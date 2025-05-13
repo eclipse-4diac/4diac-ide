@@ -7,15 +7,15 @@
 			class="org.eclipse.fordiac.ide.debug.ui.fb.FBLaunchShortcut"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
 			id="org.eclipse.fordiac.ide.debug.ui.fbLaunchShortcut"
-			label="Evaluate FB Type"
+			label="%fbLaunchShortcut.label"
 			modes="run, debug">
 			<contextualLaunch>
 				<contextLabel
-					label="Run FB Type"
+					label="%fbLaunchShortcut.run.label"
 					mode="run">
 				</contextLabel>
 				<contextLabel
-					label="Debug FB Type"
+					label="%fbLaunchShortcut.debug.label"
 					mode="debug">
 				</contextLabel>
 				<enablement>
@@ -101,7 +101,7 @@
 			class="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
 			icon="fordiacimage://ICON_FB"
 			id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
-			name="FB Debug"
+			name="%FBDebugView.name"
 			restorable="true">
 		</view>
 	</extension>
@@ -132,7 +132,7 @@
 			category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
 			class="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
 			id="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
-			name="Debug">
+			name="%FordiacDebugPreferencePage.name">
 		</page>
 	</extension>
 	<extension
@@ -150,7 +150,7 @@
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.debug.ui.changeValue"
-			name="Change Value">
+			name="%changeValue.name">
 		</command>
 	</extension>
 	<extension
@@ -235,8 +235,8 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.debug.ui.changeValue"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/elcl16/changevariablevalue_co.png"
-				label="Change Values..."
-				tooltip="Change variable values">
+				label="%changeValue.label"
+				tooltip="%changeValue.tooltip">
 				<visibleWhen
 					checkEnabled="false">
 					<with

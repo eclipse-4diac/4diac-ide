@@ -5,10 +5,10 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate"
-            delegateName="Evaluate FB"
+            delegateName="%fbLaunch.name"
             id="org.eclipse.fordiac.ide.debug.fbLaunch"
             modes="run, debug"
-            name="Evaluate FB"
+            name="%fbLaunch.name"
             sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
       </launchConfigurationType>
    </extension>
@@ -17,7 +17,7 @@
       <sourceLocator
             class="org.eclipse.fordiac.ide.debug.EvaluatorSourceLocator"
             id="org.eclipse.fordiac.ide.debug.sourceLocator"
-            name="Evaluator Source Locator">
+            name="%sourceLocator.name">
       </sourceLocator>
    </extension>
    <extension

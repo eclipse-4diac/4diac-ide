@@ -7,7 +7,7 @@
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab"
 			group="org.eclipse.fordiac.ide.debug.ui.fbLaunchConfigurationTabGroup"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.runtimeTab"
-			name="Runtime">
+			name="%runtimeTab.name">
 			<placement
 				after="org.eclipse.fordiac.ide.debug.ui.mainTab">
 			</placement>
@@ -50,19 +50,19 @@
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentLaunchShortcut"
 			icon="platform:/plugin/org.eclipse.debug.ui/icons/full/etool16/run_exc.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployShortcut"
-			label="Deploy"
+			label="%deployShortcut.label"
 			modes="run, debug, org.eclipse.fordiac.ide.deployment.debug.monitor">
 			<contextualLaunch>
 				<contextLabel
-					label="Deploy"
+					label="%deployShortcut.run.label"
 					mode="run">
 				</contextLabel>
 				<contextLabel
-					label="Deploy and Monitor"
+					label="%deployShortcut.debug.label"
 					mode="debug">
 				</contextLabel>
 				<contextLabel
-					label="Monitor"
+					label="%deployShortcut.monitor.label"
 					mode="org.eclipse.fordiac.ide.deployment.debug.monitor">
 				</contextLabel>
 				<enablement>
@@ -99,15 +99,15 @@
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchShortcut"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deployFBLaunchShortcut"
-			label="Remote Evaluate FB Type"
+			label="%deployFBLaunchShortcut.label"
 			modes="run, debug">
 			<contextualLaunch>
 				<contextLabel
-					label="Run FB Type on Device"
+					label="%deployFBLaunchShortcut.run.label"
 					mode="run">
 				</contextLabel>
 				<contextLabel
-					label="Debug FB Type on Device"
+					label="%deployFBLaunchShortcut.debug.label"
 					mode="debug">
 				</contextLabel>
 				<enablement>
@@ -249,74 +249,74 @@
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
-			name="Clean Device">
+			name="%cleanDevice.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
-			name="Kill Device">
+			name="%killDevice.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
-			name="Restart Device">
+			name="%restartDevice.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
-			name="Delete Resource">
+			name="%deleteResource.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
-			name="Online Create FB">
+			name="%onlineCreateFB.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
-			name="Online Start FB">
+			name="%onlineStartFB.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
-			name="Online Create Connection">
+			name="%onlineCreateConnection.name">
 		</command>
 		<command
 			categoryId="org.eclipse.debug.ui.category.run"
-			description="Open monitor launch configuration dialog"
+			description="%OpenMonitorConfigurations.description"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
-			name="Monitor...">
+			name="%OpenMonitorConfigurations.name">
 		</command>
 		<command
 			categoryId="org.eclipse.debug.ui.category.run"
-			description="Runs the last launched monitor configuration"
+			description="%MonitorToolbar.description"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorToolbar"
-			name="Run Last Launch Monitor Configuration">
+			name="%MonitorToolbar.name">
 		</command>
 		<command
 			categoryId="org.eclipse.debug.ui.category.run"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
-			name="Toggle Watch">
+			name="%toggleWatch.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
-			name="Toggle Pinned">
+			name="%togglePinned.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.force"
-			name="Force Value">
+			name="%force.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
-			name="Clear Force">
+			name="%clearForce.name">
 		</command>
 		<command
 			categoryId="org.eclipse.fordiac.ide.commands.category"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
-			name="Trigger Event">
+			name="%triggerEvent.name">
 		</command>
 	</extension>
 	<extension
@@ -610,7 +610,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
 				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="Clean Device"
+				label="%cleanDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -621,7 +621,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
-				label="Kill Device"
+				label="%killDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -632,7 +632,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
 				icon="fordiacimage://ICON_DEVICE_RESTART"
-				label="Restart Device"
+				label="%restartDevice.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -643,7 +643,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
 				icon="fordiacimage://ICON_DELETE_RESOURCE"
-				label="Delete Resource"
+				label="%deleteResource.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -657,7 +657,7 @@
 			</separator>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
-				label="Online Create FB"
+				label="%onlineCreateFB.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -667,7 +667,7 @@
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
-				label="Online Start FB">
+				label="%onlineStartFB.label">
 				<visibleWhen
 					checkEnabled="false">
 					<reference
@@ -676,7 +676,7 @@
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
-				label="Online Create Connection"
+				label="%onlineCreateConnection.label"
 				style="push">
 				<visibleWhen
 					checkEnabled="false">
@@ -703,9 +703,9 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
-				label="Toggle Watch"
+				label="%toggleWatch.label"
 				style="push"
-				tooltip="Toggle watch for selected elements">
+				tooltip="%toggleWatch.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
@@ -713,9 +713,9 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.togglePinned"
 				icon="fordiacimage://ICON_PIN"
-				label="Toggle Pinned"
+				label="%togglePinned.label"
 				style="push"
-				tooltip="Pin/unpin selected watch">
+				tooltip="%togglePinned.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
@@ -724,8 +724,8 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
-				label="Force Value..."
-				tooltip="Force the watch value">
+				label="%force.label"
+				tooltip="%force.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
@@ -734,8 +734,8 @@
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
 				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
 				icon="fordiacimage://ICON_CLEAR_FORCE"
-				label="Clear Force Value"
-				tooltip="Clear the force for the watch value">
+				label="%clearForce.label"
+				tooltip="%clearForce.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
@@ -743,8 +743,8 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 				icon="fordiacimage://ICON_TRIGGER_EVENT"
-				label="Trigger Event"
-				tooltip="Trigger an event">
+				label="%triggerEvent.label"
+				tooltip="%triggerEvent.tooltip">
 				<visibleWhen
 					checkEnabled="true">
 				</visibleWhen>
@@ -759,25 +759,25 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.cleanDevice"
 				icon="fordiacimage://ICON_CLEAR_DEVICE"
-				label="Clean Device"
+				label="%cleanDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.killDevice"
 				icon="fordiacimage://ICON_KILL_DEVICE"
-				label="Kill Device"
+				label="%killDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.restartDevice"
 				icon="fordiacimage://ICON_DEVICE_RESTART"
-				label="Restart Device"
+				label="%restartDevice.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.deleteResource"
 				icon="fordiacimage://ICON_DELETE_RESOURCE"
-				label="Delete Resource"
+				label="%deleteResource.label"
 				style="push">
 			</command>
 			<separator
@@ -786,45 +786,45 @@
 			</separator>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateFB"
-				label="Online Create FB"
+				label="%onlineCreateFB.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineStartFB"
-				label="Online Start FB">
+				label="%onlineStartFB.label">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.onlineCreateConnection"
-				label="Online Create Connection"
+				label="%onlineCreateConnection.label"
 				style="push">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.toggleWatch"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/read_obj.png"
-				label="Toggle Watch"
+				label="%toggleWatch.label"
 				style="push"
-				tooltip="Toggle watch for selected elements">
+				tooltip="%toggleWatch.tooltip">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.force"
 				disabledIcon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj_disabled.png"
 				icon="platform:/plugin/org.eclipse.debug.ui/icons/full/obj16/write_obj.png"
-				label="Force Value"
-				tooltip="Force the watch value">
+				label="%force.label"
+				tooltip="%force.tooltip">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.clearForce"
 				disabledIcon="fordiacimage://ICON_CLEAR_FORCE_DISABLED"
 				icon="fordiacimage://ICON_CLEAR_FORCE"
-				label="Clear Force"
-				tooltip="Clear the force for the watch value">
+				label="%clearForce.label"
+				tooltip="%clearForce.tooltip">
 			</command>
 			<command
 				commandId="org.eclipse.fordiac.ide.deployment.debug.ui.triggerEvent"
 				icon="fordiacimage://ICON_TRIGGER_EVENT"
-				label="Trigger Event"
-				tooltip="Trigger an event">
+				label="%triggerEvent.label"
+				tooltip="%triggerEvent.tooltip">
 			</command>
 		</menuContribution>
 	</extension>
@@ -902,9 +902,9 @@
 			bannerImage="fordiacimage://ICON_START_MONITORING"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.monitor"
 			image="fordiacimage://ICON_START_MONITORING"
-			label="Monitor"
+			label="%monitor.label"
 			mode="org.eclipse.fordiac.ide.deployment.debug.monitor"
-			title="Monitor">
+			title="%monitor.title">
 		</launchGroup>
 	</extension>
 	<!-- org.eclipse.ui.actionSets is required to use action base classes from
@@ -913,11 +913,11 @@
 		point="org.eclipse.ui.actionSets">
 		<actionSet
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorSet"
-			label="Monitor"
+			label="%monitor.label"
 			visible="true">
 			<menu
 				id="org.eclipse.ui.run"
-				label="Run"
+				label="%run.label"
 				path="additions">
 				<separator
 					name="monitorGroup">
@@ -927,19 +927,19 @@
 				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.OpenMonitorConfigurations"
 				definitionId="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
 				id="org.eclipse.fordiac.ide.deployment.debug.ui.OpenMonitorConfigurations"
-				label="Monitor Configurations..."
+				label="%OpenMonitorConfigurations.label"
 				menubarPath="org.eclipse.ui.run/monitorGroup">
 			</action>
 			<action
 				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorAsAction"
 				icon="fordiacimage://ICON_START_MONITORING"
 				id="org.eclipse.fordiac.ide.deployment.debug.ui.MonitorWithConfigurationAction"
-				label="Monitor As"
+				label="%MonitorWithConfigurationAction.label"
 				menubarPath="org.eclipse.ui.run/monitorGroup"
 				style="pulldown">
 			</action>
 			<action
-				label="Monitor History"
+				label="%MonitorHistoryMenuAction.label"
 				style="pulldown"
 				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorHistoryMenuAction"
 				menubarPath="org.eclipse.ui.run/monitorGroup"
@@ -951,7 +951,7 @@
 				hoverIcon="fordiacimage://ICON_START_MONITORING"
 				class="org.eclipse.fordiac.ide.deployment.debug.ui.actions.MonitorToolbarAction"
 				icon="fordiacimage://ICON_START_MONITORING"
-				label="Monitor"
+				label="%MonitorDropDownAction.label"
 				style="pulldown">
 			</action>
 		</actionSet>
@@ -968,7 +968,7 @@
 				enablesFor="+"
 				icon="fordiacimage://ICON_START_MONITORING"
 				id="org.eclipse.fordiac.ide.deployment.debug.ui.contextualLaunch.monitor.submenu"
-				label="Monitor As"
+				label="%monitor.submenu.label"
 				menubarPath="additions"
 				style="pulldown">
 			</action>
@@ -1041,37 +1041,37 @@
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.forceColor"
-			label="Force background"
+			label="%forceColor.label"
 			value="172,72,255">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchColor"
-			label="Watch background"
+			label="%watchColor.label"
 			value="72,148,255">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorColor"
-			label="Watch error background"
+			label="%watchErrorColor.label"
 			value="255,48,64">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.forceTextColor"
-			label="Force text color"
+			label="%forceTextColor.label"
 			value="COLOR_BLACK">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchTextColor"
-			label="Watch text color"
+			label="%watchTextColor.label"
 			value="COLOR_BLACK">
 		</colorDefinition>
 		<colorDefinition
 			categoryId="org.eclipse.fordiac.ide.themeCategory"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.watchErrorTextColor"
-			label="Watch error text color"
+			label="%watchErrorTextColor.label"
 			value="COLOR_BLACK">
 		</colorDefinition>
 	</extension>
@@ -1126,7 +1126,7 @@
 			category="org.eclipse.fordiac.ide.debug.ui.preferences.FordiacDebugPreferencePage"
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.preferences"
-			name="Deployment">
+			name="%preferences.name">
 		</page>
 	</extension>
 	<extension
@@ -1142,7 +1142,7 @@
 		category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
 		class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
 		id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
-		name="Deployment">
+		name="%properties.name">
 		<enabledWhen>
 	        <adapt
 	              type="org.eclipse.core.resources.IProject">
