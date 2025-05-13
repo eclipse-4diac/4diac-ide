@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -62,6 +63,11 @@ public final class VariableUtils {
 	public static void fBVariableInitialization(final CompositeFBType compFBType) {
 		initInputVars(compFBType);
 		initOutputVars(compFBType);
+	}
+
+	public static void fBVariableInitialization(final FunctionFBType functionFBType) {
+		initInputVars(functionFBType);
+		initOutputVars(functionFBType);
 	}
 
 	public static void initOutputVars(final FBType fbType) {

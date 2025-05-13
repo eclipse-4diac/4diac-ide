@@ -193,26 +193,49 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue)
 				.orElse(null);
 		if (algoEval != null) {
-			try (EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(basefbtype.getName())) {
-				final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
-				tpe.setMonotonicClock(clock);
-				tpe.execute(() -> {
-					try {
-						algoEval.evaluate();
-						vars.forEach(v -> {
-							final VarDeclaration varDecl = varDecls.stream()
-									.filter(vd -> vd.getName().equals(v.getName())).findAny().orElse(null);
-							final String value = v.getValue().toString();
-							varDecl.getValue().setValue(value);
-						});
-					} catch (final EvaluatorException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-					} catch (final InterruptedException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-						Thread.currentThread().interrupt();
-					}
-				});
-			}
+			executeEvaluator(algoEval, vars, varDecls, eventOccurrence, algorithm.getName());
+		}
+	}
+
+	private static void processFunctionWithEvaluator(final FunctionFBType functionFBType,
+			final EventOccurrence eventOccurrence) {
+		final List<VarDeclaration> varDecls = new ArrayList<>(functionFBType.getInterfaceList().getInputVars());
+		varDecls.addAll(functionFBType.getInterfaceList().getOutputVars());
+		final List<Variable<?>> vars = varDecls.stream().map(DefaultRunFBType::mapVar).collect(Collectors.toList());
+		// internal variables of function could be added by calling
+		// STFunctionParseUtil2.parseFunctionBody, getting the root element which is a
+		// STFunctionSource and then getting functions -> varDeclarationBlock ->
+		// varDeclaration + converting it with VariableOperations.newVariable
+		final FBVariable fbVar = new FBVariable("THIS", functionFBType, Collections.emptyList()); //$NON-NLS-1$
+
+		final Evaluator fbEval = EvaluatorFactory.createEvaluator(functionFBType, FunctionFBType.class, fbVar, vars,
+				null);
+		if (fbEval != null) {
+			executeEvaluator(fbEval, vars, varDecls, eventOccurrence, functionFBType.getName());
+		}
+	}
+
+	private static void executeEvaluator(final Evaluator eval, final List<Variable<?>> vars,
+			final List<VarDeclaration> varDecls, final EventOccurrence eventOccurrence, final String name) {
+		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
+			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
+			tpe.setMonotonicClock(clock);
+			tpe.execute(() -> {
+				try {
+					eval.evaluate();
+					vars.forEach(v -> {
+						final VarDeclaration varDecl = varDecls.stream().filter(vd -> vd.getName().equals(v.getName()))
+								.findAny().orElse(null);
+						final String value = v.getValue().toString();
+						varDecl.getValue().setValue(value);
+					});
+				} catch (final EvaluatorException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+				} catch (final InterruptedException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					Thread.currentThread().interrupt();
+				}
+			});
 		}
 	}
 
@@ -336,9 +359,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runFunctionFBType(final FunctionFBTypeRuntime fBTypeRuntime) {
-		final FunctionFBType functionFBType = fBTypeRuntime.getModel();
+		final FunctionFBType functionFBType = fBTypeRuntime.getFunctionFBType();
+		VariableUtils.fBVariableInitialization(functionFBType);
+
 		// function types always have exactly 1 output event
 		final Event event = functionFBType.getInterfaceList().getEventOutputs().get(0);
+		processFunctionWithEvaluator(functionFBType, this.eventOccurrence);
+		isConsumed(this.eventOccurrence);
+
 		return ECollections.newBasicEList(createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
 	}
 
