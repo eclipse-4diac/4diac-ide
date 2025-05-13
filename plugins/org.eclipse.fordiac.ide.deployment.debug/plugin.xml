@@ -5,31 +5,31 @@
 		point="org.eclipse.debug.core.launchConfigurationTypes">
 		<launchConfigurationType
 			delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
-			delegateName="Deploy"
+			delegateName="%deployLaunch.name"
 			id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
 			modes="run, debug, org.eclipse.fordiac.ide.deployment.debug.monitor"
-			name="Deploy">
+			name="%deployLaunch.name">
 		</launchConfigurationType>
 		<launchConfigurationType
 			delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
-			delegateName="Remote Evaluate FB"
+			delegateName="%deployFBLaunch.name"
 			id="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
 			modes="run, debug"
-			name="Remote Evaluate FB"
+			name="%deployFBLaunch.name"
 			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
 		</launchConfigurationType>
 	</extension>
 	<extension
 		point="org.eclipse.debug.core.launchModes">
 		<launchMode
-			label="Monitor"
-			launchAsLabel="Monitor As"
+			label="%monitor.label"
+			launchAsLabel="%monitor.launchAsLabel"
 			mode="org.eclipse.fordiac.ide.deployment.debug.monitor">
 		</launchMode>
 	</extension>
 	<extension
 		id="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"
-		name="Watch"
+		name="%watchpointMarker.name"
 		point="org.eclipse.core.resources.markers">
 		<super
 			type="org.eclipse.debug.core.breakpointMarker">
@@ -56,7 +56,7 @@
 			class="org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint"
 			id="org.eclipse.fordiac.ide.deployment.debug.watchpoint"
 			markerType="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker"
-			name="Watch">
+			name="%watchpoint.name">
 		</breakpoint>
 	</extension>
 	<extension

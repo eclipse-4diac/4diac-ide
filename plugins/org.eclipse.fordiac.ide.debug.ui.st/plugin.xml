@@ -46,7 +46,7 @@
       <page
             class="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.STBreakpointPropertyPage"
             id="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.propertyPage"
-            name="Breakpoint">
+            name="%breakpoint.propertyPage.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint">
@@ -78,7 +78,7 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties"
-            name="Breakpoint Properties">
+            name="%breakpointProperties.name">
       </command>
    </extension>
    <extension
@@ -108,7 +108,7 @@
             locationURI="popup:org.eclipse.debug.ui.BreakpointView?after=additions">
          <command
                commandId="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties"
-               label="Breakpoint Properties..."
+               label="%breakpointProperties.label"
                style="push">
             <visibleWhen
                   checkEnabled="true">
