@@ -143,6 +143,8 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;
 
+	public static String VarDeclarationAnnotations_ValueOverriddenBySubAppInput;
+
 	public static String VarDeclarationAnnotations_VarInOutLeftNotConnected;
 
 	public static String VarDeclarationAnnotations_VarInOutRightNotConnected;
