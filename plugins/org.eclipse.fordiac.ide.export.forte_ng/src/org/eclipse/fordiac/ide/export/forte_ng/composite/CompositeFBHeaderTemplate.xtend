@@ -85,7 +85,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def protected generateFBNetwork() '''
-		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
+		«IF !fbs.empty»
 			static const SCFB_FBInstanceData scmInternalFBs[];
 		«ENDIF»
 		«IF !type.FBNetwork.eventConnections.empty»
@@ -128,6 +128,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	override generateEventAccessorDefinitions() ''''''
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
-		(super.getDependencies(options) + type.FBNetwork.networkElements.map[getType]).toSet
+		(super.getDependencies(options) + fbs.map[getType]).toSet
 	}
 }
