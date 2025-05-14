@@ -628,7 +628,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		}
 	}
 
-	def protected void getUsedFBStrings(FBNetworkElement fb, Set<String> strings) {
+	def protected void getUsedFBStrings(FB fb, Set<String> strings) {
 		strings.add(fb.name)
 		strings.add(fb.type.generateTypeNamePlain)
 	}
