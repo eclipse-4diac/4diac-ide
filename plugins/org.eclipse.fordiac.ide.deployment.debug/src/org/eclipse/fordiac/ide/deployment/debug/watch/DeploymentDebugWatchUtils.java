@@ -27,6 +27,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class DeploymentDebugWatchUtils {
 
+	public record SubAppConnectionEndpoint<T extends IInterfaceElement>(T element, boolean negate) {
+		SubAppConnectionEndpoint(final T element) {
+			this(element, false);
+		}
+	}
+
 	public static Resource getResource(final INamedElement element) {
 		return switch (element) {
 		case final IInterfaceElement interfaceElement -> getResource(interfaceElement.getFBNetworkElement());
@@ -85,6 +91,43 @@ public final class DeploymentDebugWatchUtils {
 				.map(AdapterDeclaration::getAdapterFB).flatMap(resolved -> resolved.findBySimpleName(element.getName()))
 				.filter(IInterfaceElement.class::isInstance);
 		default -> Stream.of(element);
+		};
+	}
+
+	public static <T extends IInterfaceElement> Stream<SubAppConnectionEndpoint<T>> resolveSubappInterfaceEndpoints(
+			final T element) {
+		return resolveSubappInterfaceEndpoints(element, false);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends IInterfaceElement> Stream<SubAppConnectionEndpoint<T>> resolveSubappInterfaceEndpoints(
+			final T element, final boolean negate) {
+		if (element == null) {
+			return Stream.empty();
+		}
+		return switch (element.getFBNetworkElement()) {
+		case null -> Stream.empty();
+		case final SubApp subapp -> {
+			subapp.loadSubAppNetwork(); // ensure network is loaded
+			yield element.isIsInput()
+					// follow inner output connection to destination for input
+					? element.getOutputConnections().stream()
+							// skip inner connections to output
+							.filter(conn -> conn.getDestination().isIsInput())
+							.flatMap(conn -> resolveSubappInterfaceEndpoints((T) conn.getDestination(),
+									negate ^ conn.isNegated()))
+					// follow inner input connection to source for output
+					: element.getInputConnections().stream()
+							// skip inner connections to input
+							.filter(conn -> !conn.getSource().isIsInput())
+							.flatMap(conn -> resolveSubappInterfaceEndpoints((T) conn.getSource(),
+									negate ^ conn.isNegated()));
+		}
+		case final AdapterFB adapterFB -> resolveSubappInterfaceConnections(adapterFB.getAdapterDecl())
+				.map(AdapterDeclaration::getAdapterFB).flatMap(resolved -> resolved.findBySimpleName(element.getName()))
+				.filter(IInterfaceElement.class::isInstance)
+				.map(resolved -> new SubAppConnectionEndpoint<>((T) resolved));
+		default -> Stream.of(new SubAppConnectionEndpoint<>(element, negate));
 		};
 	}
 

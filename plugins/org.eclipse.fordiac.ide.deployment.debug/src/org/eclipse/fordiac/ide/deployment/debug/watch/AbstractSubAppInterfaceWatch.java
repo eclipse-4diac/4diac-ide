@@ -17,6 +17,7 @@ import java.util.SequencedSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
+import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils.SubAppConnectionEndpoint;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -31,16 +32,17 @@ public abstract class AbstractSubAppInterfaceWatch extends AbstractVirtualWatch 
 		input = element.isIsInput();
 	}
 
-	protected static SequencedSet<IVariableWatch> createWatches(final IInterfaceElement element,
+	protected static SequencedSet<SubWatch> createWatches(final IInterfaceElement element,
 			final DeploymentDebugDevice debugTarget) {
-		return DeploymentDebugWatchUtils.resolveSubappInterfaceConnections(element).distinct()
+		return DeploymentDebugWatchUtils.resolveSubappInterfaceEndpoints(element).distinct()
 				.map(resolved -> createSubWatch(resolved, debugTarget))
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
-	protected static IVariableWatch createSubWatch(final IInterfaceElement element,
+	protected static SubWatch createSubWatch(final SubAppConnectionEndpoint<IInterfaceElement> endpoint,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException, UnsupportedOperationException {
-		return (IVariableWatch) IWatch.watchFor(element.getQualifiedName(), element, debugTarget);
+		return new SubWatch((IVariableWatch) IWatch.watchFor(endpoint.element().getQualifiedName(), endpoint.element(),
+				debugTarget), endpoint.negate());
 	}
 
 	@Override
