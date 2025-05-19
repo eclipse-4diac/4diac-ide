@@ -580,7 +580,7 @@
     <page
           category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.saveActions"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.saveActions.preferencePage"
           name="Save Actions">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
@@ -594,6 +594,27 @@
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.ui.propertyPages">
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
+          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.saveActions.propertyPage"
+          name="Save Actions">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
+       </keywordReference>
+       <enabledWhen>
+          <adapt
+                type="org.eclipse.core.resources.IProject">
+          </adapt>
+       </enabledWhen>
+       <filter
+             name="projectNature"
+             value="org.eclipse.xtext.ui.shared.xtextNature">
+       </filter>
     </page>
  </extension>
  <extension
