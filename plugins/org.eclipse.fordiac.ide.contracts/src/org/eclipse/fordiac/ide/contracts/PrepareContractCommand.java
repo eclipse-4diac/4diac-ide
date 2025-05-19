@@ -118,7 +118,7 @@ public class PrepareContractCommand extends Command {
 	private SubApp createNewSubapp() {
 		SubApp subapp;
 
-		if (fbNetworkElement instanceof final SubApp s) {
+		if (fbNetworkElement instanceof final SubApp s && !s.isTyped()) {
 			subapp = s;
 		} else if (fbNetworkElement.isNestedInSubApp()) {
 			subapp = (SubApp) fbNetworkElement.eContainer().eContainer();
