@@ -20,7 +20,6 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -33,7 +32,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -46,7 +44,6 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -54,7 +51,6 @@ import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class VarConfigurationSection extends AbstractSection {
@@ -124,27 +120,6 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	@Override
-	protected CommandStack getCommandStack(final IWorkbenchPart part, final Object input) {
-		super.getCommandStack(part, input);
-		if (input instanceof final FBNetworkEditPart fbnEditPart) {
-			EObject eObject = fbnEditPart.getModel().eContainer();
-
-			while (!(eObject instanceof AutomationSystem)) {
-				eObject = eObject.eContainer();
-			}
-
-			return ((AutomationSystem) eObject).getCommandStack();
-		}
-		if (input instanceof final EObject eObj) {
-			final EObject root = EcoreUtil.getRootContainer(eObj);
-			if (root instanceof final AutomationSystem system) {
-				return system.getCommandStack();
-			}
-		}
-		return null;
-	}
-
-	@Override
 	protected void setInputCode() {
 		// Not needed currently
 	}
@@ -169,19 +144,18 @@ public class VarConfigurationSection extends AbstractSection {
 		if (getType() instanceof final TypedSubApp tsa) {
 			return tsa.getVarConfigParams();
 		}
-		final Stream<VarDeclaration> varConfStream = StreamSupport
+		final Stream<VarDeclaration> varConfigStream = StreamSupport
 				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(getType(), true), 0), false)
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
 				.filter(VarDeclaration::isVarConfig)
 				.filter(var -> !FBNetworkElementHelper.isContainedInTypedInstance(var));
 		if (getType() instanceof final Application app) {
-			final Stream<VarDeclaration> subAppStream = app.getFBNetwork().getNetworkElements().stream()
+			final Stream<VarDeclaration> savedSubAppStream = app.getFBNetwork().getNetworkElements().stream()
 					.filter(TypedSubApp.class::isInstance).map(TypedSubApp.class::cast)
 					.flatMap(tsa -> tsa.getVarConfigParams().stream());
-
-			return Stream.concat(subAppStream, varConfStream).distinct().toList();
+			return Stream.concat(savedSubAppStream, varConfigStream).distinct().toList();
 		}
-		return varConfStream.toList();
+		return varConfigStream.toList();
 	}
 
 	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
