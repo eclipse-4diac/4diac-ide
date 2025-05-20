@@ -20,6 +20,22 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.ui.messages"; //$NON-NLS-1$
 	public static String AutoReloadError_PathNotFound_Title;
 	public static String AutoReloadError_PathNotFound;
+
+	public static String BlockSizePreferences_BlockMargins;
+	public static String BlockSizePreferences_TopBottom;
+	public static String BlockSizePreferences_LeftRight;
+
+	public static String BlockSizePreferences_LabelSize;
+	public static String BlockSizePreferences_MaximumValueLabelSize;
+	public static String BlockSizePreferences_MinimumPinLabelSize;
+	public static String BlockSizePreferences_MaximumPinLabelSize;
+	public static String BlockSizePreferences_MaximumHiddenConnectionLabelSize;
+	public static String BlockSizePreferences_MaximumTypeLabelSize;
+	public static String BlockSizePreferences_MaximumInterfaceBarSize;
+	public static String BlockSizePreferences_MinimumInterfaceBarSize;
+
+	public static String BlockSizePreferences_Refresh;
+
 	public static String DataTypeDropdown_Adapter_Types;
 	public static String DataTypeDropdown_Type_Selection;
 	public static String DataTypeDropdown_Select_Type;
