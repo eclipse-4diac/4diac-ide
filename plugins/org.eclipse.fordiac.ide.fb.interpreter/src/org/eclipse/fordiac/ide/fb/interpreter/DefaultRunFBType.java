@@ -318,8 +318,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
-		final var outputEvents = new BasicEList<EventOccurrence>();
-		processAlgorithmWithEvaluator(simpleFBType, simpleFBType.getAlgorithm().get(0), eventOccurrence);
+
+		final var actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
+		final var outputEvents = new BasicEList<EventOccurrence>(actions.size());
+
+		for (final SimpleECAction action : actions) {
+			simpleFBType.getAlgorithm().stream().filter(a -> a.getName().equals(action.getAlgorithm())).findAny()
+					.ifPresent(a -> processAlgorithmWithEvaluator(simpleFBType, a, eventOccurrence));
+			outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, action.getOutput(), simpleFBType));
+		}
 		isConsumed(this.eventOccurrence);
 		return outputEvents;
 	}
