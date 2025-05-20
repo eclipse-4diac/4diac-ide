@@ -36,5 +36,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
 	</Service>
-	<Attribute Name="GenericClassName" Value="'GEN_F_MUX'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_F_MUX'"/>
 </FBType>

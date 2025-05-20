@@ -28,5 +28,5 @@
 			<VarDeclaration Name="OUT" Type="LREAL" Comment="Array output" ArraySize="2"/>
 		</OutputVars>
 	</InterfaceList>
-	<Attribute Name="GenericClassName" Value="'GEN_VALUES2ARRAY'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_VALUES2ARRAY'"/>
 </FBType>

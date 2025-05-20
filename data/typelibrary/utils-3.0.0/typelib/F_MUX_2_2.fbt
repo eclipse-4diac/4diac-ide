@@ -40,5 +40,5 @@
 			<VarDeclaration Name="OUT_2" Type="ANY" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
-	<Attribute Name="GenericClassName" Value="'GEN_F_MUX'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_F_MUX'"/>
 </FBType>

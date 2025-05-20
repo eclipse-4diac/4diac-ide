@@ -93,5 +93,5 @@
 			</ServiceTransaction>
 		</ServiceSequence>
 	</Service>
-	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_CSV_WRITER'"/>
 </FBType>

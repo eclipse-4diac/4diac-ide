@@ -51,5 +51,5 @@
 			<VarDeclaration Name="STATUS" Type="STRING" Comment="File access status" />
 		</OutputVars>
 	</InterfaceList>
-	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_CSV_WRITER'"/>
 </FBType>
