@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
+	public static final int DEFAULT_MAX_INTERFACE_BAR_SIZE = 40;
+
 	@Override
 	public void initializeDefaultPreferences() {
 		final IEclipsePreferences preferences = DefaultScope.INSTANCE
@@ -30,5 +32,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				ModelPreferenceConstants.MARGIN_TOP_BOTTOM_DEFAULT_VALUE);
 		preferences.putInt(ModelPreferenceConstants.MARGIN_LEFT_RIGHT,
 				ModelPreferenceConstants.MARGIN_LEFT_RIGHT_DEFAULT_VALUE);
+
+		preferences.putInt(ModelPreferenceConstants.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an IP address
+																				// and port
+
+		preferences.putInt(ModelPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
+		preferences.putInt(ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, DEFAULT_MAX_INTERFACE_BAR_SIZE);
+		preferences.putInt(ModelPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
+		preferences.putInt(ModelPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
+		preferences.putInt(ModelPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);
 	}
 }

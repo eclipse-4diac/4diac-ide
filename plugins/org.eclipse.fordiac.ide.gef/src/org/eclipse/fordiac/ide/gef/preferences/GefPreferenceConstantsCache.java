@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
+import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.ui.preferences.IGraphicalPreferencesCache;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
@@ -23,6 +24,7 @@ import org.eclipse.jface.resource.JFaceResources;
 
 public class GefPreferenceConstantsCache implements IGraphicalPreferencesCache {
 	private final IProject project;
+	private final PreferenceStoreProvider modelStoreProvider;
 	private final PreferenceStoreProvider storeProvider;
 
 	private final int maxDefaultValueLength;
@@ -40,22 +42,25 @@ public class GefPreferenceConstantsCache implements IGraphicalPreferencesCache {
 
 	public GefPreferenceConstantsCache(final IProject project) {
 		this.project = project;
+		this.modelStoreProvider = new PreferenceStoreProvider(ModelPreferenceConstants.MODEL_PREFERENCES_ID, project);
 		this.storeProvider = new PreferenceStoreProvider(GefPreferenceConstants.GEF_PREFERENCES_ID, project);
 		final var store = storeProvider.getStore();
+		final var modelStore = modelStoreProvider.getStore();
 
 		final Dimension singleCharLength = FigureUtilities.getStringExtents(" ", //$NON-NLS-1$
 				JFaceResources.getFontRegistry().get(UIPreferenceConstants.DIAGRAM_FONT));
 
-		minInterfaceBarSize = singleCharLength.width * store.getInt(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE)
-				+ ConnectorBorder.LR_MARGIN + LEFT_RIGHT_MARGIN;
-		maxInterfaceBarSize = store.getInt(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
+		minInterfaceBarSize = singleCharLength.width
+				* modelStore.getInt(ModelPreferenceConstants.MIN_INTERFACE_BAR_SIZE) + ConnectorBorder.LR_MARGIN
+				+ LEFT_RIGHT_MARGIN;
+		maxInterfaceBarSize = modelStore.getInt(ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE);
 		maxHiddenConnectionLabelSize = singleCharLength.width
-				* store.getInt(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+				* modelStore.getInt(ModelPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
 		maxDefaultValueLength = store.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH);
-		maxTypeLabelSize = store.getInt(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE);
-		maxValueLabelSize = store.getInt(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE);
-		minPinLabelSize = store.getInt(GefPreferenceConstants.MIN_PIN_LABEL_SIZE);
-		maxPinLabelSize = store.getInt(GefPreferenceConstants.MAX_PIN_LABEL_SIZE);
+		maxTypeLabelSize = modelStore.getInt(ModelPreferenceConstants.MAX_TYPE_LABEL_SIZE);
+		maxValueLabelSize = modelStore.getInt(ModelPreferenceConstants.MAX_VALUE_LABEL_SIZE);
+		minPinLabelSize = modelStore.getInt(ModelPreferenceConstants.MIN_PIN_LABEL_SIZE);
+		maxPinLabelSize = modelStore.getInt(ModelPreferenceConstants.MAX_PIN_LABEL_SIZE);
 		pinLabelStyle = store.getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 		snapToGrid = store.getBoolean(GefPreferenceConstants.SNAP_TO_GRID);
 	}
