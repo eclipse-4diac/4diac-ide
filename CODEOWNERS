@@ -1,0 +1,119 @@
+# This is a list of maintainers for 4diac IDE. Feel free to contact them with any questions or comments.
+# Please have a look at CONTRIBUTING.md on how to contribute.
+
+# data
+/data/  @mx990
+
+# features
+/features/org.eclipse.fordiac.ide.comgeneration.feature/
+/features/org.eclipse.fordiac.ide.deployment.feature/       @mx990
+/features/org.eclipse.fordiac.ide.export.feature/           @mx990
+/features/org.eclipse.fordiac.ide.interpreter.feature/
+/features/org.eclipse.fordiac.ide.runtime.feature/
+/features/org.eclipse.fordiac.ide.structuredtext.feature/   @mx990
+/features/org.eclipse.fordiac.ide.typeeditor.feature/
+/features/org.eclipse.fordiac.ide.workbench.feature/        @mx990
+
+# plugins
+/plugins/org.eclipse.fordiac.ide/
+/plugins/org.eclipse.fordiac.ide.ant/
+/plugins/org.eclipse.fordiac.ide.application/
+/plugins/org.eclipse.fordiac.ide.attributetypeeditor/           @mx990
+/plugins/org.eclipse.fordiac.ide.bulkeditor/
+/plugins/org.eclipse.fordiac.ide.comgeneration/
+/plugins/org.eclipse.fordiac.ide.contracts/
+/plugins/org.eclipse.fordiac.ide.contractspec*/
+/plugins/org.eclipse.fordiac.ide.datatypeeditor/
+/plugins/org.eclipse.fordiac.ide.debug/                         @mx990
+/plugins/org.eclipse.fordiac.ide.debug.replaydebugging/
+/plugins/org.eclipse.fordiac.ide.debug.replaydebugging.ui/
+/plugins/org.eclipse.fordiac.ide.debug.st/                      @mx990
+/plugins/org.eclipse.fordiac.ide.debug.ui/                      @mx990
+/plugins/org.eclipse.fordiac.ide.debug.ui.st/                   @mx990
+/plugins/org.eclipse.fordiac.ide.deployment/                    @mx990
+/plugins/org.eclipse.fordiac.ide.deployment.bootfile/
+/plugins/org.eclipse.fordiac.ide.deployment.debug/              @mx990
+/plugins/org.eclipse.fordiac.ide.deployment.debug.ui/           @mx990
+/plugins/org.eclipse.fordiac.ide.deployment.eval/               @mx990
+/plugins/org.eclipse.fordiac.ide.deployment.iec61499/
+/plugins/org.eclipse.fordiac.ide.deployment.opcua/
+/plugins/org.eclipse.fordiac.ide.elk/
+/plugins/org.eclipse.fordiac.ide.emf.compare/
+/plugins/org.eclipse.fordiac.ide.export/                        @mx990
+/plugins/org.eclipse.fordiac.ide.export.compare/
+/plugins/org.eclipse.fordiac.ide.export.forte_lua/
+/plugins/org.eclipse.fordiac.ide.export.forte_lua.st/
+/plugins/org.eclipse.fordiac.ide.export.forte_ng/               @mx990
+/plugins/org.eclipse.fordiac.ide.export.forte_ng.st/            @mx990
+/plugins/org.eclipse.fordiac.ide.export.ui/                     @mx990
+/plugins/org.eclipse.fordiac.ide.export.xmi/                    @mx990
+/plugins/org.eclipse.fordiac.ide.fb.interpreter*/
+/plugins/org.eclipse.fordiac.ide.fbrtlauncher/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor.doc/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor.ecc/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor.network/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor.servicesequence/
+/plugins/org.eclipse.fordiac.ide.fbtypeeditor.st/               @mx990
+/plugins/org.eclipse.fordiac.ide.fmu/
+/plugins/org.eclipse.fordiac.ide.fortelauncher/
+/plugins/org.eclipse.fordiac.ide.gef/                           @mx990
+/plugins/org.eclipse.fordiac.ide.gitlab/
+/plugins/org.eclipse.fordiac.ide.globalconstants*/              @mx990
+/plugins/org.eclipse.fordiac.ide.hierarchymanager*/
+/plugins/org.eclipse.fordiac.ide.images/
+/plugins/org.eclipse.fordiac.ide.library*/
+/plugins/org.eclipse.fordiac.ide.model/                         @mx990
+/plugins/org.eclipse.fordiac.ide.model.commands/
+/plugins/org.eclipse.fordiac.ide.model.edit/                    @mx990
+/plugins/org.eclipse.fordiac.ide.model.eval/                    @mx990
+/plugins/org.eclipse.fordiac.ide.model.eval.st/                 @mx990
+/plugins/org.eclipse.fordiac.ide.model.search/
+/plugins/org.eclipse.fordiac.ide.model.search.st/               @mx990
+/plugins/org.eclipse.fordiac.ide.model.ui/                      @mx990
+/plugins/org.eclipse.fordiac.ide.product/                       @mx990
+/plugins/org.eclipse.fordiac.ide.resourceediting/
+/plugins/org.eclipse.fordiac.ide.runtime/
+/plugins/org.eclipse.fordiac.ide.structuredtext*/               @mx990
+/plugins/org.eclipse.fordiac.ide.subapptypeeditor/
+/plugins/org.eclipse.fordiac.ide.systemconfiguration/
+/plugins/org.eclipse.fordiac.ide.systemconfiguration.segment/
+/plugins/org.eclipse.fordiac.ide.systemmanagement/
+/plugins/org.eclipse.fordiac.ide.systemmanagement.ui/
+/plugins/org.eclipse.fordiac.ide.typeeditor/                    @mx990
+/plugins/org.eclipse.fordiac.ide.typemanagement/
+/plugins/org.eclipse.fordiac.ide.ui/                            @mx990
+/plugins/org.eclipse.fordiac.ide.ui.errormessages/
+/plugins/org.eclipse.fordiac.ide.util/
+/plugins/org.eclipse.fordiac.ide.validation/
+
+# tests
+/tests/org.eclipse.fordiac.ide.test.contracts/
+/tests/org.eclipse.fordiac.ide.test.deployment/
+/tests/org.eclipse.fordiac.ide.test.export/         @mx990
+/tests/org.eclipse.fordiac.ide.test.fb.interpreter/
+/tests/org.eclipse.fordiac.ide.test.library/
+/tests/org.eclipse.fordiac.ide.test.model/          @mx990
+/tests/org.eclipse.fordiac.ide.test.model.commands/
+/tests/org.eclipse.fordiac.ide.test.model.eval/     @mx990
+/tests/org.eclipse.fordiac.ide.test.model.search/
+/tests/org.eclipse.fordiac.ide.test.ui/
+/tests/org.eclipse.fordiac.ide.test.util/
+
+# release engineering
+/.mvn/          @mx990
+/releng/        @mx990
+/Jenkinsfile    @mx990
+/pom.xml        @mx990
+/.project       @mx990
+/.settings      @mx990
+
+# misc
+/CODE_OF_CONDUCT.md @eclipse-4diac/iot-4diac-project-leads
+/CODEOWNERS         @eclipse-4diac/iot-4diac-project-leads
+/CONTRIBUTING.md    @eclipse-4diac/iot-4diac-project-leads
+/.gitreview         @eclipse-4diac/iot-4diac-project-leads
+/LICENSE.md         @eclipse-4diac/iot-4diac-project-leads
+/NOTICE.md          @eclipse-4diac/iot-4diac-project-leads
+/README.md          @eclipse-4diac/iot-4diac-project-leads
+/SECURITY.md        @eclipse-4diac/iot-4diac-project-leads
