@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -97,8 +97,8 @@ public class DeviceCreateCommand extends Command {
 		if ((null != device.getType().getProfile()) && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		} else {
-			profile = InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-					.get(UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, ""); //$NON-NLS-1$
+			profile = Platform.getPreferencesService().getString(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+					UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "", null); //$NON-NLS-1$
 		}
 		device.setProfile(profile);
 	}

@@ -13,10 +13,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.Optional;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.application.commands.ConnectThroughCommand;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * An EditPolicy which returns a command for deleting a FB from a fbnetwork.
@@ -32,10 +41,37 @@ public class DeleteFBNElementEditPolicy extends org.eclipse.gef.editpolicies.Com
 	 */
 	@Override
 	protected Command createDeleteCommand(final GroupRequest request) {
-		if (getHost().getModel() instanceof FBNetworkElement) {
-			return new DeleteFBNetworkElementCommand((FBNetworkElement) getHost().getModel());
+		if (getHost().getModel() instanceof final FBNetworkElement fbne) {
+			if (getPreferenceStore().getBoolean(GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY)) {
+				final Command rerouteCommand = createRerouteConnectionCommand(fbne);
+				if (rerouteCommand != null) {
+					return rerouteCommand.chain(new DeleteFBNetworkElementCommand(fbne));
+				}
+			}
+			return new DeleteFBNetworkElementCommand(fbne);
 		}
 		return null;
+	}
+
+	private static Command createRerouteConnectionCommand(final FBNetworkElement fbne) {
+		if (fbne.getInterface() != null && !fbne.getInterface().getEventInputs().isEmpty()
+				&& !fbne.getInterface().getEventOutputs().isEmpty()) {
+			final Optional<IInterfaceElement> inputEvent = fbne.getInterface().getEventInputs().stream()
+					.filter(e -> !e.getInputConnections().isEmpty()).map(e -> ((IInterfaceElement) e)).findFirst();
+			final Optional<IInterfaceElement> outputEvent = fbne.getInterface().getEventOutputs().stream()
+					.filter(e -> !e.getOutputConnections().isEmpty()).map(e -> (IInterfaceElement) e).findFirst();
+
+			if (outputEvent.isPresent() && inputEvent.isPresent()) {
+				return new ConnectThroughCommand(inputEvent.get(), outputEvent.get());
+			}
+		}
+		return null;
+	}
+
+	private IPreferenceStore getPreferenceStore() {
+		final IProject project = ((AdvancedScrollingGraphicalViewer) getHost().getViewer()).getPreferencesCache()
+				.getProject();
+		return PreferenceStoreProvider.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, project);
 	}
 
 }

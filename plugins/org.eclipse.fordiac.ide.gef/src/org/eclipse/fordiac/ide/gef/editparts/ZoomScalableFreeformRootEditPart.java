@@ -21,7 +21,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
@@ -277,8 +277,8 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	}
 
 	private static Color getDrawingAreaBGColor() {
-		final String background = InstanceScope.INSTANCE.getNode("org.eclipse.ui.editors") //$NON-NLS-1$
-				.get("AbstractTextEditor.Color.Background", null); //$NON-NLS-1$
+		final String background = Platform.getPreferencesService().getString("org.eclipse.ui.editors", //$NON-NLS-1$
+				"AbstractTextEditor.Color.Background", null, null); //$NON-NLS-1$
 
 		if (background != null) {
 			// we have a color in the preferences set

@@ -47,18 +47,39 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferences"
+            name="Block Size">
+      </page>
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferences"
-            name="Validation Preferences">
+            name="Validation">
       </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.properties.BlockSizePreferences"
+            name="Block Size">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
             id="org.eclipse.fordiac.ide.model.ui.properties.ValidationPreferences"
-            name="Validation Preferences">
+            name="Validation">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">

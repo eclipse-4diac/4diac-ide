@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 
 public final class FordiacDebugPreferences {
 
@@ -25,12 +25,12 @@ public final class FordiacDebugPreferences {
 	}
 
 	public static int getValueMaxDisplayLength() {
-		return InstanceScope.INSTANCE.getNode(DEBUG_PREFERENCES_ID).getInt(VALUE_MAX_DISPLAY_LENGTH,
-				FordiacDebugPreferenceInitializer.VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
+		return Platform.getPreferencesService().getInt(DEBUG_PREFERENCES_ID, VALUE_MAX_DISPLAY_LENGTH,
+				FordiacDebugPreferenceInitializer.VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE, null);
 	}
 
 	public static int getDebugViewValueMaxDisplayLength() {
-		return InstanceScope.INSTANCE.getNode(DEBUG_PREFERENCES_ID).getInt(DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH,
-				FordiacDebugPreferenceInitializer.DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE);
+		return Platform.getPreferencesService().getInt(DEBUG_PREFERENCES_ID, DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH,
+				FordiacDebugPreferenceInitializer.DEBUG_VIEW_VALUE_MAX_DISPLAY_LENGTH_DEFAULT_VALUE, null);
 	}
 }

@@ -62,8 +62,8 @@ public abstract class AbstractContainerWatch extends DeploymentDebugElement impl
 	}
 
 	@Override
-	public boolean isAlive() {
-		return getSubWatches().stream().allMatch(IWatch::isAlive);
+	public void disconnected() {
+		getSubWatches().forEach(IWatch::disconnected);
 	}
 
 	@Override

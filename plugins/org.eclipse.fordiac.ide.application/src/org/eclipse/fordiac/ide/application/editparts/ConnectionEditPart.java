@@ -27,6 +27,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PolylineConnection;
@@ -49,7 +50,6 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
-import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
@@ -66,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -211,7 +212,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 				&& (getModel() instanceof EventConnection)) {
 			getFigure().setVisible(!getNewBooleanFromEvent(event));
 		}
-		if (event.getProperty().equals(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)) {
+		if (event.getProperty().equals(ModelPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)) {
 			getFigure().updateConLabels();
 		}
 	};
@@ -269,13 +270,15 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 
 	private void performConnTypeConfiguration(final FBNetworkConnection connectionFigure) {
 		if (getModel() instanceof EventConnection) {
-			connectionFigure.setVisible(!InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-					.getBoolean(UIPreferenceConstants.P_HIDE_EVENT_CON, false));
+			connectionFigure.setVisible(
+					!Platform.getPreferencesService().getBoolean(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+							UIPreferenceConstants.P_HIDE_EVENT_CON, false, null));
 		}
 
 		if (getModel() instanceof DataConnection) {
-			connectionFigure.setVisible(!InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-					.getBoolean(UIPreferenceConstants.P_HIDE_DATA_CON, false));
+			connectionFigure.setVisible(
+					!Platform.getPreferencesService().getBoolean(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+							UIPreferenceConstants.P_HIDE_DATA_CON, false, null));
 		}
 	}
 

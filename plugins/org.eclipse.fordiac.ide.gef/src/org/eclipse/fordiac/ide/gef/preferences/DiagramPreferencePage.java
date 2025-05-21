@@ -22,14 +22,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -78,14 +74,13 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 		integerFieldEditorValue.setValidRange(120, 100000);
 		addField(integerFieldEditorValue);
 
-		// Create a Group to hold label size field
-		createGroupLabelSize();
+		final BooleanFieldEditor manageConnections = new BooleanFieldEditor(
+				GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY,
+				Messages.DiagramPreferences_ManageConnectionOfEventsAutomatically, parent);
+		addField(manageConnections);
 
 		// Create a Group to hold the interface pin field
 		createGroupInterfacePins();
-
-		// Create a Group to hold the block margin fields
-		createGroupBlockMargins();
 
 		// Create a Group to hold the expanded interface fields
 		createExpandedInterfaceOptionsPins();
@@ -116,15 +111,8 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 
 	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
 		final String sourcePrefName = ((FieldEditor) event.getSource()).getPreferenceName();
-		return sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MIN_PIN_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_PIN_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_TYPE_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_VALUE_LABEL_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE)
+		return sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)
 				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.PIN_LABEL_STYLE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE)
-				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE)
 				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP)
 				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR);
 	}
@@ -149,52 +137,6 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 		msgBox.open();
 	}
 
-	private void createGroupLabelSize() {
-
-		final Group labelSize = createGroup(Messages.DiagramPreferences_LabelSize);
-		final IntegerFieldEditor integerFieldEditorLabel = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_VALUE_LABEL_SIZE, Messages.DiagramPreferences_MaximumValueLabelSize,
-				labelSize);
-		integerFieldEditorLabel.setValidRange(0, 120);
-		addField(integerFieldEditorLabel);
-
-		final IntegerFieldEditor integerFieldEditorTypeLabel = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_TYPE_LABEL_SIZE, Messages.DiagramPreferences_MaximumTypeLabelSize,
-				labelSize);
-		integerFieldEditorTypeLabel.setValidRange(0, 120);
-		addField(integerFieldEditorTypeLabel);
-
-		final IntegerFieldEditor integerFieldEditorMinPin = new IntegerFieldEditor(
-				GefPreferenceConstants.MIN_PIN_LABEL_SIZE, Messages.DiagramPreferences_MinimumPinLabelSize, labelSize);
-		integerFieldEditorMinPin.setValidRange(0, 60);
-		addField(integerFieldEditorMinPin);
-
-		final IntegerFieldEditor integerFieldEditorMaxPin = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_PIN_LABEL_SIZE, Messages.DiagramPreferences_MaximumPinLabelSize, labelSize);
-		integerFieldEditorMaxPin.setValidRange(0, 60);
-		addField(integerFieldEditorMaxPin);
-
-		final IntegerFieldEditor integerFieldEditorMinInterfaceBarWidth = new IntegerFieldEditor(
-				GefPreferenceConstants.MIN_INTERFACE_BAR_SIZE, Messages.DiagramPreferences_MinimumInterfaceBarSize,
-				labelSize);
-		integerFieldEditorMinInterfaceBarWidth.setValidRange(0, 100);
-		addField(integerFieldEditorMinInterfaceBarWidth);
-
-		final IntegerFieldEditor integerFieldEditorInterfaceBar = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_INTERFACE_BAR_SIZE, Messages.DiagramPreferences_MaximumInterfaceBarSize,
-				labelSize);
-		integerFieldEditorInterfaceBar.setValidRange(0, 100);
-		addField(integerFieldEditorInterfaceBar);
-
-		final IntegerFieldEditor integerFieldEditorConnection = new IntegerFieldEditor(
-				GefPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE,
-				Messages.DiagramPreferences_MaximumHiddenConnectionLabelSize, labelSize);
-		integerFieldEditorConnection.setValidRange(0, 100);
-		addField(integerFieldEditorConnection);
-
-		configGroup(labelSize);
-	}
-
 	private void createGroupInterfacePins() {
 		addField(new RadioGroupFieldEditor(GefPreferenceConstants.PIN_LABEL_STYLE,
 				Messages.DiagramPreferences_PinLabelText, 1,
@@ -205,26 +147,6 @@ public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
 						{ Messages.DiagramPreferences_ShowConnectedOutputPinName,
 								GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME } },
 				getFieldEditorParent(), true));
-	}
-
-	private void createGroupBlockMargins() {
-		final Group group = createGroup(Messages.DiagramPreferences_BlockMargins);
-		final IPreferenceStore modelStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
-				ModelPreferenceConstants.MODEL_PREFERENCES_ID);
-
-		final IntegerFieldEditor integerFieldEditorTopBottom = new IntegerFieldEditor(
-				ModelPreferenceConstants.MARGIN_TOP_BOTTOM, Messages.DiagramPreferences_TopBottom, group);
-		integerFieldEditorTopBottom.setValidRange(0, 1000);
-		integerFieldEditorTopBottom.setPreferenceStore(modelStore);
-		addField(integerFieldEditorTopBottom);
-
-		final IntegerFieldEditor integerFieldEditorLeftRight = new IntegerFieldEditor(
-				ModelPreferenceConstants.MARGIN_LEFT_RIGHT, Messages.DiagramPreferences_LeftRight, group);
-		integerFieldEditorLeftRight.setValidRange(0, 1000);
-		integerFieldEditorLeftRight.setPreferenceStore(modelStore);
-		addField(integerFieldEditorLeftRight);
-
-		configGroup(group);
 	}
 
 	private void createExpandedInterfaceOptionsPins() {

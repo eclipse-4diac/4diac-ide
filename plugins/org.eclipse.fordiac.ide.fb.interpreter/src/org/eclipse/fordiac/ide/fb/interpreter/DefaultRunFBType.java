@@ -318,6 +318,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
+
 		final var actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
 		final var outputEvents = new BasicEList<EventOccurrence>(actions.size());
 

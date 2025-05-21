@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.handlers.internal;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.ui.handlers.ErrorMessageHandler;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.dialogs.PopupDialog;
@@ -240,8 +240,8 @@ public final class ErrorMessageDialog extends PopupDialog {
 	}
 
 	private static boolean showErrorAtMouse() {
-		return InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-				.getBoolean(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR, false);
+		return Platform.getPreferencesService().getBoolean(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+				UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR, false, null);
 	}
 
 }

@@ -19,8 +19,8 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement;
@@ -92,8 +92,8 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		final IInterfaceElement ie = iep.getModel();
 		final EList<Connection> connList = getConnectionList(ie);
 
-		final boolean stepMode = InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-				.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false);
+		final boolean stepMode = Platform.getPreferencesService().getBoolean(
+				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
 
 		if (stepMode) {
 			if (isLeft()) {

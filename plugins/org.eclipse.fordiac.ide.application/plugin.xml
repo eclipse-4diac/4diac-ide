@@ -408,6 +408,12 @@
              name="Update Type">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
+             description="Mark FB as predecessor"
+             id="org.eclipse.fordiac.ide.application.commands.markAsPredecessor"
+             name="%FBMarker_MarkAsPredecessor">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
              id="org.eclipse.fordiac.ide.application.commands.gotoparent"
              name="%command.goToParent.name">
@@ -690,6 +696,23 @@
         </with>
       </activeWhen>
     </handler>
+    
+     <handler class="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
+      <activeWhen>
+        <with variable="selection">
+          <iterate ifEmpty="false">
+            <or>
+              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+              </instanceof>
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              </instanceof>
+            </or>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
     <handler class="org.eclipse.fordiac.ide.application.handlers.FlattenSubApplication"
              commandId="org.eclipse.fordiac.ide.application.commands.flattenSubApp">
       <activeWhen>
@@ -1003,6 +1026,7 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
@@ -1222,6 +1246,18 @@
           </and>
         </visibleWhen>
       </command>
+      
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
+        <visibleWhen>
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </with>
+            <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+          </and>
+        </visibleWhen>
+      </command>
+      
       <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent">
         <visibleWhen checkEnabled="true">
           <and>
@@ -1865,4 +1901,8 @@
             type="java.lang.Object">
       </propertyTester>
   </extension>
+    <extension
+          point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
+          <listener class = "org.eclipse.fordiac.ide.application.listeners.PredecessorQualifiedNameListener"/>
+    </extension>
 </plugin>

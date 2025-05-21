@@ -50,9 +50,13 @@ public class GenericVariable extends AbstractVariable<AnyValue> {
 
 	@Override
 	public void setValue(final TypedValue value) {
-		try {
-			variable.setValue(value);
-		} catch (final Exception e) {
+		if (variable != null && variable.getType().equals(value.type())) {
+			try {
+				variable.setValue(value);
+			} catch (final Exception e) {
+				super.setValue(value);
+			}
+		} else {
 			super.setValue(value);
 		}
 	}

@@ -16,11 +16,12 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.debug.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 	public static String AbstractRuntimeWatch_AddWatch;
 	public static String AbstractRuntimeWatch_RemoveWatch;
 	public static String AbstractVariableWatch_Disconnected;
 	public static String AbstractVariableWatch_ElementNotInResource;
+	public static String AbstractVariableWatch_InconsistentValues;
 	public static String AbstractVariableWatch_InvalidValue;
 	public static String AbstractVariableWatch_NoValue;
 	public static String AbstractVariableWatch_UnknownError;
