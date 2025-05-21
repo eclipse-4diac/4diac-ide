@@ -52,7 +52,9 @@ public class SearchTypeReferences extends AbstractHandler {
 					true,
 					false,
 					SearchScope.PROJECT,
-					typeEntry.getFile().getProject());
+					typeEntry.getFile().getProject(),
+					null
+					);
 			// @formatter:on
 			final ModelSearchQuery query = createModelSearchQuery(typeEntry, searchSpec);
 			NewSearchUI.runQueryInBackground(query, NewSearchUI.getSearchResultView());

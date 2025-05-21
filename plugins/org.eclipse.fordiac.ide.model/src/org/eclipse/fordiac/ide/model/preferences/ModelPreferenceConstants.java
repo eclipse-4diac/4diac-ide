@@ -30,6 +30,18 @@ public final class ModelPreferenceConstants {
 	public static final int MARGIN_TOP_BOTTOM_DEFAULT_VALUE = 0;
 	public static final int MARGIN_LEFT_RIGHT_DEFAULT_VALUE = 0;
 
+	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
+
+	public static final String MIN_PIN_LABEL_SIZE = "MinPinLabelSize"; //$NON-NLS-1$
+	public static final String MAX_PIN_LABEL_SIZE = "MaxPinLabelSize"; //$NON-NLS-1$
+
+	public static final String MAX_INTERFACE_BAR_SIZE = "MaxInterfaceBarSize"; //$NON-NLS-1$
+	public static final String MIN_INTERFACE_BAR_SIZE = "MinInterfaceBarSize"; //$NON-NLS-1$
+
+	public static final String MAX_HIDDEN_CONNECTION_LABEL_SIZE = "MaxHiddenConnectionLabelSize"; //$NON-NLS-1$
+
+	public static final String MAX_TYPE_LABEL_SIZE = "MaxTypeLabelSize"; //$NON-NLS-1$
+
 	// Additional constants defined in
 	// org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants
 

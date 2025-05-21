@@ -74,11 +74,14 @@ public abstract class AbstractRuntimeWatch extends AbstractVariableWatch {
 	public final void updateValue(final DeploymentDebugWatchData watchData) {
 		final Resource resource = getResource();
 		if (resource == null) {
+			setError(Messages.AbstractVariableWatch_NoValue);
 			return; // silently ignore
 		}
 		final Data data = watchData.getLastData(resource, getResourceRelativeName());
 		if (data != null) {
 			updateValue(data);
+		} else {
+			setError(Messages.AbstractVariableWatch_NoValue);
 		}
 	}
 

@@ -17,66 +17,54 @@ import java.util.SequencedSet;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 
 public abstract class AbstractVirtualWatch extends AbstractVariableWatch {
 
-	public record SubWatch(IVariableWatch watch, boolean negate) {
-
-		public Value value() {
-			return convertValue(watch.getInternalValue());
-		}
-
-		public Value convertValue(final Value value) {
-			if (negate) {
-				return ValueOperations.bitwiseNot(value);
-			}
-			return value;
-		}
-	}
-
-	private final SequencedSet<SubWatch> watches;
+	private final SequencedSet<IVariableWatch> watches;
 
 	protected AbstractVirtualWatch(final Variable<?> variable, final ITypedElement element,
-			final SequencedSet<SubWatch> watches, final DeploymentDebugDevice debugTarget) {
+			final SequencedSet<IVariableWatch> watches, final DeploymentDebugDevice debugTarget) {
 		super(variable, element, debugTarget);
 		this.watches = watches;
 	}
 
 	@Override
 	public void addWatch() throws DebugException {
-		for (final SubWatch watch : watches) {
-			watch.watch().addWatch();
+		for (final IWatch watch : watches) {
+			watch.addWatch();
 		}
 	}
 
 	@Override
 	public void removeWatch() throws DebugException {
-		for (final SubWatch watch : watches) {
-			watch.watch().removeWatch();
+		for (final IWatch watch : watches) {
+			watch.removeWatch();
 		}
 	}
 
 	@Override
 	public void updateValue(final DeploymentDebugWatchData watchData) {
 		if (watches.isEmpty()) {
+			setError(Messages.AbstractVariableWatch_NoValue);
 			return;
 		}
-		for (final SubWatch watch : watches) {
-			watch.watch().updateValue(watchData);
-			if (watch.watch().hasError()) {
+		for (final IWatch watch : watches) {
+			watch.updateValue(watchData);
+			if (watch.hasError()) {
+				setError(Messages.AbstractVariableWatch_NoValue);
 				return;
 			}
 		}
-		updateValue(watches.stream().map(SubWatch::value).toList());
+		updateValue(watches.stream().map(IVariableWatch::getInternalValue).toList());
 	}
 
 	protected abstract void updateValue(List<Value> values);
 
-	public SequencedSet<SubWatch> getWatches() {
+	public SequencedSet<IVariableWatch> getWatches() {
 		return watches;
 	}
 

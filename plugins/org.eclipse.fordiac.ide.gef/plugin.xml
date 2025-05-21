@@ -60,13 +60,13 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
-            name="Diagram Preferences">
+            name="Diagram">
       </page>
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gef.preferences.GridPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.GridPreferences"
-            name="Grid Preferences">
+            name="Grid">
       </page>
    </extension>
    <extension
@@ -75,7 +75,7 @@
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"
-            name="Diagram Preferences">
+            name="Diagram">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">

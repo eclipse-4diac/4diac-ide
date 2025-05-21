@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
@@ -392,7 +392,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	private static boolean isConnectionLayoutPreferenceTicked() {
-		return InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.gef").getBoolean("ConnectionAutoLayout", false); //$NON-NLS-1$ //$NON-NLS-2$
+		return Platform.getPreferencesService().getBoolean("org.eclipse.fordiac.ide.gef", "ConnectionAutoLayout", false, //$NON-NLS-1$ //$NON-NLS-2$
+				null);
 	}
 
 	private static Command createConnectionLayoutCommand() {

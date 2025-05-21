@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
@@ -98,6 +99,8 @@ public class SubAppVarDeclarationWatch extends AbstractSubAppInterfaceWatch impl
 		// all values must be equal
 		if (values.stream().distinct().count() == 1) {
 			updateValue(values.getFirst());
+		} else {
+			setError(Messages.AbstractVariableWatch_InconsistentValues);
 		}
 	}
 
