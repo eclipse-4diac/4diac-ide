@@ -114,7 +114,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def protected generateFBNetwork() '''
-		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterType)]»
+		«IF !fbs.empty»
 			const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
 			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
 			};

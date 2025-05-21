@@ -20,187 +20,231 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Transition Trace</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Transition Trace</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getSourceState <em>Source
- * State</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getDestinationState <em>Destination
- * State</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getCondEvent <em>Cond
- * Event</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getCondExpression <em>Cond
- * Expression</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getSourceState
+ * <em>Source State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getDestinationState
+ * <em>Destination State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getCondEvent
+ * <em>Cond Event</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransitionTraceImpl#getCondExpression
+ * <em>Cond Expression</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class TransitionTraceImpl extends MinimalEObjectImpl.Container implements TransitionTrace {
-	/** The default value of the '{@link #getSourceState() <em>Source State</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getSourceState() <em>Source State</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getSourceState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String SOURCE_STATE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getSourceState() <em>Source State</em>}' attribute. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getSourceState() <em>Source State</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getSourceState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String sourceState = SOURCE_STATE_EDEFAULT;
 
-	/** The default value of the '{@link #getDestinationState() <em>Destination State</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getDestinationState() <em>Destination
+	 * State</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getDestinationState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String DESTINATION_STATE_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getDestinationState() <em>Destination State</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getDestinationState() <em>Destination
+	 * State</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getDestinationState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String destinationState = DESTINATION_STATE_EDEFAULT;
 
-	/** The default value of the '{@link #getCondEvent() <em>Cond Event</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The default value of the '{@link #getCondEvent() <em>Cond Event</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getCondEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COND_EVENT_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getCondEvent() <em>Cond Event</em>}' attribute. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCondEvent() <em>Cond Event</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getCondEvent()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String condEvent = COND_EVENT_EDEFAULT;
 
-	/** The default value of the '{@link #getCondExpression() <em>Cond Expression</em>}' attribute. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The default value of the '{@link #getCondExpression() <em>Cond
+	 * Expression</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getCondExpression()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected static final String COND_EXPRESSION_EDEFAULT = null;
 
-	/** The cached value of the '{@link #getCondExpression() <em>Cond Expression</em>}' attribute. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getCondExpression() <em>Cond
+	 * Expression</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getCondExpression()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected String condExpression = COND_EXPRESSION_EDEFAULT;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected TransitionTraceImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.TRANSITION_TRACE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getSourceState() {
 		return sourceState;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setSourceState(String newSourceState) {
 		String oldSourceState = sourceState;
 		sourceState = newSourceState;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSITION_TRACE__SOURCE_STATE, oldSourceState, sourceState));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getDestinationState() {
 		return destinationState;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setDestinationState(String newDestinationState) {
 		String oldDestinationState = destinationState;
 		destinationState = newDestinationState;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSITION_TRACE__DESTINATION_STATE, oldDestinationState,
 					destinationState));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getCondEvent() {
 		return condEvent;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setCondEvent(String newCondEvent) {
 		String oldCondEvent = condEvent;
 		condEvent = newCondEvent;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSITION_TRACE__COND_EVENT, oldCondEvent, condEvent));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String getCondExpression() {
 		return condExpression;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setCondExpression(String newCondExpression) {
 		String oldCondExpression = condExpression;
 		condExpression = newCondExpression;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.TRANSITION_TRACE__COND_EXPRESSION, oldCondExpression, condExpression));
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -217,9 +261,11 @@ public class TransitionTraceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -241,9 +287,11 @@ public class TransitionTraceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -265,9 +313,11 @@ public class TransitionTraceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -286,13 +336,16 @@ public class TransitionTraceImpl extends MinimalEObjectImpl.Container implements
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
-		if (eIsProxy())
+		if (eIsProxy()) {
 			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (sourceState: "); //$NON-NLS-1$

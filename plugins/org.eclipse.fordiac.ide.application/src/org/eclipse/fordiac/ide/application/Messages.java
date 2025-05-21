@@ -97,6 +97,12 @@ public final class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
+	public static String FBMarker_ActivePredecessor;
+
+	public static String FBMarker_MarkAsPredecessor;
+
+	public static String FBMarker_RemovePredecessorMarker;
+
 	public static String FunctionBlock;
 
 	public static String HandlerPreferenceSafeError;
@@ -202,6 +208,12 @@ public final class Messages extends NLS {
 	public static String StructManipulatorSection_STRUCTURED_TYPE;
 
 	public static String StructManipulatorSection_Contained_variables;
+
+	public static String ToggleSegments;
+
+	public static String ToggleSegments_3;
+
+	public static String ToggleSegments_5;
 
 	public static String TransferInstanceComments_WizardTitle;
 

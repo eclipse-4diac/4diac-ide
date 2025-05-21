@@ -17,6 +17,7 @@ import java.util.SequencedSet;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
@@ -48,11 +49,13 @@ public abstract class AbstractVirtualWatch extends AbstractVariableWatch {
 	@Override
 	public void updateValue(final DeploymentDebugWatchData watchData) {
 		if (watches.isEmpty()) {
+			setError(Messages.AbstractVariableWatch_NoValue);
 			return;
 		}
 		for (final IWatch watch : watches) {
 			watch.updateValue(watchData);
 			if (watch.hasError()) {
+				setError(Messages.AbstractVariableWatch_NoValue);
 				return;
 			}
 		}

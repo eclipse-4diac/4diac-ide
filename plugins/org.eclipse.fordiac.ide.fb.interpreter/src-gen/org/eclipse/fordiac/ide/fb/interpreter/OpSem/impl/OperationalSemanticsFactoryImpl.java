@@ -36,13 +36,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
-/** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements OperationalSemanticsFactory {
-	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public static OperationalSemanticsFactory init() {
 		try {
 			OperationalSemanticsFactory theOperationalSemanticsFactory = (OperationalSemanticsFactory) EPackage.Registry.INSTANCE
@@ -56,16 +62,21 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 		return new OperationalSemanticsFactoryImpl();
 	}
 
-	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public OperationalSemanticsFactoryImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
@@ -96,115 +107,141 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence createEventOccurrence() {
 		EventOccurrenceImpl eventOccurrence = new EventOccurrenceImpl();
 		return eventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventManager createEventManager() {
 		EventManagerImpl eventManager = new EventManagerImpl();
 		return eventManager;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BasicFBTypeRuntime createBasicFBTypeRuntime() {
 		BasicFBTypeRuntimeImpl basicFBTypeRuntime = new BasicFBTypeRuntimeImpl();
 		return basicFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public SimpleFBTypeRuntime createSimpleFBTypeRuntime() {
 		SimpleFBTypeRuntimeImpl simpleFBTypeRuntime = new SimpleFBTypeRuntimeImpl();
 		return simpleFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBNetworkRuntime createFBNetworkRuntime() {
 		FBNetworkRuntimeImpl fbNetworkRuntime = new FBNetworkRuntimeImpl();
 		return fbNetworkRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public FBTransaction createFBTransaction() {
 		FBTransactionImpl fbTransaction = new FBTransactionImpl();
 		return fbTransaction;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Map.Entry<Connection, Value> createConnectionToValueMap() {
 		ConnectionToValueMapImpl connectionToValueMap = new ConnectionToValueMapImpl();
 		return connectionToValueMap;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public Map.Entry<FBNetworkElement, FBRuntimeAbstract> createRuntimeMap() {
 		RuntimeMapImpl runtimeMap = new RuntimeMapImpl();
 		return runtimeMap;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Trace createTrace() {
 		TraceImpl trace = new TraceImpl();
 		return trace;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EccTrace createEccTrace() {
 		EccTraceImpl eccTrace = new EccTraceImpl();
 		return eccTrace;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public TransitionTrace createTransitionTrace() {
 		TransitionTraceImpl transitionTrace = new TransitionTraceImpl();
 		return transitionTrace;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public OperationalSemanticsPackage getOperationalSemanticsPackage() {
 		return (OperationalSemanticsPackage) getEPackage();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @deprecated
-	 * @generated */
+	 * @generated
+	 */
 	@Deprecated
 	public static OperationalSemanticsPackage getPackage() {
 		return OperationalSemanticsPackage.eINSTANCE;

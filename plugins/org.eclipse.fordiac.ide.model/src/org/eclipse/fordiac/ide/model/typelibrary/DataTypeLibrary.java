@@ -185,7 +185,7 @@ public final class DataTypeLibrary {
 			try {
 				final String plainTypeName = matcher.group(1);
 				final String maxLengthString = matcher.group(2);
-				final DataType plainType = typeMap.get(plainTypeName);
+				final DataType plainType = typeMap.get(plainTypeName.toUpperCase());
 				if (plainType instanceof AnyStringType) {
 					final int maxLength = Integer.parseUnsignedInt(maxLengthString);
 					return typeMap.computeIfAbsent(typeName.toUpperCase(), name -> {

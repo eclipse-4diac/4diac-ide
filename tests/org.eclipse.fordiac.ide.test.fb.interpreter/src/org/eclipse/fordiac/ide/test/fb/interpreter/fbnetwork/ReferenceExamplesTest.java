@@ -98,12 +98,11 @@ public class ReferenceExamplesTest {
 				URI.createURI("platform:/resource/ReferenceExamples/" + res.getName())); //$NON-NLS-1$
 
 		final Resource resLeft = EventManagerUtils
-				.loadResourceNotOnDemand(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
+				.loadResource(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
 
 		final Comparison eventComparison = EventManagerComparisonUtils.compareEventManager(resLeft, resRight);
 		EMFComparePrettyPrinter.printComparison(eventComparison, System.out);
 		assertTrue(eventComparison.getDifferences().isEmpty());
-
 	}
 
 	static FordiacProjectLoader getProject() {

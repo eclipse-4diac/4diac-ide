@@ -28,9 +28,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -46,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
@@ -57,11 +62,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
-import org.eclipse.search.ui.text.Match;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -309,17 +314,25 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private void searchInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
+
 		// @formatter:off
-		Stream.of(
+		final Stream<IInterfaceElement> searchableElements = Stream.of(
 	            interfaceList.getInputs(),
 	            interfaceList.getOutputVars().stream(),
 	            interfaceList.getEventOutputs().stream(),
 	            interfaceList.getPlugs().stream()
 	    )
-	    .flatMap(Function.identity())
-		.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor))
-		.forEach(searchResult::addResult);
-		// @formatter:on
+	    .flatMap(Function.identity());
+
+		 Stream<IInterfaceElement> results;
+
+		if(modelQuerySpec.referenceObject() instanceof final STVarDeclaration globalConstant) {
+			results = searchableElements.filter((final INamedElement modelElement) -> this.checkGlobalConstant(modelElement, monitor));
+		} else {
+			results = searchableElements.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor));
+		}
+
+		results.forEach(searchResult::addResult);
 	}
 
 	private boolean matchEObject(final INamedElement modelElement, final IProgressMonitor monitor) {
@@ -346,7 +359,7 @@ public class ModelSearchQuery implements ISearchQuery {
 			if (modelElement instanceof Algorithm || modelElement instanceof Method
 					|| modelElement instanceof FunctionFBType) {
 				addMatchesForSTOccurance(modelElement);
-				return searchResult.getMatchCount(modelElement) > 0;
+				return searchResult.hasFordiacMatch(EcoreUtil.getURI(modelElement));
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 				return compareStrings(config.getTypeName())
@@ -357,12 +370,56 @@ public class ModelSearchQuery implements ISearchQuery {
 						|| (namElem.getTypeEntry() != null && compareStrings(namElem.getTypeEntry().getFullTypeName()));
 			}
 			if (modelElement instanceof final VarDeclaration varDecl) {
+
 				return compareStrings(varDecl.getTypeName())
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
 								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
 			}
 		}
 		return false;
+	}
+
+
+	private boolean checkGlobalConstant(final INamedElement modelElement, final IProgressMonitor monitor) {
+		SearchCanceledException.throwIfCanceled(monitor);
+
+		if(!(modelElement instanceof final VarDeclaration varDecl) || varDecl.getValue() == null)
+		{
+			return false;
+		}
+
+		final List<String> segments = List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER));
+
+		final String variableName; // GlobalConstantsType::VariableName
+		final String typeName; // PackageName::GlobalConstantsType
+
+		if(segments.size() == 3) { // package name in the string
+			   variableName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments.subList(1, 3));
+			   typeName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments.subList(0, 2));
+		} else {
+			variableName = modelQuerySpec.searchString();
+			typeName = null;
+		}
+
+		// if there is no variable match, we do not check anything else
+		if(!varDecl.getValue().getValue().contains(variableName)) {
+			return false;
+		}
+
+		// if it's not part of a package, we don't need to check the imports
+		if(typeName == null) {
+			return true;
+		}
+
+		// if it has the full qualified name, no need to check imports
+		if(varDecl.getValue().getValue().contains(modelQuerySpec.searchString())) {
+			return true;
+		}
+
+		final List<Import> imports = ImportHelper.getContainerImports(varDecl);
+
+		// we check if the type is part of the imports
+		return imports.stream().anyMatch(imp -> typeName.equals(imp.getImportedNamespace()));
 	}
 
 	private void addMatchesForSTOccurance(final INamedElement modelElement) {
@@ -381,9 +438,11 @@ public class ModelSearchQuery implements ISearchQuery {
 
 		if (searchSupport != null) {
 			final IModelMatcher matcher = new STMatcher(this::compareStrings);
+			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-					.map(match -> new Match(modelElement, Match.UNIT_LINE, match.getOffset(), match.getLine() + 1))
-					.forEach(match -> searchResult.addMatch(match));
+					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength(),
+							match.getType()))
+					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
 	}

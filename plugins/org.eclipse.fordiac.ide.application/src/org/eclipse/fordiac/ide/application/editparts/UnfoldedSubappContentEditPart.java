@@ -17,6 +17,7 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -26,16 +27,22 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.commands.InsertFBIntoExecutionChainCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.AbstractContainerCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditPart {
 
@@ -81,8 +88,15 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractContainerCreateInstanceDirectEditPolicy() {
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
-				return new ResizeGroupOrSubappCommand(getHost(), AbstractCreateFBNetworkElementCommand
-						.createCreateCommand(value, getModel(), refPoint.x, refPoint.y));
+				Command insertFBCommandChain = AbstractCreateFBNetworkElementCommand.createCreateCommand(value,
+						getModel(), refPoint.x, refPoint.y);
+				if (getRoot() instanceof final FBNetworkRootEditPart root
+						&& insertFBCommandChain instanceof final FBCreateCommand fbcreateCommand && getPreferenceStore()
+						.getBoolean(GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY)) {
+					insertFBCommandChain = insertFBCommandChain.chain(new InsertFBIntoExecutionChainCommand(
+							getContainerElement(), fbcreateCommand.getFB(), root));
+				}
+				return new ResizeGroupOrSubappCommand(getHost(), insertFBCommandChain);
 			}
 		});
 	}
@@ -132,6 +146,12 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			return key.cast(getContainerElement());
 		}
 		return super.getAdapter(key);
+	}
+
+	private IPreferenceStore getPreferenceStore() {
+		final IProject project = ((AdvancedScrollingGraphicalViewer) this.getViewer()).getPreferencesCache()
+				.getProject();
+		return PreferenceStoreProvider.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, project);
 	}
 
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="StationCtrl2" Comment="Template for a simple Basic Function Block Type" >
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2020-08-10">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request" >
+				<With Var="ErrorCode"/>
+			</Event>
+			<Event Name="NextPart" Type="Event" Comment="Next part is ready" >
+				<With Var="PartID"/>
+				<With Var="ErrorCode"/>
+			</Event>
+			<Event Name="PartPicked" Type="Event">
+			</Event>
+			<Event Name="Error" Type="Event" Comment="Error in system occurred" >
+				<With Var="ErrorCode"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm" >
+				<With Var="ConvSpeed"/>
+			</Event>
+			<Event Name="StartConv" Type="Event" Comment="Execution Confirmation" >
+				<With Var="ConvSpeed"/>
+			</Event>
+			<Event Name="StopConv" Type="Event">
+				<With Var="ConvSpeed"/>
+			</Event>
+			<Event Name="PickPart" Type="Event">
+				<With Var="RobotID"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="ErrorCode" Type="INT" Comment="Origin and type of error" />
+			<VarDeclaration Name="PartID" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="ConvSpeed" Type="INT" Comment="Output event qualifier"  InitialValue="100"/>
+			<VarDeclaration Name="RobotID" Type="INT"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="2553.33" y="913.33">
+			</ECState>
+			<ECState Name="initialize" x="3733.33" y="973.33">
+				<ECAction Algorithm="init" Output="INITO"/>
+			</ECState>
+			<ECState Name="processingPart" x="3120" y="1966.67">
+				<ECAction Output="StopConv"/>
+				<ECAction Algorithm="chooseRobot" Output="PickPart"/>
+			</ECState>
+			<ECState Name="handleError" x="1066.67" y="1533.33">
+			</ECState>
+			<ECState Name="conveyorError" x="506.67" y="720">
+				<ECAction Algorithm="reduceSpeed" Output="StopConv"/>
+			</ECState>
+			<ECState Name="robotError" x="606.67" y="2040">
+				<ECAction Output="StartConv"/>
+			</ECState>
+			<ECState Name="restart" x="2033.33" y="1506.67">
+				<ECAction Output="StartConv"/>
+			</ECState>
+			<ECTransition Source="START" Destination="initialize" Condition="INIT" Comment="" x="3306.67" y="853.33"/>
+			<ECTransition Source="initialize" Destination="START" Condition="1" Comment="" x="3280" y="1166.67"/>
+			<ECTransition Source="START" Destination="processingPart" Condition="NextPart[ErrorCode = 0]" Comment="" x="3266.67" y="1413.33"/>
+			<ECTransition Source="processingPart" Destination="restart" Condition="PartPicked" Comment="" x="2633.33" y="1840"/>
+			<ECTransition Source="processingPart" Destination="handleError" Condition="Error" Comment="" x="2213.33" y="2013.33"/>
+			<ECTransition Source="handleError" Destination="robotError" Condition="[ErrorCode = 1]" Comment="" x="1240" y="1846.67"/>
+			<ECTransition Source="handleError" Destination="conveyorError" Condition="[ErrorCode = 2]" Comment="" x="1280" y="1293.33"/>
+			<ECTransition Source="conveyorError" Destination="START" Condition="1" Comment="" x="1673.33" y="1006.67"/>
+			<ECTransition Source="robotError" Destination="START" Condition="1" Comment="" x="746.67" y="1213.33"/>
+			<ECTransition Source="restart" Destination="START" Condition="1" Comment="" x="2360" y="1306.67"/>
+		</ECC>
+		<Algorithm Name="init">
+			<ST><![CDATA[ALGORITHM init
+
+RobotID := 0;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="setSpeed">
+			<ST><![CDATA[
+
+ALGORITHM setSpeed
+
+ConvSpeed := 100;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="chooseRobot">
+			<ST><![CDATA[
+
+ALGORITHM chooseRobot
+
+RobotID := 50;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="reduceSpeed">
+			<ST><![CDATA[
+
+ALGORITHM reduceSpeed
+ConvSpeed := 50;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Service RightInterface="BFB Internal" LeftInterface="FB Network">
+		<ServiceSequence Name="initialize">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="FB Network" Event="INIT"/>
+				<OutputPrimitive Interface="BFB Internal" Event="init"/>
+				<OutputPrimitive Interface="FB Network" Event="INITO"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="normal_operation">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="FB Network" Event="NextPart" Parameters="ErrorCode:=0"/>
+				<OutputPrimitive Interface="BFB Internal" Event="chooseRobot"/>
+				<OutputPrimitive Interface="FB Network" Event="StopConv"/>
+				<OutputPrimitive Interface="FB Network" Event="PickPart" Parameters="ConvSpeed:=INT#100"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="FB Network" Event="PartPicked"/>
+				<OutputPrimitive Interface="FB Network" Event="StartConv"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="conveyor_error">
+			<Attribute Name="StartState" Type="STRING" Value="processingPart"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="FB Network" Event="Error" Parameters="ErrorCode:=2"/>
+				<OutputPrimitive Interface="BFB Internal" Event="reduceSpeed"/>
+				<OutputPrimitive Interface="FB Network" Event="StopConv" Parameters="ConvSpeed:=50"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>

@@ -37,24 +37,33 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
-/** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence} object.
+/**
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class EventOccurrenceItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
-	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	public EventOccurrenceItemProvider(final AdapterFactory adapterFactory) {
+	 * @generated
+	 */
+	public EventOccurrenceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
-	/** This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -64,93 +73,130 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 			addFbRuntimePropertyDescriptor(object);
 			addCreatedTransactionsPropertyDescriptor(object);
 			addParentFBPropertyDescriptor(object);
+			addStartTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
-	/** This adds a property descriptor for the Event feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Event feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addEventPropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addEventPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_event_feature"), //$NON-NLS-1$
 				getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_event_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_EventOccurrence_type"),  //$NON-NLS-1$
+						"_UI_EventOccurrence_type"), //$NON-NLS-1$
 				OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__EVENT, true, false, true, null, null, null));
 	}
 
-	/** This adds a property descriptor for the Active feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Active feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addActivePropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addActivePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_active_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_active_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_EventOccurrence_type"),  //$NON-NLS-1$
+								"_UI_EventOccurrence_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__ACTIVE, true, false, false,
 						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Ignored feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Ignored feature. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addIgnoredPropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addIgnoredPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_ignored_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_ignored_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_EventOccurrence_type"),  //$NON-NLS-1$
+								"_UI_EventOccurrence_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__IGNORED, true, false, false,
 						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
-	/** This adds a property descriptor for the Fb Runtime feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Fb Runtime feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addFbRuntimePropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addFbRuntimePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_fbRuntime_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_fbRuntime_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_EventOccurrence_type"),  //$NON-NLS-1$
+								"_UI_EventOccurrence_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__FB_RUNTIME, true, false, true, null,
 						null, null));
 	}
 
-	/** This adds a property descriptor for the Created Transactions feature. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
+	/**
+	 * This adds a property descriptor for the Created Transactions feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addCreatedTransactionsPropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addCreatedTransactionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_createdTransactions_feature"), //$NON-NLS-1$
 						getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
-								"_UI_EventOccurrence_createdTransactions_feature", "_UI_EventOccurrence_type"),  //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_EventOccurrence_createdTransactions_feature", "_UI_EventOccurrence_type"), //$NON-NLS-1$ //$NON-NLS-2$
 						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__CREATED_TRANSACTIONS, true, false, true,
 						null, null, null));
 	}
 
-	/** This adds a property descriptor for the Parent FB feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Parent FB feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
-	protected void addParentFBPropertyDescriptor(final Object object) {
+	 * @generated
+	 */
+	protected void addParentFBPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_parentFB_feature"), //$NON-NLS-1$
 				getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_parentFB_feature", //$NON-NLS-1$ //$NON-NLS-2$
-						"_UI_EventOccurrence_type"),  //$NON-NLS-1$
+						"_UI_EventOccurrence_type"), //$NON-NLS-1$
 				OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__PARENT_FB, true, false, true, null, null, null));
 	}
 
-	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This adds a property descriptor for the Start Time feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated
+	 */
+	protected void addStartTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_EventOccurrence_startTime_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_EventOccurrence_startTime_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_EventOccurrence_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__START_TIME, true, false, false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an
+	 * appropriate feature for an {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated NOT
+	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
@@ -161,20 +207,26 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		return childrenFeatures;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to
+		// use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
-	/** This returns EventOccurrence.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns EventOccurrence.gif. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public Object getImage(final Object object) {
 		if (object instanceof final EObject eObj) {
@@ -187,9 +239,12 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/EventOccurrence")); //$NON-NLS-1$
 	}
 
-	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated NOT */
+	 * @generated NOT
+	 */
 	@Override
 	public String getText(final Object object) {
 		final EventOccurrence eventOccurrence = (EventOccurrence) object;
@@ -200,11 +255,13 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		return getString("_UI_EventOccurrence_type"); //$NON-NLS-1$
 	}
 
-	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
-	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/**
+	 * This handles model notifications by calling {@link #updateChildren} to update
+	 * any cached children and by creating a viewer notification, which it passes to
+	 * {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
@@ -212,6 +269,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		switch (notification.getFeatureID(EventOccurrence.class)) {
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__ACTIVE:
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__IGNORED:
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__START_TIME:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
@@ -223,10 +281,13 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 		}
 	}
 
-	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
-	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing
+	 * the children that can be created under this object. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
@@ -244,9 +305,12 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 						OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime()));
 	}
 
-	/** Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
 		return OperationalSemanticsEditPlugin.INSTANCE;

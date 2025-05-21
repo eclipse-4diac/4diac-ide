@@ -32,6 +32,7 @@ public class SearchChildrenProviderHelper {
 
 	public static Stream<? extends EObject> getFBTypeChildren(final FBType fbType) {
 		Stream<? extends EObject> retval = getInterfaceListChildren(fbType.getInterfaceList());
+		retval = Stream.concat(retval, fbType.getAttributes().stream());
 		if (fbType instanceof final BaseFBType baseFBType) {
 			retval = Stream.concat(retval, baseFBType.getInternalVars().stream());
 			retval = Stream.concat(retval, baseFBType.getInternalConstVars().stream());

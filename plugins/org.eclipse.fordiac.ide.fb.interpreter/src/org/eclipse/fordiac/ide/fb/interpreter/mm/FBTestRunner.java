@@ -56,7 +56,7 @@ public final class FBTestRunner {
 
 		if (expectedResults.size() != results.size()) { // correct test data
 			return Optional.of("test data is incorrect: expected number of elements: " + expectedResults.size() //$NON-NLS-1$
-					+ ", received number of elements: " + results.size());  //$NON-NLS-1$
+					+ ", received number of elements: " + results.size()); //$NON-NLS-1$
 		}
 
 		for (int i = 0; i < expectedResults.size(); i++) {
@@ -80,39 +80,37 @@ public final class FBTestRunner {
 		}
 
 		// no unwanted output event occurrences
-		final long outputEvents = expectedResult.getOutputPrimitive().stream().filter(
+		final List<OutputPrimitive> outputEvents = expectedResult.getOutputPrimitive().stream().filter(
 				p -> !p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
-				.count();
-		if (outputEvents != result.getOutputEventOccurrences().size()) {
+				.toList();
+
+		if (outputEvents.size() != result.getOutputEventOccurrences().size()) {
 			return Optional.of("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
 
 		// check all output primitives
-		for (int j = 0; j < outputEvents; j++) {
-			final OutputPrimitive p = expectedResult.getOutputPrimitive().get(j);
+		for (int j = 0; j < outputEvents.size(); j++) {
+			final OutputPrimitive p = outputEvents.get(j);
 			final Optional<String> errorMsg = checkOutputPrimitive(result, j, p);
 			if (errorMsg.isPresent()) {
 				return errorMsg;
 			}
 		}
-
 		return Optional.empty();
 	}
 
 	private static Optional<String> checkOutputPrimitive(final FBTransaction result, final int j,
 			final OutputPrimitive p) {
-		if (!p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE)) {
-			// generated output event is correct
-			final String nameGeneratedEvent = result.getOutputEventOccurrences().get(j).getEvent().getName();
-			if (!p.getEvent().equals(nameGeneratedEvent)) {
-				return Optional.of("Generated output event " + nameGeneratedEvent + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			// the associated data is correct
-			final Optional<String> errorMsg = processParameters(p.getParameters(), result);
-			if (!errorMsg.isEmpty()) {
-				return Optional
-						.of("Parameter values of " + p.getParameters() + " do not match the data: " + errorMsg.get()); //$NON-NLS-1$ //$NON-NLS-2$
-			}
+		// generated output event is correct
+		final String nameGeneratedEvent = result.getOutputEventOccurrences().get(j).getEvent().getName();
+		if (!p.getEvent().equals(nameGeneratedEvent)) {
+			return Optional.of("Generated output event " + nameGeneratedEvent + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		// the associated data is correct
+		final Optional<String> errorMsg = processParameters(p.getParameters(), result);
+		if (!errorMsg.isEmpty()) {
+			return Optional
+					.of("Parameter values of " + p.getParameters() + " do not match the data: " + errorMsg.get()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return Optional.empty();
 	}

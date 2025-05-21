@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.preferences;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.Platform;
 
 public class IEC61499PreferenceConstants {
 
@@ -31,7 +31,7 @@ public class IEC61499PreferenceConstants {
 	 * default value
 	 */
 	public static int getConnectionTimeout() {
-		return InstanceScope.INSTANCE.getNode(DEPLOYMENT_IEC61499_PREFERENCES_ID).getInt(P_CONNECTION_TIMEOUT,
-				P_CONNECTION_TIMEOUT_DEFAULT);
+		return Platform.getPreferencesService().getInt(DEPLOYMENT_IEC61499_PREFERENCES_ID, P_CONNECTION_TIMEOUT,
+				P_CONNECTION_TIMEOUT_DEFAULT, null);
 	}
 }

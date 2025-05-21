@@ -184,7 +184,9 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 					isExactNameMatching,
 					isInterfaceValueMatching,
 					getScope(),
-					curProject);
+					curProject,
+					null
+					);
 			// @formatter:on
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());

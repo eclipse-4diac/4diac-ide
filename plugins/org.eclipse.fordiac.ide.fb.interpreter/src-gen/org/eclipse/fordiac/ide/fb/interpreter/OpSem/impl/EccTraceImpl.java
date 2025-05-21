@@ -28,43 +28,55 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.TracingAnnotations;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Ecc Trace</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Ecc
+ * Trace</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl#getTransitionTraces <em>Transition
- * Traces</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl#getTransitionTraces
+ * <em>Transition Traces</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class EccTraceImpl extends TraceImpl implements EccTrace {
-	/** The cached value of the '{@link #getTransitionTraces() <em>Transition Traces</em>}' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getTransitionTraces() <em>Transition
+	 * Traces</em>}' containment reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getTransitionTraces()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<TransitionTrace> transitionTraces;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected EccTraceImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.ECC_TRACE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<TransitionTrace> getTransitionTraces() {
 		if (transitionTraces == null) {
@@ -74,17 +86,21 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 		return transitionTraces;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EList<ECTransition> getTransitions(final ECC ecc) {
 		return TracingAnnotations.getTransitions(ecc, this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -95,9 +111,11 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -108,9 +126,11 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -125,9 +145,11 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -140,9 +162,11 @@ public class EccTraceImpl extends TraceImpl implements EccTrace {
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {

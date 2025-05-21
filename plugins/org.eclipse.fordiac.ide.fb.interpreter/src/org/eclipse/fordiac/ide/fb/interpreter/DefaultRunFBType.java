@@ -14,6 +14,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,6 +51,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.BasicFBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
@@ -67,10 +71,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
@@ -84,7 +90,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		if (this.eventOccurrence.getFbRuntime() instanceof final FBNetworkRuntime fbNetworkRuntime) {
 			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
 			fbNetwork.getNetworkElements()
-			.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
+					.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
 		}
 	}
 
@@ -119,7 +125,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		while (firedTransition != null) {
 			isConsumed(this.eventOccurrence);
 			basicFBTypeRuntime.setActiveState(firedTransition.getDestination().getName());// fire transition
-			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
+			outputEvents.addAll(performEntryAction(basicFBTypeRuntime, eventOccurrence));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 			addToTrace(firedTransition, basicFBTypeRuntime.eContainer().eContainer());
 		}
@@ -140,12 +146,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 	}
 
-	private static EList<EventOccurrence> performEntryAction(final BasicFBTypeRuntime basicFBTypeRuntime) {
+	private static EList<EventOccurrence> performEntryAction(final BasicFBTypeRuntime basicFBTypeRuntime,
+			final EventOccurrence eventOccurrence) {
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		for (final ECAction action : basicFBTypeRuntime.getActiveState(basicFBTypeRuntime.getActiveState())
 				.getECAction()) {
 			if (action.getAlgorithm() != null) {
-				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm());
+				processAlgorithmWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), action.getAlgorithm(),
+						eventOccurrence);
 			}
 			if (action.getOutput() != null) {
 				outputEvents.add(createOutputEventOccurrence(basicFBTypeRuntime, action.getOutput(),
@@ -159,7 +167,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return VariableOperations.newVariable(vdec, vdec.getValue().getValue());
 	}
 
-	private static void processAlgorithmWithEvaluator(final BaseFBType basefbtype, final Algorithm algorithm) {
+	private static void processAlgorithmWithEvaluator(final BaseFBType basefbtype, final Algorithm algorithm,
+			final EventOccurrence eventOccurrence) {
 		if (!(algorithm instanceof STAlgorithm)) {
 			throw new IllegalArgumentException("StructuredTextAlgorithm object could not be found"); //$NON-NLS-1$
 		}
@@ -180,19 +189,25 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue)
 				.orElse(null);
 		if (algoEval != null) {
-			try {
-				algoEval.evaluate();
-				vars.forEach(v -> {
-					final VarDeclaration varDecl = varDecls.stream().filter(vd -> vd.getName().equals(v.getName()))
-							.findAny().orElse(null);
-					final String value = v.getValue().toString();
-					varDecl.getValue().setValue(value);
+			try (EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(basefbtype.getName())) {
+				final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
+				tpe.setMonotonicClock(clock);
+				tpe.execute(() -> {
+					try {
+						algoEval.evaluate();
+						vars.forEach(v -> {
+							final VarDeclaration varDecl = varDecls.stream()
+									.filter(vd -> vd.getName().equals(v.getName())).findAny().orElse(null);
+							final String value = v.getValue().toString();
+							varDecl.getValue().setValue(value);
+						});
+					} catch (final EvaluatorException e) {
+						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
+					} catch (final InterruptedException e) {
+						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
+						Thread.currentThread().interrupt();
+					}
 				});
-			} catch (final EvaluatorException e) {
-				FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-			} catch (final InterruptedException e) {
-				FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-				Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -303,12 +318,31 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
-		final var outputEvents = new BasicEList<EventOccurrence>();
-		processAlgorithmWithEvaluator(simpleFBType, simpleFBType.getAlgorithm().get(0));
+
+		final var actions = getActions(simpleFBType, eventOccurrence.getEvent().getName());
+		final var outputEvents = new BasicEList<EventOccurrence>(actions.size());
+
+		for (final SimpleECAction action : actions) {
+			simpleFBType.getAlgorithm().stream().filter(a -> a.getName().equals(action.getAlgorithm())).findAny()
+					.ifPresent(a -> processAlgorithmWithEvaluator(simpleFBType, a, eventOccurrence));
+			outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, action.getOutput(), simpleFBType));
+		}
 		isConsumed(this.eventOccurrence);
-		final Event outputEvent = simpleFBType.getInterfaceList().getEventOutputs().get(0);
-		outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, outputEvent, simpleFBType));
 		return outputEvents;
+	}
+
+	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
+		// if we don't have ECStates, use first output/algorithm as fallback
+		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
+			final SimpleECAction action = LibraryElementFactoryImpl.eINSTANCE.createSimpleECAction();
+			action.setAlgorithm(simpleFBType.getAlgorithm().get(0).getName());
+			action.setOutput(simpleFBType.getInterfaceList().getEventOutputs().get(0));
+			return List.of(action);
+		}
+
+		// find ECStates matching the input event and return their actions
+		return simpleFBType.getSimpleECStates().stream().filter(state -> state.getName().equals(inEvent))
+				.flatMap(state -> state.getSimpleECActions().stream()).toList();
 	}
 
 	@Override

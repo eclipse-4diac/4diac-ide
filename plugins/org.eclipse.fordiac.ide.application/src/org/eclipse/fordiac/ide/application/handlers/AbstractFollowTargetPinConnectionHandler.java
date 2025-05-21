@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
@@ -36,8 +36,8 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 		final TargetInterfaceElementEditPart targetIEEditPart = (TargetInterfaceElementEditPart) selection
 				.getFirstElement();
 
-		final boolean stepMode = InstanceScope.INSTANCE.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID)
-				.getBoolean(UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false);
+		final boolean stepMode = Platform.getPreferencesService().getBoolean(
+				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
 
 		if (useTargetRefElement(targetIEEditPart) && !stepMode) {
 			// select the element the target pin is referring to
