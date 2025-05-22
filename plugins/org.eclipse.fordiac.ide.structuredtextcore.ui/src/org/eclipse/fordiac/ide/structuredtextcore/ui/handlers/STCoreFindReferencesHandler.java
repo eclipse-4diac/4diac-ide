@@ -20,10 +20,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.search.ModelSearchQuery;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler;
@@ -37,11 +39,24 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 
 	@Override
 	protected void findReferences(final EObject target) {
-		if (target instanceof final STVarDeclaration varDec
+
+		String searchString = null;
+
+		if (target instanceof final STFunction function) {
+			searchString = function.getName();
+		} else if (target instanceof final FunctionFBType function) {
+			searchString = function.getName();
+		} else if (target instanceof final STVarDeclaration varDec
 				&& varDec.eContainer() instanceof STVarGlobalDeclarationBlock) {
+
+			searchString = nameProvider.getFullyQualifiedName(varDec)
+					.toString(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		}
+
+		if (searchString != null) {
 			// @formatter:off
 			final ModelQuerySpec searchSpec = new ModelQuerySpec(
-					nameProvider.getFullyQualifiedName(varDec).toString(PackageNameHelper.PACKAGE_NAME_DELIMITER),
+					searchString,
 					false,
 					false,
 					true,
@@ -50,7 +65,7 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 					true,
 					true, // search initial value
 					SearchScope.PROJECT,
-					getProject(varDec),
+					getProject(target),
 					target
 					);
 			// @formatter:on
@@ -62,8 +77,8 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 		}
 	}
 
-	private static IProject getProject(final STVarDeclaration varDec) {
-		final var resource = varDec.eResource();
+	private static IProject getProject(final EObject target) {
+		final var resource = target.eResource();
 		final IFile file = ResourcesPlugin.getWorkspace().getRoot()
 				.getFile(new Path(resource.getURI().toPlatformString(true)));
 		return file.getProject();
