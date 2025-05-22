@@ -78,9 +78,10 @@
 	<extension
 			point="org.eclipse.ui.preferencePages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-			name="STAlgorithm">
+			name="General">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
 		</page>
 		<page
@@ -101,9 +102,10 @@
 	<extension
 			point="org.eclipse.ui.propertyPages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-			name="STAlgorithm">
+			name="General">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
