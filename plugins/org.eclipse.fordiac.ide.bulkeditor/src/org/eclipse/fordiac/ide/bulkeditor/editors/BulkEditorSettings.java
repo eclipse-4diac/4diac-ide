@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,17 +38,19 @@ public class BulkEditorSettings {
 	public boolean attributeTypes = true;
 	private static final String SCOPE_TAG = "_scope"; //$NON-NLS-1$
 	public boolean projectScope = true;
+	private static final String LINKED_LIBRARIES_TAG = "_ignoreLinkedLibraries"; //$NON-NLS-1$
+	public boolean ignoreLinkedLibraries = true;
 
-	public static final List<String> whereSearchList = List.of("_where-name", "_where-type", "_where-comment",
-			"_where-value");
-	public static final List<String> inFBTypesSearchList = List.of("_inFBType-name", "_inFBType-type",
-			"_inFBType-comment");
-	public static final List<String> inFBInstanceSearchList = List.of("_inFBInstance-name", "_inFBInstance-type",
-			"_inFBInstance-comment");
-	public static final List<String> inUntypedSubAppSearchList = List.of("_inUntypedSubApp-name",
-			"_inUntypedSubApp-type", "_inUntypedSubApp-comment");
-	public static final List<String> inDataTypesSearchList = List.of("_inDT-name", "_inDT-type", "_inDT-comment");
-	public static final List<String> inAttributeTypesSearchList = List.of("_inAT-name", "_inAT-type", "_inAT-comment");
+	public static final List<String> whereSearchList = List.of("_where-name", "_where-type", "_where-comment", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			"_where-value"); //$NON-NLS-1$
+	public static final List<String> inFBTypesSearchList = List.of("_inFBType-name", "_inFBType-type", //$NON-NLS-1$ //$NON-NLS-2$
+			"_inFBType-comment"); //$NON-NLS-1$
+	public static final List<String> inFBInstanceSearchList = List.of("_inFBInstance-name", "_inFBInstance-type", //$NON-NLS-1$ //$NON-NLS-2$
+			"_inFBInstance-comment"); //$NON-NLS-1$
+	public static final List<String> inUntypedSubAppSearchList = List.of("_inUntypedSubApp-name", //$NON-NLS-1$
+			"_inUntypedSubApp-type", "_inUntypedSubApp-comment"); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final List<String> inDataTypesSearchList = List.of("_inDT-name", "_inDT-type", "_inDT-comment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static final List<String> inAttributeTypesSearchList = List.of("_inAT-name", "_inAT-type", "_inAT-comment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	private final Map<String, BulkEditorSubSettings> subSettingsMap = Stream
 			.of(whereSearchList, inFBTypesSearchList, inFBInstanceSearchList, inUntypedSubAppSearchList,
@@ -73,6 +76,7 @@ public class BulkEditorSettings {
 		childMemento.putBoolean(DATA_TYPES_TAG, dataTypes);
 		childMemento.putBoolean(ATTRIBUTE_TYPES_TAG, attributeTypes);
 		childMemento.putBoolean(SCOPE_TAG, projectScope);
+		childMemento.putBoolean(LINKED_LIBRARIES_TAG, ignoreLinkedLibraries);
 	}
 
 	public static BulkEditorSettings createFromMemento(final IMemento memento) {
@@ -80,13 +84,16 @@ public class BulkEditorSettings {
 		final IMemento childMemento = memento.getChild(TAG_BULKEDITOR_SETTINGS);
 
 		settings.subSettingsMap.values().forEach(subSetting -> subSetting.changeFromMemento(childMemento));
-		settings.modeSelection = childMemento.getInteger(MODE_TAG);
-		settings.fbSubappTypes = childMemento.getBoolean(FB_TYPES_TAG);
-		settings.fbTypedSubappInstance = childMemento.getBoolean(FB_INSTANCES_TAG);
-		settings.untypedSubapp = childMemento.getBoolean(UNTYPED_SUBAPPS_TAG);
-		settings.dataTypes = childMemento.getBoolean(DATA_TYPES_TAG);
-		settings.attributeTypes = childMemento.getBoolean(ATTRIBUTE_TYPES_TAG);
-		settings.projectScope = childMemento.getBoolean(SCOPE_TAG);
+		settings.modeSelection = Optional.ofNullable(memento.getInteger(MODE_TAG)).orElse(Integer.valueOf(0))
+				.intValue();
+		// !Boolean.FALSE.equals for null check with true as fallback value
+		settings.fbSubappTypes = !Boolean.FALSE.equals(childMemento.getBoolean(FB_TYPES_TAG));
+		settings.fbTypedSubappInstance = !Boolean.FALSE.equals(childMemento.getBoolean(FB_INSTANCES_TAG));
+		settings.untypedSubapp = !Boolean.FALSE.equals(childMemento.getBoolean(UNTYPED_SUBAPPS_TAG));
+		settings.dataTypes = !Boolean.FALSE.equals(childMemento.getBoolean(DATA_TYPES_TAG));
+		settings.attributeTypes = !Boolean.FALSE.equals(childMemento.getBoolean(ATTRIBUTE_TYPES_TAG));
+		settings.projectScope = !Boolean.FALSE.equals(childMemento.getBoolean(SCOPE_TAG));
+		settings.ignoreLinkedLibraries = !Boolean.FALSE.equals(childMemento.getBoolean(LINKED_LIBRARIES_TAG));
 
 		return settings;
 	}
@@ -124,12 +131,12 @@ public class BulkEditorSettings {
 
 		public void changeFromMemento(final IMemento memento) {
 			final IMemento childMemento = memento.getChild(tagBulkEditorSubSettings);
-			selected = childMemento.getBoolean(SELECTED_TAG);
+			selected = Boolean.TRUE.equals(childMemento.getBoolean(SELECTED_TAG));
 			textField = childMemento.getString(NAME_TAG);
-			caseSensitive = childMemento.getBoolean(CASE_SENSITIVE_TAG);
-			wholeWord = childMemento.getBoolean(WHOLE_WORD_TAG);
-			exactMatch = childMemento.getBoolean(EXACT_MATCH_TAG);
-			regularExpression = childMemento.getBoolean(REGULAR_EXPRESSION_TAG);
+			caseSensitive = Boolean.TRUE.equals(childMemento.getBoolean(CASE_SENSITIVE_TAG));
+			wholeWord = Boolean.TRUE.equals(childMemento.getBoolean(WHOLE_WORD_TAG));
+			exactMatch = Boolean.TRUE.equals(childMemento.getBoolean(EXACT_MATCH_TAG));
+			regularExpression = Boolean.TRUE.equals(childMemento.getBoolean(REGULAR_EXPRESSION_TAG));
 		}
 	}
 }

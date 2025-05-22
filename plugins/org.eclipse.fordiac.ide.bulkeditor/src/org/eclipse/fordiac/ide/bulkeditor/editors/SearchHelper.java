@@ -52,8 +52,16 @@ import org.eclipse.fordiac.ide.model.search.types.SearchChildrenProviderHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
-// TODO cleanup, rename class and record, better way to handle paramters
 public class SearchHelper {
+	public static final Predicate<TypeEntry> linkedElementsFilter = entry -> {
+		for (final String segment : entry.getFile().getFullPath().segments()) {
+			if (segment.equals("External Libraries") || segment.equals("Standard Libraries")) { //$NON-NLS-1$ //$NON-NLS-2$
+				return false;
+			}
+		}
+		return true;
+	};
+
 	public static class FilterRecordClass {
 		private final boolean selected;
 
@@ -83,16 +91,19 @@ public class SearchHelper {
 	final FilterRecordClass untypedSubappRecord;
 	final FilterRecordClass dataTypesRecord;
 	final FilterRecordClass attributeTypesRecord;
+	final boolean ignoreLinkedLibraries;
 
 	public SearchHelper(final FilterRecordClass fbSubappTypesRecord,
 			final FilterRecordClass fbTypedSubappInstanceRecord, final FilterRecordClass untypedSubappRecord,
-			final FilterRecordClass dataTypesRecord, final FilterRecordClass attributeTypesRecord) {
+			final FilterRecordClass dataTypesRecord, final FilterRecordClass attributeTypesRecord,
+			final boolean ignoreLinkedLibraries) {
 
 		this.fbSubappTypesRecord = fbSubappTypesRecord;
 		this.fbTypedSubappInstanceRecord = fbTypedSubappInstanceRecord;
 		this.untypedSubappRecord = untypedSubappRecord;
 		this.dataTypesRecord = dataTypesRecord;
 		this.attributeTypesRecord = attributeTypesRecord;
+		this.ignoreLinkedLibraries = ignoreLinkedLibraries;
 	}
 
 	public List<ISearchContext> createSearchContextList(final boolean workspace, final boolean project,
@@ -110,10 +121,9 @@ public class SearchHelper {
 
 	private ISearchContext createSearchContext(final IProject project) {
 		return new AbstractLiveSearchContext(project) {
-
 			@Override
 			public Stream<URI> getTypes() {
-				Stream<URI> s = Stream.empty();
+				Stream<TypeEntry> s = Stream.empty();
 				if (fbSubappTypesRecord.selected) {
 					final Predicate<TypeEntry> filter = entry -> (matchesString(entry.getFullTypeName(),
 							fbSubappTypesRecord.nameFilter, fbSubappTypesRecord.namePattern)
@@ -121,12 +131,11 @@ public class SearchHelper {
 									fbSubappTypesRecord.typePattern)
 							&& matchesString(entry.getComment(), fbSubappTypesRecord.commentFilter,
 									fbSubappTypesRecord.commentPattern));
-					s = Stream.concat(s,
-							Stream.concat(getTypelib().getFbTypes().stream().filter(filter).map(TypeEntry::getURI),
-									getTypelib().getSubAppTypes().stream().filter(filter).map(TypeEntry::getURI)));
+					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().stream().filter(filter),
+							getTypelib().getSubAppTypes().stream().filter(filter)));
 				}
 				if (fbTypedSubappInstanceRecord.selected || untypedSubappRecord.selected) {
-					s = Stream.concat(s, getTypelib().getSystems().stream().map(TypeEntry::getURI));
+					s = Stream.concat(s, getTypelib().getSystems().stream());
 				}
 				if (dataTypesRecord.selected) {
 					s = Stream.concat(s,
@@ -136,8 +145,7 @@ public class SearchHelper {
 											&& matchesString(dtEntry.getTypeName(), dataTypesRecord.typeFilter,
 													dataTypesRecord.typePattern)
 											&& matchesString(dtEntry.getComment(), dataTypesRecord.commentFilter,
-													dataTypesRecord.commentPattern)))
-									.map(TypeEntry::getURI));
+													dataTypesRecord.commentPattern))));
 				}
 				if (attributeTypesRecord.selected) {
 					s = Stream.concat(s,
@@ -147,10 +155,12 @@ public class SearchHelper {
 											&& matchesString(atEntry.getTypeName(), attributeTypesRecord.typeFilter,
 													attributeTypesRecord.typePattern)
 											&& matchesString(atEntry.getComment(), attributeTypesRecord.commentFilter,
-													attributeTypesRecord.commentPattern)))
-									.map(TypeEntry::getURI));
+													attributeTypesRecord.commentPattern))));
 				}
-				return s.filter(Objects::nonNull);
+				if (ignoreLinkedLibraries) {
+					s = s.filter(linkedElementsFilter);
+				}
+				return s.map(TypeEntry::getURI).filter(Objects::nonNull);
 			}
 
 			@Override
