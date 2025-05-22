@@ -40,6 +40,7 @@ public class FilterComposite extends Composite {
 	private final int firstItemWidth;
 
 	private final List<Consumer<String>> textChangedListeners = new ArrayList<>();
+	private final List<Runnable> filterChangedListeners = new ArrayList<>();
 
 	public FilterComposite(final Composite parent, final int style, final List<String> filterNames,
 			final BulkEditorSettings settings, final List<String> subSettingsReferencesNames) {
@@ -76,6 +77,10 @@ public class FilterComposite extends Composite {
 	public void addTextChangedListener(final Consumer<String> listener) {
 		textChangedListeners.add(listener);
 		listener.accept(createFiltersText());
+	}
+
+	public void addFilterChangedListener(final Runnable listener) {
+		filterChangedListeners.add(listener);
 	}
 
 	private String createFiltersText() {
@@ -162,6 +167,7 @@ public class FilterComposite extends Composite {
 			selected.addListener(SWT.Selection, event -> {
 				subSetting.selected = selected.getSelection();
 				fireTextChanged();
+				fireFilterChanged();
 			});
 
 			textField.setText(subSetting.textField);
@@ -169,11 +175,15 @@ public class FilterComposite extends Composite {
 			textField.addModifyListener(event -> {
 				subSetting.textField = textField.getText();
 				fireTextChanged();
+				fireFilterChanged();
 			});
 
 			caseSensitive.setSelection(subSetting.caseSensitive);
 			caseSensitive.setEnabled(isSelected);
-			caseSensitive.addListener(SWT.Selection, event -> subSetting.caseSensitive = caseSensitive.getSelection());
+			caseSensitive.addListener(SWT.Selection, event -> {
+				subSetting.caseSensitive = caseSensitive.getSelection();
+				fireFilterChanged();
+			});
 
 			wholeWord.setSelection(subSetting.wholeWord);
 			wholeWord.setEnabled(isSelected && !subSetting.exactMatch && !subSetting.regularExpression);
@@ -181,6 +191,7 @@ public class FilterComposite extends Composite {
 				subSetting.wholeWord = wholeWord.getSelection();
 				exactMatch.setEnabled(!wholeWord.getSelection());
 				regularExpression.setEnabled(!wholeWord.getSelection());
+				fireFilterChanged();
 			});
 
 			exactMatch.setSelection(subSetting.exactMatch);
@@ -188,6 +199,7 @@ public class FilterComposite extends Composite {
 			exactMatch.addListener(SWT.Selection, event -> {
 				subSetting.exactMatch = exactMatch.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
+				fireFilterChanged();
 			});
 
 			regularExpression.setSelection(subSetting.regularExpression);
@@ -195,7 +207,12 @@ public class FilterComposite extends Composite {
 			regularExpression.addListener(SWT.Selection, event -> {
 				subSetting.regularExpression = regularExpression.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
+				fireFilterChanged();
 			});
+		}
+
+		private void fireFilterChanged() {
+			filterChangedListeners.forEach(Runnable::run);
 		}
 
 		private void fireTextChanged() {
