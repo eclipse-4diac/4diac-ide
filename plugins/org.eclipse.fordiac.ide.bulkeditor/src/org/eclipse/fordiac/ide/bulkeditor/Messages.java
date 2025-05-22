@@ -37,6 +37,8 @@ public final class Messages extends NLS {
 	public static String SearchWhere;
 	public static String SearchIn;
 
+	public static String IgnoreLinkedLibraries;
+
 	public static String FBandSubappTypes;
 	public static String FBandSubappInstances;
 	public static String UntypedSubapps;
