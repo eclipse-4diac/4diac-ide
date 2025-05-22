@@ -89,9 +89,10 @@
 	<extension
 			point="org.eclipse.ui.preferencePages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			name="GlobalConstants">
+			name="Constants">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 		<page
@@ -112,9 +113,10 @@
 	<extension
 			point="org.eclipse.ui.propertyPages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			name="GlobalConstants">
+			name="Constants">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -290,28 +292,6 @@
 		<participant
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
 			fileExtensions="globalconsts"/>
-	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.compiler.preferencePage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.propertyPages">
-		<page
-			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.compiler.propertyPage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
-			<enabledWhen>
-				<adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-		</page>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
