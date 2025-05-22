@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
@@ -36,7 +38,7 @@ public class STCoreCleanupEditorCallback extends IXtextEditorCallback.NullImpl {
 
 	@Override
 	public void afterSave(final XtextEditor editor) {
-		if (!running && preferences.isEnableSaveActions()) {
+		if (!running && preferences.isEnableSaveActions(getProject(editor))) {
 			try {
 				running = true;
 				performSaveActions(editor);
@@ -50,7 +52,7 @@ public class STCoreCleanupEditorCallback extends IXtextEditorCallback.NullImpl {
 	}
 
 	protected void performSaveActions(final XtextEditor editor) {
-		if (preferences.isEnableFormat()) {
+		if (preferences.isEnableFormat(getProject(editor))) {
 			performFormat(editor);
 		}
 	}
@@ -74,5 +76,13 @@ public class STCoreCleanupEditorCallback extends IXtextEditorCallback.NullImpl {
 		} finally {
 			document.stopRewriteSession(rewriteSession);
 		}
+	}
+
+	private static IProject getProject(final XtextEditor editor) {
+		final IResource resource = editor.getResource();
+		if (resource != null) {
+			return resource.getProject();
+		}
+		return null;
 	}
 }
