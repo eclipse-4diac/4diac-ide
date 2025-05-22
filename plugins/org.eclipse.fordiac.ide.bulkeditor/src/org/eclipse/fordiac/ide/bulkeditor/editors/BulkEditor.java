@@ -126,6 +126,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	// Search For
 	private Combo modeSelectionDropDown;
 	private FilterComposite searchFilter;
+	private boolean changedSearchParameter = false;
 
 	// Search In
 	private FilterComposite fbSubappTypesFilter;
@@ -142,6 +143,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private NatTable natTable;
 	private ChangeableListDataProvider<Attribute> attributeProvider;
 	private ChangeableListDataProvider<VarDeclaration> varDeclProvider;
+
+	private Label searchInformation;
+	private Label dirtyInformation;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -172,9 +176,16 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
 		modeSelectionDropDown.select(settings.modeSelection);
 		modeSelectionDropDown.addListener(SWT.Selection, event -> {
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
 			changeNatTable(natTable.getParent(), modeSelectionDropDown.getSelectionIndex());
 			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
 			natTable.getParent().layout();
+			changedSearchParameter = false;
+			searchInformation.setText(""); //$NON-NLS-1$
+			commandStack.flush();
 		});
 
 		final Group searchGroup = WidgetFactory.group(SWT.NONE).text(Messages.SearchWhere).create(composite);
@@ -183,6 +194,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
 				BulkEditorSettings.whereSearchList);
+		searchFilter.addFilterChangedListener(() -> {
+			this.changedSearchParameter = true;
+		});
 
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
@@ -290,16 +304,39 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
 	}
 
-	private void createSearchButton(final Composite parent) {
-		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
-			performSearch();
-			checkTypeEntriesForDirty();
-		}).create(parent);
-
+	private int openUnsavedChangesDialog() {
+		if (commandStack.isDirty()) {
+			final MessageDialog dialog = new MessageDialog(this.getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.Unsaved_Changes, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			return dialog.open();
+		}
+		return 0;
 	}
 
-	private void checkTypeEntriesForDirty() {
-		final var editors = EditorUtils.findEditor(part -> {
+	private void createSearchButton(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
+			performSearch();
+			checkTypeEntriesForDirty();
+		}).create(composite);
+
+		dirtyInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		dirtyInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
+		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
+
+	private IEditorPart[] getDirtyEditors() {
+		return EditorUtils.findEditor(part -> {
 			if (!part.isDirty()) {
 				return false;
 			}
@@ -311,6 +348,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 			return map.containsKey(libE.getTypeEntry());
 		});
+	}
+
+	private void checkTypeEntriesForDirty() {
+		final var editors = getDirtyEditors();
 
 		if (editors.length <= 0) {
 			return;
@@ -337,9 +378,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			for (final IEditorPart editor : editors) {
 				editor.doSave(new NullProgressMonitor());
 			}
-
+			dirtyInformation.setText(""); //$NON-NLS-1$
 			performSearch();
+		} else {
+			dirtyInformation.setText(Messages.Other_Dirty_Editor);
 		}
+		dirtyInformation.getParent().layout();
 	}
 
 	private void performSearch() {
@@ -386,6 +430,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		}
 		natTable.refresh();
 		commandStack.flush();
+		changedSearchParameter = false;
+		searchInformation.setText(""); //$NON-NLS-1$
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {
@@ -514,7 +560,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	public void reloadType() {
 		performSearch();
-		commandStack.flush();
 	}
 
 	@Override
@@ -571,6 +616,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	@Override
 	public void executeCommand(final Command cmd) {
 		commandStack.execute(cmd);
+		if (!changedSearchParameter) {
+			searchInformation.setText(Messages.Search_Changes);
+		}
 	}
 
 	@Override
