@@ -198,12 +198,10 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
-			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.handlers.STFunctionFindReferencesHandler"
+				commandId="org.eclipse.xtext.ui.editor.FindReferences">
 			<activeWhen>
-				<reference
-					definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
-				</reference>
+				<reference definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened" />
 			</activeWhen>
 		</handler>
 	</extension>
