@@ -235,27 +235,28 @@ public class SearchHelper {
 				case final AutomationSystem system ->
 					Stream.concat(system.getAttributes().stream(), system.getApplication().stream());
 				case final Application application -> {
+					Stream<? extends EObject> stream = Stream.empty();
 					if (untypedSubappRecord.selected) {
-						yield application.getFBNetwork().getNetworkElements().stream()
-								.filter(fbne -> (fbne instanceof UntypedSubApp
-										&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
-												untypedSubappRecord.namePattern)
-										&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
-												untypedSubappRecord.typePattern)
-										&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
-												untypedSubappRecord.commentPattern)));
+						stream = Stream.concat(stream,
+								application.getFBNetwork().getNetworkElements().stream()
+										.filter(fbne -> (fbne instanceof UntypedSubApp
+												&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
+														untypedSubappRecord.namePattern)
+												&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
+														untypedSubappRecord.typePattern)
+												&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
+														untypedSubappRecord.commentPattern))));
 					}
 					if (fbTypedSubappInstanceRecord.selected) {
-						yield application.getFBNetwork().getNetworkElements().stream()
+						stream = Stream.concat(stream, application.getFBNetwork().getNetworkElements().stream()
 								.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
 										&& matchesString(fbne.getName(), fbTypedSubappInstanceRecord.nameFilter,
 												fbTypedSubappInstanceRecord.namePattern)
 										&& matchesString(fbne.getTypeName(), fbTypedSubappInstanceRecord.typeFilter,
 												fbTypedSubappInstanceRecord.typePattern)
 										&& matchesString(fbne.getComment(), fbTypedSubappInstanceRecord.commentFilter,
-												fbTypedSubappInstanceRecord.commentPattern));
+												fbTypedSubappInstanceRecord.commentPattern)));
 					}
-					Stream<? extends EObject> stream = application.getFBNetwork().getNetworkElements().stream();
 					stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
 					stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
 					stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
