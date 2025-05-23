@@ -36,8 +36,10 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -52,8 +54,11 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 
-		if ((selection.getFirstElement() instanceof final AbstractFBNElementEditPart ep)
-				&& (ep.getRoot() instanceof final FBNetworkRootEditPart root)) {
+		final AbstractFBNElementEditPart ep = getValidSelectedFBNElement(selection);
+
+		if (ep != null) {
+			// we don't need to check root here anymore as it is checked in the getter above
+			final FBNetworkRootEditPart root = (FBNetworkRootEditPart) ep.getRoot();
 			if (isActivePredecessor(ep)) {
 				removePredecessor(root);
 			} else {
@@ -68,6 +73,10 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
 		if (currentActiveEditor != null) {
 			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			if (viewer == null || viewer.getSelectedEditParts().isEmpty()) {
+				return;
+			}
+
 			final EditPart editPart = viewer.getSelectedEditParts().getFirst();
 
 			if ((editPart.getRoot() instanceof final FBNetworkRootEditPart root && getPredecessor(root) != null)
@@ -75,6 +84,28 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 				element.setText(Messages.FBMarker_RemovePredecessorMarker);
 			}
 		}
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_EDITOR_NAME);
+		if (editor != null) {
+			final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+					ISources.ACTIVE_CURRENT_SELECTION_NAME);
+			setBaseEnabled(getValidSelectedFBNElement(selection) != null);
+		} else {
+			setBaseEnabled(false);
+		}
+	}
+
+	private static AbstractFBNElementEditPart getValidSelectedFBNElement(final ISelection selection) {
+		if (selection instanceof final IStructuredSelection structSel
+				&& structSel.getFirstElement() instanceof final AbstractFBNElementEditPart ep
+				&& ep.getRoot() instanceof FBNetworkRootEditPart) {
+			return ep;
+		}
+		return null;
 	}
 
 	public static void setPredecessor(final FBNetworkRootEditPart root,
