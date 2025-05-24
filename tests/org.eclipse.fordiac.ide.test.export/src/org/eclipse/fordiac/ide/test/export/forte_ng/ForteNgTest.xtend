@@ -303,9 +303,15 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "core/datatypes/forte_array_fixed.h"
 						#include "core/datatypes/forte_array_variable.h"
 						
+						using namespace std::literals;
+						
 						USE_STRING_ID(functionblock);
 						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock))
+						namespace {
+						  constexpr std::string_view TypeHash ="1234"sv;
+						}
+						
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock), TypeHash)
 						
 						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
 						  0, nullptr, nullptr, nullptr, nullptr,

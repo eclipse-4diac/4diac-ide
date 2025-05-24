@@ -40,6 +40,10 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateUseStringId»
 		
+		namespace {
+		  «generateTypeHash»
+		}
+		
 		«generateFBDefinition»
 		
 		«generateFBInterfaceDefinition»
@@ -52,7 +56,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 
 	override protected generateFBDefinition() '''
-		DEFINE_ADAPTER_TYPE(«FBClassName», «type.generateTypeSpec»)
+		DEFINE_ADAPTER_TYPE(«FBClassName», «type.generateTypeSpec», TypeHash)
 	'''
 
 	def generateFBInterfaceSpecSocket() '''

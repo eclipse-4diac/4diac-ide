@@ -17,6 +17,8 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class GlobalConstantsImplTemplate extends ForteLibraryElementTemplate<GlobalConstants> {
 
 	new(GlobalConstants type, String name, Path prefix, Map<?,?> options) {
@@ -28,6 +30,17 @@ class GlobalConstantsImplTemplate extends ForteLibraryElementTemplate<GlobalCons
 		
 		«generateImplIncludes»
 		
+		namespace {
+		    «generateTypeHash»
+		}
+		
+		«generateGlobalConstDefinition»
+		
 		«type.constants.generateVariableDefinitions(true)»
+	'''
+	
+	def protected generateGlobalConstDefinition() '''
+		DEFINE_FIRMWARE_GLOBAL_CONST(«className», «type.generateTypeSpec», TypeHash)
+		
 	'''
 }

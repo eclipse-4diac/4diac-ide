@@ -59,6 +59,10 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«generateUseStringId»
 		
+		namespace {
+		  «generateTypeHash»
+		}
+		
 		«generateFBDefinition»
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»

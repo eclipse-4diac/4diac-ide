@@ -134,7 +134,7 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 
 	@Override
 	public String getTypeHash() {
-		return ""; //$NON-NLS-1$
+		return "1234"; //$NON-NLS-1$
 	}
 
 	@Override

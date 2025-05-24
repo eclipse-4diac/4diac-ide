@@ -95,7 +95,7 @@ public final class LibraryElementHasher {
 	}
 
 	public static String getLibraryElementHash(final INamedElement libelem) throws LibraryElementHashException {
-		return hash(libelem, DEFAULT_HASH_ALG);
+		return LibraryElementHasher.getHashType() + ':' + hash(libelem, DEFAULT_HASH_ALG);
 	}
 
 	private static EObject copyLibraryElementForHashing(final EObject libraryElement) {

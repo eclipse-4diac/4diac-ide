@@ -32,6 +32,7 @@ class GlobalConstantsHeaderTemplate extends ForteLibraryElementTemplate<GlobalCo
 		«generateHeaderIncludes»
 		
 		class «className» final {
+			«generateGlobalConstDeclaration»
 		  public:
 		    «type.constants.generateVariableDeclarations(true)»
 		    «className»() = delete;
@@ -45,5 +46,9 @@ class GlobalConstantsHeaderTemplate extends ForteLibraryElementTemplate<GlobalCo
 		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		
 		«type.compilerInfo?.header»
+	'''
+	
+	def protected generateGlobalConstDeclaration() '''
+		DECLARE_FIRMWARE_GLOBAL_CONST()
 	'''
 }

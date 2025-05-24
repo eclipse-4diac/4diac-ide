@@ -78,7 +78,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateFBDefinition() '''
-		DEFINE_FIRMWARE_FB(«FBClassName», «type.generateTypeSpec»)
+		DEFINE_FIRMWARE_FB(«FBClassName», «type.generateTypeSpec», TypeHash)
 		
 	'''
 
