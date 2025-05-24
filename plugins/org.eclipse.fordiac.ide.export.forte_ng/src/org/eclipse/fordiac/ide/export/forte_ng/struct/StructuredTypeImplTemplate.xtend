@@ -35,7 +35,11 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«generateUseStringId»
 		
-		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec»);
+		namespace {
+			«generateTypeHash»
+		}
+		
+		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
 		
 		const CStringDictionary::TStringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
 		

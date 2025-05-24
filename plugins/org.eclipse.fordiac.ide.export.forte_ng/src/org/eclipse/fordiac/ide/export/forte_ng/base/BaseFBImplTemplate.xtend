@@ -48,6 +48,10 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateUseStringId»
 		
+		namespace {
+		  «generateTypeHash»
+		}
+		
 		«generateFBDefinition»
 		«generateFBInterfaceDefinition»
 		«generateFBInterfaceSpecDefinition»

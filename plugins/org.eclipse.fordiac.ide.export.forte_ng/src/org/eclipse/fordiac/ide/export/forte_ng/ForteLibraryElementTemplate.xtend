@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.util.LibraryElementHasher
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
@@ -76,6 +77,8 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 		«getDependencies(emptyMap).generateDependencyIncludes»
 		«type.compilerInfo?.header»
+		
+		using namespace std::literals;
 	'''
 	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
@@ -195,4 +198,8 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected Set<String> getUsedStrings(Map<?, ?> options) {
 		newHashSet(type.generateTypeNamePlain)
 	}
+	
+	def protected generateTypeHash() '''
+		constexpr std::string_view TypeHash ="«type.typeEntry.typeHash»"sv;
+	'''
 }
