@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.preferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
@@ -34,11 +35,11 @@ public class PreferenceProvider {
 
 			if (Platform.getPreferencesService().getBoolean(qualifier, PROJECT_STORE_ACTIVE, false,
 					new IScopeContext[] { projectScope })) {
-				return new IScopeContext[] { projectScope, InstanceScope.INSTANCE };
+				return new IScopeContext[] { projectScope, InstanceScope.INSTANCE, DefaultScope.INSTANCE };
 			}
 		}
 
-		return new IScopeContext[] { InstanceScope.INSTANCE };
+		return new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
 	}
 
 	public static boolean getBoolean(final String qualifier, final String key, final boolean defaultValue,
