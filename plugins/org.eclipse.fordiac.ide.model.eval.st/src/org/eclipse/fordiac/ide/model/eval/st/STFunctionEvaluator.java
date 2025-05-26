@@ -36,6 +36,11 @@ public class STFunctionEvaluator extends STCallableEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		// do nothing
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		prepare();
 		evaluateStructuredTextFunction(function);

@@ -44,6 +44,11 @@ public class FunctionFBEvaluator extends FBEvaluator<FunctionFBType> {
 	}
 
 	@Override
+	public void cleanup() {
+		functionEvaluator.cleanup();
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		if (getEventQueue() == null) {
 			final Value result = functionEvaluator.evaluate();

@@ -104,6 +104,13 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 	}
 
 	@Override
+	public void cleanup() {
+		parseResult = null;
+		parseResultType = null;
+		resultType = null;
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		return evaluateVariable().getValue();
 	}

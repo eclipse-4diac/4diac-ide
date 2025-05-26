@@ -60,6 +60,11 @@ public class STFunctionBodyEvaluator extends STCallableEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		prepare();
 		evaluateStructuredTextFunction(getSourceElement());

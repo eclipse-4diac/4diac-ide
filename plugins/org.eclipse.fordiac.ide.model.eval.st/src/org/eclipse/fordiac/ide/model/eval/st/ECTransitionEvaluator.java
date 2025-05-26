@@ -59,6 +59,11 @@ public class ECTransitionEvaluator extends StructuredTextEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
+	@Override
 	public Value evaluate() throws InterruptedException {
 		prepare();
 		return evaluateExpression(trap(parseResult.getExpression()));
