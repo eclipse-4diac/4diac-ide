@@ -1026,7 +1026,16 @@
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
-      <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor" />
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
+      	<visibleWhen checkEnabled="false">
+          <and>
+	        <with variable="activeEditor">
+	          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
+	        </with>
+	        <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
+	      </and>
+        </visibleWhen>
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
