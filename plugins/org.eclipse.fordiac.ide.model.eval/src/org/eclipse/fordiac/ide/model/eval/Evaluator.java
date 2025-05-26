@@ -34,6 +34,16 @@ public interface Evaluator {
 	void prepare() throws EvaluatorException;
 
 	/**
+	 * Clean up internal state of the evaluator after execution. This executes
+	 * clean-up steps that may bring the evaluator into a state before another
+	 * prepare, such as removing previously parsed code.
+	 *
+	 * @throws EvaluatorException if an exception occurred during clean-up
+	 * @implSpec This shall not affect any variables of the evaluator.
+	 */
+	void cleanup() throws EvaluatorException;
+
+	/**
 	 * Evaluate a result
 	 *
 	 * @return The resulting value or {@code null} if not applicable
