@@ -65,6 +65,11 @@ public class AttributeEvaluator extends StructuredTextEvaluator implements Varia
 		}
 	}
 
+	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
 	protected STInitializerExpressionSource parseInitialValue(final List<String> errors, final List<String> warnings,
 			final List<String> infos) {
 		return StructuredTextParseUtil.parse(attribute.getValue(),

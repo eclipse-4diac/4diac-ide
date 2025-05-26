@@ -61,6 +61,11 @@ public class DirectlyDerivedTypeEvaluator extends StructuredTextEvaluator implem
 		}
 	}
 
+	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
 	protected STInitializerExpressionSource parseInitialValue(final List<String> errors, final List<String> warnings,
 			final List<String> infos) {
 		return StructuredTextParseUtil.parse(directlyDerivedType.getInitialValue(),

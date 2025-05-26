@@ -79,6 +79,11 @@ public class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 		}
 	}
 
+	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
 	private LibraryElement getType() {
 		if (getContext() != null && getContext().getType() instanceof final LibraryElement libraryElement) {
 			return libraryElement;

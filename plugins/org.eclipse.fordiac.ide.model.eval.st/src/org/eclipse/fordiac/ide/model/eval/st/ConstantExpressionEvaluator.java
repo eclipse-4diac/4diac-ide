@@ -51,6 +51,11 @@ public final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		// nothing to do
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		return null;
 	}

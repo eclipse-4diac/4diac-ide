@@ -53,6 +53,11 @@ public class STAlgorithmEvaluator extends STCallableEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		prepare();
 		evaluateStructuredTextAlgorithm(parseResult);
