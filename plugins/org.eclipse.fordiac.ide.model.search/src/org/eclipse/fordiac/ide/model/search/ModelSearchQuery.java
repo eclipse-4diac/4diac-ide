@@ -119,11 +119,10 @@ public class ModelSearchQuery implements ISearchQuery {
 	private void performSearch(final List<ISearchContext> searchContexts, final IProgressMonitor monitor) {
 		for (final ISearchContext context : searchContexts) {
 			context.getTypes().forEach(libraryElementURI -> {
-				final LibraryElement libraryElement = context.getLibraryElement(libraryElementURI);
-				if (libraryElement instanceof final AutomationSystem sys) {
-					searchSystem(sys, monitor);
-				} else if (libraryElement != null) {
-					if (matchTypeEntry(libraryElement, monitor)) {
+				if (context.mapTypes(libraryElementURI) instanceof final LibraryElement libraryElement) {
+					if (libraryElement instanceof final AutomationSystem sys) {
+						searchSystem(sys, monitor);
+					} else if (matchTypeEntry(libraryElement, monitor)) {
 						searchResult.addResult(libraryElement);
 					}
 				} else {

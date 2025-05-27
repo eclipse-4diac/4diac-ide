@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -164,24 +161,9 @@ public class SearchHelper {
 			}
 
 			@Override
-			public LibraryElement getLibraryElement(final URI uri) {
+			public EObject mapTypes(final URI uri) {
 				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 				return typeEntry.getType(); // use original for search
-			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
 			}
 		};
 	}
