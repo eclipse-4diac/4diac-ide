@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionDimension;
@@ -28,6 +28,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBShapeHelper;
@@ -36,11 +38,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
+import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 import org.eclipse.fordiac.ide.model.util.SpatialHash;
 import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
@@ -69,22 +73,25 @@ final class FBNetworkAnnotations {
 		if (parent.filter(p -> p.getTypeEntry() != null).isPresent()) {
 			return true; // ignore typed parent
 		}
+
 		return validateCollisions(parent.filter(FBNetworkAnnotations::isUnfoldedSubapp), network.getNetworkElements(),
-				Predicate.not(FBNetworkElement::isInGroup), diagnostics, context);
+				Predicate.not(FBNetworkElement::isInGroup), diagnostics, context, getRootProject(network));
 	}
 
 	static boolean validateCollisions(final Group group, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		return validateCollisions(Optional.of(group), group.getGroupElements(), unused -> true, diagnostics, context);
+		return validateCollisions(Optional.of(group), group.getGroupElements(), unused -> true, diagnostics, context,
+				getRootProject(group));
 	}
 
 	static boolean validateCollisions(final Optional<FBNetworkElement> parent,
 			final List<FBNetworkElement> networkElements, final Predicate<FBNetworkElement> filter,
-			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+			final DiagnosticChain diagnostics, final Map<Object, Object> context, final IProject project) {
 		boolean result = true;
-		final double marginLeftRight = getIntPreference(context, ModelPreferenceConstants.MARGIN_LEFT_RIGHT)
+
+		final double marginLeftRight = getIntPreference(context, ModelPreferenceConstants.MARGIN_LEFT_RIGHT, project)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
-		final double marginTopBottom = getIntPreference(context, ModelPreferenceConstants.MARGIN_TOP_BOTTOM)
+		final double marginTopBottom = getIntPreference(context, ModelPreferenceConstants.MARGIN_TOP_BOTTOM, project)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
 		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
 		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(CELL_SIZE, gridSize);
@@ -181,13 +188,24 @@ final class FBNetworkAnnotations {
 						LibraryElementPackage.Literals.POSITIONABLE_ELEMENT__POSITION));
 	}
 
-	private static int getIntPreference(final Map<Object, Object> context, final String name) {
-		return ((Integer) context.computeIfAbsent(name, FBNetworkAnnotations::internalGetIntPreference)).intValue();
+	private static IProject getRootProject(final EObject eObject) {
+		if (eObject == null) {
+			return null;
+		}
+		if (EcoreUtil.getRootContainer(eObject) instanceof final LibraryElement libElem
+				&& libElem.getTypeLibrary() != null) {
+			return libElem.getTypeLibrary().getProject();
+		}
+		return null;
 	}
 
-	private static Integer internalGetIntPreference(final Object key) {
-		return Integer.valueOf(Platform.getPreferencesService().getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
-				(String) key, 0, null));
+	private static int getIntPreference(final Map<Object, Object> context, final String name, final IProject project) {
+		return ((Integer) context.computeIfAbsent(name, key -> internalGetIntPreference(key, project))).intValue();
+	}
+
+	private static Integer internalGetIntPreference(final Object key, final IProject project) {
+		return Integer.valueOf(
+				PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID, (String) key, 0, project));
 	}
 
 	private static boolean isUnfoldedSubapp(final FBNetworkElement parent) {
