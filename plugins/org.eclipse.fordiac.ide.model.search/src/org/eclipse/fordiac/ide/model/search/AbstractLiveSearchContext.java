@@ -52,7 +52,7 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 	}
 
 	@Override
-	public LibraryElement getLibraryElement(final URI uri) {
+	public EObject mapTypes(final URI uri) {
 		final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 		return getLiveType(typeEntry);
 	}
