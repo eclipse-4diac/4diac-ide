@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -60,6 +61,22 @@ public class VarDeclarationAnnotations {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE,
 						Messages.VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateIllegalVariableLengthArrayVariable(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isArray() && !varDeclaration.isInOutVar()
+				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())
+				&& !(varDeclaration.getFBType() instanceof FunctionFBType)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE,
+						Messages.VarDeclarationAnnotations_IllegalVariableLengthArray,
 						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
 			}
 			return false;

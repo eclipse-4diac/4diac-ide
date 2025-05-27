@@ -909,6 +909,11 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForGenericTypeVariable/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateIllegalVariableLengthArrayVariable"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateIllegalVariableLengthArrayVariable(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateIllegalVariableLengthArrayVariable/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateIllegalVariableLengthArrayVariable/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateNoValueForVariableLengthArrayVariable"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateNoValueForVariableLengthArrayVariable/diagnostics"/>
