@@ -34,7 +34,7 @@ public class IEC61499ElementSearch {
 
 	public List<? extends EObject> performSearch() {
 		results.clear();
-		searchContext.getTypes().map(searchContext::getLibraryElement).forEach(this::checkElement);
+		searchContext.getTypes().map(searchContext::mapTypes).forEach(this::checkElement);
 
 		return results;
 	}
