@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.deployment.debug.watch;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -24,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class DeploymentDebugWatchUtils {
 
@@ -129,6 +133,15 @@ public final class DeploymentDebugWatchUtils {
 				.map(resolved -> new SubAppConnectionEndpoint<>((T) resolved));
 		default -> Stream.of(new SubAppConnectionEndpoint<>(element, negate));
 		};
+	}
+
+	public static INamedElement evaluateWatchType(final VarDeclaration varDeclaration) {
+		if (varDeclaration.isInOutVar() && varDeclaration.isArray()
+				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())) {
+			// use type of defining InOut declaration for arrays with variable length
+			return VariableOperations.evaluateResultType(VarInOutHelper.getDefiningVarInOutDeclaration(varDeclaration));
+		}
+		return VariableOperations.evaluateResultType(varDeclaration);
 	}
 
 	private DeploymentDebugWatchUtils() {
