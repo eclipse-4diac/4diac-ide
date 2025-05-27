@@ -197,7 +197,17 @@ public final class TypeLibrary {
 		return fileMap.get(typeFile);
 	}
 
-	public void reload() {
+	/**
+	 * Clear and reload the entire type library
+	 *
+	 * <p>
+	 * This is a dangerous operation, since it will effectively <em>detach</em>
+	 * anyone currently holding a type entry from this type library, including any
+	 * listeners. For most use cases, use {@link #refresh()} instead.
+	 *
+	 * @see #refresh()
+	 */
+	private void reload() {
 		adapterTypes.clear();
 		attributeTypes.clear();
 		deviceTypes.clear();
