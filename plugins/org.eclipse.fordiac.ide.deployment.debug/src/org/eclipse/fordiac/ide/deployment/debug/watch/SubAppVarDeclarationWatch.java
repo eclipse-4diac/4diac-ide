@@ -28,7 +28,7 @@ public class SubAppVarDeclarationWatch extends AbstractSubAppInterfaceWatch impl
 
 	public SubAppVarDeclarationWatch(final String name, final VarDeclaration varDeclaration,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
-		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
+		super(VariableOperations.newVariable(name, DeploymentDebugWatchUtils.evaluateWatchType(varDeclaration)),
 				varDeclaration, debugTarget);
 	}
 
