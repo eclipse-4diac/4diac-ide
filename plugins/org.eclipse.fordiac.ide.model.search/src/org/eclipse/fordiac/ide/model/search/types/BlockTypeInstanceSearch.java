@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.search.types;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -62,9 +61,7 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 	}
 
 	private static ISearchContext createSearchContext(final TypeEntry entry) {
-
 		return new AbstractLiveSearchContext(entry.getFile().getProject()) {
-
 			@Override
 			public Stream<URI> getTypes() {
 				final Stream<SystemEntry> systems = getTypelib().getSystems().stream();
@@ -72,21 +69,6 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 				final Stream<SubAppTypeEntry> subApps = getTypelib().getSubAppTypes().stream();
 				return Stream.concat(systems, Stream.concat(fbs, subApps)).map(TypeEntry::getURI)
 						.filter(Objects::nonNull);
-			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
 			}
 		};
 	}

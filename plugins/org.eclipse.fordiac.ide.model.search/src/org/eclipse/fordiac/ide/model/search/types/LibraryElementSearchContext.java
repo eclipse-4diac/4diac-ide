@@ -12,11 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.types;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 
@@ -37,25 +36,10 @@ final class LibraryElementSearchContext implements ISearchContext {
 	}
 
 	@Override
-	public Collection<URI> getSubappTypes() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public LibraryElement getLibraryElement(final URI uri) {
+	public EObject mapTypes(final URI uri) {
 		if (uri.equals(typeEditable.getTypeEntry().getURI())) {
 			return typeEditable;
 		}
 		return null;
-	}
-
-	@Override
-	public Collection<URI> getFBTypes() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public Collection<URI> getAllTypes() {
-		return Collections.emptyList();
 	}
 }
