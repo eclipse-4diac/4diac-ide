@@ -16,24 +16,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -74,6 +82,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final CommandStack commandStack = new CommandStack();
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
 	private BulkEditorSettings settings;
+	private List<URI> selectedSubApps = Collections.emptyList();
 	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
 	private final IPartListener2 focusListener = new IPartListener2() {
 		@Override
@@ -101,6 +110,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	// Scope
 	private Button workspaceScopeButton;
 	private Button projectScopeButton;
+	private Button subappHierarchyScopeButton;
+	private Button subappHierarchyScopeSearchButton;
+	private Label subappHierarchyScopeLabel;
 
 	BulkEditorNatTable natTable;
 
@@ -229,21 +241,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		ignoreLinkedLibrariesButton.setLayoutData(buttonLayoutData);
 	}
 
-	private void createScopeGroup(final Composite parent) {
-		final Group scopeGroup = createCollapsibleGroup(parent, Messages.Scope, null);
-		final Composite groupContent = new Composite(scopeGroup, SWT.NONE);
-		groupContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		groupContent.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-
-		projectScopeButton = WidgetFactory.button(SWT.RADIO)
-				.text(MessageFormat.format(Messages.Project, project.getName())).create(groupContent);
-		projectScopeButton.setSelection(settings.projectScope);
-		projectScopeButton.addListener(SWT.Selection,
-				event -> settings.projectScope = projectScopeButton.getSelection());
-		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(groupContent);
-		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
-	}
-
 	private void createSearchButton(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
@@ -361,6 +358,80 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			scrolledParentComposite.setMinSize(current.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			current.layout();
 		}
+		composite.getParent().layout();
+	}
+
+	private void createScopeGroup(final Composite parent) {
+		final Group scopeGroup = createCollapsibleGroup(parent, Messages.Scope, null);
+		final Composite groupContent = new Composite(scopeGroup, SWT.NONE);
+		groupContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		groupContent.setLayout(GridLayoutFactory.swtDefaults().numColumns(5).create());
+
+		projectScopeButton = WidgetFactory.button(SWT.RADIO)
+				.text(MessageFormat.format(Messages.Project, project.getName())).create(groupContent);
+		projectScopeButton.setSelection(settings.scope == ScopeOption.PROJECT);
+		projectScopeButton.addListener(SWT.Selection, event -> {
+			if (projectScopeButton.getSelection()) {
+				settings.scope = ScopeOption.PROJECT;
+			}
+		});
+
+		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(groupContent);
+		workspaceScopeButton.setSelection(settings.scope == ScopeOption.WORKSPACE);
+		workspaceScopeButton.addListener(SWT.Selection, event -> {
+			if (workspaceScopeButton.getSelection()) {
+				settings.scope = ScopeOption.WORKSPACE;
+			}
+		});
+
+		subappHierarchyScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.SubappHierarchy)
+				.create(groupContent);
+		subappHierarchyScopeButton.setSelection(settings.scope == ScopeOption.SUBAPP_HIERARCHY);
+		subappHierarchyScopeButton.addListener(SWT.Selection, event -> {
+			if (subappHierarchyScopeButton.getSelection()) {
+				settings.scope = ScopeOption.SUBAPP_HIERARCHY;
+			}
+			subappHierarchyScopeSearchButton.setVisible(subappHierarchyScopeButton.getSelection());
+			subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
+		});
+
+		subappHierarchyScopeSearchButton = WidgetFactory.button(SWT.NONE).text(Messages.SelectSubappHierarchy)
+				.create(groupContent);
+		subappHierarchyScopeSearchButton.addListener(SWT.Selection, event -> {
+			if (subappHierarchyScopeButton.getSelection()) {
+				openScopeDialog();
+			}
+		});
+		subappHierarchyScopeSearchButton.setVisible(subappHierarchyScopeButton.getSelection());
+
+		selectedSubApps = settings.subappHierarchies;
+		subappHierarchyScopeLabel = WidgetFactory.label(SWT.NONE).text(createSubappHierarchyText())
+				.create(groupContent);
+		subappHierarchyScopeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
+	}
+
+	private void openScopeDialog() {
+		final var dialog = new SubAppHierarchyDialog(project);
+		final var result = dialog.open();
+		if (result != null) {
+			selectedSubApps = SubAppHierarchyDialog.mapResultToURIs(result);
+			settings.subappHierarchies = selectedSubApps;
+			subappHierarchyScopeLabel.setText(createSubappHierarchyText());
+		}
+	}
+
+	private String createSubappHierarchyText() {
+		return selectedSubApps.stream().map(uri -> {
+			final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+			return typeEntry.getType().eResource().getEObject(uri.fragment());
+		}).map(eObject -> {
+			if (EcoreUtil.getRootContainer(eObject) instanceof final SubAppType subAppType && subAppType != eObject) {
+				// special case for SubappTypes
+				return subAppType.getName() + "." + FordiacMarkerHelper.getLocation(eObject); //$NON-NLS-1$
+			}
+			return FordiacMarkerHelper.getLocation(eObject);
+		}).collect(Collectors.joining("; ")); //$NON-NLS-1$
 	}
 
 	private int openUnsavedChangesDialog() {
@@ -448,8 +519,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
 				ignoreLinkedLibrariesButton.getSelection());
 
-		final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
-				projectScopeButton.getSelection(), project);
+		List<ISearchContext> contexts;
+		if (subappHierarchyScopeButton.getSelection()) {
+			contexts = SearchHelper.createSearchContextList(project, selectedSubApps);
+		} else {
+			contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
+					projectScopeButton.getSelection(), project);
+		}
 
 		final var result = contexts.stream()
 				.flatMap(context -> new IEC61499ElementSearch(context,
