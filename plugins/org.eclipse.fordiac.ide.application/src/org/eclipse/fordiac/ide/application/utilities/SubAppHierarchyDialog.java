@@ -14,8 +14,14 @@
 package org.eclipse.fordiac.ide.application.utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
@@ -30,6 +36,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -49,6 +59,15 @@ public class SubAppHierarchyDialog {
 
 	private final ElementTreeSelectionDialog dialog;
 
+	public SubAppHierarchyDialog(final IProject project) {
+		this.root = null;
+		final List<TreeNode> nodeList = buildNodeList(TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+
+		dialog = createDialog();
+		dialog.setInput(nodeList.toArray(new TreeNode[0]));
+		dialog.setTitle(Messages.SubAppHierarchyDialogTitle);
+	}
+
 	public SubAppHierarchyDialog(final FBNetworkElement root, final List<FBNetworkElement> filteredElements) {
 		this.root = (FBNetwork) root.eContainer();
 		final List<TreeNode> nodeList = buildNodeList(filteredElements);
@@ -60,10 +79,9 @@ public class SubAppHierarchyDialog {
 		dialog.setInitialSelection(rootNode);
 	}
 
-	public FBNetwork open() {
-		dialog.open();
-		final Object result = dialog.getResult() != null ? dialog.getResult()[0] : null;
-		if (result instanceof final TreeNode node && node != rootNode) {
+	public FBNetwork mapResultToFBNetwork(final Object[] result) {
+		final Object firstResult = result != null ? dialog.getResult()[0] : null;
+		if (firstResult instanceof final TreeNode node && node != rootNode) {
 			return switch (node.getValue()) {
 			case final SubApp subapp -> subapp.getSubAppNetwork();
 			case final Application app -> app.getFBNetwork();
@@ -72,6 +90,24 @@ public class SubAppHierarchyDialog {
 			};
 		}
 		return null;
+	}
+
+	public static List<URI> mapResultToURIs(final Object[] result) {
+		if (result != null) {
+			return Arrays.stream(result).filter(TreeNode.class::isInstance).map(node -> ((TreeNode) node).getValue())
+					.map(value -> {
+						if (value instanceof final EObject eobj) {
+							return EcoreUtil.getURI(eobj);
+						}
+						return null;
+					}).filter(Objects::nonNull).toList();
+		}
+		return Collections.emptyList();
+	}
+
+	public Object[] open() {
+		dialog.open();
+		return dialog.getResult();
 	}
 
 	private ElementTreeSelectionDialog createDialog() {
@@ -86,26 +122,37 @@ public class SubAppHierarchyDialog {
 		};
 	}
 
+	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
+		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getSystem),
+				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
+		return buildNodeList(stream, Collections.emptyList());
+	}
+
 	private List<TreeNode> buildNodeList(final List<FBNetworkElement> filterList) {
+		return buildNodeList(Stream.of(EcoreUtil.getRootContainer(root)), filterList);
+	}
+
+	private List<TreeNode> buildNodeList(final Stream<EObject> roots, final List<FBNetworkElement> filterList) {
 		final List<TreeNode> nodeList = new ArrayList<>();
-		final EObject container = EcoreUtil.getRootContainer(root);
-		if (container instanceof final AutomationSystem as) {
-			as.getApplication().forEach(app -> {
-				final TreeNode node = new TreeNode(app);
+		roots.forEach(r -> {
+			if (r instanceof final AutomationSystem automationSystem) {
+				automationSystem.getApplication().forEach(app -> {
+					final TreeNode node = new TreeNode(app);
+					nodeList.add(node);
+					if (root != null && app.getFBNetwork() == root) {
+						rootNode = node;
+					}
+					addFBNetwork(node, app.getFBNetwork(), filterList);
+				});
+			} else if (r instanceof final SubAppType subappType) {
+				final TreeNode node = new TreeNode(subappType);
 				nodeList.add(node);
-				if (app.getFBNetwork() == root) {
+				if (root != null && subappType.getFBNetwork() == root) {
 					rootNode = node;
 				}
-				addFBNetwork(node, app.getFBNetwork(), filterList);
-			});
-		} else if (container instanceof final CompositeFBType cfb) {
-			final TreeNode node = new TreeNode(cfb);
-			nodeList.add(node);
-			if (cfb.getFBNetwork() == root) {
-				rootNode = node;
+				addFBNetwork(node, subappType.getFBNetwork(), filterList);
 			}
-			addFBNetwork(node, cfb.getFBNetwork(), filterList);
-		}
+		});
 		return nodeList;
 	}
 
@@ -114,7 +161,7 @@ public class SubAppHierarchyDialog {
 		network.getNetworkElements().forEach(fbnE -> {
 			if (fbnE instanceof final UntypedSubApp subapp && !filterList.contains(fbnE)) {
 				final TreeNode node = new TreeNode(subapp);
-				if (subapp.getSubAppNetwork() == root) {
+				if (root != null && subapp.getSubAppNetwork() == root) {
 					rootNode = node;
 				}
 				node.setParent(parent);
