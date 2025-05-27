@@ -103,6 +103,21 @@ public class SearchHelper {
 		this.ignoreLinkedLibraries = ignoreLinkedLibraries;
 	}
 
+	public static List<ISearchContext> createSearchContextList(final IProject project, final List<URI> uriList) {
+		return List.of(new AbstractLiveSearchContext(project) {
+			@Override
+			public Stream<URI> getTypes() {
+				return uriList.stream();
+			}
+
+			@Override
+			public EObject mapTypes(final URI uri) {
+				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+				return typeEntry.getType().eResource().getEObject(uri.fragment());
+			}
+		});
+	}
+
 	public List<ISearchContext> createSearchContextList(final boolean workspace, final boolean project,
 			final IProject iproject) {
 		if (workspace) {
