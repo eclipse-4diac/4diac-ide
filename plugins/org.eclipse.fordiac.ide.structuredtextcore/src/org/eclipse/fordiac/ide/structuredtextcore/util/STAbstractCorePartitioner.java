@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.util;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -102,8 +103,12 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 	}
 
 	protected static String extractArraySize(final STVarDeclaration declaration) {
-		return NodeModelUtils.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_Ranges())
-				.stream().map(INode::getText).collect(Collectors.joining(",")); //$NON-NLS-1$
+		return Stream.concat(
+				NodeModelUtils.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_Ranges())
+						.stream(),
+				NodeModelUtils.findNodesForFeature(declaration, STCorePackage.eINSTANCE.getSTVarDeclaration_Count())
+						.stream())
+				.map(INode::getText).collect(Collectors.joining(",")); //$NON-NLS-1$
 	}
 
 	protected static String extractDefaultValue(final STVarDeclaration declaration) {
