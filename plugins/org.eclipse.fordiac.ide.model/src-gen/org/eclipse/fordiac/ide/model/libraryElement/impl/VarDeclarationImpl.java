@@ -616,6 +616,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public boolean validateIllegalVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateIllegalVariableLengthArrayVariable(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateNoValueForVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);
 	}

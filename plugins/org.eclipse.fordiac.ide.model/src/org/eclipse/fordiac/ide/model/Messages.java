@@ -135,6 +135,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_TypeNotSupported;
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
+	public static String VarDeclarationAnnotations_IllegalVariableLengthArray;
+
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
 
 	public static String VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds;
