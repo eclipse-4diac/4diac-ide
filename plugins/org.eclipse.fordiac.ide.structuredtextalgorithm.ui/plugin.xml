@@ -424,15 +424,6 @@
    </menu>
 		</menuContribution>
 	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.refactoring"
-			name="Refactoring">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm"/>
-		</page>
-	</extension>
 	<extension point="org.eclipse.compare.contentViewers">
 		<viewer id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.compare.contentViewers"
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
@@ -575,66 +566,6 @@
     <module
           class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmSharedModule">
     </module>
- </extension>
- <extension
-       point="org.eclipse.ui.preferencePages">
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.codeMining"
-          name="Code Minings">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.contentAssist"
-          name="Content Assist">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.saveActions.preferencePage"
-          name="Save Actions">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor"
-          name="Editor">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
-       </keywordReference>
-    </page>
- </extension>
- <extension
-       point="org.eclipse.ui.propertyPages">
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"
-          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.saveActions.propertyPage"
-          name="Save Actions">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
-       </keywordReference>
-       <enabledWhen>
-          <adapt
-                type="org.eclipse.core.resources.IProject">
-          </adapt>
-       </enabledWhen>
-       <filter
-             name="projectNature"
-             value="org.eclipse.xtext.ui.shared.xtextNature">
-       </filter>
-    </page>
  </extension>
  <extension
        point="org.eclipse.xtext.builder.participant">
