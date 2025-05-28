@@ -25,7 +25,10 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -141,6 +144,21 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
 		return unwrap(queryResourcesAsync());
+	}
+
+	@Override
+	public Response queryFBType(final FBType type) throws DeploymentException {
+		return unwrap(queryFBTypeAsync(type));
+	}
+
+	@Override
+	public Response queryDataType(final DataType type) throws DeploymentException {
+		return unwrap(queryDataTypeAsync(type));
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
+		return unwrap(queryGlobalConstTypeAsync(type));
 	}
 
 	@Override
@@ -331,6 +349,21 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@Override
 	public Future<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> queryResourcesAsync() {
 		return executorService.submit(getDelegate()::queryResources);
+	}
+
+	@Override
+	public Future<Response> queryFBTypeAsync(final FBType type) {
+		return executorService.submit(() -> getDelegate().queryFBType(type));
+	}
+
+	@Override
+	public Future<Response> queryDataTypeAsync(final DataType type) {
+		return executorService.submit(() -> getDelegate().queryDataType(type));
+	}
+
+	@Override
+	public Future<Response> queryGlobalConstTypeAsync(final GlobalConstants type) {
+		return executorService.submit(() -> getDelegate().queryGlobalConstType(type));
 	}
 
 	@Override
