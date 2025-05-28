@@ -39,11 +39,16 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -62,6 +67,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public static final String DELETE_CONNECTION = "<Request ID=\"{0}\" Action=\"DELETE\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
 
 	public static final String QUERY_FB_INSTANCES = "<Request ID=\"{0}\" Action=\"QUERY\"><FB Name=\"*\" Type=\"*\"/></Request>"; //$NON-NLS-1$
+	public static final String QUERY_FB_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_DATA_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><DataType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><GlobalConstType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String READ_WATCHES = "<Request ID=\"{0}\" Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
 	public static final String ADD_WATCH = "<Request ID=\"{0}\" Action=\"CREATE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
@@ -217,7 +225,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(START, getNextId());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -228,7 +236,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void stopResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(STOP, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(STOP, getNextId());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -239,7 +247,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(START, getNextId());
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -252,8 +260,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void writeDeviceParameter(final Device device, final String parameter, final String value)
 			throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
-		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(getNextId()),
-				encodedValue, parameter);
+		final String request = MessageFormat.format(getWriteParameterMessage(), getNextId(), encodedValue, parameter);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -369,6 +376,44 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			throw new DeploymentException(
 					MessageFormat.format(Messages.DeploymentExecutor_QueryResourcesFailed, getDevice().getName()), e);
 		}
+	}
+
+	@Override
+	public Response queryFBType(final FBType type) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(type));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_QueryFBTypeFailed, type.getName()), e);
+		}
+	}
+
+	@Override
+	public Response queryDataType(final DataType type) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_DATA_TYPE, getNextId(), getTypeNameWithHash(type));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_QueryDataTypeFailed, type.getName()), e);
+		}
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_GLOBAL_CONST_TYPE, getNextId(),
+					getTypeNameWithHash(type));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_QueryGlobalConstTypeFailed, type.getName()), e);
+		}
+	}
+
+	private static String getTypeNameWithHash(final LibraryElement type) throws LibraryElementHashException {
+		return type.getName() + '#' + type.getTypeEntry().getTypeHash();
 	}
 
 	protected Response parseResponse(final String result) throws IOException {

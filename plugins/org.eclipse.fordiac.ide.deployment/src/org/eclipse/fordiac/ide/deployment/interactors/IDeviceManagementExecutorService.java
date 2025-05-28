@@ -22,7 +22,10 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -229,6 +232,12 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 * @see #queryResources()
 	 */
 	Future<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> queryResourcesAsync();
+
+	Future<Response> queryFBTypeAsync(final FBType type);
+
+	Future<Response> queryDataTypeAsync(final DataType type);
+
+	Future<Response> queryGlobalConstTypeAsync(final GlobalConstants type);
 
 	/**
 	 * Query resources periodically

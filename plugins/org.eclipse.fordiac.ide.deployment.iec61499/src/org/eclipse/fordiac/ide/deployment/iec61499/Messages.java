@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.deployment.iec61499;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.iec61499.messages"; //$NON-NLS-1$
 	public static String DeploymentExecutor_CreateConnectionFailed;
@@ -40,6 +40,9 @@ public final class Messages extends NLS {
 	public static String DeploymentExecutor_DeleteFBFailed;
 
 	public static String DeploymentExecutor_QueryResourcesFailed;
+	public static String DeploymentExecutor_QueryFBTypeFailed;
+	public static String DeploymentExecutor_QueryDataTypeFailed;
+	public static String DeploymentExecutor_QueryGlobalConstTypeFailed;
 
 	public static String DeploymentExecutor_ReadWatchesFailed;
 	public static String DeploymentExecutor_AddWatchesFailed;

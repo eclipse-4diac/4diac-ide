@@ -46,8 +46,11 @@ import org.eclipse.fordiac.ide.deployment.opcua.helpers.Constants;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener2;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -565,6 +568,24 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public Response queryFBType(final FBType type) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query FB Type not yet supported!"); //$NON-NLS-1$
+	}
+
+	@Override
+	public Response queryDataType(final DataType type) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query Data Type Type not yet supported!"); //$NON-NLS-1$
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query Global Const Type not yet supported!"); //$NON-NLS-1$
 	}
 
 	@Override

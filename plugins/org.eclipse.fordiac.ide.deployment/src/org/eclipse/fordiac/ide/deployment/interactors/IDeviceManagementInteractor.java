@@ -24,7 +24,10 @@ import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -251,6 +254,12 @@ public interface IDeviceManagementInteractor {
 	 * @return unmodifiable list of the queried resources
 	 */
 	List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException;
+
+	Response queryFBType(FBType type) throws DeploymentException;
+
+	Response queryDataType(DataType type) throws DeploymentException;
+
+	Response queryGlobalConstType(GlobalConstants type) throws DeploymentException;
 
 	/***********************
 	 * monitoring commands
