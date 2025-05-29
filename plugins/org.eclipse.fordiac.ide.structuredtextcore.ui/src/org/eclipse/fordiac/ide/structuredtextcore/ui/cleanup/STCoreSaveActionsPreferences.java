@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 
@@ -32,19 +33,19 @@ public class STCoreSaveActionsPreferences {
 	@Inject
 	private IPreferenceStoreAccess preferenceStoreAccess;
 
-	public boolean isEnableSaveActions() {
-		return preferenceStoreAccess.getPreferenceStore().getBoolean(ENABLE_SAVE_ACTIONS);
+	public boolean isEnableSaveActions(final IProject project) {
+		return preferenceStoreAccess.getContextPreferenceStore(project).getBoolean(ENABLE_SAVE_ACTIONS);
 	}
 
-	public boolean isEnableFormat() {
-		return preferenceStoreAccess.getPreferenceStore().getBoolean(ENABLE_FORMAT);
+	public boolean isEnableFormat(final IProject project) {
+		return preferenceStoreAccess.getContextPreferenceStore(project).getBoolean(ENABLE_FORMAT);
 	}
 
-	public void setEnableSaveActions(final boolean isEnableSaveActions) {
-		preferenceStoreAccess.getWritablePreferenceStore().setValue(ENABLE_SAVE_ACTIONS, isEnableSaveActions);
+	public void setEnableSaveActions(final IProject project, final boolean isEnableSaveActions) {
+		preferenceStoreAccess.getWritablePreferenceStore(project).setValue(ENABLE_SAVE_ACTIONS, isEnableSaveActions);
 	}
 
-	public void setEnableFormat(final boolean isEnableFormat) {
-		preferenceStoreAccess.getWritablePreferenceStore().setValue(ENABLE_FORMAT, isEnableFormat);
+	public void setEnableFormat(final IProject project, final boolean isEnableFormat) {
+		preferenceStoreAccess.getWritablePreferenceStore(project).setValue(ENABLE_FORMAT, isEnableFormat);
 	}
 }

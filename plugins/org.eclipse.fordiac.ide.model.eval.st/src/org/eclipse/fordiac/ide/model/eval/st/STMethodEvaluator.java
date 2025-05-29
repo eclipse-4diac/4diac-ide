@@ -64,6 +64,11 @@ public class STMethodEvaluator extends STCallableEvaluator {
 	}
 
 	@Override
+	public void cleanup() {
+		parseResult = null;
+	}
+
+	@Override
 	public Value evaluate() throws EvaluatorException, InterruptedException {
 		prepare();
 		evaluateStructuredTextMethod(parseResult);

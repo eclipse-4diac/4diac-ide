@@ -51,6 +51,12 @@ public abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<
 	}
 
 	@Override
+	public void cleanup() {
+		algorithmEvaluators.values().forEach(Evaluator::cleanup);
+		internalFBEvaluators.values().forEach(Evaluator::cleanup);
+	}
+
+	@Override
 	public Set<String> getDependencies() {
 		return Stream
 				.concat(Stream.of(super.getDependencies()),

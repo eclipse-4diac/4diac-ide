@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
@@ -68,6 +70,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -98,6 +101,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return new LambdaVisitor<>() //
 				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType) //
 				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType) //
+				.on(FunctionFBTypeRuntime.class).then(runTypeVisitor::runFunctionFBType) //
 				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBNetwork);
 	}
 
@@ -189,26 +193,49 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue)
 				.orElse(null);
 		if (algoEval != null) {
-			try (EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(basefbtype.getName())) {
-				final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
-				tpe.setMonotonicClock(clock);
-				tpe.execute(() -> {
-					try {
-						algoEval.evaluate();
-						vars.forEach(v -> {
-							final VarDeclaration varDecl = varDecls.stream()
-									.filter(vd -> vd.getName().equals(v.getName())).findAny().orElse(null);
-							final String value = v.getValue().toString();
-							varDecl.getValue().setValue(value);
-						});
-					} catch (final EvaluatorException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-					} catch (final InterruptedException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-						Thread.currentThread().interrupt();
-					}
-				});
-			}
+			executeEvaluator(algoEval, vars, varDecls, eventOccurrence, algorithm.getName());
+		}
+	}
+
+	private static void processFunctionWithEvaluator(final FunctionFBType functionFBType,
+			final EventOccurrence eventOccurrence) {
+		final List<VarDeclaration> varDecls = new ArrayList<>(functionFBType.getInterfaceList().getInputVars());
+		varDecls.addAll(functionFBType.getInterfaceList().getOutputVars());
+		final List<Variable<?>> vars = varDecls.stream().map(DefaultRunFBType::mapVar).collect(Collectors.toList());
+		// internal variables of function could be added by calling
+		// STFunctionParseUtil2.parseFunctionBody, getting the root element which is a
+		// STFunctionSource and then getting functions -> varDeclarationBlock ->
+		// varDeclaration + converting it with VariableOperations.newVariable
+		final FBVariable fbVar = new FBVariable("THIS", functionFBType, Collections.emptyList()); //$NON-NLS-1$
+
+		final Evaluator fbEval = EvaluatorFactory.createEvaluator(functionFBType, FunctionFBType.class, fbVar, vars,
+				null);
+		if (fbEval != null) {
+			executeEvaluator(fbEval, vars, varDecls, eventOccurrence, functionFBType.getName());
+		}
+	}
+
+	private static void executeEvaluator(final Evaluator eval, final List<Variable<?>> vars,
+			final List<VarDeclaration> varDecls, final EventOccurrence eventOccurrence, final String name) {
+		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
+			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
+			tpe.setMonotonicClock(clock);
+			tpe.execute(() -> {
+				try {
+					eval.evaluate();
+					vars.forEach(v -> {
+						final VarDeclaration varDecl = varDecls.stream().filter(vd -> vd.getName().equals(v.getName()))
+								.findAny().orElse(null);
+						final String value = v.getValue().toString();
+						varDecl.getValue().setValue(value);
+					});
+				} catch (final EvaluatorException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+				} catch (final InterruptedException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					Thread.currentThread().interrupt();
+				}
+			});
 		}
 	}
 
@@ -264,16 +291,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Copy FBType
 		final FBType copyFBType = EcoreUtil.copy(executedFbtype);
 		// Add copy FBType to the RuntimeFBType
-		if (runtime instanceof BasicFBTypeRuntime) {
-			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFBType);
-		} else if (runtime instanceof SimpleFBTypeRuntime) {
-			((SimpleFBTypeRuntime) newFBTypeRT).setSimpleFBType((SimpleFBType) copyFBType);
-		} else {
-			throw new UnsupportedOperationException();
+		switch (newFBTypeRT) {
+		case final BasicFBTypeRuntime b -> b.setBasicfbtype((BasicFBType) copyFBType);
+		case final SimpleFBTypeRuntime s -> s.setSimpleFBType((SimpleFBType) copyFBType);
+		case final FunctionFBTypeRuntime f -> f.setFunctionFBType((FunctionFBType) copyFBType);
+		default -> throw new UnsupportedOperationException();
 		}
+
 		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEventOccurrence.setFbRuntime(newFBTypeRT);
-		// Event
 		newEventOccurrence.setEvent(output);
 		return newEventOccurrence;
 	}
@@ -331,6 +357,19 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return outputEvents;
 	}
 
+	@Override
+	public EList<EventOccurrence> runFunctionFBType(final FunctionFBTypeRuntime fBTypeRuntime) {
+		final FunctionFBType functionFBType = fBTypeRuntime.getFunctionFBType();
+		VariableUtils.fBVariableInitialization(functionFBType);
+
+		// function types always have exactly 1 output event
+		final Event event = functionFBType.getInterfaceList().getEventOutputs().get(0);
+		processFunctionWithEvaluator(functionFBType, this.eventOccurrence);
+		isConsumed(this.eventOccurrence);
+
+		return ECollections.newBasicEList(createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
+	}
+
 	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
 		// if we don't have ECStates, use first output/algorithm as fallback
 		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
@@ -350,7 +389,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// run FB Type to get the output events for the instance in the network
 		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
 		if (runtime == null) {
-			final BaseFBType copiedType = (BaseFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType());
+			final FBType copiedType = EcoreUtil.copy(eventOccurrence.getParentFB().getType());
 			runtime = RuntimeFactory.createFrom(copiedType);
 			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
 		}
@@ -542,5 +581,4 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		interfaceElement.getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
 		return destinations;
 	}
-
 }

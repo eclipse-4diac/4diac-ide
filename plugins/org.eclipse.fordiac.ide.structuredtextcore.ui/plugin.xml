@@ -78,32 +78,20 @@
 	<extension
 			point="org.eclipse.ui.preferencePages">
 		<page
+			category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			name="STCore">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-		</page>
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.coloring"
-			name="Syntax Coloring">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-		</page>
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.templates"
-			name="Templates">
+			name="Structured Text">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 		</page>
 	</extension>
 	<extension
 			point="org.eclipse.ui.propertyPages">
 		<page
+			category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			name="STCore">
+			name="Structured Text">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -282,54 +270,10 @@
        </markerTypeReference>
     </markerTypeCategory>
  </extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.validator.preferencePage"
-			name="Errors/Warnings">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.propertyPages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.validator.propertyPage"
-			name="Errors/Warnings">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-			<enabledWhen>
-				<adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-		</page>
-	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
 			fileExtensions="stcore"/>
-	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.compiler.preferencePage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.propertyPages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.compiler.propertyPage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
-			<enabledWhen>
-				<adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-		</page>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
@@ -636,7 +580,7 @@
     <page
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextcore.ui.saveActions"
+          id="org.eclipse.fordiac.ide.structuredtextcore.STCore.saveActions.preferencePage"
           name="Save Actions">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
@@ -650,6 +594,27 @@
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.ui.propertyPages">
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextcore.STCore.saveActions.propertyPage"
+          name="Save Actions">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
+       </keywordReference>
+       <enabledWhen>
+          <adapt
+                type="org.eclipse.core.resources.IProject">
+          </adapt>
+       </enabledWhen>
+       <filter
+             name="projectNature"
+             value="org.eclipse.xtext.ui.shared.xtextNature">
+       </filter>
     </page>
  </extension>
  <extension

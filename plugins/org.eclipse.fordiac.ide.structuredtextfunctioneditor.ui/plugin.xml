@@ -79,9 +79,10 @@
 	<extension
 			point="org.eclipse.ui.preferencePages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			name="STFunction">
+			name="Functions">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 		<page
@@ -102,9 +103,10 @@
 	<extension
 			point="org.eclipse.ui.propertyPages">
 		<page
+			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			name="STFunction">
+			name="Functions">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -296,28 +298,6 @@
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
 			fileExtensions="stfunc"/>
 	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.compiler.preferencePage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.propertyPages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.compiler.propertyPage"
-			name="Compiler">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
-			<enabledWhen>
-				<adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-		</page>
-	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
 			<command
@@ -472,15 +452,6 @@
      </menu>
   </menuContribution>
 	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.refactoring"
-			name="Refactoring">
-			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
-		</page>
-	</extension>
 	<extension point="org.eclipse.compare.contentViewers">
 		<viewer id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.compare.contentViewers"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
@@ -576,45 +547,6 @@
     <module
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionSharedModule">
     </module>
- </extension>
- <extension
-       point="org.eclipse.ui.preferencePages">
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.codeMining"
-          name="Code Minings">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.contentAssist"
-          name="Content Assist">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.saveActions"
-          name="Save Actions">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction">
-       </keywordReference>
-    </page>
-    <page
-          category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-          class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferencePage"
-          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.editor"
-          name="Editor">
-       <keywordReference
-             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
-       </keywordReference>
-    </page>
  </extension>
  <extension
        point="org.eclipse.xtext.ui.resourceRelocationStrategy">

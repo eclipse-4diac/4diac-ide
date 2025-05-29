@@ -18,8 +18,6 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferences;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixMatcher;
@@ -27,11 +25,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposa
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater.LibraryElementChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
-import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.preferences.STCoreSubLanguagePreferenceStoreAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
@@ -101,7 +99,7 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
 import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
-import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
 import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
@@ -152,8 +150,6 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	public void configureSTCoreCleanupEditorCallback(final Binder binder) {
 		binder.bind(IXtextEditorCallback.class).annotatedWith(Names.named("STCoreCleanupEditorCallback")) //$NON-NLS-1$
 				.to(STCoreCleanupEditorCallback.class);
-		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("saveActionsInitializer")) //$NON-NLS-1$
-				.to(STCoreSaveActionsPreferences.Initializer.class);
 	}
 
 	@Override
@@ -184,11 +180,6 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
 		return STCoreRefactoringDocumentProvider.class;
-	}
-
-	public void configureCodeMinings(final Binder binder) {
-		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-				.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 
 	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
@@ -230,19 +221,12 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 		}
 	}
 
-	public void configureEditor(final Binder binder) {
-		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("editorInitializer")) //$NON-NLS-1$
-				.to(STCoreEditorPreferences.Initializer.class);
-	}
-
 	public void configureKeyBindingScope(final Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
 				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
 	}
 
 	public void configureContentAssist(final Binder binder) {
-		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("contentAssistInitializer")) //$NON-NLS-1$
-				.to(STCoreContentAssistPreferences.Initializer.class);
 		binder.bind(String.class)
 				.annotatedWith(com.google.inject.name.Names
 						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
@@ -361,5 +345,9 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	@Override
 	public Class<? extends AbstractValidatorConfigurationBlock> bindAbstractValidatorConfigurationBlock() {
 		return STCoreCustomValidatorConfigurationBlock.class;
+	}
+
+	public Class<? extends IPreferenceStoreAccess> bindIPreferenceStoreAccess() {
+		return STCoreSubLanguagePreferenceStoreAccess.class;
 	}
 }

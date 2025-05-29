@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
@@ -79,6 +80,13 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	private EClass simpleFBTypeRuntimeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	private EClass functionFBTypeRuntimeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -407,6 +415,26 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EClass getFunctionFBTypeRuntime() {
+		return functionFBTypeRuntimeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getFunctionFBTypeRuntime_FunctionFBType() {
+		return (EReference) functionFBTypeRuntimeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public EClass getTransaction() {
 		return transactionEClass;
 	}
@@ -716,6 +744,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		simpleFBTypeRuntimeEClass = createEClass(SIMPLE_FB_TYPE_RUNTIME);
 		createEReference(simpleFBTypeRuntimeEClass, SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE);
 
+		functionFBTypeRuntimeEClass = createEClass(FUNCTION_FB_TYPE_RUNTIME);
+		createEReference(functionFBTypeRuntimeEClass, FUNCTION_FB_TYPE_RUNTIME__FUNCTION_FB_TYPE);
+
 		transactionEClass = createEClass(TRANSACTION);
 		createEReference(transactionEClass, TRANSACTION__INPUT_EVENT_OCCURRENCE);
 		createEReference(transactionEClass, TRANSACTION__PARENT_EO);
@@ -789,6 +820,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		// Add supertypes to classes
 		basicFBTypeRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
 		simpleFBTypeRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
+		functionFBTypeRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
 		fbNetworkRuntimeEClass.getESuperTypes().add(this.getFBRuntimeAbstract());
 		fbTransactionEClass.getESuperTypes().add(this.getTransaction());
 		eccTraceEClass.getESuperTypes().add(this.getTrace());
@@ -867,6 +899,15 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(simpleFBTypeRuntimeEClass, theLibraryElementPackage.getSimpleFBType(), "getModel", 1, 1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
+
+		initEClass(functionFBTypeRuntimeEClass, FunctionFBTypeRuntime.class, "FunctionFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFunctionFBTypeRuntime_FunctionFBType(), theLibraryElementPackage.getFunctionFBType(), null,
+				"functionFBType", null, 1, 1, FunctionFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(functionFBTypeRuntimeEClass, theLibraryElementPackage.getFunctionFBType(), "getModel", 1, 1, //$NON-NLS-1$
 				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(transactionEClass, Transaction.class, "Transaction", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$

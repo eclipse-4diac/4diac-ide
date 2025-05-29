@@ -79,8 +79,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -138,6 +138,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	// Scope
 	private Button workspaceScopeButton;
 	private Button projectScopeButton;
+
+	private Button ignoreLinkedLibrariesButton;
 
 	// NatTable
 	private NatTable natTable;
@@ -241,6 +243,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		attributeTypesFilter = createSearchFilterInGroup(searchGroup, Messages.AttributeTypes,
 				BulkEditorSettings.inAttributeTypesSearchList, settings.attributeTypes,
 				b -> settings.attributeTypes = b.booleanValue());
+
+		ignoreLinkedLibrariesButton = WidgetFactory.button(SWT.CHECK).text(Messages.IgnoreLinkedLibraries)
+				.onSelect(event -> settings.ignoreLinkedLibraries = ignoreLinkedLibrariesButton.getSelection())
+				.create(searchGroup);
+		ignoreLinkedLibrariesButton.setSelection(settings.ignoreLinkedLibraries);
+		final GridData buttonData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		buttonData.verticalIndent = 10;
+		ignoreLinkedLibrariesButton.setLayoutData(buttonData);
 	}
 
 	private FilterComposite createSearchFilterInGroup(final Composite parent, final String name,
@@ -407,7 +417,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				new SearchHelper.FilterRecordClass(settings.attributeTypes,
 						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))));
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				ignoreLinkedLibrariesButton.getSelection());
 
 		final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
 				projectScopeButton.getSelection(), project);
@@ -479,7 +490,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-					new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
+					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
 							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
 							VarDeclarationTableColumn.EDITABLE_NO_LOCATION),
 					null, null, false);
@@ -495,7 +506,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-					new AttributeEditableRule(IEditableRule.ALWAYS_EDITABLE,
+					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
 							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
 							AttributeTableColumn.EDITABLE_NO_LOCATION, attributeProvider),
 					new TypeSelectionButton(() -> {
@@ -640,6 +651,23 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
 				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}
+		}
+	}
+
+	private class LinkedElementsEditableRule extends EditableRule {
+		private final ChangeableListDataProvider<? extends EObject> provider;
+
+		public LinkedElementsEditableRule(final ChangeableListDataProvider<? extends EObject> provider) {
+			this.provider = provider;
+		}
+
+		@Override
+		public boolean isEditable(final int columnIndex, final int rowIndex) {
+			final var rootElement = EcoreUtil.getRootContainer(provider.getRowObject(rowIndex));
+			if (rootElement instanceof final LibraryElement libElement) {
+				return SearchHelper.linkedElementsFilter.test(libElement.getTypeEntry());
+			}
+			return true;
 		}
 	}
 }

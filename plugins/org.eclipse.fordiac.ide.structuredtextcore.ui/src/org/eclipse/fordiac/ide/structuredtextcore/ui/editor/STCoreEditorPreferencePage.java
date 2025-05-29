@@ -13,25 +13,18 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.editor;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.xtext.ui.editor.preferences.AbstractPreferencePage;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 
 import com.google.inject.Inject;
 
-public class STCoreEditorPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	private IntegerFieldEditor performanceModeThreshold;
+public class STCoreEditorPreferencePage extends AbstractPreferencePage {
 
 	@Inject
 	private IPreferenceStoreAccess preferenceStoreAccess;
-
-	public STCoreEditorPreferencePage() {
-		super(GRID);
-	}
 
 	@Override
 	protected IPreferenceStore doGetPreferenceStore() {
@@ -40,9 +33,8 @@ public class STCoreEditorPreferencePage extends FieldEditorPreferencePage implem
 
 	@Override
 	protected void createFieldEditors() {
-		performanceModeThreshold = new IntegerFieldEditor(STCoreEditorPreferences.PERFORMANCE_MODE_THRESHOLD,
-				Messages.STCoreEditorPreferencePage_PerformanceModeThreshold, getFieldEditorParent());
-		addField(performanceModeThreshold);
+		addField(new IntegerFieldEditor(STCoreEditorPreferences.PERFORMANCE_MODE_THRESHOLD,
+				Messages.STCoreEditorPreferencePage_PerformanceModeThreshold, getFieldEditorParent()));
 	}
 
 	@Override

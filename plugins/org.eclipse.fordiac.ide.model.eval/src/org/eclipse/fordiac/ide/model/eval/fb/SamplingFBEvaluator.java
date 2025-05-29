@@ -47,6 +47,11 @@ public class SamplingFBEvaluator extends FBEvaluator<FBType> {
 	}
 
 	@Override
+	public void cleanup() {
+		delegate.cleanup();
+	}
+
+	@Override
 	public void evaluate(final Event event) throws EvaluatorException, InterruptedException {
 		getVariables(event).forEach(this::readData);
 		delegate.evaluate(event);
