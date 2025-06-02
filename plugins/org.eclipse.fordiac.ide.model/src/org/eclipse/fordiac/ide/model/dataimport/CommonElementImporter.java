@@ -755,6 +755,7 @@ public abstract class CommonElementImporter {
 
 				final var relativeName = String.join(".", parts); //$NON-NLS-1$
 				final var copy = EcoreUtil.copy(vd);
+				copy.getAttributes().clear();
 				copy.setName(relativeName);
 				copy.setValue(vd.getValue());
 				copy.setComment(vd.getComment());
