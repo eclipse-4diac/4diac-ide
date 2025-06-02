@@ -14,6 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -41,10 +44,9 @@ public class UpdateFBInstanceChange extends AbstractCommandChange<FBNetworkEleme
 	private final TypeEntry typeEntry;
 
 	public UpdateFBInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
-		super(("Update FB instances - " + FBNetworkHelper.getFullHierarchicalName(instance)),
+		super(MessageFormat.format(Messages.UpdateFBInstances, FBNetworkHelper.getFullHierarchicalName(instance)),
 				EcoreUtil.getURI(instance), FBNetworkElement.class);
 		this.typeEntry = typeEntry;
-
 	}
 
 	@Override
@@ -65,7 +67,6 @@ public class UpdateFBInstanceChange extends AbstractCommandChange<FBNetworkEleme
 
 	@Override
 	protected Command createCommand(final FBNetworkElement element) {
-
 		if (element instanceof final SubApp subApp && !subApp.isTyped()
 				&& typeEntry instanceof final DataTypeEntry dtEntry) {
 			return new UpdateUntypedSubAppInterfaceCommand(element, dtEntry);

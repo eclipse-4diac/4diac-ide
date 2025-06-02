@@ -37,6 +37,7 @@ public class Messages extends NLS {
 
 	public static String MoveToPackageChangePreview_EnterPackageName;
 	public static String MoveTypeToPackage;
+	public static String MoveTypeToPackage_UpdateDataTypeInstance;
 	public static String MoveTypeToPackage_RenamePackageTo;
 	public static String MoveTypeToPackage_PackageNameIsTheSame;
 	public static String MoveTypeToPackage_PackageNameIsEmpty;
