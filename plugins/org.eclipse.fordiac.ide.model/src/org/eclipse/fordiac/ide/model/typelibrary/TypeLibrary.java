@@ -522,6 +522,5 @@ public final class TypeLibrary {
 
 	void setProject(final IProject newProject) {
 		project = newProject;
-		reload();
 	}
 }
