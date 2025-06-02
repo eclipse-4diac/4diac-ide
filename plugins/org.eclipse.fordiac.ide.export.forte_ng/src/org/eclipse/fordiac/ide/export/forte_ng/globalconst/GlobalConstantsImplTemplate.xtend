@@ -30,6 +30,8 @@ class GlobalConstantsImplTemplate extends ForteLibraryElementTemplate<GlobalCons
 		
 		«generateImplIncludes»
 		
+		«generateUseStringId»
+		
 		namespace {
 		    «generateTypeHash»
 		}
@@ -43,4 +45,5 @@ class GlobalConstantsImplTemplate extends ForteLibraryElementTemplate<GlobalCons
 		DEFINE_FIRMWARE_GLOBAL_CONST(«className», «type.generateTypeSpec», TypeHash)
 		
 	'''
+	
 }
