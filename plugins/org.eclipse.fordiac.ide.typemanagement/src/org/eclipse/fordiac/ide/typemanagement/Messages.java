@@ -170,6 +170,7 @@ public final class Messages extends NLS {
 	public static String SafeStructDeletionChange_RootNodeChangeText;
 
 	public static String UpdateUntypedSubappPinChange_0;
+	public static String UpdateFBInstances;
 
 	static {
 		// initialize resource bundle
