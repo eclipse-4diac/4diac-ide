@@ -289,6 +289,14 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static SelectionLayer getSelectionLayer(final NatTable table) {
+		final ILayer viewportLayer = getViewportLayer(table);
+		if (viewportLayer != null) {
+			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);
+		}
+		return null;
+	}
+
+	public static ViewportLayer getViewportLayer(final NatTable table) {
 		ILayer viewportLayer = null;
 		if (table.getLayer() instanceof final GridLayer gridLayer) {
 			viewportLayer = gridLayer.getBodyLayer();
@@ -297,8 +305,8 @@ public final class NatTableWidgetFactory {
 			viewportLayer = vpl;
 		}
 
-		if (viewportLayer != null) {
-			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);
+		if (viewportLayer instanceof final ViewportLayer vpl) {
+			return vpl;
 		}
 		return null;
 	}
@@ -404,7 +412,7 @@ public final class NatTableWidgetFactory {
 				return super.getBackgroundColour(cell, configRegistry);
 			}
 		};
-		
+
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
