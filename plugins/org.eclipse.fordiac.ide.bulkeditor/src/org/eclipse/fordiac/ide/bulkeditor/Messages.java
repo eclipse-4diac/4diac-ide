@@ -58,6 +58,7 @@ public final class Messages extends NLS {
 	public static String Workspace;
 	public static String SubappHierarchy;
 	public static String SelectSubappHierarchy;
+	public static String NoHierarchySelected;
 
 	public static String Search;
 
