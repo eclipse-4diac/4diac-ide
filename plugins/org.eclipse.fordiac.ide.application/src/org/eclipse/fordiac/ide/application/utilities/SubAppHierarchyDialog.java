@@ -56,20 +56,33 @@ public class SubAppHierarchyDialog {
 
 	private final FBNetwork root;
 	private TreeNode rootNode;
+	private final List<EObject> initialSelectionElements;
+	private final List<TreeNode> initalSelection = new ArrayList<>();
 
 	private final ElementTreeSelectionDialog dialog;
 
-	public SubAppHierarchyDialog(final IProject project) {
+	public SubAppHierarchyDialog(final IProject project, final List<EObject> initialSelectionElements) {
 		this.root = null;
+		this.initialSelectionElements = initialSelectionElements;
 		final List<TreeNode> nodeList = buildNodeList(TypeLibraryManager.INSTANCE.getTypeLibrary(project));
 
-		dialog = createDialog();
+		dialog = new ElementTreeSelectionDialog(Display.getCurrent().getActiveShell(), new TreeNodeLabelProvider(),
+				new TreeNodeContentProvider()) {
+			@Override
+			protected TreeViewer createTreeViewer(final Composite parent) {
+				final TreeViewer viewer = super.createTreeViewer(parent);
+				return viewer;
+			}
+		};
+		dialog.setInitialSelections(initalSelection.toArray(Object[]::new));
 		dialog.setInput(nodeList.toArray(new TreeNode[0]));
+
 		dialog.setTitle(Messages.SubAppHierarchyDialogTitle);
 	}
 
 	public SubAppHierarchyDialog(final FBNetworkElement root, final List<FBNetworkElement> filteredElements) {
 		this.root = (FBNetwork) root.eContainer();
+		this.initialSelectionElements = Collections.emptyList();
 		final List<TreeNode> nodeList = buildNodeList(filteredElements);
 
 		dialog = createDialog();
@@ -125,32 +138,58 @@ public class SubAppHierarchyDialog {
 	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
 		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getSystem),
 				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
-		return buildNodeList(stream, Collections.emptyList());
+		final var list = stream.toList();
+		return buildNodeList(list.stream(), Collections.emptyList());
 	}
 
 	private List<TreeNode> buildNodeList(final List<FBNetworkElement> filterList) {
+		if (EcoreUtil.getRootContainer(root) instanceof final AutomationSystem automationSystem) {
+			return buildNodeList(automationSystem.getApplication().stream(), filterList);
+		}
 		return buildNodeList(Stream.of(EcoreUtil.getRootContainer(root)), filterList);
 	}
 
-	private List<TreeNode> buildNodeList(final Stream<EObject> roots, final List<FBNetworkElement> filterList) {
+	private List<TreeNode> buildNodeList(final Stream<? extends EObject> roots,
+			final List<FBNetworkElement> filterList) {
 		final List<TreeNode> nodeList = new ArrayList<>();
 		roots.forEach(r -> {
-			if (r instanceof final AutomationSystem automationSystem) {
-				automationSystem.getApplication().forEach(app -> {
-					final TreeNode node = new TreeNode(app);
-					nodeList.add(node);
-					if (root != null && app.getFBNetwork() == root) {
-						rootNode = node;
-					}
-					addFBNetwork(node, app.getFBNetwork(), filterList);
-				});
+			if (r instanceof final Application application) {
+				final TreeNode node = new TreeNode(application);
+				nodeList.add(node);
+				if (initialSelectionElements.contains(application)) {
+					initalSelection.add(node);
+				}
+				if (root != null && application.getFBNetwork() == root) {
+					rootNode = node;
+				}
+				addFBNetwork(node, application.getFBNetwork(), filterList);
 			} else if (r instanceof final SubAppType subappType) {
 				final TreeNode node = new TreeNode(subappType);
 				nodeList.add(node);
+				if (initialSelectionElements.contains(subappType)) {
+					initalSelection.add(node);
+				}
 				if (root != null && subappType.getFBNetwork() == root) {
 					rootNode = node;
 				}
 				addFBNetwork(node, subappType.getFBNetwork(), filterList);
+			} else if (r instanceof final AutomationSystem automationSystem) {
+				final List<TreeNode> childrenList = new ArrayList<>();
+				final TreeNode systemNode = new TreeNode(automationSystem);
+				nodeList.add(systemNode);
+				if (initialSelectionElements.contains(automationSystem)) {
+					initalSelection.add(systemNode);
+				}
+				automationSystem.getApplication().forEach(app -> {
+					final TreeNode node = new TreeNode(app);
+					node.setParent(systemNode);
+					childrenList.add(node);
+					if (initialSelectionElements.contains(app)) {
+						initalSelection.add(node);
+					}
+					addFBNetwork(node, app.getFBNetwork(), filterList);
+				});
+				systemNode.setChildren(childrenList.toArray(new TreeNode[0]));
 			}
 		});
 		return nodeList;
@@ -166,6 +205,9 @@ public class SubAppHierarchyDialog {
 				}
 				node.setParent(parent);
 				nodeList.add(node);
+				if (initialSelectionElements.contains(subapp)) {
+					initalSelection.add(node);
+				}
 				addFBNetwork(node, subapp.getSubAppNetwork(), filterList);
 			}
 		});
@@ -196,6 +238,9 @@ public class SubAppHierarchyDialog {
 				}
 				if (node.getValue() instanceof Application) {
 					return FordiacImage.ICON_APPLICATION.getImage();
+				}
+				if (node.getValue() instanceof AutomationSystem) {
+					return FordiacImage.ICON_SYSTEM.getImage();
 				}
 			}
 			return super.getImage(element);
