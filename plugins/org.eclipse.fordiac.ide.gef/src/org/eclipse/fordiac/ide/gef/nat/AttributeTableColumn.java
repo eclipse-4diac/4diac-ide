@@ -27,7 +27,7 @@ public enum AttributeTableColumn implements NatTableColumn {
 			TYPE, VALUE, COMMENT);
 
 	public static final Set<AttributeTableColumn> ALL_EDITABLE = Set.of(AttributeTableColumn.values());
-	public static final Set<AttributeTableColumn> EDITABLE_NO_LOCATION = Set.of(NAME, TYPE, VALUE, COMMENT);
+	public static final Set<AttributeTableColumn> EDITABLE_COMMENT_VALUE = Set.of(VALUE, COMMENT);
 
 	private final String displayName;
 
