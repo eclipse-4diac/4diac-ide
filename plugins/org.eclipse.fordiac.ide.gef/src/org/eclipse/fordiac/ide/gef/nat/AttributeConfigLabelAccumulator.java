@@ -78,10 +78,10 @@ public class AttributeConfigLabelAccumulator extends AbstractAnnotatedConfigLabe
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 			break;
-		case LOCATION:
+		case FILE_PATH:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			break;
-		case PATH:
+		case LOCATION:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			break;
 		default:
