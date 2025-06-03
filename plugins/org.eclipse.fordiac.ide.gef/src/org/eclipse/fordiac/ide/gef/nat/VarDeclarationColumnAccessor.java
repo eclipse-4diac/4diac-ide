@@ -64,8 +64,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
-		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
-		case PATH -> FordiacMarkerHelper.getLocation(rowObject);
+		case FILE_PATH -> EcoreUtil.getURI(rowObject).toPlatformString(true);
+		case LOCATION -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}
