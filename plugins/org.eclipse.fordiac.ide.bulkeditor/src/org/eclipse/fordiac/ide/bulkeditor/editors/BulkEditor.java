@@ -85,12 +85,16 @@ import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
@@ -203,7 +207,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
 		createSearchButton(composite);
-		createNatTable(composite, settings.modeSelection);
+		changeNatTable(composite, settings.modeSelection);
 
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite.layout();
@@ -443,6 +447,28 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		commandStack.flush();
 		changedSearchParameter = false;
 		searchInformation.setText(""); //$NON-NLS-1$
+
+		natTable.getDisplay().asyncExec(() -> {
+			// make sure NatTable is drawn to get Correct Cell-height
+			final GridData natTableGridData = new GridData(SWT.FILL, SWT.TOP, true, false);
+			int height = (int) (24 * (double) Display.getCurrent().getDPI().x / 96);
+			if (result.size() > 0) {
+				height = Math.max(height,
+						NatTableWidgetFactory.getDataLayer(natTable).getBoundsByPosition(0, 0).height);
+			}
+			natTableGridData.heightHint = result.size() * height + 1;
+			natTable.setLayoutData(natTableGridData);
+
+			final ViewportLayer viewportLayer = NatTableWidgetFactory.getViewportLayer(natTable);
+			viewportLayer.setClientAreaProvider(() -> new Rectangle(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+			final var container = natTable.getParent();
+			container.layout(true, true);
+			final var size = container.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+
+			final var scrolledComposite = (ScrolledComposite) container.getParent();
+			scrolledComposite.setMinSize(size);
+		});
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {
@@ -463,17 +489,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 		}
 		return mappedList;
-	}
-
-	private void createNatTable(final Composite parent, final int selectionIndex) {
-		final Composite comp = new Composite(parent, SWT.NONE);
-		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumHeight = (parent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y / DataLayer.DEFAULT_ROW_HEIGHT + 1)
-				* DataLayer.DEFAULT_ROW_HEIGHT;
-		comp.setLayoutData(gridData);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(0, 0).generateLayout(comp);
-
-		changeNatTable(comp, selectionIndex);
 	}
 
 	private void changeNatTable(final Composite parent, final int selectionIndex) {
@@ -552,6 +567,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		}
 
 		natTable.configure();
+		// Scroll ScrolledComposite instead of NatTable
+		natTable.addListener(SWT.MouseWheel, event -> {
+			final ScrolledComposite scrolledParent = ((ScrolledComposite) natTable.getParent().getParent());
+			final Point origin = scrolledParent.getOrigin();
+
+			final int newY = Math.max(0, origin.y - event.count * 20);
+			scrolledParent.setOrigin(origin.x, newY);
+		});
 	}
 
 	@Override
