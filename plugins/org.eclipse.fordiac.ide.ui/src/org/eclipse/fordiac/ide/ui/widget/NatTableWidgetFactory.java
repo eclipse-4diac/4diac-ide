@@ -98,6 +98,7 @@ public final class NatTableWidgetFactory {
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
+	public static final String LEFT_TRUNCATING = "LEFT_TRUNCATING"; //$NON-NLS-1$
 
 	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
 	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
@@ -472,9 +473,13 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
+				
 				// Padding for the left aligned cells
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(
 						new PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER,
+						new BackgroundPainter(new PaddingDecorator(new LeftTruncatingTextPainter(), 2, 2, 2, 2)),
+						DisplayMode.NORMAL, LEFT_TRUNCATING);
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
@@ -543,6 +548,37 @@ public final class NatTableWidgetFactory {
 		@Override
 		public void configureTypedLayer(final SelectionLayer layer) {
 			layer.registerCommandHandler(new PasteFromClipboardDataCommandHandler(selectionLayer, pasteLayer));
+		}
+	}
+
+	private static class LeftTruncatingTextPainter extends TextPainter {
+		public LeftTruncatingTextPainter() {
+			super(false, true, false, true);
+		}
+
+		@Override
+		protected String getTextToDisplay(final ILayerCell cell, final GC gc, final int availableLength,
+				final String text) {
+			if (text == null || text.isEmpty()) {
+				return ""; //$NON-NLS-1$
+			}
+
+			final String dots = "..."; //$NON-NLS-1$
+			if (gc.textExtent(text).x <= availableLength) {
+				return text;
+			}
+
+			// Add characters leftward until text fills available space
+			final StringBuilder result = new StringBuilder();
+			for (int i = text.length() - 1; i >= 0; i--) {
+				result.insert(0, text.charAt(i));
+				final int currentWidth = gc.textExtent(dots + result.toString()).x;
+				if (currentWidth > availableLength) {
+					return dots + result.substring(1);
+				}
+			}
+
+			return dots + result.toString();
 		}
 	}
 
