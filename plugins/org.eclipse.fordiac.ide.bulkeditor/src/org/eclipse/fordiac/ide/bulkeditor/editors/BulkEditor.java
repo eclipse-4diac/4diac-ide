@@ -84,6 +84,7 @@ import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
@@ -500,8 +501,25 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
 			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
 					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(varDeclProvider,
-					() -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
+					varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+				@Override
+				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+						final int rowPosition) {
+					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+					switch (getColumns().get(columnPosition)) {
+					case NAME:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					case TYPE:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					default:
+						break;
+					}
+				}
+			};
+			inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
 			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
@@ -516,8 +534,26 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			attributeProvider = new ChangeableListDataProvider<>(
 					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
 			final DataLayer dataLayer = new DataLayer(attributeProvider);
-			dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(attributeProvider, () -> null,
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+
+			final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
+					attributeProvider, () -> null, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+				@Override
+				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+						final int rowPosition) {
+					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+					switch (getColumns().get(columnPosition)) {
+					case NAME:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					case TYPE:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					default:
+						break;
+					}
+				}
+			};
+			dataLayer.setConfigLabelAccumulator(configLabelProvider);
 			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
