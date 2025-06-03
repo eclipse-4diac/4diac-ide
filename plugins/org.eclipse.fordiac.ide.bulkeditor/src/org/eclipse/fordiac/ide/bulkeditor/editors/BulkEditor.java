@@ -525,7 +525,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
 							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							VarDeclarationTableColumn.EDITABLE_NO_LOCATION),
+							VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
 					null, null, false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
 			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
@@ -559,7 +559,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
 					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
 							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							AttributeTableColumn.EDITABLE_NO_LOCATION, attributeProvider),
+							AttributeTableColumn.EDITABLE_COMMENT_VALUE, attributeProvider),
 					new TypeSelectionButton(() -> {
 						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
 								.getLastSelectedCellPosition().getRowPosition();
