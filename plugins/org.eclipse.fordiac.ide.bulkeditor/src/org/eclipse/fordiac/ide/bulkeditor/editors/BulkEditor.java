@@ -36,8 +36,8 @@ import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -54,6 +54,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -405,33 +406,46 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		subappHierarchyScopeSearchButton.setVisible(subappHierarchyScopeButton.getSelection());
 
 		selectedSubApps = settings.subappHierarchies;
-		subappHierarchyScopeLabel = WidgetFactory.label(SWT.NONE).text(createSubappHierarchyText())
-				.create(groupContent);
+		subappHierarchyScopeLabel = WidgetFactory.label(SWT.NONE).create(groupContent);
+		createSubappHierarchyText();
 		subappHierarchyScopeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
 	}
 
 	private void openScopeDialog() {
-		final var dialog = new SubAppHierarchyDialog(project);
+		final var elements = selectedSubApps.stream().map(uri -> {
+			final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+			return typeEntry.getType().eResource().getEObject(uri.fragment());
+		}).toList();
+		final var dialog = new SubAppHierarchyDialog(project, elements);
 		final var result = dialog.open();
 		if (result != null) {
 			selectedSubApps = SubAppHierarchyDialog.mapResultToURIs(result);
 			settings.subappHierarchies = selectedSubApps;
-			subappHierarchyScopeLabel.setText(createSubappHierarchyText());
 		}
+		createSubappHierarchyText();
 	}
 
-	private String createSubappHierarchyText() {
-		return selectedSubApps.stream().map(uri -> {
+	private void createSubappHierarchyText() {
+		if (selectedSubApps.size() == 0) {
+			subappHierarchyScopeLabel.setForeground(new Color(255, 0, 0));
+			subappHierarchyScopeLabel.setText(Messages.NoHierarchySelected);
+			return;
+		}
+
+		final var elements = selectedSubApps.stream().map(uri -> {
 			final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 			return typeEntry.getType().eResource().getEObject(uri.fragment());
 		}).map(eObject -> {
-			if (EcoreUtil.getRootContainer(eObject) instanceof final SubAppType subAppType && subAppType != eObject) {
-				// special case for SubappTypes
-				return subAppType.getName() + "." + FordiacMarkerHelper.getLocation(eObject); //$NON-NLS-1$
+			if (EcoreUtil.getRootContainer(eObject) instanceof final INamedElement rootElement
+					&& rootElement != eObject) {
+				return rootElement.getName() + "." + FordiacMarkerHelper.getLocation(eObject); //$NON-NLS-1$
 			}
 			return FordiacMarkerHelper.getLocation(eObject);
-		}).collect(Collectors.joining("; ")); //$NON-NLS-1$
+		});
+
+		subappHierarchyScopeLabel.setForeground(new Color(0, 0, 0));
+		subappHierarchyScopeLabel.setText(elements.collect(Collectors.joining("; "))); //$NON-NLS-1$
 	}
 
 	private int openUnsavedChangesDialog() {
