@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
@@ -120,6 +121,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	protected static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
 
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject);
+		if (typeLib == null || typeLib.getProject() == null) {
+			return value;
+		}
 		if (value.length() > PreferenceStoreProvider
 				.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
 						TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject).getProject())
