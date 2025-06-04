@@ -22,20 +22,6 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.contracts.messages"; //$NON-NLS-1$
 
-	public static String Contract_ErrorAssumption;
-
-	public static String Contract_ErrorAssumptionsGuarantees;
-
-	public static String Contract_ErrorElements;
-
-	public static String Contract_ErrorGuarantee;
-
-	public static String Contract_ErrorIncosistentAssumptions;
-
-	public static String Contract_ErrorIncosistentGuarantees;
-
-	public static String Contract_ErrorName;
-
 	public static String NoPinSelectedErrorDialog_Title;
 
 	public static String NoPinSelectedErrorDialog_Info;
@@ -63,14 +49,6 @@ public final class Messages extends NLS {
 	public static String ContractRuleCausalAge;
 
 	public static String ContractRuleEmpty;
-
-	public static String ContractElementDialog_Title;
-
-	public static String ContractElementDialog_Info;
-
-	public static String ContractElementDialog_Ok;
-
-	public static String ContractElementDialog_Define;
 
 	public static String ContractModelLoadError;
 
@@ -107,6 +85,8 @@ public final class Messages extends NLS {
 	public static String ContractCheckOneIssue;
 
 	public static String ContractCheckNIssues;
+
+	public static String ContractCheck_OK;
 
 	static {
 		// initialize resource bundle
