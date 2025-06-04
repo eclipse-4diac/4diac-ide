@@ -60,14 +60,16 @@ public class DefineContractDecisionDialog extends MessageDialog {
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
+		parent.setLayout(new GridLayout(1, false));
 		final Group group = new Group(parent, 0);
 		group.setLayout(new GridLayout(3, false));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		for (int i = 0; i < names.size(); i++) {
 			final Label lbl = new Label(group, 0);
 			lbl.setText(names.get(i) + ":"); //$NON-NLS-1$
 			lbl.setAlignment(SWT.RIGHT);
-			lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 
 			final StyledText txt = new StyledText(group, SWT.READ_ONLY | SWT.SINGLE);
 			txt.setText(templates.get(i));
@@ -98,7 +100,7 @@ public class DefineContractDecisionDialog extends MessageDialog {
 			final int fi = i;
 			final Button btn = new Button(group, 0);
 			btn.setText(Messages.DefineContractDecisionDialog_Create);
-			btn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+			btn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			btn.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {

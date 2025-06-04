@@ -33,7 +33,7 @@ class ContractCheckResultDialog extends MessageDialog {
 						: Messages.ContractCheckIssue_Title,
 				null, createDialogMessage(contractSys, networkCheck),
 				contractSys.getIssues().isEmpty() ? MessageDialog.INFORMATION : MessageDialog.ERROR, 0,
-				Messages.ContractElementDialog_Ok);
+				Messages.ContractCheck_OK);
 
 		this.contractSys = contractSys;
 	}
