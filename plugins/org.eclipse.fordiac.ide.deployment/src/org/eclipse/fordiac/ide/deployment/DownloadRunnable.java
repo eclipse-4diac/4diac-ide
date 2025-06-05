@@ -43,6 +43,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -113,6 +115,7 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 			addDeploymentListener(executor);
 			try (IDeviceManagementInteractorCloser closer = executor::disconnect) {
 				executor.connect();
+				queryTypes(devData, executor);
 				deployResources(devData, executor);
 				deployDeviceData(devData, executor);
 			} catch (final DeploymentException e) {
@@ -123,6 +126,24 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 
 		} else {
 			DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(devData.getDevice(), null);
+		}
+	}
+
+	private void queryTypes(final DeviceDeploymentData devData, final IDeviceManagementInteractor executor)
+			throws DeploymentException, InterruptedException {
+		for (final FBTypeEntry entry : devData.getFbTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryFBType(entry);
+			curMonitor.worked(1);
+		}
+		for (final DataTypeEntry entry : devData.getDataTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryDataType(entry);
+			curMonitor.worked(1);
 		}
 	}
 
@@ -206,6 +227,8 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 		for (final DeviceDeploymentData devData : deploymentData) {
 			retVal += devData.getSelectedDevParams().size();
 			retVal += devData.getResData().size();
+			retVal += devData.getFbTypes().size();
+			retVal += devData.getDataTypes().size();
 			for (final ResourceDeploymentData resDepData : devData.getResData()) {
 				retVal += countResourceParams(resDepData.getRes());
 				retVal += resDepData.getFbs().size() + resDepData.getConnections().size()

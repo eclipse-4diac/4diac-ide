@@ -18,11 +18,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.SequencedSet;
 
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -35,6 +38,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /**
  * Class for storing the information for deploying a resource
@@ -52,6 +57,10 @@ public class ResourceDeploymentData {
 
 	private final List<ParameterDeploymentData> params = new ArrayList<>();
 
+	private final SequencedSet<FBTypeEntry> fbTypes = new LinkedHashSet<>();
+
+	private final SequencedSet<DataTypeEntry> dataTypes = new LinkedHashSet<>();
+
 	public Resource getRes() {
 		return res;
 	}
@@ -66,6 +75,14 @@ public class ResourceDeploymentData {
 
 	public List<ParameterDeploymentData> getParams() {
 		return params;
+	}
+
+	public SequencedSet<FBTypeEntry> getFbTypes() {
+		return fbTypes;
+	}
+
+	public SequencedSet<DataTypeEntry> getDataTypes() {
+		return dataTypes;
 	}
 
 	public void addFbs(final FBDeploymentData fb) {
@@ -106,6 +123,13 @@ public class ResourceDeploymentData {
 	private void addFB(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix, final FB fb)
 			throws DeploymentException {
 		fbs.add(new FBDeploymentData(ensurePrefix(prefix, fb), fb));
+		if (fb.getTypeEntry() instanceof final FBTypeEntry entry) {
+			fbTypes.add(entry);
+		}
+		if (fb instanceof final ConfigurableFB configurableFB && configurableFB.getDataType() != null
+				&& configurableFB.getDataType().getTypeEntry() instanceof final DataTypeEntry entry) {
+			dataTypes.add(entry);
+		}
 		for (final VarDeclaration inputVar : fb.getInterface().getInputVars()) {
 			addInputParam(subAppHierarchy, prefix, inputVar);
 		}
