@@ -25,12 +25,12 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public class DeviceManagementExecutorService extends AbstractDelegatingDeviceManagementInteractor
 		implements IDeviceManagementExecutorService {
@@ -147,18 +147,18 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	}
 
 	@Override
-	public Response queryFBType(final FBType type) throws DeploymentException {
-		return unwrap(queryFBTypeAsync(type));
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		return unwrap(queryFBTypeAsync(entry));
 	}
 
 	@Override
-	public Response queryDataType(final DataType type) throws DeploymentException {
-		return unwrap(queryDataTypeAsync(type));
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		return unwrap(queryDataTypeAsync(entry));
 	}
 
 	@Override
-	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
-		return unwrap(queryGlobalConstTypeAsync(type));
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		return unwrap(queryGlobalConstTypeAsync(entry));
 	}
 
 	@Override
@@ -352,18 +352,18 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	}
 
 	@Override
-	public Future<Response> queryFBTypeAsync(final FBType type) {
-		return executorService.submit(() -> getDelegate().queryFBType(type));
+	public Future<Response> queryFBTypeAsync(final FBTypeEntry entry) {
+		return executorService.submit(() -> getDelegate().queryFBType(entry));
 	}
 
 	@Override
-	public Future<Response> queryDataTypeAsync(final DataType type) {
-		return executorService.submit(() -> getDelegate().queryDataType(type));
+	public Future<Response> queryDataTypeAsync(final DataTypeEntry entry) {
+		return executorService.submit(() -> getDelegate().queryDataType(entry));
 	}
 
 	@Override
-	public Future<Response> queryGlobalConstTypeAsync(final GlobalConstants type) {
-		return executorService.submit(() -> getDelegate().queryGlobalConstType(type));
+	public Future<Response> queryGlobalConstTypeAsync(final GlobalConstantsEntry entry) {
+		return executorService.submit(() -> getDelegate().queryGlobalConstType(entry));
 	}
 
 	@Override

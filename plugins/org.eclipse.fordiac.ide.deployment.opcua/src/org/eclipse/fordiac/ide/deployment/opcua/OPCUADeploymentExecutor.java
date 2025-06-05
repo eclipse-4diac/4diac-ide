@@ -46,14 +46,14 @@ import org.eclipse.fordiac.ide.deployment.opcua.helpers.Constants;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener2;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.SessionActivityListener;
@@ -571,19 +571,19 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	}
 
 	@Override
-	public Response queryFBType(final FBType type) throws DeploymentException {
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		// TODO implement when the API and infrastructure is fully tested
 		throw new DeploymentException("Query FB Type not yet supported!"); //$NON-NLS-1$
 	}
 
 	@Override
-	public Response queryDataType(final DataType type) throws DeploymentException {
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
 		// TODO implement when the API and infrastructure is fully tested
 		throw new DeploymentException("Query Data Type Type not yet supported!"); //$NON-NLS-1$
 	}
 
 	@Override
-	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
 		// TODO implement when the API and infrastructure is fully tested
 		throw new DeploymentException("Query Global Const Type not yet supported!"); //$NON-NLS-1$
 	}

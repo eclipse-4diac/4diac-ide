@@ -39,15 +39,15 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.xml.sax.InputSource;
 
@@ -379,41 +379,45 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	@Override
-	public Response queryFBType(final FBType type) throws DeploymentException {
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		try {
-			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(type));
+			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(entry));
 			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
 		} catch (final IOException | LibraryElementHashException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_QueryFBTypeFailed, type.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_QueryFBTypeFailed, entry.getFullTypeName()), e);
 		}
 	}
 
 	@Override
-	public Response queryDataType(final DataType type) throws DeploymentException {
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
 		try {
-			final String request = MessageFormat.format(QUERY_DATA_TYPE, getNextId(), getTypeNameWithHash(type));
+			final String request = MessageFormat.format(QUERY_DATA_TYPE, getNextId(), getTypeNameWithHash(entry));
 			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
 		} catch (final IOException | LibraryElementHashException e) {
 			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_QueryDataTypeFailed, type.getName()), e);
+					MessageFormat.format(Messages.DeploymentExecutor_QueryDataTypeFailed, entry.getFullTypeName()), e);
 		}
 	}
 
 	@Override
-	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
 		try {
 			final String request = MessageFormat.format(QUERY_GLOBAL_CONST_TYPE, getNextId(),
-					getTypeNameWithHash(type));
+					getTypeNameWithHash(entry));
 			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
 		} catch (final IOException | LibraryElementHashException e) {
-			throw new DeploymentException(
-					MessageFormat.format(Messages.DeploymentExecutor_QueryGlobalConstTypeFailed, type.getName()), e);
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_QueryGlobalConstTypeFailed,
+					entry.getFullTypeName()), e);
 		}
 	}
 
-	private static String getTypeNameWithHash(final LibraryElement type) throws LibraryElementHashException {
-		return type.getName() + '#' + type.getTypeEntry().getTypeHash();
+	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+		final String hash = entry.getTypeHash();
+		if (hash.isEmpty()) {
+			return ForteTypeNameCreator.getForteTypeName(entry);
+		}
+		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
 	}
 
 	protected Response parseResponse(final String result) throws IOException {

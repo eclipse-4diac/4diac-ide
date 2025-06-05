@@ -22,12 +22,12 @@ import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public interface IDeviceManagementExecutorService extends IDeviceManagementInteractor, AutoCloseable {
 
@@ -233,11 +233,11 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 */
 	Future<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> queryResourcesAsync();
 
-	Future<Response> queryFBTypeAsync(final FBType type);
+	Future<Response> queryFBTypeAsync(final FBTypeEntry entry);
 
-	Future<Response> queryDataTypeAsync(final DataType type);
+	Future<Response> queryDataTypeAsync(final DataTypeEntry entry);
 
-	Future<Response> queryGlobalConstTypeAsync(final GlobalConstants type);
+	Future<Response> queryGlobalConstTypeAsync(final GlobalConstantsEntry entry);
 
 	/**
 	 * Query resources periodically
