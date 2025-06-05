@@ -25,4 +25,5 @@
       <VarDeclaration Comment="Selected member if QO = TRUE, remains unchanged otherwise" Name="output" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

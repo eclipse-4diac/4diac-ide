@@ -26,4 +26,5 @@
 			<VarDeclaration Name="Name" Type="STRING" Comment="Instance name of this FB"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

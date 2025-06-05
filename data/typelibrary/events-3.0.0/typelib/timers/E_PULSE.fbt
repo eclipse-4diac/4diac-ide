@@ -50,4 +50,5 @@
 			<Connection Source="E_SR.Q" Destination="Q" dx1="2340"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

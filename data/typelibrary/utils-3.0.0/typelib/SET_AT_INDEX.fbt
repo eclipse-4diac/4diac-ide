@@ -31,4 +31,5 @@
       <VarDeclaration Comment="resulting array after set" Name="OUT_ARRAY" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -86,4 +86,5 @@
       <ST Text="CV := CV - 1;"/>
     </Algorithm>
   </BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

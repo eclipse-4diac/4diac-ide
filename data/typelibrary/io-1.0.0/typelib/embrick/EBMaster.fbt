@@ -41,4 +41,5 @@
 			<AdapterDeclaration Name="BusAdapterOut" Type="EBBusAdapter"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

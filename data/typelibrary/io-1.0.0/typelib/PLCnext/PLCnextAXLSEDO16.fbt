@@ -66,4 +66,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="PLCnextBusAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

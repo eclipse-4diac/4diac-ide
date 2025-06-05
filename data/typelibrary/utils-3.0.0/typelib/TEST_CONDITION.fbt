@@ -20,4 +20,5 @@
       <VarDeclaration Comment="Test fails if check == 0, passes otherwise" Name="check" Type="BOOL"/>
     </InputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

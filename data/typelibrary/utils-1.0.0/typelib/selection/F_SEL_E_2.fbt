@@ -28,4 +28,5 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -23,4 +23,5 @@
       <VarDeclaration Comment="value 1 &lt;= value2 = true" InitialValue="" Name="OUT" Type="BOOL"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

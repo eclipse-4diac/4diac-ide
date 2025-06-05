@@ -23,4 +23,5 @@
       <VarDeclaration Comment="Concatenated output string" Name="OUT" Type="STRING"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -33,4 +33,5 @@
 			<AdapterDeclaration Name="BusAdapterOut" Type="PLCnextBusAdapter"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

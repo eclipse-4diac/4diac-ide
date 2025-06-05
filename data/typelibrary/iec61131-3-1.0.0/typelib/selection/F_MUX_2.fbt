@@ -25,4 +25,5 @@
       <VarDeclaration Comment="IN1 for K = 0, IN2 for K = 1" InitialValue="" Name="OUT" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

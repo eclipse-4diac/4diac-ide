@@ -29,4 +29,5 @@
       <VarDeclaration Comment="Elapsed time" InitialValue="" Name="ET" Type="TIME"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

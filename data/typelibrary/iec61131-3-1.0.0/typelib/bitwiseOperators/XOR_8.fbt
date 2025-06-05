@@ -39,4 +39,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_XOR'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

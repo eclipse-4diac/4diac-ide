@@ -60,4 +60,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Subscribe to a PUBLISH_10 Block" >
 	</Service>
 	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_SUBSCRIBE'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

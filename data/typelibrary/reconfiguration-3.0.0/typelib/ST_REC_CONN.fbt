@@ -47,4 +47,5 @@
 			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

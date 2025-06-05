@@ -28,4 +28,5 @@
 			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1265" y="605"/>
 		</ECC>
 	</BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -56,4 +56,5 @@
 			<Connection Source="N" Destination="E_TRAIN.N" dx1="980"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

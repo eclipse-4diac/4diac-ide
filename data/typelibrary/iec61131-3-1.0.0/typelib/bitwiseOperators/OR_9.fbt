@@ -41,4 +41,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_OR'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

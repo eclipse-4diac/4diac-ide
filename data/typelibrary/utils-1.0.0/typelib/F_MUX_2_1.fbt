@@ -33,4 +33,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_F_MUX'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

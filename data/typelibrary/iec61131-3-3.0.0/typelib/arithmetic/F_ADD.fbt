@@ -27,4 +27,5 @@
       <VarDeclaration Comment="IN1 plus IN2" Name="OUT" Type="ANY_MAGNITUDE"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

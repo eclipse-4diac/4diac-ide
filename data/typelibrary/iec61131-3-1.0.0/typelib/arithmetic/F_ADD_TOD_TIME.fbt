@@ -23,4 +23,5 @@
       <VarDeclaration Comment="Function output" Name="OUT" Type="TIME_OF_DAY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

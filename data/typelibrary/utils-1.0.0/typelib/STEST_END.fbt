@@ -14,4 +14,5 @@
     <OutputVars/>
   </InterfaceList>
   <Service Comment="Service Interface Function Block Type" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

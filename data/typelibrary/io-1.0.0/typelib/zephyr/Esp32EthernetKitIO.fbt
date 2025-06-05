@@ -38,4 +38,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with Esp32EthernetKit board" >
 	</Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

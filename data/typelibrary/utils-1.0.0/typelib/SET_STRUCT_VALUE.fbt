@@ -26,4 +26,5 @@
 			<VarDeclaration Name="out_struct" Type="ANY" Comment="TRUE if no errors ocurred, FALSE otherwise"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

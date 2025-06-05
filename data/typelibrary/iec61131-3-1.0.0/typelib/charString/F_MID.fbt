@@ -25,4 +25,5 @@
       <VarDeclaration Comment="substring from P to P+L" Name="OUT" Type="ANY_STRING"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

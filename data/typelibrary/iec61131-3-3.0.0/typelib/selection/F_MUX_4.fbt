@@ -34,4 +34,5 @@
       <VarDeclaration Comment="IN1 for K = 0, IN2 for K = 1, IN3 for K = 2, IN4 for K = 3" InitialValue="" Name="OUT" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

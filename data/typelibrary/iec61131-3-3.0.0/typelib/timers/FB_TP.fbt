@@ -30,4 +30,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="standard timer function block (pulse)" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

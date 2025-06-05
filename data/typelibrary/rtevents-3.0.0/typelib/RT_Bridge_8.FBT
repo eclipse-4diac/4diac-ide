@@ -61,4 +61,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">
 	</Service>
 	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_RT_Bridge'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -30,4 +30,5 @@
       <Connection Comment="" Destination="EO" Source="E_SWITCH.EO0" dx1="0.0" dx2="0.0" dy="0.0"/>
     </EventConnections>
   </FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

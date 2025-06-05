@@ -23,4 +23,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION">
 	</Service>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[]]></Attribute>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

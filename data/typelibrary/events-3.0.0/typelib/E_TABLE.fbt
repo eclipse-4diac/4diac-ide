@@ -49,4 +49,5 @@
 			<Connection Source="N" Destination="E_TABLE_CTRL.N" dx1="280"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

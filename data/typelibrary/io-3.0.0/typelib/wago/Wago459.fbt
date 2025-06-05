@@ -47,4 +47,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::wago::WagoBusAdapter" Comment=""/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

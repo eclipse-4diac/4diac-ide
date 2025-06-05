@@ -57,4 +57,5 @@
 			<Connection Source="F_SUB.OUT" Destination="E_DEMUX.K" dx1="173.68"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

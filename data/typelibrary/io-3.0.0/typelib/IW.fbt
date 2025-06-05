@@ -46,4 +46,5 @@
 			<VarDeclaration Name="IN" Type="WORD" Comment="Input data from resource" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

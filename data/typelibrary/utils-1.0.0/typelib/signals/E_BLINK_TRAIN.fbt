@@ -54,4 +54,5 @@
 			<Connection Source="N" Destination="E_TRAIN.N" dx1="980"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

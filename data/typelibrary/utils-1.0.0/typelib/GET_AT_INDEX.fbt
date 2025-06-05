@@ -25,4 +25,5 @@
       <VarDeclaration Comment="fetched output value" Name="OUT" Type="ANY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -60,4 +60,5 @@ if (SEED() == 0) {
 ]]></Other>
 		</Algorithm>
 	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

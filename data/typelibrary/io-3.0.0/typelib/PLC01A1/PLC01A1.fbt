@@ -68,4 +68,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Access IOs of the PLC01A1 module" >
 	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -16,4 +16,5 @@
       <VarDeclaration Comment="Test fails if check == 0, passes otherwise" Name="check" Type="BOOL"/>
     </InputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -53,4 +53,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::revpi::IORevPiBusAdapter" Comment=""/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -31,4 +31,5 @@
 			<AdapterDeclaration Name="PortK" Type="eclipse4diac::io::eliteboard::PortAdapter" Comment=""/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

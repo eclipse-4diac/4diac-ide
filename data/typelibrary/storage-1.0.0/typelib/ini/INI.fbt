@@ -50,4 +50,5 @@
 			<VarDeclaration Name="VALUEO" Type="ANY_ELEMENTARY" Comment="The output value" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

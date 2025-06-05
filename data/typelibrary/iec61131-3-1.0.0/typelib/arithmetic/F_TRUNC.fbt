@@ -22,4 +22,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="truncation toward zero" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

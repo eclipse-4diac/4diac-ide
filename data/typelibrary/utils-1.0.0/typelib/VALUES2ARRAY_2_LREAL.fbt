@@ -25,4 +25,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_VALUES2ARRAY'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

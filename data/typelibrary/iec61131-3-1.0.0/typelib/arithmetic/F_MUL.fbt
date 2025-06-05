@@ -23,4 +23,5 @@
       <VarDeclaration Comment="IN1 multiplie with IN2" Name="OUT" Type="ANY_NUM"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

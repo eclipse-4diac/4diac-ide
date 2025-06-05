@@ -19,4 +19,5 @@
     <OutputVars/>
   </InterfaceList>
   <Service Comment="Delayed event propagation" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

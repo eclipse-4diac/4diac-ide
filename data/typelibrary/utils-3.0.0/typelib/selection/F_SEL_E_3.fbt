@@ -36,4 +36,5 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

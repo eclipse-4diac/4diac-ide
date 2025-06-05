@@ -48,4 +48,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_PUBLISH'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

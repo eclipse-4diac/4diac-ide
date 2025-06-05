@@ -25,4 +25,5 @@
       <VarDeclaration Comment="Elapsed time" InitialValue="" Name="ET" Type="TIME"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

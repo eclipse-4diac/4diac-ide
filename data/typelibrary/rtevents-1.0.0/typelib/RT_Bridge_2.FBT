@@ -33,4 +33,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_RT_Bridge'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

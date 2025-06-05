@@ -45,4 +45,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_XOR'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

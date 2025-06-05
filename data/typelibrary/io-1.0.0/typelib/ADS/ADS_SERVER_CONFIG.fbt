@@ -28,4 +28,5 @@
 			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

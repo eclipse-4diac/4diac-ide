@@ -25,4 +25,5 @@
       <VarDeclaration Comment="Event Output Qualifier" Name="OUT" Type="ANY_REAL"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

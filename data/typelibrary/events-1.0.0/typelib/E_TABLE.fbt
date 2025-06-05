@@ -45,4 +45,5 @@
 			<Connection Source="N" Destination="E_TABLE_CTRL.N" Comment="" dx1="280.0"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -27,4 +27,5 @@
       <VarDeclaration Comment="right-shifted by N zero-filled on left" Name="OUT" Type="ANY_BIT"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

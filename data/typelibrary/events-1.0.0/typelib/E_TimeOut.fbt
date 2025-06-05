@@ -23,4 +23,5 @@
       <Connection Comment="" Destination="TimeOutSocket.TimeOut" Source="DLY.EO" dx1="0.0" dx2="0.0" dy="-160.0"/>
     </EventConnections>
   </FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -38,4 +38,5 @@
       <ST Text="Q := D;"/>
     </Algorithm>
   </BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

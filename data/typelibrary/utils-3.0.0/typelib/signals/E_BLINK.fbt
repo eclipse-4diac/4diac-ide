@@ -53,4 +53,5 @@
 			<Connection Source="TIMEHIGH" Destination="E_TP.PT" dx1="1353.33"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

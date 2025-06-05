@@ -26,4 +26,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="standard timer function block (pulse)" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

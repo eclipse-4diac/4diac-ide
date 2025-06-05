@@ -48,4 +48,5 @@
 			<VarDeclaration Name="IN" Type="BOOL" Comment="Input data from resource" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

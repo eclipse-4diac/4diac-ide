@@ -28,4 +28,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="bitwise or" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

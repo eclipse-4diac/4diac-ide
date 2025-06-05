@@ -23,4 +23,5 @@
       <VarDeclaration Comment="IN1 plus IN2" Name="OUT" Type="ANY_MAGNITUDE"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

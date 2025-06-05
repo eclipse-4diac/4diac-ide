@@ -23,4 +23,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_FORTE_F_MOVE'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

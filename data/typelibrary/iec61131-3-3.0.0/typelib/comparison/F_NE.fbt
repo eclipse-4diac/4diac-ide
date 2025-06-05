@@ -27,4 +27,5 @@
       <VarDeclaration Comment="value 1 &lt;&gt; value2 = true" InitialValue="" Name="OUT" Type="BOOL"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

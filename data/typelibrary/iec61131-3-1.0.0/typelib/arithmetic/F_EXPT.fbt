@@ -23,4 +23,5 @@
       <VarDeclaration Comment="Function output" Name="OUT" Type="ANY_REAL"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

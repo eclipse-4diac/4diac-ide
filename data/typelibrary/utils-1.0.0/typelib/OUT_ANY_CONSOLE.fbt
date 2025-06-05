@@ -28,4 +28,5 @@
       <VarDeclaration Comment="Event Output Qualifier" Name="QO" Type="BOOL"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

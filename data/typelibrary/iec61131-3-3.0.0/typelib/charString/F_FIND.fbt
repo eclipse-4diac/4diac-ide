@@ -27,4 +27,5 @@
       <VarDeclaration Comment="number of occurrence" Name="OUT" Type="ANY_INT"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

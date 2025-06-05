@@ -37,4 +37,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_F_MUX'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

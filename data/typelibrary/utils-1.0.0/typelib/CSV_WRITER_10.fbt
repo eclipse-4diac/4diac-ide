@@ -92,4 +92,5 @@
 		</ServiceSequence>
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>
