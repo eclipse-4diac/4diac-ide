@@ -41,4 +41,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_AND'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -45,4 +45,5 @@
 			<AdapterDeclaration Name="BusAdapterOut" Type="eclipse4diac::io::embrick::EBBusAdapter"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

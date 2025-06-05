@@ -70,4 +70,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="eclipse4diac::io::plcnext::PLCnextBusAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

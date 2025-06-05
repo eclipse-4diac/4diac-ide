@@ -54,4 +54,5 @@
       <Connection Comment="" Destination="RT_E_CYCLE.STOP" Source="E_SWITCH.EO1" dx1="345.0" dx2="-285.0" dy="-715.0"/>
     </EventConnections>
   </FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

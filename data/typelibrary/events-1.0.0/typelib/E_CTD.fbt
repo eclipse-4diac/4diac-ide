@@ -51,4 +51,5 @@
       <ST Text="CV := PV;&#10;Q:= (CV = 0);&#10;"/>
     </Algorithm>
   </BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -23,4 +23,5 @@
     <OutputVars/>
   </InterfaceList>
   <Service Comment="Delayed event propagation" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

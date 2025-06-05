@@ -32,4 +32,5 @@
 			<ECTransition Source="START" Destination="EO" Condition="EI2" Comment="" x="910" y="785"/>
 		</ECC>
 	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

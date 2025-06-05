@@ -58,4 +58,5 @@
 			<ECTransition Source="State" Destination="START" Condition="[K &gt; 3]" Comment="" x="1210" y="645"/>
 		</ECC>
 	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

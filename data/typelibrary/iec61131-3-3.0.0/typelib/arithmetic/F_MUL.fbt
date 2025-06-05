@@ -27,4 +27,5 @@
       <VarDeclaration Comment="IN1 multiplie with IN2" Name="OUT" Type="ANY_NUM"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

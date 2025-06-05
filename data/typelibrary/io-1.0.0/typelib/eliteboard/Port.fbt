@@ -27,4 +27,5 @@
 			<AdapterDeclaration Name="PortInAdapter" Type="PortAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

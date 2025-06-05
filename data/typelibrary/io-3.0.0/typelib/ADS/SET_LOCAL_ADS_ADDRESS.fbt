@@ -31,4 +31,5 @@
 			<VarDeclaration Name="LOCAL_ADS_ADDRESS" Type="STRING" Comment="Resulting ADS address" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

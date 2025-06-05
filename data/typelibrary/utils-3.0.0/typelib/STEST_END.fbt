@@ -16,4 +16,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
 	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

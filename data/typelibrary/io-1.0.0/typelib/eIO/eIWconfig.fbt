@@ -31,4 +31,5 @@
 			<AdapterDeclaration Name="eIW" Type="eGenAdapter" Comment="Connection to eIO Instance"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

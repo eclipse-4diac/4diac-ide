@@ -62,4 +62,5 @@
 			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" Comment="" dx1="233.33333333333334" dx2="300.0" dy="233.33333333333334"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

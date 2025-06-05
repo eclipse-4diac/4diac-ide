@@ -52,4 +52,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_SUBSCRIBE'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

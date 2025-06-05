@@ -27,4 +27,5 @@
       <VarDeclaration Comment="date + time of day" Name="OUT" Type="DATE_AND_TIME"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

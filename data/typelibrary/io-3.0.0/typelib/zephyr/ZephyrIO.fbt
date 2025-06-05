@@ -32,4 +32,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with boards running Zephyr OS" >
 	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

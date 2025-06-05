@@ -53,4 +53,5 @@
 			<Connection Source="F_SUB.OUT" Destination="E_DEMUX.K" Comment="" dx1="173.68421052631578"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -29,4 +29,5 @@
       <VarDeclaration Comment="Concatenated output string" Name="OUT" Type="STRING"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -31,4 +31,5 @@
 			<AdapterDeclaration Name="PortInAdapter" Type="eclipse4diac::io::eliteboard::PortAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

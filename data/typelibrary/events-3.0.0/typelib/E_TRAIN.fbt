@@ -55,4 +55,5 @@
 			<Connection Source="CTR.Q" Destination="GATE.G"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

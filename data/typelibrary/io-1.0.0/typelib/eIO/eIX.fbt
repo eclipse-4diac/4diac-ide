@@ -43,4 +43,5 @@
 			<AdapterDeclaration Name="eCONF" Type="eGenAdapter" Comment="Configuration of Event-based-Trigger"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

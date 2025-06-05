@@ -54,4 +54,5 @@
 			<VarDeclaration Name="VALUEO" Type="ANY_ELEMENTARY" Comment="The output value" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

@@ -51,4 +51,5 @@
 			<Connection Source="TIMEHIGH" Destination="E_TP.PT" dx1="1353.33"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

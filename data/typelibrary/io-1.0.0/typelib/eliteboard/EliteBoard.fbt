@@ -27,4 +27,5 @@
 			<AdapterDeclaration Name="PortK" Type="PortAdapter" Comment=""/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

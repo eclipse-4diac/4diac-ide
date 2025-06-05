@@ -29,4 +29,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_AND'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

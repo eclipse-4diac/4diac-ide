@@ -30,4 +30,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with boards running Zephyr OS" >
 	</Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

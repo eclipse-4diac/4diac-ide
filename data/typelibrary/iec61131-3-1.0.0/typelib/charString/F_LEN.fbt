@@ -21,4 +21,5 @@
       <VarDeclaration Comment="length" Name="OUT" Type="ANY_INT"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

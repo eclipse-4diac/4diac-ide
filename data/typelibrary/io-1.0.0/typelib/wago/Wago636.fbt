@@ -65,4 +65,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="WagoBusAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

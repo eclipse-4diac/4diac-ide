@@ -23,4 +23,5 @@
       <VarDeclaration Comment="rest of IN1 devided by IN2" Name="OUT" Type="ANY_NUM"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

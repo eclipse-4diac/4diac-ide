@@ -25,4 +25,5 @@
 		</InputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_E_DEMUX'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

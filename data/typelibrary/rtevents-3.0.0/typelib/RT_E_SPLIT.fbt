@@ -41,4 +41,5 @@
       <VarDeclaration Name="QO" Type="BOOL" />
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

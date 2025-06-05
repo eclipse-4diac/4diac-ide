@@ -35,4 +35,5 @@
       <VarDeclaration Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE" Name="STATUS" Type="WSTRING"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

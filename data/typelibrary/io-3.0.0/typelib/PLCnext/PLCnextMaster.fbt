@@ -37,4 +37,5 @@
 			<AdapterDeclaration Name="BusAdapterOut" Type="eclipse4diac::io::plcnext::PLCnextBusAdapter"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

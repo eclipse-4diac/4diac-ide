@@ -25,4 +25,5 @@
 			<Connection Source="TimeOutSocket.DT" Destination="DLY.DT" dx1="80" dx2="80" dy="160"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

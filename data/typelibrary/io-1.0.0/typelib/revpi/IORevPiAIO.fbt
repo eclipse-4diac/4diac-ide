@@ -49,4 +49,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="IORevPiBusAdapter" Comment=""/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

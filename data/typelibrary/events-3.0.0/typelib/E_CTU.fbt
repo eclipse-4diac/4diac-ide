@@ -53,4 +53,5 @@
       <ST Text="CV := CV + 1;&#13;&#10;Q  := (CV &gt;= PV);"/>
     </Algorithm>
   </BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

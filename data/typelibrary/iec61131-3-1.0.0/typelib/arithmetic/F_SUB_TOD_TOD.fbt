@@ -23,4 +23,5 @@
       <VarDeclaration Comment="IN2 substracted from IN1" Name="OUT" Type="TIME"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

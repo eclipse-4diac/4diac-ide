@@ -27,4 +27,5 @@
       <VarDeclaration Comment="Minimum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
