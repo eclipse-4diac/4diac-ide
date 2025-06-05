@@ -19,12 +19,12 @@ import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public abstract class AbstractDelegatingDeviceManagementInteractor implements IDeviceManagementInteractor {
 	private final IDeviceManagementInteractor delegate;
@@ -154,18 +154,18 @@ public abstract class AbstractDelegatingDeviceManagementInteractor implements ID
 	}
 
 	@Override
-	public Response queryFBType(final FBType type) throws DeploymentException {
-		return delegate.queryFBType(type);
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		return delegate.queryFBType(entry);
 	}
 
 	@Override
-	public Response queryDataType(final DataType type) throws DeploymentException {
-		return delegate.queryDataType(type);
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		return delegate.queryDataType(entry);
 	}
 
 	@Override
-	public Response queryGlobalConstType(final GlobalConstants type) throws DeploymentException {
-		return delegate.queryGlobalConstType(type);
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		return delegate.queryGlobalConstType(entry);
 	}
 
 	@Override

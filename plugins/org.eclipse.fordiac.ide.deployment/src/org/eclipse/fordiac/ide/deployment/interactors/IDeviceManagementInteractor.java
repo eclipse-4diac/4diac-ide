@@ -24,12 +24,12 @@ import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 /**
  * Interface for classes that allow deployment and monitoring to interact with a
@@ -255,11 +255,11 @@ public interface IDeviceManagementInteractor {
 	 */
 	List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException;
 
-	Response queryFBType(FBType type) throws DeploymentException;
+	Response queryFBType(FBTypeEntry entry) throws DeploymentException;
 
-	Response queryDataType(DataType type) throws DeploymentException;
+	Response queryDataType(DataTypeEntry entry) throws DeploymentException;
 
-	Response queryGlobalConstType(GlobalConstants type) throws DeploymentException;
+	Response queryGlobalConstType(GlobalConstantsEntry entry) throws DeploymentException;
 
 	/***********************
 	 * monitoring commands
