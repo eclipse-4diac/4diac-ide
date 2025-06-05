@@ -33,24 +33,25 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Port</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Port</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getDataValues <em>Data Values</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl#getDataValues
+ * <em>Data Values</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class PortImpl extends EObjectImpl implements Port {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -58,9 +59,9 @@ public class PortImpl extends EObjectImpl implements Port {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -68,9 +69,9 @@ public class PortImpl extends EObjectImpl implements Port {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDataValues() <em>Data Values</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDataValues() <em>Data Values</em>}'
+	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getDataValues()
 	 * @generated
 	 * @ordered
@@ -78,17 +79,16 @@ public class PortImpl extends EObjectImpl implements Port {
 	protected EList<Data> dataValues;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected PortImpl() {
-		super();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -97,8 +97,8 @@ public class PortImpl extends EObjectImpl implements Port {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -107,21 +107,22 @@ public class PortImpl extends EObjectImpl implements Port {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
+	public void setName(final String newName) {
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.PORT__NAME, oldName, name));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -133,110 +134,103 @@ public class PortImpl extends EObjectImpl implements Port {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DevResponsePackage.PORT__DATA_VALUES:
-				return ((InternalEList<?>)getDataValues()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
+		return switch (featureID) {
+		case DevResponsePackage.PORT__DATA_VALUES -> ((InternalEList<?>) getDataValues()).basicRemove(otherEnd, msgs);
+		default -> super.eInverseRemove(otherEnd, featureID, msgs);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DevResponsePackage.PORT__NAME:
-				return getName();
-			case DevResponsePackage.PORT__DATA_VALUES:
-				return getDataValues();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+		return switch (featureID) {
+		case DevResponsePackage.PORT__NAME -> getName();
+		case DevResponsePackage.PORT__DATA_VALUES -> getDataValues();
+		default -> super.eGet(featureID, resolve, coreType);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case DevResponsePackage.PORT__NAME:
-				setName((String)newValue);
-				return;
-			case DevResponsePackage.PORT__DATA_VALUES:
-				getDataValues().clear();
-				getDataValues().addAll((Collection<? extends Data>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case DevResponsePackage.PORT__NAME:
+			setName((String) newValue);
+			return;
+		case DevResponsePackage.PORT__DATA_VALUES:
+			getDataValues().clear();
+			getDataValues().addAll((Collection<? extends Data>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case DevResponsePackage.PORT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case DevResponsePackage.PORT__DATA_VALUES:
-				getDataValues().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case DevResponsePackage.PORT__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case DevResponsePackage.PORT__DATA_VALUES:
+			getDataValues().clear();
+			return;
+		default:
+			super.eUnset(featureID);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DevResponsePackage.PORT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case DevResponsePackage.PORT__DATA_VALUES:
-				return dataValues != null && !dataValues.isEmpty();
-			default:
-				return super.eIsSet(featureID);
-		}
+	public boolean eIsSet(final int featureID) {
+		return switch (featureID) {
+		case DevResponsePackage.PORT__NAME -> NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case DevResponsePackage.PORT__DATA_VALUES -> dataValues != null && !dataValues.isEmpty();
+		default -> super.eIsSet(featureID);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(')');
 		return result.toString();
 	}
 
-} //PortImpl
+} // PortImpl
