@@ -436,7 +436,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			}
 		}
 
-		final String newTypeHash = LibraryElementHasher.getLibraryElementHash(getType());
+		final String newTypeHash = LibraryElementHasher.hash(getType());
 		typeHashRef = new SoftReference<>(newTypeHash);
 		return newTypeHash;
 	}
