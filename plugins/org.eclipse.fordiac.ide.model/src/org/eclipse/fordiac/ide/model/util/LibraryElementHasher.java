@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,8 @@
  *
  * Contributors:
  *   Felix Roithmayr - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - code cleanup
+ *                      - use base64 encoding for hashes
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.util;
 
@@ -18,6 +21,7 @@ import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
@@ -31,37 +35,52 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.model.emf.HashMetaData;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public final class LibraryElementHasher {
-	public static final String DEFAULT_HASH_ALG = "SHA3-512"; //$NON-NLS-1$
-	public static final String HASH_VERSION = "v1"; //$NON-NLS-1$ // increment this whenever anything is changed in the
-													// hashing algorithm
-	public static final String FULL_HASH_STRING = HASH_VERSION + ":" + DEFAULT_HASH_ALG; //$NON-NLS-1$
+	/**
+	 * The current hash version
+	 *
+	 * @implNote increment this whenever anything is changed in the hashing
+	 *           algorithm
+	 */
+	public static final String CURRENT_HASH_VERSION = "v1"; //$NON-NLS-1$
+
+	/**
+	 * The default hash algorithm
+	 */
+	public static final String DEFAULT_HASH_ALGORITHM = "SHA3-512"; //$NON-NLS-1$
+
 	private static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 	private static final String TOHASH_XMI_URI = "tohash.xmi"; //$NON-NLS-1$
 
-	public static String getHashType() {
-		return FULL_HASH_STRING;
+	/**
+	 * Calculate hash with default parameters for the given object
+	 *
+	 * @param eObject The object to hash
+	 * @return The hash string
+	 * @throws LibraryElementHashException if an error occurs
+	 */
+	public static String hash(final EObject eObject) throws LibraryElementHashException {
+		return hash(eObject, CURRENT_HASH_VERSION, DEFAULT_HASH_ALGORITHM);
 	}
 
-	public static String getLibraryElementHash(final INamedElement libelem, final String version)
+	/**
+	 * Calculate hash with given parameters for the given object
+	 *
+	 * @param eObject   The object to hash
+	 * @param version   The hash version
+	 * @param algorithm The hash algorithm
+	 * @return The hash string
+	 * @throws LibraryElementHashException if an error occurs
+	 */
+	public static String hash(final EObject eObject, final String version, final String algorithm)
 			throws LibraryElementHashException {
-		final String[] versionParts = version.split(":"); //$NON-NLS-1$
-		if (versionParts.length != 2) {
-			throw new LibraryElementHashException("Library hash version in wrong format"); //$NON-NLS-1$
+		if (!CURRENT_HASH_VERSION.equals(version)) {
+			throw new LibraryElementHashException(MessageFormat.format("Wrong library hash version: {0}", version)); //$NON-NLS-1$
 		}
-		if (!versionParts[0].equals(HASH_VERSION)) {
-			throw new LibraryElementHashException(
-					MessageFormat.format("Wrong library hash version: {0}", versionParts[0])); //$NON-NLS-1$
-		}
-		return hash(libelem, versionParts[1]);
-	}
-
-	private static String hash(final EObject eobj, final String version) throws LibraryElementHashException {
 		MessageDigest digest = null;
 		try {
-			digest = MessageDigest.getInstance(version);
+			digest = MessageDigest.getInstance(algorithm);
 		} catch (final NoSuchAlgorithmException e) {
 			throw new LibraryElementHashException("could not aquire hashing algorithm", e); //$NON-NLS-1$
 		}
@@ -70,9 +89,12 @@ public final class LibraryElementHasher {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
 				new XMIResourceFactoryImpl());
 		final Resource xmiResource = xmiResourceSet.createResource(URI.createFileURI(TOHASH_XMI_URI));
-		xmiResource.getContents().add(copyLibraryElementForHashing(eobj));
+		xmiResource.getContents().add(copyForHashing(eObject));
 
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(version);
+		sb.append(':');
+		sb.append(algorithm);
+		sb.append(':');
 
 		try (OutputStream nullOut = OutputStream.nullOutputStream();
 				DigestOutputStream dos = new DigestOutputStream(nullOut, digest)
@@ -83,10 +105,7 @@ public final class LibraryElementHasher {
 			options.put(XMLResource.OPTION_SKIP_ESCAPE_URI, Boolean.FALSE);
 
 			xmiResource.save(dos, options);
-			for (final byte b : digest.digest()) {
-				sb.append(String.format("%02x", b)); //$NON-NLS-1$
-			}
-
+			sb.append(Base64.getUrlEncoder().encodeToString(digest.digest()));
 		} catch (final IOException e) {
 			throw new LibraryElementHashException("Problem with generating library element hash", e); //$NON-NLS-1$
 		}
@@ -94,13 +113,9 @@ public final class LibraryElementHasher {
 		return sb.toString();
 	}
 
-	public static String getLibraryElementHash(final INamedElement libelem) throws LibraryElementHashException {
-		return LibraryElementHasher.getHashType() + ':' + hash(libelem, DEFAULT_HASH_ALG);
-	}
-
-	private static EObject copyLibraryElementForHashing(final EObject libraryElement) {
+	private static EObject copyForHashing(final EObject eObject) {
 		final Copier copier = new HashCopier();
-		final EObject result = copier.copy(libraryElement);
+		final EObject result = copier.copy(eObject);
 		copier.copyReferences();
 		return result;
 	}
