@@ -28,40 +28,40 @@ import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>FB List</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
+ * List</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl#getFbs <em>Fbs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl#getFbs
+ * <em>Fbs</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class FBListImpl extends EObjectImpl implements FBList {
 	/**
-	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getFbs()
 	 * @generated
 	 * @ordered
 	 */
 	protected EList<FB> fbs;
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected FBListImpl() {
-		super();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -70,8 +70,8 @@ public class FBListImpl extends EObjectImpl implements FBList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -83,69 +83,63 @@ public class FBListImpl extends EObjectImpl implements FBList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DevResponsePackage.FB_LIST__FBS:
-				return getFbs();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+		return switch (featureID) {
+		case DevResponsePackage.FB_LIST__FBS -> getFbs();
+		default -> super.eGet(featureID, resolve, coreType);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case DevResponsePackage.FB_LIST__FBS:
-				getFbs().clear();
-				getFbs().addAll((Collection<? extends FB>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case DevResponsePackage.FB_LIST__FBS:
+			getFbs().clear();
+			getFbs().addAll((Collection<? extends FB>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case DevResponsePackage.FB_LIST__FBS:
-				getFbs().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case DevResponsePackage.FB_LIST__FBS:
+			getFbs().clear();
+			return;
+		default:
+			super.eUnset(featureID);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DevResponsePackage.FB_LIST__FBS:
-				return fbs != null && !fbs.isEmpty();
-			default:
-				return super.eIsSet(featureID);
-		}
+	public boolean eIsSet(final int featureID) {
+		return switch (featureID) {
+		case DevResponsePackage.FB_LIST__FBS -> fbs != null && !fbs.isEmpty();
+		default -> super.eIsSet(featureID);
+		};
 	}
 
-} //FBListImpl
+} // FBListImpl
