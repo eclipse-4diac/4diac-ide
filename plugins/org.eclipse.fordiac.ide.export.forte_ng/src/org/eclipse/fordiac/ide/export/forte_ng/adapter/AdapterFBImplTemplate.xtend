@@ -29,8 +29,13 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 
 class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 
+	var CharSequence myClassName = null;
+	
+	//this a lows to reuse accessor method generation form ForteFBTemplate
+	override getClassName() { (myClassName === null) ? super.className : myClassName}  
+
 	new(AdapterType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CAdapter", options)
+		super(type, name, prefix, "forte::CAdapter", options)
 	}
 
 	override generate() '''
@@ -50,9 +55,19 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateFBInterfaceSpecDefinition»
 		
-		«generateReadInputDataDefinition»
+		«FBClassName»::«FBClassName»(forte::core::CFBContainer &paContainer,
+		                             const SFBInterfaceSpec &paInterfaceSpec,
+		                             const CStringDictionary::TStringId paInstanceNameId,
+		                             TForteUInt8 paParentAdapterlistID) :
+		    CAdapter(paContainer, paInterfaceSpec, paInstanceNameId, paParentAdapterlistID)«// no newline
+		    »«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer» {
+		}
 		
-		«generateWriteOutputDataDefinition»
+		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		
+		«generatePlugImpl»
+		
+		«generateSocketImpl»
 	'''
 
 	override protected generateFBDefinition() '''
@@ -86,63 +101,116 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateFBInterfaceSpecPlug»
 	'''
-
-	override protected generateReadInputDataDefinition() '''
-		void «FBClassName»::readInputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  if(isSocket()) {
-		    «type.interfaceList.eventInputs.generateReadInputDataBody»
-		  } else {
-		    «type.interfaceList.eventOutputs.generateReadInputDataBody»
-		  }
+	
+	def generatePlugImpl() '''
+		«generatePlugConstructorImpl»
+		
+		«generatePlugReadInputData»
+		
+		«generatePlugWriteOutputData»		
+		«{ myClassName = plugClassName
+		   null // do not add to output string	
+		}»
+		«type.interfaceList.outputVars.generateAccessorDefinition("getDI", false)»
+		«type.interfaceList.inputVars.generateAccessorDefinition("getDO", false)»
+		«type.interfaceList.eventInputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
+		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
+		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
+		«{myClassName = null
+		   null // do not add to output string	
+		}»
+	'''
+	
+	def generateSocketImpl() '''
+		«generateSocketConstructorImpl»
+		
+		«generateSocketReadInputData»
+		
+		«generateSocketWriteOutputData»
+		«{myClassName = socketClassName
+		   null // do not add to output string	
+		}»
+		«type.interfaceList.inputVars.generateAccessorDefinition("getDI", false)»
+		«type.interfaceList.outputVars.generateAccessorDefinition("getDO", false)»
+		«type.interfaceList.eventOutputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
+		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
+		«type.interfaceList.outputVars.generateConnectionAccessorsDefinition("getDOConUnchecked", "CDataConnection *")»
+		«{myClassName = null
+		   null // do not add to output string	
+		}»
+	'''
+	
+	def generatePlugConstructorImpl() '''
+		«plugClassName»::«plugClassName»(CStringDictionary::TStringId paInstanceNameId,
+		                                         forte::core::CFBContainer &paContainer,
+		                                         TForteUInt8 paParentAdapterlistID) :
+		    «FBClassName»(paContainer, «FBClassName»::scmFBInterfaceSpecPlug, paInstanceNameId, paParentAdapterlistID)«//no newline
+		    »«type.interfaceList.eventInputs.generateEventConnectionInitializer»«//no newline
+		    »«type.interfaceList.outputVars.generateDataConnectionPointerInitializer»«//no newline
+		    »«type.interfaceList.inputVars.generateDataConnectionInitializer» {
+		}
+	'''
+	
+	def generateSocketConstructorImpl() '''
+		«socketClassName»::«socketClassName»(CStringDictionary::TStringId paInstanceNameId,
+		                                         forte::core::CFBContainer &paContainer,
+		                                         TForteUInt8 paParentAdapterlistID) :
+		    «FBClassName»(paContainer, «FBClassName»::scmFBInterfaceSpecSocket, paInstanceNameId, paParentAdapterlistID)«//no newline
+		    »«type.interfaceList.eventOutputs.generateEventConnectionInitializer»«//no newline
+		    »«type.interfaceList.inputVars.generateDataConnectionPointerInitializer»«//no newline
+		    »«type.interfaceList.outputVars.generateDataConnectionInitializer» {
+		}
+	'''
+	
+	def generatePlugReadInputData()  '''
+		void «plugClassName»::readInputData(«IF type.interfaceList.eventOutputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  «type.interfaceList.eventOutputs.generateReadInputDataBody(socketClassName)»
+		}
+	'''
+	
+	def generateSocketReadInputData()  '''
+		void «socketClassName»::readInputData(«IF type.interfaceList.eventInputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  «type.interfaceList.eventInputs.generateReadInputDataBody(plugClassName)»
+		}
+	'''
+	
+	def generateReadInputDataBody(List<Event> events, CharSequence peerName) '''
+	«IF events.exists[!with.empty]»
+		switch(paEIID) {
+		  «FOR event : events.filter[!with.empty]»
+		  	case «event.generateEventID»: {
+		  	  «FOR variable : event.with.map[withVariable]»
+		  	  	«variable.generateReadInputDataVariable»
+		  	  «ENDFOR»
+		  	  if(auto peer = static_cast<«peerName» *>(getPeer()); peer) {
+		  	    «FOR variable : event.with.map[withVariable]»
+		  	       peer->«variable.generateName» = «variable.generateName»;
+		  	    «ENDFOR»
+		  	  }
+		  	  break;
+		  	}
+		  «ENDFOR»
+		  default:
+		    break;
+		}
+	«ELSE»
+		// nothing to do
+	«ENDIF»
+	'''
+	
+	def generatePlugWriteOutputData()  '''
+		void «plugClassName»::writeOutputData(«IF type.interfaceList.eventInputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  «type.interfaceList.eventInputs.generateWriteOutputDataBody»
 		}
 	'''
 
-	override protected generateReadInputDataBody(List<Event> events) '''
-		«IF events.exists[!with.empty]»
-			switch(paEIID) {
-			  «FOR event : events.filter[!with.empty]»
-			  	case «event.generateEventID»: {
-			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	«val index = variable.interfaceElementIndex»readData(«variable.absoluteDataPortIndex», *mDIs[«index»], mDIConns[«index»]);
-			  	  «ENDFOR»
-			  	  break;
-			  	}
-			  «ENDFOR»
-			  default:
-			    break;
-			}
-		«ELSE»
-			// nothing to do
-		«ENDIF»
-	'''
-
-	override protected generateWriteOutputDataDefinition() '''
-		void «FBClassName»::writeOutputData(«IF (type.interfaceList.eventInputs + type.interfaceList.eventOutputs).exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
-		  if(isSocket()) {
-		    «type.interfaceList.eventOutputs.generateWriteOutputDataBody»
-		  } else {
-		    «type.interfaceList.eventInputs.generateWriteOutputDataBody»
-		  }
+	def generateSocketWriteOutputData()  '''
+		void «socketClassName»::writeOutputData(«IF type.interfaceList.eventOutputs.exists[!with.empty]»const TEventID paEIID«ELSE»TEventID«ENDIF») {
+		  «type.interfaceList.eventOutputs.generateWriteOutputDataBody»
 		}
 	'''
 
-	override protected generateWriteOutputDataBody(List<Event> events) '''
-		«IF events.exists[!with.empty]»
-			switch(paEIID) {
-			  «FOR event : events.filter[!with.empty]»
-			  	case «event.generateEventID»: {
-			  	  «FOR variable : event.with.map[withVariable]»
-			  	  	«val index = variable.interfaceElementIndex»writeData(«variable.absoluteDataPortIndex», *mDOs[«index»], mDOConns[«index»]);
-			  	  «ENDFOR»
-			  	  break;
-			  	}
-			  «ENDFOR»
-			  default:
-			    break;
-			}
-		«ELSE»
-			// nothing to do
-		«ENDIF»
-	'''
+	def getPlugClassName() '''«FBClassName»_Plug'''
 
+	def getSocketClassName() '''«FBClassName»_Socket'''
 }

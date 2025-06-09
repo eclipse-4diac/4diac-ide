@@ -47,8 +47,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
-
 final class ForteNgExportUtil {
 	public static final CharSequence CONNECTION_EXPORT_PREFIX = "conn_"
 	public static final CharSequence VARIABLE_EXPORT_PREFIX = "var_"
@@ -77,7 +75,6 @@ final class ForteNgExportUtil {
 					element.inputConnections.first.generateConnectionValue
 				else
 					'''«VARIABLE_EXPORT_PREFIX»«element.name»'''
-			case element.rootContainer instanceof AdapterType: '''«VARIABLE_EXPORT_PREFIX»«element.name»()'''
 			default: '''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 		}
 	}
