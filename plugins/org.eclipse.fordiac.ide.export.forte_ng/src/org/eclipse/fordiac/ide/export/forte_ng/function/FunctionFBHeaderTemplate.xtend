@@ -46,7 +46,6 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
-		    «generateInitializeDeclaration»
 		
 		    «generateInterfaceDeclarations»
 		};

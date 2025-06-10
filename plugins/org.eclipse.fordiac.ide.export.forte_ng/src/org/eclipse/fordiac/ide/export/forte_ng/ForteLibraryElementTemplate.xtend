@@ -24,12 +24,12 @@ import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.util.LibraryElementHasher
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
@@ -99,14 +99,20 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected generateVariableInitializerFromParameters(Iterable<VarDeclaration> variables) //
 	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateNameAsParameter»)«ENDFOR»'''
 
-	def protected generateAdapterDeclarations(List<AdapterDeclaration> adapters) '''
+	def protected generatePlugDeclarations(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters AFTER '\n'»
-			«adapter.type.generateTypeName» «adapter.generateName»;
+			forte::CPlugPin<«adapter.type.generateTypeName»_Plug> «adapter.generateName»;
 		«ENDFOR»
 	'''
 
-	def protected generateAdapterInitializer(Iterable<AdapterDeclaration> adapters) ///
-	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «!adapter.isIsInput»)«ENDFOR»'''
+	def protected generateSocketDeclarations(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters AFTER '\n'»
+			forte::CSocketPin<«adapter.type.generateTypeName»_Socket> «adapter.generateName»;
+		«ENDFOR»
+	'''
+
+	def protected generateAdapterInitializer(List<AdapterDeclaration> adapters) ///
+	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «IF type instanceof CompositeFBType»forte::cgCFBParentAdapterlistIDMarker«ELSE»«adapters.indexOf(adapter)»«ENDIF»)«ENDFOR»'''
 
 	def protected generateAccessorDeclaration(String function, boolean const) {
 		generateAccessorDeclaration(function, "CIEC_ANY *", const)

@@ -319,7 +319,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr, nullptr,
 						  0, nullptr, nullptr,
 						  0, nullptr,
-						  0, nullptr
+						  0, nullptr,
+						  {},
+						  {}
 						};
 						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :

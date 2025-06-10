@@ -22,7 +22,6 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -63,7 +62,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
-		    «generateInitializeDeclaration»
 		
 		    «generateInterfaceDeclarations»
 		};
@@ -102,8 +100,8 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	override generateInterfaceVariableAndConnectionDeclarations() '''
 		«type.interfaceList.outputVars.filter[needsOutputVariable].toList.generateVariableDeclarations(false)»
-		«type.interfaceList.sockets.generateAdapterDeclarations»
-		«type.interfaceList.plugs.generateAdapterDeclarations»
+		«type.interfaceList.sockets.generateSocketDeclarations»
+		«type.interfaceList.plugs.generatePlugDeclarations»
 		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
 		«type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
 		«type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»

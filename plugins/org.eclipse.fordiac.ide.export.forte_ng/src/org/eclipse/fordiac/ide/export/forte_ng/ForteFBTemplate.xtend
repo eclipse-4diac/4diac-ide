@@ -32,12 +32,10 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.LibraryElementTags
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -98,12 +96,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«generateFBEventInputInterfaceDecl»
 		«generateFBEventOutputInterfaceDecl»
 		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
-			«FOR adapter : type.interfaceList.sockets»
-				static const int scm«adapter.name»AdpNum = «type.interfaceList.sockets.indexOf(adapter)»;
-			«ENDFOR»
-			«FOR adapter : type.interfaceList.plugs»
-				static const int scm«adapter.name»AdpNum = «type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(adapter)»;
-			«ENDFOR»
 			static const SAdapterInstanceDef scmAdapterInstances[];
 		«ENDIF»
 	'''
@@ -201,6 +193,16 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 				  «FOR adapter : (type.interfaceList.sockets + type.interfaceList.plugs) SEPARATOR ",\n"»{«adapter.typeName.FORTEStringId», «adapter.name.FORTEStringId», «!adapter.isInput»}«ENDFOR»
 				};
 			«ENDIF»
+			«IF !type.interfaceList.sockets.empty» 
+				namespace {
+				  const auto cSocketNameIds = std::array{«type.interfaceList.sockets.FORTENameList»};
+				}
+			«ENDIF»
+			«IF !type.interfaceList.plugs.empty»
+				namespace {
+				  const auto cPlugNameIds = std::array{«type.interfaceList.plugs.FORTENameList»};
+				}
+			«ENDIF»
 		'''
 	}
 
@@ -229,7 +231,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
 		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
 		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scmAdapterInstances«ELSE»nullptr«ENDIF»
+		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scmAdapterInstances«ELSE»nullptr«ENDIF», 
+		  «IF !type.interfaceList.sockets.empty»cSocketNameIds«ELSE»{}«ENDIF»,
+		  «IF !type.interfaceList.plugs.empty»cPlugNameIds«ELSE»{}«ENDIF»
 		};
 	'''
 
@@ -336,8 +340,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«generateAccessorDeclaration("getDIO", false)»
 		«ENDIF»
-		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
-			«generateAccessorDeclaration("getAdapterUnchecked", "CAdapter *", false)»
+		«IF !type.interfaceList.sockets.empty»
+			«generateAccessorDeclaration("getSocketPinUnchecked", "forte::ISocketPin *", false)»
+		«ENDIF»
+		«IF !type.interfaceList.plugs.empty»
+			«generateAccessorDeclaration("getPlugPinUnchecked", "forte::IPlugPin *", false)»
 		«ENDIF»
 		«generateConnectionAccessorsDeclaration("getEOConUnchecked", "CEventConnection *")»
 		«generateConnectionAccessorsDeclaration("getDIConUnchecked", "CDataConnection **")»
@@ -354,8 +361,8 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«type.interfaceList.inputVars.generateVariableDeclarations(false)»
 		«type.interfaceList.inOutVars.generateVariableDeclarations(false)»
 		«type.interfaceList.outputVars.generateVariableDeclarations(false)»
-		«type.interfaceList.sockets.generateAdapterDeclarations»
-		«type.interfaceList.plugs.generateAdapterDeclarations»
+		«type.interfaceList.sockets.generateSocketDeclarations»
+		«type.interfaceList.plugs.generatePlugDeclarations»
 		«type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
 		«type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
 		«type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»
@@ -373,8 +380,11 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		«IF (!type.interfaceList.inOutVars.empty)»
 			«type.interfaceList.inOutVars.generateAccessorDefinition("getDIO", false)»
 		«ENDIF»
-		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
-			«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessorDefinition("getAdapterUnchecked", "CAdapter *", false)»
+		«IF !type.interfaceList.sockets.empty»
+			«type.interfaceList.sockets.toList.generateAccessorDefinition("getSocketPinUnchecked", "forte::ISocketPin *", false)»
+		«ENDIF»
+		«IF !type.interfaceList.plugs.empty»
+			«type.interfaceList.plugs.toList.generateAccessorDefinition("getPlugPinUnchecked", "forte::IPlugPin *", false)»
 		«ENDIF»
 		«type.interfaceList.eventOutputs.generateConnectionAccessorsDefinition("getEOConUnchecked", "CEventConnection *")»
 		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getDIConUnchecked", "CDataConnection **")»
@@ -555,32 +565,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	}
 
 	def protected getFBClassName() { className }
-
-	def protected generateInitializeDeclaration() '''
-		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
-			bool initialize() override;
-		«ENDIF»
-	'''
-
-	def protected generateInitializeDefinition() '''
-		«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
-			
-			bool «FBClassName»::initialize() {
-			««« initialize adapters before base class to support establishing connections in CCompositeFB::initialize()
-			  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitialize»
-				  return «baseClass»::initialize();
-			}
-		«ENDIF»
-	'''
-
-	def protected generateAdapterInitialize(List<AdapterDeclaration> adapters) '''
-		«FOR adapter : adapters»
-			if(!«adapter.generateName».initialize()) { return false; }
-		«ENDFOR»
-		«FOR adapter : adapters»
-			«adapter.generateName».setParentFB(this, «adapters.indexOf(adapter)»);
-		«ENDFOR»
-	'''
 
 	def generateInternalFBDeclarations(List<FB> internalFbs) '''
 		«FOR fb : internalFbs»
