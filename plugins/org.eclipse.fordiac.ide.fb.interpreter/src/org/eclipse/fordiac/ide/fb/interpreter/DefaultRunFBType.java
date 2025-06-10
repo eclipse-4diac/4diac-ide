@@ -68,7 +68,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -457,15 +456,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		for (final Connection conn : eventOccurrence.getEvent().getOutputConnections()) {
 			final FBNetworkRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
 
-			// copy network to avoid removing it from the SubApp
 			if (eventOccurrence.getEvent().isIsInput()) {
 				// we are entering a SubApp, change network to SubApp network
-				final FBNetwork networkCpy = EcoreUtil.copy(subApp.getSubAppNetwork());
-				runtime.setFbnetwork(networkCpy);
+				runtime.setFbnetwork(subApp.getSubAppNetwork());
 			} else {
 				// we are leaving a SubApp, change network to outer network
-				final FBNetwork networkCpy = EcoreUtil.copy(subApp.getFbNetwork());
-				runtime.setFbnetwork(networkCpy);
+				runtime.setFbnetwork(subApp.getFbNetwork());
 			}
 			final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
 
