@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -134,22 +135,18 @@ public class FilterComposite extends Composite {
 
 			ImageDescriptor descriptor = ImageDescriptor
 					.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(CASE_SENSITVE_IMAGE)));
-			caseSensitive = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage())
-					.tooltip(Messages.CaseSensitve).create(this);
+			caseSensitive = createImageButton(descriptor, Messages.CaseSensitve);
 
 			descriptor = FordiacImage.ICON_WHOLE_WORD.getImageDescriptor();
-			wholeWord = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage()).tooltip(Messages.WholeWord)
-					.create(this);
+			wholeWord = createImageButton(descriptor, Messages.WholeWord);
 
 			descriptor = ImageDescriptor
 					.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(EXACT_MATCH_IMAGE)));
-			exactMatch = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage()).tooltip(Messages.ExactMatch)
-					.create(this);
+			exactMatch = createImageButton(descriptor, Messages.ExactMatch);
 
 			descriptor = ImageDescriptor.createFromURL(
 					FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE)));
-			regularExpression = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage())
-					.tooltip(Messages.RegularExpression).create(this);
+			regularExpression = createImageButton(descriptor, Messages.RegularExpression);
 
 			selected.addListener(SWT.Selection, event -> {
 				textField.setEnabled(selected.getSelection());
@@ -159,6 +156,13 @@ public class FilterComposite extends Composite {
 				exactMatch.setEnabled(selected.getSelection() && !wholeWord.getSelection());
 				regularExpression.setEnabled(selected.getSelection() && !wholeWord.getSelection());
 			});
+		}
+
+		private Button createImageButton(final ImageDescriptor descriptor, final String tooltip) {
+			final Image image = descriptor.createImage();
+			final Button button = WidgetFactory.button(SWT.TOGGLE).image(image).tooltip(tooltip).create(this);
+			button.addDisposeListener(e -> image.dispose());
+			return button;
 		}
 
 		private void addListenerSubSetting(final BulkEditorSubSettings subSetting) {
