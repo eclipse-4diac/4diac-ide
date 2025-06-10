@@ -92,6 +92,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -102,14 +103,15 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
-
 	private static final List<String> DEFAULT_LIST = List.of(Messages.Name, Messages.Type, Messages.Comment,
 			Messages.InitialValue);
 	private static final List<String> LIST_WITHOUT_VALUE = List.of(Messages.Name, Messages.Type, Messages.Comment);
@@ -134,6 +136,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private boolean changedSearchParameter = false;
 
 	// Search In
+	private Button searchInClearButton;
 	private FilterComposite fbSubappTypesFilter;
 	private FilterComposite fbTypedSubappInstanceFilter;
 	private FilterComposite untypedSubappFilter;
@@ -195,16 +198,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			commandStack.flush();
 		});
 
-		final Group searchGroup = WidgetFactory.group(SWT.NONE).text(Messages.SearchWhere).create(composite);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
-
-		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
-				BulkEditorSettings.whereSearchList);
-		searchFilter.addFilterChangedListener(() -> {
-			this.changedSearchParameter = true;
-		});
-
+		createSearchWhereGroup(composite);
 		createSearchInGroup(composite);
 		createScopeGroup(composite);
 		createSearchButton(composite);
@@ -226,13 +220,31 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		return result;
 	}
 
+	private void createSearchWhereGroup(final Composite parent) {
+		final Group searchGroup = createFilterSearchGroup(parent, Messages.SearchWhere,
+				button -> button.addListener(SWT.Selection, event -> {
+					searchFilter.clear();
+				}));
+
+		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
+				BulkEditorSettings.whereSearchList);
+		searchFilter.addFilterChangedListener(() -> {
+			this.changedSearchParameter = true;
+		});
+	}
+
 	private void createSearchInGroup(final Composite parent) {
-		final Group searchGroup = new Group(parent, SWT.NONE);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		searchGroup.setText(Messages.SearchIn);
-
+		final Group searchGroup = createFilterSearchGroup(parent, Messages.SearchIn,
+				button -> this.searchInClearButton = button);
+		this.searchInClearButton.addListener(SWT.Selection, event -> {
+			fbSubappTypesFilter.clear();
+			fbTypedSubappInstanceFilter.clear();
+			untypedSubappFilter.clear();
+			dataTypesFilter.clear();
+			attributeTypesFilter.clear();
+			ignoreLinkedLibrariesButton.setSelection(true);
+			settings.ignoreLinkedLibraries = true;
+		});
 		fbSubappTypesFilter = createSearchFilterInGroup(searchGroup, Messages.FBandSubappTypes,
 				BulkEditorSettings.inFBTypesSearchList, settings.fbSubappTypes,
 				b -> settings.fbSubappTypes = b.booleanValue());
@@ -256,6 +268,33 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		final GridData buttonData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		buttonData.verticalIndent = 10;
 		ignoreLinkedLibrariesButton.setLayoutData(buttonData);
+	}
+
+	private static Group createFilterSearchGroup(final Composite parent, final String text,
+			final Consumer<Button> clearButtonProvider) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var gridLayout = new GridLayout(1, false);
+		gridLayout.verticalSpacing = 0;
+		gridLayout.marginWidth = 0;
+		composite.setLayout(gridLayout);
+
+		final Composite header = new Composite(composite, SWT.NONE);
+		header.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		header.setLayout(new GridLayout(2, false));
+
+		final Label titleLabel = new Label(header, SWT.NONE);
+		titleLabel.setText(text);
+
+		final Button clearButton = WidgetFactory.button(SWT.PUSH)
+				.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_CLEAR))
+				.tooltip(Messages.ClearFilter).create(header);
+		clearButtonProvider.accept(clearButton);
+
+		final Group searchGroup = new Group(composite, SWT.NONE);
+		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+		return searchGroup;
 	}
 
 	private FilterComposite createSearchFilterInGroup(final Composite parent, final String name,
@@ -283,6 +322,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				event -> updateVisibility(expandFilterCompositeTwistie.isExpanded(), filterComposite));
 		updateVisibility(false, filterComposite);
 
+		searchInClearButton.addListener(SWT.Selection, event -> {
+			categorySelectionButton.setSelection(true);
+			categorySelectionButton.notifyListeners(SWT.Selection, null);
+			expandFilterCompositeTwistie.setExpanded(false);
+			expandFilterCompositeTwistie.notifyListeners(SWT.MouseUp, null);
+		});
+
 		final Label stateLabel = new Label(searchInCategorySubComposite, SWT.LEAD);
 		stateLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		filterComposite.addTextChangedListener(stateLabel::setText);
@@ -295,7 +341,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		((GridData) filter.getLayoutData()).exclude = !visible;
 
 		filter.layout();
-		final Composite composite = filter.getParent().getParent();
+		final Composite group = filter.getParent().getParent();
+		group.layout();
+		final Composite composite = group.getParent();
 		composite.layout();
 		if (composite.getParent().getParent() instanceof final ScrolledComposite sc) {
 			sc.setMinSize(composite.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
