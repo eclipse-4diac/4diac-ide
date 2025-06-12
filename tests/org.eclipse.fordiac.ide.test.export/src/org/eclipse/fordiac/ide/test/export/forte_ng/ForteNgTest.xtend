@@ -252,8 +252,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						  private:
 						
-						    static const SFBInterfaceSpec scmFBInterfaceSpec;
-						
 						    CIEC_ANY *getVarInternal(size_t) override;
 						
 						    void «EXPORTED_ALGORITHM_NAME»(void);
@@ -309,23 +307,24 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						namespace {
 						  constexpr std::string_view TypeHash ="1234"sv;
+						
+						  const SFBInterfaceSpec cFBInterfaceSpec = {
+						      .mEINames = {},
+						      .mEITypeNames = {},
+						      .mEONames = {},
+						      .mEOTypeNames = {},
+						      .mDINames = {},
+						      .mDONames = {},
+						      .mDIONames = {},
+						      .mSocketNames = {},
+						      .mPlugNames = {},
+						  };
 						}
 						
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock), TypeHash)
 						
-						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr,
-						  0, nullptr,
-						  {},
-						  {}
-						};
-						
 						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
+						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, nullptr) {
 						}
 						
 						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {

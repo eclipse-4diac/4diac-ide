@@ -46,8 +46,6 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
-		
 		    «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		  public:
 		    «type.interfaceList.inputVars.generateVariableDeclarations(false)»
@@ -81,13 +79,6 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 
 	override protected generateFBDeclaration() '''
 		DECLARE_ADAPTER_TYPE(«FBClassName»)
-	'''
-
-	override protected generateFBInterfaceSpecDeclaration() '''
-		protected:
-		  static const SFBInterfaceSpec scmFBInterfaceSpecSocket;
-		
-		  static const SFBInterfaceSpec scmFBInterfaceSpecPlug;
 	'''
 
 	override protected generateEventConstants(List<Event> events) '''

@@ -49,8 +49,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		    «generateFBInterfaceSpecDeclaration»
-		
 		    «generateFBNetwork»
 		
 		    «fbs.generateInternalFBDeclarations»

@@ -36,8 +36,6 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		    «generateFBInterfaceSpecDeclaration»
-		
 		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
 		    «generateReadInputDataDeclaration»
