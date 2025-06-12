@@ -172,17 +172,37 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		// page layout
 		final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setBackground(parent.getBackground());
 		scrolledComposite.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		final Composite composite = new Composite(scrolledComposite, SWT.NONE);
-		scrolledComposite.setContent(composite);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(composite);
 
-		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(composite);
-		modeSelectionDropDown = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		final Composite pageComposite = new Composite(scrolledComposite, SWT.NONE);
+		scrolledComposite.setContent(pageComposite);
+		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+
+		final Composite pageHeaderComposite = new Composite(pageComposite, SWT.NONE);
+		pageHeaderComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var headerLayout = new GridLayout(2, false);
+
+		final Composite pageBodyComposite = new Composite(pageComposite, SWT.NONE);
+		pageBodyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		pageBodyComposite.setLayout(new GridLayout(1, false));
+
+		// header
+		pageHeaderComposite.setLayout(headerLayout);
+		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(pageHeaderComposite);
+		final Twistie expandBodyCompositeTwistie = new Twistie(pageHeaderComposite, SWT.NONE);
+		expandBodyCompositeTwistie.setExpanded(true);
+		expandBodyCompositeTwistie.addListener(SWT.MouseUp, event -> {
+			final boolean isVisible = expandBodyCompositeTwistie.isExpanded();
+			updateVisibility(isVisible, pageBodyComposite);
+		});
+
+		// body
+		modeSelectionDropDown = new Combo(pageBodyComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
 		modeSelectionDropDown.select(settings.modeSelection);
 		modeSelectionDropDown.addListener(SWT.Selection, event -> {
@@ -198,15 +218,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			commandStack.flush();
 		});
 
-		createSearchWhereGroup(composite);
-		createSearchInGroup(composite);
-		createScopeGroup(composite);
-		createSearchButton(composite);
-		changeNatTable(composite, settings.modeSelection);
+		createSearchWhereGroup(pageBodyComposite);
+		createSearchInGroup(pageBodyComposite);
+		createScopeGroup(pageBodyComposite);
+		createSearchButton(pageBodyComposite);
+		changeNatTable(pageComposite, settings.modeSelection);
 
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		composite.layout();
-
+		scrolledComposite.setMinSize(pageComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		pageComposite.layout();
 		getSite().getPage().addPartListener(focusListener);
 	}
 
@@ -221,12 +240,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private void createSearchWhereGroup(final Composite parent) {
-		final Group searchGroup = createFilterSearchGroup(parent, Messages.SearchWhere,
+		final Group searchWhereGroup = createCollapsibleGroup(parent, Messages.SearchWhere,
 				button -> button.addListener(SWT.Selection, event -> {
 					searchFilter.clear();
 				}));
 
-		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
+		searchFilter = new FilterComposite(searchWhereGroup, SWT.NONE, DEFAULT_LIST, settings,
 				BulkEditorSettings.whereSearchList);
 		searchFilter.addFilterChangedListener(() -> {
 			this.changedSearchParameter = true;
@@ -234,7 +253,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private void createSearchInGroup(final Composite parent) {
-		final Group searchGroup = createFilterSearchGroup(parent, Messages.SearchIn,
+		final Group searchGroup = createCollapsibleGroup(parent, Messages.SearchIn,
 				button -> this.searchInClearButton = button);
 		this.searchInClearButton.addListener(SWT.Selection, event -> {
 			fbSubappTypesFilter.clear();
@@ -265,35 +284,88 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				.onSelect(event -> settings.ignoreLinkedLibraries = ignoreLinkedLibrariesButton.getSelection())
 				.create(searchGroup);
 		ignoreLinkedLibrariesButton.setSelection(settings.ignoreLinkedLibraries);
-		final GridData buttonData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		buttonData.verticalIndent = 10;
-		ignoreLinkedLibrariesButton.setLayoutData(buttonData);
+		final GridData buttonLayoutData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		buttonLayoutData.verticalIndent = 10;
+		ignoreLinkedLibrariesButton.setLayoutData(buttonLayoutData);
 	}
 
-	private static Group createFilterSearchGroup(final Composite parent, final String text,
-			final Consumer<Button> clearButtonProvider) {
+	private void createScopeGroup(final Composite parent) {
+		final Group scopeGroup = createCollapsibleGroup(parent, Messages.Scope, null);
+		final Composite groupContent = new Composite(scopeGroup, SWT.NONE);
+		groupContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		groupContent.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
+
+		projectScopeButton = WidgetFactory.button(SWT.RADIO)
+				.text(MessageFormat.format(Messages.Project, project.getName())).create(groupContent);
+		projectScopeButton.setSelection(settings.projectScope);
+		projectScopeButton.addListener(SWT.Selection,
+				event -> settings.projectScope = projectScopeButton.getSelection());
+		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(groupContent);
+		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
+	}
+
+	private void createSearchButton(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		final var gridLayout = new GridLayout(1, false);
-		gridLayout.verticalSpacing = 0;
-		gridLayout.marginWidth = 0;
-		composite.setLayout(gridLayout);
+		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		final Composite header = new Composite(composite, SWT.NONE);
+		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
+			performSearch();
+			checkTypeEntriesForDirty();
+		}).create(composite);
+
+		dirtyInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		dirtyInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
+		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
+
+	private static Group createCollapsibleGroup(final Composite parent, final String groupLabel,
+			final Consumer<Button> clearButtonProvider) {
+		// group layout
+		final Composite groupComposite = new Composite(parent, SWT.NONE);
+		groupComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var groupCompositeLayout = new GridLayout(1, false);
+		groupCompositeLayout.verticalSpacing = 0;
+		groupCompositeLayout.marginWidth = 0;
+		groupComposite.setLayout(groupCompositeLayout);
+
+		final Composite header = new Composite(groupComposite, SWT.NONE);
 		header.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		header.setLayout(new GridLayout(2, false));
-
-		final Label titleLabel = new Label(header, SWT.NONE);
-		titleLabel.setText(text);
-
-		final Button clearButton = WidgetFactory.button(SWT.PUSH)
-				.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_CLEAR))
-				.tooltip(Messages.ClearFilter).create(header);
-		clearButtonProvider.accept(clearButton);
-
-		final Group searchGroup = new Group(composite, SWT.NONE);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		header.setLayout(new GridLayout(clearButtonProvider != null ? 3 : 2, false));
+		final Group searchGroup = new Group(groupComposite, SWT.NONE);
+		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+
+		// header
+		final Label titleLabel = new Label(header, SWT.NONE);
+		titleLabel.setText(groupLabel);
+		final Twistie expandCompositeTwistie = new Twistie(header, SWT.NONE);
+		final Button clearButton;
+		if (clearButtonProvider != null) {
+			clearButton = WidgetFactory.button(SWT.PUSH)
+					.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_CLEAR))
+					.tooltip(Messages.ClearFilter).create(header);
+			clearButtonProvider.accept(clearButton);
+		} else {
+			clearButton = null;
+		}
+
+		expandCompositeTwistie.setExpanded(true);
+		expandCompositeTwistie.addListener(SWT.MouseUp, event -> {
+			final boolean isVisible = expandCompositeTwistie.isExpanded();
+			if (clearButton != null) {
+				clearButton.setVisible(isVisible);
+			}
+
+			updateVisibility(isVisible, searchGroup);
+		});
+
 		return searchGroup;
 	}
 
@@ -336,35 +408,141 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		return filterComposite;
 	}
 
-	private static void updateVisibility(final boolean visible, final FilterComposite filter) {
-		filter.setVisible(visible);
-		((GridData) filter.getLayoutData()).exclude = !visible;
+	private static void updateVisibility(final boolean visible, final Composite composite) {
+		composite.setVisible(visible);
+		((GridData) composite.getLayoutData()).exclude = !visible;
 
-		filter.layout();
-		final Composite group = filter.getParent().getParent();
-		group.layout();
-		final Composite composite = group.getParent();
-		composite.layout();
-		if (composite.getParent().getParent() instanceof final ScrolledComposite sc) {
-			sc.setMinSize(composite.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		Composite current = composite.getParent();
+		while (current != null && !(current.getParent() instanceof ScrolledComposite)) {
+			current = current.getParent();
 		}
-		composite.getParent().layout();
+		if (current != null) {
+			final ScrolledComposite scrolledParentComposite = (ScrolledComposite) current.getParent();
+			scrolledParentComposite.setMinSize(current.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			current.layout();
+		}
 	}
 
-	private void createScopeGroup(final Composite parent) {
-		final Group scopeGroup = new Group(parent, SWT.NONE);
-		scopeGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+	private void changeNatTable(final Composite parent, final int selectionIndex) {
+		if (natTable != null) {
+			natTable.dispose();
+		}
+		if (selectionIndex == 0) {
+			varDeclProvider = new ChangeableListDataProvider<>(
+					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
+					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
+					varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+				@Override
+				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+						final int rowPosition) {
+					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+					switch (getColumns().get(columnPosition)) {
+					case NAME:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					case TYPE:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					default:
+						break;
+					}
+				}
+			};
+			inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
+			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
+					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
+							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
+							VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
+					null, null, false);
+			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
+			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
+			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		} else {
+			attributeProvider = new ChangeableListDataProvider<>(
+					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final DataLayer dataLayer = new DataLayer(attributeProvider);
 
-		scopeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-		scopeGroup.setText(Messages.Scope);
+			final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
+					attributeProvider, () -> null, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
 
-		projectScopeButton = WidgetFactory.button(SWT.RADIO)
-				.text(MessageFormat.format(Messages.Project, project.getName())).create(scopeGroup);
-		projectScopeButton.setSelection(settings.projectScope);
-		projectScopeButton.addListener(SWT.Selection,
-				event -> settings.projectScope = projectScopeButton.getSelection());
-		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(scopeGroup);
-		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
+				@Override
+				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+						final int rowPosition) {
+					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+					switch (getColumns().get(columnPosition)) {
+					case NAME:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					case TYPE:
+						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						break;
+					default:
+						break;
+					}
+				}
+			};
+			dataLayer.setConfigLabelAccumulator(configLabelProvider);
+			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
+					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
+					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
+							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
+							AttributeTableColumn.EDITABLE_COMMENT_VALUE, attributeProvider),
+					new TypeSelectionButton(() -> {
+						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+								.getLastSelectedCellPosition().getRowPosition();
+						if (EcoreUtil.getRootContainer(attributeProvider
+								.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
+							return libElement.getTypeLibrary();
+						}
+						return null;
+					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
+					false);
+			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
+			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+
+			final Predicate<TypeEntry> targetFilter = entry -> {
+				if (entry.getType() instanceof final AttributeDeclaration decl) {
+					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+							.getLastSelectedCellPosition().getRowPosition();
+					if (attributeProvider.getRowObject(relevantRowIndex)
+							.eContainer() instanceof final ConfigurableObject configurableObject) {
+						return decl.isValidObject(configurableObject);
+					}
+				}
+				return true;
+			};
+
+			final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
+			attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
+					new ImportTypeSelectionProposalProvider(() -> {
+						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+								.getLastSelectedCellPosition().getRowPosition();
+						return attributeProvider.getRowObject(relevantRowIndex).eContainer();
+					}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
+					KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
+			natTable.addConfiguration(new AbstractRegistryConfiguration() {
+				@Override
+				public void configureRegistry(final IConfigRegistry configRegistry) {
+					configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
+							DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+				}
+			});
+		}
+
+		natTable.configure();
+		// Scroll ScrolledComposite instead of NatTable
+		natTable.addListener(SWT.MouseWheel, event -> {
+			final ScrolledComposite scrolledParent = ((ScrolledComposite) natTable.getParent().getParent());
+			final Point origin = scrolledParent.getOrigin();
+
+			final int newY = Math.max(0, origin.y - event.count * 20);
+			scrolledParent.setOrigin(origin.x, newY);
+		});
 	}
 
 	private int openUnsavedChangesDialog() {
@@ -375,27 +553,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			return dialog.open();
 		}
 		return 0;
-	}
-
-	private void createSearchButton(final Composite parent) {
-		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
-			final int choice = openUnsavedChangesDialog();
-			if (choice == 1) {
-				return;
-			}
-			performSearch();
-			checkTypeEntriesForDirty();
-		}).create(composite);
-
-		dirtyInformation = WidgetFactory.label(SWT.NONE).create(composite);
-		dirtyInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-
-		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
-		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 	}
 
 	private IEditorPart[] getDirtyEditors() {
@@ -538,127 +695,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 		}
 		return mappedList;
-	}
-
-	private void changeNatTable(final Composite parent, final int selectionIndex) {
-		if (natTable != null) {
-			natTable.dispose();
-		}
-		if (selectionIndex == 0) {
-			varDeclProvider = new ChangeableListDataProvider<>(
-					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
-					varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
-				@Override
-				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
-						final int rowPosition) {
-					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-					switch (getColumns().get(columnPosition)) {
-					case NAME:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					case TYPE:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					default:
-						break;
-					}
-				}
-			};
-			inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
-			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
-							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
-					null, null, false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-		} else {
-			attributeProvider = new ChangeableListDataProvider<>(
-					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final DataLayer dataLayer = new DataLayer(attributeProvider);
-
-			final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
-					attributeProvider, () -> null, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
-				@Override
-				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
-						final int rowPosition) {
-					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-					switch (getColumns().get(columnPosition)) {
-					case NAME:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					case TYPE:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					default:
-						break;
-					}
-				}
-			};
-			dataLayer.setConfigLabelAccumulator(configLabelProvider);
-			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
-							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							AttributeTableColumn.EDITABLE_COMMENT_VALUE, attributeProvider),
-					new TypeSelectionButton(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						if (EcoreUtil.getRootContainer(attributeProvider
-								.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
-							return libElement.getTypeLibrary();
-						}
-						return null;
-					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
-					false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-
-			final Predicate<TypeEntry> targetFilter = entry -> {
-				if (entry.getType() instanceof final AttributeDeclaration decl) {
-					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-							.getLastSelectedCellPosition().getRowPosition();
-					if (attributeProvider.getRowObject(relevantRowIndex)
-							.eContainer() instanceof final ConfigurableObject configurableObject) {
-						return decl.isValidObject(configurableObject);
-					}
-				}
-				return true;
-			};
-
-			final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-			attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-					new ImportTypeSelectionProposalProvider(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						return attributeProvider.getRowObject(relevantRowIndex).eContainer();
-					}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
-					KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
-			natTable.addConfiguration(new AbstractRegistryConfiguration() {
-				@Override
-				public void configureRegistry(final IConfigRegistry configRegistry) {
-					configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
-							DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
-				}
-			});
-		}
-
-		natTable.configure();
-		// Scroll ScrolledComposite instead of NatTable
-		natTable.addListener(SWT.MouseWheel, event -> {
-			final ScrolledComposite scrolledParent = ((ScrolledComposite) natTable.getParent().getParent());
-			final Point origin = scrolledParent.getOrigin();
-
-			final int newY = Math.max(0, origin.y - event.count * 20);
-			scrolledParent.setOrigin(origin.x, newY);
-		});
 	}
 
 	@Override
