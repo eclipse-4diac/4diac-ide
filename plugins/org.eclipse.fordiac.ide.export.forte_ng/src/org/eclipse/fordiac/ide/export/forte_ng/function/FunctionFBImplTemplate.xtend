@@ -33,11 +33,15 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 		«generateUseStringId»
 		
 		«generateFBDefinition»
-		«generateFBInterfaceDefinition»
-		«generateFBInterfaceSpecDefinition»
+		
+		namespace {
+		  «generateFBInterfaceDefinition»
+		
+		  «generateFBInterfaceSpecDefinition»
+		}
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId)«// no newline
+		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«// no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
 			»«generateConnectionInitializer» {

@@ -47,13 +47,14 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		namespace {
 		  «generateTypeHash»
+		
+		  «generateFBInterfaceDefinition»
+		
+		  «generateFBInterfaceSpecDefinition»
 		}
 		
 		«generateFBDefinition»
 		
-		«generateFBInterfaceDefinition»
-		
-		«generateFBInterfaceSpecDefinition»
 		
 		«FBClassName»::«FBClassName»(forte::core::CFBContainer &paContainer,
 		                             const SFBInterfaceSpec &paInterfaceSpec,
@@ -75,24 +76,30 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 
 	def generateFBInterfaceSpecSocket() '''
-		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecSocket = {
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF type.interfaceList.eventInputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventInputTypeIds«ENDIF», «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventOutputTypeIds«ENDIF», «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
-		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
-		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scmAdapterInstances«ELSE»nullptr«ENDIF»
+		const SFBInterfaceSpec cFBInterfaceSpecSocket = {
+		    .mEINames = «IF type.interfaceList.eventInputs.empty»{}«ELSE»cEventInputNames«ENDIF»,
+		    .mEITypeNames = «IF type.interfaceList.eventInputs.empty || type.interfaceList.eventInputs.containsOnlyBasicEventType»{}«ELSE»cEventInputTypeIds«ENDIF»,
+		    .mEONames = «IF type.interfaceList.eventOutputs.empty»{}«ELSE»cEventOutputNames«ENDIF»,
+		    .mEOTypeNames = «IF type.interfaceList.eventOutputs.empty || type.interfaceList.eventOutputs.containsOnlyBasicEventType»{}«ELSE»cEventOutputTypeIds«ENDIF»,
+		    .mDINames = «IF type.interfaceList.inputVars.empty»{}«ELSE»cDataInputNames«ENDIF»,
+		    .mDONames = «IF type.interfaceList.outputVars.empty»{}«ELSE»cDataOutputNames«ENDIF»,
+		    .mDIONames = «IF type.interfaceList.inOutVars.empty»{}«ELSE»cDataInOutNames«ENDIF»,
+		    .mSocketNames = «IF type.interfaceList.sockets.empty»{}«ELSE»cSocketNameIds«ENDIF»,
+		    .mPlugNames = «IF type.interfaceList.plugs.empty»{}«ELSE»cPlugNameIds«ENDIF»,
 		};
 	'''
 
 	def generateFBInterfaceSpecPlug() '''
-		const SFBInterfaceSpec «FBClassName»::scmFBInterfaceSpecPlug = {
-		  «type.interfaceList.eventOutputs.size», «IF type.interfaceList.eventOutputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventOutputNames, «IF type.interfaceList.eventOutputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventOutputTypeIds«ENDIF», «IF hasOutputWith»scmEOWith«ELSE»nullptr«ENDIF», scmEOWithIndexes«ENDIF»,
-		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr, nullptr«ELSE»scmEventInputNames, «IF type.interfaceList.eventInputs.containsOnlyBasicEventType»nullptr«ELSE»scmEventInputTypeIds«ENDIF», «IF hasInputWith»scmEIWith«ELSE»nullptr«ENDIF», scmEIWithIndexes«ENDIF»,
-		  «type.interfaceList.outputVars.size», «IF type.interfaceList.outputVars.empty»nullptr, nullptr«ELSE»scmDataOutputNames, scmDataOutputTypeIds«ENDIF»,
-		  «type.interfaceList.inputVars.size», «IF type.interfaceList.inputVars.empty»nullptr, nullptr«ELSE»scmDataInputNames, scmDataInputTypeIds«ENDIF»,
-		  «type.interfaceList.inOutVars.size», «IF type.interfaceList.inOutVars.empty»nullptr«ELSE»scmDataInOutNames«ENDIF»,
-		  «type.interfaceList.plugs.size + type.interfaceList.sockets.size», «IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»scmAdapterInstances«ELSE»nullptr«ENDIF»
+		const SFBInterfaceSpec cFBInterfaceSpecPlug = {
+		    .mEINames = «IF type.interfaceList.eventOutputs.empty»{}«ELSE»cEventOutputNames«ENDIF»,
+		    .mEITypeNames = «IF type.interfaceList.eventOutputs.empty || type.interfaceList.eventOutputs.containsOnlyBasicEventType»{}«ELSE»cEventOutputTypeIds«ENDIF»,
+		    .mEONames = «IF type.interfaceList.eventInputs.empty»{}«ELSE»cEventInputNames«ENDIF»,
+		    .mEOTypeNames = «IF type.interfaceList.eventInputs.empty || type.interfaceList.eventInputs.containsOnlyBasicEventType»{}«ELSE»cEventInputTypeIds«ENDIF»,
+		    .mDINames = «IF type.interfaceList.outputVars.empty»{}«ELSE»cDataOutputNames«ENDIF»,
+		    .mDONames = «IF type.interfaceList.inputVars.empty»{}«ELSE»cDataInputNames«ENDIF»,
+		    .mDIONames = «IF type.interfaceList.inOutVars.empty»{}«ELSE»cDataInOutNames«ENDIF»,
+		    .mSocketNames = «IF type.interfaceList.sockets.empty»{}«ELSE»cSocketNameIds«ENDIF»,
+		    .mPlugNames = «IF type.interfaceList.plugs.empty»{}«ELSE»cPlugNameIds«ENDIF»,
 		};
 	'''
 
@@ -144,7 +151,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		«plugClassName»::«plugClassName»(CStringDictionary::TStringId paInstanceNameId,
 		                                         forte::core::CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
-		    «FBClassName»(paContainer, «FBClassName»::scmFBInterfaceSpecPlug, paInstanceNameId, paParentAdapterlistID)«//no newline
+		    «FBClassName»(paContainer, cFBInterfaceSpecPlug, paInstanceNameId, paParentAdapterlistID)«//no newline
 		    »«type.interfaceList.eventInputs.generateEventConnectionInitializer»«//no newline
 		    »«type.interfaceList.outputVars.generateDataConnectionPointerInitializer»«//no newline
 		    »«type.interfaceList.inputVars.generateDataConnectionInitializer» {
@@ -155,7 +162,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		«socketClassName»::«socketClassName»(CStringDictionary::TStringId paInstanceNameId,
 		                                         forte::core::CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
-		    «FBClassName»(paContainer, «FBClassName»::scmFBInterfaceSpecSocket, paInstanceNameId, paParentAdapterlistID)«//no newline
+		    «FBClassName»(paContainer, cFBInterfaceSpecSocket, paInstanceNameId, paParentAdapterlistID)«//no newline
 		    »«type.interfaceList.eventOutputs.generateEventConnectionInitializer»«//no newline
 		    »«type.interfaceList.inputVars.generateDataConnectionPointerInitializer»«//no newline
 		    »«type.interfaceList.outputVars.generateDataConnectionInitializer» {

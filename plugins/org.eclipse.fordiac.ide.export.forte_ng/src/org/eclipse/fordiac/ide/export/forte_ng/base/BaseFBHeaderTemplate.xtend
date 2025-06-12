@@ -50,8 +50,6 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		    «generateFBInterfaceSpecDeclaration»
-		
 		    «generateInternalVarDeclaration(type)»
 		    «type.internalVars.generateVariableDeclarations(false)»
 		    «type.internalConstVars.generateVariableDeclarations(true)»

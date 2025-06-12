@@ -60,14 +60,16 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		namespace {
 		  «generateTypeHash»
+		
+		  «generateFBInterfaceDefinition»
+		
+		  «generateFBInterfaceSpecDefinition»
 		}
 		
 		«generateFBDefinition»
-		«generateFBInterfaceDefinition»
-		«generateFBInterfaceSpecDefinition»
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
+		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
 		    »«fbs.generateInternalFBInitializer»«// no newline
 		    »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
 		    »«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
