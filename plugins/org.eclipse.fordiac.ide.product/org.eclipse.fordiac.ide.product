@@ -23,15 +23,13 @@
 -Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true
 -Declipse.e4.inject.javax.warning=false
 -Dorg.slf4j.simpleLogger.defaultLogLevel=off
--Dswt.autoScale=exact
+-Dswt.autoScale=quarter
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
 -Xmn512m
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
-      <vmArgsWin>-Dorg.eclipse.swt.browser.DefaultType=IE
-      </vmArgsWin>
    </launcherArgs>
 
    <windowImages i16="/org.eclipse.fordiac.ide/icons/4diac16.png" i32="/org.eclipse.fordiac.ide/icons/4diac32.png" i48="/org.eclipse.fordiac.ide/icons/4diac48.png" i64="/org.eclipse.fordiac.ide/icons/4diac64.png" i128="/org.eclipse.fordiac.ide/icons/4diac128.png" i256="/org.eclipse.fordiac.ide/icons/4diac256.png"/>
