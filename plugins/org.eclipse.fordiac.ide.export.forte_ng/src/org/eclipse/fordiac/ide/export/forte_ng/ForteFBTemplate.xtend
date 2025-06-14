@@ -141,23 +141,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		};
 	'''
 
-	def protected generateInternalVarDeclaration(BaseFBType baseFBType) '''
-		«IF !baseFBType.internalVars.isEmpty»
-			static const CStringDictionary::TStringId scmInternalsNames[];
-			static const CStringDictionary::TStringId scmInternalsTypeIds[];
-			static const SInternalVarsInformation scmInternalVars;
-			
-		«ENDIF»
-	'''
-
-	def protected generateInternalVarDefinition(BaseFBType baseFBType) '''
-		«IF !baseFBType.internalVars.isEmpty»
-			const CStringDictionary::TStringId «FBClassName»::scmInternalsNames[] = {«baseFBType.internalVars.FORTENameList»};
-			const CStringDictionary::TStringId «FBClassName»::scmInternalsTypeIds[] = {«baseFBType.internalVars.FORTETypeList»};
-			const SInternalVarsInformation «FBClassName»::scmInternalVars = {«baseFBType.internalVars.size», scmInternalsNames, scmInternalsTypeIds};
-		«ENDIF»
-	'''
-
 	def protected generateReadInputDataDeclaration() '''
 		void readInputData(TEventID paEIID) override;
 	'''

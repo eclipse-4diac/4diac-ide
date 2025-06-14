@@ -141,7 +141,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»), TypeHash)
 						
 						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, nullptr) {
+						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
 						}
 						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::setInitialValues() {
