@@ -53,20 +53,16 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		  «generateFBInterfaceDefinition»
 		  «generateFBInterfaceSpecDefinition»
+		  «generateInternalVarDefinition»
 		}
 		
 		«generateFBDefinition»
-		
-		«IF !type.internalVars.isEmpty»
-			«type.generateInternalVarDefinition»
-			
-		«ENDIF»
 		«IF !type.internalConstVars.isEmpty»
-			«type.internalConstVars.generateVariableDefinitions(true)»
-			
+			«type.internalConstVars.generateVariableDefinitions(true)»			
 		«ENDIF»
+		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
 		    			»«type.internalFbs.generateInternalFBInitializer»«// no newline
 		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
@@ -79,6 +75,13 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
 		«generateAlgorithms»
 		«generateMethods»
+	'''
+
+	def generateInternalVarDefinition() '''
+		«IF !type.internalVars.isEmpty»
+			
+			const auto cInternalsNames = std::array{«type.internalVars.FORTENameList»};
+		«ENDIF»
 	'''
 
 	def generateChangeFBExecutionState() //
