@@ -1,5 +1,5 @@
 /**********************************************************************************
- * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University Linz, 
+ * Copyright (c) 2019, 2025 fortiss GmbH, Johannes Kepler University Linz, 
  *                          Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -24,12 +24,9 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
@@ -64,12 +61,14 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		  «generateFBInterfaceDefinition»
 		
 		  «generateFBInterfaceSpecDefinition»
+		
+		  «generateFBNetwork»
 		}
 		
 		«generateFBDefinition»
 		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, scmFBNData)«//no newline
+		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, cFBNData)«//no newline
 		    »«fbs.generateInternalFBInitializer»«// no newline
 		    »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
 		    »«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
@@ -78,7 +77,6 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateSetFBNetworkInitialValuesDefinition»
-		«generateFBNetwork»
 		«generateInterfaceDefinitions»
 	'''
 
@@ -90,79 +88,46 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		«ENDIF»
 	'''
 
-	def protected generateFBNetwork() '''
-		«IF !fbs.empty»
-			const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
-			  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.generateTypeSpec»}«ENDFOR»
-			};
-		«ENDIF»
-		
+	def private generateFBNetwork() '''
 		«IF !type.FBNetwork.eventConnections.empty»
-			«type.FBNetwork.eventConnections.generateEventConnections»
+			«type.FBNetwork.eventConnections.generateConnections("cEventConnections")»
 			
 		«ENDIF»
 		«IF !type.FBNetwork.dataConnections.empty»
-			«type.FBNetwork.dataConnections.generateDataConnections»
+			«type.FBNetwork.dataConnections.generateConnections("cDataConnections")»
 			
 		«ENDIF»
 		«IF !type.FBNetwork.adapterConnections.empty»
-			«type.FBNetwork.adapterConnections.generateAdapterConnections»
+			«type.FBNetwork.adapterConnections.generateConnections("cAdapterConnections")»
 			
 		«ENDIF»
 		«generateFBNDataStruct()»
 	'''
 
-	protected def generateFBNDataStruct() '''
+	def private generateFBNDataStruct() '''
 		const SCFB_FBNData «FBClassName»::scmFBNData = {
-		  «fbs.size», «IF !fbs.isEmpty»scmInternalFBs«ELSE»nullptr«ENDIF»,
-		  «type.FBNetwork.eventConnections.size», «IF !type.FBNetwork.eventConnections.empty»scmEventConnections«ELSE»nullptr«ENDIF»,
-		  «type.FBNetwork.dataConnections.size», «IF !type.FBNetwork.dataConnections.empty»scmDataConnections«ELSE»nullptr«ENDIF»,
-		  «type.FBNetwork.adapterConnections.size», «IF !type.FBNetwork.adapterConnections.empty»scmAdapterConnections«ELSE»nullptr«ENDIF»
+		  .mEventConnections = «IF !type.FBNetwork.eventConnections.empty»cEventConnections«ELSE»{}«ENDIF»,
+		  .mDataConnections = «IF !type.FBNetwork.dataConnections.empty»cDataConnections«ELSE»{}«ENDIF»,
+		  .mAdapterConnections = «IF !type.FBNetwork.adapterConnections.empty»cAdapterConnections«ELSE»{}«ENDIF»,
 		};
-		
 	'''
 
-	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
+	def private generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
 		return if (type.FBNetwork.networkElements.contains(elem))
-			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEStringId», «iface.name.FORTEStringId»), «elem.fbId»'''
+			'''«elem.name.FORTEStringId», «iface.name.FORTEStringId»'''
 		else
-			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEStringId»), -1'''
+			'''CStringDictionary::scmInvalidStringId, «iface.name.FORTEStringId»'''
 	}
 
-	def protected dispatch fbId(FBNetworkElement elem) '''«fbs.indexOf(elem)»'''
-
-	def protected dispatch fbId(AdapterFB elem) //
-	'''CCompositeFB::scmAdapterMarker | «IF elem.isPlug»«getPlugIndex(elem)»«ELSE»«type.interfaceList.sockets.indexOf(elem.adapterDecl)»«ENDIF»'''
-
-	def protected getPlugIndex(AdapterFB elem) {
-		type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(elem.adapterDecl)
-	}
-
-	def protected generateEventConnections(EList<EventConnection> connections) '''
-		const SCFB_FBConnectionData «FBClassName»::scmEventConnections[] = {
+	def private generateConnections(EList<? extends Connection> connections, String listName) '''
+		const auto «listName» = std::to_array<SCFB_FBConnectionData>({
 		  «FOR conn : connections»
 		  	«conn.generateConnectionEntry»
 		  «ENDFOR»
-		};
+		});
 	'''
 
-	def protected generateDataConnections(EList<DataConnection> connections) '''
-		const SCFB_FBConnectionData «FBClassName»::scmDataConnections[] = {
-		  «FOR conn : connections»
-		  	«conn.generateConnectionEntry»
-		  «ENDFOR»
-		};
-	'''
-
-	def protected generateAdapterConnections(EList<AdapterConnection> connections) '''
-		const SCFB_FBConnectionData «FBClassName»::scmAdapterConnections[] = {
-		  «FOR conn : connections»
-		  	«conn.generateConnectionEntry»
-		  «ENDFOR»
-		};
-	'''
-
-	def protected generateConnectionEntry(Connection con) //
+	def private generateConnectionEntry(Connection con) //
 	'''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},'''
 
 	override protected generateConnectionInitializer() //

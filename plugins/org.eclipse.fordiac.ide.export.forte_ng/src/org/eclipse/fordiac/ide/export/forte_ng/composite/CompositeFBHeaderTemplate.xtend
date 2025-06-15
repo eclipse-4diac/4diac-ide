@@ -49,8 +49,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		    «generateFBNetwork»
-		
 		    «fbs.generateInternalFBDeclarations»
 		
 		    «generateReadInputDataDeclaration»
@@ -78,22 +76,6 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateDependencyInclude("core/cfb.h")»
 		«generateDependencyInclude("core/typelib.h")»
 		«super.generateHeaderIncludes»
-	'''
-
-	def protected generateFBNetwork() '''
-		«IF !fbs.empty»
-			static const SCFB_FBInstanceData scmInternalFBs[];
-		«ENDIF»
-		«IF !type.FBNetwork.eventConnections.empty»
-			static const SCFB_FBConnectionData scmEventConnections[];
-		«ENDIF»
-		«IF !type.FBNetwork.dataConnections.empty»
-			static const SCFB_FBConnectionData scmDataConnections[];
-		«ENDIF»
-		«IF !type.FBNetwork.adapterConnections.empty»
-			static const SCFB_FBConnectionData scmAdapterConnections[];
-		«ENDIF»
-		static const SCFB_FBNData scmFBNData;
 	'''
 
 	override generateInterfaceVariableAndConnectionDeclarations() '''
