@@ -147,8 +147,9 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	private boolean isTypeEditable() {
 		final ConfigurableObject type = getType();
 		return !(type instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance()
-				|| type instanceof final IInterfaceElement ie && ie.getFBNetworkElement().isContainedInTypedInstance()
-				|| type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn));
+				|| (type instanceof final IInterfaceElement ie && ie.getFBNetworkElement() != null
+						&& ie.getFBNetworkElement().isContainedInTypedInstance())
+				|| (type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn)));
 	}
 
 	private Attribute getNeighbourListItem(final Attribute ref, final boolean above) {
