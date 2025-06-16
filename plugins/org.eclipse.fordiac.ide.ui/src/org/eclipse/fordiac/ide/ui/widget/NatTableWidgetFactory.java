@@ -62,6 +62,8 @@ import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
+import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
@@ -168,6 +170,14 @@ public final class NatTableWidgetFactory {
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
 			final ICellEditor proposalCellEditor, final I4diacNatTableUtil section, final boolean isInput) {
+		return createRowNatTable(parent, bodyDataLayer, columnHeaderProvider, editableRule, proposalCellEditor, section,
+				null, isInput);
+	}
+
+	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
+			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
+			final ICellEditor proposalCellEditor, final I4diacNatTableUtil section, final ISortModel sortModel,
+			final boolean isInput) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -192,6 +202,13 @@ public final class NatTableWidgetFactory {
 		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
 				selectionLayer);
 
+		final ILayer columnHeader;
+		if (sortModel != null && bodyDataLayer.getDataProvider() instanceof final ListDataProvider<?> dataProvider) {
+			columnHeader = createSortHeaderLayer(columnHeaderLayer, dataProvider, sortModel);
+		} else {
+			columnHeader = columnHeaderLayer;
+		}
+
 		final RowHeaderDataProvider rowHeaderProvider = new RowHeaderDataProvider(bodyDataLayer.getDataProvider(),
 				isInput);
 		selectionLayer.registerCommandHandler(
@@ -208,9 +225,9 @@ public final class NatTableWidgetFactory {
 
 		final DataLayer cornerDataLayer = new DataLayer(
 				new DefaultCornerDataProvider(columnHeaderProvider, rowHeaderProvider));
-		final CornerLayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeaderLayer);
+		final CornerLayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeader);
 
-		final GridLayer gridLayer = new GridLayer(viewportLayer, columnHeaderLayer, rowHeaderLayer, cornerLayer, false);
+		final GridLayer gridLayer = new GridLayer(viewportLayer, columnHeader, rowHeaderLayer, cornerLayer, false);
 		gridLayer.addConfiguration(new DefaultGridLayerConfiguration(gridLayer) {
 			@Override
 			protected void addEditingUIConfig() {
@@ -241,7 +258,6 @@ public final class NatTableWidgetFactory {
 		});
 
 		return table;
-
 	}
 
 	public static <T> NatTable createTreeNatTable(final Composite parent, final DataLayer bodyDataLayer,
@@ -322,6 +338,11 @@ public final class NatTableWidgetFactory {
 			}
 		}
 		return null;
+	}
+
+	private static <T> SortHeaderLayer<T> createSortHeaderLayer(final ColumnHeaderLayer columnHeaderLayer,
+			final ListDataProvider<T> bodyDataProvider, final ISortModel sortModel) {
+		return new SortHeaderLayer<>(columnHeaderLayer, sortModel, false);
 	}
 
 	private static void setColumnWidths(final DataLayer dataLayer) {
