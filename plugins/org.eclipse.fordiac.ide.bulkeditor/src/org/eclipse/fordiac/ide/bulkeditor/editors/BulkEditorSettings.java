@@ -84,7 +84,7 @@ public class BulkEditorSettings {
 		final IMemento childMemento = memento.getChild(TAG_BULKEDITOR_SETTINGS);
 
 		settings.subSettingsMap.values().forEach(subSetting -> subSetting.changeFromMemento(childMemento));
-		settings.modeSelection = Optional.ofNullable(memento.getInteger(MODE_TAG)).orElse(Integer.valueOf(0))
+		settings.modeSelection = Optional.ofNullable(childMemento.getInteger(MODE_TAG)).orElse(Integer.valueOf(0))
 				.intValue();
 		// !Boolean.FALSE.equals for null check with true as fallback value
 		settings.fbSubappTypes = !Boolean.FALSE.equals(childMemento.getBoolean(FB_TYPES_TAG));
