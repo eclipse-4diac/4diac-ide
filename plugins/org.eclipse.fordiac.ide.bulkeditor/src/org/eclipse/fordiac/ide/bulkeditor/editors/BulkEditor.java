@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
@@ -85,6 +86,7 @@ import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
+import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
@@ -151,6 +153,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	// NatTable
 	private NatTable natTable;
+	private SorterModel<Attribute> attributeSorterModel;
+	private SorterModel<VarDeclaration> varDeclarationSorterModel;
 	private ChangeableListDataProvider<Attribute> attributeProvider;
 	private ChangeableListDataProvider<VarDeclaration> varDeclProvider;
 
@@ -428,8 +432,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			natTable.dispose();
 		}
 		if (selectionIndex == 0) {
-			varDeclProvider = new ChangeableListDataProvider<>(
-					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final var accessor = new VarDeclarationColumnAccessor(this,
+					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			varDeclProvider = new ChangeableListDataProvider<>(accessor);
+			this.varDeclarationSorterModel = new SorterModel<>(accessor);
 			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
 					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
 			final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
@@ -457,13 +463,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
 							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
 							VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
-					null, null, false);
+					null, null, varDeclarationSorterModel, false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
 			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
 			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		} else {
-			attributeProvider = new ChangeableListDataProvider<>(
-					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
+			final var accessor = new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+			attributeProvider = new ChangeableListDataProvider<>(accessor);
+			this.attributeSorterModel = new SorterModel<>(accessor);
 			final DataLayer dataLayer = new DataLayer(attributeProvider);
 
 			final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
@@ -501,7 +508,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 						}
 						return null;
 					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
-					false);
+					attributeSorterModel, false);
 			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
 			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 
@@ -534,6 +541,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			});
 		}
 
+		natTable.addConfiguration(new SingleClickSortConfiguration());
 		natTable.configure();
 		// Scroll ScrolledComposite instead of NatTable
 		natTable.addListener(SWT.MouseWheel, event -> {
@@ -644,10 +652,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		if (modeSelectionDropDown.getSelectionIndex() == 0
 				&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
-			varDeclProvider.setInput(mapList(mappedList, VarDeclaration.class));
+			final var list = mapList(mappedList, VarDeclaration.class);
+			varDeclProvider.setInput(list);
+			varDeclarationSorterModel.setSortingList(list);
 		} else if (modeSelectionDropDown.getSelectionIndex() == 1
 				&& (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
-			attributeProvider.setInput(mapList(mappedList, Attribute.class));
+			final var list = mapList(mappedList, Attribute.class);
+			attributeProvider.setInput(list);
+			attributeSorterModel.setSortingList(list);
 		}
 		natTable.refresh();
 		commandStack.flush();
