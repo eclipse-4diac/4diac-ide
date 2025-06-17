@@ -23,6 +23,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -64,11 +65,14 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
+import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.library.preferences.LibraryPreferenceConstants;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.preferences.PreferenceProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -268,7 +272,11 @@ public enum LibraryManager {
 		try (InputStream inputStream = Files.newInputStream(path);
 				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 			ZipEntry entry = zipInputStream.getNextEntry();
-			folderName = entry != null ? entry.getName() : ""; //$NON-NLS-1$
+			folderName = ""; //$NON-NLS-1$
+			if (entry != null) {
+				folderName = entry.getName();
+				deleteLibFolder(newPath(libraryPath, entry));
+			}
 			while (entry != null) {
 				final Path newFile = newPath(libraryPath, entry);
 				if (entry.isDirectory()) {
@@ -307,6 +315,27 @@ public enum LibraryManager {
 		return importURI;
 	}
 
+	private static void deleteLibFolder(final Path folder) throws IOException {
+		if (Files.exists(folder)) {
+			Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+					setPathEditable(file);
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+					setPathEditable(dir);
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+
+			});
+		}
+	}
+
 	/**
 	 * Create new {@link Path} for {@link ZipEntry} and ensure it stays in
 	 * {@code destinationDir}
@@ -325,6 +354,11 @@ public enum LibraryManager {
 		return destPath;
 	}
 
+	/**
+	 * Sets a specific path read only
+	 *
+	 * @param path Path to set read only
+	 */
 	private static void setPathReadOnly(final Path path) {
 		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
 		if (dosView != null) {
@@ -341,6 +375,34 @@ public enum LibraryManager {
 				permissions.remove(PosixFilePermission.OWNER_WRITE);
 				permissions.remove(PosixFilePermission.GROUP_WRITE);
 				permissions.remove(PosixFilePermission.OTHERS_WRITE);
+				posixView.setPermissions(permissions);
+			} catch (final IOException e) {
+				// empty
+			}
+		}
+	}
+
+	/**
+	 * Sets a specific path editable
+	 *
+	 * @param path Path to set editable
+	 */
+	private static void setPathEditable(final Path path) {
+		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
+		if (dosView != null) {
+			try {
+				dosView.setReadOnly(false);
+			} catch (final IOException e) {
+				// empty
+			}
+		}
+		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
+		if (posixView != null) {
+			try {
+				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
+				permissions.add(PosixFilePermission.OWNER_WRITE);
+				permissions.add(PosixFilePermission.GROUP_WRITE);
+				permissions.add(PosixFilePermission.OTHERS_WRITE);
 				posixView.setPermissions(permissions);
 			} catch (final IOException e) {
 				// empty
@@ -529,7 +591,8 @@ public enum LibraryManager {
 	 *
 	 * @param symbolicName symbolic name of library
 	 * @param versionRange version range of library
-	 * @param preferred    preferred version of library (ignored if {@code null})
+	 * @param preferred    preferred version of library (ignored if {@code null} or
+	 *                     outside version range)
 	 * @param project      project to import the library into after extracting
 	 *                     (irrelevant if {@code autoImport} is false)
 	 * @param autoImport   if library should be automatically imported into project
@@ -551,7 +614,7 @@ public enum LibraryManager {
 		DownloadResult<Path> dlResult;
 		final StringBuilder errors = new StringBuilder();
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
-
+		final Version pref = (preferred != null && range.includes(preferred)) ? preferred : null;
 		progress.setWorkRemaining(downloaders.size());
 		for (final var downloader : downloaders) {
 			if (!downloader.isActive()) {
@@ -559,8 +622,7 @@ public enum LibraryManager {
 				continue;
 			}
 			try {
-				dlResult = downloader.downloadLibrary(symbolicName, range, preferred, progress.split(1));
-
+				dlResult = downloader.downloadLibrary(symbolicName, range, pref, progress.split(1));
 				if (dlResult.status() == DownloadResult.Status.OK) {
 					return new DownloadResult<>(extractLibrary(dlResult.result(), project, autoImport, resolve));
 				}
@@ -659,7 +721,37 @@ public enum LibraryManager {
 		importDependencyNodes(project, deps, res, preferred, linked, projectManifest, markerList, progress.split(15));
 
 		// remove still linked libraries
-		cleanupLinks(linked, progress.split(5));
+		cleanupLinks(linked, progress.split(2));
+
+		if (PreferenceProvider.getBoolean(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID,
+				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
+			// force load explicitly defined dependencies
+			final List<Required> explicitDeps = projectManifest.getDependencies().getRequired().stream()
+					.filter(r -> !r.getVersion().contains("-") && !deps.get(r.getSymbolicName()).isValid()).toList(); //$NON-NLS-1$
+			progress.setWorkRemaining(explicitDeps.size());
+			for (final Required req : explicitDeps) {
+				linked.remove(req.getSymbolicName());
+				final Version version = Version.parseVersion(req.getVersion());
+				LibraryRecord lib = getLibraryRecord(stdlibraries, req.getSymbolicName(), version);
+				// check if library is already downloaded
+				if (lib != null) {
+					importLibrary(project, lib.uri(), false, false);
+					continue;
+				}
+				lib = getLibraryRecord(libraries, req.getSymbolicName(), version);
+				if (lib != null) {
+					importLibrary(project, lib.uri(), false, false);
+					continue;
+				}
+				// download library
+				libraryDownload(req.getSymbolicName(),
+						new org.eclipse.osgi.service.resolver.VersionRange(version, true, version, true), null, project,
+						true, false, progress.split(1));
+			}
+
+		} else {
+			progress.worked(3);
+		}
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
@@ -738,7 +830,6 @@ public enum LibraryManager {
 					linked.remove(rnode.getSymbolicName());
 				} else {
 					markerList.add(createDependencyMarker(projectManifest, rnode, dnode));
-
 				}
 			} else if (dnode.isRangeEmpty()) {
 				markerList.add(createDependencyMarker(projectManifest, dnode));
