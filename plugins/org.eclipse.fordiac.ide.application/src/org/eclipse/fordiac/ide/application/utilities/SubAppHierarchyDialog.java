@@ -47,9 +47,15 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.widgets.WidgetFactory;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class SubAppHierarchyDialog {
@@ -70,7 +76,21 @@ public class SubAppHierarchyDialog {
 				new TreeNodeContentProvider()) {
 			@Override
 			protected TreeViewer createTreeViewer(final Composite parent) {
+				final Composite buttonsComposite = new Composite(parent, SWT.NONE);
+				buttonsComposite.setLayout(new GridLayout(2, false));
 				final TreeViewer viewer = super.createTreeViewer(parent);
+
+				final Button expandAll = WidgetFactory.button(SWT.NONE).image(FordiacImage.ICON_EXPAND_ALL.getImage())
+						.create(buttonsComposite);
+				expandAll.addListener(SWT.Selection, event -> {
+					viewer.expandAll();
+				});
+				final Button collapseAll = WidgetFactory.button(SWT.NONE)
+						.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL))
+						.create(buttonsComposite);
+				collapseAll.addListener(SWT.Selection, event -> {
+					viewer.collapseAll();
+				});
 				return viewer;
 			}
 		};
