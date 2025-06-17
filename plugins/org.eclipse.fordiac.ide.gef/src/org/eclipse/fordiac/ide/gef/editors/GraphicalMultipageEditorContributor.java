@@ -37,13 +37,6 @@ public class GraphicalMultipageEditorContributor extends MultiPageEditorActionBa
 	private final List<String> globalActionKeys = new ArrayList<>();
 
 	@Override
-	public void setActiveEditor(final IEditorPart editor) {
-		setGlobalActionHandler(Adapters.adapt(editor, ActionRegistry.class));
-		super.setActiveEditor(editor);
-
-	}
-
-	@Override
 	public void setActivePage(final IEditorPart activeEditor) {
 		setGlobalActionHandler(Adapters.adapt(activeEditor, ActionRegistry.class));
 	}
