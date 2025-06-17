@@ -18,12 +18,15 @@
             commandId="org.eclipse.fordiac.ide.bulkeditor.editors.openEditor"
             label="Open in Bulk Editor">
             <visibleWhen>
-                <with variable="selection">
-                    <iterate operator="or">
-                        <instanceof value="org.eclipse.core.resources.IProject"/>
-                    </iterate>
-                </with>
-            </visibleWhen>
+			  	<with variable="selection">
+			    	<iterate operator="and">
+			      		<or>
+			        		<instanceof value="org.eclipse.core.resources.IProject"/>
+			        		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp"/>
+			      		</or>
+			    	</iterate>
+				</with>
+			</visibleWhen>
         </command>
     </menuContribution>
 	</extension>
