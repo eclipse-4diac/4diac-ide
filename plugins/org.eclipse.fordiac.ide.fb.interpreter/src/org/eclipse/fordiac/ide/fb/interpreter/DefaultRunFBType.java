@@ -213,7 +213,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final Optional<Evaluator> algoEval = eval.getChildren().entrySet().stream()
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue);
 		if (algoEval.isPresent()) {
-			executeEvaluator(algoEval.get(), varDecls, eventOccurrence, algorithm.getName());
+			executeEvaluator(algoEval.get(), varDecls, basefbtype, eventOccurrence, algorithm.getName());
 		}
 	}
 
@@ -232,28 +232,19 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			eval = EvaluatorFactory.createEvaluator(functionFBType, FunctionFBType.class, fbVar, List.of(), null);
 			evaluatorCache.put(getCacheKey(eventOccurrence), eval);
 		}
-		executeEvaluator(eval, varDecls, eventOccurrence, functionFBType.getName());
+		executeEvaluator(eval, varDecls, functionFBType, eventOccurrence, functionFBType.getName());
 	}
 
-	private static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls,
+	private static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls, final FBType type,
 			final EventOccurrence eventOccurrence, final String name) {
+		setEvaluatorInputState(eval, type.getInterfaceList().getInputVars());
 		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
 			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
 			tpe.setMonotonicClock(clock);
 			tpe.execute(() -> {
 				try {
 					eval.evaluate();
-					// set varDecls based on evaluator result
-					for (final Variable<?> var : eval.getVariables().values()) {
-						if (var.getValue() instanceof final FBValue fbval) {
-							for (final VarDeclaration varDecl : varDecls) {
-								final var member = fbval.getMembers().get(varDecl.getName());
-								if (member != null) {
-									varDecl.getValue().setValue(member.getValue().toString());
-								}
-							}
-						}
-					}
+					getEvaluatorOutputState(eval, varDecls);
 				} catch (final EvaluatorException e) {
 					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
 				} catch (final InterruptedException e) {
@@ -261,6 +252,30 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 					Thread.currentThread().interrupt();
 				}
 			});
+		}
+	}
+
+	private static void setEvaluatorInputState(final Evaluator eval, final List<VarDeclaration> inputVars) {
+		if (!(eval.getContext().getValue() instanceof final FBValue fbval)) {
+			return;
+		}
+		for (final VarDeclaration varDecl : inputVars) {
+			final var member = fbval.getMembers().get(varDecl.getName());
+			if (member != null) {
+				member.setValue(varDecl.getValue().getValue());
+			}
+		}
+	}
+
+	private static void getEvaluatorOutputState(final Evaluator eval, final List<VarDeclaration> outputVars) {
+		if (!(eval.getContext().getValue() instanceof final FBValue fbval)) {
+			return;
+		}
+		for (final VarDeclaration varDecl : outputVars) {
+			final var member = fbval.getMembers().get(varDecl.getName());
+			if (member != null) {
+				varDecl.getValue().setValue(member.getValue().toString());
+			}
 		}
 	}
 
