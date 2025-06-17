@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -59,8 +60,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
-
-import com.google.common.base.Objects;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
@@ -380,7 +379,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
 
-		if (!Objects.equal(newFile, entry.getFile())) {
+		if (!Objects.equals(newFile, entry.getFile())) {
 			final TypeLibrary typeLibrary = entry.getTypeLibrary();
 			if (typeLibrary != null) {
 				typeLibrary.removeTypeEntry(entry);
@@ -407,7 +406,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
 
-		if (!Objects.equal(newFile, entry.getFile())) {
+		if (!Objects.equals(newFile, entry.getFile())) {
 			final TypeLibrary typeLibrary = entry.getTypeLibrary();
 			if (typeLibrary != null) {
 				typeLibrary.removeTypeEntry(entry);

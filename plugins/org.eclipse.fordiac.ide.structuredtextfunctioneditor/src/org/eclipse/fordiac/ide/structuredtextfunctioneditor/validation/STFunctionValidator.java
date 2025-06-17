@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -32,7 +33,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.xtext.validation.Check;
 
-import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -85,7 +85,7 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 				&& resource.getInternalLibraryElement() instanceof final FunctionFBType fbType
 				&& function.eContainer() instanceof final STFunctionSource source
 				&& source.getFunctions().indexOf(function) == 0
-				&& !Objects.equal(fbType.getName(), function.getName())) {
+				&& !Objects.equals(fbType.getName(), function.getName())) {
 			error(MessageFormat.format(Messages.STFunctionValidator_FunctionNameMismatch, function.getName(),
 					fbType.getName()), LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, FUNCTION_NAME_MISMATCH,
 					function.getName(), fbType.getName());
