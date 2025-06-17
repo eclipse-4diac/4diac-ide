@@ -129,6 +129,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (input instanceof final BulkEditorInput bulkEditorInput) {
 			this.settings = bulkEditorInput.getSettings();
 			project = bulkEditorInput.getProject();
+			selectedSubApps = bulkEditorInput.getInitialSelectedSubApps();
 			setPartName(getPartName() + ": " + project.getName()); //$NON-NLS-1$
 		}
 	}
@@ -410,6 +411,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		createSubappHierarchyText();
 		subappHierarchyScopeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
+		createSubappHierarchyText();
 	}
 
 	private void openScopeDialog() {
