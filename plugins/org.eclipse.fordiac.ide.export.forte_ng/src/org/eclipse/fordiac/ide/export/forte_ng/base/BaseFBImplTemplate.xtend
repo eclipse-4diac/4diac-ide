@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
@@ -93,7 +95,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 
 	def protected generateSendEvent(Event event) {
 		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(scm«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
+			return '''sendAdapterEvent(*«(event.FBNetworkElement as AdapterFB).generateName», FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
 		}
 		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}

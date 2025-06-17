@@ -114,7 +114,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	def protected generateTransitionEvent(Event event) {
 		var fbNetworkElement = event.FBNetworkElement
 		if (fbNetworkElement instanceof AdapterFB) {
-			return '''«fbNetworkElement.generateName».«event.generateName»()'''
+			return '''«fbNetworkElement.generateName»->«event.generateName»()'''
 		}
 		event.generateEventID
 	}

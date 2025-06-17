@@ -259,7 +259,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) {
 		switch (expr.receiver.resultType) {
-			AdapterType: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
+			AdapterType,
 			FBType: '''«expr.receiver.generateExpression»->«expr.member.generateExpression»'''
 			default: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
 		}
