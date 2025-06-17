@@ -105,7 +105,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def private generateFBNDataStruct() '''
-		const SCFB_FBNData «FBClassName»::scmFBNData = {
+		const SCFB_FBNData cFBNData = {
 		  .mEventConnections = «IF !type.FBNetwork.eventConnections.empty»cEventConnections«ELSE»{}«ENDIF»,
 		  .mDataConnections = «IF !type.FBNetwork.dataConnections.empty»cDataConnections«ELSE»{}«ENDIF»,
 		  .mAdapterConnections = «IF !type.FBNetwork.adapterConnections.empty»cAdapterConnections«ELSE»{}«ENDIF»,
