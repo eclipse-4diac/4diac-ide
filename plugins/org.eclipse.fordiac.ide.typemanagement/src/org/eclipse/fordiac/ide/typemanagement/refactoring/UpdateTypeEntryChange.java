@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -36,8 +37,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
-
-import com.google.common.base.Objects;
 
 public class UpdateTypeEntryChange extends Change {
 
@@ -111,7 +110,7 @@ public class UpdateTypeEntryChange extends Change {
 	private static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
 		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
 
-		if (!Objects.equal(newFile, entry.getFile())) {
+		if (!Objects.equals(newFile, entry.getFile())) {
 			final TypeLibrary typeLibrary = entry.getTypeLibrary();
 			if (typeLibrary != null) {
 				typeLibrary.removeTypeEntry(entry);

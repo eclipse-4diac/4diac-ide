@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.debug;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -43,8 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
-
-import com.google.common.base.Objects;
 
 /**
  * A common debugger implementation for evaluators based on the Eclipse
@@ -140,7 +139,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			final int lineNumber = getLineNumber(context);
 			if (breakpoint instanceof final EvaluatorLineBreakpoint evaluatorLineBreakpoint
 					&& evaluatorLineBreakpoint.isApplicable(frame.getEvaluator())
-					&& Objects.equal(breakpoint.getMarker().getResource(), resource)
+					&& Objects.equals(breakpoint.getMarker().getResource(), resource)
 					&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
 				if (evaluatorLineBreakpoint.isConditionEnabled()) {
 					return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);

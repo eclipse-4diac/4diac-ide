@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.validation;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.Messages;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
@@ -31,7 +32,6 @@ import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
 
-import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -74,7 +74,7 @@ public class GlobalConstantsValidator extends AbstractGlobalConstantsValidator {
 	public void checkGlobalConstantsMatchesTypeName(final STGlobalConstants globalConstants) {
 		if (globalConstants.eResource() instanceof final GlobalConstantsResource resource
 				&& resource.getInternalLibraryElement() instanceof final GlobalConstants globalConstantsType
-				&& !Objects.equal(globalConstantsType.getName(), globalConstants.getName())) {
+				&& !Objects.equals(globalConstantsType.getName(), globalConstants.getName())) {
 			error(MessageFormat.format(Messages.GlobalConstValidator_GlobalConstantsNameMismatch,
 					globalConstants.getName(), globalConstantsType.getName()),
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, GLOBAL_CONSTANTS_NAME_MISMATCH,
