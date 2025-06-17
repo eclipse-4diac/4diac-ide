@@ -950,22 +950,6 @@
 		 contextId="org.eclipse.fordiac.ide.fbnetwork"
 		 schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
 		 sequence="M2+DEL"/>
-	<key commandId="org.eclipse.fordiac.ide.application.commands.followRightConnection"
-		 contextId="org.eclipse.fordiac.ide.fbnetwork"
-	     schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-	     sequence="M1+ARROW_RIGHT"/>	
-    <key contextId="org.eclipse.fordiac.ide.fbnetwork"
-	     commandId="org.eclipse.fordiac.ide.application.commands.followLeftConnection"
-	     schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-	     sequence="M1+ARROW_LEFT"/>
-	<key commandId="org.eclipse.fordiac.ide.application.commands.gotopinabove"
-         contextId="org.eclipse.fordiac.ide.fbnetwork"
-		 schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         sequence="CTRL+ARROW_UP"/>
-    <key commandId="org.eclipse.fordiac.ide.application.commands.gotopinunder"
-         contextId="org.eclipse.fordiac.ide.fbnetwork"
-		 schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-         sequence="CTRL+ARROW_DOWN"/>
     <key
           commandId="org.eclipse.fordiac.ide.application.commands.toggleBoolValue"
           contextId="org.eclipse.fordiac.ide.fbnetwork"
