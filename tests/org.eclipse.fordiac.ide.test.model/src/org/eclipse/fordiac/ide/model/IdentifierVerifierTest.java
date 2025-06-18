@@ -34,7 +34,7 @@ class IdentifierVerifierTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "", "TEST$", "Test\u00c4", "4test", "__test", "test__name", "test_", "test name",
-			"test\\nname", "ANY" })
+			"test\\nname", "ANY", "test.name" })
 	void testVerifyInvalidIdentifier(final String identifier) {
 		assertTrue(IdentifierVerifier.verifyIdentifier(identifier.translateEscapes()).isPresent());
 	}
