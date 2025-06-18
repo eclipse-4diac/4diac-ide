@@ -54,6 +54,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	private final String name;
 	private final URI elementURI;
 	private final Class<T> elementClass;
+	private final TypeEntry typeEntry;
 
 	private IEditorPart editor;
 
@@ -79,6 +80,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		this.name = Objects.requireNonNull(name);
 		this.elementURI = Objects.requireNonNull(elementURI);
 		this.elementClass = Objects.requireNonNull(elementClass);
+		this.typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
 	}
 
 	/**
@@ -208,7 +210,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 		if (editor != null) {
 			return Adapters.adapt(editor, LibraryElement.class);
 		}
-		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
 		if (typeEntry != null) {
 			return editable ? typeEntry.copyType() : typeEntry.getType();
 		}
@@ -223,7 +224,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 * @throws CoreException if there was a problem saving the library element
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
-		libraryElement.getTypeEntry().save(libraryElement, pm);
+		if (typeEntry != null) {
+			typeEntry.save(libraryElement, pm);
+		}
 		if (editor != null) {
 			// if we have an editor mark the save location in the command stack to tell the
 			// editor that it is not dirty anymore
