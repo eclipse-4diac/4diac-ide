@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Johannes Kepler University Linz
+ * Copyright (c) 2025 Felix Schmid
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,11 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *    - initial API and implementation and/or initial documentation
- *  Paul Pavlicek
- *    - - initial API and implementation and/or initial documentation
- *  Felix Schmid
- *    - adapted to use new contract checking system
+ *   Felix Schmid
+ *     - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
@@ -21,8 +18,6 @@ import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -31,57 +26,48 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractEditPart;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class EvaluateContractHandler extends AbstractHandler {
+public abstract class ContractCheckHandler extends AbstractHandler {
 
-	@Override
-	public Object execute(final ExecutionEvent event) throws ExecutionException {
+	private boolean isNetwork;
+
+	protected Set<SubApp> getSubAppsToCheck(final ExecutionEvent event) {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final Shell parentShell = HandlerUtil.getActiveShell(event);
 
-		// using a set for "toEvaluate" avoids adding the same SubApp multiple times
+		// using a set for "toCheck" avoids adding the same SubApp multiple times
 		// e.g. by selecting the SubApp but also its contract or pin
-		final Set<SubApp> toEvaluate = new HashSet<>();
+		final Set<SubApp> toCheck = new HashSet<>();
 		final FBNetwork network = selection.size() == 1
 				&& selection.getFirstElement() instanceof final AbstractEditPart editPart
 				&& editPart.getModel() instanceof final FBNetwork nw ? nw : null;
 
-		if (network != null) {
+		isNetwork = network != null;
+		if (isNetwork) {
 			// selected network -> check all contracts of network
-			addFromNetwork(network, toEvaluate);
+			addFromNetwork(network, toCheck);
 		} else {
 			// selection -> look for selected SubApps with contracts
-			addFromSelection(selection, toEvaluate);
+			addFromSelection(selection, toCheck);
 		}
-
-		if (!toEvaluate.isEmpty()) {
-			final ContractSystem sysContracts = new ContractSystem();
-			sysContracts.gatherContracts(toEvaluate);
-			sysContracts.checkSystem();
-
-			final var dialog = new ContractCheckResultDialog(sysContracts, network != null, parentShell);
-			dialog.open();
-			return Status.OK_STATUS;
-		}
-		MessageDialog.openError(parentShell, Messages.EvaluateSelectionErrorDialog_Title,
-				Messages.EvaluateSelectionErrorDialog_Info);
-		return Status.CANCEL_STATUS;
+		return toCheck;
 	}
 
-	private static void addFromNetwork(final FBNetwork network, final Set<SubApp> toEvaluate) {
+	protected boolean isNetworkCheck() {
+		return isNetwork;
+	}
+
+	private static void addFromNetwork(final FBNetwork network, final Set<SubApp> toCheck) {
 		for (final FBNetworkElement element : network.getNetworkElements()) {
 			if (element instanceof final SubApp subapp
 					&& subapp.getAttribute(ChangeContractCommand.CONTRACT_ATTRIBUTE_NAME) != null) {
-				toEvaluate.add(subapp);
+				toCheck.add(subapp);
 			}
 		}
 	}
 
-	private static void addFromSelection(final IStructuredSelection selection, final Set<SubApp> toEvaluate) {
+	private static void addFromSelection(final IStructuredSelection selection, final Set<SubApp> toCheck) {
 		for (final Object selected : selection) {
 			if (selected instanceof final EditPart selectedEP) {
 				Object obj = selectedEP.getModel();
@@ -95,9 +81,9 @@ public class EvaluateContractHandler extends AbstractHandler {
 
 				if (obj instanceof final SubApp subapp
 						&& subapp.getAttribute(ChangeContractCommand.CONTRACT_ATTRIBUTE_NAME) != null) {
-					toEvaluate.add(subapp);
+					toCheck.add(subapp);
 				} else if (obj instanceof final InstanceContract instCon) {
-					toEvaluate.add(instCon.getSubApp());
+					toCheck.add(instCon.getSubApp());
 				}
 			}
 		}
