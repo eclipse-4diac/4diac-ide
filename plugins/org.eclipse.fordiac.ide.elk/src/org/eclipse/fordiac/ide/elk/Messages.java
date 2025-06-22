@@ -29,6 +29,8 @@ public final class Messages extends NLS {
 	public static String SystemLayout_ProgressTitle;
 	public static String SystemLayout_ProgressMessage;
 
+	public static String LayoutPreferences_ConnectionLayoutTimeout;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
