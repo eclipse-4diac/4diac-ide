@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.elk.commands.BlockLayoutCommand;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
+import org.eclipse.fordiac.ide.elk.preferences.ElkPreferences;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -199,6 +200,8 @@ public class FordiacLayout {
 				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.TRUE)
 				.setProperty(LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
 						Boolean.TRUE)
+				.setProperty(LibavoidMetaDataProvider.PROCESS_TIMEOUT,
+						Integer.valueOf(ElkPreferences.getConnectionLaoyutTimeout()))
 				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
 				.setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
 	}
