@@ -132,4 +132,22 @@
 						type="java.lang.Object"/>
 	</extension>
 
+	<!-- Preferences -->
+	<extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.elk.preferences.LayoutPreferencePage"
+            id="org.eclipse.fordiac.ide.elk.layoutPreferences"
+            name="Layout">
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.elk.preferences.ElkPreferenceInitializer">
+      </initializer>
+   </extension>
+
 </plugin>
