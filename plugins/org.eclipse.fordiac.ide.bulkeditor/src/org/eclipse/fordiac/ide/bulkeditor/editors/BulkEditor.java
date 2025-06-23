@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -115,6 +116,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private ActionRegistry actionRegistry;
 	private SearchHelper helper;
 	private final Map<TypeEntry, LibraryElement> copiedElementsMap = new HashMap<>();
+	private final Set<TypeEntry> dirtyEntries = new HashSet<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
 	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
@@ -648,6 +650,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		final var editors = getDirtyEditors();
 
 		if (editors.length <= 0) {
+			dirtyInformation.setText(""); //$NON-NLS-1$
 			return;
 		}
 
@@ -746,9 +749,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		final List<EObject> mappedList = createMappedList(result);
 		natTable.updateList(mappedList);
-		commandStack.flush();
 		changedSearchParameter = false;
 		searchInformation.setText(""); //$NON-NLS-1$
+		commandStack.flush();
+		dirtyEntries.clear();
 		return true;
 	}
 
@@ -782,6 +786,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	public void reloadType() {
 		performSearch();
+	}
+
+	public boolean hasDirtyType(final TypeEntry entry) {
+		return dirtyEntries.contains(entry);
 	}
 
 	@Override
@@ -826,6 +834,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		}
 
 		commandStack.markSaveLocation();
+		dirtyEntries.clear();
 	}
 
 	@Override
@@ -843,6 +852,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	@Override
 	public void executeCommand(final Command cmd) {
 		commandStack.execute(cmd);
+		if (cmd instanceof final ScopedCommand scopedCmd) {
+			final Set<EObject> eobjects = scopedCmd.getAffectedObjects();
+			eobjects.forEach(eobj -> {
+				if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement libe) {
+					dirtyEntries.add(libe.getTypeEntry());
+				}
+			});
+		}
 		if (!changedSearchParameter) {
 			searchInformation.setText(Messages.Search_Changes);
 		}
