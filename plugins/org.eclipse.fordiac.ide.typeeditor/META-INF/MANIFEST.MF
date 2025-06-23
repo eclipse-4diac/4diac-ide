@@ -59,3 +59,4 @@ Import-Package: com.google.inject,
  org.eclipse.xtext.resource,
  org.eclipse.xtext.ui.editor,
  org.osgi.framework
+Require-Bundle: org.eclipse.fordiac.ide.bulkeditor
