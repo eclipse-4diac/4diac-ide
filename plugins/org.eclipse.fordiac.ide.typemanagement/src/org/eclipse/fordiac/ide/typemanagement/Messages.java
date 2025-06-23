@@ -86,6 +86,20 @@ public final class Messages extends NLS {
 	public static String ConnectionsToStructRefactoring_Output;
 	public static String ConnectionsToStructRefactoring_Input;
 	public static String ConnectionsToStructRefactoring_MissingStructManipulator;
+
+	public static String ConnectionsToStructWizard_PageTitle;
+	public static String ConnectionsToStructWizard_WindowTitle;
+	public static String ConnectionsToStructWizardPage_AnyStruct;
+	public static String ConnectionsToStructWizardPage_Description;
+	public static String ConnectionsToStructWizardPage_ExistingStruct;
+	public static String ConnectionsToStructWizardPage_InName;
+	public static String ConnectionsToStructWizardPage_InvalidStructName;
+	public static String ConnectionsToStructWizardPage_Name;
+	public static String ConnectionsToStructWizardPage_NewType;
+	public static String ConnectionsToStructWizardPage_OutName;
+	public static String ConnectionsToStructWizardPage_SolveConflicts;
+	public static String ConnectionsToStructWizardPage_Title;
+
 	public static String CreateStructChange_Name;
 	public static String RepairBrokenConnectionChange_Name;
 	public static String ReplaceVarsWithStructChange_Inputs;
@@ -117,6 +131,17 @@ public final class Messages extends NLS {
 	public static String ImportChange_ImportedNamespaceChanged;
 
 	public static String InitialValueChange_InitialValueChanged;
+
+	public static String MoveToPackageChangePreview_EnterPackageName;
+	public static String MoveTypeToPackage;
+	public static String MoveTypeToPackage_UpdateDataTypeInstance;
+	public static String MoveTypeToPackage_RenamePackageTo;
+	public static String MoveTypeToPackage_PackageNameIsTheSame;
+	public static String MoveTypeToPackage_PackageNameIsEmpty;
+	public static String MoveTypeToPackage_InvalidDestination;
+	public static String MoveTypeToPackage_UpdateInstances;
+	public static String MoveTypeToPackage_NameChanged;
+	public static String MoveTypeToPackage_UpdateTypeEntryFile;
 
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
@@ -157,6 +182,12 @@ public final class Messages extends NLS {
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
 	public static String Refactoring_UpdateTypeEntryChange;
+
+	public static String RepairBrokenConnectionWizardPage_Description;
+	public static String RepairBrokenConnectionWizardPage_Dots;
+	public static String RepairBrokenConnectionWizardPage_Name;
+	public static String RepairBrokenConnectionWizardPage_Title;
+	public static String RepairBrokenConnectionWizardPage_Type;
 
 	public static String PreviewChange_DeleteChoice;
 	public static String PreviewChange_ChangeToAnyStruct;
