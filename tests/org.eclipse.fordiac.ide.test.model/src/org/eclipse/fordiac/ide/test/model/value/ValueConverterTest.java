@@ -79,6 +79,9 @@ class ValueConverterTest {
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'\""), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "aa"), //
+				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac'IDE'"), //
+				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac$''IDE'"), //
+				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac'$'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, "abc", "'abc'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_ACUTE, "'4diac$'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_BACKSLASH, "'4diac\"IDE'"), //
@@ -93,10 +96,13 @@ class ValueConverterTest {
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\""), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"'"), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "aa"), //
+				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac\"IDE\""), //
+				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac\"$\"IDE\""), //
+				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac$\"\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, "abc", "\"abc\""), //
-				arguments(StringValueConverter.INSTANCE, NAME_ACUTE, "'4diac$'IDE'"), //
-				arguments(StringValueConverter.INSTANCE, NAME_BACKSLASH, "'4diac$\"IDE'"), //
-				arguments(StringValueConverter.INSTANCE, NAME_DOLLAR, NAME_TWO_DOLLAR), //
+				arguments(WStringValueConverter.INSTANCE, NAME_ACUTE, "\"4diac'IDE\""), //
+				arguments(WStringValueConverter.INSTANCE, NAME_BACKSLASH, "\"4diac$\"IDE\""), //
+				arguments(WStringValueConverter.INSTANCE, NAME_DOLLAR, "\"4diac$$IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_BACKSLASHN, "\"4diac$NIDE\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_BACKSLASH_FRT, "\"4diac$P$R$TIDE\""), //
 				arguments(WStringValueConverter.INSTANCE, "4diac IDE", "\"4diac$0020IDE\""), //
@@ -163,8 +169,13 @@ class ValueConverterTest {
 	void toValueTest(final ValueConverter<?> converter, final Object expected, final String string) {
 		if (expected instanceof final Class<?> expectedClass && Throwable.class.isAssignableFrom(expectedClass)) {
 			assertThrowsExactly(expectedClass.asSubclass(Throwable.class), () -> converter.toValue(string));
-			assertThrowsExactly(expectedClass.asSubclass(Throwable.class),
-					() -> converter.toValue(new Scanner(string)));
+			assertThrowsExactly(expectedClass.asSubclass(Throwable.class), () -> {
+				final Scanner scanner = new Scanner(string);
+				converter.toValue(scanner);
+				if (scanner.hasNext()) { // ensure we parsed entire input
+					throw new IllegalArgumentException();
+				}
+			});
 		} else if (expected instanceof final Iterable<?> expectedIterable) {
 			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(string));
 			assertIterableEquals(expectedIterable, (Iterable<?>) converter.toValue(new Scanner(string)));
