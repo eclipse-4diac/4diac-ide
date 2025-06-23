@@ -16,13 +16,17 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -64,6 +68,9 @@ public class VarConfigurationSection extends AbstractSection {
 	private NatTable inputTable;
 	private IChangeableRowDataProvider<VarDeclaration> inputDataProvider;
 	private static String separationPoint = "."; //$NON-NLS-1$
+	private TypedSubApp rootTSA;
+	private final Map<String, VarDeclaration> displayMap = new LinkedHashMap<>();
+	private final Map<VarDeclaration, VarDeclaration> varDeclCopies = new HashMap<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -148,11 +155,10 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	private List<VarDeclaration> collectVarConfigs() {
-		final Map<String, VarDeclaration> resultMap = new LinkedHashMap<>();
+		displayMap.clear();
 		final Set<INamedElement> visited = new HashSet<>();
-		collectVarConfigsRecursive(getType(), resultMap, visited, ""); //$NON-NLS-1$
-		final List<VarDeclaration> results = new ArrayList<>(resultMap.values());
-		return results;
+		collectVarConfigsRecursive(getType(), displayMap, visited, ""); //$NON-NLS-1$
+		return new ArrayList<>(displayMap.values());
 	}
 
 	private void collectVarConfigsRecursive(final INamedElement type, final Map<String, VarDeclaration> result,
@@ -208,7 +214,7 @@ public class VarConfigurationSection extends AbstractSection {
 		return false;
 	}
 
-	private static void addPossibleVarConfigs(final FBNetworkElement fbne, final Map<String, VarDeclaration> result,
+	private void addPossibleVarConfigs(final FBNetworkElement fbne, final Map<String, VarDeclaration> result,
 			final String prefix, final boolean shouldCopy) {
 		for (final IInterfaceElement elem : fbne.getInterface().getAllInterfaceElements()) {
 			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
@@ -230,19 +236,95 @@ public class VarConfigurationSection extends AbstractSection {
 		result.put(qualifiedName, vd);
 	}
 
-	private static void addAndCopyElement(final VarDeclaration vd, final String currentPrefix,
+	private void addAndCopyElement(final VarDeclaration vd, final String currentPrefix,
 			final Map<String, VarDeclaration> result) {
 		final String qualifiedName = currentPrefix + vd.getName();
 		if (result.containsKey(qualifiedName)) {
 			return;
 		}
-		final VarDeclaration copy = EcoreUtil.copy(vd);
-		copy.setName(qualifiedName);
-		if (vd.getValue() != null) {
-			copy.setValue(EcoreUtil.copy(vd.getValue()));
+		final String subAppTypeName = qualifiedName.split("\\.")[0]; //$NON-NLS-1$
+		switch (getType()) {
+		case final Application app -> rootTSA = (TypedSubApp) app.getFBNetwork().getNetworkElements().stream()
+				.filter(x -> x.getName().equals(subAppTypeName)).toList().getFirst();
+		case final TypedSubApp tsa -> rootTSA = tsa;
+		case final UntypedSubApp usa -> rootTSA = findTypedSubAppByTypeNameInUntypedSubApp(usa, subAppTypeName);
+		default -> {
+			break;
 		}
-		copy.setComment(vd.getComment());
-		result.put(qualifiedName, copy);
+		}
+
+		final String relativeName = rootTSA != null ? getRelativeName(qualifiedName, rootTSA.getName()) : qualifiedName;
+		VarDeclaration existing = null;
+		if (rootTSA != null) {
+			existing = (rootTSA != null)
+					? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
+							.orElse(null)
+					: null;
+		}
+
+		final VarDeclaration targetVD;
+		if (existing != null) {
+			targetVD = existing;
+		} else {
+			targetVD = EcoreUtil.copy(vd);
+			targetVD.setName(relativeName);
+			if (vd.getValue() != null) {
+				targetVD.setValue(EcoreUtil.copy(vd.getValue()));
+			}
+			targetVD.setComment(vd.getComment());
+			targetVD.getAttributes().clear();
+			if (rootTSA != null) {
+				targetVD.eAdapters().add(new AdapterImpl() {
+					@Override
+					public void notifyChanged(final Notification notification) {
+						final Object feature = notification.getFeature();
+						if (!(feature instanceof final EStructuralFeature esf)) {
+							return;
+						}
+
+						final String featureName = esf.getName();
+						final boolean isRelevant = switch (featureName) {
+						case "comment", "value", "visible", "varConfig" -> true; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						default -> false;
+						};
+
+						if (isRelevant && !rootTSA.getVarConfigParams().contains(targetVD)) {
+							rootTSA.getVarConfigParams().add(targetVD);
+						}
+					}
+				});
+			}
+
+		}
+		result.put(qualifiedName, targetVD);
+	}
+
+	private static TypedSubApp findTypedSubAppByTypeNameInUntypedSubApp(final UntypedSubApp root,
+			final String satName) {
+		for (final FBNetworkElement element : root.getSubAppNetwork().getNetworkElements()) {
+			if (element instanceof final TypedSubApp tsa && tsa.getType().getName().equals(satName)) {
+				return tsa;
+			}
+			if (element instanceof final UntypedSubApp nested) {
+				final TypedSubApp result = findTypedSubAppByTypeNameInUntypedSubApp(nested, satName);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static String getRelativeName(final String qualifiedName, final String rootName) {
+		if (qualifiedName.startsWith(rootName + separationPoint)) {
+			return qualifiedName.substring(rootName.length() + 1);
+		}
+		return qualifiedName;
+	}
+
+	public String getDisplayName(final VarDeclaration varDecl) {
+		return displayMap.entrySet().stream().filter(e -> e.getValue() == varDecl).map(Map.Entry::getKey).findFirst()
+				.orElse(varDecl.getName());
 	}
 
 	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
@@ -253,6 +335,9 @@ public class VarConfigurationSection extends AbstractSection {
 
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
+			if (columnIndex == VarDeclarationTableColumn.NAME.ordinal()) {
+				return getCommandExecutor().getDisplayName(rowObject);
+			}
 			return super.getDataValue(rowObject, columnIndex);
 		}
 
