@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
@@ -97,6 +98,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private boolean wasDirtyBeforeExecute = false;
 
 	@Override
 	protected void addPages() {
@@ -485,6 +487,22 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
+		final var commandStack = getCommandStack();
+		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
+			wasDirtyBeforeExecute = commandStack.isDirty();
+		}
+		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
+				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
+						&& bulkEditor.hasDirtyType(getTypeEntry())).length > 0) {
+			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.BulkEditorDirty, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			if (dialog.open() == 1) {
+				// Cancel
+				commandStack.undo();
+				commandStack.flush();
+			}
+		}
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 

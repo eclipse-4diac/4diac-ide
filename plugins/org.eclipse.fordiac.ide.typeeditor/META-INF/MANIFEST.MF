@@ -53,3 +53,4 @@ Import-Package: org.eclipse.core.commands.common,
  org.eclipse.ui.views.properties,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.xtext.ui.editor
+Require-Bundle: org.eclipse.fordiac.ide.bulkeditor
