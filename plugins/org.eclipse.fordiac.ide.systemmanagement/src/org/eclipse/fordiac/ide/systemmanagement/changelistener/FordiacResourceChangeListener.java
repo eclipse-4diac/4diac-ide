@@ -51,7 +51,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -86,11 +85,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
 
-	private final SystemManager systemManager;
 	private final Collection<FileToRenameEntry> filesToRename;
 
-	public FordiacResourceChangeListener(final SystemManager systemManager) {
-		this.systemManager = systemManager;
+	public FordiacResourceChangeListener() {
 		this.filesToRename = new HashSet<>();
 	}
 
@@ -153,9 +150,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			break;
 		default:
 			break;
-		}
-		if (testFlags(delta, IResourceDelta.MARKERS)) {
-			systemManager.notifyListeners();
 		}
 		return true;
 	}

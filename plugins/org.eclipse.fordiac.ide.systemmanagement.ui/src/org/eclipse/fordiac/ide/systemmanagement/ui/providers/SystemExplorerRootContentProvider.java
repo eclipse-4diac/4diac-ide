@@ -22,18 +22,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
-public class SystemExplorerRootContentProvider implements ITreeContentProvider, DistributedSystemListener {
-
-	private Viewer viewer;
-
-	public SystemExplorerRootContentProvider() {
-		SystemManager.INSTANCE.addWorkspaceListener(this);
-	}
+public class SystemExplorerRootContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
@@ -46,11 +38,6 @@ public class SystemExplorerRootContentProvider implements ITreeContentProvider, 
 			return Arrays.stream(root.getProjects()).filter(SystemExplorerRootContentProvider::projectToShow).toArray();
 		}
 		return new Object[0];
-	}
-
-	@Override
-	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		this.viewer = viewer;
 	}
 
 	@Override
@@ -72,21 +59,6 @@ public class SystemExplorerRootContentProvider implements ITreeContentProvider, 
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public void distributedSystemWorkspaceChanged() {
-		if (isViewerValid()) {
-			viewer.getControl().getDisplay().asyncExec(() -> {
-				if (isViewerValid()) {
-					viewer.refresh();
-				}
-			});
-		}
-	}
-
-	private boolean isViewerValid() {
-		return null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed();
 	}
 
 	private static boolean projectToShow(final IProject proj) {
