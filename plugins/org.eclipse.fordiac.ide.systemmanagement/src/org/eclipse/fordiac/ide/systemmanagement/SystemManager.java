@@ -25,7 +25,6 @@
 package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
@@ -74,10 +72,9 @@ public enum SystemManager {
 	public static final String SYSTEM_FILE_ENDING = "sys"; //$NON-NLS-1$
 	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
 
-	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener(this);
+	private final IResourceChangeListener fordiacListener = new FordiacResourceChangeListener();
 
 	/** The listeners. */
-	private final List<DistributedSystemListener> listeners = new ArrayList<>();
 
 	/** Instantiates a new system manager. */
 	SystemManager() {
@@ -180,22 +177,6 @@ public enum SystemManager {
 
 	private static String[] getBuilderIDs() {
 		return new String[] { XtextProjectHelper.BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
-	}
-
-	/** Notify listeners. */
-	public void notifyListeners() {
-		listeners.forEach(DistributedSystemListener::distributedSystemWorkspaceChanged);
-	}
-
-	/**
-	 * Adds the workspace listener.
-	 *
-	 * @param listener the listener
-	 */
-	public void addWorkspaceListener(final DistributedSystemListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
 	}
 
 	public void removeFordiacChangeListener() {
