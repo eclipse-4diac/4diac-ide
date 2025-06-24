@@ -7,6 +7,6 @@
   <VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package"/>
   <CompilerInfo packageName="iec61499::hardware"/>
   <FBNetwork>
-    <FB Comment="" Name="START" Type="E_RESTART" x="100.0" y="0.0"/>
+    <FB Comment="" Name="START" Type="iec61499::events::E_RESTART" x="100.0" y="0.0"/>
   </FBNetwork>
 </ResourceType>
