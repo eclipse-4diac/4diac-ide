@@ -14,7 +14,7 @@
  *  Felix Schmid
  *    - redesign to only use a general purpose dialog
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.handlers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.contracts.Messages;
+import org.eclipse.fordiac.ide.contracts.PrepareContractCommand;
+import org.eclipse.fordiac.ide.contracts.dialogs.DefineContractDecisionDialog;
 import org.eclipse.fordiac.ide.contracts.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;

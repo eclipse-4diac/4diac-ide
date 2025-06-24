@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.contracts.ContractSystem;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "static-method", "nls" }) // translating doesn't make sense here
-class ContractTest {
+class StaticContractCheckTest {
 
 	// === test single events
 	@Test
@@ -33,7 +33,7 @@ class ContractTest {
 		final String g = "EO occurs within [12, 18]ms";
 		final String a = "EI occurs within [10, 20]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -42,7 +42,7 @@ class ContractTest {
 		final String g = "EO occurs within [10, 18]ms";
 		final String a = "EI occurs within [12, 20]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
 	}
 
@@ -52,7 +52,7 @@ class ContractTest {
 		final String g = "EO occurs every [6, 8]ms with offset 4ms";
 		final String a = "EI occurs every [5, 10]ms with offset [2, 6]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -61,7 +61,7 @@ class ContractTest {
 		final String g = "EO occurs every [6, 8]ms with offset 5ms and jitter 1ms";
 		final String a = "EI occurs every [5, 10]ms with offset [4, 6]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -70,7 +70,7 @@ class ContractTest {
 		final String g = "EO occurs every [1, 6]ms";
 		final String a = "EI occurs every [2, 4]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
 
@@ -79,7 +79,7 @@ class ContractTest {
 		final String g = "EO occurs every 5ms with offset [4, 10]ms";
 		final String a = "EI occurs every 5ms with offset [5, 8]ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
 
@@ -88,7 +88,7 @@ class ContractTest {
 		final String g = "EO occurs every 5ms with jitter 4ms";
 		final String a = "EI occurs every 5ms with jitter 2ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
 
@@ -98,7 +98,7 @@ class ContractTest {
 		final String g = "EO occurs within 10ms";
 		final String a = "EI occurs every 10ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.TYPE_MATCH, sys);
 	}
 
@@ -107,7 +107,7 @@ class ContractTest {
 		final String g = "EO occurs every 10ms";
 		final String a = "EI occurs within 10ms";
 		final ContractSystem sys = create2ConnectedComponents(a, g);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.TYPE_MATCH, sys);
 	}
 
@@ -122,7 +122,7 @@ class ContractTest {
 		final String contract = "EO occurs within [8, 9]ms " //
 				+ "EI occurs within [7, 10]ms";
 		sys.addComponent(comp1, contract, List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -136,7 +136,7 @@ class ContractTest {
 		final String contract = "EO occurs within [7, 10]ms " //
 				+ "EI occurs within [8, 9]ms";
 		sys.addComponent(comp1, contract, List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
 	}
 
@@ -149,7 +149,7 @@ class ContractTest {
 
 		final String contract = "whenever EI occurs then EO occurs within 10ms";
 		sys.addComponent(comp1, contract, List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -163,7 +163,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EI occurs within [5, 10]ms " //
 				+ "EO occurs within [4, 12]ms", List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -176,7 +176,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EI occurs within [5, 10]ms " //
 				+ "EO occurs within [6, 8]ms", List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
 	}
 
@@ -192,7 +192,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EO1, EO2 occurs within 10ms", null, List.of("EO1", "EO2"));
 		sys.addComponent(comp2, "EI1, EI2 occurs within 10ms", List.of("EI1", "EI2"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -210,7 +210,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EO occurs within 10ms", null, List.of("EO"));
 		sys.addComponent(comp2, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(comp3, "EI occurs within 10ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertTrue(sys.getIssues().isEmpty());
 	}
 
@@ -222,7 +222,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EI occurs within 10ms " //
 				+ "EI occurs within 20ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.CONFLICTING_ASSUMPTIONS, sys);
 	}
 
@@ -233,7 +233,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EI occurs within 10ms " //
 				+ "EI occurs every 10ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.CONFLICTING_ASSUMPTIONS, sys);
 	}
 
@@ -244,7 +244,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EO occurs within 10ms " //
 				+ "EO occurs every 20ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.CONFLICTING_GUARANTEES, sys);
 	}
 
@@ -255,7 +255,7 @@ class ContractTest {
 
 		sys.addComponent(comp1, "EO occurs every 10ms " //
 				+ "EO occurs every 10ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 		assertOneIssue(ContractIssue.Code.CONFLICTING_GUARANTEES, sys);
 	}
 
@@ -273,7 +273,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EO occurs within 10ms", null, List.of("EO"));
 		sys.addComponent(comp2, "EO occurs within 10ms", null, List.of("EO"));
 		sys.addComponent(comp3, "EI occurs within 10ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.MULTIPLE_FULFILL, sys);
 	}
@@ -290,7 +290,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(comp1, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp2, "EI occurs within 15ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -306,7 +306,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(comp1, "whenever EI occurs then EO occurs within 8ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp2, "EI occurs within 15ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
 	}
@@ -324,7 +324,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EO occurs every [5, 10]ms", null, List.of("EO"));
 		sys.addComponent(comp2, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp3, "EI occurs every [5, 10]ms with offset 5ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -342,7 +342,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EO occurs every [5, 10]ms", null, List.of("EO"));
 		sys.addComponent(comp2, "whenever EI occurs then EO occurs within 2ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp3, "EI occurs every [5, 10]ms with offset 5ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
@@ -363,7 +363,7 @@ class ContractTest {
 		sys.addComponent(comp2, "whenever EI occurs then EO occurs within 2ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp3, "whenever EI occurs then EO occurs within 3ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp4, "EI occurs every [2, 3]ms with offset 5ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -384,7 +384,7 @@ class ContractTest {
 		sys.addComponent(comp2, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp3, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(comp4, "EI occurs every [2, 3]ms with offset 5ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
@@ -403,7 +403,7 @@ class ContractTest {
 		sys.addComponent(comp1, "EO occurs within 10ms", null, List.of("EO"));
 		sys.addComponent(comp2, "EO occurs within 20ms", null, List.of("EO"));
 		sys.addComponent(comp3, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.MULTIPLE_RESOLVE, sys);
 	}
@@ -421,7 +421,7 @@ class ContractTest {
 		sys.addComponent(outer, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(inner1, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(inner2, "EO occurs within 20ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.MULTIPLE_RESOLVE, sys);
 	}
@@ -437,7 +437,7 @@ class ContractTest {
 
 		sys.addComponent(outer, "EO occurs every 10ms", null, List.of("EO"));
 		sys.addComponent(inner, "EO occurs every 10ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -452,7 +452,7 @@ class ContractTest {
 
 		sys.addComponent(outer, "EO occurs every 10ms", null, List.of("EO"));
 		sys.addComponent(inner, "EO occurs every 5ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
@@ -467,7 +467,7 @@ class ContractTest {
 
 		sys.addComponent(outer, "EI occurs every 10ms", List.of("EI"), null);
 		sys.addComponent(inner, "EI occurs every 10ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -482,7 +482,7 @@ class ContractTest {
 
 		sys.addComponent(outer, "EI occurs every 10ms", List.of("EI"), null);
 		sys.addComponent(inner, "EI occurs every 5ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
 	}
@@ -497,7 +497,7 @@ class ContractTest {
 
 		sys.addComponent(outer, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(inner, "EO occurs within 10ms", null, List.of("EO"));
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.UNRESOLVED_REACTION, sys);
 	}
@@ -515,7 +515,7 @@ class ContractTest {
 		sys.addComponent(outer, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(inner1, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(inner2, "EI occurs within 15ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertTrue(sys.getIssues().isEmpty());
 	}
@@ -533,7 +533,7 @@ class ContractTest {
 		sys.addComponent(outer, "EI occurs within 10ms", List.of("EI"), null);
 		sys.addComponent(inner1, "whenever EI occurs then EO occurs within 5ms", List.of("EI"), List.of("EO"));
 		sys.addComponent(inner2, "EI occurs within 20ms", List.of("EI"), null);
-		sys.checkSystem();
+		sys.performStaticCheck();
 
 		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
 	}

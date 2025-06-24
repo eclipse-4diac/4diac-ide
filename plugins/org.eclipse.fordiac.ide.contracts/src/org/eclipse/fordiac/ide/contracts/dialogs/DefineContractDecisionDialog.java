@@ -11,11 +11,12 @@
  *   Felix Schmid
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.contracts.Messages;
 import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;

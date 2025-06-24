@@ -14,7 +14,7 @@
   </extension>
   <extension point="org.eclipse.ui.handlers">
     <!-- HANDLERS -->
-    <handler class="org.eclipse.fordiac.ide.contracts.DefineFbInterfaceConstraintHandler"
+    <handler class="org.eclipse.fordiac.ide.contracts.handlers.DefineFbInterfaceConstraintHandler"
              commandId="org.eclipse.fordiac.ide.contracts.defineFbInterfaceConstraint">
       <enabledWhen>
         <with variable="selection">
@@ -28,9 +28,9 @@
         </with>
       </enabledWhen>
     </handler>
-    <handler class="org.eclipse.fordiac.ide.contracts.StaticContractCheckHandler"
+    <handler class="org.eclipse.fordiac.ide.contracts.handlers.StaticContractCheckHandler"
              commandId="org.eclipse.fordiac.ide.contracts.staticContractCheck" />
-    <handler class="org.eclipse.fordiac.ide.contracts.DynamicContractCheckHandler"
+    <handler class="org.eclipse.fordiac.ide.contracts.handlers.DynamicContractCheckHandler"
              commandId="org.eclipse.fordiac.ide.contracts.dynamicContractCheck" />
   </extension>
   <extension point="org.eclipse.ui.menus">
