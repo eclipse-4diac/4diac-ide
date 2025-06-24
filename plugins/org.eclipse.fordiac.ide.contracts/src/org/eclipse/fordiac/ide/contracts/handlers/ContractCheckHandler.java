@@ -11,7 +11,7 @@
  *   Felix Schmid
  *     - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.handlers;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -60,9 +60,25 @@ class CInterval {
 		return new CInterval(lbOpen, Math.max(0, lb - jitter), ub + jitter, ubOpen);
 	}
 
+	CInterval translate(final double amount) {
+		return new CInterval(lbOpen, lb + amount, ub + amount, ubOpen);
+	}
+
+	boolean contains(final double value) {
+		return (value > lb || (!lbOpen && value >= lb)) && (value < ub || (!ubOpen && value <= ub));
+	}
+
 	boolean contains(final CInterval other) {
 		return !(other.lb < lb || other.ub > ub || (other.lb == lb && !other.lbOpen && lbOpen)
 				|| (other.ub == ub && !other.ubOpen && ubOpen));
+	}
+
+	double getLowerBound() {
+		return lb;
+	}
+
+	double getUpperBound() {
+		return ub;
 	}
 
 	@Override

@@ -11,10 +11,13 @@
  *   Felix Schmid
  *     - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.dialogs;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.contracts.ContractIssue;
+import org.eclipse.fordiac.ide.contracts.ContractSystem;
+import org.eclipse.fordiac.ide.contracts.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -23,11 +26,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-class ContractCheckResultDialog extends MessageDialog {
+public class ContractCheckResultDialog extends MessageDialog {
 
 	private final ContractSystem contractSys;
 
-	ContractCheckResultDialog(final ContractSystem contractSys, final boolean networkCheck, final Shell shell) {
+	public ContractCheckResultDialog(final ContractSystem contractSys, final boolean networkCheck, final Shell shell) {
 		super(shell,
 				contractSys.getIssues().isEmpty() ? Messages.ContractCheckSuccess_Title
 						: Messages.ContractCheckIssue_Title,

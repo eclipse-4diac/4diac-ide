@@ -98,6 +98,14 @@ class ContractRule {
 		return (type == Type.SINGLE_EVENT || type == Type.REPETITION) && output == null;
 	}
 
+	String getPortName() {
+		return isAssumption() ? getInput() : getOutput();
+	}
+
+	String getPortNameQualified() {
+		return owner.getName() + "." + getPortName(); //$NON-NLS-1$
+	}
+
 	// === getters/setters
 	Type getType() {
 		return type;

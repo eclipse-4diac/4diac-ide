@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Johannes Kepler University Linz
+ * Copyright (c) 2025 Felix Schmid
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,25 +8,26 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *    - initial API and implementation and/or initial documentation
- *  Paul Pavlicek
- *    - - initial API and implementation and/or initial documentation
- *  Felix Schmid
- *    - adapted to use new contract checking system
+ *   Felix Schmid
+ *     - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.handlers;
 
 import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.contracts.ContractSystem;
+import org.eclipse.fordiac.ide.contracts.Messages;
+import org.eclipse.fordiac.ide.contracts.dialogs.ContractCheckResultDialog;
+import org.eclipse.fordiac.ide.contracts.dialogs.EventOccurrencesDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class StaticContractCheckHandler extends ContractCheckHandler {
+public class DynamicContractCheckHandler extends ContractCheckHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -36,12 +37,18 @@ public class StaticContractCheckHandler extends ContractCheckHandler {
 		if (!toCheck.isEmpty()) {
 			final ContractSystem sysContracts = new ContractSystem();
 			sysContracts.gatherContracts(toCheck);
-			sysContracts.checkSystem();
+
+			final var eoDialog = new EventOccurrencesDialog(parentShell);
+			if (eoDialog.open() != 0) {
+				return Status.CANCEL_STATUS;
+			}
+			sysContracts.performDynamicCheck(eoDialog.getEventOccurrences());
 
 			final var dialog = new ContractCheckResultDialog(sysContracts, isNetworkCheck(), parentShell);
 			dialog.open();
 			return Status.OK_STATUS;
 		}
+		// TODO more visual error dialog with a diagram
 		MessageDialog.openError(parentShell, Messages.EvaluateSelectionErrorDialog_Title,
 				Messages.EvaluateSelectionErrorDialog_Info);
 		return Status.CANCEL_STATUS;
