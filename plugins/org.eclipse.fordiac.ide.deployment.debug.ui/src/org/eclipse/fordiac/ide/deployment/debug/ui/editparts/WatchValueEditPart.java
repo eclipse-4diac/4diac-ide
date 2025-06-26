@@ -25,11 +25,13 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.editparts;
 import static org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT;
 
 import org.eclipse.draw2d.FigureUtilities;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
@@ -40,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -49,14 +52,57 @@ import org.eclipse.swt.graphics.FontMetrics;
 
 public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
-	public static final int MONITORING_VALUE_LR_MARGIN = 5;
+	class WatchValueInterfaceLabel extends SetableAlphaLabel {
 
+		private static final int DIAMETER = 10;
+		private final boolean hasNegatedConnection;
+
+		public WatchValueInterfaceLabel(final boolean hasNegatedConnection) {
+			this.hasNegatedConnection = hasNegatedConnection;
+		}
+
+		@Override
+		protected void paintFigure(final Graphics graphics) {
+			super.paintFigure(graphics);
+			if (hasNegatedConnection) {
+				paintNegationPoint(graphics);
+				setBorder(new MarginBorder(0, MONITORING_VALUE_LR_MARGIN * 2, 0, MONITORING_VALUE_LR_MARGIN));
+			}
+			setBorder(new MarginBorder(0, MONITORING_VALUE_LR_MARGIN, 0, MONITORING_VALUE_LR_MARGIN));
+			setOpaque(true);
+		}
+
+		private void paintNegationPoint(final Graphics graphics) {
+			final int x = getBounds().getRight().x - DIAMETER;
+			final int y = getBounds().getCenter().y - DIAMETER / 2;
+			graphics.setBackgroundColor(UIPreferenceConstants.getBoolConnectorColor());
+			graphics.fillOval(x, y, DIAMETER, DIAMETER);
+		}
+
+		@Override
+		protected Point getTextLocation() {
+			if (hasNegatedConnection) {
+				final Point txtLocation = super.getTextLocation().getCopy();
+				txtLocation.x = txtLocation.x - DIAMETER / 4;
+				return txtLocation;
+			}
+			return super.getTextLocation();
+		}
+
+		@Override
+		public Dimension getPreferredSize(final int wHint, final int hHint) {
+			return super.getPreferredSize(wHint, hHint).getCopy().expand(DIAMETER, 0);
+		}
+
+	}
+
+	public static final int MONITORING_VALUE_LR_MARGIN = 5;
 	private int maxWidth = Integer.MAX_VALUE;
 
 	@Override
 	protected IFigure createFigure() {
-		final SetableAlphaLabel figure = new SetableAlphaLabel();
-		figure.setOpaque(true);
+		final SetableAlphaLabel figure = new WatchValueInterfaceLabel(hasNegatedInputConnection());
+
 		if (getInterfaceElement().isIsInput()) {
 			figure.setLabelAlignment(PositionConstants.RIGHT);
 			figure.setTextAlignment(PositionConstants.RIGHT);
@@ -64,7 +110,6 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 			figure.setTextAlignment(PositionConstants.LEFT);
 			figure.setLabelAlignment(PositionConstants.LEFT);
 		}
-		figure.setBorder(new MarginBorder(0, MONITORING_VALUE_LR_MARGIN, 0, MONITORING_VALUE_LR_MARGIN));
 		figure.setText(Messages.MonitoringEditPart_Not_Available);
 		figure.setMinimumSize(new Dimension(50, 1));
 		return figure;
@@ -171,6 +216,14 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
 	protected int getMaxWidth() {
 		return maxWidth;
+	}
+
+	private boolean hasNegatedInputConnection() {
+		if (getInterfaceElement() == null || !getInterfaceElement().isIsInput()
+				|| getInterfaceElement().getInputConnections().isEmpty()) {
+			return false;
+		}
+		return getInterfaceElement().getInputConnections().getFirst().isNegated();
 	}
 
 	private void initializeMaxWidth() {
