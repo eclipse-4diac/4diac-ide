@@ -30,6 +30,7 @@
         <eclipse.platform.version>4.34</eclipse.platform.version>
         <equinox.executable.version>3.8.2700</equinox.executable.version>
         <eclipse.cbi.version>1.5.2</eclipse.cbi.version>
+        <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
 	</properties>
 
 	<repositories>
@@ -60,6 +61,12 @@
 
 	<build>
 		<plugins>
+			<!-- Prevent warnings for missing version, see https://github.com/eclipse-tycho/tycho/discussions/2717 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${build-helper-maven-plugin.version}</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
