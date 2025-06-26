@@ -102,7 +102,7 @@ public class FordiacLayout {
 			final RecursiveGraphLayoutEngine engine, final boolean isBlockLayout) {
 		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(part, ep);
 
-		FordiacGraphBuilder.build(mapping);
+		new FordiacGraphBuilder(mapping).build();
 
 		if (isBlockLayout) {
 			performBlockLayout(mapping, engine);
