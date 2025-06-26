@@ -42,25 +42,14 @@ public class SystemLabelProvider extends LibraryElementLabelProvider implements 
 
 	@Override
 	public String getText(final Object object) {
-		if (object instanceof final IFile file) {
-			return getTextForFiles(file);
-		}
 		if (object instanceof IResource) {
+			if (object instanceof final IFile file
+					&& TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension())) {
+				return TypeEntry.getTypeNameFromFile(file);
+			}
 			return null;
 		}
 		return super.getText(object);
-	}
-
-	private static String getTextForFiles(final IFile element) {
-		String text = null;
-		if (TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
-				|| TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
-				|| TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
-				|| TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
-				|| TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			text = TypeEntry.getTypeNameFromFile(element);
-		}
-		return text;
 	}
 
 	@Override
