@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
@@ -29,9 +30,12 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
+import org.osgi.framework.VersionRange;
 
 public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
@@ -62,6 +66,12 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 			setPageComplete(validatePage());
 		}
 	};
+
+	private LibrarySelectionPage libPage;
+
+	private static final String[] comboLabels = { "current", "old", "none" };
+	private static final VersionRange[] comboValues = { new VersionRange("3.0.0"), new VersionRange("[1.0.0,1.0.0]"),
+			new VersionRange("(0.0.0,0.0.0)") };
 
 	/**
 	 * Creates a new project creation wizard page.
@@ -197,6 +207,36 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				openApplication = false;
 			}
 		});
+
+		final Label standardLibraryLabel = new Label(advancedGroupContainer, SWT.NONE);
+		standardLibraryLabel.setText("Import standard libraries:");
+
+		final Combo standardLibraryCombo = new Combo(advancedGroupContainer, SWT.DROP_DOWN);
+		for (int i = 0; i < comboLabels.length; i++) {
+			standardLibraryCombo.add(comboLabels[i], i);
+		}
+		standardLibraryCombo.select(0);
+		standardLibraryCombo.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				if (libPage != null) {
+					libPage.setStandardLibRange(comboValues[standardLibraryCombo.getSelectionIndex()]);
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				if (libPage != null) {
+					libPage.setStandardLibRange(comboValues[standardLibraryCombo.getSelectionIndex()]);
+				}
+			}
+		});
+	}
+
+	public void setLibraryPage(final LibrarySelectionPage libraryPage) {
+		this.libPage = libraryPage;
+		this.libPage.setStandardLibRange(comboValues[0]);
 	}
 
 	private static boolean projectNameExistsinWSPath(final String projectName) {

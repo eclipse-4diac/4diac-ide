@@ -80,7 +80,7 @@ public class Constants {
 	public static final Response EMPTY_RESPONSE;
 
 	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
-	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}"; //$NON-NLS-1$
+	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}{3}"; //$NON-NLS-1$
 
 	/* IEC61499 Status Codes */
 	public static final String MGM_RESPONSE_READY = "Ready"; //$NON-NLS-1$

@@ -87,19 +87,16 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 	private static void checkInputConns(final Set<EObject> currTargets, final Connection con) {
 		currTargets.add(con);
 		final IInterfaceElement source = con.getSource();
-		if (source != null) {
-			currTargets.add(con.getSource());
-			if (TargetPinManager.followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
-				source.getInputConnections().forEach(srcCon -> checkInputConns(currTargets, srcCon));
-			}
+		if (source != null && currTargets.add(con.getSource())
+				&& TargetPinManager.followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
+			source.getInputConnections().forEach(srcCon -> checkInputConns(currTargets, srcCon));
 		}
 	}
 
 	private static void checkoutOutputConns(final Set<EObject> currTargets, final Connection con) {
 		currTargets.add(con);
 		final IInterfaceElement dest = con.getDestination();
-		if (dest != null) {
-			currTargets.add(dest);
+		if (dest != null && currTargets.add(dest)) {
 			if (TargetPinManager.followConnections(dest.getFBNetworkElement(), dest.getOutputConnections())) {
 				dest.getOutputConnections().forEach(dstCon -> checkoutOutputConns(currTargets, dstCon));
 			} else {

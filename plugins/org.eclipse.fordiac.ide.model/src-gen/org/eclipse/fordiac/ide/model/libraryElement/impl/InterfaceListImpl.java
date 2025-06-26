@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -51,6 +52,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getPlugs <em>Plugs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getErrorMarker <em>Error Marker</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getFBType <em>FB Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getFBNetworkElement <em>FB Network Element</em>}</li>
  * </ul>
  *
  * @generated
@@ -253,6 +256,48 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBType getFBType() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_TYPE) return null;
+		return (FBType)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FBType basicGetFBType() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_TYPE) return null;
+		return (FBType)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBNetworkElement getFBNetworkElement() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT) return null;
+		return (FBNetworkElement)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FBNetworkElement basicGetFBNetworkElement() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT) return null;
+		return (FBNetworkElement)eInternalContainer();
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -286,15 +331,6 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public IInterfaceElement getInterfaceElement(final String name) {
 		return InterfaceListAnnotations.getInterfaceElement(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FBNetworkElement getFBNetworkElement() {
-		return InterfaceListAnnotations.getFBNetworkElement(this);
 	}
 
 	/**
@@ -374,6 +410,27 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated not
@@ -412,8 +469,29 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return ((InternalEList<?>)getSockets()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return ((InternalEList<?>)getErrorMarker()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
+				return eBasicSetContainer(null, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+				return eBasicSetContainer(null, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.FB_TYPE__INTERFACE_LIST, FBType.class, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, FBNetworkElement.class, msgs);
+			default:
+				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
 	}
 
@@ -442,6 +520,12 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return getSockets();
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return getErrorMarker();
+			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
+				if (resolve) return getFBType();
+				return basicGetFBType();
+			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+				if (resolve) return getFBNetworkElement();
+				return basicGetFBNetworkElement();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -562,6 +646,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return sockets != null && !sockets.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__ERROR_MARKER:
 				return errorMarker != null && !errorMarker.isEmpty();
+			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
+				return basicGetFBType() != null;
+			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+				return basicGetFBNetworkElement() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

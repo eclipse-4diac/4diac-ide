@@ -47,4 +47,5 @@
 			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1066.6666666666667"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

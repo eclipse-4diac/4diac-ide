@@ -42,4 +42,5 @@
 			<VarDeclaration Name="IN" Type="WORD" Comment="Input data from resource" />
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Paul Pavlicek and others
+ * Copyright (c) 2023, 2025 Paul Pavlicek and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Felix Schmid
  *     - removed unused messages
+ *     - add messages for new contract check system
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
@@ -21,23 +22,13 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.contracts.messages"; //$NON-NLS-1$
 
-	public static String Contract_ErrorAssumption;
-
-	public static String Contract_ErrorAssumptionsGuarantees;
-
-	public static String Contract_ErrorElements;
-
-	public static String Contract_ErrorGuarantee;
-
-	public static String Contract_ErrorIncosistentAssumptions;
-
-	public static String Contract_ErrorIncosistentGuarantees;
-
-	public static String Contract_ErrorName;
-
 	public static String NoPinSelectedErrorDialog_Title;
 
 	public static String NoPinSelectedErrorDialog_Info;
+
+	public static String EvaluateSelectionErrorDialog_Title;
+
+	public static String EvaluateSelectionErrorDialog_Info;
 
 	public static String DefineContractDecisionDialog_Title;
 
@@ -59,13 +50,43 @@ public final class Messages extends NLS {
 
 	public static String ContractRuleEmpty;
 
-	public static String ContractElementDialog_Title;
+	public static String ContractModelLoadError;
 
-	public static String ContractElementDialog_Info;
+	public static String ContractUnkownRuleWarning;
 
-	public static String ContractElementDialog_Ok;
+	public static String ContractSingleEventMatchError;
 
-	public static String ContractElementDialog_Define;
+	public static String ContractRepetitionOffsetMatchError;
+
+	public static String ContractRepetitionIntervalMatchError;
+
+	public static String ContractRuleTypeError;
+
+	public static String ContractUnresolvedReactionInfo;
+
+	public static String ContractMultipleFulfillError;
+
+	public static String ContractMultipleResolveError;
+
+	public static String ContractConflictingAssumptionsError;
+
+	public static String ContractConflictingGuaranteesError;
+
+	public static String ContractCheckSuccess_Title;
+
+	public static String ContractCheckIssue_Title;
+
+	public static String ContractCheckNetworkSize;
+
+	public static String ContractCheckSelectionSize;
+
+	public static String ContractCheckNoIssues;
+
+	public static String ContractCheckOneIssue;
+
+	public static String ContractCheckNIssues;
+
+	public static String ContractCheck_OK;
 
 	static {
 		// initialize resource bundle

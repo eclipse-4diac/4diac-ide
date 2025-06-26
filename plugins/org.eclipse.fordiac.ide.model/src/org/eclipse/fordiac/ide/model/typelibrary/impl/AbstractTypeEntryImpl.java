@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
  *    Alois Zoitl  - turned the Palette model into POJOs
+ *                 - added library element hash
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
@@ -47,11 +48,15 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry, Adapter.Internal {
@@ -89,6 +94,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private static final Pattern TYPE_COMMENT_PATTERN = Pattern.compile("Comment=\\\"([^\"]*)\\\""); //$NON-NLS-1$
 	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
 
+	private static final String TYPE_HASH_ATTRIBUTE_NAME = "TypeHash"; //$NON-NLS-1$
+	private static final String TYPE_HASH_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::TypeHash"; //$NON-NLS-1$
+
 	private IFile file;
 	private String typeName;
 	private String fullTypeName;
@@ -98,6 +106,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private final AtomicLong lastModificationTimestampEditable = new AtomicLong(IResource.NULL_STAMP);
 
 	private SoftReference<LibraryElement> typeRef;
+	private SoftReference<String> typeHashRef;
 	private SoftReference<LibraryElement> typeEditableRef;
 	private final AtomicReference<Set<TypeEntry>> dependencies = new AtomicReference<>(Collections.emptySet());
 
@@ -257,6 +266,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
 			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
+		typeHashRef = null; // our type is invalidated clear the hash
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
 			encloseInResource(newType);
@@ -418,6 +428,42 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			return dependencies.get();
 		}
 		return Collections.emptySet();
+	}
+
+	@Override
+	public String getTypeHash() throws LibraryElementHashException {
+		final SoftReference<String> typeHashRefCached = typeHashRef;
+
+		if (!isFileContentChanged() && typeHashRefCached != null) {
+			final String typeHash = typeHashRefCached.get();
+			if (typeHash != null) {
+				return typeHash;
+			}
+		}
+
+		final String newTypeHash = basicGetTypeHash();
+		typeHashRef = new SoftReference<>(newTypeHash);
+		return newTypeHash;
+	}
+
+	private String basicGetTypeHash() throws LibraryElementHashException {
+		final LibraryElement type = getType();
+		if (type == null) {
+			return ""; //$NON-NLS-1$
+		}
+		final Attribute typeHashAttribute = getTypeHashAttribute(type);
+		if (typeHashAttribute != null) {
+			return StringValueConverter.INSTANCE.toValue(typeHashAttribute.getValue());
+		}
+		return LibraryElementHasher.hash(type);
+	}
+
+	private static Attribute getTypeHashAttribute(final LibraryElement type) {
+		final Attribute typeHashAttribute = type.getAttribute(TYPE_HASH_ATTRIBUTE_FULL_NAME);
+		if (typeHashAttribute != null) {
+			return typeHashAttribute;
+		}
+		return type.getAttribute(TYPE_HASH_ATTRIBUTE_NAME);
 	}
 
 	private void updateDependencies(final Set<TypeEntry> dependencies) {

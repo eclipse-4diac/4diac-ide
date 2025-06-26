@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +41,7 @@ public class FilterComposite extends Composite {
 	private final int firstItemWidth;
 
 	private final List<Consumer<String>> textChangedListeners = new ArrayList<>();
+	private final List<Runnable> filterChangedListeners = new ArrayList<>();
 
 	public FilterComposite(final Composite parent, final int style, final List<String> filterNames,
 			final BulkEditorSettings settings, final List<String> subSettingsReferencesNames) {
@@ -60,6 +62,12 @@ public class FilterComposite extends Composite {
 		}
 	}
 
+	public void clear() {
+		filterList.forEach(filter -> {
+			filter.clear();
+		});
+	}
+
 	private static int calculateMaxCheckboxWidth(final Composite parent, final List<String> names) {
 		int maxWidth = 0;
 		final GC gc = new GC(parent);
@@ -76,6 +84,10 @@ public class FilterComposite extends Composite {
 	public void addTextChangedListener(final Consumer<String> listener) {
 		textChangedListeners.add(listener);
 		listener.accept(createFiltersText());
+	}
+
+	public void addFilterChangedListener(final Runnable listener) {
+		filterChangedListeners.add(listener);
 	}
 
 	private String createFiltersText() {
@@ -105,6 +117,7 @@ public class FilterComposite extends Composite {
 		private static final String REGULAR_EXPRESSION_IMAGE = "icons/full/elcl16/regex.png"; //$NON-NLS-1$
 
 		public final String name;
+		private BulkEditorSubSettings subSetting;
 
 		public final Button selected;
 		public final Text textField;
@@ -129,22 +142,18 @@ public class FilterComposite extends Composite {
 
 			ImageDescriptor descriptor = ImageDescriptor
 					.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(CASE_SENSITVE_IMAGE)));
-			caseSensitive = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage())
-					.tooltip(Messages.CaseSensitve).create(this);
+			caseSensitive = createImageButton(descriptor, Messages.CaseSensitve);
 
 			descriptor = FordiacImage.ICON_WHOLE_WORD.getImageDescriptor();
-			wholeWord = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage()).tooltip(Messages.WholeWord)
-					.create(this);
+			wholeWord = createImageButton(descriptor, Messages.WholeWord);
 
 			descriptor = ImageDescriptor
 					.createFromURL(FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(EXACT_MATCH_IMAGE)));
-			exactMatch = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage()).tooltip(Messages.ExactMatch)
-					.create(this);
+			exactMatch = createImageButton(descriptor, Messages.ExactMatch);
 
 			descriptor = ImageDescriptor.createFromURL(
 					FileLocator.find(Platform.getBundle(IMAGE_BUNDLE), new Path(REGULAR_EXPRESSION_IMAGE)));
-			regularExpression = WidgetFactory.button(SWT.TOGGLE).image(descriptor.createImage())
-					.tooltip(Messages.RegularExpression).create(this);
+			regularExpression = createImageButton(descriptor, Messages.RegularExpression);
 
 			selected.addListener(SWT.Selection, event -> {
 				textField.setEnabled(selected.getSelection());
@@ -156,46 +165,81 @@ public class FilterComposite extends Composite {
 			});
 		}
 
+		private Button createImageButton(final ImageDescriptor descriptor, final String tooltip) {
+			final Image image = descriptor.createImage();
+			final Button button = WidgetFactory.button(SWT.TOGGLE).image(image).tooltip(tooltip).create(this);
+			button.addDisposeListener(e -> image.dispose());
+			return button;
+		}
+
 		private void addListenerSubSetting(final BulkEditorSubSettings subSetting) {
+			this.subSetting = subSetting;
 			final boolean isSelected = subSetting.selected;
 			selected.setSelection(isSelected);
 			selected.addListener(SWT.Selection, event -> {
-				subSetting.selected = selected.getSelection();
+				this.subSetting.selected = selected.getSelection();
 				fireTextChanged();
+				fireFilterChanged();
 			});
 
 			textField.setText(subSetting.textField);
-			textField.setEnabled(isSelected);
 			textField.addModifyListener(event -> {
-				subSetting.textField = textField.getText();
+				this.subSetting.textField = textField.getText();
 				fireTextChanged();
+				fireFilterChanged();
 			});
 
 			caseSensitive.setSelection(subSetting.caseSensitive);
-			caseSensitive.setEnabled(isSelected);
-			caseSensitive.addListener(SWT.Selection, event -> subSetting.caseSensitive = caseSensitive.getSelection());
+			caseSensitive.addListener(SWT.Selection, event -> {
+				subSetting.caseSensitive = caseSensitive.getSelection();
+				fireFilterChanged();
+			});
 
 			wholeWord.setSelection(subSetting.wholeWord);
-			wholeWord.setEnabled(isSelected && !subSetting.exactMatch && !subSetting.regularExpression);
 			wholeWord.addListener(SWT.Selection, event -> {
-				subSetting.wholeWord = wholeWord.getSelection();
+				this.subSetting.wholeWord = wholeWord.getSelection();
 				exactMatch.setEnabled(!wholeWord.getSelection());
 				regularExpression.setEnabled(!wholeWord.getSelection());
+				fireFilterChanged();
 			});
 
 			exactMatch.setSelection(subSetting.exactMatch);
-			exactMatch.setEnabled(isSelected && !subSetting.wholeWord);
 			exactMatch.addListener(SWT.Selection, event -> {
-				subSetting.exactMatch = exactMatch.getSelection();
+				this.subSetting.exactMatch = exactMatch.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
+				fireFilterChanged();
 			});
 
 			regularExpression.setSelection(subSetting.regularExpression);
-			regularExpression.setEnabled(isSelected && !subSetting.wholeWord);
 			regularExpression.addListener(SWT.Selection, event -> {
-				subSetting.regularExpression = regularExpression.getSelection();
+				this.subSetting.regularExpression = regularExpression.getSelection();
 				wholeWord.setEnabled(!exactMatch.getSelection() && !regularExpression.getSelection());
+				fireFilterChanged();
 			});
+
+			selected.notifyListeners(SWT.Selection, null);
+		}
+
+		private void clear() {
+			selected.setSelection(false);
+			textField.setText(""); //$NON-NLS-1$
+			caseSensitive.setSelection(false);
+			wholeWord.setSelection(false);
+			exactMatch.setSelection(false);
+			regularExpression.setSelection(false);
+
+			subSetting.selected = false;
+			subSetting.textField = ""; //$NON-NLS-1$
+			subSetting.caseSensitive = false;
+			subSetting.wholeWord = false;
+			subSetting.exactMatch = false;
+			subSetting.regularExpression = false;
+
+			selected.notifyListeners(SWT.Selection, null);
+		}
+
+		private void fireFilterChanged() {
+			filterChangedListeners.forEach(Runnable::run);
 		}
 
 		private void fireTextChanged() {

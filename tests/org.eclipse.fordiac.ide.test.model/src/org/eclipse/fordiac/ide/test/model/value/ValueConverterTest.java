@@ -207,7 +207,7 @@ class ValueConverterTest {
 				arguments(StringValueConverter.INSTANCE, "'4diac$'IDE'", NAME_ACUTE), //
 				arguments(StringValueConverter.INSTANCE, "'4diac\"IDE'", NAME_BACKSLASH), //
 				arguments(StringValueConverter.INSTANCE, NAME_TWO_DOLLAR, NAME_DOLLAR), //
-				arguments(StringValueConverter.INSTANCE, "'4diac$NIDE'", NAME_BACKSLASHN), //
+				arguments(StringValueConverter.INSTANCE, "'4diac$LIDE'", NAME_BACKSLASHN), //
 				arguments(StringValueConverter.INSTANCE, "'4diac$P$R$TIDE'", NAME_BACKSLASH_FRT), //
 				arguments(StringValueConverter.INSTANCE, "'4diac$00IDE'", "4diac\u0000IDE"), //
 				arguments(WStringValueConverter.INSTANCE, "\"\"", ""), //
@@ -215,7 +215,7 @@ class ValueConverterTest {
 				arguments(WStringValueConverter.INSTANCE, "\"4diac'IDE\"", NAME_ACUTE), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$\"IDE\"", NAME_BACKSLASH), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$$IDE\"", NAME_DOLLAR), //
-				arguments(WStringValueConverter.INSTANCE, "\"4diac$NIDE\"", NAME_BACKSLASHN), //
+				arguments(WStringValueConverter.INSTANCE, "\"4diac$LIDE\"", NAME_BACKSLASHN), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$P$R$TIDE\"", NAME_BACKSLASH_FRT), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$0000IDE\"", "4diac\u0000IDE"), //
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), "[17, 4, 21, 42]",

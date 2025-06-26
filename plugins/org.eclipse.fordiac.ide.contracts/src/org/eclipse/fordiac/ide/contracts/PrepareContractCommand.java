@@ -83,8 +83,10 @@ public class PrepareContractCommand extends Command {
 		if (mappingcmd != null) {
 			mappingcmd.undo();
 		}
-		for (final var cmd : connectioncmds) {
-			cmd.undo();
+		if (connectioncmds != null) {
+			for (final var cmd : connectioncmds) {
+				cmd.undo();
+			}
 		}
 		if (togglecmd != null) {
 			togglecmd.undo();
@@ -102,8 +104,10 @@ public class PrepareContractCommand extends Command {
 		if (togglecmd != null) {
 			togglecmd.redo();
 		}
-		for (final var cmd : connectioncmds) {
-			cmd.redo();
+		if (connectioncmds != null) {
+			for (final var cmd : connectioncmds) {
+				cmd.undo();
+			}
 		}
 		if (mappingcmd != null) {
 			mappingcmd.redo();
@@ -112,10 +116,9 @@ public class PrepareContractCommand extends Command {
 	}
 
 	private SubApp createNewSubapp() {
-		final var resource = fbNetworkElement.isMapped() ? fbNetworkElement.getResource() : null;
-		SubApp subapp = null;
+		SubApp subapp;
 
-		if (fbNetworkElement instanceof final SubApp s) {
+		if (fbNetworkElement instanceof final SubApp s && !s.isTyped()) {
 			subapp = s;
 		} else if (fbNetworkElement.isNestedInSubApp()) {
 			subapp = (SubApp) fbNetworkElement.eContainer().eContainer();
@@ -129,11 +132,18 @@ public class PrepareContractCommand extends Command {
 			if (subappcmd.canExecute()) {
 				subappcmd.execute();
 			}
-
 			subapp = subappcmd.getElement();
 			subapp.setWidth(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_WIDTH));
 			subapp.setHeight(CoordinateConverter.INSTANCE.screenToIEC61499(NEW_SUBAPP_HEIGHT));
 			createConnectionsToSubApp(subapp);
+
+			final var resource = fbNetworkElement.isMapped() ? fbNetworkElement.getResource() : null;
+			if (resource != null) {
+				mappingcmd = MapToCommand.createMapToCommand(subapp, resource);
+				if (mappingcmd.canExecute()) {
+					mappingcmd.execute();
+				}
+			}
 		}
 
 		if (!subapp.isUnfolded()) {
@@ -142,14 +152,6 @@ public class PrepareContractCommand extends Command {
 				togglecmd.execute();
 			}
 		}
-
-		if (resource != null) {
-			mappingcmd = MapToCommand.createMapToCommand(subapp, resource);
-			if (mappingcmd.canExecute()) {
-				mappingcmd.execute();
-			}
-		}
-
 		return subapp;
 	}
 

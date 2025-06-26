@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
@@ -46,25 +48,28 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateImplIncludes»
 		
-		«generateFBDefinition»
-		«generateFBInterfaceDefinition»
-		«generateFBInterfaceSpecDefinition»
+		«generateUseStringId»
 		
-		«IF !type.internalVars.isEmpty»
-			«type.generateInternalVarDefinition»
-			
-		«ENDIF»
+		namespace {
+		  «generateTypeHash»
+		
+		  «generateFBInterfaceDefinition»
+		  «generateFBInterfaceSpecDefinition»
+		  «generateInternalVarDefinition»
+		}
+		
+		«generateFBDefinition»
 		«IF !type.internalConstVars.isEmpty»
-			«type.internalConstVars.generateVariableDefinitions(true)»
-			
-		«ENDIF»		
+			«type.internalConstVars.generateVariableDefinitions(true)»			
+		«ENDIF»
+		
 		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
+		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
 		    			»«type.internalFbs.generateInternalFBInitializer»«// no newline
 		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
+		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		    			»«generateConnectionInitializer» {
 		}
-		«generateInitializeDefinition»
 		
 		«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
 		«generateExecuteEvent»
@@ -72,6 +77,13 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
 		«generateAlgorithms»
 		«generateMethods»
+	'''
+
+	def generateInternalVarDefinition() '''
+		«IF !type.internalVars.isEmpty»
+			
+			const auto cInternalsNames = std::array{«type.internalVars.FORTENameList»};
+		«ENDIF»
 	'''
 
 	def generateChangeFBExecutionState() //
@@ -83,7 +95,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 
 	def protected generateSendEvent(Event event) {
 		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(scm«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
+			return '''sendAdapterEvent(*«(event.FBNetworkElement as AdapterFB).generateName», FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
 		}
 		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
@@ -139,5 +151,12 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 				getDependencies(options)
 			]
 		).toSet
+	}
+	
+	override Set<String> getUsedStrings(Map<?, ?> options) {
+		val strings = super.getUsedStrings(options)
+		type.internalVars.forEach[getUsedIEStrings(it, strings)]
+		type.internalFbs.forEach[getUsedFBStrings(it, strings)]		
+		return strings	
 	}
 }

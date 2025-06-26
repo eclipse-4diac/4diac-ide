@@ -12,7 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
@@ -22,14 +26,26 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	private final IProject project;
 	private final BulkEditorSettings settings;
+	private final List<URI> initialSelectedSubApps;
 
 	public BulkEditorInput(final IProject project) {
 		this(project, new BulkEditorSettings());
 	}
 
+	public BulkEditorInput(final IProject project, final List<URI> initialSelectedSubApps) {
+		this.project = project;
+		this.settings = new BulkEditorSettings();
+		if (!initialSelectedSubApps.isEmpty()) {
+			this.settings.scope = ScopeOption.SUBAPP_HIERARCHY;
+			this.settings.subappHierarchies = initialSelectedSubApps;
+		}
+		this.initialSelectedSubApps = initialSelectedSubApps;
+	}
+
 	public BulkEditorInput(final IProject project, final BulkEditorSettings settings) {
 		this.project = project;
 		this.settings = settings;
+		this.initialSelectedSubApps = settings.subappHierarchies;
 	}
 
 	public IProject getProject() {
@@ -38,6 +54,10 @@ public class BulkEditorInput implements IEditorInput, IPersistableElement {
 
 	public BulkEditorSettings getSettings() {
 		return settings;
+	}
+
+	public List<URI> getInitialSelectedSubApps() {
+		return initialSelectedSubApps;
 	}
 
 	@Override

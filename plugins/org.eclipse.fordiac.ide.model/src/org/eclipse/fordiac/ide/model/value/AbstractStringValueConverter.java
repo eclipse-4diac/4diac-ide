@@ -177,7 +177,7 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 			}
 			break;
 		case '\n':
-			result.append("$N"); //$NON-NLS-1$
+			result.append("$L"); //$NON-NLS-1$
 			break;
 		case '\f':
 			result.append("$P"); //$NON-NLS-1$

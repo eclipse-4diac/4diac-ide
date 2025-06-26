@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Name="FB_RANDOM" Comment="Generate a REAL Randomly" >
+	<Identification Standard="61499-1" Classification="Mathematic" Function="RANDOM" Type="Mathematical function" Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0 " >
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::math">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Initializes the random with the specified seed, if not called the generated values will always be identical" >
+				<With Var="SEED"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Calculates a new random number between 0 and 1" >
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit">
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
+				<With Var="VAL"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="SEED" Type="UINT" Comment="the seed to initialize the random, a seed of 0 (zero) uses the current systemtime as seed"  InitialValue="0"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="VAL" Type="REAL" Comment="Function output" />
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="855" y="285">
+			</ECState>
+			<ECState Name="REQ" Comment="Normal execution"  x="215" y="755">
+				<ECAction Algorithm="REQ" Output="CNF"/>
+			</ECState>
+			<ECState Name="State" x="2015" y="430">
+				<ECAction Algorithm="INIT" Output="INITO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="REQ" Condition="REQ" Comment="" x="555" y="600"/>
+			<ECTransition Source="REQ" Destination="START" Condition="1" Comment="" x="215" y="425"/>
+			<ECTransition Source="START" Destination="State" Condition="INIT" Comment="" x="1705" y="320"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1585" y="680"/>
+		</ECC>
+		<Algorithm Name="INIT" Comment="ALG" >
+			<Other Language="AnyText"><![CDATA[// WARNING - Don't forget to add #include <time.h>
+
+if (SEED() == 0) {
+  srand( (unsigned int) time(NULL) );
+} else {
+  srand( SEED() );
+}]]></Other>
+		</Algorithm>
+		<Algorithm Name="REQ" Comment="Normally executed algorithm" >
+			<Other Language="AnyText"><![CDATA[VAL() = (TForteFloat) ((rand() % 32767) / 100000.0); // RAND_MAX is a constant defined in <cstdlib>. Its default value may vary between implementations but it is granted to be at least 32767.
+]]></Other>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

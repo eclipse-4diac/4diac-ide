@@ -27,7 +27,9 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -62,6 +64,26 @@ public final class InterfaceElementAnnotations {
 		return LibraryElementPackage.eINSTANCE.getInterfaceList_InOutVars().equals(varDecl.eContainingFeature())
 				|| LibraryElementPackage.eINSTANCE.getInterfaceList_OutMappedInOutVars()
 						.equals(varDecl.eContainingFeature());
+	}
+
+	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement element) {
+		return switch (element.eContainer()) {
+		case final FBNetworkElement fbNetworkElement -> fbNetworkElement;
+		case final InterfaceList interfaceList -> interfaceList.getFBNetworkElement();
+		case null, default -> null;
+		};
+	}
+
+	public static FBType getFBType(final IInterfaceElement element) {
+		return switch (element.eContainer()) {
+		case final FBType fbType -> fbType;
+		case final InterfaceList interfaceList -> interfaceList.getFBType();
+		case null, default -> null;
+		};
+	}
+
+	public static InterfaceList getInterfaceList(final IInterfaceElement element) {
+		return element.eContainer() instanceof final InterfaceList interfaceList ? interfaceList : null;
 	}
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,

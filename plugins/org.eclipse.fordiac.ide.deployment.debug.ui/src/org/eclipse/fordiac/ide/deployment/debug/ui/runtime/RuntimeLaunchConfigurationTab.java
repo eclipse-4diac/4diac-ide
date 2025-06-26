@@ -200,9 +200,9 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 			profileCombo.setText(configuration.getAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE,
 					DeploymentEvaluatorConfiguration.DEFAULT_DEVICE_PROFILE));
 			deviceTypeText.setText(configuration.getAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE,
-					DeploymentEvaluatorConfiguration.DEFAULT_DEVICE_TYPE));
+					DeploymentEvaluatorConfiguration.getDefaultDeviceType(getTypeLibrary())));
 			resourceTypeText.setText(configuration.getAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE,
-					DeploymentEvaluatorConfiguration.DEFAULT_RESOURCE_TYPE));
+					DeploymentEvaluatorConfiguration.getDefaultResourceType(getTypeLibrary())));
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
@@ -210,10 +210,19 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 
 	@Override
 	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(DeploymentEvaluatorConfiguration.MGR_ID, runtimeText.getText());
-		configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE, profileCombo.getText());
-		configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE, deviceTypeText.getText());
-		configuration.setAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE, resourceTypeText.getText());
+		if (!DeploymentEvaluatorConfiguration.DEFAULT_MGR_ID.equals(runtimeText.getText())) {
+			configuration.setAttribute(DeploymentEvaluatorConfiguration.MGR_ID, runtimeText.getText());
+		}
+		if (!DeploymentEvaluatorConfiguration.DEFAULT_DEVICE_PROFILE.equals(profileCombo.getText())) {
+			configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE, profileCombo.getText());
+		}
+		if (!DeploymentEvaluatorConfiguration.getDefaultDeviceType(getTypeLibrary()).equals(deviceTypeText.getText())) {
+			configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE, deviceTypeText.getText());
+		}
+		if (!DeploymentEvaluatorConfiguration.getDefaultResourceType(getTypeLibrary())
+				.equals(resourceTypeText.getText())) {
+			configuration.setAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE, resourceTypeText.getText());
+		}
 	}
 
 	@Override

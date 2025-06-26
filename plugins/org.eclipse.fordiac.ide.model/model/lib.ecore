@@ -740,6 +740,9 @@
         defaultValueLiteral=""/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eOperations name="is1SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1());"/>
@@ -942,6 +945,9 @@
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Condition"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
@@ -1317,7 +1323,7 @@
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
-        containment="true"/>
+        containment="true" eOpposite="#//InterfaceList/FBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"
         eOpposite="#//Group/groupElements"/>
@@ -1344,7 +1350,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceList" lowerBound="1"
-        eType="#//InterfaceList" containment="true" resolveProxies="false">
+        eType="#//InterfaceList" containment="true" resolveProxies="false" eOpposite="#//InterfaceList/FBType">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="InterfaceList"/>
@@ -1487,7 +1493,17 @@
       eSuperTypes="#//ITypedElement #//ConfigurableObject #//HiddenElement">
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBNetworkElement(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFBType" lowerBound="1" eType="#//FBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInterfaceList" lowerBound="1" eType="#//InterfaceList">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="validateName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -1556,7 +1572,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
         defaultValueLiteral=""/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="InterfaceList">
@@ -1585,11 +1605,6 @@
         <details key="body" value="return InterfaceListAnnotations.getInterfaceElement(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return InterfaceListAnnotations.getFBNetworkElement(this);"/>
-      </eAnnotations>
     </eOperations>
     <eOperations name="getAdapter" eType="#//AdapterDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -1698,6 +1713,10 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FBType" eType="#//FBType"
+        changeable="false" eOpposite="#//FBType/interfaceList"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FBNetworkElement" eType="#//FBNetworkElement"
+        changeable="false" eOpposite="#//FBNetworkElement/interface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true"
       eSuperTypes="#//INamedElement">
@@ -1847,6 +1866,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="Position">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eOperations name="toScreenPoint" lowerBound="1" eType="#//Point">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return PositionAnnotation.toScreenPoint(this);"/>
@@ -2013,7 +2035,11 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceSequence" eSuperTypes="#//INamedElement #//ConfigurableObject">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -2185,7 +2211,11 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextAlgorithm" abstract="true" eSuperTypes="#//Algorithm">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunction" abstract="true" eSuperTypes="#//Function">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
@@ -2196,10 +2226,18 @@
         eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextFunctionBody" abstract="true" eSuperTypes="#//FunctionBody">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TextMethod" abstract="true" eSuperTypes="#//Method">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
@@ -2210,7 +2248,11 @@
         eType="#//ITypedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="varargs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="transformer" value="org.eclipse.fordiac.ide.model.util.StringTransformer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypedConfigureableObject" eSuperTypes="#//ITypedElement #//ConfigurableObject">
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -2271,6 +2313,8 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subAppNetwork" eType="#//FBNetwork"
         transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varConfigParams" upperBound="-1"
+        eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UntypedSubApp" eSuperTypes="#//SubApp">
     <eOperations name="getType" lowerBound="1" eType="#//SubAppType">
@@ -2369,6 +2413,21 @@
         </eGenericType>
       </eParameters>
     </eOperations>
+    <eOperations name="validateIllegalVariableLengthArrayVariable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateIllegalVariableLengthArrayVariable(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eOperations name="validateNoValueForVariableLengthArrayVariable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
         <details key="invariant" value="true"/>
@@ -2390,6 +2449,21 @@
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateValueOverriddenBySubAppInput" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueOverriddenBySubAppInput(this, diagnostics, context);"/>
       </eAnnotations>
       <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
       <eParameters name="context">

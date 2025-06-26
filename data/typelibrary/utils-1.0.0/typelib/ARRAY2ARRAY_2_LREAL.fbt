@@ -25,4 +25,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_ARRAY2ARRAY'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

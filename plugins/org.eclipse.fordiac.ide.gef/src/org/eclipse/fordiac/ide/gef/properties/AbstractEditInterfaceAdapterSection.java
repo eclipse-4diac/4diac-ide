@@ -58,8 +58,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	@Override
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
-			return getInsertingIndex(interfaceElement, getAdapterList(interfaceList, isInput));
+			return getInsertingIndex(interfaceElement, getAdapterList(interfaceElement.getInterfaceList(), isInput));
 		}
 		return -1;
 	}

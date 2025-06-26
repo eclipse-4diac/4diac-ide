@@ -24,4 +24,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="standard bitwise boolean function (and)" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

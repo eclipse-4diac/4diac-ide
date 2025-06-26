@@ -38,4 +38,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_CLIENT'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

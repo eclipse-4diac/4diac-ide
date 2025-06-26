@@ -10,6 +10,9 @@
          </run>
       </runtime>
       <builder
+            id="org.eclipse.fordiac.ide.library.builder">
+      </builder>
+      <builder
             id="org.eclipse.fordiac.ide.export.builder">
       </builder>
    </extension>

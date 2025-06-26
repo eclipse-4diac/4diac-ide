@@ -106,6 +106,7 @@ public interface Service extends EObject {
 	 * @see #setComment(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getService_Comment()
 	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	String getComment();

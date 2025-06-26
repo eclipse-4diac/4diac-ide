@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Markus Meingast, Johannes Kepler University Linz
+ * Copyright (c) 2022, 2025 Markus Meingast, Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Markus Meingast
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.opcua;
 
@@ -48,6 +51,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.SessionActivityListener;
@@ -324,7 +330,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
-				fbData.getFb().getName(), varDecl.getName());
+				fbData.getFb().getName(), varDecl.getName(), ""); //$NON-NLS-1$
 		writeFBParameter(resource, destination, value);
 	}
 
@@ -345,8 +351,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final IInterfaceElement sourceData = connData.getSource();
-		final IInterfaceElement destinationData = connData.getDestination();
+		final IInterfaceElement sourceData = connData.source();
+		final IInterfaceElement destinationData = connData.destination();
 
 		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
 				|| destinationData.getFBNetworkElement() == null) {
@@ -356,10 +362,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
-				sourceFB.getName(), sourceData.getName());
-		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
-				destinationFB.getName(), destinationData.getName());
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
+				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
+				destinationFB.getName(), destinationData.getName(), ""); //$NON-NLS-1$
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.CREATE_CONNECTION_NODE,
 				new Variant[] { new Variant(source), new Variant(destination) });
 		final String message = MessageFormat.format(Constants.CREATE_CONNECTION, destination, source);
@@ -492,8 +498,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			return;
 		}
 
-		final IInterfaceElement sourceData = connData.getSource();
-		final IInterfaceElement destinationData = connData.getDestination();
+		final IInterfaceElement sourceData = connData.source();
+		final IInterfaceElement destinationData = connData.destination();
 
 		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
 				|| destinationData.getFBNetworkElement() == null) {
@@ -502,10 +508,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
-		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getSourcePrefix(),
-				sourceFB.getName(), sourceData.getName());
-		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.getDestinationPrefix(),
-				destinationFB.getName(), destinationData.getName());
+		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
+				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
+		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
+				destinationFB.getName(), destinationData.getName(), ""); //$NON-NLS-1$
 		final String resName = res.getName();
 		final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
 				Constants.DELETE_CONNECTION_NODE, new Variant[] { new Variant(source), new Variant(destination) });
@@ -562,6 +568,24 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query FB Type not yet supported!"); //$NON-NLS-1$
+	}
+
+	@Override
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query Data Type Type not yet supported!"); //$NON-NLS-1$
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		// TODO implement when the API and infrastructure is fully tested
+		throw new DeploymentException("Query Global Const Type not yet supported!"); //$NON-NLS-1$
 	}
 
 	@Override

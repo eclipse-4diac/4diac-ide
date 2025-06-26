@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -79,6 +80,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
@@ -697,7 +699,9 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 
-		final IInterfaceElement ie = getInterfaceElement(block, name, val);
+		final IInterfaceElement ie = (name.contains(".") && block instanceof final TypedSubApp tsa) //$NON-NLS-1$
+				? parsedVarConfig(tsa, name)
+				: getInterfaceElement(block, name, val);
 
 		if (ie instanceof final VarDeclaration varDecl) {
 			varDecl.setValue(val);
@@ -716,6 +720,91 @@ public abstract class CommonElementImporter {
 			}
 			return false;
 		});
+	}
+
+	private static VarDeclaration parsedVarConfig(final TypedSubApp typedSubApp, final String name) {
+		final var elements = List.of(name.split("\\.")); //$NON-NLS-1$
+		final var pathSegmenents = elements.subList(0, elements.size() - 1);
+		final var lastPathSegment = elements.get(elements.size() - 1);
+
+		final var vd = getVarConfigVD(typedSubApp, pathSegmenents, lastPathSegment);
+		if (vd != null) {
+			return copyVarDeclFromType(vd, name, typedSubApp, pathSegmenents);
+		}
+		return vd;
+	}
+
+	private static VarDeclaration copyVarDeclFromType(final VarDeclaration vd, final String path,
+			FBNetworkElement typedSubApp, final List<String> pathSegmenents) {
+		VarDeclaration result = null;
+		var fbn = typedSubApp.getFbNetwork();
+		final var parts = new ArrayList<>(List.of(path.split("\\."))); //$NON-NLS-1$
+
+		for (final var blockName : pathSegmenents) {
+			typedSubApp = fbn.getNetworkElements().stream().filter(elem -> elem.getName().equals(blockName)).findFirst()
+					.orElse(null);
+			if (typedSubApp == null) {
+				return result;
+			}
+
+			if (typedSubApp instanceof final TypedSubApp tsa) {
+				fbn = tsa.getType().getFBNetwork();
+				if (!parts.isEmpty()) {
+					parts.remove(0);
+				}
+
+				final var relativeName = String.join(".", parts); //$NON-NLS-1$
+				final var copy = EcoreUtil.copy(vd);
+				copy.getAttributes().clear();
+				copy.setName(relativeName);
+				copy.setValue(vd.getValue());
+				copy.setComment(vd.getComment());
+				result = copy;
+				if (!isAlreadyPresent(tsa.getVarConfigParams(), copy.getName())) {
+					tsa.getVarConfigParams().add(copy);
+				}
+			}
+		}
+		return result;
+	}
+
+	private static boolean isAlreadyPresent(final List<VarDeclaration> list, final String name) {
+		return list.stream().anyMatch(elem -> elem.getName().equals(name));
+	}
+
+	private static VarDeclaration getVarConfigVD(FBNetworkElement typedSubApp, final List<String> pathSegmenents,
+			final String lastPathSegment) {
+		var fbn = typedSubApp.getFbNetwork();
+		TypedSubApp current = null;
+
+		for (final var blockName : pathSegmenents) {
+			typedSubApp = fbn.getNetworkElements().stream().filter(elem -> elem.getName().equals(blockName)).findFirst()
+					.orElse(null);
+
+			if (typedSubApp == null) {
+				return null;
+			}
+
+			if (typedSubApp instanceof final TypedSubApp tsa) {
+				fbn = tsa.getType().getFBNetwork();
+				current = tsa;
+			} else if (typedSubApp instanceof final FB fb) {
+				final var vdOpt = fb.getInterface().getAllInterfaceElements().stream()
+						.filter(elem -> elem.getName().equals(lastPathSegment) && elem instanceof VarDeclaration)
+						.map(VarDeclaration.class::cast).findFirst();
+
+				if (vdOpt.isPresent()) {
+					final var vd = vdOpt.get();
+					if (current != null && current.getVarConfigParams().stream()
+							.noneMatch(param -> param.getName().equals(vd.getName()))) {
+						vd.setVarConfig(true);
+						return vd;
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name,

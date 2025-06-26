@@ -48,4 +48,5 @@
 			<ST><![CDATA[Q := FALSE;]]></ST>
 		</Algorithm>
 	</BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

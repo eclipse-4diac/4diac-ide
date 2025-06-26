@@ -56,4 +56,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Subscribe to a PUBLISH_10 Block" >
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_SUBSCRIBE'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

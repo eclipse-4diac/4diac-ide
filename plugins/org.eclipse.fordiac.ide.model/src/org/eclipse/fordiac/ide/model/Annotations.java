@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -526,11 +525,6 @@ public final class Annotations {
 
 	public static AdapterDeclaration getAdapterDestination(final AdapterConnection ac) {
 		return (AdapterDeclaration) ac.getDestination();
-	}
-
-	// *** IInterfaceElement ***//
-	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement iie) {
-		return (iie.eContainer() instanceof final InterfaceList il) ? il.getFBNetworkElement() : null;
 	}
 
 	// *** SystemConfiguration ***//

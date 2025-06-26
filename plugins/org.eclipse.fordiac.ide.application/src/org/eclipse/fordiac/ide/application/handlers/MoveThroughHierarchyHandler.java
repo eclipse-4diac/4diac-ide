@@ -50,7 +50,7 @@ public class MoveThroughHierarchyHandler extends AbstractHandler {
 			if (!fbelements.isEmpty() && allElementsFromSameNetwork(fbelements)) {
 				// get selected FBNetwork
 				final SubAppHierarchyDialog dialog = new SubAppHierarchyDialog(fbelements.get(0), fbelements);
-				final FBNetwork destinationNetwork = dialog.open();
+				final FBNetwork destinationNetwork = dialog.mapResultToFBNetwork(dialog.open());
 				if (destinationNetwork == null) {
 					return Status.CANCEL_STATUS;
 				}

@@ -134,6 +134,11 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	}
 
 	@Override
+	public String getTypeHash() {
+		return ""; //$NON-NLS-1$
+	}
+
+	@Override
 	public String getComment() {
 		return subAppType.getComment();
 	}

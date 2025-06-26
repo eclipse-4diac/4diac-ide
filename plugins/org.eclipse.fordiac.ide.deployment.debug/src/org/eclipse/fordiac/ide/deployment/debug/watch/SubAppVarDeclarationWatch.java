@@ -28,7 +28,7 @@ public class SubAppVarDeclarationWatch extends AbstractSubAppInterfaceWatch impl
 
 	public SubAppVarDeclarationWatch(final String name, final VarDeclaration varDeclaration,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
-		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
+		super(VariableOperations.newVariable(name, DeploymentDebugWatchUtils.evaluateWatchType(varDeclaration)),
 				varDeclaration, debugTarget);
 	}
 
@@ -57,8 +57,8 @@ public class SubAppVarDeclarationWatch extends AbstractSubAppInterfaceWatch impl
 	}
 
 	protected void writeWatch() throws DebugException {
-		for (final IVariableWatch watch : getWatches()) {
-			((IVarDeclarationWatch) watch).setValue(getInternalVariable().getValue());
+		for (final SubWatch watch : getWatches()) {
+			((IVarDeclarationWatch) watch.watch()).setValue(watch.convertValue(getInternalValue()));
 		}
 	}
 
@@ -76,21 +76,22 @@ public class SubAppVarDeclarationWatch extends AbstractSubAppInterfaceWatch impl
 	}
 
 	protected void writeForce() throws DebugException {
-		for (final IVariableWatch watch : getWatches()) {
-			((IVarDeclarationWatch) watch).forceValue(getInternalVariable().getValue());
+		for (final SubWatch watch : getWatches()) {
+			((IVarDeclarationWatch) watch.watch()).forceValue(watch.convertValue(getInternalValue()));
 		}
 	}
 
 	@Override
 	public void clearForce() throws DebugException {
-		for (final IVariableWatch watch : getWatches()) {
-			((IVarDeclarationWatch) watch).clearForce();
+		for (final SubWatch watch : getWatches()) {
+			((IVarDeclarationWatch) watch.watch()).clearForce();
 		}
 	}
 
 	@Override
 	public boolean isForced() {
-		return getWatches().stream().map(IVarDeclarationWatch.class::cast).allMatch(IVarDeclarationWatch::isForced);
+		return getWatches().stream().map(SubWatch::watch).map(IVarDeclarationWatch.class::cast)
+				.allMatch(IVarDeclarationWatch::isForced);
 	}
 
 	@Override

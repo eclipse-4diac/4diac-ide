@@ -35,7 +35,7 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 	private final CompoundCommand deleteCmds = new CompoundCommand();
 	private Command addStructCmd;
 
-	public CreateStructFromInterfaceElementsCommand(List<VarDeclaration> selection, DataType datatype) {
+	public CreateStructFromInterfaceElementsCommand(final List<VarDeclaration> selection, final DataType datatype) {
 		elementsToRemove = Collections.unmodifiableList(selection);
 		if (!elementsToRemove.isEmpty()) {
 			hasInputVariables = elementsToRemove.get(0).isIsInput();
@@ -65,7 +65,7 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 	}
 
 	private InterfaceList getInterfaceList() {
-		return (InterfaceList) elementsToRemove.get(0).eContainer();
+		return elementsToRemove.get(0).getInterfaceList();
 	}
 
 	@Override

@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.utils;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -35,9 +37,19 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 			.getResourceServiceProvider(SYNTHETIC_URI);
 
 	private final FBNetworkElement fbElem;
+	private final List<String> inPorts;
+	private final List<String> outPorts;
 
 	public ContractspecResourceProvider(final FBNetworkElement fbElem) {
 		this.fbElem = fbElem;
+		inPorts = null;
+		outPorts = null;
+	}
+
+	public ContractspecResourceProvider(final List<String> inPorts, final List<String> outPorts) {
+		this.fbElem = null;
+		this.inPorts = inPorts;
+		this.outPorts = outPorts;
 	}
 
 	@Override
@@ -46,7 +58,14 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 		final XtextResource resource = SERVICE_PROVIDER.get(XtextResource.class);
 		resource.setURI(SYNTHETIC_URI);
 		resourceSet.getResources().add(resource);
-		addFBInterface(resourceSet, fbElem);
+
+		final Resource resInter = resourceSet.createResource(SYNTHETIC_URI_INTERFACE);
+		ContractSpecScopeProvider.setInterfaceURI(SYNTHETIC_URI_INTERFACE);
+		if (fbElem != null) {
+			addFBInterface(resInter, fbElem);
+		} else {
+			addFBInterface(resInter, inPorts, outPorts);
+		}
 		return resource;
 	}
 
@@ -55,21 +74,32 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory.class).newEditor(resourceProvider);
 	}
 
-	private static void addFBInterface(final ResourceSet set, final FBNetworkElement fbElem) {
-		final Resource r = set.createResource(SYNTHETIC_URI_INTERFACE);
-		ContractSpecScopeProvider.interfaceURI = SYNTHETIC_URI_INTERFACE;
-
+	private static void addFBInterface(final Resource res, final FBNetworkElement fbElem) {
 		fbElem.getInterface().getInputs().forEach(ie -> {
-			final Port p = ContractSpecFactory.eINSTANCE.createPort();
-			p.setName(ie.getName());
-			p.setIsInput(1);
-			r.getContents().add(p);
+			createPort(res, ie.getName(), true);
 		});
-		fbElem.getInterface().getOutputs().forEach(ie -> {
-			final Port p = ContractSpecFactory.eINSTANCE.createPort();
-			p.setName(ie.getName());
-			p.setIsInput(0);
-			r.getContents().add(p);
+		fbElem.getInterface().getOutputs().forEach(oe -> {
+			createPort(res, oe.getName(), false);
 		});
+	}
+
+	private static void addFBInterface(final Resource res, final List<String> inputs, final List<String> outputs) {
+		if (inputs != null) {
+			for (final String ie : inputs) {
+				createPort(res, ie, true);
+			}
+		}
+		if (outputs != null) {
+			for (final String oe : outputs) {
+				createPort(res, oe, false);
+			}
+		}
+	}
+
+	private static void createPort(final Resource res, final String name, final boolean isInput) {
+		final Port p = ContractSpecFactory.eINSTANCE.createPort();
+		p.setName(name);
+		p.setIsInput(isInput ? 1 : 0);
+		res.getContents().add(p);
 	}
 }

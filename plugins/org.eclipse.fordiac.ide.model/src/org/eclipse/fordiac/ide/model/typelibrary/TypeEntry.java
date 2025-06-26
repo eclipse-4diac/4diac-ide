@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public interface TypeEntry extends Notifier {
 
@@ -103,6 +104,8 @@ public interface TypeEntry extends Notifier {
 	}
 
 	Set<TypeEntry> getDependencies();
+
+	String getTypeHash() throws LibraryElementHashException;
 
 	void refresh();
 

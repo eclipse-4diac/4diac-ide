@@ -62,6 +62,8 @@ import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
+import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
@@ -98,6 +100,7 @@ public final class NatTableWidgetFactory {
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
+	public static final String LEFT_TRUNCATING = "LEFT_TRUNCATING"; //$NON-NLS-1$
 
 	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
 	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
@@ -167,6 +170,14 @@ public final class NatTableWidgetFactory {
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
 			final ICellEditor proposalCellEditor, final I4diacNatTableUtil section, final boolean isInput) {
+		return createRowNatTable(parent, bodyDataLayer, columnHeaderProvider, editableRule, proposalCellEditor, section,
+				null, isInput);
+	}
+
+	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
+			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
+			final ICellEditor proposalCellEditor, final I4diacNatTableUtil section, final ISortModel sortModel,
+			final boolean isInput) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -191,6 +202,13 @@ public final class NatTableWidgetFactory {
 		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
 				selectionLayer);
 
+		final ILayer columnHeader;
+		if (sortModel != null && bodyDataLayer.getDataProvider() instanceof final ListDataProvider<?> dataProvider) {
+			columnHeader = createSortHeaderLayer(columnHeaderLayer, dataProvider, sortModel);
+		} else {
+			columnHeader = columnHeaderLayer;
+		}
+
 		final RowHeaderDataProvider rowHeaderProvider = new RowHeaderDataProvider(bodyDataLayer.getDataProvider(),
 				isInput);
 		selectionLayer.registerCommandHandler(
@@ -207,9 +225,9 @@ public final class NatTableWidgetFactory {
 
 		final DataLayer cornerDataLayer = new DataLayer(
 				new DefaultCornerDataProvider(columnHeaderProvider, rowHeaderProvider));
-		final CornerLayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeaderLayer);
+		final CornerLayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeader);
 
-		final GridLayer gridLayer = new GridLayer(viewportLayer, columnHeaderLayer, rowHeaderLayer, cornerLayer, false);
+		final GridLayer gridLayer = new GridLayer(viewportLayer, columnHeader, rowHeaderLayer, cornerLayer, false);
 		gridLayer.addConfiguration(new DefaultGridLayerConfiguration(gridLayer) {
 			@Override
 			protected void addEditingUIConfig() {
@@ -240,7 +258,6 @@ public final class NatTableWidgetFactory {
 		});
 
 		return table;
-
 	}
 
 	public static <T> NatTable createTreeNatTable(final Composite parent, final DataLayer bodyDataLayer,
@@ -289,6 +306,14 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static SelectionLayer getSelectionLayer(final NatTable table) {
+		final ILayer viewportLayer = getViewportLayer(table);
+		if (viewportLayer != null) {
+			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);
+		}
+		return null;
+	}
+
+	public static ViewportLayer getViewportLayer(final NatTable table) {
 		ILayer viewportLayer = null;
 		if (table.getLayer() instanceof final GridLayer gridLayer) {
 			viewportLayer = gridLayer.getBodyLayer();
@@ -297,8 +322,8 @@ public final class NatTableWidgetFactory {
 			viewportLayer = vpl;
 		}
 
-		if (viewportLayer != null) {
-			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);
+		if (viewportLayer instanceof final ViewportLayer vpl) {
+			return vpl;
 		}
 		return null;
 	}
@@ -313,6 +338,11 @@ public final class NatTableWidgetFactory {
 			}
 		}
 		return null;
+	}
+
+	private static <T> SortHeaderLayer<T> createSortHeaderLayer(final ColumnHeaderLayer columnHeaderLayer,
+			final ListDataProvider<T> bodyDataProvider, final ISortModel sortModel) {
+		return new SortHeaderLayer<>(columnHeaderLayer, sortModel, false);
 	}
 
 	private static void setColumnWidths(final DataLayer dataLayer) {
@@ -404,7 +434,7 @@ public final class NatTableWidgetFactory {
 				return super.getBackgroundColour(cell, configRegistry);
 			}
 		};
-		
+
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
@@ -464,9 +494,13 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
+				
 				// Padding for the left aligned cells
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(
 						new PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER,
+						new BackgroundPainter(new PaddingDecorator(new LeftTruncatingTextPainter(), 2, 2, 2, 2)),
+						DisplayMode.NORMAL, LEFT_TRUNCATING);
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
@@ -535,6 +569,37 @@ public final class NatTableWidgetFactory {
 		@Override
 		public void configureTypedLayer(final SelectionLayer layer) {
 			layer.registerCommandHandler(new PasteFromClipboardDataCommandHandler(selectionLayer, pasteLayer));
+		}
+	}
+
+	private static class LeftTruncatingTextPainter extends TextPainter {
+		public LeftTruncatingTextPainter() {
+			super(false, true, false, true);
+		}
+
+		@Override
+		protected String getTextToDisplay(final ILayerCell cell, final GC gc, final int availableLength,
+				final String text) {
+			if (text == null || text.isEmpty()) {
+				return ""; //$NON-NLS-1$
+			}
+
+			final String dots = "..."; //$NON-NLS-1$
+			if (gc.textExtent(text).x <= availableLength) {
+				return text;
+			}
+
+			// Add characters leftward until text fills available space
+			final StringBuilder result = new StringBuilder();
+			for (int i = text.length() - 1; i >= 0; i--) {
+				result.insert(0, text.charAt(i));
+				final int currentWidth = gc.textExtent(dots + result.toString()).x;
+				if (currentWidth > availableLength) {
+					return dots + result.substring(1);
+				}
+			}
+
+			return dots + result.toString();
 		}
 	}
 

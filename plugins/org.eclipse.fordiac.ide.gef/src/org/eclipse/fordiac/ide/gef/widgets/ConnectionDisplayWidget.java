@@ -243,8 +243,8 @@ public class ConnectionDisplayWidget {
 						if (ie.eContainer() == null) { // broken connection
 							return ""; //$NON-NLS-1$
 						}
-						if (ie.eContainer().eContainer() instanceof CompositeFBType) {
-							return ((CompositeFBType) ie.eContainer().eContainer()).getName();
+						if (ie.getFBType() instanceof final CompositeFBType compositeFBType) {
+							return compositeFBType.getName();
 						}
 						break;
 					case PIN_COL_INDEX:

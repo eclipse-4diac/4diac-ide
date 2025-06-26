@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.messages"; //$NON-NLS-1$
 
@@ -33,6 +34,20 @@ public final class Messages extends NLS {
 	public static String DegenerateIntervalQuickfixLabel;
 
 	public static String DegenerateIntervalQuickfixDescription;
+
+	public static String SlidingWindowNotNeededWarning;
+
+	public static String SlidingWindowInvalidError;
+
+	public static String ClockAlreadyDefinedError;
+
+	public static String MaxdiffAndSkewError;
+
+	public static String MaxdiffAndDriftError;
+
+	public static String SkewWithoutResolutionError;
+
+	public static String SkewLTResolutionError;
 
 	static {
 		// initialize resource bundle

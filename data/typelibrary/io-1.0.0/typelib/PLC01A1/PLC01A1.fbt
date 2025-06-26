@@ -64,4 +64,5 @@
 	</InterfaceList>
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Access IOs of the PLC01A1 module" >
 	</Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

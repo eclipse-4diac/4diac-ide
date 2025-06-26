@@ -66,6 +66,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 
 final package class ExpressionAnnotations {
 
@@ -339,40 +340,40 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getDeclaredResultType(STStructInitElement expr) { expr.variable.featureType }
 
-	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedOutputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInOutArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInOutArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedOutputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInOutArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeInputParameters(arguments)
@@ -391,7 +392,7 @@ final package class ExpressionAnnotations {
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeOutputParameters(arguments)
@@ -412,7 +413,7 @@ final package class ExpressionAnnotations {
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeInOutParameters(arguments)

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,7 @@
  *   Alois Zoitl - reworked deployment to detect if monitoring was enabled
  *               - added message dialog informing about error responses from
  *                 devices
+ *   Martin Jobst - rework initial value handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
@@ -30,8 +31,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
-import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -40,9 +41,10 @@ import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -113,6 +115,7 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 			addDeploymentListener(executor);
 			try (IDeviceManagementInteractorCloser closer = executor::disconnect) {
 				executor.connect();
+				queryTypes(devData, executor);
 				deployResources(devData, executor);
 				deployDeviceData(devData, executor);
 			} catch (final DeploymentException e) {
@@ -123,6 +126,24 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 
 		} else {
 			DeploymentCoordinator.printUnsupportedDeviceProfileMessageBox(devData.getDevice(), null);
+		}
+	}
+
+	private void queryTypes(final DeviceDeploymentData devData, final IDeviceManagementInteractor executor)
+			throws DeploymentException, InterruptedException {
+		for (final FBTypeEntry entry : devData.getFbTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryFBType(entry);
+			curMonitor.worked(1);
+		}
+		for (final DataTypeEntry entry : devData.getDataTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryDataType(entry);
+			curMonitor.worked(1);
 		}
 	}
 
@@ -206,11 +227,12 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 		for (final DeviceDeploymentData devData : deploymentData) {
 			retVal += devData.getSelectedDevParams().size();
 			retVal += devData.getResData().size();
+			retVal += devData.getFbTypes().size();
+			retVal += devData.getDataTypes().size();
 			for (final ResourceDeploymentData resDepData : devData.getResData()) {
 				retVal += countResourceParams(resDepData.getRes());
 				retVal += resDepData.getFbs().size() + resDepData.getConnections().size()
 						+ resDepData.getParams().size();
-				// TODO count variables of Fbs
 			}
 		}
 		return retVal;
@@ -240,17 +262,17 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 				}
 			}
 			createFBInstance(resDepData, executor);
-			deployParamters(resDepData, executor); // this needs to be done before the connections are created
+			deployParameters(resDepData, executor); // this needs to be done before the connections are created
 			deployConnections(resDepData, executor);
 			executor.startResource(res);
 		}
 	}
 
-	private void deployParamters(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
+	private void deployParameters(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
 			throws DeploymentException {
-		for (final ParameterData param : resDepData.getParams()) {
-			executor.writeFBParameter(resDepData.getRes(), param.getValue(),
-					new FBDeploymentData(param.getPrefix(), param.getVar().getFBNetworkElement()), param.getVar());
+		for (final ParameterDeploymentData param : resDepData.getParams()) {
+			executor.writeFBParameter(resDepData.getRes(), param.value(),
+					new FBDeploymentData(param.prefix(), param.variable().getFBNetworkElement()), param.variable());
 			curMonitor.worked(1);
 		}
 	}
@@ -270,19 +292,9 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 			throws DeploymentException {
 		final Resource res = resDepData.getRes();
 		for (final FBDeploymentData fbDepData : resDepData.getFbs()) {
-			if (fbDepData.getFb() instanceof FB && !((FB) fbDepData.getFb()).isResourceTypeFB()) {
+			if (fbDepData.getFb() instanceof final FB fb && !fb.isResourceTypeFB()) {
 				executor.createFBInstance(fbDepData, res);
 				curMonitor.worked(1);
-				final InterfaceList interfaceList = fbDepData.getFb().getInterface();
-				if (interfaceList != null) {
-					for (final VarDeclaration varDecl : interfaceList.getInputVars()) {
-						final String val = DeploymentHelper.getVariableValue(varDecl);
-						if (null != val) {
-							executor.writeFBParameter(res, val, fbDepData, varDecl);
-							curMonitor.worked(1);
-						}
-					}
-				}
 			}
 		}
 	}

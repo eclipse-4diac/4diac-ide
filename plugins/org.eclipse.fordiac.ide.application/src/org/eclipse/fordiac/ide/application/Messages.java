@@ -138,6 +138,8 @@ public final class Messages extends NLS {
 
 	public static String MoveElementDialogTitle;
 
+	public static String SubAppHierarchyDialogTitle;
+
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
 
@@ -289,10 +291,6 @@ public final class Messages extends NLS {
 	public static String QuickFixDialog_Problems_List_Location;
 
 	public static String QuickFixDialog_Problems_List_Resource;
-
-	public static String ContractEditor_Title;
-
-	public static String ContractEditor_OK;
 
 	public static String Connection_Negate;
 

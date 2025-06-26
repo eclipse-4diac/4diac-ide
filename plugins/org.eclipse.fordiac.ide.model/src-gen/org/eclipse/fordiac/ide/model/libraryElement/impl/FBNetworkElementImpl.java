@@ -195,9 +195,9 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 			interface_ = (InterfaceList)eResolveProxy(oldInterface);
 			if (interface_ != oldInterface) {
 				InternalEObject newInterface = (InternalEObject)interface_;
-				NotificationChain msgs = oldInterface.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, null);
+				NotificationChain msgs =  oldInterface.eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, null);
 				if (newInterface.eInternalContainer() == null) {
-					msgs = newInterface.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
+					msgs =  newInterface.eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
@@ -241,9 +241,9 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 		if (newInterface != interface_) {
 			NotificationChain msgs = null;
 			if (interface_ != null)
-				msgs = ((InternalEObject)interface_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
+				msgs = ((InternalEObject)interface_).eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
 			if (newInterface != null)
-				msgs = ((InternalEObject)newInterface).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
+				msgs = ((InternalEObject)newInterface).eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
 			msgs = basicSetInterface(newInterface, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -596,6 +596,10 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
+				if (interface_ != null)
+					msgs = ((InternalEObject)interface_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
+				return basicSetInterface((InterfaceList)otherEnd, msgs);
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP:
 				if (group != null)
 					msgs = ((InternalEObject)group).eInverseRemove(this, LibraryElementPackage.GROUP__GROUP_ELEMENTS, Group.class, msgs);

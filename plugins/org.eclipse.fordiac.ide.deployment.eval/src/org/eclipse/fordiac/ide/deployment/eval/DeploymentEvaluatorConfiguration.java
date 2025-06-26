@@ -24,9 +24,11 @@ public final class DeploymentEvaluatorConfiguration {
 
 	public static final String DEVICE_TYPE = PREFIX + ".DEVICE_TYPE"; //$NON-NLS-1$
 	public static final String DEFAULT_DEVICE_TYPE = "FORTE_PC"; //$NON-NLS-1$
+	public static final String DEFAULT_DEVICE_FULL_TYPE = "iec61499::hardware::FORTE_PC"; //$NON-NLS-1$
 
 	public static final String RESOURCE_TYPE = PREFIX + "RESOURCE_TYPE"; //$NON-NLS-1$
 	public static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
+	public static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::hardware::EMB_RES"; //$NON-NLS-1$
 
 	public static final String DEVICE_PROFILE = PREFIX + ".DEVICE_PROFILE"; //$NON-NLS-1$
 	public static final String DEFAULT_DEVICE_PROFILE = "HOLOBLOC"; //$NON-NLS-1$
@@ -35,11 +37,13 @@ public final class DeploymentEvaluatorConfiguration {
 	public static final String DEFAULT_MGR_ID = "\"localhost:61499\""; //$NON-NLS-1$
 
 	public static DeviceTypeEntry getDeviceType(final Map<String, Object> context, final TypeLibrary typeLibrary) {
-		return typeLibrary.getDeviceTypeEntry((String) context.getOrDefault(DEVICE_TYPE, DEFAULT_DEVICE_TYPE));
+		return typeLibrary
+				.getDeviceTypeEntry((String) context.getOrDefault(DEVICE_TYPE, getDefaultDeviceType(typeLibrary)));
 	}
 
 	public static ResourceTypeEntry getResourceType(final Map<String, Object> context, final TypeLibrary typeLibrary) {
-		return typeLibrary.getResourceTypeEntry((String) context.getOrDefault(RESOURCE_TYPE, DEFAULT_RESOURCE_TYPE));
+		return typeLibrary.getResourceTypeEntry(
+				(String) context.getOrDefault(RESOURCE_TYPE, getDefaultResourceType(typeLibrary)));
 	}
 
 	public static String getDeviceProfile(final Map<String, Object> context) {
@@ -48,6 +52,20 @@ public final class DeploymentEvaluatorConfiguration {
 
 	public static String getMgrID(final Map<String, Object> context) {
 		return (String) context.getOrDefault(MGR_ID, DEFAULT_MGR_ID);
+	}
+
+	public static String getDefaultDeviceType(final TypeLibrary typeLibrary) {
+		if (typeLibrary != null && typeLibrary.getDeviceTypeEntry(DEFAULT_DEVICE_FULL_TYPE) != null) {
+			return DEFAULT_DEVICE_FULL_TYPE;
+		}
+		return DEFAULT_DEVICE_TYPE;
+	}
+
+	public static String getDefaultResourceType(final TypeLibrary typeLibrary) {
+		if (typeLibrary != null && typeLibrary.getResourceTypeEntry(DEFAULT_RESOURCE_FULL_TYPE) != null) {
+			return DEFAULT_RESOURCE_FULL_TYPE;
+		}
+		return DEFAULT_RESOURCE_TYPE;
 	}
 
 	private DeploymentEvaluatorConfiguration() {

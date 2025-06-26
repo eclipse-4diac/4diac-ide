@@ -36,8 +36,6 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		  private:
 		    «generateFBInterfaceDeclaration»
 		
-		    «generateFBInterfaceSpecDeclaration»
-		
 		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
 		    «generateReadInputDataDeclaration»
@@ -46,7 +44,6 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		
 		  public:
 		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
-		    «generateInitializeDeclaration»
 		
 		    «generateInterfaceDeclarations»
 		};

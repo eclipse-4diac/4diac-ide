@@ -454,7 +454,7 @@ public final class VariableOperations {
 		return null;
 	}
 
-	private static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
+	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
 		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
 		if (networkElement != null) {
 			final FBType type = networkElement.getType();

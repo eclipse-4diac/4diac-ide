@@ -19,6 +19,8 @@ import java.util.List;
 import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
+import org.eclipse.xtext.EnumLiteralDeclaration;
+import org.eclipse.xtext.EnumRule;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.Group;
@@ -352,51 +354,53 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Reaction");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cWheneverKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cTriggerAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cTriggerEventExprParserRuleCall_1_0 = (RuleCall)cTriggerAssignment_1.eContents().get(0);
+		private final Assignment cInputAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cInputEventExprParserRuleCall_1_0 = (RuleCall)cInputAssignment_1.eContents().get(0);
 		private final Keyword cOccursKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Keyword cThenKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cReactionAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cReactionEventExprParserRuleCall_4_0 = (RuleCall)cReactionAssignment_4.eContents().get(0);
+		private final Assignment cOutputAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cOutputEventExprParserRuleCall_4_0 = (RuleCall)cOutputAssignment_4.eContents().get(0);
 		private final Keyword cOccursKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Keyword cWithinKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Assignment cIntervalAssignment_7 = (Assignment)cGroup.eContents().get(7);
 		private final RuleCall cIntervalIntervalParserRuleCall_7_0 = (RuleCall)cIntervalAssignment_7.eContents().get(0);
-		private final Keyword cOnceKeyword_8 = (Keyword)cGroup.eContents().get(8);
+		private final Alternatives cAlternatives_8 = (Alternatives)cGroup.eContents().get(8);
+		private final Assignment cOnceAssignment_8_0 = (Assignment)cAlternatives_8.eContents().get(0);
+		private final Keyword cOnceOnceKeyword_8_0_0 = (Keyword)cOnceAssignment_8_0.eContents().get(0);
+		private final Group cGroup_8_1 = (Group)cAlternatives_8.eContents().get(1);
+		private final Assignment cNAssignment_8_1_0 = (Assignment)cGroup_8_1.eContents().get(0);
+		private final RuleCall cNINTTerminalRuleCall_8_1_0_0 = (RuleCall)cNAssignment_8_1_0.eContents().get(0);
+		private final Keyword cOutKeyword_8_1_1 = (Keyword)cGroup_8_1.eContents().get(1);
+		private final Keyword cOfKeyword_8_1_2 = (Keyword)cGroup_8_1.eContents().get(2);
+		private final Assignment cOutOfAssignment_8_1_3 = (Assignment)cGroup_8_1.eContents().get(3);
+		private final RuleCall cOutOfINTTerminalRuleCall_8_1_3_0 = (RuleCall)cOutOfAssignment_8_1_3.eContents().get(0);
+		private final Keyword cTimesKeyword_8_1_4 = (Keyword)cGroup_8_1.eContents().get(4);
 		private final Group cGroup_9 = (Group)cGroup.eContents().get(9);
-		private final Assignment cNAssignment_9_0 = (Assignment)cGroup_9.eContents().get(0);
-		private final RuleCall cNINTTerminalRuleCall_9_0_0 = (RuleCall)cNAssignment_9_0.eContents().get(0);
-		private final Keyword cOutKeyword_9_1 = (Keyword)cGroup_9.eContents().get(1);
-		private final Keyword cOfKeyword_9_2 = (Keyword)cGroup_9.eContents().get(2);
-		private final Assignment cOutOfAssignment_9_3 = (Assignment)cGroup_9.eContents().get(3);
-		private final RuleCall cOutOfINTTerminalRuleCall_9_3_0 = (RuleCall)cOutOfAssignment_9_3.eContents().get(0);
-		private final Keyword cTimesKeyword_9_4 = (Keyword)cGroup_9.eContents().get(4);
-		private final Group cGroup_10 = (Group)cGroup.eContents().get(10);
-		private final Keyword cUsingKeyword_10_0 = (Keyword)cGroup_10.eContents().get(0);
-		private final Keyword cClockKeyword_10_1 = (Keyword)cGroup_10.eContents().get(1);
-		private final Assignment cClockAssignment_10_2 = (Assignment)cGroup_10.eContents().get(2);
-		private final CrossReference cClockClockDefinitionCrossReference_10_2_0 = (CrossReference)cClockAssignment_10_2.eContents().get(0);
-		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_10_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_10_2_0.eContents().get(1);
+		private final Keyword cUsingKeyword_9_0 = (Keyword)cGroup_9.eContents().get(0);
+		private final Keyword cClockKeyword_9_1 = (Keyword)cGroup_9.eContents().get(1);
+		private final Assignment cClockAssignment_9_2 = (Assignment)cGroup_9.eContents().get(2);
+		private final CrossReference cClockClockDefinitionCrossReference_9_2_0 = (CrossReference)cClockAssignment_9_2.eContents().get(0);
+		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_9_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_9_2_0.eContents().get(1);
 		
 		//Reaction:
-		//    "whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "occurs" "within" interval=Interval
-		//    ("once")? (n=INT "out" "of" outOf=INT "times")?
+		//    "whenever" input=EventExpr "occurs" "then" output=EventExpr "occurs" "within" interval=Interval
+		//    (once?="once" | n=INT "out" "of" outOf=INT "times")?
 		//    ("using" "clock" clock=[ClockDefinition])?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//"whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "occurs" "within" interval=Interval
-		//("once")? (n=INT "out" "of" outOf=INT "times")?
+		//"whenever" input=EventExpr "occurs" "then" output=EventExpr "occurs" "within" interval=Interval
+		//(once?="once" | n=INT "out" "of" outOf=INT "times")?
 		//("using" "clock" clock=[ClockDefinition])?
 		public Group getGroup() { return cGroup; }
 		
 		//"whenever"
 		public Keyword getWheneverKeyword_0() { return cWheneverKeyword_0; }
 		
-		//trigger=EventExpr
-		public Assignment getTriggerAssignment_1() { return cTriggerAssignment_1; }
+		//input=EventExpr
+		public Assignment getInputAssignment_1() { return cInputAssignment_1; }
 		
 		//EventExpr
-		public RuleCall getTriggerEventExprParserRuleCall_1_0() { return cTriggerEventExprParserRuleCall_1_0; }
+		public RuleCall getInputEventExprParserRuleCall_1_0() { return cInputEventExprParserRuleCall_1_0; }
 		
 		//"occurs"
 		public Keyword getOccursKeyword_2() { return cOccursKeyword_2; }
@@ -404,11 +408,11 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//"then"
 		public Keyword getThenKeyword_3() { return cThenKeyword_3; }
 		
-		//reaction=EventExpr
-		public Assignment getReactionAssignment_4() { return cReactionAssignment_4; }
+		//output=EventExpr
+		public Assignment getOutputAssignment_4() { return cOutputAssignment_4; }
 		
 		//EventExpr
-		public RuleCall getReactionEventExprParserRuleCall_4_0() { return cReactionEventExprParserRuleCall_4_0; }
+		public RuleCall getOutputEventExprParserRuleCall_4_0() { return cOutputEventExprParserRuleCall_4_0; }
 		
 		//"occurs"
 		public Keyword getOccursKeyword_5() { return cOccursKeyword_5; }
@@ -422,32 +426,169 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//Interval
 		public RuleCall getIntervalIntervalParserRuleCall_7_0() { return cIntervalIntervalParserRuleCall_7_0; }
 		
-		//("once")?
-		public Keyword getOnceKeyword_8() { return cOnceKeyword_8; }
+		//(once?="once" | n=INT "out" "of" outOf=INT "times")?
+		public Alternatives getAlternatives_8() { return cAlternatives_8; }
 		
-		//(n=INT "out" "of" outOf=INT "times")?
-		public Group getGroup_9() { return cGroup_9; }
+		//once?="once"
+		public Assignment getOnceAssignment_8_0() { return cOnceAssignment_8_0; }
+		
+		//"once"
+		public Keyword getOnceOnceKeyword_8_0_0() { return cOnceOnceKeyword_8_0_0; }
+		
+		//n=INT "out" "of" outOf=INT "times"
+		public Group getGroup_8_1() { return cGroup_8_1; }
 		
 		//n=INT
-		public Assignment getNAssignment_9_0() { return cNAssignment_9_0; }
+		public Assignment getNAssignment_8_1_0() { return cNAssignment_8_1_0; }
 		
 		//INT
-		public RuleCall getNINTTerminalRuleCall_9_0_0() { return cNINTTerminalRuleCall_9_0_0; }
+		public RuleCall getNINTTerminalRuleCall_8_1_0_0() { return cNINTTerminalRuleCall_8_1_0_0; }
 		
 		//"out"
-		public Keyword getOutKeyword_9_1() { return cOutKeyword_9_1; }
+		public Keyword getOutKeyword_8_1_1() { return cOutKeyword_8_1_1; }
 		
 		//"of"
-		public Keyword getOfKeyword_9_2() { return cOfKeyword_9_2; }
+		public Keyword getOfKeyword_8_1_2() { return cOfKeyword_8_1_2; }
 		
 		//outOf=INT
-		public Assignment getOutOfAssignment_9_3() { return cOutOfAssignment_9_3; }
+		public Assignment getOutOfAssignment_8_1_3() { return cOutOfAssignment_8_1_3; }
 		
 		//INT
-		public RuleCall getOutOfINTTerminalRuleCall_9_3_0() { return cOutOfINTTerminalRuleCall_9_3_0; }
+		public RuleCall getOutOfINTTerminalRuleCall_8_1_3_0() { return cOutOfINTTerminalRuleCall_8_1_3_0; }
 		
 		//"times"
-		public Keyword getTimesKeyword_9_4() { return cTimesKeyword_9_4; }
+		public Keyword getTimesKeyword_8_1_4() { return cTimesKeyword_8_1_4; }
+		
+		//("using" "clock" clock=[ClockDefinition])?
+		public Group getGroup_9() { return cGroup_9; }
+		
+		//"using"
+		public Keyword getUsingKeyword_9_0() { return cUsingKeyword_9_0; }
+		
+		//"clock"
+		public Keyword getClockKeyword_9_1() { return cClockKeyword_9_1; }
+		
+		//clock=[ClockDefinition]
+		public Assignment getClockAssignment_9_2() { return cClockAssignment_9_2; }
+		
+		//[ClockDefinition]
+		public CrossReference getClockClockDefinitionCrossReference_9_2_0() { return cClockClockDefinitionCrossReference_9_2_0; }
+		
+		//ID
+		public RuleCall getClockClockDefinitionIDTerminalRuleCall_9_2_0_1() { return cClockClockDefinitionIDTerminalRuleCall_9_2_0_1; }
+	}
+	public class AgeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Age");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cWheneverKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cOutputAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cOutputEventExprParserRuleCall_1_0 = (RuleCall)cOutputAssignment_1.eContents().get(0);
+		private final Keyword cOccursKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Keyword cThenKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cInputAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cInputEventExprParserRuleCall_4_0 = (RuleCall)cInputAssignment_4.eContents().get(0);
+		private final Keyword cHasKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Keyword cOccurredKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Keyword cWithinKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cIntervalAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cIntervalIntervalParserRuleCall_8_0 = (RuleCall)cIntervalAssignment_8.eContents().get(0);
+		private final Alternatives cAlternatives_9 = (Alternatives)cGroup.eContents().get(9);
+		private final Assignment cOnceAssignment_9_0 = (Assignment)cAlternatives_9.eContents().get(0);
+		private final Keyword cOnceOnceKeyword_9_0_0 = (Keyword)cOnceAssignment_9_0.eContents().get(0);
+		private final Group cGroup_9_1 = (Group)cAlternatives_9.eContents().get(1);
+		private final Assignment cNAssignment_9_1_0 = (Assignment)cGroup_9_1.eContents().get(0);
+		private final RuleCall cNINTTerminalRuleCall_9_1_0_0 = (RuleCall)cNAssignment_9_1_0.eContents().get(0);
+		private final Keyword cOutKeyword_9_1_1 = (Keyword)cGroup_9_1.eContents().get(1);
+		private final Keyword cOfKeyword_9_1_2 = (Keyword)cGroup_9_1.eContents().get(2);
+		private final Assignment cOutOfAssignment_9_1_3 = (Assignment)cGroup_9_1.eContents().get(3);
+		private final RuleCall cOutOfINTTerminalRuleCall_9_1_3_0 = (RuleCall)cOutOfAssignment_9_1_3.eContents().get(0);
+		private final Keyword cTimesKeyword_9_1_4 = (Keyword)cGroup_9_1.eContents().get(4);
+		private final Group cGroup_10 = (Group)cGroup.eContents().get(10);
+		private final Keyword cUsingKeyword_10_0 = (Keyword)cGroup_10.eContents().get(0);
+		private final Keyword cClockKeyword_10_1 = (Keyword)cGroup_10.eContents().get(1);
+		private final Assignment cClockAssignment_10_2 = (Assignment)cGroup_10.eContents().get(2);
+		private final CrossReference cClockClockDefinitionCrossReference_10_2_0 = (CrossReference)cClockAssignment_10_2.eContents().get(0);
+		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_10_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_10_2_0.eContents().get(1);
+		
+		//Age:
+		//    "whenever" output=EventExpr "occurs" "then" input=EventExpr "has" "occurred" "within" interval=Interval
+		//    (once?="once" | n=INT "out" "of" outOf=INT "times")?
+		//    ("using" "clock" clock=[ClockDefinition])?;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//"whenever" output=EventExpr "occurs" "then" input=EventExpr "has" "occurred" "within" interval=Interval
+		//(once?="once" | n=INT "out" "of" outOf=INT "times")?
+		//("using" "clock" clock=[ClockDefinition])?
+		public Group getGroup() { return cGroup; }
+		
+		//"whenever"
+		public Keyword getWheneverKeyword_0() { return cWheneverKeyword_0; }
+		
+		//output=EventExpr
+		public Assignment getOutputAssignment_1() { return cOutputAssignment_1; }
+		
+		//EventExpr
+		public RuleCall getOutputEventExprParserRuleCall_1_0() { return cOutputEventExprParserRuleCall_1_0; }
+		
+		//"occurs"
+		public Keyword getOccursKeyword_2() { return cOccursKeyword_2; }
+		
+		//"then"
+		public Keyword getThenKeyword_3() { return cThenKeyword_3; }
+		
+		//input=EventExpr
+		public Assignment getInputAssignment_4() { return cInputAssignment_4; }
+		
+		//EventExpr
+		public RuleCall getInputEventExprParserRuleCall_4_0() { return cInputEventExprParserRuleCall_4_0; }
+		
+		//"has"
+		public Keyword getHasKeyword_5() { return cHasKeyword_5; }
+		
+		//"occurred"
+		public Keyword getOccurredKeyword_6() { return cOccurredKeyword_6; }
+		
+		//"within"
+		public Keyword getWithinKeyword_7() { return cWithinKeyword_7; }
+		
+		//interval=Interval
+		public Assignment getIntervalAssignment_8() { return cIntervalAssignment_8; }
+		
+		//Interval
+		public RuleCall getIntervalIntervalParserRuleCall_8_0() { return cIntervalIntervalParserRuleCall_8_0; }
+		
+		//(once?="once" | n=INT "out" "of" outOf=INT "times")?
+		public Alternatives getAlternatives_9() { return cAlternatives_9; }
+		
+		//once?="once"
+		public Assignment getOnceAssignment_9_0() { return cOnceAssignment_9_0; }
+		
+		//"once"
+		public Keyword getOnceOnceKeyword_9_0_0() { return cOnceOnceKeyword_9_0_0; }
+		
+		//n=INT "out" "of" outOf=INT "times"
+		public Group getGroup_9_1() { return cGroup_9_1; }
+		
+		//n=INT
+		public Assignment getNAssignment_9_1_0() { return cNAssignment_9_1_0; }
+		
+		//INT
+		public RuleCall getNINTTerminalRuleCall_9_1_0_0() { return cNINTTerminalRuleCall_9_1_0_0; }
+		
+		//"out"
+		public Keyword getOutKeyword_9_1_1() { return cOutKeyword_9_1_1; }
+		
+		//"of"
+		public Keyword getOfKeyword_9_1_2() { return cOfKeyword_9_1_2; }
+		
+		//outOf=INT
+		public Assignment getOutOfAssignment_9_1_3() { return cOutOfAssignment_9_1_3; }
+		
+		//INT
+		public RuleCall getOutOfINTTerminalRuleCall_9_1_3_0() { return cOutOfINTTerminalRuleCall_9_1_3_0; }
+		
+		//"times"
+		public Keyword getTimesKeyword_9_1_4() { return cTimesKeyword_9_1_4; }
 		
 		//("using" "clock" clock=[ClockDefinition])?
 		public Group getGroup_10() { return cGroup_10; }
@@ -467,139 +608,16 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//ID
 		public RuleCall getClockClockDefinitionIDTerminalRuleCall_10_2_0_1() { return cClockClockDefinitionIDTerminalRuleCall_10_2_0_1; }
 	}
-	public class AgeElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Age");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cWheneverKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cTriggerAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cTriggerEventExprParserRuleCall_1_0 = (RuleCall)cTriggerAssignment_1.eContents().get(0);
-		private final Keyword cOccursKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Keyword cThenKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cReactionAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cReactionEventExprParserRuleCall_4_0 = (RuleCall)cReactionAssignment_4.eContents().get(0);
-		private final Keyword cHasKeyword_5 = (Keyword)cGroup.eContents().get(5);
-		private final Keyword cOccurredKeyword_6 = (Keyword)cGroup.eContents().get(6);
-		private final Keyword cWithinKeyword_7 = (Keyword)cGroup.eContents().get(7);
-		private final Assignment cIntervalAssignment_8 = (Assignment)cGroup.eContents().get(8);
-		private final RuleCall cIntervalIntervalParserRuleCall_8_0 = (RuleCall)cIntervalAssignment_8.eContents().get(0);
-		private final Keyword cOnceKeyword_9 = (Keyword)cGroup.eContents().get(9);
-		private final Group cGroup_10 = (Group)cGroup.eContents().get(10);
-		private final Assignment cNAssignment_10_0 = (Assignment)cGroup_10.eContents().get(0);
-		private final RuleCall cNINTTerminalRuleCall_10_0_0 = (RuleCall)cNAssignment_10_0.eContents().get(0);
-		private final Keyword cOutKeyword_10_1 = (Keyword)cGroup_10.eContents().get(1);
-		private final Keyword cOfKeyword_10_2 = (Keyword)cGroup_10.eContents().get(2);
-		private final Assignment cOutOfAssignment_10_3 = (Assignment)cGroup_10.eContents().get(3);
-		private final RuleCall cOutOfINTTerminalRuleCall_10_3_0 = (RuleCall)cOutOfAssignment_10_3.eContents().get(0);
-		private final Keyword cTimesKeyword_10_4 = (Keyword)cGroup_10.eContents().get(4);
-		private final Group cGroup_11 = (Group)cGroup.eContents().get(11);
-		private final Keyword cUsingKeyword_11_0 = (Keyword)cGroup_11.eContents().get(0);
-		private final Keyword cClockKeyword_11_1 = (Keyword)cGroup_11.eContents().get(1);
-		private final Assignment cClockAssignment_11_2 = (Assignment)cGroup_11.eContents().get(2);
-		private final CrossReference cClockClockDefinitionCrossReference_11_2_0 = (CrossReference)cClockAssignment_11_2.eContents().get(0);
-		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_11_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_11_2_0.eContents().get(1);
-		
-		//Age:
-		//    "whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "has" "occurred" "within" interval=Interval
-		//    ("once")? (n=INT "out" "of" outOf=INT "times")?
-		//    ("using" "clock" clock=[ClockDefinition])?;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//"whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "has" "occurred" "within" interval=Interval
-		//("once")? (n=INT "out" "of" outOf=INT "times")?
-		//("using" "clock" clock=[ClockDefinition])?
-		public Group getGroup() { return cGroup; }
-		
-		//"whenever"
-		public Keyword getWheneverKeyword_0() { return cWheneverKeyword_0; }
-		
-		//trigger=EventExpr
-		public Assignment getTriggerAssignment_1() { return cTriggerAssignment_1; }
-		
-		//EventExpr
-		public RuleCall getTriggerEventExprParserRuleCall_1_0() { return cTriggerEventExprParserRuleCall_1_0; }
-		
-		//"occurs"
-		public Keyword getOccursKeyword_2() { return cOccursKeyword_2; }
-		
-		//"then"
-		public Keyword getThenKeyword_3() { return cThenKeyword_3; }
-		
-		//reaction=EventExpr
-		public Assignment getReactionAssignment_4() { return cReactionAssignment_4; }
-		
-		//EventExpr
-		public RuleCall getReactionEventExprParserRuleCall_4_0() { return cReactionEventExprParserRuleCall_4_0; }
-		
-		//"has"
-		public Keyword getHasKeyword_5() { return cHasKeyword_5; }
-		
-		//"occurred"
-		public Keyword getOccurredKeyword_6() { return cOccurredKeyword_6; }
-		
-		//"within"
-		public Keyword getWithinKeyword_7() { return cWithinKeyword_7; }
-		
-		//interval=Interval
-		public Assignment getIntervalAssignment_8() { return cIntervalAssignment_8; }
-		
-		//Interval
-		public RuleCall getIntervalIntervalParserRuleCall_8_0() { return cIntervalIntervalParserRuleCall_8_0; }
-		
-		//("once")?
-		public Keyword getOnceKeyword_9() { return cOnceKeyword_9; }
-		
-		//(n=INT "out" "of" outOf=INT "times")?
-		public Group getGroup_10() { return cGroup_10; }
-		
-		//n=INT
-		public Assignment getNAssignment_10_0() { return cNAssignment_10_0; }
-		
-		//INT
-		public RuleCall getNINTTerminalRuleCall_10_0_0() { return cNINTTerminalRuleCall_10_0_0; }
-		
-		//"out"
-		public Keyword getOutKeyword_10_1() { return cOutKeyword_10_1; }
-		
-		//"of"
-		public Keyword getOfKeyword_10_2() { return cOfKeyword_10_2; }
-		
-		//outOf=INT
-		public Assignment getOutOfAssignment_10_3() { return cOutOfAssignment_10_3; }
-		
-		//INT
-		public RuleCall getOutOfINTTerminalRuleCall_10_3_0() { return cOutOfINTTerminalRuleCall_10_3_0; }
-		
-		//"times"
-		public Keyword getTimesKeyword_10_4() { return cTimesKeyword_10_4; }
-		
-		//("using" "clock" clock=[ClockDefinition])?
-		public Group getGroup_11() { return cGroup_11; }
-		
-		//"using"
-		public Keyword getUsingKeyword_11_0() { return cUsingKeyword_11_0; }
-		
-		//"clock"
-		public Keyword getClockKeyword_11_1() { return cClockKeyword_11_1; }
-		
-		//clock=[ClockDefinition]
-		public Assignment getClockAssignment_11_2() { return cClockAssignment_11_2; }
-		
-		//[ClockDefinition]
-		public CrossReference getClockClockDefinitionCrossReference_11_2_0() { return cClockClockDefinitionCrossReference_11_2_0; }
-		
-		//ID
-		public RuleCall getClockClockDefinitionIDTerminalRuleCall_11_2_0_1() { return cClockClockDefinitionIDTerminalRuleCall_11_2_0_1; }
-	}
 	public class CausalReactionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalReaction");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cReactionKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cE1Assignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cE1EventSpecParserRuleCall_2_0 = (RuleCall)cE1Assignment_2.eContents().get(0);
+		private final Assignment cInputAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cInputEventSpecParserRuleCall_2_0 = (RuleCall)cInputAssignment_2.eContents().get(0);
 		private final Keyword cCommaKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cE2Assignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cE2EventSpecParserRuleCall_4_0 = (RuleCall)cE2Assignment_4.eContents().get(0);
+		private final Assignment cOutputAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cOutputEventSpecParserRuleCall_4_0 = (RuleCall)cOutputAssignment_4.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Keyword cWithinKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Assignment cIntervalAssignment_7 = (Assignment)cGroup.eContents().get(7);
@@ -612,11 +630,11 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_8_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_8_2_0.eContents().get(1);
 		
 		//CausalReaction:
-		//    "Reaction" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+		//    "Reaction" "(" input=EventSpec "," output=EventSpec ")" "within" interval=Interval
 		//    ("using" "clock" clock=[ClockDefinition])?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//"Reaction" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+		//"Reaction" "(" input=EventSpec "," output=EventSpec ")" "within" interval=Interval
 		//("using" "clock" clock=[ClockDefinition])?
 		public Group getGroup() { return cGroup; }
 		
@@ -626,20 +644,20 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 		
-		//e1=EventSpec
-		public Assignment getE1Assignment_2() { return cE1Assignment_2; }
+		//input=EventSpec
+		public Assignment getInputAssignment_2() { return cInputAssignment_2; }
 		
 		//EventSpec
-		public RuleCall getE1EventSpecParserRuleCall_2_0() { return cE1EventSpecParserRuleCall_2_0; }
+		public RuleCall getInputEventSpecParserRuleCall_2_0() { return cInputEventSpecParserRuleCall_2_0; }
 		
 		//","
 		public Keyword getCommaKeyword_3() { return cCommaKeyword_3; }
 		
-		//e2=EventSpec
-		public Assignment getE2Assignment_4() { return cE2Assignment_4; }
+		//output=EventSpec
+		public Assignment getOutputAssignment_4() { return cOutputAssignment_4; }
 		
 		//EventSpec
-		public RuleCall getE2EventSpecParserRuleCall_4_0() { return cE2EventSpecParserRuleCall_4_0; }
+		public RuleCall getOutputEventSpecParserRuleCall_4_0() { return cOutputEventSpecParserRuleCall_4_0; }
 		
 		//")"
 		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
@@ -676,11 +694,11 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cAgeKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cE1Assignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cE1EventSpecParserRuleCall_2_0 = (RuleCall)cE1Assignment_2.eContents().get(0);
+		private final Assignment cOutputAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cOutputEventSpecParserRuleCall_2_0 = (RuleCall)cOutputAssignment_2.eContents().get(0);
 		private final Keyword cCommaKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cE2Assignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cE2EventSpecParserRuleCall_4_0 = (RuleCall)cE2Assignment_4.eContents().get(0);
+		private final Assignment cInputAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cInputEventSpecParserRuleCall_4_0 = (RuleCall)cInputAssignment_4.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Keyword cWithinKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Assignment cIntervalAssignment_7 = (Assignment)cGroup.eContents().get(7);
@@ -693,11 +711,11 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final RuleCall cClockClockDefinitionIDTerminalRuleCall_8_2_0_1 = (RuleCall)cClockClockDefinitionCrossReference_8_2_0.eContents().get(1);
 		
 		//CausalAge:
-		//    "Age" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+		//    "Age" "(" output=EventSpec "," input=EventSpec ")" "within" interval=Interval
 		//    ("using" "clock" clock=[ClockDefinition])?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//"Age" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+		//"Age" "(" output=EventSpec "," input=EventSpec ")" "within" interval=Interval
 		//("using" "clock" clock=[ClockDefinition])?
 		public Group getGroup() { return cGroup; }
 		
@@ -707,20 +725,20 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 		
-		//e1=EventSpec
-		public Assignment getE1Assignment_2() { return cE1Assignment_2; }
+		//output=EventSpec
+		public Assignment getOutputAssignment_2() { return cOutputAssignment_2; }
 		
 		//EventSpec
-		public RuleCall getE1EventSpecParserRuleCall_2_0() { return cE1EventSpecParserRuleCall_2_0; }
+		public RuleCall getOutputEventSpecParserRuleCall_2_0() { return cOutputEventSpecParserRuleCall_2_0; }
 		
 		//","
 		public Keyword getCommaKeyword_3() { return cCommaKeyword_3; }
 		
-		//e2=EventSpec
-		public Assignment getE2Assignment_4() { return cE2Assignment_4; }
+		//input=EventSpec
+		public Assignment getInputAssignment_4() { return cInputAssignment_4; }
 		
 		//EventSpec
-		public RuleCall getE2EventSpecParserRuleCall_4_0() { return cE2EventSpecParserRuleCall_4_0; }
+		public RuleCall getInputEventSpecParserRuleCall_4_0() { return cInputEventSpecParserRuleCall_4_0; }
 		
 		//")"
 		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
@@ -758,7 +776,8 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Assignment cEventAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
 		private final RuleCall cEventEventSpecParserRuleCall_0_0 = (RuleCall)cEventAssignment_0.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Keyword cLeftParenthesisKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cSequenceAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final Keyword cSequenceLeftParenthesisKeyword_1_0_0 = (Keyword)cSequenceAssignment_1_0.eContents().get(0);
 		private final Assignment cEventsAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cEventsEventListParserRuleCall_1_1_0 = (RuleCall)cEventsAssignment_1_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
@@ -770,12 +789,12 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		
 		//EventExpr:
 		//    event=EventSpec |
-		//    ("(" events=EventList ")") |
+		//    (sequence?="(" events=EventList ")") | // event sequence
 		//    ("{" events=EventList "}");
 		@Override public ParserRule getRule() { return rule; }
 		
 		//event=EventSpec |
-		//("(" events=EventList ")") |
+		//(sequence?="(" events=EventList ")") | // event sequence
 		//("{" events=EventList "}")
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
@@ -785,11 +804,14 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//EventSpec
 		public RuleCall getEventEventSpecParserRuleCall_0_0() { return cEventEventSpecParserRuleCall_0_0; }
 		
-		//("(" events=EventList ")")
+		//(sequence?="(" events=EventList ")")
 		public Group getGroup_1() { return cGroup_1; }
 		
+		//sequence?="("
+		public Assignment getSequenceAssignment_1_0() { return cSequenceAssignment_1_0; }
+		
 		//"("
-		public Keyword getLeftParenthesisKeyword_1_0() { return cLeftParenthesisKeyword_1_0; }
+		public Keyword getSequenceLeftParenthesisKeyword_1_0_0() { return cSequenceLeftParenthesisKeyword_1_0_0; }
 		
 		//events=EventList
 		public Assignment getEventsAssignment_1_1() { return cEventsAssignment_1_1; }
@@ -800,7 +822,8 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//")"
 		public Keyword getRightParenthesisKeyword_1_2() { return cRightParenthesisKeyword_1_2; }
 		
-		//("{" events=EventList "}")
+		//// event sequence
+		//   ("{" events=EventList "}")
 		public Group getGroup_2() { return cGroup_2; }
 		
 		//"{"
@@ -825,6 +848,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Assignment cEventsAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cEventsEventSpecParserRuleCall_1_1_0 = (RuleCall)cEventsAssignment_1_1.eContents().get(0);
 		
+		//            // event set
 		//EventList:
 		//    events+=EventSpec ("," events+=EventSpec)*;
 		@Override public ParserRule getRule() { return rule; }
@@ -922,26 +946,26 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Assignment cTimeAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
 		private final RuleCall cTimeTimeExprParserRuleCall_0_0 = (RuleCall)cTimeAssignment_0.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
-		private final Assignment cB1Assignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final RuleCall cB1BoundaryParserRuleCall_1_0_0 = (RuleCall)cB1Assignment_1_0.eContents().get(0);
-		private final Assignment cV1Assignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cV1ValueParserRuleCall_1_1_0 = (RuleCall)cV1Assignment_1_1.eContents().get(0);
+		private final Assignment cLBoundAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cLBoundBoundaryParserRuleCall_1_0_0 = (RuleCall)cLBoundAssignment_1_0.eContents().get(0);
+		private final Assignment cLbValueAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cLbValueValueParserRuleCall_1_1_0 = (RuleCall)cLbValueAssignment_1_1.eContents().get(0);
 		private final Keyword cCommaKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
-		private final Assignment cV2Assignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
-		private final RuleCall cV2ValueParserRuleCall_1_3_0 = (RuleCall)cV2Assignment_1_3.eContents().get(0);
-		private final Assignment cB2Assignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
-		private final RuleCall cB2BoundaryParserRuleCall_1_4_0 = (RuleCall)cB2Assignment_1_4.eContents().get(0);
+		private final Assignment cUbValueAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
+		private final RuleCall cUbValueValueParserRuleCall_1_3_0 = (RuleCall)cUbValueAssignment_1_3.eContents().get(0);
+		private final Assignment cUBoundAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
+		private final RuleCall cUBoundBoundaryParserRuleCall_1_4_0 = (RuleCall)cUBoundAssignment_1_4.eContents().get(0);
 		private final Assignment cUnitAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
-		private final RuleCall cUnitUnitParserRuleCall_1_5_0 = (RuleCall)cUnitAssignment_1_5.eContents().get(0);
+		private final RuleCall cUnitUnitEnumRuleCall_1_5_0 = (RuleCall)cUnitAssignment_1_5.eContents().get(0);
 		
 		// // component name implicit, isInput used as boolean
 		//Interval:
 		//    time=TimeExpr |
-		//    (b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit);
+		//    (lBound=Boundary lbValue=Value "," ubValue=Value uBound=Boundary unit=Unit);
 		@Override public ParserRule getRule() { return rule; }
 		
 		//time=TimeExpr |
-		//(b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit)
+		//(lBound=Boundary lbValue=Value "," ubValue=Value uBound=Boundary unit=Unit)
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//time=TimeExpr
@@ -950,41 +974,41 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		//TimeExpr
 		public RuleCall getTimeTimeExprParserRuleCall_0_0() { return cTimeTimeExprParserRuleCall_0_0; }
 		
-		//(b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit)
+		//(lBound=Boundary lbValue=Value "," ubValue=Value uBound=Boundary unit=Unit)
 		public Group getGroup_1() { return cGroup_1; }
 		
-		//b1=Boundary
-		public Assignment getB1Assignment_1_0() { return cB1Assignment_1_0; }
+		//lBound=Boundary
+		public Assignment getLBoundAssignment_1_0() { return cLBoundAssignment_1_0; }
 		
 		//Boundary
-		public RuleCall getB1BoundaryParserRuleCall_1_0_0() { return cB1BoundaryParserRuleCall_1_0_0; }
+		public RuleCall getLBoundBoundaryParserRuleCall_1_0_0() { return cLBoundBoundaryParserRuleCall_1_0_0; }
 		
-		//v1=Value
-		public Assignment getV1Assignment_1_1() { return cV1Assignment_1_1; }
+		//lbValue=Value
+		public Assignment getLbValueAssignment_1_1() { return cLbValueAssignment_1_1; }
 		
 		//Value
-		public RuleCall getV1ValueParserRuleCall_1_1_0() { return cV1ValueParserRuleCall_1_1_0; }
+		public RuleCall getLbValueValueParserRuleCall_1_1_0() { return cLbValueValueParserRuleCall_1_1_0; }
 		
 		//","
 		public Keyword getCommaKeyword_1_2() { return cCommaKeyword_1_2; }
 		
-		//v2=Value
-		public Assignment getV2Assignment_1_3() { return cV2Assignment_1_3; }
+		//ubValue=Value
+		public Assignment getUbValueAssignment_1_3() { return cUbValueAssignment_1_3; }
 		
 		//Value
-		public RuleCall getV2ValueParserRuleCall_1_3_0() { return cV2ValueParserRuleCall_1_3_0; }
+		public RuleCall getUbValueValueParserRuleCall_1_3_0() { return cUbValueValueParserRuleCall_1_3_0; }
 		
-		//b2=Boundary
-		public Assignment getB2Assignment_1_4() { return cB2Assignment_1_4; }
+		//uBound=Boundary
+		public Assignment getUBoundAssignment_1_4() { return cUBoundAssignment_1_4; }
 		
 		//Boundary
-		public RuleCall getB2BoundaryParserRuleCall_1_4_0() { return cB2BoundaryParserRuleCall_1_4_0; }
+		public RuleCall getUBoundBoundaryParserRuleCall_1_4_0() { return cUBoundBoundaryParserRuleCall_1_4_0; }
 		
 		//unit=Unit
 		public Assignment getUnitAssignment_1_5() { return cUnitAssignment_1_5; }
 		
 		//Unit
-		public RuleCall getUnitUnitParserRuleCall_1_5_0() { return cUnitUnitParserRuleCall_1_5_0; }
+		public RuleCall getUnitUnitEnumRuleCall_1_5_0() { return cUnitUnitEnumRuleCall_1_5_0; }
 	}
 	public class TimeExprElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.TimeExpr");
@@ -992,7 +1016,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final Assignment cValueAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cValueValueParserRuleCall_0_0 = (RuleCall)cValueAssignment_0.eContents().get(0);
 		private final Assignment cUnitAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cUnitUnitParserRuleCall_1_0 = (RuleCall)cUnitAssignment_1.eContents().get(0);
+		private final RuleCall cUnitUnitEnumRuleCall_1_0 = (RuleCall)cUnitAssignment_1.eContents().get(0);
 		
 		//TimeExpr:
 		//    value=Value unit=Unit;
@@ -1011,7 +1035,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		public Assignment getUnitAssignment_1() { return cUnitAssignment_1; }
 		
 		//Unit
-		public RuleCall getUnitUnitParserRuleCall_1_0() { return cUnitUnitParserRuleCall_1_0; }
+		public RuleCall getUnitUnitEnumRuleCall_1_0() { return cUnitUnitEnumRuleCall_1_0; }
 	}
 	public class BoundaryElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Boundary");
@@ -1035,119 +1059,84 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	public class ValueElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Value");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cIntegerAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cIntegerINTTerminalRuleCall_0_0 = (RuleCall)cIntegerAssignment_0.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Assignment cFractionAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cFractionINTTerminalRuleCall_1_1_0 = (RuleCall)cFractionAssignment_1_1.eContents().get(0);
+		private final RuleCall cINTTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
 		
-		//Value:
-		//    integer=INT ("." fraction=INT)?;
+		//Value returns ecore::EDouble:
+		//    INT ("." INT)?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//integer=INT ("." fraction=INT)?
+		//INT ("." INT)?
 		public Group getGroup() { return cGroup; }
 		
-		//integer=INT
-		public Assignment getIntegerAssignment_0() { return cIntegerAssignment_0; }
-		
 		//INT
-		public RuleCall getIntegerINTTerminalRuleCall_0_0() { return cIntegerINTTerminalRuleCall_0_0; }
+		public RuleCall getINTTerminalRuleCall_0() { return cINTTerminalRuleCall_0; }
 		
-		//("." fraction=INT)?
+		//("." INT)?
 		public Group getGroup_1() { return cGroup_1; }
 		
 		//"."
 		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
 		
-		//fraction=INT
-		public Assignment getFractionAssignment_1_1() { return cFractionAssignment_1_1; }
-		
 		//INT
-		public RuleCall getFractionINTTerminalRuleCall_1_1_0() { return cFractionINTTerminalRuleCall_1_1_0; }
-	}
-	public class UnitElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Unit");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cSKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cMsKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		private final Keyword cUsKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
-		private final Keyword cNsKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
-		
-		//Unit:
-		//    "s" | "ms" | "us" | "ns";
-		@Override public ParserRule getRule() { return rule; }
-		
-		//"s" | "ms" | "us" | "ns"
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//"s"
-		public Keyword getSKeyword_0() { return cSKeyword_0; }
-		
-		//"ms"
-		public Keyword getMsKeyword_1() { return cMsKeyword_1; }
-		
-		//"us"
-		public Keyword getUsKeyword_2() { return cUsKeyword_2; }
-		
-		//"ns"
-		public Keyword getNsKeyword_3() { return cNsKeyword_3; }
+		public RuleCall getINTTerminalRuleCall_1_1() { return cINTTerminalRuleCall_1_1; }
 	}
 	public class CausalFuncDeclElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalFuncDecl");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cFuncNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cFuncNameCausalFuncNameParserRuleCall_0_0 = (RuleCall)cFuncNameAssignment_0.eContents().get(0);
+		private final RuleCall cFuncNameCausalFuncNameEnumRuleCall_0_0 = (RuleCall)cFuncNameAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cP1Assignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final CrossReference cP1PortCrossReference_2_0 = (CrossReference)cP1Assignment_2.eContents().get(0);
-		private final RuleCall cP1PortIDTerminalRuleCall_2_0_1 = (RuleCall)cP1PortCrossReference_2_0.eContents().get(1);
+		private final Assignment cPort1Assignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final CrossReference cPort1PortCrossReference_2_0 = (CrossReference)cPort1Assignment_2.eContents().get(0);
+		private final RuleCall cPort1PortIDTerminalRuleCall_2_0_1 = (RuleCall)cPort1PortCrossReference_2_0.eContents().get(1);
 		private final Keyword cCommaKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cP2Assignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final CrossReference cP2PortCrossReference_4_0 = (CrossReference)cP2Assignment_4.eContents().get(0);
-		private final RuleCall cP2PortIDTerminalRuleCall_4_0_1 = (RuleCall)cP2PortCrossReference_4_0.eContents().get(1);
+		private final Assignment cPort2Assignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final CrossReference cPort2PortCrossReference_4_0 = (CrossReference)cPort2Assignment_4.eContents().get(0);
+		private final RuleCall cPort2PortIDTerminalRuleCall_4_0_1 = (RuleCall)cPort2PortCrossReference_4_0.eContents().get(1);
 		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Keyword cColonEqualsSignKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Assignment cRelationAssignment_7 = (Assignment)cGroup.eContents().get(7);
-		private final RuleCall cRelationCausalRelationParserRuleCall_7_0 = (RuleCall)cRelationAssignment_7.eContents().get(0);
+		private final RuleCall cRelationCausalRelationEnumRuleCall_7_0 = (RuleCall)cRelationAssignment_7.eContents().get(0);
 		
 		//CausalFuncDecl:
-		//    funcName=CausalFuncName "(" p1=[Port] "," p2=[Port] ")" ":=" relation=CausalRelation;
+		//    funcName=CausalFuncName "(" port1=[Port] "," port2=[Port] ")" ":=" relation=CausalRelation;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//funcName=CausalFuncName "(" p1=[Port] "," p2=[Port] ")" ":=" relation=CausalRelation
+		//funcName=CausalFuncName "(" port1=[Port] "," port2=[Port] ")" ":=" relation=CausalRelation
 		public Group getGroup() { return cGroup; }
 		
 		//funcName=CausalFuncName
 		public Assignment getFuncNameAssignment_0() { return cFuncNameAssignment_0; }
 		
 		//CausalFuncName
-		public RuleCall getFuncNameCausalFuncNameParserRuleCall_0_0() { return cFuncNameCausalFuncNameParserRuleCall_0_0; }
+		public RuleCall getFuncNameCausalFuncNameEnumRuleCall_0_0() { return cFuncNameCausalFuncNameEnumRuleCall_0_0; }
 		
 		//"("
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 		
-		//p1=[Port]
-		public Assignment getP1Assignment_2() { return cP1Assignment_2; }
+		//port1=[Port]
+		public Assignment getPort1Assignment_2() { return cPort1Assignment_2; }
 		
 		//[Port]
-		public CrossReference getP1PortCrossReference_2_0() { return cP1PortCrossReference_2_0; }
+		public CrossReference getPort1PortCrossReference_2_0() { return cPort1PortCrossReference_2_0; }
 		
 		//ID
-		public RuleCall getP1PortIDTerminalRuleCall_2_0_1() { return cP1PortIDTerminalRuleCall_2_0_1; }
+		public RuleCall getPort1PortIDTerminalRuleCall_2_0_1() { return cPort1PortIDTerminalRuleCall_2_0_1; }
 		
 		//","
 		public Keyword getCommaKeyword_3() { return cCommaKeyword_3; }
 		
-		//p2=[Port]
-		public Assignment getP2Assignment_4() { return cP2Assignment_4; }
+		//port2=[Port]
+		public Assignment getPort2Assignment_4() { return cPort2Assignment_4; }
 		
 		//[Port]
-		public CrossReference getP2PortCrossReference_4_0() { return cP2PortCrossReference_4_0; }
+		public CrossReference getPort2PortCrossReference_4_0() { return cPort2PortCrossReference_4_0; }
 		
 		//ID
-		public RuleCall getP2PortIDTerminalRuleCall_4_0_1() { return cP2PortIDTerminalRuleCall_4_0_1; }
+		public RuleCall getPort2PortIDTerminalRuleCall_4_0_1() { return cPort2PortIDTerminalRuleCall_4_0_1; }
 		
 		//")"
 		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
@@ -1159,49 +1148,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		public Assignment getRelationAssignment_7() { return cRelationAssignment_7; }
 		
 		//CausalRelation
-		public RuleCall getRelationCausalRelationParserRuleCall_7_0() { return cRelationCausalRelationParserRuleCall_7_0; }
-	}
-	public class CausalFuncNameElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalFuncName");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cVerticalLineGreaterThanSignKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cLessThanSignVerticalLineKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		
-		//CausalFuncName:
-		//    "|>" | "<|";
-		@Override public ParserRule getRule() { return rule; }
-		
-		//"|>" | "<|"
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//"|>"
-		public Keyword getVerticalLineGreaterThanSignKeyword_0() { return cVerticalLineGreaterThanSignKeyword_0; }
-		
-		//"<|"
-		public Keyword getLessThanSignVerticalLineKeyword_1() { return cLessThanSignVerticalLineKeyword_1; }
-	}
-	public class CausalRelationElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalRelation");
-		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
-		private final Keyword cFIFOKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
-		private final Keyword cLIFOKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		private final Keyword cIDKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
-		
-		//CausalRelation:
-		//    "FIFO" | "LIFO" | "ID";
-		@Override public ParserRule getRule() { return rule; }
-		
-		//"FIFO" | "LIFO" | "ID"
-		public Alternatives getAlternatives() { return cAlternatives; }
-		
-		//"FIFO"
-		public Keyword getFIFOKeyword_0() { return cFIFOKeyword_0; }
-		
-		//"LIFO"
-		public Keyword getLIFOKeyword_1() { return cLIFOKeyword_1; }
-		
-		//"ID"
-		public Keyword getIDKeyword_2() { return cIDKeyword_2; }
+		public RuleCall getRelationCausalRelationEnumRuleCall_7_0() { return cRelationCausalRelationEnumRuleCall_7_0; }
 	}
 	public class ClockDefinitionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.ClockDefinition");
@@ -1303,6 +1250,111 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		public RuleCall getMaxdiffTimeExprParserRuleCall_6_1_0() { return cMaxdiffTimeExprParserRuleCall_6_1_0; }
 	}
 	
+	public class UnitElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.Unit");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cSEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cSSKeyword_0_0 = (Keyword)cSEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cMSEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cMSMsKeyword_1_0 = (Keyword)cMSEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cUSEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cUSUsKeyword_2_0 = (Keyword)cUSEnumLiteralDeclaration_2.eContents().get(0);
+		private final EnumLiteralDeclaration cNSEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
+		private final Keyword cNSNsKeyword_3_0 = (Keyword)cNSEnumLiteralDeclaration_3.eContents().get(0);
+		
+		//enum Unit:
+		//    S="s" | MS="ms" | US="us" | NS="ns";
+		public EnumRule getRule() { return rule; }
+		
+		//S="s" | MS="ms" | US="us" | NS="ns"
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//S="s"
+		public EnumLiteralDeclaration getSEnumLiteralDeclaration_0() { return cSEnumLiteralDeclaration_0; }
+		
+		//"s"
+		public Keyword getSSKeyword_0_0() { return cSSKeyword_0_0; }
+		
+		//MS="ms"
+		public EnumLiteralDeclaration getMSEnumLiteralDeclaration_1() { return cMSEnumLiteralDeclaration_1; }
+		
+		//"ms"
+		public Keyword getMSMsKeyword_1_0() { return cMSMsKeyword_1_0; }
+		
+		//US="us"
+		public EnumLiteralDeclaration getUSEnumLiteralDeclaration_2() { return cUSEnumLiteralDeclaration_2; }
+		
+		//"us"
+		public Keyword getUSUsKeyword_2_0() { return cUSUsKeyword_2_0; }
+		
+		//NS="ns"
+		public EnumLiteralDeclaration getNSEnumLiteralDeclaration_3() { return cNSEnumLiteralDeclaration_3; }
+		
+		//"ns"
+		public Keyword getNSNsKeyword_3_0() { return cNSNsKeyword_3_0; }
+	}
+	public class CausalFuncNameElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalFuncName");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cREACTIONEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cREACTIONVerticalLineGreaterThanSignKeyword_0_0 = (Keyword)cREACTIONEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cAGEEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cAGELessThanSignVerticalLineKeyword_1_0 = (Keyword)cAGEEnumLiteralDeclaration_1.eContents().get(0);
+		
+		//enum CausalFuncName:
+		//    REACTION="|>" | AGE="<|";
+		public EnumRule getRule() { return rule; }
+		
+		//REACTION="|>" | AGE="<|"
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//REACTION="|>"
+		public EnumLiteralDeclaration getREACTIONEnumLiteralDeclaration_0() { return cREACTIONEnumLiteralDeclaration_0; }
+		
+		//"|>"
+		public Keyword getREACTIONVerticalLineGreaterThanSignKeyword_0_0() { return cREACTIONVerticalLineGreaterThanSignKeyword_0_0; }
+		
+		//AGE="<|"
+		public EnumLiteralDeclaration getAGEEnumLiteralDeclaration_1() { return cAGEEnumLiteralDeclaration_1; }
+		
+		//"<|"
+		public Keyword getAGELessThanSignVerticalLineKeyword_1_0() { return cAGELessThanSignVerticalLineKeyword_1_0; }
+	}
+	public class CausalRelationElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.ContractSpec.CausalRelation");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cFIFOEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cFIFOFIFOKeyword_0_0 = (Keyword)cFIFOEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cLIFOEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cLIFOLIFOKeyword_1_0 = (Keyword)cLIFOEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cIDEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cIDIDKeyword_2_0 = (Keyword)cIDEnumLiteralDeclaration_2.eContents().get(0);
+		
+		//enum CausalRelation:
+		//    FIFO="FIFO" | LIFO="LIFO" | ID="ID";
+		public EnumRule getRule() { return rule; }
+		
+		//FIFO="FIFO" | LIFO="LIFO" | ID="ID"
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//FIFO="FIFO"
+		public EnumLiteralDeclaration getFIFOEnumLiteralDeclaration_0() { return cFIFOEnumLiteralDeclaration_0; }
+		
+		//"FIFO"
+		public Keyword getFIFOFIFOKeyword_0_0() { return cFIFOFIFOKeyword_0_0; }
+		
+		//LIFO="LIFO"
+		public EnumLiteralDeclaration getLIFOEnumLiteralDeclaration_1() { return cLIFOEnumLiteralDeclaration_1; }
+		
+		//"LIFO"
+		public Keyword getLIFOLIFOKeyword_1_0() { return cLIFOLIFOKeyword_1_0; }
+		
+		//ID="ID"
+		public EnumLiteralDeclaration getIDEnumLiteralDeclaration_2() { return cIDEnumLiteralDeclaration_2; }
+		
+		//"ID"
+		public Keyword getIDIDKeyword_2_0() { return cIDIDKeyword_2_0; }
+	}
 	
 	private final ModelElements pModel;
 	private final TimeSpecElements pTimeSpec;
@@ -1323,10 +1375,10 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	private final TimeExprElements pTimeExpr;
 	private final BoundaryElements pBoundary;
 	private final ValueElements pValue;
-	private final UnitElements pUnit;
+	private final UnitElements eUnit;
 	private final CausalFuncDeclElements pCausalFuncDecl;
-	private final CausalFuncNameElements pCausalFuncName;
-	private final CausalRelationElements pCausalRelation;
+	private final CausalFuncNameElements eCausalFuncName;
+	private final CausalRelationElements eCausalRelation;
 	private final ClockDefinitionElements pClockDefinition;
 	
 	private final Grammar grammar;
@@ -1357,10 +1409,10 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		this.pTimeExpr = new TimeExprElements();
 		this.pBoundary = new BoundaryElements();
 		this.pValue = new ValueElements();
-		this.pUnit = new UnitElements();
+		this.eUnit = new UnitElements();
 		this.pCausalFuncDecl = new CausalFuncDeclElements();
-		this.pCausalFuncName = new CausalFuncNameElements();
-		this.pCausalRelation = new CausalRelationElements();
+		this.eCausalFuncName = new CausalFuncNameElements();
+		this.eCausalRelation = new CausalRelationElements();
 		this.pClockDefinition = new ClockDefinitionElements();
 	}
 	
@@ -1467,8 +1519,8 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	}
 	
 	//Reaction:
-	//    "whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "occurs" "within" interval=Interval
-	//    ("once")? (n=INT "out" "of" outOf=INT "times")?
+	//    "whenever" input=EventExpr "occurs" "then" output=EventExpr "occurs" "within" interval=Interval
+	//    (once?="once" | n=INT "out" "of" outOf=INT "times")?
 	//    ("using" "clock" clock=[ClockDefinition])?;
 	public ReactionElements getReactionAccess() {
 		return pReaction;
@@ -1479,8 +1531,8 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	}
 	
 	//Age:
-	//    "whenever" trigger=EventExpr "occurs" "then" reaction=EventExpr "has" "occurred" "within" interval=Interval
-	//    ("once")? (n=INT "out" "of" outOf=INT "times")?
+	//    "whenever" output=EventExpr "occurs" "then" input=EventExpr "has" "occurred" "within" interval=Interval
+	//    (once?="once" | n=INT "out" "of" outOf=INT "times")?
 	//    ("using" "clock" clock=[ClockDefinition])?;
 	public AgeElements getAgeAccess() {
 		return pAge;
@@ -1491,7 +1543,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	}
 	
 	//CausalReaction:
-	//    "Reaction" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+	//    "Reaction" "(" input=EventSpec "," output=EventSpec ")" "within" interval=Interval
 	//    ("using" "clock" clock=[ClockDefinition])?;
 	public CausalReactionElements getCausalReactionAccess() {
 		return pCausalReaction;
@@ -1502,7 +1554,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	}
 	
 	//CausalAge:
-	//    "Age" "(" e1=EventSpec "," e2=EventSpec ")" "within" interval=Interval
+	//    "Age" "(" output=EventSpec "," input=EventSpec ")" "within" interval=Interval
 	//    ("using" "clock" clock=[ClockDefinition])?;
 	public CausalAgeElements getCausalAgeAccess() {
 		return pCausalAge;
@@ -1514,7 +1566,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	
 	//EventExpr:
 	//    event=EventSpec |
-	//    ("(" events=EventList ")") |
+	//    (sequence?="(" events=EventList ")") | // event sequence
 	//    ("{" events=EventList "}");
 	public EventExprElements getEventExprAccess() {
 		return pEventExpr;
@@ -1524,6 +1576,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		return getEventExprAccess().getRule();
 	}
 	
+	//            // event set
 	//EventList:
 	//    events+=EventSpec ("," events+=EventSpec)*;
 	public EventListElements getEventListAccess() {
@@ -1557,7 +1610,7 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 	// // component name implicit, isInput used as boolean
 	//Interval:
 	//    time=TimeExpr |
-	//    (b1=Boundary v1=Value "," v2=Value b2=Boundary unit=Unit);
+	//    (lBound=Boundary lbValue=Value "," ubValue=Value uBound=Boundary unit=Unit);
 	public IntervalElements getIntervalAccess() {
 		return pInterval;
 	}
@@ -1586,8 +1639,8 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		return getBoundaryAccess().getRule();
 	}
 	
-	//Value:
-	//    integer=INT ("." fraction=INT)?;
+	//Value returns ecore::EDouble:
+	//    INT ("." INT)?;
 	public ValueElements getValueAccess() {
 		return pValue;
 	}
@@ -1596,18 +1649,18 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		return getValueAccess().getRule();
 	}
 	
-	//Unit:
-	//    "s" | "ms" | "us" | "ns";
+	//enum Unit:
+	//    S="s" | MS="ms" | US="us" | NS="ns";
 	public UnitElements getUnitAccess() {
-		return pUnit;
+		return eUnit;
 	}
 	
-	public ParserRule getUnitRule() {
+	public EnumRule getUnitRule() {
 		return getUnitAccess().getRule();
 	}
 	
 	//CausalFuncDecl:
-	//    funcName=CausalFuncName "(" p1=[Port] "," p2=[Port] ")" ":=" relation=CausalRelation;
+	//    funcName=CausalFuncName "(" port1=[Port] "," port2=[Port] ")" ":=" relation=CausalRelation;
 	public CausalFuncDeclElements getCausalFuncDeclAccess() {
 		return pCausalFuncDecl;
 	}
@@ -1616,23 +1669,23 @@ public class ContractSpecGrammarAccess extends AbstractElementFinder.AbstractGra
 		return getCausalFuncDeclAccess().getRule();
 	}
 	
-	//CausalFuncName:
-	//    "|>" | "<|";
+	//enum CausalFuncName:
+	//    REACTION="|>" | AGE="<|";
 	public CausalFuncNameElements getCausalFuncNameAccess() {
-		return pCausalFuncName;
+		return eCausalFuncName;
 	}
 	
-	public ParserRule getCausalFuncNameRule() {
+	public EnumRule getCausalFuncNameRule() {
 		return getCausalFuncNameAccess().getRule();
 	}
 	
-	//CausalRelation:
-	//    "FIFO" | "LIFO" | "ID";
+	//enum CausalRelation:
+	//    FIFO="FIFO" | LIFO="LIFO" | ID="ID";
 	public CausalRelationElements getCausalRelationAccess() {
-		return pCausalRelation;
+		return eCausalRelation;
 	}
 	
-	public ParserRule getCausalRelationRule() {
+	public EnumRule getCausalRelationRule() {
 		return getCausalRelationAccess().getRule();
 	}
 	

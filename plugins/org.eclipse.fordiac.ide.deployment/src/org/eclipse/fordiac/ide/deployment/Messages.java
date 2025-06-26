@@ -72,6 +72,8 @@ public final class Messages extends NLS {
 
 	public static String DownloadRunnable_DeploymentErrorWarningMessage;
 
+	public static String ResourceDeploymentData_MissingSubAppNetwork;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

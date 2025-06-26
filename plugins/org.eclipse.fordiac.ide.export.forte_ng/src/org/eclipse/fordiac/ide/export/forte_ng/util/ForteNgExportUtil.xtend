@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -42,23 +44,46 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
-
 final class ForteNgExportUtil {
+	public static final CharSequence CONNECTION_EXPORT_PREFIX = "conn_"
 	public static final CharSequence VARIABLE_EXPORT_PREFIX = "var_"
 	public static final CharSequence EVENT_EXPORT_PREFIX = "evt_"
 	public static final CharSequence FB_EXPORT_PREFIX = "fb_"
+
+	def static boolean needsGenericAccess(IInterfaceElement element) {
+		switch (element) {
+			VarDeclaration case element.FBType instanceof CompositeFBType:
+				element.inOutVar || (!element.isInput && !element.inputConnections.empty &&
+					element.inputConnections.first.sourceElement.type.genericType)
+			default:
+				false
+		}
+	}
 
 	def static CharSequence generateName(IInterfaceElement element) {
 		switch (element) {
 			Event: '''«EVENT_EXPORT_PREFIX»«element.name»'''
 			case element.eContainmentFeature == LibraryElementPackage.Literals.
 				BASE_FB_TYPE__INTERNAL_CONST_VARS: '''«VARIABLE_EXPORT_PREFIX»const_«element.name»'''
-			case element.rootContainer instanceof AdapterType: '''«VARIABLE_EXPORT_PREFIX»«element.name»()'''
+			VarDeclaration case element.FBType instanceof CompositeFBType:
+				if (element.isInput || element.inOutVar)
+					'''«CONNECTION_EXPORT_PREFIX»if2in_«element.name».getValue()'''
+				else if (!element.inputConnections.empty && !element.inputConnections.first.negated)
+					element.inputConnections.first.generateConnectionValue
+				else
+					'''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 			default: '''«VARIABLE_EXPORT_PREFIX»«element.name»'''
 		}
+	}
+
+	def static CharSequence generateConnectionValue(Connection conn) {
+		if (conn.sourceElement.type.genericType)
+			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
+		else
+			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
 	}
 
 	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»'''
@@ -77,7 +102,8 @@ final class ForteNgExportUtil {
 			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
 			FBType case type.genericType:
 				type.genericClassName
-			FBType: '''FORTE_«type.generateTypeNamePlain»'''
+			FBType,
+			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
 		}
@@ -94,7 +120,8 @@ final class ForteNgExportUtil {
 			DataType: '''CIEC_«type.generateTypeNamePlain»'''
 			FBType case type.genericType:
 				type.genericClassName
-			FBType: '''FORTE_«type.generateTypeNamePlain»'''
+			FBType,
+			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
 			default:
 				type.generateTypeNamePlain
 		}
@@ -111,6 +138,17 @@ final class ForteNgExportUtil {
 		}
 	}
 
+	def static CharSequence generateDefiningTypeName(EObject object) {
+		switch (object) {
+			LibraryElement: object.generateTypeName
+			default: object.eResource?.generateDefiningTypeName
+		}
+	}
+
+	def static CharSequence generateDefiningTypeName(Resource resource) {
+		resource.contents.filter(LibraryElement)?.head?.generateTypeName
+	}
+
 	def static String generateDefiningInclude(EObject object) {
 		switch (object) {
 			LibraryElement: object.generateTypeIncludePath
@@ -121,7 +159,7 @@ final class ForteNgExportUtil {
 	def static String generateDefiningInclude(Resource resource) {
 		resource.contents.filter(LibraryElement)?.head?.generateTypeIncludePath ?:
 			'''«resource.URI.trimFileExtension.lastSegment».h'''
-	}	
+	}
 
 	def static String generateTypeIncludePath(INamedElement type) {
 		switch (path : type.generateTypePath) {
@@ -192,7 +230,7 @@ final class ForteNgExportUtil {
 		switch (type) {
 			ArrayType:
 				type.baseType.generateTypePath
-			AnyType case type.typeEntry === null: 
+			AnyType case type.typeEntry === null:
 				"core/datatypes"
 			LibraryElement:
 				type.compilerInfo?.packageName?.replace("::", "/") ?: ""
@@ -236,7 +274,25 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence getFORTEStringId(String s) '''g_nStringId«s»'''
+	def static CharSequence getFORTEStringId(String s) '''STRID(«s»)'''
+
+	def static int getAbsoluteDataPortIndex(IInterfaceElement element) {
+		val interfaceList = element.interfaceList
+		if (interfaceList !== null) {
+			switch (element.eContainmentFeature) {
+				case LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS:
+					0
+				case LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS:
+					interfaceList.inputVars.size
+				case LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				case LibraryElementPackage.Literals.INTERFACE_LIST__OUT_MAPPED_IN_OUT_VARS:
+					interfaceList.inputVars.size + interfaceList.outputVars.size
+				default:
+					0
+			} + element.interfaceElementIndex
+		} else
+			element.interfaceElementIndex
+	}
 
 	def static int getInterfaceElementIndex(IInterfaceElement element) {
 		if (element.eContainer !== null && element.eContainingFeature.many) {

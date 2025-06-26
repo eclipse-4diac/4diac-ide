@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_MOVE" Comment="moves input to output">
+	<Identification Standard="61131-3" Classification="standard arithmetic function" Description="Copyright (c) 2013 TU Wien ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="TU Wien ACIN" Version="1.0" Author="Monika Wenger" Date="2013-08-17">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61131::arithmetic">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="ANY" Comment="input"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY" Comment="input = output"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_FORTE_F_MOVE'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

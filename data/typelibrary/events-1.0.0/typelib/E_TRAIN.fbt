@@ -51,4 +51,5 @@
 			<Connection Source="CTR.Q" Destination="GATE.G"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -31,4 +31,5 @@
       <ECTransition Comment="" Condition="EI1[G]" Destination="EO" Source="START" x="1060.0" y="740.0"/>
     </ECC>
   </BasicFB>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

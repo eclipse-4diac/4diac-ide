@@ -12,77 +12,51 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
-import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
-import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
-import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
-import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
-import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
-import org.eclipse.nebula.widgets.nattable.config.EditableRule;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
-import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
-import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -91,12 +65,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
-
 	private static final List<String> DEFAULT_LIST = List.of(Messages.Name, Messages.Type, Messages.Comment,
 			Messages.InitialValue);
 	private static final List<String> LIST_WITHOUT_VALUE = List.of(Messages.Name, Messages.Type, Messages.Comment);
@@ -105,28 +83,42 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final CommandStack commandStack = new CommandStack();
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
 	private BulkEditorSettings settings;
+	private List<URI> selectedSubApps = Collections.emptyList();
+	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
+	private final IPartListener2 focusListener = new IPartListener2() {
+		@Override
+		public void partActivated(final IWorkbenchPartReference partRef) {
+			if (partRef.getPart(false) == BulkEditor.this) {
+				checkTypeEntriesForDirty();
+			}
+		}
+	};
 
 	// Search For
 	private Combo modeSelectionDropDown;
 	private FilterComposite searchFilter;
+	private boolean changedSearchParameter = false;
 
 	// Search In
+	private Button searchInClearButton;
 	private FilterComposite fbSubappTypesFilter;
 	private FilterComposite fbTypedSubappInstanceFilter;
 	private FilterComposite untypedSubappFilter;
 	private FilterComposite dataTypesFilter;
 	private FilterComposite attributeTypesFilter;
+	private Button ignoreLinkedLibrariesButton;
 
 	// Scope
 	private Button workspaceScopeButton;
 	private Button projectScopeButton;
+	private Button subappHierarchyScopeButton;
+	private Button subappHierarchyScopeSearchButton;
+	private Label subappHierarchyScopeLabel;
 
-	private Button ignoreLinkedLibrariesButton;
+	BulkEditorNatTable natTable;
 
-	// NatTable
-	private NatTable natTable;
-	private ChangeableListDataProvider<Attribute> attributeProvider;
-	private ChangeableListDataProvider<VarDeclaration> varDeclProvider;
+	private Label searchInformation;
+	private Label dirtyInformation;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -137,64 +129,95 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (input instanceof final BulkEditorInput bulkEditorInput) {
 			this.settings = bulkEditorInput.getSettings();
 			project = bulkEditorInput.getProject();
+			selectedSubApps = bulkEditorInput.getInitialSelectedSubApps();
 			setPartName(getPartName() + ": " + project.getName()); //$NON-NLS-1$
 		}
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		// page layout
 		final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setBackground(parent.getBackground());
 		scrolledComposite.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		final Composite composite = new Composite(scrolledComposite, SWT.NONE);
-		scrolledComposite.setContent(composite);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(composite);
 
-		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(composite);
-		modeSelectionDropDown = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		final Composite pageComposite = new Composite(scrolledComposite, SWT.NONE);
+		scrolledComposite.setContent(pageComposite);
+		GridLayoutFactory.fillDefaults().numColumns(1).margins(20, 20).generateLayout(pageComposite);
+
+		final Composite pageHeaderComposite = new Composite(pageComposite, SWT.NONE);
+		pageHeaderComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var headerLayout = new GridLayout(2, false);
+
+		final Composite pageBodyComposite = new Composite(pageComposite, SWT.NONE);
+		pageBodyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		pageBodyComposite.setLayout(new GridLayout(1, false));
+
+		// header
+		pageHeaderComposite.setLayout(headerLayout);
+		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(pageHeaderComposite);
+		final Twistie expandBodyCompositeTwistie = new Twistie(pageHeaderComposite, SWT.NONE);
+		expandBodyCompositeTwistie.setExpanded(true);
+		expandBodyCompositeTwistie.addListener(SWT.MouseUp, event -> {
+			final boolean isVisible = expandBodyCompositeTwistie.isExpanded();
+			updateVisibility(isVisible, pageBodyComposite);
+		});
+
+		// body
+		modeSelectionDropDown = new Combo(pageBodyComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
 		modeSelectionDropDown.select(settings.modeSelection);
 		modeSelectionDropDown.addListener(SWT.Selection, event -> {
-			changeNatTable(natTable.getParent(), modeSelectionDropDown.getSelectionIndex());
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
+			natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
 			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
-			natTable.getParent().layout();
+			pageComposite.layout();
+			changedSearchParameter = false;
+			searchInformation.setText(""); //$NON-NLS-1$
+			commandStack.flush();
 		});
 
-		final Group searchGroup = WidgetFactory.group(SWT.NONE).text(Messages.SearchWhere).create(composite);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
+		createSearchWhereGroup(pageBodyComposite);
+		createSearchInGroup(pageBodyComposite);
+		createScopeGroup(pageBodyComposite);
+		createSearchButton(pageBodyComposite);
+		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection);
 
-		searchFilter = new FilterComposite(searchGroup, SWT.NONE, DEFAULT_LIST, settings,
-				BulkEditorSettings.whereSearchList);
-
-		createSearchInGroup(composite);
-		createScopeGroup(composite);
-		createSearchButton(composite);
-		createNatTable(composite, settings.modeSelection);
-
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		composite.layout();
+		scrolledComposite.setMinSize(pageComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		pageComposite.layout();
+		getSite().getPage().addPartListener(focusListener);
 	}
 
-	private static <T> List<T> mapList(final List<EObject> ori, final Class<T> clazz) {
-		final List<T> result = new ArrayList<>();
-		for (final EObject obj : ori) {
-			if (clazz.isInstance(obj)) {
-				result.add(clazz.cast(obj));
-			}
-		}
-		return result;
+	private void createSearchWhereGroup(final Composite parent) {
+		final Group searchWhereGroup = createCollapsibleGroup(parent, Messages.SearchWhere,
+				button -> button.addListener(SWT.Selection, event -> {
+					searchFilter.clear();
+				}));
+
+		searchFilter = new FilterComposite(searchWhereGroup, SWT.NONE, DEFAULT_LIST, settings,
+				BulkEditorSettings.whereSearchList);
+		searchFilter.addFilterChangedListener(() -> {
+			this.changedSearchParameter = true;
+		});
 	}
 
 	private void createSearchInGroup(final Composite parent) {
-		final Group searchGroup = new Group(parent, SWT.NONE);
-		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
-		searchGroup.setText(Messages.SearchIn);
-
+		final Group searchGroup = createCollapsibleGroup(parent, Messages.SearchIn,
+				button -> this.searchInClearButton = button);
+		this.searchInClearButton.addListener(SWT.Selection, event -> {
+			fbSubappTypesFilter.clear();
+			fbTypedSubappInstanceFilter.clear();
+			untypedSubappFilter.clear();
+			dataTypesFilter.clear();
+			attributeTypesFilter.clear();
+			ignoreLinkedLibrariesButton.setSelection(true);
+			settings.ignoreLinkedLibraries = true;
+		});
 		fbSubappTypesFilter = createSearchFilterInGroup(searchGroup, Messages.FBandSubappTypes,
 				BulkEditorSettings.inFBTypesSearchList, settings.fbSubappTypes,
 				b -> settings.fbSubappTypes = b.booleanValue());
@@ -215,9 +238,74 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				.onSelect(event -> settings.ignoreLinkedLibraries = ignoreLinkedLibrariesButton.getSelection())
 				.create(searchGroup);
 		ignoreLinkedLibrariesButton.setSelection(settings.ignoreLinkedLibraries);
-		final GridData buttonData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		buttonData.verticalIndent = 10;
-		ignoreLinkedLibrariesButton.setLayoutData(buttonData);
+		final GridData buttonLayoutData = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		buttonLayoutData.verticalIndent = 10;
+		ignoreLinkedLibrariesButton.setLayoutData(buttonLayoutData);
+	}
+
+	private void createSearchButton(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
+			performSearch();
+			checkTypeEntriesForDirty();
+		}).create(composite);
+
+		dirtyInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		dirtyInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
+		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
+		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
+
+	private static Group createCollapsibleGroup(final Composite parent, final String groupLabel,
+			final Consumer<Button> clearButtonProvider) {
+		// group layout
+		final Composite groupComposite = new Composite(parent, SWT.NONE);
+		groupComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final var groupCompositeLayout = new GridLayout(1, false);
+		groupCompositeLayout.verticalSpacing = 0;
+		groupCompositeLayout.marginWidth = 0;
+		groupComposite.setLayout(groupCompositeLayout);
+
+		final Composite header = new Composite(groupComposite, SWT.NONE);
+		header.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		header.setLayout(new GridLayout(clearButtonProvider != null ? 3 : 2, false));
+		final Group searchGroup = new Group(groupComposite, SWT.NONE);
+		searchGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		searchGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(1).create());
+
+		// header
+		final Label titleLabel = new Label(header, SWT.NONE);
+		titleLabel.setText(groupLabel);
+		final Twistie expandCompositeTwistie = new Twistie(header, SWT.NONE);
+		final Button clearButton;
+		if (clearButtonProvider != null) {
+			clearButton = WidgetFactory.button(SWT.PUSH)
+					.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_CLEAR))
+					.tooltip(Messages.ClearFilter).create(header);
+			clearButtonProvider.accept(clearButton);
+		} else {
+			clearButton = null;
+		}
+
+		expandCompositeTwistie.setExpanded(true);
+		expandCompositeTwistie.addListener(SWT.MouseUp, event -> {
+			final boolean isVisible = expandCompositeTwistie.isExpanded();
+			if (clearButton != null) {
+				clearButton.setVisible(isVisible);
+			}
+
+			updateVisibility(isVisible, searchGroup);
+		});
+
+		return searchGroup;
 	}
 
 	private FilterComposite createSearchFilterInGroup(final Composite parent, final String name,
@@ -245,6 +333,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				event -> updateVisibility(expandFilterCompositeTwistie.isExpanded(), filterComposite));
 		updateVisibility(false, filterComposite);
 
+		searchInClearButton.addListener(SWT.Selection, event -> {
+			categorySelectionButton.setSelection(true);
+			categorySelectionButton.notifyListeners(SWT.Selection, null);
+			expandFilterCompositeTwistie.setExpanded(false);
+			expandFilterCompositeTwistie.notifyListeners(SWT.MouseUp, null);
+		});
+
 		final Label stateLabel = new Label(searchInCategorySubComposite, SWT.LEAD);
 		stateLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		filterComposite.addTextChangedListener(stateLabel::setText);
@@ -252,90 +347,227 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		return filterComposite;
 	}
 
-	private static void updateVisibility(final boolean visible, final FilterComposite filter) {
-		filter.setVisible(visible);
-		((GridData) filter.getLayoutData()).exclude = !visible;
+	private static void updateVisibility(final boolean visible, final Composite composite) {
+		composite.setVisible(visible);
+		((GridData) composite.getLayoutData()).exclude = !visible;
 
-		filter.layout();
-		final Composite composite = filter.getParent().getParent();
-		composite.layout();
-		if (composite.getParent().getParent() instanceof final ScrolledComposite sc) {
-			sc.setMinSize(composite.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		Composite current = composite.getParent();
+		while (current != null && !(current.getParent() instanceof ScrolledComposite)) {
+			current = current.getParent();
+		}
+		if (current != null) {
+			final ScrolledComposite scrolledParentComposite = (ScrolledComposite) current.getParent();
+			scrolledParentComposite.setMinSize(current.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			current.layout();
 		}
 		composite.getParent().layout();
 	}
 
 	private void createScopeGroup(final Composite parent) {
-		final Group scopeGroup = new Group(parent, SWT.NONE);
-		scopeGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		scopeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(4).create());
-		scopeGroup.setText(Messages.Scope);
+		final Group scopeGroup = createCollapsibleGroup(parent, Messages.Scope, null);
+		final Composite groupContent = new Composite(scopeGroup, SWT.NONE);
+		groupContent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		groupContent.setLayout(GridLayoutFactory.swtDefaults().numColumns(5).create());
 
 		projectScopeButton = WidgetFactory.button(SWT.RADIO)
-				.text(MessageFormat.format(Messages.Project, project.getName())).create(scopeGroup);
-		projectScopeButton.setSelection(settings.projectScope);
-		projectScopeButton.addListener(SWT.Selection,
-				event -> settings.projectScope = projectScopeButton.getSelection());
-		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(scopeGroup);
-		workspaceScopeButton.setSelection(!projectScopeButton.getSelection());
+				.text(MessageFormat.format(Messages.Project, project.getName())).create(groupContent);
+		projectScopeButton.setSelection(settings.scope == ScopeOption.PROJECT);
+		projectScopeButton.addListener(SWT.Selection, event -> {
+			if (projectScopeButton.getSelection()) {
+				settings.scope = ScopeOption.PROJECT;
+			}
+		});
+
+		workspaceScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.Workspace).create(groupContent);
+		workspaceScopeButton.setSelection(settings.scope == ScopeOption.WORKSPACE);
+		workspaceScopeButton.addListener(SWT.Selection, event -> {
+			if (workspaceScopeButton.getSelection()) {
+				settings.scope = ScopeOption.WORKSPACE;
+			}
+		});
+
+		subappHierarchyScopeButton = WidgetFactory.button(SWT.RADIO).text(Messages.SubappHierarchy)
+				.create(groupContent);
+		subappHierarchyScopeButton.setSelection(settings.scope == ScopeOption.SUBAPP_HIERARCHY);
+		subappHierarchyScopeButton.addListener(SWT.Selection, event -> {
+			if (subappHierarchyScopeButton.getSelection()) {
+				settings.scope = ScopeOption.SUBAPP_HIERARCHY;
+			}
+			subappHierarchyScopeSearchButton.setVisible(subappHierarchyScopeButton.getSelection());
+			subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
+		});
+
+		subappHierarchyScopeSearchButton = WidgetFactory.button(SWT.NONE).text(Messages.SelectSubappHierarchy)
+				.create(groupContent);
+		subappHierarchyScopeSearchButton.addListener(SWT.Selection, event -> {
+			if (subappHierarchyScopeButton.getSelection()) {
+				openScopeDialog();
+			}
+		});
+		subappHierarchyScopeSearchButton.setVisible(subappHierarchyScopeButton.getSelection());
+
+		selectedSubApps = settings.subappHierarchies;
+		subappHierarchyScopeLabel = WidgetFactory.label(SWT.NONE).create(groupContent);
+		createSubappHierarchyText();
+		subappHierarchyScopeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		subappHierarchyScopeLabel.setVisible(subappHierarchyScopeButton.getSelection());
+		createSubappHierarchyText();
 	}
 
-	private void createSearchButton(final Composite parent) {
-		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
-			final SearchHelper helper = new SearchHelper(
-					new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.fbTypedSubappInstance,
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.untypedSubapp,
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.dataTypes,
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					new SearchHelper.FilterRecordClass(settings.attributeTypes,
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
-							attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
-					ignoreLinkedLibrariesButton.getSelection());
+	private void openScopeDialog() {
+		final var elements = selectedSubApps.stream().map(uri -> {
+			final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+			return typeEntry.getType().eResource().getEObject(uri.fragment());
+		}).toList();
+		final var dialog = new SubAppHierarchyDialog(project, elements);
+		final var result = dialog.open();
+		if (result != null) {
+			selectedSubApps = SubAppHierarchyDialog.mapResultToURIs(result);
+			settings.subappHierarchies = selectedSubApps;
+		}
+		createSubappHierarchyText();
+	}
 
-			final List<ISearchContext> contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
-					projectScopeButton.getSelection(), project);
+	private void createSubappHierarchyText() {
+		if (selectedSubApps.size() == 0) {
+			subappHierarchyScopeLabel.setForeground(new Color(255, 0, 0));
+			subappHierarchyScopeLabel.setText(Messages.NoHierarchySelected);
+			return;
+		}
 
-			final var result = contexts.stream()
-					.flatMap(context -> new IEC61499ElementSearch(context,
-							SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
-									DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
-							helper.createChildrenSearchProvider()).performSearch().stream())
-					.toList();
-
-			final List<EObject> mappedList = createMappedList(result);
-
-			if (modeSelectionDropDown.getSelectionIndex() == 0
-					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
-				varDeclProvider.setInput(mapList(mappedList, VarDeclaration.class));
-			} else if (modeSelectionDropDown.getSelectionIndex() == 1
-					&& (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
-				attributeProvider.setInput(mapList(mappedList, Attribute.class));
+		final var elements = selectedSubApps.stream().map(uri -> {
+			final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+			return typeEntry.getType().eResource().getEObject(uri.fragment());
+		}).map(eObject -> {
+			if (EcoreUtil.getRootContainer(eObject) instanceof final INamedElement rootElement
+					&& rootElement != eObject) {
+				return rootElement.getName() + "." + FordiacMarkerHelper.getLocation(eObject); //$NON-NLS-1$
 			}
-			natTable.refresh();
-		}).create(parent);
+			return FordiacMarkerHelper.getLocation(eObject);
+		});
+
+		subappHierarchyScopeLabel.setForeground(new Color(0, 0, 0));
+		subappHierarchyScopeLabel.setText(elements.collect(Collectors.joining("; "))); //$NON-NLS-1$
+	}
+
+	private int openUnsavedChangesDialog() {
+		if (commandStack.isDirty()) {
+			final MessageDialog dialog = new MessageDialog(this.getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.Unsaved_Changes, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			return dialog.open();
+		}
+		return 0;
+	}
+
+	private IEditorPart[] getDirtyEditors() {
+		return EditorUtils.findEditor(part -> {
+			if (!part.isDirty()) {
+				return false;
+			}
+
+			final LibraryElement libE = part.getAdapter(LibraryElement.class);
+			if (libE == null) {
+				return false;
+			}
+
+			return map.containsKey(libE.getTypeEntry());
+		});
+	}
+
+	private void checkTypeEntriesForDirty() {
+		final var editors = getDirtyEditors();
+
+		if (editors.length <= 0) {
+			return;
+		}
+
+		final StringBuilder sb = new StringBuilder();
+		for (final IEditorPart editor : editors) {
+			sb.append("\n"); //$NON-NLS-1$
+			sb.append(editor.getAdapter(LibraryElement.class).getTypeEntry().getFile().getFullPath().toOSString());
+		}
+		sb.append("\n"); //$NON-NLS-1$
+
+		final MessageDialog dialog = new MessageDialog(this.getSite().getShell(), "", null, //$NON-NLS-1$
+				MessageFormat
+						.format(editors.length > 1 ? Messages.Dirty_Editors : Messages.Dirty_Editor, sb.toString()),
+				MessageDialog.QUESTION,
+				new String[] { Messages.Dirty_Editor_IgnoreChange,
+						editors.length > 1 ? Messages.Dirty_Editors_SaveAndSearch
+								: Messages.Dirty_Editor_SaveAndSearch },
+				0);
+		final var choise = dialog.open();
+
+		if (choise == 1) {
+			for (final IEditorPart editor : editors) {
+				editor.doSave(new NullProgressMonitor());
+			}
+			dirtyInformation.setText(""); //$NON-NLS-1$
+			performSearch();
+		} else {
+			dirtyInformation.setText(Messages.Other_Dirty_Editor);
+		}
+		dirtyInformation.getParent().layout();
+	}
+
+	private void performSearch() {
+		final SearchHelper helper = new SearchHelper(
+				new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.fbTypedSubappInstance,
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						fbTypedSubappInstanceFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.untypedSubapp,
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						untypedSubappFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.dataTypes,
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						dataTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				new SearchHelper.FilterRecordClass(settings.attributeTypes,
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
+						attributeTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(2))),
+				ignoreLinkedLibrariesButton.getSelection());
+
+		List<ISearchContext> contexts;
+		if (subappHierarchyScopeButton.getSelection()) {
+			contexts = SearchHelper.createSearchContextList(project, selectedSubApps);
+		} else {
+			contexts = helper.createSearchContextList(workspaceScopeButton.getSelection(),
+					projectScopeButton.getSelection(), project);
+		}
+
+		final var result = contexts.stream()
+				.flatMap(context -> new IEC61499ElementSearch(context,
+						SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
+								DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
+						helper.createChildrenSearchProvider()).performSearch().stream())
+				.toList();
+
+		final List<EObject> mappedList = createMappedList(result);
+		natTable.updateList(mappedList);
+		commandStack.flush();
+		changedSearchParameter = false;
+		searchInformation.setText(""); //$NON-NLS-1$
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {
 		final List<EObject> mappedList = new ArrayList<>();
+		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
 		map.clear();
 		for (final EObject libE : list) {
 			if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
 				final TypeEntry entry = rootLibE.getTypeEntry();
-				map.computeIfAbsent(entry, e -> new CopyElementRecord(e.copyType(), new ArrayList<>()));
+				map.computeIfAbsent(entry, e -> {
+					entry.eAdapters().add(adapter);
+					return new CopyElementRecord(e.copyType(), new ArrayList<>());
+				});
 				final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
 						EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
 				map.get(entry).addToList(copyLibE);
@@ -343,95 +575,6 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			}
 		}
 		return mappedList;
-	}
-
-	private void createNatTable(final Composite parent, final int selectionIndex) {
-		final Composite comp = new Composite(parent, SWT.NONE);
-		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumHeight = (parent.computeSize(SWT.DEFAULT, SWT.DEFAULT).y / DataLayer.DEFAULT_ROW_HEIGHT + 1)
-				* DataLayer.DEFAULT_ROW_HEIGHT;
-		comp.setLayoutData(gridData);
-		GridLayoutFactory.fillDefaults().numColumns(1).margins(0, 0).generateLayout(comp);
-
-		changeNatTable(comp, selectionIndex);
-	}
-
-	private void changeNatTable(final Composite parent, final int selectionIndex) {
-		if (natTable != null) {
-			natTable.dispose();
-		}
-		if (selectionIndex == 0) {
-			varDeclProvider = new ChangeableListDataProvider<>(
-					new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(varDeclProvider,
-					() -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
-							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							VarDeclarationTableColumn.EDITABLE_NO_LOCATION),
-					null, null, false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-		} else {
-			attributeProvider = new ChangeableListDataProvider<>(
-					new AttributeColumnAccessor(this, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final DataLayer dataLayer = new DataLayer(attributeProvider);
-			dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(attributeProvider, () -> null,
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION));
-			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
-							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							AttributeTableColumn.EDITABLE_NO_LOCATION, attributeProvider),
-					new TypeSelectionButton(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						if (EcoreUtil.getRootContainer(attributeProvider
-								.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
-							return libElement.getTypeLibrary();
-						}
-						return null;
-					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
-					false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-
-			final Predicate<TypeEntry> targetFilter = entry -> {
-				if (entry.getType() instanceof final AttributeDeclaration decl) {
-					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-							.getLastSelectedCellPosition().getRowPosition();
-					if (attributeProvider.getRowObject(relevantRowIndex)
-							.eContainer() instanceof final ConfigurableObject configurableObject) {
-						return decl.isValidObject(configurableObject);
-					}
-				}
-				return true;
-			};
-
-			final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-			attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-					new ImportTypeSelectionProposalProvider(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						return attributeProvider.getRowObject(relevantRowIndex).eContainer();
-					}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
-					KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
-			natTable.addConfiguration(new AbstractRegistryConfiguration() {
-				@Override
-				public void configureRegistry(final IConfigRegistry configRegistry) {
-					configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
-							DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
-				}
-			});
-		}
-
-		natTable.configure();
 	}
 
 	@Override
@@ -446,28 +589,49 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void setFocus() {
-		// nothing done here
+		adapter.checkFileReload();
+	}
+
+	public void reloadType() {
+		performSearch();
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
-				.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
-					if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
-						return rootLibE.getTypeEntry();
-					}
-					return null;
-				}).filter(Objects::nonNull).distinct().toList();
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(project.getParent()) {
+			@Override
+			protected void execute(final IProgressMonitor monitor)
+					throws CoreException, InvocationTargetException, InterruptedException {
+				final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
+						.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
+							if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
+								return rootLibE.getTypeEntry();
+							}
+							return null;
+						}).filter(Objects::nonNull).distinct().toList();
 
-		affect.forEach(entry -> {
-			try {
-				if (map.containsKey(entry)) {
-					entry.save(map.get(entry).copiedElement());
-				}
-			} catch (final CoreException e) {
-				e.printStackTrace();
+				affect.forEach(entry -> {
+					try {
+						if (map.containsKey(entry)) {
+							entry.eAdapters().remove(adapter);
+							entry.save(map.get(entry).copiedElement());
+							entry.eAdapters().add(adapter);
+						}
+					} catch (final CoreException e) {
+						e.printStackTrace();
+					}
+				});
 			}
-		});
+		};
+		try {
+			operation.run(monitor);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+
 		commandStack.markSaveLocation();
 	}
 
@@ -477,46 +641,22 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	@Override
+	public void dispose() {
+		super.dispose();
+		getSite().getPage().removePartListener(focusListener);
+		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
+	}
+
+	@Override
 	public void executeCommand(final Command cmd) {
 		commandStack.execute(cmd);
+		if (!changedSearchParameter) {
+			searchInformation.setText(Messages.Search_Changes);
+		}
 	}
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-	}
-
-	protected class AttributeNameCellEditor extends TextCellEditor {
-		@Override
-		protected void configureContentProposalAdapter(final ContentProposalAdapter contentProposalAdapter) {
-			contentProposalAdapter.addContentProposalListener(this::proposalAccepted);
-			super.configureContentProposalAdapter(contentProposalAdapter);
-		}
-
-		protected void proposalAccepted(final IContentProposal proposal) {
-			if (proposal instanceof final ImportContentProposal importProposal
-					&& EcoreUtil.getRootContainer(attributeProvider.getRowObject(this.getRowIndex())
-							.eContainer()) instanceof final LibraryElement libraryElement
-					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
-				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
-			}
-		}
-	}
-
-	private class LinkedElementsEditableRule extends EditableRule {
-		private final ChangeableListDataProvider<? extends EObject> provider;
-
-		public LinkedElementsEditableRule(final ChangeableListDataProvider<? extends EObject> provider) {
-			this.provider = provider;
-		}
-
-		@Override
-		public boolean isEditable(final int columnIndex, final int rowIndex) {
-			final var rootElement = EcoreUtil.getRootContainer(provider.getRowObject(rowIndex));
-			if (rootElement instanceof final LibraryElement libElement) {
-				return SearchHelper.linkedElementsFilter.test(libElement.getTypeEntry());
-			}
-			return true;
-		}
 	}
 }

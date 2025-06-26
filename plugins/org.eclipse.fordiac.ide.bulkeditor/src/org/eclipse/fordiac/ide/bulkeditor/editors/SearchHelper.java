@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -106,6 +103,21 @@ public class SearchHelper {
 		this.ignoreLinkedLibraries = ignoreLinkedLibraries;
 	}
 
+	public static List<ISearchContext> createSearchContextList(final IProject project, final List<URI> uriList) {
+		return List.of(new AbstractLiveSearchContext(project) {
+			@Override
+			public Stream<URI> getTypes() {
+				return uriList.stream();
+			}
+
+			@Override
+			public EObject mapTypes(final URI uri) {
+				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+				return typeEntry.getType().eResource().getEObject(uri.fragment());
+			}
+		});
+	}
+
 	public List<ISearchContext> createSearchContextList(final boolean workspace, final boolean project,
 			final IProject iproject) {
 		if (workspace) {
@@ -164,24 +176,9 @@ public class SearchHelper {
 			}
 
 			@Override
-			public LibraryElement getLibraryElement(final URI uri) {
+			public EObject mapTypes(final URI uri) {
 				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 				return typeEntry.getType(); // use original for search
-			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
 			}
 		};
 	}

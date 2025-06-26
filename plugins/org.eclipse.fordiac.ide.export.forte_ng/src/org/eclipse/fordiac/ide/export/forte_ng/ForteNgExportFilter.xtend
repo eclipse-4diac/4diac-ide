@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 fortiss GmbH, Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *                - added support for custom language templates
+ *                - added support for global constants
  *   Alois Zoitl  - added support for structured types
  *   Ernst Blecha - added support for exporting CMakeLists.txt
  *******************************************************************************/
@@ -53,6 +55,9 @@ import org.eclipse.fordiac.ide.export.Messages
 import java.text.MessageFormat
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
+import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsImplTemplate
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -121,6 +126,13 @@ class ForteNgExportFilter extends TemplateExportFilter {
 					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude,
 						Paths.get(source.generateTypePath), options),
 					new StructuredTypeImplTemplate(source, source.generateTypeSource,
+						Paths.get(source.generateTypePath), options)
+				}
+			GlobalConstants:
+				#{
+					new GlobalConstantsHeaderTemplate(source, source.generateTypeInclude,
+						Paths.get(source.generateTypePath), options),
+					new GlobalConstantsImplTemplate(source, source.generateTypeSource,
 						Paths.get(source.generateTypePath), options)
 				}
 			CMakeListsMarker:

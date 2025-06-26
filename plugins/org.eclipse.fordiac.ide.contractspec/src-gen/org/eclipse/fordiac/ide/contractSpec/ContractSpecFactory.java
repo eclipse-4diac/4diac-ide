@@ -187,15 +187,6 @@ public interface ContractSpecFactory extends EFactory
   TimeExpr createTimeExpr();
 
   /**
-   * Returns a new object of class '<em>Value</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Value</em>'.
-   * @generated
-   */
-  Value createValue();
-
-  /**
    * Returns a new object of class '<em>Causal Func Decl</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

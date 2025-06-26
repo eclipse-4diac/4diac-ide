@@ -24,4 +24,5 @@
     </OutputVars>
   </InterfaceList>
   <Service Comment="bitwise or" LeftInterface="APPLICATION" RightInterface="RESOURCE"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

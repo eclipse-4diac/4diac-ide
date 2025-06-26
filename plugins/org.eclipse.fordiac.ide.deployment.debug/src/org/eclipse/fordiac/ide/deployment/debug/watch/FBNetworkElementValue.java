@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
@@ -58,8 +60,19 @@ public class FBNetworkElementValue extends DeploymentDebugElement implements IVa
 	}
 
 	private Stream<INamedElement> getSubElements() throws UnsupportedOperationException {
-		return Stream.concat(element.getInterface().getAllInterfaceElements().stream(), getAdditionalSubElements())
+		return Stream.concat(getInterfaceSubElements(), getAdditionalSubElements())
 				.sorted(Comparator.comparing(INamedElement::getName));
+	}
+
+	private Stream<INamedElement> getInterfaceSubElements() throws UnsupportedOperationException {
+		final InterfaceList interfaceList = element.getInterface();
+		return Stream.of(
+				// include events
+				interfaceList.getEventInputs(), interfaceList.getEventOutputs(),
+				// include variables (except out-mapped InOut vars)
+				interfaceList.getInputVars(), interfaceList.getOutputVars(), interfaceList.getInOutVars(),
+				// include adapters
+				interfaceList.getSockets(), interfaceList.getPlugs()).flatMap(Collection::stream);
 	}
 
 	private Stream<? extends INamedElement> getAdditionalSubElements() throws UnsupportedOperationException {

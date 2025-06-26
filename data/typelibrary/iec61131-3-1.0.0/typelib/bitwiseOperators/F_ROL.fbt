@@ -23,4 +23,5 @@
       <VarDeclaration Comment="left-rotated by N zero-filled on right" Name="OUT" Type="ANY_BIT"/>
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

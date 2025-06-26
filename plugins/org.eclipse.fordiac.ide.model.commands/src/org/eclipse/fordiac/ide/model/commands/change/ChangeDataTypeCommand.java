@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -79,8 +78,7 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));
 		}
 		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration
-				&& interfaceElement.eContainer() instanceof final InterfaceList interfaceList
-				&& interfaceList.eContainer() instanceof final CompositeFBType compositeFBType
+				&& interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType
 				&& !(compositeFBType instanceof SubAppType)) {
 			result.getAdditionalCommands().add(new ChangeAdapterFBCommand(adapterDeclaration));
 		}

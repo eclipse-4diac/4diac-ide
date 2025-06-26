@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
@@ -36,9 +35,7 @@ public class AttributeFilter implements IFilter {
 		case final VarDeclaration varDecl when varDecl.isInOutVar() && !varDecl.isIsInput() ->
 			varDecl.getInOutVarOpposite();
 		// handle exception: interface elements of functions
-		case final IInterfaceElement interfaceElement when interfaceElement
-				.eContainer() instanceof final InterfaceList interfaceList
-				&& interfaceList.eContainer() instanceof FunctionFBType ->
+		case final IInterfaceElement interfaceElement when interfaceElement.getFBType() instanceof FunctionFBType ->
 			null;
 		case final ConfigurableObject configurableObject -> configurableObject;
 		case final FBNetwork fbNetwork -> parseObject(fbNetwork.eContainer());

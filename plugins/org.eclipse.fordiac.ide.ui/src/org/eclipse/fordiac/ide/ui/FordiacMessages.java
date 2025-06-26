@@ -47,6 +47,7 @@ public final class FordiacMessages extends NLS {
 	public static String EmptyField; // NOSONAR
 	public static String Event; // NOSONAR
 	public static String FBNetwork; // NOSONAR
+	public static String File_Path; // NOSONAR
 	public static String Function; // NOSONAR
 	public static String Header; // NOSONAR
 	public static String Height; // NOSONAR

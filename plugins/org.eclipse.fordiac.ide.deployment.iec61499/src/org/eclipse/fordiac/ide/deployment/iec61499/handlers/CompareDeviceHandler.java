@@ -138,11 +138,11 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 		onlineResource.getConnections().forEach(onlineCon -> {
 			if (offlineResource.getConnections().stream()
-					.noneMatch(offlineCon -> offlineCon.getDestination().getName()
-							.equals(onlineCon.getDestination().getName())
-							&& offlineCon.getDestinationPrefix().equals(onlineCon.getDestinationPrefix())
-							&& offlineCon.getSource().getName().equals(onlineCon.getSource().getName())
-							&& offlineCon.getSourcePrefix().equals(onlineCon.getSourcePrefix()))) {
+					.noneMatch(offlineCon -> offlineCon.destination().getName()
+							.equals(onlineCon.destination().getName())
+							&& offlineCon.destinationPrefix().equals(onlineCon.destinationPrefix())
+							&& offlineCon.source().getName().equals(onlineCon.source().getName())
+							&& offlineCon.sourcePrefix().equals(onlineCon.sourcePrefix()))) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
 				.addConnections(onlineCon);
 			}
@@ -150,11 +150,11 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 		offlineResource.getConnections().forEach(offlineCon -> {
 			if (onlineResource.getConnections().stream()
-					.noneMatch(onlineCon -> onlineCon.getDestination().getName()
-							.equals(offlineCon.getDestination().getName())
-							&& onlineCon.getDestinationPrefix().equals(offlineCon.getDestinationPrefix())
-							&& onlineCon.getSource().getName().equals(offlineCon.getSource().getName())
-							&& onlineCon.getSourcePrefix().equals(offlineCon.getSourcePrefix()))) {
+					.noneMatch(onlineCon -> onlineCon.destination().getName()
+							.equals(offlineCon.destination().getName())
+							&& onlineCon.destinationPrefix().equals(offlineCon.destinationPrefix())
+							&& onlineCon.source().getName().equals(offlineCon.source().getName())
+							&& onlineCon.sourcePrefix().equals(offlineCon.sourcePrefix()))) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
 				.addConnections(offlineCon);
 			}
@@ -166,8 +166,8 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 		onlineResource.getParams().forEach(onlineParam -> {
 			if (offlineResource.getParams().stream()
-					.noneMatch(offlineParam -> offlineParam.getVar().equals(onlineParam.getVar())
-							&& offlineParam.getPrefix().equals(onlineParam.getPrefix()))) {
+					.noneMatch(offlineParam -> offlineParam.variable().equals(onlineParam.variable())
+							&& offlineParam.prefix().equals(onlineParam.prefix()))) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
 				.addParameter(onlineParam);
 			}
@@ -175,8 +175,8 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 		offlineResource.getParams().forEach(offlineParam -> {
 			if (onlineResource.getParams().stream()
-					.noneMatch(onlineParam -> onlineParam.getVar().equals(offlineParam.getVar())
-							&& onlineParam.getPrefix().equals(offlineParam.getPrefix()))) {
+					.noneMatch(onlineParam -> onlineParam.variable().equals(offlineParam.variable())
+							&& onlineParam.prefix().equals(offlineParam.prefix()))) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
 				.addParameter(offlineParam);
 			}
@@ -238,18 +238,18 @@ public class CompareDeviceHandler extends AbstractHandler {
 			System.out.println("== Resource: " + res.getRes().getName() + " (online)");
 			res.getFbs().forEach(fb -> System.out.println("++ fb: " + fb.getPrefix() + fb.getFb().getName()));
 			res.getConnections().forEach(con -> System.out
-					.println("++ con: " + con.getSourcePrefix() + con.getSource().getName() + " -> "
-							+ con.getDestinationPrefix() + con.getDestination().getName()));
-			res.getParams().forEach(con -> System.out.println("++ param: " + con.getPrefix() + con.getVar().getName()));
+					.println("++ con: " + con.sourcePrefix() + con.source().getName() + " -> "
+							+ con.destinationPrefix() + con.destination().getName()));
+			res.getParams().forEach(con -> System.out.println("++ param: " + con.prefix() + con.variable().getName()));
 		});
 
 		differenceDataDeltaMinus.getResData().forEach(res -> {
 			System.out.println("== Resource: " + res.getRes().getName() + "(local)");
 			res.getFbs().forEach(fb -> System.out.println("-- fb: " + fb.getPrefix() + fb.getFb().getName()));
 			res.getConnections().forEach(con ->
-			System.out.println("-- con: " + con.getSourcePrefix() + con.getSource().getName() + " -> "
-					+ con.getDestinationPrefix() + con.getDestination().getName()));
-			res.getParams().forEach(con -> System.out.println("-- param: " + con.getPrefix() + con.getVar().getName()));
+			System.out.println("-- con: " + con.sourcePrefix() + con.source().getName() + " -> "
+					+ con.destinationPrefix() + con.destination().getName()));
+			res.getParams().forEach(con -> System.out.println("-- param: " + con.prefix() + con.variable().getName()));
 		});
 	}
 }

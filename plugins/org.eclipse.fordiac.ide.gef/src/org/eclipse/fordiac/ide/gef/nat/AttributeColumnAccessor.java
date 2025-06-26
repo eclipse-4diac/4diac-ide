@@ -58,8 +58,8 @@ public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, A
 		}
 		case VALUE -> InitialValueHelper.getInitialOrDefaultValue(rowObject);
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
-		case LOCATION -> EcoreUtil.getURI(rowObject).toPlatformString(true);
-		case PATH -> FordiacMarkerHelper.getLocation(rowObject);
+		case FILE_PATH -> EcoreUtil.getURI(rowObject).toPlatformString(true);
+		case LOCATION -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
 	}

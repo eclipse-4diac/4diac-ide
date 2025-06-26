@@ -4890,13 +4890,31 @@ public interface LibraryElementPackage extends EPackage {
 	int INTERFACE_LIST__ERROR_MARKER = 8;
 
 	/**
+	 * The feature id for the '<em><b>FB Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__FB_TYPE = 9;
+
+	/**
+	 * The feature id for the '<em><b>FB Network Element</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERFACE_LIST__FB_NETWORK_ELEMENT = 10;
+
+	/**
 	 * The number of structural features of the '<em>Interface List</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERFACE_LIST_FEATURE_COUNT = 9;
+	int INTERFACE_LIST_FEATURE_COUNT = 11;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.IVarElement <em>IVar Element</em>}' class.
@@ -7809,13 +7827,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TYPED_SUB_APP__SUB_APP_NETWORK = SUB_APP_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Var Config Params</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_SUB_APP__VAR_CONFIG_PARAMS = SUB_APP_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Typed Sub App</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 1;
+	int TYPED_SUB_APP_FEATURE_COUNT = SUB_APP_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.
@@ -10078,6 +10105,28 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getInterfaceList_ErrorMarker();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBType <em>FB Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>FB Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBType()
+	 * @see #getInterfaceList()
+	 * @generated
+	 */
+	EReference getInterfaceList_FBType();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBNetworkElement <em>FB Network Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>FB Network Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBNetworkElement()
+	 * @see #getInterfaceList()
+	 * @generated
+	 */
+	EReference getInterfaceList_FBNetworkElement();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11329,6 +11378,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTypedSubApp_SubAppNetwork();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams <em>Var Config Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Var Config Params</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp#getVarConfigParams()
+	 * @see #getTypedSubApp()
+	 * @generated
+	 */
+	EReference getTypedSubApp_VarConfigParams();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp <em>Untyped Sub App</em>}'.
@@ -13179,6 +13239,22 @@ public interface LibraryElementPackage extends EPackage {
 		EReference INTERFACE_LIST__ERROR_MARKER = eINSTANCE.getInterfaceList_ErrorMarker();
 
 		/**
+		 * The meta object literal for the '<em><b>FB Type</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INTERFACE_LIST__FB_TYPE = eINSTANCE.getInterfaceList_FBType();
+
+		/**
+		 * The meta object literal for the '<em><b>FB Network Element</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INTERFACE_LIST__FB_NETWORK_ELEMENT = eINSTANCE.getInterfaceList_FBNetworkElement();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.ITypedElement <em>ITyped Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14211,6 +14287,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TYPED_SUB_APP__SUB_APP_NETWORK = eINSTANCE.getTypedSubApp_SubAppNetwork();
+
+		/**
+		 * The meta object literal for the '<em><b>Var Config Params</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TYPED_SUB_APP__VAR_CONFIG_PARAMS = eINSTANCE.getTypedSubApp_VarConfigParams();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.UntypedSubAppImpl <em>Untyped Sub App</em>}' class.

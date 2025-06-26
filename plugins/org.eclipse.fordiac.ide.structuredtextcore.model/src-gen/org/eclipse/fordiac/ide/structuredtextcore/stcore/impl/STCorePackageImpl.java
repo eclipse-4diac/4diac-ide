@@ -3004,7 +3004,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		EOperation op = addEOperation(stFeatureExpressionEClass, null, "getMappedInputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
-		EGenericType g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		EGenericType g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);
@@ -3012,7 +3012,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		op = addEOperation(stFeatureExpressionEClass, null, "getMappedOutputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);
@@ -3020,7 +3020,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		op = addEOperation(stFeatureExpressionEClass, null, "getMappedInOutArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);
@@ -3037,7 +3037,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedInputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);
@@ -3045,7 +3045,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedOutputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);
@@ -3053,7 +3053,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedInOutArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(theLibraryElementPackage.getITypedElement());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(this.getSTCallArgument());
 		g1.getETypeArguments().add(g2);

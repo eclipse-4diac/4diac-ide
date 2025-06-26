@@ -25,6 +25,9 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public interface IDeviceManagementExecutorService extends IDeviceManagementInteractor, AutoCloseable {
 
@@ -229,6 +232,12 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 * @see #queryResources()
 	 */
 	Future<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> queryResourcesAsync();
+
+	Future<Response> queryFBTypeAsync(final FBTypeEntry entry);
+
+	Future<Response> queryDataTypeAsync(final DataTypeEntry entry);
+
+	Future<Response> queryGlobalConstTypeAsync(final GlobalConstantsEntry entry);
 
 	/**
 	 * Query resources periodically
