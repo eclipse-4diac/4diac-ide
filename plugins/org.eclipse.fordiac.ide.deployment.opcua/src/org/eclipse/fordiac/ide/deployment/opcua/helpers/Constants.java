@@ -49,6 +49,9 @@ public class Constants {
 	public static final NodeId FORCE_VALUE_NODE = new NodeId(1, "forceValue"); //$NON-NLS-1$
 	public static final NodeId CLEAR_FORCE_NODE = new NodeId(1, "clearForce"); //$NON-NLS-1$
 	public static final NodeId QUERY_RESOURCES_NODE = new NodeId(1, "queryResources"); //$NON-NLS-1$
+	public static final NodeId QUERY_FB_TYPE_NODE = new NodeId(1, "queryFBType"); //$NON-NLS-1$
+	public static final NodeId QUERY_DATA_TYPE_NODE = new NodeId(1, "queryDataType"); //$NON-NLS-1$
+	public static final NodeId QUERY_GLOBAL_CONST_TYPE_NODE = new NodeId(1, "queryGlobalConstType"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -72,6 +75,9 @@ public class Constants {
 	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String CLEAR_FORCE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String QUERY_RESOURCES = "<Request Action=\"QUERY\"></Request>"; //$NON-NLS-1$
+	public static final String QUERY_FB_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_DATA_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><DataType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><GlobalConstType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 

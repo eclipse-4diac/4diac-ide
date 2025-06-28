@@ -572,20 +572,74 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
-		// TODO implement when the API and infrastructure is fully tested
-		throw new DeploymentException("Query FB Type not yet supported!"); //$NON-NLS-1$
+		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_FB_TYPE_NODE,
+				new Variant[] {});
+		final String message = Constants.QUERY_FB_TYPE;
+		try {
+			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
+			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			if (response != Constants.EMPTY_RESPONSE) {
+				return response;
+			}
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryFBType,
+					getIEC61499Status(result.getStatusCode())));
+
+		} catch (final IOException | ExecutionException e) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryFBTypeFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
+		return Constants.EMPTY_RESPONSE;
 	}
 
 	@Override
 	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
-		// TODO implement when the API and infrastructure is fully tested
-		throw new DeploymentException("Query Data Type Type not yet supported!"); //$NON-NLS-1$
+		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_DATA_TYPE_NODE,
+				new Variant[] {});
+		final String message = Constants.QUERY_DATA_TYPE;
+		try {
+			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
+			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			if (response != Constants.EMPTY_RESPONSE) {
+				return response;
+			}
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+					getIEC61499Status(result.getStatusCode())));
+
+		} catch (final IOException | ExecutionException e) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryDataTypeFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
+		return Constants.EMPTY_RESPONSE;
 	}
 
 	@Override
 	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
-		// TODO implement when the API and infrastructure is fully tested
-		throw new DeploymentException("Query Global Const Type not yet supported!"); //$NON-NLS-1$
+		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE,
+				Constants.QUERY_GLOBAL_CONST_TYPE_NODE, new Variant[] {});
+		final String message = Constants.QUERY_DATA_TYPE;
+		try {
+			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
+			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			if (response != Constants.EMPTY_RESPONSE) {
+				return response;
+			}
+			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryGlobalConstType,
+					getIEC61499Status(result.getStatusCode())));
+
+		} catch (final IOException | ExecutionException e) {
+			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryGlobalConstTypeFailed, e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
+		return Constants.EMPTY_RESPONSE;
 	}
 
 	@Override
