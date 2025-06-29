@@ -4,8 +4,6 @@
 	</Identification>
 	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2024-02-26">
 	</VersionInfo>
-	<CompilerInfo packageName="iec61499::net">
-	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="INIT" Type="EInit" Comment="Open new connection (QI = TRUE) / Close connection (QI = FALSE)">
@@ -45,4 +43,6 @@
 			<VarDeclaration Name="RD_2" Type="ANY" Comment="Body from the server&apos;s response"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_CLIENT'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>
