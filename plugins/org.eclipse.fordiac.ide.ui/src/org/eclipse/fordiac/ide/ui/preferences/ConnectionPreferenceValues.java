@@ -24,6 +24,9 @@ public final class ConnectionPreferenceValues {
 
 	public static final int MIN_HANDLE_SIZE = 5;
 
+	/** Diameter of the negated connection point indicator */
+	public static final int NEGATION_POINT_DIAMETER = 12;
+
 	private ConnectionPreferenceValues() {
 		throw new UnsupportedOperationException("ConnectionPreferenceValues utility class should not be instantiated!"); //$NON-NLS-1$
 	}

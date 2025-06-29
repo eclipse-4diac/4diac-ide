@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 
 public class FBNetworkConnection extends HideableConnection {
 
@@ -114,15 +115,15 @@ public class FBNetworkConnection extends HideableConnection {
 
 	public void addNegationPoint(final Graphics graphics) {
 		graphics.setBackgroundColor(getLocalForegroundColor());
-		final int diameter = 12;
 		final PointList points = getPoints();
 
 		if (points != null && points.size() > 1) {
 			final Point targetPoint = points.getPoint(points.size() - 1);
-			final int x = targetPoint.x - diameter - 1;
-			final int y = targetPoint.y - (diameter / 2);
+			final int x = targetPoint.x - ConnectionPreferenceValues.NEGATION_POINT_DIAMETER - 1;
+			final int y = targetPoint.y - (ConnectionPreferenceValues.NEGATION_POINT_DIAMETER / 2);
 
-			graphics.fillOval(x, y, diameter, diameter);
+			graphics.fillOval(x, y, ConnectionPreferenceValues.NEGATION_POINT_DIAMETER,
+					ConnectionPreferenceValues.NEGATION_POINT_DIAMETER);
 		}
 	}
 
