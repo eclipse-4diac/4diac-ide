@@ -8,7 +8,9 @@
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.2" Author="Franz Höpfinger" Date="2024-02-10" Remarks="Copy over E_CTUD to E_CTUD_UDINT">
 	</VersionInfo>
-	<CompilerInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -116,5 +118,5 @@ END_ALGORITHM
 ]]></ST>
 		</Algorithm>
 	</BasicFB>
-	<Attribute Name="TypeHash" Value="''"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
