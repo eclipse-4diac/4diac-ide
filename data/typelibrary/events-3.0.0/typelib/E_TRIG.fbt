@@ -4,7 +4,9 @@
 	</Identification>
 	<VersionInfo Version="1.0" Author="Mario Kastner" Date="2025-01-08">
 	</VersionInfo>
-	<CompilerInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -23,5 +25,5 @@
 	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION">
 	</Service>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[]]></Attribute>
-	<Attribute Name="TypeHash" Value="''"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
