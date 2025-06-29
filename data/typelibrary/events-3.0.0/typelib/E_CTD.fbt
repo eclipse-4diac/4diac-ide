@@ -4,7 +4,10 @@
   <Identification Classification="Event-driven blocks" Description="Copyright (c) 2017 fortiss GmbH&#10;&#9;&#9;&#9;     2019 Johannes Keppler University Linz&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Function="Down-counter" Standard="61499-1-A.x"/>
   <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2019-07-09" Organization="JKU" Remarks="fixed bug in down counting" Version="1.1"/>
-  <CompilerInfo/>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Count Down" Name="CD" Type="Event"/>
@@ -51,5 +54,5 @@
       <ST Text="CV := PV;&#10;Q:= (CV = 0);&#10;"/>
     </Algorithm>
   </BasicFB>
-	<Attribute Name="TypeHash" Value="''"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
