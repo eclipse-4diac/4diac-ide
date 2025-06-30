@@ -12,17 +12,36 @@
    <extension
 		point="org.eclipse.ui.editors">
 		<editor
-			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor"
-			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsTypeEditor"
+			contributorClass="org.eclipse.fordiac.ide.typeeditor.TypeEditorContributor"
 			default="true"
-			extensions="globalconsts,gcf"
+			extensions="gcf"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
+			name="%GlobalConstantsEditor">
+		</editor>
+		<editor
+			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			default="true"
+			extensions="globalconsts"
+			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsPlain"
 			name="%GlobalConstantsEditor">
 		</editor>
       <editorContentTypeBinding
             contentTypeId="org.eclipse.4diac.ide.globalConstContent" 
             editorId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"/>
 	</extension>
+	<extension
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
+            class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor"
+            sortIndex="20">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants">
+            </instanceof>            
+         </enablement>
+      </editorPage>
+   </extension>
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler
@@ -498,7 +517,7 @@
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsTypeInfoSection"
              tab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab">
           <input
-                type="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor">
+                type="org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants">
           </input>
        </propertySection>
        <propertySection
@@ -506,7 +525,7 @@
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsAttributeSection"
              tab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsAttributeTab">
           <input
-                type="org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor">
+                type="org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants">
           </input>
        </propertySection>
     </propertySections>

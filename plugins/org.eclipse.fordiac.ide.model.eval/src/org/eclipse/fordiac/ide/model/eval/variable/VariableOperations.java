@@ -515,7 +515,7 @@ public final class VariableOperations {
 		return copy;
 	}
 
-	private static boolean isSimpleInitialValue(final VarDeclaration varDeclaration) {
+	public static boolean isSimpleInitialValue(final VarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
 			return false;
 		}
@@ -530,7 +530,7 @@ public final class VariableOperations {
 		return true;
 	}
 
-	private static boolean isSimpleAttributeValue(final Attribute attribute) {
+	public static boolean isSimpleAttributeValue(final Attribute attribute) {
 		if (hasValue(attribute) && attribute.getType() instanceof final AnyType type) {
 			try {
 				new TypedValueConverter(type, true).toValue(attribute.getValue());

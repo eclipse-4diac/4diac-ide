@@ -14,29 +14,21 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.ui.properties;
 
 import org.eclipse.fordiac.ide.gef.properties.AttributeSection;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.ui.PlatformUI;
 
 public class GlobalConstantsAttributeSection extends AttributeSection {
 	@Override
 	protected ConfigurableObject getInputType(final Object input) {
-		if (input instanceof final GlobalConstantsEditor editor
-				&& editor.getDocument() instanceof final GlobalConstantsDocument document) {
-			return document.getResourceLibraryElement();
+		if (input instanceof ITextSelection) {
+			final var editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			if (editor != null && editor.getAdapter(LibraryElement.class) instanceof final GlobalConstants gc) {
+				return gc;
+			}
 		}
 		return null;
-	}
-
-	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		setCurrentCommandStack(part, null);
-		if (null == getCurrentCommandStack()) {
-			setInputCode();
-		}
-		setType(part);
-		setInputInit();
 	}
 }
