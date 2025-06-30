@@ -73,8 +73,8 @@ public class WatchValueDirectEditPolicy extends DirectEditPolicy {
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
 		final String value = (String) request.getCellEditor().getValue();
-		if (getHost() instanceof final WatchValueEditPart editPart) {
-			editPart.getFigure().setText(value);
+		if ((getHost() instanceof final WatchValueEditPart editPart) && (editPart.getLabelFigure() != null)) {
+			editPart.getLabelFigure().setText(value);
 		}
 	}
 }
