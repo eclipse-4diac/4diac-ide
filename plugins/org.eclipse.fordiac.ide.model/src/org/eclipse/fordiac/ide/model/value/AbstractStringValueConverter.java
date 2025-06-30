@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
@@ -50,7 +51,35 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		final String unquoted = string.substring(1, string.length() - 1);
 		// process escapes
 		final Pattern pattern = wide ? WSTRING_ESCAPE_PATTERN : STRING_ESCAPE_PATTERN;
-		return pattern.matcher(unquoted).replaceAll(StringValueConverter::unescapeReplace);
+		final Matcher matcher = pattern.matcher(unquoted);
+		if (matcher.find()) { // check for escapes
+			final StringBuilder result = new StringBuilder(unquoted.length());
+			int last = 0;
+			do {
+				// check for unescaped quotes
+				if (unquoted.indexOf(quote, last, matcher.start()) >= 0) {
+					throw new IllegalArgumentException(
+							MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
+				}
+				// append part between escapes
+				result.append(unquoted, last, matcher.start());
+				// append escape
+				result.append(unescape(matcher));
+				last = matcher.end();
+			} while (matcher.find());
+			// check for unescaped quotes in remainder
+			if (unquoted.indexOf(quote, last) >= 0) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
+			}
+			// append remainder
+			result.append(unquoted, last, unquoted.length());
+			return result.toString();
+		}
+		if (unquoted.indexOf(quote) >= 0) { // check for unescaped quotes
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
+		}
+		return unquoted;
 	}
 
 	@Override
@@ -80,14 +109,6 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 			}
 		}
 		return result.toString();
-	}
-
-	protected static String unescapeReplace(final MatchResult result) {
-		final String replacement = unescape(result);
-		if ("$".equals(replacement)) { //$NON-NLS-1$
-			return "\\$"; //$NON-NLS-1$
-		}
-		return replacement;
 	}
 
 	protected static String unescape(final MatchResult result) {

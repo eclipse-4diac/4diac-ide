@@ -57,6 +57,11 @@
       <genOperations ecoreOperation="OperationalSemantics.ecore#//SimpleFBTypeRuntime/getModel"
           body="return simpleFBType;"/>
     </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//FunctionFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FunctionFBTypeRuntime/functionFBType"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//FunctionFBTypeRuntime/getModel"
+          body="return functionFBType;"/>
+    </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/parentEO"/>

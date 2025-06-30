@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
@@ -88,6 +89,8 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createBasicFBTypeRuntime();
 		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME:
 			return createSimpleFBTypeRuntime();
+		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME:
+			return createFunctionFBTypeRuntime();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
 			return createFBNetworkRuntime();
 		case OperationalSemanticsPackage.FB_TRANSACTION:
@@ -149,6 +152,17 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public SimpleFBTypeRuntime createSimpleFBTypeRuntime() {
 		SimpleFBTypeRuntimeImpl simpleFBTypeRuntime = new SimpleFBTypeRuntimeImpl();
 		return simpleFBTypeRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public FunctionFBTypeRuntime createFunctionFBTypeRuntime() {
+		FunctionFBTypeRuntimeImpl functionFBTypeRuntime = new FunctionFBTypeRuntimeImpl();
+		return functionFBTypeRuntime;
 	}
 
 	/**

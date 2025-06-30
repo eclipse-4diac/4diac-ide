@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
@@ -129,6 +130,17 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 			T result = caseSimpleFBTypeRuntime(simpleFBTypeRuntime);
 			if (result == null) {
 				result = caseFBRuntimeAbstract(simpleFBTypeRuntime);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME: {
+			FunctionFBTypeRuntime functionFBTypeRuntime = (FunctionFBTypeRuntime) theEObject;
+			T result = caseFunctionFBTypeRuntime(functionFBTypeRuntime);
+			if (result == null) {
+				result = caseFBRuntimeAbstract(functionFBTypeRuntime);
 			}
 			if (result == null) {
 				result = defaultCase(theEObject);
@@ -289,6 +301,22 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimpleFBTypeRuntime(SimpleFBTypeRuntime object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Function
+	 * FB Type Runtime</em>'. <!-- begin-user-doc --> This implementation returns
+	 * null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Function
+	 *         FB Type Runtime</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFunctionFBTypeRuntime(FunctionFBTypeRuntime object) {
 		return null;
 	}
 

@@ -142,7 +142,7 @@ public class EventManagerItemProvider extends ItemProviderAdapter implements IEd
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, FordiacImage.ICON_SERVICE); //$NON-NLS-1$
+		return overlayImage(object, FordiacImage.ICON_SERVICE); // $NON-NLS-1$
 	}
 
 	/**

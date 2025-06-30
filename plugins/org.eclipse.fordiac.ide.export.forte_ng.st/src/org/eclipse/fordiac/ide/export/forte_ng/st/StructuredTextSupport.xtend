@@ -572,7 +572,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<INamedElement> getParameterDependencies(ICallable feature) {
 		(feature.inputParameters + feature.outputParameters + feature.inOutParameters).flatMap [
 			defaultDependencies // need dependencies of default values possibly generated in call
-		]
+		].reject[isAnyType] // cannot have default values of generic types anyhow
 	}
 
 	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {

@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
@@ -54,6 +56,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadPoolExecutor;
 import org.eclipse.fordiac.ide.model.eval.fb.BasicFBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
+import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -68,6 +71,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -83,6 +87,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private final EventOccurrence eventOccurrence;
 	private final Map<String, FBNetworkElement> nameToFBNetwork;
+	private static Map<String, Evaluator> evaluatorCache = new HashMap<>();
 
 	public DefaultRunFBType(final EventOccurrence eventOccurrence) {
 		this.eventOccurrence = eventOccurrence;
@@ -94,10 +99,26 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 	}
 
+	public static void clearCaches() {
+		evaluatorCache.clear();
+	}
+
+	private static String getCacheKey(final EventOccurrence eventOccurrence) {
+		if (eventOccurrence.getParentFB() != null) {
+			return eventOccurrence.getParentFB().getQualifiedName();
+		}
+		if (eventOccurrence.getFbRuntime() != null
+				&& eventOccurrence.getFbRuntime().getModel() instanceof final FBType type) {
+			return type.getName();
+		}
+		return "no-name"; //$NON-NLS-1$
+	}
+
 	public static Function<Object, Object> of(final IRunFBTypeVisitor runTypeVisitor) {
 		return new LambdaVisitor<>() //
 				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType) //
 				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType) //
+				.on(FunctionFBTypeRuntime.class).then(runTypeVisitor::runFunctionFBType) //
 				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBNetwork);
 	}
 
@@ -176,38 +197,84 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		varDecls.addAll(basefbtype.getInterfaceList().getOutputVars());
 		varDecls.addAll(basefbtype.getInternalVars());
 		varDecls.addAll(basefbtype.getInternalConstVars());
-		final List<Variable<?>> vars = varDecls.stream().map(DefaultRunFBType::mapVar).collect(Collectors.toList());
-		final FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
-		Class<? extends FBType> baseFBClass = null;
-		if (basefbtype instanceof BasicFBType) {
-			baseFBClass = BasicFBType.class;
-		} else if (basefbtype instanceof SimpleFBType) {
-			baseFBClass = SimpleFBType.class;
+
+		Evaluator eval = evaluatorCache.get(getCacheKey(eventOccurrence));
+		if (eval == null) {
+			Class<? extends FBType> baseFBClass = null;
+			if (basefbtype instanceof BasicFBType) {
+				baseFBClass = BasicFBType.class;
+			} else if (basefbtype instanceof SimpleFBType) {
+				baseFBClass = SimpleFBType.class;
+			}
+			final FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
+			eval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar, List.of(), null);
+			evaluatorCache.put(getCacheKey(eventOccurrence), eval);
 		}
-		final Evaluator fbEval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar, vars, null);
-		final Evaluator algoEval = fbEval.getChildren().entrySet().stream()
-				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue)
-				.orElse(null);
-		if (algoEval != null) {
-			try (EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(basefbtype.getName())) {
-				final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
-				tpe.setMonotonicClock(clock);
-				tpe.execute(() -> {
-					try {
-						algoEval.evaluate();
-						vars.forEach(v -> {
-							final VarDeclaration varDecl = varDecls.stream()
-									.filter(vd -> vd.getName().equals(v.getName())).findAny().orElse(null);
-							final String value = v.getValue().toString();
-							varDecl.getValue().setValue(value);
-						});
-					} catch (final EvaluatorException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-					} catch (final InterruptedException e) {
-						FordiacLogHelper.logError("Algorithm: " + algorithm.getName(), e);//$NON-NLS-1$
-						Thread.currentThread().interrupt();
-					}
-				});
+		final Optional<Evaluator> algoEval = eval.getChildren().entrySet().stream()
+				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue);
+		if (algoEval.isPresent()) {
+			executeEvaluator(algoEval.get(), varDecls, basefbtype, eventOccurrence, algorithm.getName());
+		}
+	}
+
+	private static void processFunctionWithEvaluator(final FunctionFBType functionFBType,
+			final EventOccurrence eventOccurrence) {
+		final List<VarDeclaration> varDecls = new ArrayList<>(functionFBType.getInterfaceList().getInputVars());
+		varDecls.addAll(functionFBType.getInterfaceList().getOutputVars());
+		// internal variables of function could be added by calling
+		// STFunctionParseUtil2.parseFunctionBody, getting the root element which is a
+		// STFunctionSource and then getting functions -> varDeclarationBlock ->
+		// varDeclaration + converting it with VariableOperations.newVariable
+
+		Evaluator eval = evaluatorCache.get(getCacheKey(eventOccurrence));
+		if (eval == null) {
+			final FBVariable fbVar = new FBVariable("THIS", functionFBType, Collections.emptyList()); //$NON-NLS-1$
+			eval = EvaluatorFactory.createEvaluator(functionFBType, FunctionFBType.class, fbVar, List.of(), null);
+			evaluatorCache.put(getCacheKey(eventOccurrence), eval);
+		}
+		executeEvaluator(eval, varDecls, functionFBType, eventOccurrence, functionFBType.getName());
+	}
+
+	private static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls, final FBType type,
+			final EventOccurrence eventOccurrence, final String name) {
+		setEvaluatorInputState(eval, type.getInterfaceList().getInputVars());
+		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
+			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
+			tpe.setMonotonicClock(clock);
+			tpe.execute(() -> {
+				try {
+					eval.evaluate();
+					getEvaluatorOutputState(eval, varDecls);
+				} catch (final EvaluatorException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+				} catch (final InterruptedException e) {
+					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					Thread.currentThread().interrupt();
+				}
+			});
+		}
+	}
+
+	private static void setEvaluatorInputState(final Evaluator eval, final List<VarDeclaration> inputVars) {
+		if (!(eval.getContext().getValue() instanceof final FBValue fbval)) {
+			return;
+		}
+		for (final VarDeclaration varDecl : inputVars) {
+			final var member = fbval.getMembers().get(varDecl.getName());
+			if (member != null) {
+				member.setValue(varDecl.getValue().getValue());
+			}
+		}
+	}
+
+	private static void getEvaluatorOutputState(final Evaluator eval, final List<VarDeclaration> outputVars) {
+		if (!(eval.getContext().getValue() instanceof final FBValue fbval)) {
+			return;
+		}
+		for (final VarDeclaration varDecl : outputVars) {
+			final var member = fbval.getMembers().get(varDecl.getName());
+			if (member != null) {
+				varDecl.getValue().setValue(member.getValue().toString());
 			}
 		}
 	}
@@ -221,8 +288,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final List<VarDeclaration> varDecls = new ArrayList<>(basicFBType.getInterfaceList().getInputVars());
 		varDecls.addAll(basicFBType.getInterfaceList().getOutputVars());
 		varDecls.addAll(basicFBType.getInternalVars());
-		final List<Variable<?>> vars = varDecls.stream()
-				.map(v -> VariableOperations.newVariable(v, v.getValue().getValue())).collect(Collectors.toList());
+		final List<Variable<?>> vars = varDecls.stream().map(DefaultRunFBType::mapVar).collect(Collectors.toList());
+
 		final FBVariable fbVar = new FBVariable("THIS", basicFBType, Collections.emptyList()); //$NON-NLS-1$
 		final Class<? extends FBType> baseFBClass = BasicFBType.class;
 
@@ -264,16 +331,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Copy FBType
 		final FBType copyFBType = EcoreUtil.copy(executedFbtype);
 		// Add copy FBType to the RuntimeFBType
-		if (runtime instanceof BasicFBTypeRuntime) {
-			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFBType);
-		} else if (runtime instanceof SimpleFBTypeRuntime) {
-			((SimpleFBTypeRuntime) newFBTypeRT).setSimpleFBType((SimpleFBType) copyFBType);
-		} else {
-			throw new UnsupportedOperationException();
+		switch (newFBTypeRT) {
+		case final BasicFBTypeRuntime b -> b.setBasicfbtype((BasicFBType) copyFBType);
+		case final SimpleFBTypeRuntime s -> s.setSimpleFBType((SimpleFBType) copyFBType);
+		case final FunctionFBTypeRuntime f -> f.setFunctionFBType((FunctionFBType) copyFBType);
+		default -> throw new UnsupportedOperationException();
 		}
+
 		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEventOccurrence.setFbRuntime(newFBTypeRT);
-		// Event
 		newEventOccurrence.setEvent(output);
 		return newEventOccurrence;
 	}
@@ -331,6 +397,19 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return outputEvents;
 	}
 
+	@Override
+	public EList<EventOccurrence> runFunctionFBType(final FunctionFBTypeRuntime fBTypeRuntime) {
+		final FunctionFBType functionFBType = fBTypeRuntime.getFunctionFBType();
+		VariableUtils.fBVariableInitialization(functionFBType);
+
+		// function types always have exactly 1 output event
+		final Event event = functionFBType.getInterfaceList().getEventOutputs().get(0);
+		processFunctionWithEvaluator(functionFBType, this.eventOccurrence);
+		isConsumed(this.eventOccurrence);
+
+		return ECollections.newBasicEList(createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
+	}
+
 	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
 		// if we don't have ECStates, use first output/algorithm as fallback
 		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
@@ -350,7 +429,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// run FB Type to get the output events for the instance in the network
 		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
 		if (runtime == null) {
-			final BaseFBType copiedType = (BaseFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType());
+			final FBType copiedType = EcoreUtil.copy(eventOccurrence.getParentFB().getType());
 			runtime = RuntimeFactory.createFrom(copiedType);
 			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
 		}
@@ -542,5 +621,4 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		interfaceElement.getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
 		return destinations;
 	}
-
 }

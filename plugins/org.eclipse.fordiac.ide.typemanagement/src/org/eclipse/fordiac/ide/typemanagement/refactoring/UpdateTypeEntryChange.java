@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -22,9 +23,11 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -97,11 +100,43 @@ public class UpdateTypeEntryChange extends Change {
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		final IFile newFile = findNewResource(newName);
-		if (newFile != null) {
-			FordiacResourceChangeListener.updateTypeEntryByRename(newFile, typeEntry);
+		if (newFile != null && typeEntry != null) {
+			updateTypeEntryByRename(newFile, typeEntry);
 			return new UpdateTypeEntryChange(newFile, typeEntry, oldName, newName);
 		}
 		return null;
+	}
+
+	private static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
+		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
+
+		if (!Objects.equals(newFile, entry.getFile())) {
+			final TypeLibrary typeLibrary = entry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(entry);
+			}
+			entry.setFile(newFile);
+
+			// update type and typeEditable names
+			LibraryElement type = entry.getTypeEditable(); // TODO: use type copy
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+			type = entry.getType();
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(entry);
+			}
+
+			try {
+				entry.save(type);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		}
 	}
 
 	@Override

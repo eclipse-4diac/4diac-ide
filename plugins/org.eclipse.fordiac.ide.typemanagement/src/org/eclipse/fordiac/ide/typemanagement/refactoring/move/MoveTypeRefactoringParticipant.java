@@ -27,16 +27,19 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
-import org.eclipse.fordiac.ide.typemanagement.wizards.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -92,15 +95,18 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 	@Override
 	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		return new MoveTypeChange(newPackageName, getName(), this.type.getURI());
+		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
+		parentChange.add(new MoveTypeChange(newPackageName, getName(), this.type.getURI()));
+		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
+		return parentChange;
 	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
-		parentChange.add(getInstanceChanges(type));
-		return parentChange;
+		if (type instanceof final DataTypeEntry dtEntry) {
+			return getDataTypeInstanceChanges(dtEntry);
+		}
+		return getInstanceChanges(type);
 	}
 
 	static IFile getFileFromURI(final URI uri) {
@@ -111,11 +117,24 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		return null;
 	}
 
+	private CompositeChange getDataTypeInstanceChanges(final DataTypeEntry dtEntry) {
+		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
+
+		for (final EObject eObject : searchResult) {
+			if (eObject instanceof VarDeclaration) {
+				change.add(
+						new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance, EcoreUtil.getURI(eObject),
+								newPackageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + dtEntry.getTypeName()));
+			}
+		}
+
+		return change;
+	}
+
 	private static CompositeChange getInstanceChanges(final TypeEntry typeEntry) {
 		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
-		final List<? extends EObject> result = (typeEntry instanceof final DataTypeEntry dtEntry)
-				? new DataTypeInstanceSearch(dtEntry).performSearch()
-				: new BlockTypeInstanceSearch(typeEntry).performSearch();
+		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
 
 		for (final EObject eObject : result) {
 			if (eObject instanceof final FBNetworkElement elem) {

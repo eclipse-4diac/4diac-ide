@@ -18,13 +18,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
-import org.eclipse.fordiac.ide.typemanagement.wizards.Messages;
+import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class UpdateTypeEntryFileChange extends UpdateTypeEntryChange {
 
@@ -53,10 +60,41 @@ public class UpdateTypeEntryFileChange extends UpdateTypeEntryChange {
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		if (destinationFile != null) {
-			FordiacResourceChangeListener.updateTypeEntry(destinationFile, typeEntry);
+			final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(typeEntry);
+			}
+
+			if (!destinationFile.getProject().equals(file.getProject())) {
+				// different project - discard type entry
+				final var entry = TypeLibraryManager.INSTANCE.getTypeLibrary(destinationFile.getProject())
+						.createTypeEntry(destinationFile);
+				closeEditors(file);
+				return new UpdateTypeEntryFileChange(destinationFile, entry, file);
+			}
+			typeEntry.setFile(destinationFile);
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(typeEntry);
+			}
 			// returns undo change
 			return new UpdateTypeEntryFileChange(destinationFile, typeEntry, file);
 		}
 		return null;
+	}
+
+	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
+
+	private static void closeEditors(final IFile src) {
+		Display.getDefault().asyncExec(() -> {
+			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IEditorReference[] editorReferences = activePage.getEditorReferences();
+
+			for (final IEditorReference editorReference : editorReferences) {
+				// close editors that point to the old file
+				if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
+					activePage.closeEditors(new IEditorReference[] { editorReference }, false);
+				}
+			}
+		});
 	}
 }

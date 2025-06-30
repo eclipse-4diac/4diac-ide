@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
@@ -46,6 +47,7 @@ public final class EventManagerUtils {
 	}
 
 	private static void processInternal(final EventManager eventManager, final boolean network) {
+		DefaultRunFBType.clearCaches();
 		final var transactions = eventManager.getTransactions();
 		long time = eventManager.getStartTime();
 

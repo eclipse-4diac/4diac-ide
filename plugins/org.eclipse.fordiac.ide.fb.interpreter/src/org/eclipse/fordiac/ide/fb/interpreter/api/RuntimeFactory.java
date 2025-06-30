@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -42,16 +44,13 @@ public final class RuntimeFactory {
 	}
 
 	public static FBRuntimeAbstract createFrom(final FBType fbType) {
-		if (fbType instanceof final BasicFBType basic) {
-			return (createFrom(basic));
-		}
-		if (fbType instanceof final SimpleFBType simple) {
-			return (createFrom(simple));
-		}
-		if (fbType instanceof final CompositeFBType composite) {
-			return (createFrom(composite));
-		}
-		return null;
+		return switch (fbType) {
+		case final BasicFBType basic -> createFrom(basic);
+		case final SimpleFBType simple -> createFrom(simple);
+		case final FunctionFBType function -> createFrom(function);
+		case final CompositeFBType composite -> createFrom(composite);
+		default -> null;
+		};
 	}
 
 	public static FBRuntimeAbstract createFrom(final FBType fbType, final String startStateName) {
@@ -81,6 +80,12 @@ public final class RuntimeFactory {
 		final SimpleFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime();
 		basicFBTypeRT.setSimpleFBType(fb);
 		return basicFBTypeRT;
+	}
+
+	private static FBRuntimeAbstract createFrom(final FunctionFBType fb) {
+		final FunctionFBTypeRuntime funcFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createFunctionFBTypeRuntime();
+		funcFBTypeRT.setFunctionFBType(fb);
+		return funcFBTypeRT;
 	}
 
 	private static FBRuntimeAbstract createFrom(final CompositeFBType fb) {
