@@ -24,7 +24,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fbrtlauncher.preferences.FbrtPreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -37,6 +36,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FBRTLaunchTab extends RuntimeLaunchTab {
 
@@ -76,7 +76,7 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 		super.setDefaults(configuration);
 
 		configuration.setAttribute(ATTR_LOCATION, getJavaRte());
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FbrtPreferenceConstants.FBRTLAUNCHER_PREFERENCES_ID);
 
 		final String fbrtPath = store.getString(FbrtPreferenceConstants.P_PATH);

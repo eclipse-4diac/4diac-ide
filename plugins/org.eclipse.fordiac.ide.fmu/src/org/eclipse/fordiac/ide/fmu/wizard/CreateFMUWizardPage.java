@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootFilesWizardP
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferencePage;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -27,6 +26,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 
@@ -109,7 +109,7 @@ public class CreateFMUWizardPage extends CreateBootFilesWizardPage {
 			}
 		}
 
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FMUPreferenceConstants.FMU_PREFERENCES_ID);
 
 		// Check the selected libraries from preferences

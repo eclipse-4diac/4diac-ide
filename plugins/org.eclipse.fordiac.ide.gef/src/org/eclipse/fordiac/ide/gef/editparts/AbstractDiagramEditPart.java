@@ -26,7 +26,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
@@ -36,6 +35,7 @@ import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * The Class AbstractDiagramEditPart.
@@ -46,8 +46,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	private final IPreferenceStore preferenceStore;
 
 	protected AbstractDiagramEditPart() {
-		preferenceStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
-				GefPreferenceConstants.GEF_PREFERENCES_ID);
+		preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, GefPreferenceConstants.GEF_PREFERENCES_ID);
 	}
 
 	/**
