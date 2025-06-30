@@ -43,9 +43,11 @@ public class STCoreFindReferencesHandler extends FindReferencesHandler {
 		String searchString = null;
 
 		if (target instanceof final STFunction function) {
-			searchString = function.getName();
+			searchString = nameProvider.getFullyQualifiedName(function).skipLast(1)
+					.toString(PackageNameHelper.PACKAGE_NAME_DELIMITER);
 		} else if (target instanceof final FunctionFBType function) {
-			searchString = function.getName();
+			searchString = nameProvider.getFullyQualifiedName(function)
+					.toString(PackageNameHelper.PACKAGE_NAME_DELIMITER);
 		} else if (target instanceof final STVarDeclaration varDec
 				&& varDec.eContainer() instanceof STVarGlobalDeclarationBlock) {
 
