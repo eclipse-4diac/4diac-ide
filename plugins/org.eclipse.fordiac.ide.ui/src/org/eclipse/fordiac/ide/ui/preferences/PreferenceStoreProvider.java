@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * Encapsulates workspace/project scoped preference store access
@@ -37,9 +38,8 @@ public class PreferenceStoreProvider {
 	private final IPreferenceStore projectStore;
 
 	public PreferenceStoreProvider(final String qualifier, final IProject project) {
-		this.instanceStore = new FixedScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
-		this.projectStore = (project != null) ? new FixedScopedPreferenceStore(new ProjectScope(project), qualifier)
-				: null;
+		this.instanceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
+		this.projectStore = (project != null) ? new ScopedPreferenceStore(new ProjectScope(project), qualifier) : null;
 	}
 
 	/**
@@ -131,11 +131,11 @@ public class PreferenceStoreProvider {
 	 *         activation of project-specific preferences
 	 */
 	public static IPreferenceStore getStore(final String qualifier, final IProject project) {
-		final var projectScope = new FixedScopedPreferenceStore(new ProjectScope(project), qualifier);
+		final var projectScope = new ScopedPreferenceStore(new ProjectScope(project), qualifier);
 		if (projectScope.getBoolean(PROJECT_STORE_ACTIVE)) {
 			return projectScope;
 		}
-		return new FixedScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
+		return new ScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
 	}
 
 	/**

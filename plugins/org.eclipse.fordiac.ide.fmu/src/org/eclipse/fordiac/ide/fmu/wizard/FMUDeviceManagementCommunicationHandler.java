@@ -57,11 +57,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public final class FMUDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
 
@@ -328,7 +328,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			final Shell shell) {
 		try {
 			final String tempFolder = Files.createTempDirectory("temp").toString(); //$NON-NLS-1$
-			final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+			final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 					FMUPreferenceConstants.FMU_PREFERENCES_ID);
 			final File binariesDirectory = new File(store.getString(FMUPreferenceConstants.P_PATH));
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
@@ -407,7 +407,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		if (!createNotBinaryFiles(root, shell)) {
 			return false;
 		}
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FMUPreferenceConstants.FMU_PREFERENCES_ID);
 		// copy libraries
 		for (final String name : librariesToAdd) {

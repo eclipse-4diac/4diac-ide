@@ -22,6 +22,7 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FordiacPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -52,8 +53,8 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
-				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID));
+		setPreferenceStore(
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID));
 		setDescription(FordiacMessages.FordiacPreferencePage_LABEL_PreferencePageDescription);
 	}
 
