@@ -323,7 +323,7 @@ public class ModelSearchQuery implements ISearchQuery {
 	    )
 	    .flatMap(Function.identity());
 
-		 Stream<IInterfaceElement> results;
+		Stream<IInterfaceElement> results;
 
 		if(modelQuerySpec.referenceObject() instanceof final STVarDeclaration globalConstant) {
 			results = searchableElements.filter((final INamedElement modelElement) -> this.checkGlobalConstant(modelElement, monitor));
@@ -361,6 +361,12 @@ public class ModelSearchQuery implements ISearchQuery {
 				return searchResult.hasFordiacMatch(EcoreUtil.getURI(modelElement));
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
+				if(modelQuerySpec.referenceObject() != null) {
+				final String packageName = PackageNameHelper.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
+				if(!packageName.equals(config.getTypeEntry().getPackageName())){
+					return false;
+					}
+				}
 				return compareStrings(config.getTypeName())
 						|| (config.getTypeEntry() != null && compareStrings(config.getTypeEntry().getFullTypeName()));
 			}
