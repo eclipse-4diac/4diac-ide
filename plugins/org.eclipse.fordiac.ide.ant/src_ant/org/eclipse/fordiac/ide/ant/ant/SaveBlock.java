@@ -107,6 +107,10 @@ public class SaveBlock extends AbstractBlockModelTask {
 	private static final IResourceServiceProvider SERVICE_PROVIDER_GCF = IResourceServiceProvider.Registry.INSTANCE
 			.getResourceServiceProvider(SYNTHETIC_URI_GCF);
 
+	private static final URI SYNTHETIC_URI_RES = URI.createURI("__synthetic.resource"); //$NON-NLS-1$
+	private static final IResourceServiceProvider SERVICE_PROVIDER_RES = IResourceServiceProvider.Registry.INSTANCE
+			.getResourceServiceProvider(SYNTHETIC_URI_RES);
+
 	private static ResourceSet getResourceSet(final TypeEntry te) {
 		XtextResourceSet resourceSet;
 
@@ -137,6 +141,9 @@ public class SaveBlock extends AbstractBlockModelTask {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 				TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, //
 				SERVICE_PROVIDER_GCF.get(IResourceFactory.class));
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+				TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING, //
+				SERVICE_PROVIDER_RES.get(IResourceFactory.class));
 
 		return resourceSet;
 	}
