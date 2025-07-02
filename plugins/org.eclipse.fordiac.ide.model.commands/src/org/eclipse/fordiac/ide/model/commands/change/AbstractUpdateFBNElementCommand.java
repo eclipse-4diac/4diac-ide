@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
@@ -360,8 +361,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		inputs.addAll(interfaceList.getInOutVars());
 
 		final List<VarDeclaration> outputs = new ArrayList<>();
-		inputs.addAll(interfaceList.getOutputVars());
-		inputs.addAll(interfaceList.getOutMappedInOutVars());
+		outputs.addAll(interfaceList.getOutputVars());
+		outputs.addAll(interfaceList.getOutMappedInOutVars());
 
 		for (final VarDeclaration input : inputs) {
 			// No outside connections to a pin in oldElement and it has an initial value
@@ -505,6 +506,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConfigurableFB();
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
+		if (newElement instanceof final TypedSubApp tsa) {
+			tsa.getVarConfigParams().addAll(EcoreUtil.copyAll(((TypedSubApp) oldElement).getVarConfigParams()));
+		}
 		copyAttributes();
 		createValues();
 		transferInstanceComments();
