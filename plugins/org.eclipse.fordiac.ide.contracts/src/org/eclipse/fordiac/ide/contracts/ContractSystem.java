@@ -255,10 +255,11 @@ public class ContractSystem {
 	 * issues are then stored and can be accessed via <code>getIssues()</code>.
 	 *
 	 * @param eventOccurences the list of (recorded) event occurrences
+	 * @return a data structure with more information about the result
 	 */
-	public void performDynamicCheck(final List<EventOccurrence> eventOccurences) {
+	public DynamicCheckResult performDynamicCheck(final List<EventOccurrence> eventOccurences) {
 		final DynamicContractChecker checker = new DynamicContractChecker(this, components, eventOccurences);
-		checker.checkSystem();
+		return checker.checkSystem();
 	}
 
 	/**

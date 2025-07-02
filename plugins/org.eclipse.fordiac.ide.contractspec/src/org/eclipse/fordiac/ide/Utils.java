@@ -28,9 +28,9 @@ public class Utils {
 
 	public static double getInNs(final double value, final Unit unit) {
 		return switch (unit) {
-		case S -> value * Math.pow(10, 9);
-		case MS -> value * Math.pow(10, 6);
-		case US -> value * Math.pow(10, 3);
+		case S -> value * 1e9;
+		case MS -> value * 1e6;
+		case US -> value * 1e3;
 		case NS -> value;
 		};
 	}

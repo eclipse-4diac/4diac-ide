@@ -15,10 +15,14 @@ package org.eclipse.fordiac.ide.ui.utils;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 
 public class ContractScanner implements Iterable<ContractScanner.Token> {
@@ -48,6 +52,28 @@ public class ContractScanner implements Iterable<ContractScanner.Token> {
 		reader = new StringReader(string);
 		sb = new StringBuilder();
 		nextChar();
+	}
+
+	public static StyleRange[] getStyleRanges(final String string) {
+		final ContractScanner scan = new ContractScanner(string);
+		final List<StyleRange> ranges = new ArrayList<>();
+		int idx = 0;
+
+		for (final Token t : scan) {
+			final int len = t.value().length();
+			final StyleRange range = new StyleRange(idx, len, null, null);
+			idx += len;
+			range.foreground = switch (t.type()) {
+			case COMMENT -> COMMENT;
+			case KEYWORD -> KEYWORD;
+			default -> NORMAL;
+			};
+			if (t.type() == TokenType.KEYWORD) {
+				range.fontStyle = SWT.BOLD;
+			}
+			ranges.add(range);
+		}
+		return ranges.toArray(StyleRange[]::new);
 	}
 
 	@Override
