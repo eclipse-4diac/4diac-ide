@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.editors.FilterComposite.Filter;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -181,6 +182,12 @@ public class SearchHelper {
 				return typeEntry.getType(); // use original for search
 			}
 		};
+	}
+
+	public static IEC61499SearchFilter createSimpleAttributeSearchFilter(final String searchText) {
+		return searchCandidate -> searchCandidate instanceof final Attribute attribute
+				&& attribute.getAttributeDeclaration() != null
+				&& searchText.equals(PackageNameHelper.getFullTypeName(attribute.getAttributeDeclaration()));
 	}
 
 	public static IEC61499SearchFilter createSearchFilter(final int mode, final List<Filter> filters) {

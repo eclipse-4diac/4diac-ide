@@ -40,11 +40,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
+import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
@@ -53,7 +57,11 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.swt.SWT;
@@ -64,8 +72,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -105,8 +115,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	// Search For
 	private Combo modeSelectionDropDown;
-	private FilterComposite searchFilter;
+	private Button advancedButton;
 	private boolean changedSearchParameter = false;
+
+	// Search Where
+	private Group searchWhereGroup;
+	private FilterComposite searchFilter;
+	private Text searchText;
 
 	// Search In
 	private Button searchInClearButton;
@@ -178,14 +193,13 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		final Composite pageHeaderComposite = new Composite(pageComposite, SWT.NONE);
 		pageHeaderComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		final var headerLayout = new GridLayout(2, false);
+		pageHeaderComposite.setLayout(new GridLayout(2, false));
 
 		final Composite pageBodyComposite = new Composite(pageComposite, SWT.NONE);
 		pageBodyComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		pageBodyComposite.setLayout(new GridLayout(1, false));
 
 		// header
-		pageHeaderComposite.setLayout(headerLayout);
 		WidgetFactory.label(SWT.NONE).text(Messages.SearchFor).create(pageHeaderComposite);
 		final Twistie expandBodyCompositeTwistie = new Twistie(pageHeaderComposite, SWT.NONE);
 		expandBodyCompositeTwistie.setExpanded(true);
@@ -195,22 +209,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		});
 
 		// body
-		modeSelectionDropDown = new Combo(pageBodyComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
-		modeSelectionDropDown.select(settings.modeSelection);
-		modeSelectionDropDown.addListener(SWT.Selection, event -> {
-			final int choice = openUnsavedChangesDialog();
-			if (choice == 1) {
-				return;
-			}
-			natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
-			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
-			pageComposite.layout();
-			changedSearchParameter = false;
-			searchInformation.setText(""); //$NON-NLS-1$
-			commandStack.flush();
-		});
-
+		createModeSelectionComposite(pageBodyComposite);
 		createSearchWhereGroup(pageBodyComposite);
 		createSearchInGroup(pageBodyComposite);
 		createScopeGroup(pageBodyComposite);
@@ -222,17 +221,84 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		getSite().getPage().addPartListener(focusListener);
 	}
 
-	private void createSearchWhereGroup(final Composite parent) {
-		final Group searchWhereGroup = createCollapsibleGroup(parent, Messages.SearchWhere,
-				button -> button.addListener(SWT.Selection, event -> {
-					searchFilter.clear();
-				}));
+	private void createModeSelectionComposite(final Composite parent) {
+		final Composite modeSelectionComposite = new Composite(parent, SWT.NONE);
+		modeSelectionComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		modeSelectionComposite.setLayout(new GridLayout(2, false));
 
-		searchFilter = new FilterComposite(searchWhereGroup, SWT.NONE, DEFAULT_LIST, settings,
-				BulkEditorSettings.whereSearchList);
-		searchFilter.addFilterChangedListener(() -> {
-			this.changedSearchParameter = true;
+		modeSelectionDropDown = new Combo(modeSelectionComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		modeSelectionDropDown.setItems(Messages.Variable, Messages.Attribute);
+		modeSelectionDropDown.select(settings.modeSelection);
+		modeSelectionDropDown.addListener(SWT.Selection, event -> {
+			if (modeSelectionDropDown.getSelectionIndex() == settings.modeSelection) {
+				return;
+			}
+			final int choice = openUnsavedChangesDialog();
+			if (choice == 1) {
+				return;
+			}
+			advancedButton.setVisible(modeSelectionDropDown.getSelectionIndex() == 1);
+			advancedButton.setSelection(settings.advancedMode);
+			changeSearchWhereGroupFilter(modeSelectionDropDown.getSelectionIndex() != 1 || settings.advancedMode);
+			natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
+			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
+			parent.getParent().layout();
+			changedSearchParameter = false;
+			searchInformation.setText(""); //$NON-NLS-1$
+			commandStack.flush();
 		});
+
+		advancedButton = WidgetFactory.button(SWT.TOGGLE).text(Messages.Advanced).onSelect(event -> {
+			changeSearchWhereGroupFilter(advancedButton.getSelection());
+			settings.advancedMode = advancedButton.getSelection();
+			parent.getParent().layout();
+		}).create(modeSelectionComposite);
+		advancedButton.setVisible(modeSelectionDropDown.getSelectionIndex() == 1);
+		advancedButton.setSelection(settings.advancedMode);
+	}
+
+	private void createSearchWhereGroup(final Composite parent) {
+		searchWhereGroup = createCollapsibleGroup(parent, Messages.SearchWhere,
+				button -> button.addListener(SWT.Selection, event -> {
+					if (searchFilter != null && !searchFilter.isDisposed()) {
+						searchFilter.clear();
+					}
+					if (searchText != null && !searchText.isDisposed()) {
+						searchText.setText(""); //$NON-NLS-1$
+					}
+				}));
+		changeSearchWhereGroupFilter(settings.modeSelection != 1 || settings.advancedMode);
+	}
+
+	private void changeSearchWhereGroupFilter(final boolean advancedMode) {
+		for (final Control child : searchWhereGroup.getChildren()) {
+			child.dispose();
+		}
+
+		if (advancedMode) {
+			searchFilter = new FilterComposite(searchWhereGroup, SWT.NONE, DEFAULT_LIST, settings,
+					BulkEditorSettings.whereSearchList);
+			searchFilter.addFilterChangedListener(() -> {
+				this.changedSearchParameter = true;
+			});
+		} else {
+			final Composite simpleTextComposite = new Composite(searchWhereGroup, SWT.NONE);
+			GridLayoutFactory.fillDefaults().numColumns(2).margins(0, 0).generateLayout(simpleTextComposite);
+			simpleTextComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+			WidgetFactory.label(SWT.NONE).text(Messages.Name).create(simpleTextComposite);
+			searchText = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.FILL, true, false))
+					.create(simpleTextComposite);
+
+			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
+					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
+					AttributeSelectionContentProvider.INSTANCE);
+			final ContentProposalAdapter adapter = new ContentProposalAdapter(searchText, new TextContentAdapter(),
+					proposalProvider, KeyStroke.getInstance(SWT.CTRL, SWT.SPACE),
+					NatTableWidgetFactory.getActivationChars());
+			adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		}
+		searchWhereGroup.layout();
 	}
 
 	private void createSearchInGroup(final Composite parent) {
@@ -572,11 +638,14 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					projectScopeButton.getSelection(), project);
 		}
 
-		final var result = contexts.stream()
-				.flatMap(context -> new IEC61499ElementSearch(context,
-						SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
-								DEFAULT_LIST.stream().map(searchFilter::getFilter).toList()),
-						helper.createChildrenSearchProvider()).performSearch().stream())
+		final IEC61499SearchFilter modelSearchFilter = (modeSelectionDropDown.getSelectionIndex() != 1
+				|| advancedButton.getSelection())
+						? SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
+								DEFAULT_LIST.stream().map(searchFilter::getFilter).toList())
+						: SearchHelper.createSimpleAttributeSearchFilter(searchText.getText());
+		final var result = contexts.stream().flatMap(
+				context -> new IEC61499ElementSearch(context, modelSearchFilter, helper.createChildrenSearchProvider())
+						.performSearch().stream())
 				.toList();
 
 		final List<EObject> mappedList = createMappedList(result);
