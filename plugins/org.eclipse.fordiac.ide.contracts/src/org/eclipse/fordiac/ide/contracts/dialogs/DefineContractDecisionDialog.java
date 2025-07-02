@@ -13,14 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.dialogs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.contracts.Messages;
 import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -76,26 +74,7 @@ public class DefineContractDecisionDialog extends MessageDialog {
 			txt.setText(templates.get(i));
 			txt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 			txt.setBackground(new Color(255, 255, 255));
-
-			final ContractScanner scan = new ContractScanner(templates.get(i));
-			final List<StyleRange> ranges = new ArrayList<>();
-			int idx = 0;
-
-			for (final ContractScanner.Token t : scan) {
-				final int len = t.value().length();
-				final StyleRange range = new StyleRange(idx, len, null, null);
-				idx += len;
-				range.foreground = switch (t.type()) {
-				case COMMENT -> ContractScanner.COMMENT;
-				case KEYWORD -> ContractScanner.KEYWORD;
-				default -> ContractScanner.NORMAL;
-				};
-				if (t.type() == ContractScanner.TokenType.KEYWORD) {
-					range.fontStyle = SWT.BOLD;
-				}
-				ranges.add(range);
-			}
-			txt.setStyleRanges(ranges.toArray(StyleRange[]::new));
+			txt.setStyleRanges(ContractScanner.getStyleRanges(templates.get(i)));
 			txt.setEnabled(false);
 
 			final int fi = i;

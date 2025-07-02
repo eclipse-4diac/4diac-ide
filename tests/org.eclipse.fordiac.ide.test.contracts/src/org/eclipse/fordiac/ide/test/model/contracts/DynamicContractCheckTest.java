@@ -39,54 +39,64 @@ class DynamicContractCheckTest {
 	void singleEventTooEarlyTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(2)));
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
+		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_TOO_EARLY, sys);
 	}
 
 	@Test
 	void singleEventTooLateTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(12)));
-		assertEquals(2, sys.getIssues().size());
-		// first error because event did not arrive in time
-		assertEquals(ContractIssue.Code.SINGLE_EVENT_MATCH, sys.getIssues().get(0).getCode());
-		// second error because event arrived outside of interval
-		assertEquals(ContractIssue.Code.SINGLE_EVENT_MATCH, sys.getIssues().get(1).getCode());
+		assertTwoIssues(ContractIssue.Code.SINGLE_EVENT_MISSED, ContractIssue.Code.SINGLE_EVENT_TOO_LATE, sys);
 	}
 
 	@Test
 	void singleEventTooOftenTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(5), createEI(8)));
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
+		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MULTIPLE, sys);
 	}
 
 	@Test
 	void singleEventMissingTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of());
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MATCH, sys);
+		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MISSED, sys);
 	}
 
 	// === test repetition
 	@Test
-	void repetitionFailAfter4Test() {
+	void repetitionMissedAfter4Test() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns");
 		sys.performDynamicCheck(List.of(createEI(0), createEI(7), createEI(14), createEI(21)));
-		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
+		assertOneIssue(ContractIssue.Code.REPETITION_MISSED, sys);
 	}
 
 	@Test
 	void repetitionTooEarlyOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(3)));
-		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
+		assertOneIssue(ContractIssue.Code.REPETITION_TOO_EARLY, sys);
 	}
 
 	@Test
 	void repetitionTooLateOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(8)));
-		assertOneIssue(ContractIssue.Code.REPETITION_MATCH, sys);
+		assertTwoIssues(ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE, sys);
+	}
+
+	@Test
+	void repetitionTooEarlyIntervalTest() {
+		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
+		sys.performDynamicCheck(List.of(createEI(4), createEI(8)));
+		assertOneIssue(ContractIssue.Code.REPETITION_TOO_EARLY, sys);
+	}
+
+	@Test
+	void repetitionTooLateIntervalTest() {
+		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
+		sys.performDynamicCheck(List.of(createEI(5), createEI(14)));
+		assertTwoIssues(ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE, sys);
 	}
 
 	// === helper methods
@@ -108,5 +118,12 @@ class DynamicContractCheckTest {
 	private static void assertOneIssue(final ContractIssue.Code code, final ContractSystem sys) {
 		assertEquals(1, sys.getIssues().size());
 		assertEquals(code, sys.getIssues().get(0).getCode());
+	}
+
+	private static void assertTwoIssues(final ContractIssue.Code code1, final ContractIssue.Code code2,
+			final ContractSystem sys) {
+		assertEquals(2, sys.getIssues().size());
+		assertEquals(code1, sys.getIssues().get(0).getCode());
+		assertEquals(code2, sys.getIssues().get(1).getCode());
 	}
 }

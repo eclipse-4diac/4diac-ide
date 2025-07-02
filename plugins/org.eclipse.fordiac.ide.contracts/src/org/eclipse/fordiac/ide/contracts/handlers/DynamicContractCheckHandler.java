@@ -13,14 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.handlers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.contracts.ContractSystem;
+import org.eclipse.fordiac.ide.contracts.DynamicCheckResultDialog;
+import org.eclipse.fordiac.ide.contracts.EventOccurrence;
 import org.eclipse.fordiac.ide.contracts.Messages;
-import org.eclipse.fordiac.ide.contracts.dialogs.ContractCheckResultDialog;
 import org.eclipse.fordiac.ide.contracts.dialogs.EventOccurrencesDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,13 +44,12 @@ public class DynamicContractCheckHandler extends ContractCheckHandler {
 			if (eoDialog.open() != 0) {
 				return Status.CANCEL_STATUS;
 			}
-			sysContracts.performDynamicCheck(eoDialog.getEventOccurrences());
-
-			final var dialog = new ContractCheckResultDialog(sysContracts, isNetworkCheck(), parentShell);
+			final List<EventOccurrence> eos = eoDialog.getEventOccurrences();
+			final var result = sysContracts.performDynamicCheck(eos);
+			final var dialog = new DynamicCheckResultDialog(result, isNetworkCheck(), parentShell);
 			dialog.open();
 			return Status.OK_STATUS;
 		}
-		// TODO more visual error dialog with a diagram
 		MessageDialog.openError(parentShell, Messages.EvaluateSelectionErrorDialog_Title,
 				Messages.EvaluateSelectionErrorDialog_Info);
 		return Status.CANCEL_STATUS;

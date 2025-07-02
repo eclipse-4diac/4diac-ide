@@ -16,7 +16,9 @@ package org.eclipse.fordiac.ide.contracts;
 public record EventOccurrence(String eventName, double timestampNs, Type type) implements Comparable<EventOccurrence> {
 	public enum Type {
 		RECORDED, // an actual recored event occurrence
-		MISSED_MARKER // a special occurrence marker used to check for missing events
+		MISSED_MARKER, // a special occurrence marker used to check for missing events
+		ISSUE_MARKER, // a special occurrence used to mark issues
+		FULFILL_MARKER, // a special occurrence used to mark correct event occurrences
 	}
 
 	public EventOccurrence(final String eventName, final double timestampNs) {

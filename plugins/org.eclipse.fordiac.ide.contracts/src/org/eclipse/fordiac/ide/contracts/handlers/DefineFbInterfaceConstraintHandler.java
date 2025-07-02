@@ -40,7 +40,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
-	public static final String DEFAULT_TIME = "10ms"; //$NON-NLS-1$
+	private static final String DEFAULT_TIME = "10ms"; //$NON-NLS-1$
 	private static final String DEFAULT_OFFSET = "0ms"; //$NON-NLS-1$
 	private static final int CANCEL = -1;
 

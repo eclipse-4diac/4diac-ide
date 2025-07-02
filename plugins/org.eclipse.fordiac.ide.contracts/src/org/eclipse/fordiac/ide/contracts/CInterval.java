@@ -81,6 +81,10 @@ class CInterval {
 		return ub;
 	}
 
+	double getDiameter() {
+		return ub - lb;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();

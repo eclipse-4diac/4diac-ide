@@ -27,11 +27,19 @@ public final class ContractUtils {
 	}
 
 	public static String createSingleEvent(final List<Event> pins, final String timeExpr) {
-		return "%s occurs within %s".formatted(createEventList(pins), timeExpr);
+		return createSingleEvent(createEventList(pins), timeExpr);
+	}
+
+	public static String createSingleEvent(final String pins, final String timeExpr) {
+		return "%s occurs within %s".formatted(pins, timeExpr);
 	}
 
 	public static String createRepetition(final List<Event> pins, final String timeExpr, final String offsetExpr) {
-		String repetition = "%s occurs every %s".formatted(createEventList(pins), timeExpr);
+		return createRepetition(createEventList(pins), timeExpr, offsetExpr);
+	}
+
+	public static String createRepetition(final String pins, final String timeExpr, final String offsetExpr) {
+		String repetition = "%s occurs every %s".formatted(pins, timeExpr);
 		if (offsetExpr != null && !offsetExpr.isEmpty()) {
 			repetition += " with offset %s".formatted(offsetExpr);
 		}
