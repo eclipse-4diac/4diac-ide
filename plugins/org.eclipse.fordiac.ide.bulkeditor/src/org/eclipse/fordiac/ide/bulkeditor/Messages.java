@@ -44,6 +44,7 @@ public final class Messages extends NLS {
 	public static String SearchWhere;
 	public static String SearchIn;
 	public static String ClearFilter;
+	public static String Advanced;
 
 	public static String IgnoreLinkedLibraries;
 
