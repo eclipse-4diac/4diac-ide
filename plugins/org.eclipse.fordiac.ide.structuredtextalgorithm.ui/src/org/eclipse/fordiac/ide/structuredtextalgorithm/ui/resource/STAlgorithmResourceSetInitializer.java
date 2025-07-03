@@ -65,6 +65,24 @@ public class STAlgorithmResourceSetInitializer implements IResourceSetInitialize
 			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
 					TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, //
 					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.DEVICE_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.DEVICE_TYPE_FILE_ENDING, //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.toLowerCase(), //
+					resourceFactory);
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put( //
+					TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING, //
+					resourceFactory);
 		}
 	}
 

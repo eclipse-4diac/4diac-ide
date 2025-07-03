@@ -250,6 +250,18 @@
 		</resourceServiceProvider>
 		<resourceServiceProvider
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="res">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="dev">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="seg">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="FBT">
 		</resourceServiceProvider>
 		<resourceServiceProvider
@@ -267,6 +279,18 @@
 		<resourceServiceProvider
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="ADP">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="RES">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="DEV">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="SEG">
 		</resourceServiceProvider>
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
