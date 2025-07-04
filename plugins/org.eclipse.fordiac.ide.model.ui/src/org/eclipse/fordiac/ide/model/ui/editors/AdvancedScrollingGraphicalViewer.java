@@ -31,6 +31,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class AdvancedScrollingGraphicalViewer.
@@ -67,7 +68,19 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		if (!(part instanceof ConnectionEditPart)) {
 			super.reveal(part);
 			if (part instanceof final GraphicalEditPart graphicalEP) {
-				centerPartPositionInViewport(graphicalEP);
+				final IFigure figure = graphicalEP.getFigure();
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						flush();
+						if (figure.isShowing() && !figure.getBounds().isEmpty()) {
+							centerPartPositionInViewport(graphicalEP);
+						} else {
+							// Retry until the figure is laid out
+							Display.getDefault().timerExec(50, this);
+						}
+					}
+				});
 			}
 		}
 	}

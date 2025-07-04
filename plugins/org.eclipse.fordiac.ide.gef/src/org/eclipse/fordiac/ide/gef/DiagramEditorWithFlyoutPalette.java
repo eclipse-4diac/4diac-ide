@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
@@ -79,6 +80,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -159,19 +161,38 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		if (canvas != null && !canvas.isDisposed()) {
 			viewer.flush();
 			// if an editpart is selected then the viewer has bee created with something to
-			// be shown centered
-			// therefore we will not show the initial position
+			// be shown centered therefore we will not show the initial position
 			// do not use getSelection() here because it will return always at least one
 			// element
 			if (viewer.getSelectedEditParts().isEmpty()) {
-				final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
-				final Point scrollPos = getInitialScrollPos(rootEditPart);
-				canvas.scrollTo(scrollPos.x, scrollPos.y);
+				performUnselectedInitialisationScroll(viewer);
 			} else {
 				// if we have a selected edit part we want to show it in the middle
 				viewer.revealEditPart(viewer.getSelectedEditParts().get(0));
 			}
 		}
+	}
+
+	private void performUnselectedInitialisationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
+		final IFigure figure = rootEditPart.getFigure();
+
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (canvas != null && !canvas.isDisposed()) {
+					viewer.flush();
+					if (figure.isShowing() && !figure.getBounds().isEmpty()) {
+						final Point scrollPos = getInitialScrollPos(rootEditPart);
+						canvas.scrollTo(scrollPos.x, scrollPos.y);
+					} else {
+						// Retry until the figure is laid out
+						Display.getDefault().timerExec(50, this);
+					}
+				}
+			}
+		});
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to override this method
