@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,12 +20,7 @@ import java.util.Map;
 
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.ElkGraphElement;
-import org.eclipse.elk.graph.ElkNode;
-import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeNetworkViewerEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.ui.IEditorPart;
@@ -40,40 +35,9 @@ public class FordiacLayoutMapping extends LayoutMapping {
 
 	private final AbstractFBNetworkEditPart ep;
 
-	public enum LayoutType {
-		Application, Unfolded, Typed
-	}
-
-	public LayoutType type;
-
 	public FordiacLayoutMapping(final IEditorPart part, final AbstractFBNetworkEditPart ep) {
 		super(part);
 		this.ep = ep;
-		type = getLayoutType(ep);
-
-		final ElkNode graph = ElkGraphUtil.createGraph();
-		final ElkNode parent = ElkGraphUtil.createGraph();
-		graph.setParent(parent);
-
-		final var bounds = ep.getFigure().getBounds();
-		graph.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
-		graph.setLocation(bounds.preciseX(), bounds.preciseY());
-
-		setLayoutGraph(graph);
-		setParentElement(ep);
-
-		getGraphMap().put(graph, ep);
-		reverseMapping.put(ep, graph);
-	}
-
-	private static LayoutType getLayoutType(final AbstractFBNetworkEditPart ep) {
-		if (ep instanceof UnfoldedSubappContentEditPart) {
-			return LayoutType.Unfolded;
-		}
-		if (ep instanceof EditorWithInterfaceEditPart && !(ep instanceof CompositeNetworkViewerEditPart)) {
-			return LayoutType.Typed;
-		}
-		return LayoutType.Application;
 	}
 
 	@Override
