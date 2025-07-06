@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -61,7 +61,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-public class FordiacLayout {
+public final class FordiacLayout {
 
 	public static void blockLayout(final IEditorPart part, final AbstractFBNetworkEditPart ep) {
 		executeLayout(part, ep, true);
@@ -100,9 +100,7 @@ public class FordiacLayout {
 
 	private static Command performLayoutRun(final IEditorPart part, final AbstractFBNetworkEditPart ep,
 			final RecursiveGraphLayoutEngine engine, final boolean isBlockLayout) {
-		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(part, ep);
-
-		new FordiacGraphBuilder(mapping).build();
+		final FordiacLayoutMapping mapping = new FordiacGraphBuilder(part, ep).build();
 
 		if (isBlockLayout) {
 			performBlockLayout(mapping, engine);
@@ -194,6 +192,8 @@ public class FordiacLayout {
 
 	private static void configureConnectionLayoutGraph(final ElkGraphElement graph) {
 		graph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid") //$NON-NLS-1$
+				.setProperty(CoreOptions.OMIT_NODE_MICRO_LAYOUT, Boolean.TRUE)
+				.setProperty(CoreOptions.DEBUG_MODE, Boolean.TRUE)
 				.setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10))
 				.setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5))
 				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.FALSE)
@@ -231,5 +231,9 @@ public class FordiacLayout {
 				.findAbstractContainerContentEditPartAtPosition((IEditorPart) workbenchPart, point,
 						networkEP.getModel());
 		return (containerEP != null) ? containerEP : networkEP;
+	}
+
+	private FordiacLayout() {
+		throw new UnsupportedOperationException("Helper class shall not be instantiated!"); //$NON-NLS-1$
 	}
 }

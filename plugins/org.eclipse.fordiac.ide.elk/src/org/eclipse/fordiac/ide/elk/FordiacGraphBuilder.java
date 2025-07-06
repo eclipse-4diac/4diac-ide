@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University Linz,
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz,
  * 							Primetals Technologies Germany GmbH,
  * 							Primetals Technologies Austria GmbH
  *
@@ -17,8 +17,7 @@ package org.eclipse.fordiac.ide.elk;
 
 import java.util.List;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.PortConstraints;
@@ -31,30 +30,30 @@ import org.eclipse.elk.graph.util.ElkGraphUtil;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnection;
-import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping.LayoutType;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.ui.IEditorPart;
 
 public final class FordiacGraphBuilder {
 
-	private static final PrecisionPoint START_POINT = new PrecisionPoint();
-	private static final PrecisionPoint END_POINT = new PrecisionPoint();
-
 	private final FordiacLayoutMapping mapping;
 
-	public FordiacGraphBuilder(final FordiacLayoutMapping mapping) {
-		this.mapping = mapping;
+	public FordiacGraphBuilder(final IEditorPart part, final AbstractFBNetworkEditPart ep) {
+		this.mapping = createFordiacLayoutMapping(part, ep);
 	}
 
-	public void build() {
-		if (mapping.type != LayoutType.Application) {
+	public FordiacLayoutMapping build() {
+		if (isParentInterfaceLayout(mapping.getParentElement())) {
 			processParentInterfaces();
 		}
 
@@ -63,23 +62,60 @@ public final class FordiacGraphBuilder {
 		}
 
 		processConnections();
+
+		return mapping;
 	}
 
 	private void processParentInterfaces() {
-		final List<? extends EditPart> children = switch (mapping.type) {
-		case LayoutType.Typed -> mapping.getParentElement().getChildren();
-		case LayoutType.Unfolded -> mapping.getParentElement().getParent().getChildren();
-		default -> throw new IllegalArgumentException("Unexpected value: " + mapping.type); //$NON-NLS-1$
+		final ElkNode inputInterfaceBarNode = createInputIBNode();
+		final ElkNode outputInterfaceBarNode = createOutputIBNode();
+
+		final List<? extends GraphicalEditPart> children = switch (mapping.getParentElement()) {
+		case final EditorWithInterfaceEditPart edWithEp -> edWithEp.getChildren();
+		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP ->
+			unfoldedSubappContentEP.getParent().getChildren();
+		default -> throw new IllegalArgumentException("Wrong parent editpart given"); //$NON-NLS-1$
 		};
+
 		// @formatter:off
 		children.stream()
 				.filter(InterfaceEditPart.class::isInstance)
 				.map(InterfaceEditPart.class::cast)
 				.forEach(ie -> {
-					createParentElementPort(ie);
+					createParentElementPort(ie, inputInterfaceBarNode, outputInterfaceBarNode);
 					processInterface(ie);
 				});
 		// @formatter:on
+	}
+
+	private ElkNode createInputIBNode() {
+		final ElkNode inputNode = createNode(getInputIBFigure());
+		inputNode.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+		return inputNode;
+	}
+
+	private ElkNode createOutputIBNode() {
+		final ElkNode outputNode = createNode(getOutputIBFigure());
+		outputNode.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+		return outputNode;
+	}
+
+	private IFigure getInputIBFigure() {
+		return switch (mapping.getParentElement()) {
+		case final EditorWithInterfaceEditPart edWithEp -> edWithEp.getLeftInterfaceContainer();
+		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP ->
+			unfoldedSubappContentEP.getParent().getFigure().getExpandedInputFigure();
+		default -> throw new IllegalArgumentException("Wrong parent editpart given"); //$NON-NLS-1$
+		};
+	}
+
+	private IFigure getOutputIBFigure() {
+		return switch (mapping.getParentElement()) {
+		case final EditorWithInterfaceEditPart edWithEp -> edWithEp.getRightInterfaceContainer();
+		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP ->
+			unfoldedSubappContentEP.getParent().getFigure().getExpandedOutputFigure();
+		default -> throw new IllegalArgumentException("Wrong parent editpart given"); //$NON-NLS-1$
+		};
 	}
 
 	private void processChild(final Object child) {
@@ -127,14 +163,23 @@ public final class FordiacGraphBuilder {
 	}
 
 	private void processValue(final ValueEditPart valueEditPart) {
+		if (valueEditPart.getModel().eContainer() instanceof final VarDeclaration varDecl
+				&& !varDecl.getInputConnections().isEmpty()) {
+			// ignore values for connected pins
+			return;
+		}
 		final EditPart iePart = valueEditPart.getViewer().getEditPartForModel(valueEditPart.getModel().getParentIE());
-		final Point point = ((InterfaceEditPart) iePart).getFigure().getBounds().getTopLeft();
-		final ElkPort port = getPort(point, (InterfaceEditPart) iePart);
+		final ElkPort port = getPort((InterfaceEditPart) iePart);
 		final ElkLabel label = ElkGraphUtil.createLabel(valueEditPart.getModel().getValue(), port);
 		final Rectangle bounds = valueEditPart.getFigure().getBounds();
 		label.setLocation(bounds.preciseX() - port.getX() - port.getParent().getX(),
 				bounds.preciseY() - port.getY() - port.getParent().getY());
 		label.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
+	}
+
+	private static boolean isParentInterfaceLayout(final GraphicalEditPart parentElement) {
+		return parentElement instanceof EditorWithInterfaceEditPart
+				|| parentElement instanceof UnfoldedSubappContentEditPart;
 	}
 
 	private static boolean isVisible(final ConnectionEditPart con) {
@@ -159,21 +204,16 @@ public final class FordiacGraphBuilder {
 		}
 	}
 
-	private ElkNode createNode(final GraphicalEditPart editPart) {
+	private ElkNode createNode(final IFigure figure) {
 		final ElkNode node = ElkGraphUtil.createNode(mapping.getLayoutGraph());
-		final Rectangle bounds = editPart.getFigure().getBounds();
-		if (mapping.type != LayoutType.Application) {
-			// @formatter:off
-			node.setLocation(
-					bounds.x - mapping.getLayoutGraph().getX(),
-					bounds.y - mapping.getLayoutGraph().getY()
-				);
-			// @formatter:on
-		} else {
-			node.setLocation(bounds.x, bounds.y);
-		}
-
+		final Rectangle bounds = figure.getBounds();
+		node.setLocation(bounds.x, bounds.y);
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
+		return node;
+	}
+
+	private ElkNode createNode(final GraphicalEditPart editPart) {
+		final ElkNode node = createNode(editPart.getFigure());
 
 		mapping.getGraphMap().put(node, editPart);
 		mapping.getReverseMapping().put(editPart, node);
@@ -191,17 +231,8 @@ public final class FordiacGraphBuilder {
 
 	private void processConnections() {
 		for (final ConnectionEditPart conn : mapping.getConnections()) {
-			final org.eclipse.draw2d.Connection connFig = conn.getFigure();
-
-			START_POINT
-					.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
-			END_POINT.setLocation(connFig.getTargetAnchor().getLocation(connFig.getTargetAnchor().getReferencePoint()));
-
-			connFig.translateToRelative(START_POINT);
-			connFig.translateToRelative(END_POINT);
-
-			final ElkPort sourcePort = getPort(START_POINT, (InterfaceEditPart) conn.getSource());
-			final ElkPort destinationPort = getPort(END_POINT, (InterfaceEditPart) conn.getTarget());
+			final ElkPort sourcePort = getPort((InterfaceEditPart) conn.getSource());
+			final ElkPort destinationPort = getPort((InterfaceEditPart) conn.getTarget());
 
 			final ElkEdge edge = ElkGraphUtil.createSimpleEdge(sourcePort, destinationPort);
 
@@ -210,7 +241,7 @@ public final class FordiacGraphBuilder {
 		}
 	}
 
-	private ElkPort getPort(final Point point, final InterfaceEditPart interfaceEditPart) {
+	private ElkPort getPort(final InterfaceEditPart interfaceEditPart) {
 		return (ElkPort) mapping.getReverseMapping().computeIfAbsent(interfaceEditPart,
 				ie -> createPort(interfaceEditPart));
 	}
@@ -240,34 +271,48 @@ public final class FordiacGraphBuilder {
 		port.setDimensions(1, figure.getBounds().preciseHeight());
 	}
 
-	private void setPortLocation(final ElkPort port, final InterfaceEditPart interfaceEditPart,
+	private static void setPortLocation(final ElkPort port, final InterfaceEditPart interfaceEditPart,
 			final ElkNode parentNode) {
-		final int x = interfaceEditPart.isInput() ? 0 : (int) parentNode.getWidth();
-		final int yOffset = interfaceEditPart.getFigure().getLocation().y - (int) parentNode.getY();
-		final int y = (mapping.type == LayoutType.Application) ? yOffset
-				: yOffset - (int) mapping.getLayoutGraph().getY();
+		final int x = interfaceEditPart.isInput() ? 0 : (int) parentNode.getWidth() - 1;
+		final int y = interfaceEditPart.getFigure().getLocation().y - (int) parentNode.getY();
 		port.setLocation(x, y);
 	}
 
-	private ElkPort createParentElementPort(final InterfaceEditPart ie) {
-		final var layoutGraph = mapping.getLayoutGraph();
+	private ElkPort createParentElementPort(final InterfaceEditPart ie, final ElkNode inputInterfaceBarNode,
+			final ElkNode outputInterfaceBarNode) {
+		final boolean isInput = ie.getModel().isIsInput();
+		final ElkNode parentNode = isInput ? inputInterfaceBarNode : outputInterfaceBarNode;
 
-		final ElkPort port = ElkGraphUtil.createPort(layoutGraph);
+		final ElkPort port = ElkGraphUtil.createPort(parentNode);
 		port.setDimensions(1, ie.getFigure().getBounds().height);
 
 		final int y = ie.getFigure().getLocation().y;
-		final boolean isInput = mapping.type == LayoutType.Unfolded ? ie.isInput() : !ie.isInput();
 		if (isInput) {
-			port.setLocation(0, y - layoutGraph.getY());
+			port.setLocation(parentNode.getWidth() - 1, y - parentNode.getY());
 		} else {
-			port.setLocation(layoutGraph.getWidth() - 1, y - layoutGraph.getY());
+			port.setLocation(0, y - parentNode.getY());
 		}
 
-		port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.WEST : PortSide.EAST);
+		// this is the opposite of FBs
+		port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.EAST : PortSide.WEST);
 
 		mapping.getGraphMap().put(port, ie.getModel());
 		mapping.getReverseMapping().put(ie, port);
 		return port;
+	}
+
+	private static FordiacLayoutMapping createFordiacLayoutMapping(final IEditorPart part,
+			final AbstractFBNetworkEditPart ep) {
+		final FordiacLayoutMapping newMapping = new FordiacLayoutMapping(part, ep);
+
+		final ElkNode graph = ElkGraphUtil.createGraph();
+
+		newMapping.setLayoutGraph(graph);
+		newMapping.setParentElement(ep);
+
+		newMapping.getGraphMap().put(graph, ep);
+		newMapping.getReverseMapping().put(ep, graph);
+		return newMapping;
 	}
 
 }
