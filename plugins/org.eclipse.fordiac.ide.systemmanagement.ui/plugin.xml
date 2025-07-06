@@ -236,6 +236,7 @@
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"/> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.workingSet"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"/>
