@@ -50,7 +50,11 @@ public class AddDeleteWidget {
 	protected Composite container;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-		container = createContainer(widgetFactory, parent);
+		createControls(parent, widgetFactory, false);
+	}
+
+	public void createControls(final Composite parent, final FormToolkit widgetFactory, final boolean horizontal) {
+		container = createContainer(widgetFactory, parent, horizontal ? 2 : 1);
 
 		createAddButton(widgetFactory, container);
 
@@ -96,10 +100,12 @@ public class AddDeleteWidget {
 		createButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 	}
 
-	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent) {
+	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent,
+			final int columns) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
 		container.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
-		GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).margins(1, 0).spacing(1, 0).applyTo(container);
+		GridLayoutFactory.fillDefaults().numColumns(columns).equalWidth(true).margins(1, 0).spacing(1, 0)
+				.applyTo(container);
 		return container;
 	}
 

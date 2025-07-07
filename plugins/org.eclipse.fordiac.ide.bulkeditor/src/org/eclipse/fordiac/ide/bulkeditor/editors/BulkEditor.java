@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
@@ -47,6 +48,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvide
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -73,6 +75,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -88,6 +91,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
@@ -141,6 +145,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	BulkEditorNatTable natTable;
 
+	private Composite addDeleteComposite;
 	private Label searchInformation;
 	private Label dirtyInformation;
 
@@ -240,7 +245,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			advancedButton.setVisible(modeSelectionDropDown.getSelectionIndex() == 1);
 			advancedButton.setSelection(settings.advancedMode);
 			changeSearchWhereGroupFilter(modeSelectionDropDown.getSelectionIndex() != 1 || settings.advancedMode);
-			natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
+			changeNatTable(modeSelectionDropDown.getSelectionIndex(), null);
 			settings.modeSelection = modeSelectionDropDown.getSelectionIndex();
 			parent.getParent().layout();
 			changedSearchParameter = false;
@@ -251,9 +256,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		advancedButton = WidgetFactory.button(SWT.TOGGLE).text(Messages.Advanced).onSelect(event -> {
 			changeSearchWhereGroupFilter(advancedButton.getSelection());
 			settings.advancedMode = advancedButton.getSelection();
-			if (advancedButton.getSelection()) {
-				natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
-			}
+			changeNatTable(modeSelectionDropDown.getSelectionIndex(), null);
 			parent.getParent().layout();
 		}).create(modeSelectionComposite);
 		advancedButton.setVisible(modeSelectionDropDown.getSelectionIndex() == 1);
@@ -343,7 +346,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	private void createSearchButton(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(3).margins(0, 0).generateLayout(composite);
+		GridLayoutFactory.fillDefaults().numColumns(4).margins(0, 0).generateLayout(composite);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		WidgetFactory.button(SWT.PUSH).text(Messages.Search).onSelect(event -> {
@@ -351,9 +354,23 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			if (choice == 1) {
 				return;
 			}
-			performSearch();
+			if (!performSearch()) {
+				return;
+			}
 			checkTypeEntriesForDirty();
+
+			if (modeSelectionDropDown.getSelectionIndex() == 1 && addDeleteComposite.getChildren().length == 0) {
+				final var addDeleteWidget = new AddDeleteWidget();
+				addDeleteWidget.createControls(addDeleteComposite, new FormToolkit(Display.getDefault()), true);
+				addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this, refElement -> null,
+						refElement -> null); // TODO: create right commands for buttons
+				addDeleteComposite.getParent().layout();
+			}
 		}).create(composite);
+
+		addDeleteComposite = new Composite(composite, 0);
+		addDeleteComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		addDeleteComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 0).create());
 
 		dirtyInformation = WidgetFactory.label(SWT.NONE).create(composite);
 		dirtyInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
@@ -443,6 +460,16 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		filterComposite.addTextChangedListener(stateLabel::setText);
 
 		return filterComposite;
+	}
+
+	private void changeNatTable(final int modeSelection, final AttributeDeclaration simpleAttribute) {
+		Arrays.stream(addDeleteComposite.getChildren()).forEach(Control::dispose);
+		addDeleteComposite.getParent().layout();
+		if (simpleAttribute != null) {
+			natTable.createDynamicNatTable(simpleAttribute);
+		} else {
+			natTable.changeNatTable(modeSelection);
+		}
 	}
 
 	private static void updateVisibility(final boolean visible, final Composite composite) {
@@ -609,7 +636,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		dirtyInformation.getParent().layout();
 	}
 
-	private void performSearch() {
+	private boolean performSearch() {
 		final SearchHelper helper = new SearchHelper(
 				new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
 						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
@@ -649,9 +676,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final var attributeTypeEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
 					.getAttributeTypeEntry(searchText.getText());
 			if (attributeTypeEntry == null) {
-				return;
+				return false;
 			}
-			natTable.createDynamicNatTable(attributeTypeEntry.getType());
+			changeNatTable(1, attributeTypeEntry.getType());
 			modelSearchFilter = SearchHelper.createAttributeDeclarationSearchFilter(attributeTypeEntry.getType());
 		}
 
@@ -665,6 +692,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		commandStack.flush();
 		changedSearchParameter = false;
 		searchInformation.setText(""); //$NON-NLS-1$
+		return true;
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {

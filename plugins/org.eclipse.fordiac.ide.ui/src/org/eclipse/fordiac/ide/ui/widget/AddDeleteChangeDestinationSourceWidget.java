@@ -34,7 +34,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-		container = createContainer(widgetFactory, parent);
+		container = createContainer(widgetFactory, parent, 1);
 
 		createAddButton(widgetFactory, container);
 
