@@ -14,12 +14,18 @@ package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.nat.AbstractAnnotatedConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.AttributeDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.AttributeDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
@@ -31,6 +37,8 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -58,17 +66,18 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
+import org.eclipse.nebula.widgets.nattable.grid.command.AutoResizeColumnCommandHandler;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
+import org.eclipse.nebula.widgets.nattable.resize.command.AutoResizeColumnsCommand;
 import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
-import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -77,7 +86,8 @@ public class BulkEditorNatTable {
 
 	private final CommandExecutor commandExecutor;
 	private final Composite parent;
-	private int currentMode = -1;
+	private int currentMode;
+	private boolean dynamicTable;
 
 	private NatTable natTable;
 
@@ -109,6 +119,16 @@ public class BulkEditorNatTable {
 			final var list = mapList(mappedList, Attribute.class);
 			attributeProvider.setInput(list);
 			attributeSorterModel.setSortingList(list);
+
+			if (this.dynamicTable) {
+				final var dataLayer = NatTableWidgetFactory.getDataLayer(natTable);
+				dataLayer.doCommand(new AutoResizeColumnsCommand(natTable,
+						IntStream.range(0, dataLayer.getColumnCount()).toArray()));
+				for (int colPos = 0; colPos < dataLayer.getColumnCount(); colPos++) {
+					final int currentWidth = dataLayer.getColumnWidthByPosition(colPos);
+					dataLayer.setColumnWidthByPosition(colPos, Math.max(currentWidth, 100));
+				}
+			}
 		}
 
 		natTable.getDisplay().asyncExec(() -> {
@@ -119,11 +139,8 @@ public class BulkEditorNatTable {
 				height = Math.max(height,
 						NatTableWidgetFactory.getDataLayer(natTable).getBoundsByPosition(0, 0).height);
 			}
-			natTableGridData.heightHint = mappedList.size() * height + 1;
+			natTableGridData.heightHint = Math.max(300, mappedList.size() * height + 1);
 			natTable.setLayoutData(natTableGridData);
-
-			final ViewportLayer viewportLayer = NatTableWidgetFactory.getViewportLayer(natTable);
-			viewportLayer.setClientAreaProvider(() -> new Rectangle(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 			parent.layout(true, true);
 			final var size = parent.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -135,10 +152,8 @@ public class BulkEditorNatTable {
 	}
 
 	public void changeNatTable(final int selectionIndex) {
-		if (this.currentMode == selectionIndex) {
-			return;
-		}
 		this.currentMode = selectionIndex;
+		this.dynamicTable = false;
 		if (natTable != null) {
 			natTable.dispose();
 		}
@@ -256,6 +271,81 @@ public class BulkEditorNatTable {
 		natTable.configure();
 		// Scroll ScrolledComposite instead of NatTable
 		natTable.addListener(SWT.MouseWheel, event -> {
+			final ScrolledComposite scrolledParent = ((ScrolledComposite) parent.getParent());
+			final Point origin = scrolledParent.getOrigin();
+
+			final int newY = Math.max(0, origin.y - event.count * 20);
+			scrolledParent.setOrigin(origin.x, newY);
+		});
+	}
+
+	public void createDynamicNatTable(final AttributeDeclaration attributeDeclaration) {
+		this.dynamicTable = true;
+		if (natTable != null) {
+			natTable.dispose();
+		}
+		final var tableColumnProider = new AttributeDeclarationTableColumn.AttributeDeclarationTableColumnProvider(
+				attributeDeclaration);
+		final List<AttributeDeclarationTableColumn> columns = tableColumnProider.getColumns();
+		final Set<AttributeDeclarationTableColumn> editColumns = tableColumnProider.getEditableColumns();
+
+		final var accessor = new AttributeDeclarationColumnAccessor(commandExecutor, columns);
+		attributeProvider = new ChangeableListDataProvider<>(accessor);
+		this.attributeSorterModel = new SorterModel<>(accessor);
+		final DataLayer dataLayer = new DataLayer(attributeProvider);
+		final var dataProvider = new NatTableColumnProvider<>(columns);
+
+		dataLayer.setConfigLabelAccumulator(
+				new AbstractAnnotatedConfigLabelAccumulator<>(attributeProvider, () -> null) {
+					@Override
+					public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+							final int rowPosition) {
+						final var column = columns.get(columnPosition);
+						if (column == AttributeDeclarationTableColumn.COMMENT) {
+							configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+							if (!CommentHelper.hasComment(attributeProvider.getRowObject(rowPosition))) {
+								configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+							}
+						}
+						if (column == AttributeDeclarationTableColumn.FILE_PATH
+								|| column == AttributeDeclarationTableColumn.LOCATION
+								|| column == AttributeDeclarationTableColumn.TYPE) {
+							configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+						}
+						if (column == AttributeDeclarationTableColumn.VALUE) {
+							configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+							if (!InitialValueHelper.hasInitalValue(attributeProvider.getRowObject(rowPosition))) {
+								configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+							}
+							accumulateAttributeConfigLabels(configLabels, attributeProvider.getRowObject(rowPosition),
+									FordiacAnnotationUtil::showOnTargetValue);
+						}
+					}
+				});
+
+		natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, dataProvider,
+				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE, columns, editColumns),
+				new TypeSelectionButton(() -> {
+					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+							.getLastSelectedCellPosition().getRowPosition();
+					if (EcoreUtil.getRootContainer(attributeProvider
+							.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
+						return libElement.getTypeLibrary();
+					}
+					return null;
+				}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
+				attributeSorterModel, false);
+
+		natTable.addConfiguration(new SingleClickSortConfiguration());
+
+		dataLayer.setColumnPercentageSizing(false);
+		dataLayer.registerCommandHandler(new AutoResizeColumnCommandHandler(dataLayer, dataLayer));
+		natTable.configure();
+
+		natTable.addListener(SWT.MouseWheel, event -> {
+			if ((event.stateMask & SWT.SHIFT) != 0) {
+				return;
+			}
 			final ScrolledComposite scrolledParent = ((ScrolledComposite) parent.getParent());
 			final Point origin = scrolledParent.getOrigin();
 
