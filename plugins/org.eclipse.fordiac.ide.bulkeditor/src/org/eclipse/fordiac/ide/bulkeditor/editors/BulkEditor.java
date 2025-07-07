@@ -251,6 +251,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		advancedButton = WidgetFactory.button(SWT.TOGGLE).text(Messages.Advanced).onSelect(event -> {
 			changeSearchWhereGroupFilter(advancedButton.getSelection());
 			settings.advancedMode = advancedButton.getSelection();
+			if (advancedButton.getSelection()) {
+				natTable.changeNatTable(modeSelectionDropDown.getSelectionIndex());
+			}
 			parent.getParent().layout();
 		}).create(modeSelectionComposite);
 		advancedButton.setVisible(modeSelectionDropDown.getSelectionIndex() == 1);
@@ -638,11 +641,20 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 					projectScopeButton.getSelection(), project);
 		}
 
-		final IEC61499SearchFilter modelSearchFilter = (modeSelectionDropDown.getSelectionIndex() != 1
-				|| advancedButton.getSelection())
-						? SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
-								DEFAULT_LIST.stream().map(searchFilter::getFilter).toList())
-						: SearchHelper.createSimpleAttributeSearchFilter(searchText.getText());
+		IEC61499SearchFilter modelSearchFilter;
+		if (modeSelectionDropDown.getSelectionIndex() != 1 || advancedButton.getSelection()) {
+			modelSearchFilter = SearchHelper.createSearchFilter(modeSelectionDropDown.getSelectionIndex(),
+					DEFAULT_LIST.stream().map(searchFilter::getFilter).toList());
+		} else {
+			final var attributeTypeEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
+					.getAttributeTypeEntry(searchText.getText());
+			if (attributeTypeEntry == null) {
+				return;
+			}
+			natTable.createDynamicNatTable(attributeTypeEntry.getType());
+			modelSearchFilter = SearchHelper.createAttributeDeclarationSearchFilter(attributeTypeEntry.getType());
+		}
+
 		final var result = contexts.stream().flatMap(
 				context -> new IEC61499ElementSearch(context, modelSearchFilter, helper.createChildrenSearchProvider())
 						.performSearch().stream())
