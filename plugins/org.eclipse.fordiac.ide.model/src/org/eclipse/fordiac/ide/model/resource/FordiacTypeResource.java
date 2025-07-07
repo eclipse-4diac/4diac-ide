@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataexport.GlobalConstantsExporter;
+import org.eclipse.fordiac.ide.model.dataexport.ResourceTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SEGExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
@@ -71,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -151,6 +153,7 @@ public class FordiacTypeResource extends ResourceImpl {
 		case final GlobalConstants globalConstants -> new GlobalConstantsExporter(globalConstants);
 		case final AttributeDeclaration attributeType -> new AttributeTypeExporter(attributeType);
 		case final DeviceType deviceType -> new DEVExporter(deviceType);
+		case final ResourceType resType -> new ResourceTypeExporter(resType);
 		case final SegmentType segmentType -> new SEGExporter(segmentType);
 		default -> throw new IOException(
 				MessageFormat.format(Messages.FordiacTypeResource_UnsupportedContent, content.toString()));
