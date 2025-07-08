@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -297,9 +298,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 			return false;
 		}
 		final FBNetworkElement fbNE = pin.getFBNetworkElement();
-
-		return ((fbNE instanceof Demultiplexer && pin.isIsInput())
-				|| (fbNE instanceof Multiplexer && !pin.isIsInput()));
+		return ((fbNE instanceof Demultiplexer && pin.isIsInput()) || (fbNE instanceof Multiplexer && !pin.isIsInput())
+				|| (fbNE instanceof ConfigurableMoveFB));
 	}
 
 	public static boolean shouldStructDataConnCreationBeUsed(final IInterfaceElement pin,
