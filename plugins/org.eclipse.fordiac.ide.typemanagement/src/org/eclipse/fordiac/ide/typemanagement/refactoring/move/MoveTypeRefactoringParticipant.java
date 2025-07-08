@@ -122,10 +122,9 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
 
 		for (final EObject eObject : searchResult) {
-			if (eObject instanceof VarDeclaration) {
-				change.add(
-						new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance, EcoreUtil.getURI(eObject),
-								newPackageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + dtEntry.getTypeName()));
+			if (eObject instanceof final VarDeclaration varDecl) {
+				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
+						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
 		}
 
@@ -142,5 +141,17 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 			}
 		}
 		return change;
+	}
+
+	private String getNewTypeDeclaration(final VarDeclaration varDeclaration) {
+		final StringBuilder typeDeclaration = new StringBuilder(varDeclaration.getFullTypeName());
+		final int packageNameEnd = typeDeclaration.lastIndexOf(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		if (packageNameEnd == -1) {
+			typeDeclaration.insert(typeDeclaration.indexOf(varDeclaration.getTypeName()),
+					newPackageName + PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		} else {
+			typeDeclaration.replace(packageNameEnd - oldPackageName.length(), packageNameEnd, newPackageName);
+		}
+		return typeDeclaration.toString();
 	}
 }
