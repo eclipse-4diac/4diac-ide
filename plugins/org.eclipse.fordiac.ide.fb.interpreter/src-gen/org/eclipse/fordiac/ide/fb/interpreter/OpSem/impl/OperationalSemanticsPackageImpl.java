@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -143,6 +144,13 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	private EClass transitionTraceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	private EDataType exceptionEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -475,6 +483,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransaction_Exceptions() {
+		return (EAttribute) transactionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public EClass getFBNetworkRuntime() {
 		return fbNetworkRuntimeEClass;
 	}
@@ -695,6 +713,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EDataType getException() {
+		return exceptionEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public OperationalSemanticsFactory getOperationalSemanticsFactory() {
 		return (OperationalSemanticsFactory) getEFactoryInstance();
 	}
@@ -751,6 +779,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		createEReference(transactionEClass, TRANSACTION__INPUT_EVENT_OCCURRENCE);
 		createEReference(transactionEClass, TRANSACTION__PARENT_EO);
 		createEAttribute(transactionEClass, TRANSACTION__DURATION);
+		createEAttribute(transactionEClass, TRANSACTION__EXCEPTIONS);
 
 		fbNetworkRuntimeEClass = createEClass(FB_NETWORK_RUNTIME);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FBNETWORK);
@@ -780,6 +809,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		createEAttribute(transitionTraceEClass, TRANSITION_TRACE__DESTINATION_STATE);
 		createEAttribute(transitionTraceEClass, TRANSITION_TRACE__COND_EVENT);
 		createEAttribute(transitionTraceEClass, TRANSITION_TRACE__COND_EXPRESSION);
+
+		// Create data types
+		exceptionEDataType = createEDataType(EXCEPTION);
 	}
 
 	/**
@@ -922,6 +954,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEAttribute(getTransaction_Duration(), theXMLTypePackage.getLong(), "duration", null, 0, 1, //$NON-NLS-1$
 				Transaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransaction_Exceptions(), this.getException(), "exceptions", null, 0, -1, Transaction.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
 
 		initEClass(fbNetworkRuntimeEClass, FBNetworkRuntime.class, "FBNetworkRuntime", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -996,6 +1031,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEAttribute(getTransitionTrace_CondExpression(), ecorePackage.getEString(), "condExpression", null, 0, 1, //$NON-NLS-1$
 				TransitionTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+
+		// Initialize data types
+		initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
