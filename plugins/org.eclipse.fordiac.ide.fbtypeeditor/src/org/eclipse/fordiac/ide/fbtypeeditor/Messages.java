@@ -28,12 +28,6 @@ public final class Messages extends NLS {
 	public static String FBInterfacePaletteFactory_EventTypes;
 	public static String FBInterfacePaletteFactory_RootGroup;
 
-	public static String FBTypeXtextEditor_PerformanceModeDialogMessage;
-
-	public static String FBTypeXtextEditor_PerformanceModeDialogTitle;
-
-	public static String FBTypeXtextEditor_PerformanceModeOutlineMessage;
-
 	public static String InterfaceContextMenuProvider_CreateDataInput;
 	public static String InterfaceContextMenuProvider_CreateDataOutput;
 	public static String InterfaceContextMenuProvider_CreatePlug;

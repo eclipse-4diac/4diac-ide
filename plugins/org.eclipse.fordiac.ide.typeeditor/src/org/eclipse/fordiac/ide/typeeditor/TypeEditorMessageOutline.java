@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editors;
+package org.eclipse.fordiac.ide.typeeditor;
 
 import org.eclipse.jface.layout.FillLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,14 +23,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class FBTypeXtextMessageOutline extends Page implements IContentOutlinePage {
+public class TypeEditorMessageOutline extends Page implements IContentOutlinePage {
 
 	private final String message;
 
 	private Composite composite;
 	private Label label;
 
-	public FBTypeXtextMessageOutline(final String message) {
+	public TypeEditorMessageOutline(final String message) {
 		this.message = message;
 	}
 

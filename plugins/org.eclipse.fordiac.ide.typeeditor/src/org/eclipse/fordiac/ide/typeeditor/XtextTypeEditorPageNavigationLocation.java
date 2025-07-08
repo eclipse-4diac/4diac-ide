@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editors;
+package org.eclipse.fordiac.ide.typeeditor;
 
 import java.util.Objects;
 
@@ -22,13 +22,13 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.texteditor.TextSelectionNavigationLocation;
 
-public class FBTypeXtextNavigationLocation extends TextSelectionNavigationLocation {
+public class XtextTypeEditorPageNavigationLocation extends TextSelectionNavigationLocation {
 
 	private final IWorkbenchPage page;
 	private final IEditorInput multiPageEditorInput;
 	private final String multiPageEditorId;
 
-	public FBTypeXtextNavigationLocation(final FBTypeXtextEditor part, final boolean initialize) {
+	public XtextTypeEditorPageNavigationLocation(final XtextTypeEditorPage part, final boolean initialize) {
 		super(part, initialize);
 		page = part.getSite().getPage();
 		if (part.getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {

@@ -29,6 +29,12 @@ public final class Messages extends NLS {
 	public static String TypeEditor_WarningDialog_Headline;
 	public static String TypeEditor_WarningDialog_NotSaved;
 
+	public static String XtextTypeEditorPage_PerformanceModeDialogMessage;
+
+	public static String XtextTypeEditorPage_PerformanceModeDialogTitle;
+
+	public static String XtextTypeEditorPage_PerformanceModeOutlineMessage;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
