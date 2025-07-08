@@ -39,64 +39,95 @@ class DynamicContractCheckTest {
 	void singleEventTooEarlyTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(2)));
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_TOO_EARLY, sys);
+		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_TOO_EARLY);
 	}
 
 	@Test
 	void singleEventTooLateTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(12)));
-		assertTwoIssues(ContractIssue.Code.SINGLE_EVENT_MISSED, ContractIssue.Code.SINGLE_EVENT_TOO_LATE, sys);
+		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_MISSED, ContractIssue.Code.SINGLE_EVENT_TOO_LATE);
 	}
 
 	@Test
 	void singleEventTooOftenTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of(createEI(5), createEI(8)));
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MULTIPLE, sys);
+		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_MULTIPLE);
 	}
 
 	@Test
 	void singleEventMissingTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
 		sys.performDynamicCheck(List.of());
-		assertOneIssue(ContractIssue.Code.SINGLE_EVENT_MISSED, sys);
+		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_MISSED);
 	}
 
 	// === test repetition
+	// all repetition tests will always have 1 issue for missing the last interval,
+	// since we cannot provide an infinite number of recorded events...
 	@Test
 	void repetitionMissedAfter4Test() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns");
 		sys.performDynamicCheck(List.of(createEI(0), createEI(7), createEI(14), createEI(21)));
-		assertOneIssue(ContractIssue.Code.REPETITION_MISSED, sys);
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooEarlyOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(3)));
-		assertOneIssue(ContractIssue.Code.REPETITION_TOO_EARLY, sys);
+		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooLateOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(8)));
-		assertTwoIssues(ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE, sys);
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
+				ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooEarlyIntervalTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(4), createEI(8)));
-		assertOneIssue(ContractIssue.Code.REPETITION_TOO_EARLY, sys);
+		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooLateIntervalTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
 		sys.performDynamicCheck(List.of(createEI(5), createEI(14)));
-		assertTwoIssues(ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE, sys);
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
+				ContractIssue.Code.REPETITION_MISSED);
+	}
+
+	@Test
+	void repetitionWithJitterTest() {
+		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
+		sys.performDynamicCheck(List.of(createEI(3), createEI(10)));
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED);
+	}
+
+	@Test
+	void repetitionWithJitterTooEarlyTest() {
+		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
+		sys.performDynamicCheck(List.of(createEI(3), createEI(8)));
+		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
+	}
+
+	@Test
+	void repetitionWithJitterTooLateTest() {
+		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
+		sys.performDynamicCheck(List.of(createEI(3), createEI(14)));
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
+				ContractIssue.Code.REPETITION_MISSED);
+	}
+
+	@Test
+	void repetitionOverlappingIntervalTest() {
+		// TODO: test repetition causing overlapping intervals
 	}
 
 	// === helper methods
@@ -115,15 +146,10 @@ class DynamicContractCheckTest {
 		return new EventOccurrence("component.EI", timestamp);
 	}
 
-	private static void assertOneIssue(final ContractIssue.Code code, final ContractSystem sys) {
-		assertEquals(1, sys.getIssues().size());
-		assertEquals(code, sys.getIssues().get(0).getCode());
-	}
-
-	private static void assertTwoIssues(final ContractIssue.Code code1, final ContractIssue.Code code2,
-			final ContractSystem sys) {
-		assertEquals(2, sys.getIssues().size());
-		assertEquals(code1, sys.getIssues().get(0).getCode());
-		assertEquals(code2, sys.getIssues().get(1).getCode());
+	private static void assertIssues(final ContractSystem sys, final ContractIssue.Code... code) {
+		assertEquals(code.length, sys.getIssues().size());
+		for (int i = 0; i < code.length; i++) {
+			assertEquals(code[i], sys.getIssues().get(i).getCode());
+		}
 	}
 }

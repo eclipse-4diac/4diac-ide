@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import org.eclipse.fordiac.ide.Utils;
 import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData;
 
 public class DynamicContractChecker {
@@ -51,6 +52,7 @@ public class DynamicContractChecker {
 	public DynamicCheckResult checkSystem() {
 		initializeRuleStates();
 		processEvents();
+		return result;
 	}
 
 	private void initializeRuleStates() {
@@ -62,6 +64,9 @@ public class DynamicContractChecker {
 				break;
 			case REPETITION:
 				initRepetition(ruleData, rule);
+				break;
+			case REACTION:
+				initReaction(ruleData, rule);
 				break;
 			default:
 				break;
@@ -86,7 +91,10 @@ public class DynamicContractChecker {
 				checkSingleEvent(ruleData, eo);
 				break;
 			case REPETITION:
-				checkRepetition(rule, eo);
+				checkRepetition(ruleData, eo);
+				break;
+			case REACTION:
+				checkReaction(ruleData, eo);
 				break;
 			default:
 				break;
@@ -115,7 +123,7 @@ public class DynamicContractChecker {
 					ContractIssue.Code.SINGLE_EVENT_MULTIPLE);
 			ruleData.markers().add(issueMarker(eo));
 		} else if (!rule.getInterval().contains(eo.timestampNs())) {
-			eventOutsideIntervalError(rule, eo, ContractIssue.Code.SINGLE_EVENT_TOO_EARLY,
+			eventOutsideIntervalError(rule.getInterval(), eo, ContractIssue.Code.SINGLE_EVENT_TOO_EARLY,
 					ContractIssue.Code.SINGLE_EVENT_TOO_LATE);
 			ruleData.markers().add(issueMarker(eo));
 		} else {
@@ -125,46 +133,56 @@ public class DynamicContractChecker {
 	}
 
 	private void initRepetition(final RuleData ruleData, final ContractRule rule) {
-		createMissedMarker(rule.getPortNameQualified(), rule.getOffset().getUpperBound());
+		createMissedMarker(rule.getPortNameQualified(), rule.getOffset().getUpperBound() + rule.getJitter());
 		ruleData.intervals().add(rule.getOffset());
 	}
 
-	private void checkRepetition(final ContractRule rule, final EventOccurrence eo) {
+	private void checkRepetition(final RuleData ruleData, final EventOccurrence eo) {
+		final ContractRule rule = ruleData.rule();
+		final CInterval interval = ruleData.intervals().getLast();
+		final CInterval intervalJitter = interval.addJitter(rule.getJitter());
 
 		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
-			final CInterval interval = rule.isFulFilled() ? rule.getInterval() : rule.getOffset();
-			if (eo.timestampNs() >= interval.getUpperBound()) {
+			if (eo.timestampNs() >= intervalJitter.getUpperBound()) {
 				system.error("\"%s\" did not arrive in time.".formatted(rule.getPortNameQualified()),
 						ContractIssue.Code.REPETITION_MISSED);
+				ruleData.markers().add(issueMarker(eo));
 			}
 			return;
 		}
 
-		if (!rule.isFulFilled()) { // first occurrence respects offset
-			if (!rule.getOffset().contains(eo.timestampNs())) {
-				eventOutsideIntervalError(rule, eo, ContractIssue.Code.REPETITION_TOO_EARLY,
-						ContractIssue.Code.REPETITION_TOO_LATE);
-			}
-			rule.setInterval(rule.getInterval().translate(eo.timestampNs()));
-			rule.setFulFilled(true);
+		final double shift;
+		if (!intervalJitter.contains(eo.timestampNs())) {
+			eventOutsideIntervalError(intervalJitter, eo, ContractIssue.Code.REPETITION_TOO_EARLY,
+					ContractIssue.Code.REPETITION_TOO_LATE);
+			ruleData.markers().add(issueMarker(eo));
+			shift = eo.timestampNs();
 		} else {
-			if (!rule.getInterval().contains(eo.timestampNs())) {
-				eventOutsideIntervalError(rule, eo, ContractIssue.Code.REPETITION_TOO_EARLY,
-						ContractIssue.Code.REPETITION_TOO_LATE);
-			}
-			rule.setInterval(rule.getInterval().translate(eo.timestampNs()));
+			ruleData.markers().add(fulfillMarker(eo));
+			// jitter does not affect next occurrence
+			shift = Math.clamp(eo.timestampNs(), interval.getLowerBound(), interval.getUpperBound());
 		}
+		final CInterval next = rule.getInterval().translate(shift);
+		createMissedMarker(rule.getPortNameQualified(), next.getUpperBound() + rule.getJitter());
+		ruleData.intervals().add(next);
 	}
 
-	@SuppressWarnings("boxing")
-	private void eventOutsideIntervalError(final ContractRule rule, final EventOccurrence eo,
+	private void initReaction(final RuleData ruleData, final ContractRule rule) {
+		// nothing to do, only when specific event occurs
+	}
+
+	private void checkReaction(final RuleData ruleData, final EventOccurrence eo) {
+		// TODO
+	}
+
+	private void eventOutsideIntervalError(final CInterval interval, final EventOccurrence eo,
 			final ContractIssue.Code tooEarly, final ContractIssue.Code tooLate) {
-		if (eo.timestampNs() <= rule.getInterval().getLowerBound()) {
-			system.error("\"%s\" occurred %fns too early.".formatted(rule.getPortNameQualified(),
-					rule.getInterval().getLowerBound() - eo.timestampNs()), tooEarly);
+		if (eo.timestampNs() <= interval.getLowerBound()) {
+			system.error("\"%s\" occurred %s too early.".formatted(eo.eventName(),
+					Utils.nsToString(interval.getLowerBound() - eo.timestampNs())), tooEarly);
 		} else {
-			system.error("\"%s\" occurred %fns too late.".formatted(rule.getPortNameQualified(),
-					eo.timestampNs() - rule.getInterval().getUpperBound()), tooLate);
+			system.error("\"%s\" occurred %s too late.".formatted(eo.eventName(),
+					Utils.nsToString(eo.timestampNs() - interval.getUpperBound())), tooLate);
 		}
 	}
 

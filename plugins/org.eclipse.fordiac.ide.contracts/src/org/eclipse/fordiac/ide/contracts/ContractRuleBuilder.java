@@ -74,19 +74,18 @@ class ContractRuleBuilder {
 		final List<EventSpec> outputs = output.getEvent() != null ? List.of(output.getEvent())
 				: output.getEvents().getEvents();
 
+		// TODO: temporary issues until implemented...
 		if (inputs.size() > 1) {
-			// TODO: temporary issue until it is implemented...
 			system.addIssue(new ContractIssue("Reaction with multiple inputs not yet supported.", //$NON-NLS-1$
 					ContractIssue.Code.UNKOWN, Severity.WARNING));
 			return;
 		}
-
-		// decompose rules with multiple input and/or output events into multiple rules
-		for (final EventSpec ei : inputs) {
-			for (final EventSpec eo : outputs) {
-				addRule(new ContractRule(type, ei, eo, interval));
-			}
+		if (outputs.size() > 1) {
+			system.addIssue(new ContractIssue("Reaction with multiple outputs not yet supported.", //$NON-NLS-1$
+					ContractIssue.Code.UNKOWN, Severity.WARNING));
+			return;
 		}
+		addRule(new ContractRule(type, inputs.get(0), outputs.get(0), interval));
 	}
 
 	private void addRule(final ContractRule rule) {
