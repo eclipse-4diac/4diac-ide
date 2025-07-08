@@ -96,7 +96,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
 	private final IPartListener2 focusListener = new IPartListener2() {
 		@Override
-		public void partActivated(final IWorkbenchPartReference partRef) {
+		public void partBroughtToTop(final IWorkbenchPartReference partRef) {
 			if (partRef.getPart(false) == BulkEditor.this) {
 				checkTypeEntriesForDirty();
 			}
