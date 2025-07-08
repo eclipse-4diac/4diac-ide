@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
@@ -83,7 +84,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
 
@@ -233,6 +233,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls, final FBType type,
 			final EventOccurrence eventOccurrence, final String name) {
 		setEvaluatorInputState(eval, type.getInterfaceList().getInputVars());
+
+		if (!(eventOccurrence.eContainer() instanceof final Transaction t)) {
+			throw new IllegalArgumentException("Container of EO was not a Transaction"); //$NON-NLS-1$
+		}
+
 		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
 			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
 			tpe.setMonotonicClock(clock);
@@ -241,9 +246,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 					eval.evaluate();
 					getEvaluatorOutputState(eval, varDecls);
 				} catch (final EvaluatorException e) {
-					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					t.getExceptions().add(e);
 				} catch (final InterruptedException e) {
-					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					t.getExceptions().add(e);
 					Thread.currentThread().interrupt();
 				}
 			});
@@ -274,11 +279,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 	}
 
-	private static boolean processConditionWithEvaluator(final BasicFBType basicFBType,
-			final ECTransition ecTransition) {
+	private static boolean processConditionWithEvaluator(final EventOccurrence eventOccurrence,
+			final BasicFBType basicFBType, final ECTransition ecTransition) {
 
 		if (ecTransition.getConditionExpression().isEmpty()) {
 			throw new IllegalArgumentException("ConditionExpression object cannot be empty"); //$NON-NLS-1$
+		}
+		if (!(eventOccurrence.eContainer() instanceof final Transaction t)) {
+			throw new IllegalArgumentException("Container of EO was not a Transaction"); //$NON-NLS-1$
 		}
 		final List<VarDeclaration> varDecls = new ArrayList<>(basicFBType.getInterfaceList().getInputVars());
 		varDecls.addAll(basicFBType.getInterfaceList().getOutputVars());
@@ -301,20 +309,17 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 			final Evaluator evaluator = findEvaluator.get().getValue();
 			try {
-				final org.eclipse.fordiac.ide.model.eval.value.Value value = evaluator.evaluate();
+				final var value = evaluator.evaluate();
 				if (value instanceof final BoolValue boolValue) {
 					return boolValue.boolValue();
 				}
 				throw new IllegalStateException("The evaluator does not return a boolean value"); //$NON-NLS-1$
 			} catch (final EvaluatorException e) {
-				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
-						e);
+				t.getExceptions().add(e);
 			} catch (final InterruptedException e) {
-				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
-						e);
+				t.getExceptions().add(e);
 				Thread.currentThread().interrupt();
 			}
-
 		}
 		return false;
 	}
@@ -357,7 +362,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
 				return true;
 			}
-			return processConditionWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), outTransition);
+			return processConditionWithEvaluator(eventOccurrence, basicFBTypeRuntime.getBasicfbtype(), outTransition);
 
 		}
 		return false;
