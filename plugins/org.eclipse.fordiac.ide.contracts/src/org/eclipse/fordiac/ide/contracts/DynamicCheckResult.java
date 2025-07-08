@@ -18,11 +18,10 @@ import java.util.List;
 
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules, List<EventOccurrence> eventOccurrences) {
 
-	public static record RuleData(ContractRule rule, List<CInterval> intervals, List<CInterval> arrows,
-			List<EventOccurrence> markers) {
+	public static record RuleData(ContractRule rule, List<CInterval> intervals, List<EventOccurrence> markers) {
 
 		public RuleData(final ContractRule rule) {
-			this(rule, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+			this(rule, new ArrayList<>(), new ArrayList<>());
 		}
 	}
 

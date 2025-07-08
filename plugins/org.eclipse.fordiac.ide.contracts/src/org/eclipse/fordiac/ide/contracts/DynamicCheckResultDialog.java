@@ -89,7 +89,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			diagramMax = 10e6;
 		}
 		displayRange = new CInterval('[', 0, upperBound, ']');
-		displayUnit = getFittingUnit(upperBound);
+		displayUnit = Utils.getFittingUnit(upperBound);
 	}
 
 	@Override
@@ -232,6 +232,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 	}
 
 	private void drawDiagram(final PaintEvent e) {
+		e.gc.setAntialias(SWT.ON);
 		final Rectangle canvasArea = canvas.getClientArea();
 		diagramArea = new Rectangle(canvasArea.x + DIAGRAM_PAD, canvasArea.y + DIAGRAM_PAD,
 				canvasArea.width - 2 * DIAGRAM_PAD, canvasArea.height - 2 * DIAGRAM_PAD);
@@ -309,24 +310,51 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 	private void drawRuleData(final GC gc, final int maxWidth) {
 		int linePos = diagramArea.y + LINE_HEIGHT - LINE_PAD;
 		int ruleIdx = firstRuleIdx;
+		final int[] vertBuf = new int[6];
 
 		for (int i = 0; i < nRules(); i++) {
 			// draw intervals
+			final int middlePos = linePos + LINE_HEIGHT / 2;
 			final DynamicCheckResult.RuleData ruleData = result.rules().get(ruleIdx);
-			gc.setForeground(INTERVAL_COLOR);
 			for (int j = firstDrawIndexInterval(ruleData.intervals()); j < ruleData.intervals().size(); j++) {
 				final CInterval interval = ruleData.intervals().get(j);
-				final int start = ns2Pixel(interval.getLowerBound());
-				final int end = ns2Pixel(interval.getUpperBound());
 
-				final int width = Math.max(end - start, 1);
-				gc.drawRectangle(start, linePos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
+				// draw intervals
+				gc.setForeground(INTERVAL_COLOR);
+				gc.setBackground(INTERVAL_COLOR);
+				gc.setAlpha(128);
+				int end = drawInterval(gc, interval, linePos, true);
+
+				final double jitter = ruleData.rule().getJitter();
+				if (jitter > 0) {
+					final CInterval intervalJitter = interval.addJitter(jitter);
+					end = drawInterval(gc, intervalJitter, linePos, false);
+				}
+
+				// draw arrows to intervals
+				gc.setForeground(EVENT_COLOR);
+				gc.setBackground(EVENT_COLOR);
+				gc.setAlpha(255);
+				if (ruleData.rule().getType() == ContractRule.Type.REPETITION && j != 0) {
+					final int start = ns2Pixel(
+							interval.getLowerBound() - ruleData.rule().getInterval().getLowerBound());
+					end = ns2Pixel(interval.getLowerBound());
+					gc.drawLine(start, middlePos, end, middlePos);
+
+					// draw the arrow head
+					vertBuf[0] = end - 12;
+					vertBuf[1] = middlePos - 4;
+					vertBuf[2] = end;
+					vertBuf[3] = middlePos;
+					vertBuf[4] = end - 12;
+					vertBuf[5] = middlePos + 4;
+					gc.fillPolygon(vertBuf);
+				}
+
 				if (end > maxWidth) {
 					break; // don't draw next interval (would be out of bounds)
 				}
 			}
-
-			// draw arrows (TODO)
 
 			// draw markers
 			gc.setForeground(ISSUE_COLOR);
@@ -350,6 +378,17 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			linePos += LINE_HEIGHT;
 			ruleIdx++;
 		}
+	}
+
+	private int drawInterval(final GC gc, final CInterval interval, final int yPos, final boolean fill) {
+		final int start = ns2Pixel(interval.getLowerBound());
+		final int end = ns2Pixel(interval.getUpperBound());
+		final int width = Math.max(end - start, 1);
+		gc.drawRectangle(start, yPos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
+		if (fill) {
+			gc.fillRectangle(start, yPos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
+		}
+		return end;
 	}
 
 	private int firstDrawIndex(final List<EventOccurrence> list) {
@@ -428,7 +467,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	@SuppressWarnings("boxing")
 	private void updateDisplayRange() {
-		displayUnit = getFittingUnit(displayRange.getDiameter());
+		displayUnit = Utils.getFittingUnit(displayRange.getDiameter());
 		final double unit = Utils.getInNs(1, displayUnit);
 		final double lv = displayRange.getLowerBound() / unit;
 		final double uv = displayRange.getUpperBound() / unit;
@@ -439,27 +478,14 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		return Math.min(MAX_RULES, result.rules().size());
 	}
 
-	private static Unit getFittingUnit(final double value) {
-		if (value > 1e9) {
-			return Unit.S;
-		}
-		if (value > 1e6) {
-			return Unit.MS;
-		}
-		if (value > 1e3) {
-			return Unit.US;
-		}
-		return Unit.NS;
-	}
-
 	private int ns2Pixel(final double ns) {
 		return ns2Pixel(ns, displayRange);
 	}
 
 	private int ns2Pixel(final double ns, final CInterval range) {
 		// pre-clamp ns value to avoid extreme integer values for pixels
-		final double nsClamped = Math.clamp(ns, displayRange.getLowerBound() * 0.95,
-				displayRange.getUpperBound() * 1.05);
+		final double pad = displayRange.getDiameter() * 0.1;
+		final double nsClamped = Math.clamp(ns, displayRange.getLowerBound() - pad, displayRange.getUpperBound() + pad);
 
 		final double shifted = nsClamped - range.getLowerBound();
 		final double percentage = shifted / range.getDiameter();
