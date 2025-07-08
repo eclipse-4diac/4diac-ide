@@ -819,17 +819,20 @@ public abstract class CommonElementImporter {
 			}
 
 			if (elem instanceof final FB fb) {
-				final VarDeclaration vd = fb.getInterface().getAllInterfaceElements().stream()
-						.filter(i -> i instanceof VarDeclaration && i.getName().equals(lastSegment))
-						.map(VarDeclaration.class::cast).findFirst().orElse(null);
-				if (vd != null) {
-					vd.setVarConfig(true);
-				}
-				return vd;
+				return findAndMarkVarConfig(fb.getInterface(), lastSegment);
+			}
+			if (elem instanceof final TypedSubApp tsa) {
+				return findAndMarkVarConfig(tsa.getInterface(), lastSegment);
 			}
 		}
 
 		return null;
+	}
+
+	private static VarDeclaration findAndMarkVarConfig(final InterfaceList iface, final String name) {
+		return iface.getAllInterfaceElements().stream()
+				.filter(i -> i instanceof VarDeclaration && i.getName().equals(name)).map(VarDeclaration.class::cast)
+				.peek(vd -> vd.setVarConfig(true)).findFirst().orElse(null);
 	}
 
 	private static Iterable<FBNetworkElement> getNetworkElements(final EObject element) {
