@@ -49,6 +49,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.RedoAction;
+import org.eclipse.gef.ui.actions.UndoAction;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
@@ -62,6 +66,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -70,17 +75,21 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.forms.widgets.Twistie;
 import org.eclipse.ui.part.EditorPart;
 
 public class BulkEditor extends EditorPart implements CommandExecutor, CommandStackEventListener {
+	private static final String CONTEXT_ID = "org.eclipse.fordiac.ide.bulkeditor"; //$NON-NLS-1$
 	private static final List<String> DEFAULT_LIST = List.of(Messages.Name, Messages.Type, Messages.Comment,
 			Messages.InitialValue);
 	private static final List<String> LIST_WITHOUT_VALUE = List.of(Messages.Name, Messages.Type, Messages.Comment);
 
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
+	private ActionRegistry actionRegistry;
 	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
@@ -122,6 +131,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		registerActions(site);
 		setSite(site);
 		setInput(input);
 		commandStack.addCommandStackEventListener(this);
@@ -132,6 +142,25 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			selectedSubApps = bulkEditorInput.getInitialSelectedSubApps();
 			setPartName(getPartName() + ": " + project.getName()); //$NON-NLS-1$
 		}
+	}
+
+	private void registerActions(final IEditorSite site) {
+		final ActionRegistry registry = new ActionRegistry();
+
+		final IAction undoAction = new UndoAction(this);
+		undoAction.setActionDefinitionId(ActionFactory.UNDO.getCommandId());
+		registry.registerAction(undoAction);
+		final IAction redoAction = new RedoAction(this);
+		redoAction.setActionDefinitionId(ActionFactory.REDO.getCommandId());
+		registry.registerAction(redoAction);
+
+		final IActionBars bars = site.getActionBars();
+		bars.setGlobalActionHandler(ActionFactory.UNDO.getId(), registry.getAction(ActionFactory.UNDO.getId()));
+		bars.setGlobalActionHandler(ActionFactory.REDO.getId(), registry.getAction(ActionFactory.REDO.getId()));
+		bars.updateActionBars();
+
+		final IContextService contextService = site.getService(IContextService.class);
+		contextService.activateContext(CONTEXT_ID);
 	}
 
 	@Override
@@ -657,6 +686,21 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
+		if ((event.getDetail() & CommandStack.POST_UNDO) != 0 || (event.getDetail() & CommandStack.POST_REDO) != 0) {
+			natTable.getCurrentTable().refresh();
+		}
+
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == CommandStack.class) {
+			return adapter.cast(commandStack);
+		}
+		if (adapter == ActionRegistry.class) {
+			return adapter.cast(actionRegistry);
+		}
+		return super.getAdapter(adapter);
 	}
 }

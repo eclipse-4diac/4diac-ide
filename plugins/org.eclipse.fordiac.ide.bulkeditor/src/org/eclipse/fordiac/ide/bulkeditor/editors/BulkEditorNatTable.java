@@ -264,6 +264,10 @@ public class BulkEditorNatTable {
 		});
 	}
 
+	public NatTable getCurrentTable() {
+		return natTable;
+	}
+
 	private static <T> List<T> mapList(final List<EObject> ori, final Class<T> clazz) {
 		final List<T> result = new ArrayList<>();
 		for (final EObject obj : ori) {
