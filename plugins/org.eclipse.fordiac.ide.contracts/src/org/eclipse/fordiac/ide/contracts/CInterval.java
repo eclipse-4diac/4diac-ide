@@ -17,6 +17,7 @@ import java.util.OptionalDouble;
 
 import org.eclipse.fordiac.ide.Utils;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
+import org.eclipse.fordiac.ide.contractSpec.Unit;
 
 class CInterval {
 	private final double lb;
@@ -87,13 +88,22 @@ class CInterval {
 
 	@Override
 	public String toString() {
+		// single number interval
+		if (ub == lb && !ubOpen && !lbOpen) {
+			return Utils.nsToString(lb);
+		}
+		final Unit unit = Utils.getFittingUnit(ub);
+		final double div = Utils.getInNs(1, unit);
+		final double lbConv = lb / div;
+		final double ubConv = ub / div;
+
 		final StringBuilder sb = new StringBuilder();
 		sb.append(lbOpen ? ']' : '[');
-		sb.append(lb);
+		sb.append(lbConv);
 		sb.append(", "); //$NON-NLS-1$
-		sb.append(ub);
+		sb.append(ubConv);
 		sb.append(ubOpen ? '[' : ']');
-		sb.append("ns"); //$NON-NLS-1$
+		sb.append(unit);
 		return sb.toString();
 	}
 }

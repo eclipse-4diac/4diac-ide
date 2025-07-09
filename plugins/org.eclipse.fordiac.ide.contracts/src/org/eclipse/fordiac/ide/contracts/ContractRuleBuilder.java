@@ -51,11 +51,13 @@ class ContractRuleBuilder {
 	}
 
 	void addReaction(final Reaction re) {
-		addRules(ContractRule.Type.REACTION, re.getInput(), re.getOutput(), re.getInterval());
+		addRules(ContractRule.Type.REACTION, re.getInput(), re.getOutput(), re.getInterval(), re.isOnce(), re.getN(),
+				re.getOutOf());
 	}
 
 	void addAge(final Age age) {
-		addRules(ContractRule.Type.AGE, age.getInput(), age.getOutput(), age.getInterval());
+		addRules(ContractRule.Type.AGE, age.getInput(), age.getOutput(), age.getInterval(), age.isOnce(), age.getN(),
+				age.getOutOf());
 	}
 
 	void addCausalReaction(final CausalReaction cRe) {
@@ -68,7 +70,7 @@ class ContractRuleBuilder {
 	}
 
 	private void addRules(final ContractRule.Type type, final EventExpr input, final EventExpr output,
-			final Interval interval) {
+			final Interval interval, final boolean once, final int n, final int m) {
 		final List<EventSpec> inputs = input.getEvent() != null ? List.of(input.getEvent())
 				: input.getEvents().getEvents();
 		final List<EventSpec> outputs = output.getEvent() != null ? List.of(output.getEvent())
@@ -85,7 +87,10 @@ class ContractRuleBuilder {
 					ContractIssue.Code.UNKOWN, Severity.WARNING));
 			return;
 		}
-		addRule(new ContractRule(type, inputs.get(0), outputs.get(0), interval));
+		final ContractRule rule = new ContractRule(type, inputs.get(0), outputs.get(0), interval);
+		rule.setOnce(once);
+		rule.setNOutOfM(new ContractRule.SlidingWindow(n, m));
+		addRule(rule);
 	}
 
 	private void addRule(final ContractRule rule) {

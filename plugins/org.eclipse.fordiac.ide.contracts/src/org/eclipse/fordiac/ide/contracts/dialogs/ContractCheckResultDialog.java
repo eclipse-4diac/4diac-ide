@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ContractCheckResultDialog extends MessageDialog {
 
+	private static final int MAX_LIST_HEIGHT = 200;
 	private final ContractSystem contractSys;
 
 	public ContractCheckResultDialog(final ContractSystem contractSys, final boolean networkCheck, final Shell shell) {
@@ -66,8 +67,13 @@ public class ContractCheckResultDialog extends MessageDialog {
 		final List<ContractIssue> issues = contractSys.getIssues();
 		if (!issues.isEmpty()) {
 			parent.setLayout(new GridLayout(1, false));
-			final var issueList = new org.eclipse.swt.widgets.List(parent, SWT.MULTI | SWT.BORDER);
-			issueList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			final var issueList = new org.eclipse.swt.widgets.List(parent, SWT.V_SCROLL | SWT.BORDER);
+			final GridData gData = new GridData(SWT.FILL, SWT.FILL, true, true);
+
+			if (issues.size() * issueList.getItemHeight() > MAX_LIST_HEIGHT) {
+				gData.heightHint = MAX_LIST_HEIGHT;
+			}
+			issueList.setLayoutData(gData);
 
 			for (final ContractIssue issue : issues) {
 				final String prefix = switch (issue.getSeverity()) {

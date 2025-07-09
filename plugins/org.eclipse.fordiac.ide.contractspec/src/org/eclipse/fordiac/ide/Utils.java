@@ -35,22 +35,20 @@ public class Utils {
 		};
 	}
 
-	@SuppressWarnings("boxing")
 	public static String nsToString(final double ns) {
 		final Unit unit = getFittingUnit(ns);
-		final double div = Utils.getInNs(1, unit);
-		final double v = ns / div;
-		return "%f%s".formatted(v, unit); //$NON-NLS-1$
+		final double v = ns / Utils.getInNs(1, unit);
+		return String.valueOf(v) + unit;
 	}
 
 	public static Unit getFittingUnit(final double value) {
-		if (value > 1e9) {
+		if (value >= 1e9) {
 			return Unit.S;
 		}
-		if (value > 1e6) {
+		if (value >= 1e6) {
 			return Unit.MS;
 		}
-		if (value > 1e3) {
+		if (value >= 1e3) {
 			return Unit.US;
 		}
 		return Unit.NS;
