@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.Utils;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.RepetitionOptions;
+import org.eclipse.fordiac.ide.contracts.helpers.ContractUtils;
 
 class ContractRule {
 	enum Type {
@@ -35,6 +36,9 @@ class ContractRule {
 		}
 	}
 
+	record SlidingWindow(int n, int outOf) {
+	}
+
 	private Type type;
 	private boolean fulfilled;
 	private ContractComponent owner;
@@ -44,9 +48,10 @@ class ContractRule {
 	// only for REPETITION
 	private CInterval offset;
 	private double jitter;
-
-	// TODO: the following aspects are ignored for now:
-	// clock, "once", N out of M times, difference between () and {} in EventExpr
+	// only for REACTION/AGE
+	private boolean once;
+	private SlidingWindow nOutOfM;
+	// TODO: difference between () and {} in EventExpr, clock, causal relation
 
 	ContractRule(final EventSpec event, final Interval interval) {
 		setCommon(Type.SINGLE_EVENT, interval);
@@ -104,6 +109,23 @@ class ContractRule {
 
 	String getPortNameQualified() {
 		return owner.getName() + "." + getPortName(); //$NON-NLS-1$
+	}
+
+	@Override
+	public String toString() {
+		return switch (type) {
+		case SINGLE_EVENT -> ContractUtils.createSingleEvent(getPortNameQualified(), interval.toString());
+		case REPETITION -> {
+			final String o = offset.getLowerBound() == 0 && offset.getUpperBound() == 0 ? null : offset.toString();
+			final String j = jitter == 0 ? null : Utils.nsToString(jitter);
+			yield ContractUtils.createRepetition(getPortNameQualified(), interval.toString(), o, j);
+		}
+		case REACTION ->
+			ContractUtils.createReaction(input, output, interval.toString(), once, nOutOfM.n(), nOutOfM.outOf());
+		case AGE -> ContractUtils.createAge(input, output, interval.toString(), once, nOutOfM.n(), nOutOfM.outOf());
+		case CAUSAL_REACTION -> ContractUtils.createCausalReaction(input, output, interval.toString());
+		case CAUSAL_AGE -> ContractUtils.createCausalAge(input, output, interval.toString());
+		};
 	}
 
 	// === getters/setters
@@ -169,5 +191,21 @@ class ContractRule {
 
 	void setOffset(final CInterval offset) {
 		this.offset = offset;
+	}
+
+	boolean isOnce() {
+		return once;
+	}
+
+	void setOnce(final boolean once) {
+		this.once = once;
+	}
+
+	SlidingWindow getNOutOfM() {
+		return nOutOfM;
+	}
+
+	void setNOutOfM(final SlidingWindow nOutOfM) {
+		this.nOutOfM = nOutOfM;
 	}
 }

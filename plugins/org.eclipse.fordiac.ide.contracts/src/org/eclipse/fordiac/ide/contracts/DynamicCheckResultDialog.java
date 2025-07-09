@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.Utils;
 import org.eclipse.fordiac.ide.contractSpec.Unit;
 import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData;
 import org.eclipse.fordiac.ide.contracts.dialogs.ContractCheckResultDialog;
-import org.eclipse.fordiac.ide.contracts.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.ui.utils.ContractScanner;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -77,19 +76,32 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		super(result.system(), networkCheck, shell);
 		this.result = result;
 
-		double upperBound;
-		if (result.eventOccurrences().size() > 0) {
+		double upperBound = 0;
+		double lastEvent = 0;
+		if (!result.eventOccurrences().isEmpty()) {
 			// set default range to try showing the 10 first events
 			final int idx = Math.min(10, result.eventOccurrences().size() - 1);
 			upperBound = result.eventOccurrences().get(idx).timestampNs();
-			diagramMax = result.eventOccurrences().getLast().timestampNs();
-		} else {
-			// no events, upper bound is just 10ms
-			upperBound = 10e6;
-			diagramMax = 10e6;
+			lastEvent = result.eventOccurrences().getLast().timestampNs();
 		}
+		for (final RuleData ruleData : result.rules()) {
+			if (!ruleData.markers().isEmpty() && ruleData.markers().getLast().timestampNs() > lastEvent) {
+				lastEvent = ruleData.markers().getLast().timestampNs();
+			}
+		}
+
+		// no events, upper bound is just 10ms
+		if (lastEvent == 0) {
+			lastEvent = 10e6;
+		}
+		if (upperBound == 0) {
+			upperBound = 10e6;
+		}
+
 		displayRange = new CInterval('[', 0, upperBound, ']');
 		displayUnit = Utils.getFittingUnit(upperBound);
+		// max diagram is last event + some padding
+		diagramMax = lastEvent + Utils.getInNs(1, displayUnit);
 	}
 
 	@Override
@@ -147,22 +159,13 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 	}
 
 	private void fillRuleList() {
-		int ruleIdx = firstRuleIdx;
 		for (int i = 0; i < nRules(); i++) {
-			final RuleData ruleData = result.rules().get(ruleIdx);
+			final RuleData ruleData = result.rules().get(i + firstRuleIdx);
 			final ContractRule rule = ruleData.rule();
 			final StyledText txt = ruleTexts[i];
-
-			final String ruleText = switch (rule.getType()) {
-			case ContractRule.Type.SINGLE_EVENT ->
-				ContractUtils.createSingleEvent(rule.getPortNameQualified(), rule.getInterval().toString());
-			case ContractRule.Type.REPETITION -> ContractUtils.createRepetition(rule.getPortNameQualified(),
-					rule.getInterval().toString(), rule.getOffset().toString());
-			default -> ""; //$NON-NLS-1$
-			};
-			txt.setText(ruleText);
-			txt.setStyleRanges(ContractScanner.getStyleRanges(ruleText));
-			ruleIdx++;
+			final String ruleString = rule.toString();
+			txt.setText(ruleString);
+			txt.setStyleRanges(ContractScanner.getStyleRanges(ruleString));
 		}
 	}
 
@@ -309,13 +312,12 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	private void drawRuleData(final GC gc, final int maxWidth) {
 		int linePos = diagramArea.y + LINE_HEIGHT - LINE_PAD;
-		int ruleIdx = firstRuleIdx;
 		final int[] vertBuf = new int[6];
 
 		for (int i = 0; i < nRules(); i++) {
 			// draw intervals
 			final int middlePos = linePos + LINE_HEIGHT / 2;
-			final DynamicCheckResult.RuleData ruleData = result.rules().get(ruleIdx);
+			final DynamicCheckResult.RuleData ruleData = result.rules().get(i + firstRuleIdx);
 			for (int j = firstDrawIndexInterval(ruleData.intervals()); j < ruleData.intervals().size(); j++) {
 				final CInterval interval = ruleData.intervals().get(j);
 
@@ -376,7 +378,6 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			}
 
 			linePos += LINE_HEIGHT;
-			ruleIdx++;
 		}
 	}
 

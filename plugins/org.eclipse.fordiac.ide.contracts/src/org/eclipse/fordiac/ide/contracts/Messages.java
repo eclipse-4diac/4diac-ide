@@ -88,6 +88,26 @@ public final class Messages extends NLS {
 
 	public static String ContractCheck_OK;
 
+	public static String EventOccurrence_Title;
+
+	public static String EventOccurrence_Info;
+
+	public static String EventOccurrence_Cancel;
+
+	public static String EventOccurrence_LoadFromFile;
+
+	public static String EventOccurrence_Error_Title;
+
+	public static String EventOccurrence_Error_Info;
+
+	public static String EventOccurrence_Format_Error_General;
+
+	public static String EventOccurrence_Format_Error_Time;
+
+	public static String EventOccurrence_Format_Error_Number;
+
+	public static String EventOccurrence_Format_Error_Negative;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

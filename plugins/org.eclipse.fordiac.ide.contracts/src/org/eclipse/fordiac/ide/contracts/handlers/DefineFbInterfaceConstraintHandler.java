@@ -41,7 +41,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 	private static final String DEFAULT_TIME = "10ms"; //$NON-NLS-1$
-	private static final String DEFAULT_OFFSET = "0ms"; //$NON-NLS-1$
 	private static final int CANCEL = -1;
 
 	@Override
@@ -83,14 +82,24 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 			templates.add(ContractUtils.createSingleEvent(pins, DEFAULT_TIME));
 
 			names.add(Messages.ContractRuleRepetition);
-			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_OFFSET));
+			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, null, null));
+			names.add(Messages.ContractRuleRepetition);
+			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_TIME, null));
+			names.add(Messages.ContractRuleRepetition);
+			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, null, DEFAULT_TIME));
+			names.add(Messages.ContractRuleRepetition);
+			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_TIME, DEFAULT_TIME));
 		}
 		if (!iPins.isEmpty() && !oPins.isEmpty()) {
 			names.add(Messages.ContractRuleReaction);
-			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME));
+			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME, false, 0, 0));
+			names.add(Messages.ContractRuleReaction);
+			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME, true, 0, 0));
 
 			names.add(Messages.ContractRuleAge);
-			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME));
+			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME, false, 0, 0));
+			names.add(Messages.ContractRuleAge);
+			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME, true, 0, 0));
 		}
 		// add an empty suggestion in case that the others don't fit well
 		names.add(Messages.ContractRuleEmpty);
