@@ -229,9 +229,8 @@
          <viewerContentBinding
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
-      		   <contentExtension isRoot="true" pattern="org.eclipse.ui.navigator.resourceContent"/>
-               <contentExtension isRoot="true"
-               		pattern="org.eclipse.ui.navigator.resources.workingSets" />
+      		   <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"/>
                <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"/> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
