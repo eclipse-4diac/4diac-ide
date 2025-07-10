@@ -249,6 +249,10 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 
 	@Override
 	public final IFile getModifiedElement() {
+		if (typeEntry != null) {
+			return typeEntry.getFile();
+		}
+
 		if (elementURI.isPlatformResource()) {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(elementURI.toPlatformString(true)));
 		}
