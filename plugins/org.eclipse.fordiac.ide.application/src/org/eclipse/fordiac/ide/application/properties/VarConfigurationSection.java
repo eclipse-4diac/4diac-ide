@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,8 +54,10 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -66,6 +69,7 @@ public class VarConfigurationSection extends AbstractSection {
 	private static String separationPoint = "."; //$NON-NLS-1$
 	private TypedSubApp rootTSA;
 	private final Map<String, VarDeclaration> displayMap = new LinkedHashMap<>();
+	private final static Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -93,7 +97,7 @@ public class VarConfigurationSection extends AbstractSection {
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
-				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
+				new NatTableColumnEditableRule<>(new VarConfigEditableRule(),
 						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
@@ -163,7 +167,7 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 		switch (type) {
 		case final TypedSubApp tsa:
-			traverseInterfaceElements(tsa, result, currentPrefix);
+			traverseInterfaceElements(tsa, result, visited, currentPrefix);
 			traverseFBNetwork(tsa.getType().getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
 			break;
 		case final UntypedSubApp utsa:
@@ -182,7 +186,7 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	private static void traverseInterfaceElements(final TypedSubApp tsa, final Map<String, VarDeclaration> result,
-			final String currentPrefix) {
+			final Set<INamedElement> visited, final String currentPrefix) {
 		for (final IInterfaceElement elem : tsa.getInterface().getAllInterfaceElements()) {
 			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
 				addOriginalElement(vd, currentPrefix, result);
@@ -239,6 +243,7 @@ public class VarConfigurationSection extends AbstractSection {
 			return;
 		}
 		result.put(qualifiedName, vd);
+		copiedMap.put(vd, Boolean.FALSE);
 	}
 
 	private void addAndCopyElement(final VarDeclaration vd, final String currentPrefix,
@@ -281,6 +286,7 @@ public class VarConfigurationSection extends AbstractSection {
 			rootTSA.getVarConfigParams().add(targetVD);
 		}
 		result.put(qualifiedName, targetVD);
+		copiedMap.put(targetVD, Boolean.TRUE);
 	}
 
 	private static TypedSubApp findTypedSubAppByTypeNameInUntypedSubApp(final UntypedSubApp root,
@@ -329,5 +335,36 @@ public class VarConfigurationSection extends AbstractSection {
 		protected VarConfigurationSection getCommandExecutor() {
 			return (VarConfigurationSection) super.getCommandExecutor();
 		}
+	}
+
+	private class VarConfigEditableRule implements IEditableRule {
+
+		@Override
+		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+			final Object rowObject = cell.getDataValue();
+			final int columnIndex = cell.getColumnIndex();
+			return checkEditable(columnIndex, rowObject);
+		}
+
+		@Override
+		public boolean isEditable(final int columnIndex, final int rowIndex) {
+			final Object rowObject = inputDataProvider.getRowObject(rowIndex);
+			return checkEditable(columnIndex, rowObject);
+		}
+
+		private boolean checkEditable(final int columnIndex, final Object rowObject) {
+			if (rowObject instanceof final VarDeclaration vd) {
+				final VarDeclarationTableColumn col = VarDeclarationTableColumn.values()[columnIndex];
+				if (col == VarDeclarationTableColumn.VISIBLE || col == VarDeclarationTableColumn.VAR_CONFIG) {
+					return isInsideOwnNetwork(vd);
+				}
+			}
+			return true;
+		}
+
+		private boolean isInsideOwnNetwork(final VarDeclaration vd) {
+			return !Boolean.TRUE.equals(copiedMap.get(vd));
+		}
+
 	}
 }
