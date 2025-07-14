@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -139,7 +140,7 @@ public class AddDeleteWidget {
 	}
 
 	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider addCommand, final CommandProvider deleteCommand) {
+			final CommandProvider addCommand, final CommandProvider deleteCommand) {
 
 		final Listener createListener = getAddListener(table, executor, addCommand);
 
@@ -306,7 +307,7 @@ public class AddDeleteWidget {
 	}
 
 	private static Listener getAddListener(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider commandProvider) {
+			final CommandProvider commandProvider) {
 		return ev -> {
 			Object refObject = null;
 			int[] rows = null;
@@ -320,7 +321,7 @@ public class AddDeleteWidget {
 				}
 			}
 
-			final CreationCommand cmd = commandProvider.getCommand(refObject);
+			final Command cmd = commandProvider.getCommand(refObject);
 			executor.executeCommand(cmd);
 			table.refresh();
 			if ((selectionLayer != null) && (rows != null) && (rows.length > 0)) {
