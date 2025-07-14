@@ -18,11 +18,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -35,13 +38,17 @@ import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.widgets.AttributeSelectionContentProvider;
@@ -55,11 +62,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
@@ -104,6 +113,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
 	private ActionRegistry actionRegistry;
+	private SearchHelper helper;
 	private final Map<TypeEntry, LibraryElement> copiedElementsMap = new HashMap<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
@@ -360,10 +370,44 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			checkTypeEntriesForDirty();
 
 			if (modeSelectionDropDown.getSelectionIndex() == 1 && addDeleteComposite.getChildren().length == 0) {
+				final AttributeTypeEntry attributeTypeEntry = advancedButton.getSelection() ? null
+						: TypeLibraryManager.INSTANCE.getTypeLibrary(project)
+								.getAttributeTypeEntry(searchText.getText());
+
 				final var addDeleteWidget = new AddDeleteWidget();
 				addDeleteWidget.createControls(addDeleteComposite, new FormToolkit(Display.getDefault()), true);
-				addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this, refElement -> null,
-						refElement -> null); // TODO: create right commands for buttons
+				addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this, refElement -> {
+					final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
+							this.getSite().getShell(),
+							copiedElementsMap.entrySet().stream()
+									.filter(entry -> SearchHelper.linkedElementsFilter.test(entry.getKey()))
+									.map(Entry::getValue).toList(),
+							helper.createChildrenSearchProvider(),
+							attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project,
+							new HashSet<>());
+					if (addAttributeDialog.open() == Dialog.OK) {
+						final DataType dataType = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
+								.getDataTypeLibrary().getType(addAttributeDialog.getAttributeType());
+
+						final CompoundCommand addAttributesCompoundCommand = new CompoundCommand();
+						Arrays.stream(addAttributeDialog.getResult()).filter(ConfigurableObject.class::isInstance)
+								.map(ConfigurableObject.class::cast)
+								.map(configureableObject -> new CreateAttributeBulkEditorCommand(natTable,
+										configureableObject, addAttributeDialog.getAttributeName(),
+										addAttributeDialog.getAttributeComment(), dataType,
+										attributeTypeEntry != null ? attributeTypeEntry.getType() : null,
+										addAttributeDialog.getAttributeValue()))
+								.forEach(addAttributesCompoundCommand::add);
+						return addAttributesCompoundCommand;
+					}
+					return null;
+				}, refElement -> {
+					if (refElement instanceof final Attribute attribute
+							&& attribute.eContainer() instanceof final ConfigurableObject configurableObject) {
+						return new DeleteAttributeBulkEditorCommand(natTable, configurableObject, attribute);
+					}
+					return null;
+				});
 				addDeleteComposite.getParent().layout();
 			}
 		}).create(composite);
@@ -637,7 +681,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private boolean performSearch() {
-		final SearchHelper helper = new SearchHelper(
+		helper = new SearchHelper(
 				new SearchHelper.FilterRecordClass(settings.fbSubappTypes,
 						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(0)),
 						fbSubappTypesFilter.getFilter(LIST_WITHOUT_VALUE.get(1)),
@@ -746,7 +790,12 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				final var affect = Arrays.stream(commandStack.getCommands()).filter(ScopedCommand.class::isInstance)
+				final var affect = Arrays.stream(commandStack.getCommands()).flatMap(cmd -> {
+					if (cmd instanceof final CompoundCommand compound) {
+						return compound.getCommands().stream();
+					}
+					return Stream.of(cmd);
+				}).filter(ScopedCommand.class::isInstance)
 						.flatMap(cmd -> ((ScopedCommand) cmd).getAffectedObjects().stream()).map(eobj -> {
 							if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
 								return rootLibE.getTypeEntry();
