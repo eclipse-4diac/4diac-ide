@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -90,6 +91,7 @@ public class BulkEditorNatTable {
 	private boolean dynamicTable;
 
 	private NatTable natTable;
+	private List<Attribute> currentAttributeList;
 
 	private SorterModel<Attribute> attributeSorterModel;
 	private SorterModel<VarDeclaration> varDeclarationSorterModel;
@@ -111,12 +113,14 @@ public class BulkEditorNatTable {
 	}
 
 	public void updateList(final List<EObject> mappedList) {
+		currentAttributeList = Collections.emptyList();
 		if (currentMode == 0 && (mappedList.isEmpty() || mappedList.getFirst() instanceof VarDeclaration)) {
 			final var list = mapList(mappedList, VarDeclaration.class);
 			varDeclProvider.setInput(list);
 			varDeclarationSorterModel.setSortingList(list);
 		} else if (currentMode == 1 && (mappedList.isEmpty() || mappedList.getFirst() instanceof Attribute)) {
 			final var list = mapList(mappedList, Attribute.class);
+			currentAttributeList = list;
 			attributeProvider.setInput(list);
 			attributeSorterModel.setSortingList(list);
 
@@ -149,6 +153,10 @@ public class BulkEditorNatTable {
 			scrolledComposite.setMinSize(size);
 			natTable.refresh();
 		});
+	}
+
+	public List<Attribute> getCurrentList() {
+		return currentAttributeList;
 	}
 
 	public void changeNatTable(final int selectionIndex) {
