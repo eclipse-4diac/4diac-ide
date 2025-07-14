@@ -104,7 +104,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private IProject project;
 	private final CommandStack commandStack = new CommandStack();
 	private ActionRegistry actionRegistry;
-	private final Map<TypeEntry, CopyElementRecord> map = new HashMap<>();
+	private final Map<TypeEntry, LibraryElement> copiedElementsMap = new HashMap<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
 	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
@@ -596,7 +596,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				return false;
 			}
 
-			return map.containsKey(libE.getTypeEntry());
+			return copiedElementsMap.containsKey(libE.getTypeEntry());
 		});
 	}
 
@@ -687,6 +687,19 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 						.performSearch().stream())
 				.toList();
 
+		// Fill Search Entries with copy of Type
+		copiedElementsMap.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
+		copiedElementsMap.clear();
+		contexts.stream().flatMap(context -> context.getTypes().map(uri -> context.mapTypes(uri))).forEach(eobj -> {
+			if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
+				final TypeEntry entry = rootLibE.getTypeEntry();
+				copiedElementsMap.computeIfAbsent(entry, e -> {
+					entry.eAdapters().add(adapter);
+					return e.copyType();
+				});
+			}
+		});
+
 		final List<EObject> mappedList = createMappedList(result);
 		natTable.updateList(mappedList);
 		commandStack.flush();
@@ -696,23 +709,16 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private List<EObject> createMappedList(final List<? extends EObject> list) {
-		final List<EObject> mappedList = new ArrayList<>();
-		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
-		map.clear();
+		final List<EObject> copyList = new ArrayList<>();
 		for (final EObject libE : list) {
 			if (EcoreUtil.getRootContainer(libE) instanceof final LibraryElement rootLibE) {
 				final TypeEntry entry = rootLibE.getTypeEntry();
-				map.computeIfAbsent(entry, e -> {
-					entry.eAdapters().add(adapter);
-					return new CopyElementRecord(e.copyType(), new ArrayList<>());
-				});
-				final EObject copyLibE = EcoreUtil.getEObject(map.get(entry).copiedElement(),
+				final EObject copyLibE = EcoreUtil.getEObject(copiedElementsMap.get(entry),
 						EcoreUtil.getRelativeURIFragmentPath(rootLibE, libE));
-				map.get(entry).addToList(copyLibE);
-				mappedList.add(copyLibE);
+				copyList.add(copyLibE);
 			}
 		}
-		return mappedList;
+		return copyList;
 	}
 
 	@Override
@@ -750,9 +756,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 				affect.forEach(entry -> {
 					try {
-						if (map.containsKey(entry)) {
+						if (copiedElementsMap.containsKey(entry)) {
 							entry.eAdapters().remove(adapter);
-							entry.save(map.get(entry).copiedElement());
+							entry.save(copiedElementsMap.get(entry));
 							entry.eAdapters().add(adapter);
 						}
 					} catch (final CoreException e) {
@@ -782,7 +788,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	public void dispose() {
 		super.dispose();
 		getSite().getPage().removePartListener(focusListener);
-		map.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
+		copiedElementsMap.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
 	}
 
 	@Override
