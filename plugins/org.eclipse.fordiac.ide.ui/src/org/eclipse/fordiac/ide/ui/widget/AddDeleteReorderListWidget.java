@@ -78,8 +78,8 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 	}
 
 	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider addCommand, final CommandProvider deleteCommand,
-			final CommandProvider moveUpCommand, final CommandProvider moveDownCommand) {
+			final CommandProvider addCommand, final CommandProvider deleteCommand, final CommandProvider moveUpCommand,
+			final CommandProvider moveDownCommand) {
 		super.bindToTableViewer(table, executor, addCommand, deleteCommand);
 		addUpListener(getSelectionListener(table, executor, moveUpCommand));
 		addDownListener(getReverseSelectionListener(table, executor, moveDownCommand));
