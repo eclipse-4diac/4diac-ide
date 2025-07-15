@@ -13,12 +13,20 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.fordiac.ide.application.policies.ConfigurableMoveFBLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.gef.EditPolicy;
 
 public class ConfigurableMoveFBEditPart extends FBEditPart {
 
 	@Override
 	public ConfigurableMoveFB getModel() {
 		return (ConfigurableMoveFB) super.getModel();
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		super.createEditPolicies();
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ConfigurableMoveFBLayoutEditPolicy());
 	}
 }
