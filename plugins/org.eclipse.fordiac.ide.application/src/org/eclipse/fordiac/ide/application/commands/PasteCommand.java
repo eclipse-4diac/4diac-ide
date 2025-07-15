@@ -17,8 +17,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -120,6 +123,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 				createUpdateTypeCommands();
 			}
 			updateTypeCmds.execute();
+			checkAndAddMissingImports();
 
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
 				ErrorMessenger.popUpErrorMessage(Messages.PasteRecreateNotPossible, ErrorMessenger.USE_DEFAULT_TIMEOUT);
@@ -140,6 +144,31 @@ public class PasteCommand extends Command implements ScopedCommand {
 		connCreateCmds.redo();
 		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
+	}
+
+	private void checkAndAddMissingImports() {
+		final List<String> neededImports = new ArrayList<>();
+
+		for (final FBNetworkElement elem : copiedElements.keySet()) {
+			final EObject srcObj = EcoreUtil.getRootContainer(elem);
+			if (srcObj instanceof final LibraryElement srcLE) {
+				srcLE.getCompilerInfo().getImports().stream().map(Import::getImportedNamespace)
+						.forEach(neededImports::add);
+			}
+		}
+		final EObject destContainer = EcoreUtil.getRootContainer(dstFBNetwork);
+		if (destContainer instanceof final LibraryElement le) {
+			final List<String> importNames = le.getCompilerInfo().getImports().stream()
+					.map(Import::getImportedNamespace).toList();
+
+			for (final String importName : neededImports) {
+				if (!importNames.contains(importName)) {
+					final Import newImp = LibraryElementFactory.eINSTANCE.createImport();
+					newImp.setImportedNamespace(importName);
+					le.getCompilerInfo().getImports().add(newImp);
+				}
+			}
+		}
 	}
 
 	// remove elements, if they are already inside a selected top-level subapp.
