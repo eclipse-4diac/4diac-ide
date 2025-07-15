@@ -17,10 +17,8 @@ import java.util.Objects;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -55,28 +53,6 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 	public EObject mapTypes(final URI uri) {
 		final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 		return getLiveType(typeEntry);
-	}
-
-	public static void executeAndSave(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
-		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
-		if (rootContainer instanceof final LibraryElement elem) {
-			final TypeEntry entry = elem.getTypeEntry();
-			final IEditorPart editor = getEditor(entry);
-			execute(cmd, editor);
-			save(entry, elem, editor, pm);
-		}
-	}
-
-	public static void execute(final Command cmd, final TypeEntry typeEntry) {
-		final IEditorPart editor = getEditor(typeEntry);
-		execute(cmd, editor);
-
-	}
-
-	public static void save(final TypeEntry typeEntry) {
-		final IEditorPart editor = getEditor(typeEntry);
-		save(typeEntry, getLiveType(typeEntry), editor, new NullProgressMonitor());
-
 	}
 
 	protected TypeLibrary getTypelib() {
