@@ -22,19 +22,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
-import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.search.AbstractLiveSearchContext;
-import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -97,17 +92,6 @@ public final class FBUpdater {
 			cmd = cmd.chain(subCmd);
 		}
 		return cmd;
-	}
-
-	public static List<FBNetworkElement> updateAllInstances(final Set<TypeEntry> typeEntries) {
-		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntries);
-		final List<FBNetworkElement> elements = search.performSearch().stream()
-				.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
-		elements.forEach(el -> {
-			final var cmd = new UpdateFBTypeCommand(el, el.getTypeEntry());
-			AbstractLiveSearchContext.executeAndSave(cmd, el, null);
-		});
-		return elements;
 	}
 
 }
