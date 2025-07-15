@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.application.utilities;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -74,7 +75,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		} else if (TemplateTransfer.getInstance().getTemplate() instanceof final DataTypeEntry dataTypeEntry
 				&& dataTypeEntry.getType() instanceof StructuredType && null != getTargetEditPart()) {
 			final Object model = getTargetEditPart().getModel();
-			if (model instanceof StructManipulator) {
+			if (model instanceof StructManipulator || model instanceof ConfigurableFB) {
 				getCurrentEvent().detail = DND.DROP_COPY;
 			} else {
 				getCurrentEvent().detail = DND.DROP_NONE;
