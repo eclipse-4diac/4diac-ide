@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -57,15 +58,17 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	private TypeEntry typeEntry;
 	private String oldName;
 	private String newName;
+	private String packageName;
 
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IFile targetFile
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(targetFile) != null) {
 			this.file = targetFile;
-			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(targetFile);
-			oldName = typeEntry.getTypeName();
-			newName = TypeEntry.getTypeNameFromFileName(getArguments().getNewName());
+			this.typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(targetFile);
+			this.oldName = typeEntry.getTypeName();
+			this.newName = TypeEntry.getTypeNameFromFileName(getArguments().getNewName());
+			this.packageName = PackageNameHelper.getContainerPackageName(typeEntry.getType());
 			return true;
 		}
 		return false;
@@ -143,8 +146,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return parentChange;
 	}
 
-	private static void createStructChanges(final DataTypeEntry dataTypeEntry,
-			final CompositeChange structUsageChanges) {
+	private void createStructChanges(final DataTypeEntry dataTypeEntry, final CompositeChange structUsageChanges) {
 		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(dataTypeEntry);
 		final Set<EObject> rootElements = new HashSet<>();
 		dataTypeInstanceSearch.performSearch().forEach(obj -> {
@@ -173,7 +175,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		return parentChange;
 	}
 
-	private static Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
+	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
 			final Set<EObject> rootElements) {
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
@@ -194,7 +196,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				}
 				if (rootContainer instanceof final FBType fbType
 						&& dataTypeEntry.getType() instanceof final StructuredType type) {
-					return new RenameUpdateFBTypeInterfaceChange(fbType, type);
+					return new RenameUpdateFBTypeInterfaceChange(fbType, oldName, newName, packageName);
 				}
 			}
 		}
