@@ -124,8 +124,8 @@ public class BulkEditorNatTable {
 			attributeProvider.setInput(list);
 			attributeSorterModel.setSortingList(list);
 
-			if (this.dynamicTable) {
-				final var dataLayer = NatTableWidgetFactory.getDataLayer(natTable);
+			final var dataLayer = NatTableWidgetFactory.getDataLayer(natTable);
+			if (this.dynamicTable && dataLayer.getRowCount() > 0) {
 				dataLayer.doCommand(new AutoResizeColumnsCommand(natTable,
 						IntStream.range(0, dataLayer.getColumnCount()).toArray()));
 				for (int colPos = 0; colPos < dataLayer.getColumnCount(); colPos++) {
