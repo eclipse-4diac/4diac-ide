@@ -149,6 +149,67 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
 
+	// === AttributeTarget Groups ===
+	public static String AttributeTarget_Types_group;
+	public static String AttributeTarget_Instances_group;
+	public static String AttributeTarget_InstancePins_group;
+	public static String AttributeTarget_TypePins_group;
+	public static String AttributeTarget_UntypedSubAppPins_group;
+	// === AttributeTarget Display Names ===
+	public static String AttributeTarget_FunctionBlock_display;
+	public static String AttributeTarget_SubApp_display;
+	public static String AttributeTarget_DataTypes_display;
+	public static String AttributeTarget_DataTypeMember_display;
+	public static String AttributeTarget_AttributeTypes_display;
+	public static String AttributeTarget_TypedSubApp_display;
+	public static String AttributeTarget_UntypedSubApp_display;
+	public static String AttributeTarget_Device_display;
+	public static String AttributeTarget_Resource_display;
+	public static String AttributeTarget_Segment_display;
+	public static String AttributeTarget_Adapter_display;
+	public static String AttributeTarget_Event_display;
+	public static String AttributeTarget_Data_display;
+	public static String AttributeTarget_Systems_display;
+	public static String AttributeTarget_Applications_display;
+	public static String AttributeTarget_GlobalConstants_display;
+	public static String AttributeTarget_Connections_display;
+	public static String AttributeTarget_Comments_display;
+	public static String AttributeTarget_Groups_display;
+	public static String AttributeTarget_Link_display;
+	public static String AttributeTarget_ServiceSequence_display;
+	// === AttributeTarget Tooltips ===
+	public static String AttributeTarget_FBTypes_tooltip;
+	public static String AttributeTarget_SubAppTypes_tooltip;
+	public static String AttributeTarget_DeviceType_tooltip;
+	public static String AttributeTarget_ResourceType_tooltip;
+	public static String AttributeTarget_SegmentType_tooltip;
+	public static String AttributeTarget_DataTypes_tooltip;
+	public static String AttributeTarget_DataTypeMember_tooltip;
+	public static String AttributeTarget_AttributeTypes_tooltip;
+	public static String AttributeTarget_FBInstances_tooltip;
+	public static String AttributeTarget_TypedSubApps_tooltip;
+	public static String AttributeTarget_UntypedSubApps_tooltip;
+	public static String AttributeTarget_DeviceInstances_tooltip;
+	public static String AttributeTarget_ResourceInstances_tooltip;
+	public static String AttributeTarget_SegmentInstances_tooltip;
+	public static String AttributeTarget_InstanceAdapter_tooltip;
+	public static String AttributeTarget_InstanceEvent_tooltip;
+	public static String AttributeTarget_InstanceData_tooltip;
+	public static String AttributeTarget_TypeAdapter_tooltip;
+	public static String AttributeTarget_TypeEvent_tooltip;
+	public static String AttributeTarget_TypeData_tooltip;
+	public static String AttributeTarget_UntypedSubAppAdapter_tooltip;
+	public static String AttributeTarget_UntypedSubAppEvent_tooltip;
+	public static String AttributeTarget_UntypedSubAppData_tooltip;
+	public static String AttributeTarget_Systems_tooltip;
+	public static String AttributeTarget_Applications_tooltip;
+	public static String AttributeTarget_GlobalConstants_tooltip;
+	public static String AttributeTarget_Connections_tooltip;
+	public static String AttributeTarget_Comments_tooltip;
+	public static String AttributeTarget_Groups_tooltip;
+	public static String AttributeTarget_Links_tooltip;
+	public static String AttributeTarget_ServiceSequences_tooltip;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

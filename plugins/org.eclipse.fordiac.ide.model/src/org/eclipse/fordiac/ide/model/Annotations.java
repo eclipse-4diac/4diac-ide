@@ -39,12 +39,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -53,18 +55,27 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
@@ -410,24 +421,86 @@ public final class Annotations {
 	public static boolean isValidObject(final AttributeDeclaration attributeDeclaration,
 			final ConfigurableObject object) {
 		final StructuredType target = attributeDeclaration.getTarget();
-		if (target != null) {
-			return switch (object) {
-			case final IInterfaceElement o -> getValueFromClassName(target, IInterfaceElement.class);
-			case final SubApp o -> getValueFromClassName(target, SubApp.class);
-			case final FBType o -> getValueFromClassName(target, FBType.class);
-			case final Application o -> getValueFromClassName(target, Application.class);
-			case final Connection o -> getValueFromClassName(target, Connection.class);
-			case final FB o -> getValueFromClassName(target, FB.class);
-			case final DataType o -> getValueFromClassName(target, DataType.class);
-			default -> false;
-			};
+		if (target == null) {
+			return true;
 		}
-		return true;
+		// old version
+		if (object instanceof IInterfaceElement || object instanceof SubApp) {
+			final String key = object instanceof IInterfaceElement ? IInterfaceElement.class.getSimpleName()
+					: SubApp.class.getSimpleName();
+
+			final Optional<VarDeclaration> correctMember = target.getMemberVariables().stream()
+					.filter(member -> member.getName().equals(key)).findFirst();
+			if (correctMember.isPresent()) {
+				final Value val = correctMember.get().getValue();
+				return Boolean.parseBoolean(val.getValue());
+			}
+		}
+
+		return switch (object) {
+		case final AutomationSystem o -> getValueFromTarget(target, AttributeTarget.AutomationSystem);
+		case final Application o -> getValueFromTarget(target, AttributeTarget.Application);
+		case final GlobalConstants o -> getValueFromTarget(target, AttributeTarget.GlobalConstant);
+		case final Connection o -> getValueFromTarget(target, AttributeTarget.Connection);
+		case final Comment o -> getValueFromTarget(target, AttributeTarget.Comment);
+		case final Group o -> getValueFromTarget(target, AttributeTarget.Group);
+		case final Link o -> getValueFromTarget(target, AttributeTarget.Link);
+		case final ServiceSequence o -> getValueFromTarget(target, AttributeTarget.ServiceSequence);
+
+		// Types:
+		case final SubAppType o -> getValueFromTarget(target, AttributeTarget.SubAppType);
+		case final FBType o -> getValueFromTarget(target, AttributeTarget.FBType);
+		case final DataType o -> getValueFromTarget(target, AttributeTarget.DataType);
+		case final AttributeDeclaration o -> getValueFromTarget(target, AttributeTarget.AttributeDeclaration);
+		case final DeviceType o -> getValueFromTarget(target, AttributeTarget.DeviceType);
+		case final ResourceType o -> getValueFromTarget(target, AttributeTarget.ResourceType);
+		case final SegmentType o -> getValueFromTarget(target, AttributeTarget.SegmentType);
+
+		// Instances:
+		case final TypedSubApp o -> getValueFromTarget(target, AttributeTarget.TypedSubApp);
+		case final UntypedSubApp o -> getValueFromTarget(target, AttributeTarget.UntypedSubApp);
+		case final Device o -> getValueFromTarget(target, AttributeTarget.Device);
+		case final Resource o -> getValueFromTarget(target, AttributeTarget.Resource);
+		case final Segment o -> getValueFromTarget(target, AttributeTarget.Segment);
+		case final FB o -> getValueFromTarget(target, AttributeTarget.FB);
+
+		// Pins
+		case final VarDeclaration decl when decl.eContainer() instanceof StructuredType ->
+			getValueFromTarget(target, AttributeTarget.DataTypeMember); // member of DataType
+		case final VarDeclaration decl when decl.eContainer() instanceof InterfaceList
+				&& decl.eContainer().eContainer() instanceof FBType ->
+			getValueFromTarget(target, AttributeTarget.TypeVarDecl);
+		case final VarDeclaration decl when decl.eContainer() instanceof InterfaceList
+				&& decl.eContainer().eContainer() instanceof UntypedSubApp ->
+			getValueFromTarget(target, AttributeTarget.Untyped_SubAppVarDecl);
+		case final VarDeclaration decl when decl.eContainer() instanceof InterfaceList
+				&& decl.eContainer().eContainer() instanceof FBNetworkElement ->
+			getValueFromTarget(target, AttributeTarget.InstanceVarDecl);
+		case final Event event when event.eContainer() != null && event.eContainer().eContainer() instanceof FBType ->
+			getValueFromTarget(target, AttributeTarget.TypeEvent);
+		case final Event event when event.eContainer() != null
+				&& event.eContainer().eContainer() instanceof UntypedSubApp ->
+			getValueFromTarget(target, AttributeTarget.Untyped_SubAppEvent);
+		case final Event event when event.eContainer() != null
+				&& event.eContainer().eContainer() instanceof FBNetworkElement ->
+			getValueFromTarget(target, AttributeTarget.InstanceEvent);
+		case final AdapterDeclaration adapter when adapter.eContainer() != null
+				&& adapter.eContainer().eContainer() instanceof FBType ->
+			getValueFromTarget(target, AttributeTarget.TypeAdapter);
+		case final AdapterDeclaration adapter when adapter.eContainer() != null
+				&& adapter.eContainer().eContainer() instanceof UntypedSubApp ->
+			getValueFromTarget(target, AttributeTarget.Untyped_SubAppAdapter);
+		case final AdapterDeclaration adapter when adapter.eContainer() != null
+				&& adapter.eContainer().eContainer() instanceof FBNetworkElement ->
+			getValueFromTarget(target, AttributeTarget.InstanceAdapter);
+
+		default -> false;
+		};
 	}
 
-	private static boolean getValueFromClassName(final StructuredType lock, final Class<?> clazz) {
+	private static boolean getValueFromTarget(final StructuredType lock, final AttributeTarget target) {
 		final Optional<VarDeclaration> correctMember = lock.getMemberVariables().stream()
-				.filter(member -> member.getName().equals(clazz.getSimpleName())).findFirst();
+				.filter(member -> member.getName().equals(target.name())).findFirst();
 		if (correctMember.isPresent()) {
 			final Value val = correctMember.get().getValue();
 			return Boolean.parseBoolean(val.getValue());
