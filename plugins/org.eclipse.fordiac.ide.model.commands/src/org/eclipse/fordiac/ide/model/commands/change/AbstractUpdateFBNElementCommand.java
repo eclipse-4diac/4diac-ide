@@ -136,9 +136,12 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		if (newElement.getType() != null) {
 			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
 			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
+			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInOutVars());
+
 		}
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
+		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInOutVars());
 
 		if (network != null) {
 			network.getNetworkElements().remove(oldElement);
@@ -232,6 +235,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				if ((newDecl.isIsInput() && newDecl.getInputConnections().isEmpty())
 						|| (!newDecl.isIsInput() && newDecl.getOutputConnections().isEmpty())) {
 					newDecl.setVisible(varDecl.isVisible());
+				}
+				if (newDecl.isInOutVar()) {
+					newDecl.setVisible(varDecl.isVisible());
+					newDecl.getInOutVarOpposite().setVisible(varDecl.getInOutVarOpposite().isVisible());
 				}
 				newDecl.setVarConfig(varDecl.isVarConfig());
 			}

@@ -69,6 +69,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		if (element.getType() != null) {
 			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInputVars());
 			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getOutputVars());
+			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInOutVars());
 		}
 		element.setPosition(position);
 		insertFBNetworkElement();
@@ -135,6 +136,9 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		varDeclList.forEach(varDecl -> {
 			final VarDeclaration newDecl = (VarDeclaration) element.getInterfaceElement(varDecl.getName());
 			newDecl.setVisible(varDecl.isVisible());
+			if (newDecl.isInOutVar()) {
+				newDecl.getInOutVarOpposite().setVisible(varDecl.getInOutVarOpposite().isVisible());
+			}
 			newDecl.setVarConfig(varDecl.isVarConfig());
 		});
 	}

@@ -17,9 +17,6 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
@@ -37,6 +34,7 @@ import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
@@ -91,19 +89,19 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	}
 
 	public void setupInputTable(final Composite parent) {
-		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this));
+		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
+
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS);
-		inputDataLayer.setConfigLabelAccumulator(
-				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel));
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
+		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
+
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, true);
-		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
-		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
-
-		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
 	}
 
