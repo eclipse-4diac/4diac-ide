@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -363,13 +364,22 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int TRANSACTION__DURATION = 2;
 
 	/**
+	 * The feature id for the '<em><b>Exceptions</b></em>' attribute list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSACTION__EXCEPTIONS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Transaction</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSACTION_FEATURE_COUNT = 3;
+	int TRANSACTION_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the
@@ -384,8 +394,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int FB_NETWORK_RUNTIME = 7;
 
 	/**
-	 * The feature id for the '<em><b>Fbnetwork</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Fbnetwork</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
@@ -457,6 +467,15 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_TRANSACTION__DURATION = TRANSACTION__DURATION;
+
+	/**
+	 * The feature id for the '<em><b>Exceptions</b></em>' attribute list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_TRANSACTION__EXCEPTIONS = TRANSACTION__EXCEPTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Output Event Occurrences</b></em>' containment
@@ -676,6 +695,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int TRANSITION_TRACE_FEATURE_COUNT = 4;
+
+	/**
+	 * The meta object id for the '<em>Exception</em>' data type. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see java.lang.Object
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getException()
+	 * @generated
+	 */
+	int EXCEPTION = 14;
 
 	/**
 	 * Returns the meta object for class
@@ -982,6 +1011,18 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EAttribute getTransaction_Duration();
 
 	/**
+	 * Returns the meta object for the attribute list
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getExceptions
+	 * <em>Exceptions</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute list '<em>Exceptions</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getExceptions()
+	 * @see #getTransaction()
+	 * @generated
+	 */
+	EAttribute getTransaction_Exceptions();
+
+	/**
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime <em>FB
 	 * Network Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -993,11 +1034,11 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EClass getFBNetworkRuntime();
 
 	/**
-	 * Returns the meta object for the containment reference
+	 * Returns the meta object for the reference
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbnetwork
 	 * <em>Fbnetwork</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the containment reference '<em>Fbnetwork</em>'.
+	 * @return the meta object for the reference '<em>Fbnetwork</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbnetwork()
 	 * @see #getFBNetworkRuntime()
 	 * @generated
@@ -1243,6 +1284,17 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTransitionTrace_CondExpression();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.Exception
+	 * <em>Exception</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for data type '<em>Exception</em>'.
+	 * @see java.lang.Exception
+	 * @model instanceClass="java.lang.Exception"
+	 * @generated
+	 */
+	EDataType getException();
 
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
@@ -1493,6 +1545,14 @@ public interface OperationalSemanticsPackage extends EPackage {
 		EAttribute TRANSACTION__DURATION = eINSTANCE.getTransaction_Duration();
 
 		/**
+		 * The meta object literal for the '<em><b>Exceptions</b></em>' attribute list
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EAttribute TRANSACTION__EXCEPTIONS = eINSTANCE.getTransaction_Exceptions();
+
+		/**
 		 * The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl
 		 * <em>FB Network Runtime</em>}' class. <!-- begin-user-doc --> <!--
@@ -1505,8 +1565,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 		EClass FB_NETWORK_RUNTIME = eINSTANCE.getFBNetworkRuntime();
 
 		/**
-		 * The meta object literal for the '<em><b>Fbnetwork</b></em>' containment
-		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Fbnetwork</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated
 		 */
@@ -1694,6 +1754,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSITION_TRACE__COND_EXPRESSION = eINSTANCE.getTransitionTrace_CondExpression();
+
+		/**
+		 * The meta object literal for the '<em>Exception</em>' data type. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see java.lang.Object
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getException()
+		 * @generated
+		 */
+		EDataType EXCEPTION = eINSTANCE.getException();
 
 	}
 

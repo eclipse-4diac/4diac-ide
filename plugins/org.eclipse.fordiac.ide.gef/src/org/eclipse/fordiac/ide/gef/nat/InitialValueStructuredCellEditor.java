@@ -74,7 +74,9 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 					: getEditorValue();
 			VariableDialog.open(composite.getShell(), getRowObject(), initialValue).ifPresent(this::setEditorValue);
 		} finally {
-			textControl.forceFocus();
+			if (textControl != null && !textControl.isDisposed()) {
+				textControl.forceFocus();
+			}
 			if (focusListener instanceof final InlineFocusListener inlineFL) {
 				inlineFL.handleFocusChanges = true;
 			}

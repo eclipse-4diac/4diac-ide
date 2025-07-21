@@ -50,4 +50,10 @@ public class FordiacCopyDataCommandHandler extends CopyDataCommandHandler {
 
 		clipboard.dispose();
 	}
+
+	@Override
+	protected ILayerCell[][] assembleCopiedDataStructure() {
+		final var cells = super.assembleCopiedDataStructure();
+		return cells != null ? cells : new ILayerCell[0][];
+	}
 }

@@ -94,6 +94,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="parentEO" eType="#//EventOccurrence"
         eOpposite="#//EventOccurrence/createdTransactions"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exceptions" upperBound="-1"
+        eType="#//Exception" changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBNetworkRuntime" eSuperTypes="#//FBRuntimeAbstract">
     <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork">
@@ -102,8 +104,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbnetwork" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork"
-        containment="true"/>
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferData" upperBound="-1"
         eType="#//ConnectionToValueMap" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeRuntimes" upperBound="-1"
@@ -150,4 +151,5 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="condEvent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="condExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
 </ecore:EPackage>

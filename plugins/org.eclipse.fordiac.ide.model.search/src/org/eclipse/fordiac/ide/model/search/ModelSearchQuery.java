@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -325,7 +326,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 		Stream<IInterfaceElement> results;
 
-		if(modelQuerySpec.referenceObject() instanceof final STVarDeclaration globalConstant) {
+		if(modelQuerySpec.referenceObject() instanceof STVarDeclaration) {
 			results = searchableElements.filter((final INamedElement modelElement) -> this.checkGlobalConstant(modelElement, monitor));
 		} else {
 			results = searchableElements.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor));
@@ -361,10 +362,13 @@ public class ModelSearchQuery implements ISearchQuery {
 				return searchResult.hasFordiacMatch(EcoreUtil.getURI(modelElement));
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
-				if(modelQuerySpec.referenceObject() != null) {
-				final String packageName = PackageNameHelper.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
-				if(!packageName.equals(config.getTypeEntry().getPackageName())){
-					return false;
+
+				if(modelQuerySpec.referenceObject() != null
+						&& (modelQuerySpec.referenceObject() instanceof STFunction || modelQuerySpec.referenceObject() instanceof FunctionFBType)
+				) {
+					final String packageName = PackageNameHelper.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
+					if(!packageName.equals(config.getTypeEntry().getPackageName())){
+						return false;
 					}
 				}
 				return compareStrings(config.getTypeName())
@@ -393,27 +397,15 @@ public class ModelSearchQuery implements ISearchQuery {
 			return false;
 		}
 
-		final List<String> segments = List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER));
+		// format is PackageName::TypeName::VariableName
+		final List<String> segments = new ArrayList<>(List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER)));
 
-		final String variableName; // GlobalConstantsType::VariableName
-		final String typeName; // PackageName::GlobalConstantsType
-
-		if(segments.size() == 3) { // package name in the string
-			   variableName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments.subList(1, 3));
-			   typeName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments.subList(0, 2));
-		} else {
-			variableName = modelQuerySpec.searchString();
-			typeName = null;
-		}
+		final String variableName = segments.removeLast();
+		final String typeName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments); // might be more than one word
 
 		// if there is no variable match, we do not check anything else
 		if(!varDecl.getValue().getValue().contains(variableName)) {
 			return false;
-		}
-
-		// if it's not part of a package, we don't need to check the imports
-		if(typeName == null) {
-			return true;
 		}
 
 		// if it has the full qualified name, no need to check imports
@@ -422,6 +414,11 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		final List<Import> imports = ImportHelper.getContainerImports(varDecl);
+
+		// if variable is used explicitly, we check if the variable is imported
+		if(!varDecl.getValue().getValue().contains(PackageNameHelper.PACKAGE_NAME_DELIMITER + variableName)) { // if delimiter is before the variable name, then its not imported
+			return imports.stream().anyMatch(imp -> modelQuerySpec.searchString().equals(imp.getImportedNamespace()));
+		}
 
 		// we check if the type is part of the imports
 		return imports.stream().anyMatch(imp -> typeName.equals(imp.getImportedNamespace()));

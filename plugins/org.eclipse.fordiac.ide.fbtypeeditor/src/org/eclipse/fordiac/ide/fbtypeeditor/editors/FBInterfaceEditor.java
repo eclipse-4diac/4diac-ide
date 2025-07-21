@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -56,7 +55,6 @@ import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -230,14 +228,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 				// empty to be sure that grid will not be drawn
 			}
 		};
-	}
-
-	@Override
-	protected void performInitialsationScroll(final AdvancedScrollingGraphicalViewer viewer) {
-		// In order that the interface editor can get the size of the canvas we need to
-		// run the initial scroll asynchronously so that SWT will layout the editor
-		// first.
-		Display.getDefault().asyncExec(() -> super.performInitialsationScroll(viewer));
 	}
 
 	@Override

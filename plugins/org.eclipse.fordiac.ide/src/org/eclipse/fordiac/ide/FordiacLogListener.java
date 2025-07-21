@@ -17,6 +17,9 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,7 +41,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 
 public class FordiacLogListener implements ILogListener {
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}"; //$NON-NLS-1$
 
 	private static final class LogErrorDialog extends ErrorDialog {
 		private LogErrorDialog(final Shell parentShell, final IStatus status) {
@@ -98,16 +101,19 @@ public class FordiacLogListener implements ILogListener {
 		if ((null != Display.getCurrent()) && (null != Display.getCurrent().getActiveShell())) {
 			final ErrorDialog dialog = new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus);
 			if (IDialogConstants.YES_ID == dialog.open()) {
-				openBugReportBrowser();
+				openBugReportBrowser(displayStatus);
 			}
 		}
 	}
 
-	private static void openBugReportBrowser() {
+	private static void openBugReportBrowser(final IStatus displayStatus) {
 		try {
 			final IWorkbench wb = PlatformUI.getWorkbench();
 			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
-			browser.openURL(new URI(FORDIAC_IDE_ISSUE_URL).toURL());
+			final String reportingURI = MessageFormat.format(FORDIAC_IDE_ISSUE_URL,
+					URLEncoder.encode(displayStatus.getMessage(), StandardCharsets.UTF_8), // title
+					URLEncoder.encode(getStackTrace(displayStatus.getException()), StandardCharsets.UTF_8)); // body
+			browser.openURL(new URI(reportingURI).toURL());
 		} catch (PartInitException | MalformedURLException | URISyntaxException e) {
 			FordiacLogHelper.logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
 		}

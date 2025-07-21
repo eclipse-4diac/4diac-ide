@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,8 +39,9 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		try {
-			if (HandlerUtil.getCurrentSelection(event) instanceof final IStructuredSelection selection
-					&& selection.size() == 1) {
+			RefactoringUtil.saveAllAndBuild();
+			final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
+			if (selection.size() == 1) {
 				final Object firstElement = selection.getFirstElement();
 				final URI elementURI = getElementURI(firstElement);
 				final String elementName = getElementName(firstElement);

@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -39,6 +40,13 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	private final TypeEntry newStructTypeEntry;
 	private final String newVisibleChildren;
 	private boolean reloadDatatype = true;
+
+	public ChangeStructCommand(final FBNetworkElement fb, final DataType newStruct) {
+		super(fb);
+		this.newStructTypeEntry = (newStruct != null) ? newStruct.getTypeEntry() : null;
+		this.entry = fb.getTypeEntry();
+		this.newVisibleChildren = null;
+	}
 
 	public ChangeStructCommand(final StructManipulator mux) {
 		this(mux, mux.getDataType(), getOldVisibleChildren(mux));
@@ -83,6 +91,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			copy = LibraryElementFactory.eINSTANCE.createMultiplexer();
 		} else if (srcElement instanceof Demultiplexer) {
 			copy = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+		} else if (srcElement instanceof ConfigurableFB) {
+			copy = LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
 		if (copy != null) {
 			copy.setTypeEntry(entry);
@@ -93,10 +103,17 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	@Override
 	protected void handleConfigurableFB() {
 		if (newStructTypeEntry != null) {
-			getNewMux().setDataType(getDataTypeFromTypeEntry());
+			if (getNewElement() instanceof StructManipulator) {
+				getNewMux().setDataType(getDataTypeFromTypeEntry());
+			} else if (getNewElement() instanceof ConfigurableFB) {
+				getNewMoveFB().setDataType(getDataTypeFromTypeEntry());
+			}
+
 		}
 		if (isDemuxConfiguration()) {
 			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		} else if (getNewElement() instanceof ConfigurableFB) {
+			getNewMoveFB().updateConfiguration();
 		} else {
 			getNewMux().updateConfiguration();
 		}
@@ -107,6 +124,10 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			return demux.isIsConfigured() || newVisibleChildren != null;
 		}
 		return false;
+	}
+
+	public ConfigurableFB getNewMoveFB() {
+		return (ConfigurableFB) newElement;
 	}
 
 	public StructManipulator getNewMux() {

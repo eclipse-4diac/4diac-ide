@@ -68,6 +68,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 
 			addParentEOPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
+			addExceptionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -101,6 +102,22 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 								"_UI_Transaction_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.TRANSACTION__DURATION, true, false, false,
 						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Exceptions feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected void addExceptionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_Transaction_exceptions_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Transaction_exceptions_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_Transaction_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.TRANSACTION__EXCEPTIONS, false, false, false,
+						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -170,6 +187,7 @@ public class TransactionItemProvider extends ItemProviderAdapter implements IEdi
 
 		switch (notification.getFeatureID(Transaction.class)) {
 		case OperationalSemanticsPackage.TRANSACTION__DURATION:
+		case OperationalSemanticsPackage.TRANSACTION__EXCEPTIONS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:

@@ -28,8 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -46,7 +44,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -408,7 +405,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			final LibraryElement retval = importer.getElement();
 			retval.setTypeEntry(this);
 			return retval;
-		} catch (IOException | XMLStreamException | TypeImportException e) {
+		} catch (final Exception e) {
 			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 			return null;
 		}
