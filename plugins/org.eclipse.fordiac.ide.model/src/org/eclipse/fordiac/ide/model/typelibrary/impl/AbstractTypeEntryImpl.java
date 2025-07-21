@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
 import org.eclipse.fordiac.ide.model.value.StringValueConverter;
@@ -91,9 +92,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
 	private static final Pattern TYPE_COMMENT_PATTERN = Pattern.compile("Comment=\\\"([^\"]*)\\\""); //$NON-NLS-1$
 	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
-
-	private static final String TYPE_HASH_ATTRIBUTE_NAME = "TypeHash"; //$NON-NLS-1$
-	private static final String TYPE_HASH_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::TypeHash"; //$NON-NLS-1$
 
 	private IFile file;
 	private String typeName;
@@ -458,11 +456,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private static Attribute getTypeHashAttribute(final LibraryElement type) {
-		final Attribute typeHashAttribute = type.getAttribute(TYPE_HASH_ATTRIBUTE_FULL_NAME);
+		final Attribute typeHashAttribute = type.getAttribute(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_FULL_NAME);
 		if (typeHashAttribute != null) {
 			return typeHashAttribute;
 		}
-		return type.getAttribute(TYPE_HASH_ATTRIBUTE_NAME);
+		return type.getAttribute(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_NAME);
 	}
 
 	private void updateDependencies(final Set<TypeEntry> dependencies) {
