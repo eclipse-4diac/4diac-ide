@@ -41,7 +41,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class UpdateFBInstanceChange extends AbstractCommandChange<FBNetworkElement> {
 
-	private final TypeEntry typeEntry;
+	protected final TypeEntry typeEntry;
 
 	public UpdateFBInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
 		super(MessageFormat.format(Messages.UpdateFBInstances, FBNetworkHelper.getFullHierarchicalName(instance)),
