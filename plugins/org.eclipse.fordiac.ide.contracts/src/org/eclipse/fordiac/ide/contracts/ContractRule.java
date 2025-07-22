@@ -13,7 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.Utils;
+import org.eclipse.fordiac.ide.contractSpec.EventExpr;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.RepetitionOptions;
@@ -42,25 +46,41 @@ class ContractRule {
 	private Type type;
 	private boolean fulfilled;
 	private ContractComponent owner;
-	private String input;
-	private String output;
+	private List<String> inputs;
+	private List<String> outputs;
 	private CInterval interval;
 	// only for REPETITION
 	private CInterval offset;
 	private double jitter;
 	// only for REACTION/AGE
+	private boolean inputIsSequence;
+	private boolean outputIsSequence;
 	private boolean once;
 	private SlidingWindow nOutOfM;
-	// TODO: difference between () and {} in EventExpr, clock, causal relation
+	// TODO: clock, causal relation
+
+	ContractRule(final String event, final CInterval interval) {
+		this.type = Type.SINGLE_EVENT;
+		this.interval = interval;
+		this.outputs = List.of(event);
+	}
 
 	ContractRule(final EventSpec event, final Interval interval) {
-		setCommon(Type.SINGLE_EVENT, interval);
-		setEvent(event);
+		this(Type.SINGLE_EVENT, interval);
+		setEventSingle(event);
+	}
+
+	ContractRule(final String event, final CInterval interval, final CInterval offset, final double jitter) {
+		this.type = Type.REPETITION;
+		this.interval = interval;
+		this.outputs = List.of(event);
+		this.offset = offset;
+		this.jitter = jitter;
 	}
 
 	ContractRule(final EventSpec event, final Interval interval, final RepetitionOptions options) {
-		setCommon(Type.REPETITION, interval);
-		setEvent(event);
+		this(Type.REPETITION, interval);
+		setEventSingle(event);
 
 		jitter = 0;
 		if (options != null) {
@@ -76,55 +96,81 @@ class ContractRule {
 		}
 	}
 
-	ContractRule(final Type type, final EventSpec input, final EventSpec output, final Interval interval) {
-		setCommon(type, interval);
-		this.input = createEvent(input);
-		this.output = createEvent(output);
+	ContractRule(final Type type, final EventExpr inputs, final EventExpr outputs, final Interval interval) {
+		this(type, interval);
+		setEventExpr(inputs, true);
+		this.inputIsSequence = inputs.isSequence();
+		setEventExpr(outputs, false);
+		this.outputIsSequence = outputs.isSequence();
 	}
 
-	private void setCommon(final Type type, final Interval interval) {
+	ContractRule(final Type type, final EventSpec input, final EventSpec output, final Interval interval) {
+		this(type, interval);
+		this.inputs = List.of(input.getPort().getName());
+		this.outputs = List.of(output.getPort().getName());
+	}
+
+	private ContractRule(final Type type, final Interval interval) {
 		this.type = type;
 		this.interval = new CInterval(interval);
 	}
 
-	private void setEvent(final EventSpec event) {
+	private void setEventSingle(final EventSpec event) {
 		if (event.getPort().getIsInput() != 0) {
-			this.input = createEvent(event);
+			this.inputs = List.of(getEventName(event));
 		} else {
-			this.output = createEvent(event);
+			this.outputs = List.of(getEventName(event));
 		}
 	}
 
-	private static String createEvent(final EventSpec event) {
+	private void setEventExpr(final EventExpr expr, final boolean isInput) {
+		if (expr.getEvent() != null) {
+			setEventSingle(expr.getEvent());
+			return;
+		}
+
+		final List<String> names = new ArrayList<>();
+		for (final EventSpec eSpec : expr.getEvents().getEvents()) {
+			names.add(eSpec.getPort().getName());
+		}
+		if (isInput) {
+			inputs = names;
+		} else {
+			outputs = names;
+		}
+	}
+
+	private static String getEventName(final EventSpec event) {
 		return event.getPort().getName();
 	}
 
 	boolean isAssumption() {
-		return (type == Type.SINGLE_EVENT || type == Type.REPETITION) && output == null;
+		return (type == Type.SINGLE_EVENT || type == Type.REPETITION) && outputs == null;
 	}
 
-	String getPortName() {
-		return isAssumption() ? getInput() : getOutput();
+	private List<String> getPortNames() {
+		return isAssumption() ? getInputs() : getOutputs();
 	}
 
-	String getPortNameQualified() {
-		return owner.getName() + "." + getPortName(); //$NON-NLS-1$
+	String getSinglePort() {
+		return isAssumption() ? getInputs().getFirst() : getOutputs().getFirst();
 	}
 
 	@Override
 	public String toString() {
 		return switch (type) {
-		case SINGLE_EVENT -> ContractUtils.createSingleEvent(getPortNameQualified(), interval.toString());
+		case SINGLE_EVENT -> ContractUtils.createSingleEvent(getPortNames(), interval.toString());
 		case REPETITION -> {
 			final String o = offset.getLowerBound() == 0 && offset.getUpperBound() == 0 ? null : offset.toString();
 			final String j = jitter == 0 ? null : Utils.nsToString(jitter);
-			yield ContractUtils.createRepetition(getPortNameQualified(), interval.toString(), o, j);
+			yield ContractUtils.createRepetition(getPortNames(), interval.toString(), o, j);
 		}
-		case REACTION ->
-			ContractUtils.createReaction(input, output, interval.toString(), once, nOutOfM.n(), nOutOfM.outOf());
-		case AGE -> ContractUtils.createAge(input, output, interval.toString(), once, nOutOfM.n(), nOutOfM.outOf());
-		case CAUSAL_REACTION -> ContractUtils.createCausalReaction(input, output, interval.toString());
-		case CAUSAL_AGE -> ContractUtils.createCausalAge(input, output, interval.toString());
+		case REACTION -> ContractUtils.createReaction(inputs, outputs, inputIsSequence, outputIsSequence,
+				interval.toString(), once, nOutOfM.n(), nOutOfM.outOf());
+		case AGE -> ContractUtils.createAge(inputs, outputs, inputIsSequence, outputIsSequence, interval.toString(),
+				once, nOutOfM.n(), nOutOfM.outOf());
+		case CAUSAL_REACTION -> ContractUtils.createCausalReaction(inputs.get(0), outputs.get(0), interval.toString());
+		case CAUSAL_AGE -> ContractUtils.createCausalAge(inputs.get(0), outputs.get(0), interval.toString());
 		};
 	}
 
@@ -153,20 +199,20 @@ class ContractRule {
 		this.owner = owner;
 	}
 
-	String getInput() {
-		return input;
+	List<String> getInputs() {
+		return inputs;
 	}
 
-	void setInput(final String input) {
-		this.input = input;
+	void setInputs(final List<String> inputs) {
+		this.inputs = inputs;
 	}
 
-	String getOutput() {
-		return output;
+	List<String> getOutputs() {
+		return outputs;
 	}
 
-	void setOutput(final String output) {
-		this.output = output;
+	void setOutputs(final List<String> outputs) {
+		this.outputs = outputs;
 	}
 
 	CInterval getInterval() {
@@ -191,6 +237,14 @@ class ContractRule {
 
 	void setOffset(final CInterval offset) {
 		this.offset = offset;
+	}
+
+	boolean inputIsSequence() {
+		return inputIsSequence;
+	}
+
+	boolean outputIsSequence() {
+		return outputIsSequence;
 	}
 
 	boolean isOnce() {

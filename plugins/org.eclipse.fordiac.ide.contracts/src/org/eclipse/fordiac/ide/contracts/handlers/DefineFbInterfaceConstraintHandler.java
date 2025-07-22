@@ -48,13 +48,17 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		// get input and output pins from event
 		final List<Event> eventPins = getSelectedPins(event);
 		final List<Event> iPins = new ArrayList<>();
+		final List<String> iPinNames = new ArrayList<>();
 		final List<Event> oPins = new ArrayList<>();
+		final List<String> oPinNames = new ArrayList<>();
 
 		for (final Event pin : eventPins) {
 			if (pin.isIsInput()) {
 				iPins.add(pin);
+				iPinNames.add(pin.getName());
 			} else {
 				oPins.add(pin);
+				oPinNames.add(pin.getName());
 			}
 		}
 
@@ -70,36 +74,37 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		final List<String> names = new ArrayList<>();
 		final List<String> templates = new ArrayList<>();
 		final List<Event> pins = iPins.isEmpty() ? oPins : iPins;
+		final List<String> pinNames = iPinNames.isEmpty() ? oPinNames : iPinNames;
 
 		if (iPins.size() == 1 && oPins.size() == 1) {
 			names.add(Messages.ContractRuleCausalReaction);
-			templates.add(ContractUtils.createCausalReaction(iPins.get(0), oPins.get(0), DEFAULT_TIME));
+			templates.add(ContractUtils.createCausalReaction(iPinNames.get(0), oPinNames.get(0), DEFAULT_TIME));
 
 			names.add(Messages.ContractRuleCausalAge);
-			templates.add(ContractUtils.createCausalAge(iPins.get(0), oPins.get(0), DEFAULT_TIME));
+			templates.add(ContractUtils.createCausalAge(iPinNames.get(0), oPinNames.get(0), DEFAULT_TIME));
 		} else if (iPins.isEmpty() || oPins.isEmpty()) {
 			names.add(Messages.ContractRuleSingleEvent);
-			templates.add(ContractUtils.createSingleEvent(pins, DEFAULT_TIME));
+			templates.add(ContractUtils.createSingleEvent(pinNames, DEFAULT_TIME));
 
 			names.add(Messages.ContractRuleRepetition);
-			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, null, null));
+			templates.add(ContractUtils.createRepetition(pinNames, DEFAULT_TIME, null, null));
 			names.add(Messages.ContractRuleRepetition);
-			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_TIME, null));
+			templates.add(ContractUtils.createRepetition(pinNames, DEFAULT_TIME, DEFAULT_TIME, null));
 			names.add(Messages.ContractRuleRepetition);
-			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, null, DEFAULT_TIME));
+			templates.add(ContractUtils.createRepetition(pinNames, DEFAULT_TIME, null, DEFAULT_TIME));
 			names.add(Messages.ContractRuleRepetition);
-			templates.add(ContractUtils.createRepetition(pins, DEFAULT_TIME, DEFAULT_TIME, DEFAULT_TIME));
+			templates.add(ContractUtils.createRepetition(pinNames, DEFAULT_TIME, DEFAULT_TIME, DEFAULT_TIME));
 		}
 		if (!iPins.isEmpty() && !oPins.isEmpty()) {
 			names.add(Messages.ContractRuleReaction);
-			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME, false, 0, 0));
+			templates.add(ContractUtils.createReaction(iPinNames, oPinNames, false, false, DEFAULT_TIME, false, 0, 0));
 			names.add(Messages.ContractRuleReaction);
-			templates.add(ContractUtils.createReaction(iPins, oPins, DEFAULT_TIME, true, 0, 0));
+			templates.add(ContractUtils.createReaction(iPinNames, oPinNames, true, true, DEFAULT_TIME, false, 0, 0));
 
 			names.add(Messages.ContractRuleAge);
-			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME, false, 0, 0));
+			templates.add(ContractUtils.createAge(iPinNames, oPinNames, false, false, DEFAULT_TIME, false, 0, 0));
 			names.add(Messages.ContractRuleAge);
-			templates.add(ContractUtils.createAge(iPins, oPins, DEFAULT_TIME, true, 0, 0));
+			templates.add(ContractUtils.createAge(iPinNames, oPinNames, true, true, DEFAULT_TIME, false, 0, 0));
 		}
 		// add an empty suggestion in case that the others don't fit well
 		names.add(Messages.ContractRuleEmpty);

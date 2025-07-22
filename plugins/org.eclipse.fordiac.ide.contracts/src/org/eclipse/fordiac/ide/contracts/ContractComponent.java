@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.xtext.diagnostics.Severity;
-
 public class ContractComponent {
+
 	private final List<CConnection> inputs;
 	private final Map<String, ContractRule> assumptions;
 	private final Map<String, ContractRule> guarantees;
+	private final List<ContractRule> reactions;
 	private final String name;
 
 	public ContractComponent(final String name) {
@@ -31,6 +31,7 @@ public class ContractComponent {
 		assumptions = new HashMap<>();
 		guarantees = new HashMap<>();
 		inputs = new ArrayList<>();
+		reactions = new ArrayList<>();
 	}
 
 	public List<CConnection> getInputs() {
@@ -54,26 +55,36 @@ public class ContractComponent {
 		return guarantees;
 	}
 
+	public List<ContractRule> getReactions() {
+		return reactions;
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	public ContractIssue addRule(final ContractRule rule) {
+	public void addRule(final ContractRule rule, final ContractSystem system) {
 		rule.setOwner(this);
-		if (rule.isAssumption()) {
-			if (assumptions.containsKey(rule.getInput())) {
-				return new ContractIssue(Messages.ContractConflictingAssumptionsError
-						.formatted(rule.getOwner().getName(), rule.getInput()),
-						ContractIssue.Code.CONFLICTING_ASSUMPTIONS, Severity.ERROR);
-			}
-			assumptions.put(rule.getInput(), rule);
-		} else if (guarantees.containsKey(rule.getOutput())) {
-			return new ContractIssue(
-					Messages.ContractConflictingGuaranteesError.formatted(rule.getOwner().getName(), rule.getOutput()),
-					ContractIssue.Code.CONFLICTING_GUARANTEES, Severity.ERROR);
+		if (rule.getType() == ContractRule.Type.SINGLE_EVENT || rule.getType() == ContractRule.Type.REPETITION) {
+			addSingleOrRepetition(rule, system);
 		} else {
-			guarantees.put(rule.getOutput(), rule);
+			reactions.add(rule);
 		}
-		return null;
+	}
+
+	private void addSingleOrRepetition(final ContractRule rule, final ContractSystem system) {
+		if (rule.isAssumption()) {
+			final String input = rule.getInputs().getFirst();
+			if (assumptions.put(input, rule) != null) {
+				system.error(Messages.ContractConflictingAssumptionsError.formatted(rule.getOwner().getName(), input),
+						ContractIssue.Code.CONFLICTING_ASSUMPTIONS);
+			}
+		} else {
+			final String output = rule.getOutputs().getFirst();
+			if (guarantees.put(output, rule) != null) {
+				system.error(Messages.ContractConflictingGuaranteesError.formatted(rule.getOwner().getName(), output),
+						ContractIssue.Code.CONFLICTING_GUARANTEES);
+			}
+		}
 	}
 }

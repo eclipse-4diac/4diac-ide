@@ -45,10 +45,11 @@ import org.eclipse.swt.widgets.Shell;
 public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	private static final Color AXIS_COLOR = new Color(0, 0, 0);
+	private static final Color AXIS_LIGHT_COLOR = new Color(200, 200, 200);
 	private static final Color INTERVAL_COLOR = new Color(255, 149, 14);
 	private static final Color EVENT_COLOR = new Color(1, 34, 105);
-	private static final Color ISSUE_COLOR = new Color(255, 0, 0);
-	private static final Color FULFILL_COLOR = new Color(26, 196, 34);
+	private static final Color ISSUE_COLOR = new Color(207, 8, 8);
+	private static final Color FULFILL_COLOR = new Color(27, 176, 11);
 	private static final int LINE_HEIGHT = 25;
 	private static final int LINE_PAD = 5;
 	private static final int DIAGRAM_PAD = 10;
@@ -57,10 +58,13 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	private final DynamicCheckResult result;
 	private final double diagramMax;
+	private final int[] triangleVertBuf;
 	private StyledText[] ruleTexts;
+	private Label[] ruleTextLabels;
 	private Button rulesUpBtn;
 	private Button rulesDownBtn;
 	private Label displayRangeLbl;
+	private Label rulePageLabel;
 	private Canvas canvas;
 	private Rectangle diagramArea;
 
@@ -75,18 +79,18 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 	public DynamicCheckResultDialog(final DynamicCheckResult result, final boolean networkCheck, final Shell shell) {
 		super(result.system(), networkCheck, shell);
 		this.result = result;
+		triangleVertBuf = new int[6];
 
 		double upperBound = 0;
 		double lastEvent = 0;
-		if (!result.eventOccurrences().isEmpty()) {
-			// set default range to try showing the 10 first events
-			final int idx = Math.min(10, result.eventOccurrences().size() - 1);
-			upperBound = result.eventOccurrences().get(idx).timestampNs();
-			lastEvent = result.eventOccurrences().getLast().timestampNs();
-		}
 		for (final RuleData ruleData : result.rules()) {
-			if (!ruleData.markers().isEmpty() && ruleData.markers().getLast().timestampNs() > lastEvent) {
-				lastEvent = ruleData.markers().getLast().timestampNs();
+			if (!ruleData.markers().isEmpty()) {
+				if (ruleData.markers().getLast().timestampNs() > lastEvent) {
+					lastEvent = ruleData.markers().getLast().timestampNs();
+				}
+				// try to set default range to show first ~5 events
+				final int idx = Math.min(5, ruleData.markers().size() - 1);
+				upperBound = Math.max(upperBound, ruleData.markers().get(idx).timestampNs());
 			}
 		}
 
@@ -108,7 +112,6 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 	protected Control createCustomArea(final Composite parent) {
 		super.createCustomArea(parent);
 
-
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout gLayout = new GridLayout(2, false);
 		gLayout.horizontalSpacing = 0;
@@ -117,8 +120,9 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 		createRuleList(composite);
 		createDiagram(composite);
-		final Label lbl = new Label(composite, SWT.NONE); // empty label to use cell
-		lbl.setText(""); //$NON-NLS-1$
+		rulePageLabel = new Label(composite, SWT.NONE);
+		rulePageLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+		updateRulePageLabel();
 		createTimeLineNav(composite);
 
 		return dialogArea;
@@ -126,46 +130,73 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	private void createRuleList(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		final GridLayout gLayout = new GridLayout(1, false);
+		final GridLayout gLayout = new GridLayout(2, false);
 		gLayout.verticalSpacing = 0;
+		gLayout.horizontalSpacing = 0;
 		composite.setLayout(gLayout);
 		composite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		rulesUpBtn = new Button(composite, SWT.NONE);
 		rulesUpBtn.setText("^"); //$NON-NLS-1$
 		rulesUpBtn.setEnabled(false);
-		rulesUpBtn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		GridData gData = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gData.horizontalSpan = 2;
+		rulesUpBtn.setLayoutData(gData);
 		rulesUpBtn.addSelectionListener(listener(e -> navigateRules(-1)));
 
 		ruleTexts = new StyledText[nRules()];
+		ruleTextLabels = new Label[nRules()];
 		for (int i = 0; i < ruleTexts.length; i++) {
+			final Label lbl = new Label(composite, SWT.SINGLE);
+			lbl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			lbl.setForeground(new Color(128, 128, 128));
+			ruleTextLabels[i] = lbl;
+
 			final StyledText txt = new StyledText(composite, SWT.SINGLE);
-			if (i % 2 == 0) {
-				txt.setBackground(new Color(255, 255, 255));
-			}
 			txt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-			txt.setAlignment(SWT.RIGHT);
 			txt.setMargins(5, 5, 5, 5);
 			txt.setEnabled(false);
 			ruleTexts[i] = txt;
+
+			if (i % 2 == 0) {
+				lbl.setBackground(new Color(255, 255, 255));
+				txt.setBackground(new Color(255, 255, 255));
+			}
 		}
 		fillRuleList();
 
 		rulesDownBtn = new Button(composite, SWT.NONE);
 		rulesDownBtn.setText("v"); //$NON-NLS-1$
 		rulesDownBtn.setEnabled(result.rules().size() > MAX_RULES);
-		rulesDownBtn.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		gData = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gData.horizontalSpan = 2;
+		rulesDownBtn.setLayoutData(gData);
 		rulesDownBtn.addSelectionListener(listener(e -> navigateRules(+1)));
 	}
 
 	private void fillRuleList() {
+		String lastName = "."; //$NON-NLS-1$
 		for (int i = 0; i < nRules(); i++) {
 			final RuleData ruleData = result.rules().get(i + firstRuleIdx);
 			final ContractRule rule = ruleData.rule();
+
+			final String name = rule.getOwner().getName();
+			if (lastName.equals(name)) {
+				ruleTextLabels[i].setText("\""); //$NON-NLS-1$
+			} else {
+				ruleTextLabels[i].setText(name);
+				lastName = name;
+			}
+
 			final StyledText txt = ruleTexts[i];
 			final String ruleString = rule.toString();
 			txt.setText(ruleString);
 			txt.setStyleRanges(ContractScanner.getStyleRanges(ruleString));
+		}
+		updateRulePageLabel();
+
+		if (ruleTexts.length > 0) {
+			ruleTexts[0].getParent().layout();
 		}
 	}
 
@@ -204,9 +235,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 				dragging = false;
 			}
 		});
-		canvas.addMouseWheelListener(e -> {
-			navigateDiagramStep(e.count, true);
-		});
+		canvas.addMouseWheelListener(e -> navigateDiagramStep(e.count, true));
 	}
 
 	private void createTimeLineNav(final Composite parent) {
@@ -240,7 +269,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		diagramArea = new Rectangle(canvasArea.x + DIAGRAM_PAD, canvasArea.y + DIAGRAM_PAD,
 				canvasArea.width - 2 * DIAGRAM_PAD, canvasArea.height - 2 * DIAGRAM_PAD);
 
-		// draw background
+		// === draw background
 		e.gc.setBackground(new Color(255, 255, 255));
 		int linePos = diagramArea.y + LINE_HEIGHT - LINE_PAD;
 		final int nFilled = nRules() % 2 == 0 ? nRules() / 2 : nRules() / 2 + 1;
@@ -249,10 +278,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			linePos += LINE_HEIGHT * 2;
 		}
 
-		drawRecordedEvents(e.gc, canvasArea.width);
-		drawRuleData(e.gc, canvasArea.width);
-
-		// draw time line axis
+		// === draw time line axis
 		e.gc.setForeground(AXIS_COLOR);
 		e.gc.drawLine(0, diagramArea.height, canvasArea.width, diagramArea.height);
 
@@ -276,108 +302,103 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		final long lowest = Math.round(displayRange.getLowerBound() / stepSizeNs) * stepSizeNs;
 		for (int i = 0; i < nTicks; i++) {
 			final int xPos = ns2Pixel(lowest + i * stepSizeNs);
+			e.gc.setForeground(AXIS_LIGHT_COLOR);
+			e.gc.drawLine(xPos, diagramArea.height, xPos, DIAGRAM_PAD);
+			e.gc.setForeground(AXIS_COLOR);
 			e.gc.drawLine(xPos, diagramArea.height, xPos, diagramArea.height - 5);
 
 			final String markerText = String.valueOf((lowest + i * stepSizeNs) / unitScale);
 			final Point extent = e.gc.textExtent(markerText);
 			e.gc.drawText(markerText, xPos - extent.x / 2, diagramArea.height, true);
 		}
-	}
 
-	private void drawRecordedEvents(final GC gc, final int maxWidth) {
-		gc.setForeground(EVENT_COLOR);
-		gc.setBackground(EVENT_COLOR);
-		final int[] vertBuf = new int[6];
+		// === draw rule data
+		linePos = diagramArea.y + LINE_HEIGHT - LINE_PAD;
+		for (int i = 0; i < nRules(); i++) {
+			final DynamicCheckResult.RuleData ruleData = result.rules().get(i + firstRuleIdx);
 
-		for (int i = firstDrawIndex(result.eventOccurrences()); i < result.eventOccurrences().size(); i++) {
-			final EventOccurrence eo = result.eventOccurrences().get(i);
-			final int xPos = ns2Pixel(eo.timestampNs());
-			if (xPos > maxWidth) {
-				break; // don't draw out of bounds events (list is sorted)
-			}
-			gc.drawLine(xPos, diagramArea.y, xPos, diagramArea.height);
-			final Point extent = gc.textExtent(eo.eventName());
-			gc.drawText(eo.eventName(), xPos - extent.x / 2, 0, true);
-
-			// draw the arrow head
-			vertBuf[0] = xPos;
-			vertBuf[1] = diagramArea.y;
-			vertBuf[2] = xPos - 5;
-			vertBuf[3] = diagramArea.y + 15;
-			vertBuf[4] = xPos + 5;
-			vertBuf[5] = diagramArea.y + 15;
-			gc.fillPolygon(vertBuf);
+			drawRuleIntervals(e.gc, ruleData, linePos, canvasArea.width);
+			drawRuleMarkers(e.gc, ruleData, linePos, canvasArea.width);
+			linePos += LINE_HEIGHT;
 		}
 	}
 
-	private void drawRuleData(final GC gc, final int maxWidth) {
-		int linePos = diagramArea.y + LINE_HEIGHT - LINE_PAD;
-		final int[] vertBuf = new int[6];
+	private void drawRuleIntervals(final GC gc, final RuleData ruleData, final int linePos, final int maxWidth) {
+		final int middlePos = linePos + LINE_HEIGHT / 2;
+		final double jitter = ruleData.rule().getJitter();
+		for (int j = firstDrawIndexInterval(ruleData.intervals(), jitter); j < ruleData.intervals().size(); j++) {
+			final CInterval interval = ruleData.intervals().get(j);
 
-		for (int i = 0; i < nRules(); i++) {
 			// draw intervals
-			final int middlePos = linePos + LINE_HEIGHT / 2;
-			final DynamicCheckResult.RuleData ruleData = result.rules().get(i + firstRuleIdx);
-			for (int j = firstDrawIndexInterval(ruleData.intervals()); j < ruleData.intervals().size(); j++) {
-				final CInterval interval = ruleData.intervals().get(j);
+			gc.setForeground(INTERVAL_COLOR);
+			gc.setBackground(INTERVAL_COLOR);
+			gc.setAlpha(128);
+			int start = drawInterval(gc, interval, linePos, true);
 
-				// draw intervals
-				gc.setForeground(INTERVAL_COLOR);
-				gc.setBackground(INTERVAL_COLOR);
-				gc.setAlpha(128);
-				int end = drawInterval(gc, interval, linePos, true);
-
-				final double jitter = ruleData.rule().getJitter();
-				if (jitter > 0) {
-					final CInterval intervalJitter = interval.addJitter(jitter);
-					end = drawInterval(gc, intervalJitter, linePos, false);
-				}
-
-				// draw arrows to intervals
-				gc.setForeground(EVENT_COLOR);
-				gc.setBackground(EVENT_COLOR);
-				gc.setAlpha(255);
-				if (ruleData.rule().getType() == ContractRule.Type.REPETITION && j != 0) {
-					final int start = ns2Pixel(
-							interval.getLowerBound() - ruleData.rule().getInterval().getLowerBound());
-					end = ns2Pixel(interval.getLowerBound());
-					gc.drawLine(start, middlePos, end, middlePos);
-
-					// draw the arrow head
-					vertBuf[0] = end - 12;
-					vertBuf[1] = middlePos - 4;
-					vertBuf[2] = end;
-					vertBuf[3] = middlePos;
-					vertBuf[4] = end - 12;
-					vertBuf[5] = middlePos + 4;
-					gc.fillPolygon(vertBuf);
-				}
-
-				if (end > maxWidth) {
-					break; // don't draw next interval (would be out of bounds)
-				}
+			if (jitter > 0) {
+				final CInterval intervalJitter = interval.addJitter(jitter);
+				start = drawInterval(gc, intervalJitter, linePos, false);
 			}
 
-			// draw markers
-			gc.setForeground(ISSUE_COLOR);
-			gc.setBackground(FULFILL_COLOR);
-			final int markerYPos = linePos + LINE_HEIGHT / 2;
-			for (int j = firstDrawIndex(ruleData.markers()); j < ruleData.markers().size(); j++) {
-				final EventOccurrence eo = ruleData.markers().get(j);
-				final int xPos = ns2Pixel(eo.timestampNs());
-				if (xPos > maxWidth) {
-					break; // don't draw out of bounds markers (list is sorted)
+			// draw arrows to intervals
+			gc.setForeground(EVENT_COLOR);
+			gc.setBackground(EVENT_COLOR);
+			gc.setAlpha(255);
+
+			switch (ruleData.rule().getType()) {
+			case REPETITION:
+				if (j == 0) {
+					break; // don't draw arrow to first interval (offset)
 				}
-				final int p = MARKER_SIZE / 2;
-				if (eo.type() == EventOccurrence.Type.FULFILL_MARKER) {
-					gc.fillOval(xPos - p, markerYPos - p, MARKER_SIZE, MARKER_SIZE);
-				} else {
-					gc.drawLine(xPos - p, markerYPos + p, xPos + p, markerYPos - p);
-					gc.drawLine(xPos + p, markerYPos + p, xPos - p, markerYPos - p);
-				}
+				//$FALL-THROUGH$ to actual arrow drawing (same for reaction/repetition)
+			case REACTION, CAUSAL_REACTION:
+				drawArrowLR(gc, interval.getLowerBound() - ruleData.rule().getInterval().getLowerBound(),
+						interval.getLowerBound(), middlePos);
+				break;
+			case AGE, CAUSAL_AGE:
+				// TODO: backwards arrow for ages
+				break;
+			default:
+				break; // no arrows to draw for otherwise
+			}
+			if (start > maxWidth) {
+				break; // don't draw next interval (would be out of bounds)
+			}
+		}
+	}
+
+	private void drawRuleMarkers(final GC gc, final RuleData ruleData, final int linePos, final int maxWidth) {
+		final int markerYPos = linePos + LINE_HEIGHT / 2;
+		final int p = MARKER_SIZE / 2;
+		for (int j = firstDrawIndex(ruleData.markers()); j < ruleData.markers().size(); j++) {
+			final EventOccurrence eo = ruleData.markers().get(j);
+			final int xPos = ns2Pixel(eo.timestampNs());
+			if (xPos > maxWidth) {
+				break; // don't draw out of bounds markers (list is sorted)
 			}
 
-			linePos += LINE_HEIGHT;
+			switch (eo.type()) {
+			case RECORDED -> {
+				gc.setForeground(AXIS_COLOR);
+				gc.setBackground(switch (eo.state()) {
+				case NOT_SET -> EVENT_COLOR;
+				case FULFILLING -> FULFILL_COLOR;
+				case ISSUE -> ISSUE_COLOR;
+				});
+				drawArrowHeadUD(gc, xPos, linePos + LINE_HEIGHT, MARKER_SIZE, -LINE_HEIGHT / 2 - 2);
+				final String txt = eo.getShortName();
+				final Point extent = gc.textExtent(txt);
+				gc.drawText(txt, xPos - extent.x / 2, linePos, true);
+			}
+			case MISSED_MARKER -> {
+				gc.setForeground(ISSUE_COLOR);
+				gc.drawLine(xPos - p, markerYPos + p, xPos + p, markerYPos - p);
+				gc.drawLine(xPos + p, markerYPos + p, xPos - p, markerYPos - p);
+			}
+			default -> {
+				// nothing to draw for other types
+			}
+			}
 		}
 	}
 
@@ -389,7 +410,39 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		if (fill) {
 			gc.fillRectangle(start, yPos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
 		}
-		return end;
+		return start;
+	}
+
+	private void drawArrowLR(final GC gc, final double start, final double end, final int y) {
+		final int startP = ns2Pixel(start);
+		final int endP = ns2Pixel(end);
+		gc.drawLine(startP, y, endP, y);
+		final int markerAndHalf = MARKER_SIZE + MARKER_SIZE / 2;
+		if (start < end) {
+			drawArrowHeadLR(gc, endP - markerAndHalf, y, MARKER_SIZE, markerAndHalf);
+		} else {
+			drawArrowHeadLR(gc, endP - markerAndHalf, y, MARKER_SIZE, -markerAndHalf);
+		}
+	}
+
+	private void drawArrowHeadUD(final GC gc, final int x, final int y, final int baseWidth, final int height) {
+		triangleVertBuf[0] = x - baseWidth / 2;
+		triangleVertBuf[1] = y;
+		triangleVertBuf[2] = x;
+		triangleVertBuf[3] = y + height;
+		triangleVertBuf[4] = x + baseWidth / 2;
+		triangleVertBuf[5] = y;
+		gc.fillPolygon(triangleVertBuf);
+	}
+
+	private void drawArrowHeadLR(final GC gc, final int x, final int y, final int baseWidth, final int length) {
+		triangleVertBuf[0] = x;
+		triangleVertBuf[1] = y + baseWidth / 2;
+		triangleVertBuf[2] = x + length;
+		triangleVertBuf[3] = y;
+		triangleVertBuf[4] = x;
+		triangleVertBuf[5] = y - baseWidth / 2;
+		gc.fillPolygon(triangleVertBuf);
 	}
 
 	private int firstDrawIndex(final List<EventOccurrence> list) {
@@ -404,8 +457,8 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		return firstIndex;
 	}
 
-	private int firstDrawIndexInterval(final List<CInterval> list) {
-		final double actualStart = pixel2Ns(-DIAGRAM_PAD);
+	private int firstDrawIndexInterval(final List<CInterval> list, final double jitter) {
+		final double actualStart = pixel2Ns(-DIAGRAM_PAD) - jitter;
 		final CInterval key = new CInterval('[', actualStart, actualStart, ']');
 
 		int firstIndex = Collections.binarySearch(list, key,
@@ -473,6 +526,14 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		final double lv = displayRange.getLowerBound() / unit;
 		final double uv = displayRange.getUpperBound() / unit;
 		displayRangeLbl.setText("[%.2f, %.2f]%s".formatted(lv, uv, displayUnit)); //$NON-NLS-1$
+	}
+
+	@SuppressWarnings("boxing")
+	private void updateRulePageLabel() {
+		if (rulePageLabel != null) {
+			rulePageLabel.setText("%d-%d / %d".formatted(firstRuleIdx + 1, //$NON-NLS-1$
+					firstRuleIdx + nRules(), result.rules().size()));
+		}
 	}
 
 	private int nRules() {

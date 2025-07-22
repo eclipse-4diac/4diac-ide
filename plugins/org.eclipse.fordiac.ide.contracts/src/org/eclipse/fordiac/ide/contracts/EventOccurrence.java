@@ -13,16 +13,60 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
-public record EventOccurrence(String eventName, double timestampNs, Type type) implements Comparable<EventOccurrence> {
+import java.util.Objects;
+
+public class EventOccurrence implements Comparable<EventOccurrence> {
+
 	public enum Type {
 		RECORDED, // an actual recored event occurrence
 		MISSED_MARKER, // a special occurrence marker used to check for missing events
-		ISSUE_MARKER, // a special occurrence used to mark issues
-		FULFILL_MARKER, // a special occurrence used to mark correct event occurrences
 	}
 
+	public enum State {
+		NOT_SET, FULFILLING, ISSUE
+	}
+
+	private final String eventName;
+	private final double timestampNs;
+	private final Type type;
+	private State state;
+	private final int ruleIndex;
+
 	public EventOccurrence(final String eventName, final double timestampNs) {
-		this(eventName, timestampNs, Type.RECORDED);
+		this(eventName, timestampNs, 0);
+	}
+
+	public EventOccurrence(final String eventName, final double timestampNs, final int ruleIndex) {
+		this(eventName, timestampNs, Type.RECORDED, State.NOT_SET, ruleIndex);
+	}
+
+	public EventOccurrence(final String eventName, final double timestampNs, final Type type, final State state,
+			final int ruleIndex) {
+		this.eventName = eventName;
+		this.timestampNs = timestampNs;
+		this.type = type;
+		this.state = state;
+		this.ruleIndex = ruleIndex;
+	}
+
+	public String getShortName() {
+		final int idx = eventName.lastIndexOf('.');
+		if (idx < 0 || idx + 1 > eventName.length()) {
+			return ""; //$NON-NLS-1$
+		}
+		return eventName.substring(idx + 1);
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		return obj instanceof final EventOccurrence other && eventName.equals(other.eventName)
+				&& timestampNs == other.timestampNs && type == other.type;
+	}
+
+	@SuppressWarnings("boxing")
+	@Override
+	public int hashCode() {
+		return Objects.hash(eventName, timestampNs, type);
 	}
 
 	@Override
@@ -34,5 +78,30 @@ public record EventOccurrence(String eventName, double timestampNs, Type type) i
 			return type.compareTo(other.type);
 		}
 		return comp;
+	}
+
+	// === getters/setters
+	public String eventName() {
+		return eventName;
+	}
+
+	public double timestampNs() {
+		return timestampNs;
+	}
+
+	public Type type() {
+		return type;
+	}
+
+	public State state() {
+		return state;
+	}
+
+	public void setState(final State state) {
+		this.state = state;
+	}
+
+	public int ruleIndex() {
+		return ruleIndex;
 	}
 }

@@ -150,7 +150,7 @@ class StaticContractCheckTest {
 		final String contract = "whenever EI occurs then EO occurs within 10ms";
 		sys.addComponent(comp1, contract, List.of("EI"), List.of("EO"));
 		sys.performStaticCheck();
-		assertTrue(sys.getIssues().isEmpty());
+		assertOneIssue(ContractIssue.Code.UNRESOLVED_REACTION, sys);
 	}
 
 	// === test direct inner connections
