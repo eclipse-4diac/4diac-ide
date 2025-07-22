@@ -126,6 +126,9 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
+			if (eObject instanceof final FBNetworkElement elem) {
+				change.add(new UpdateFBInstanceChange(elem, dtEntry));
+			}
 		}
 
 		return change;
