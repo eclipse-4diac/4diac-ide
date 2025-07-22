@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.test.model.contracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -31,28 +30,28 @@ class DynamicContractCheckTest {
 	@Test
 	void singleEventCorrectTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
-		sys.performDynamicCheck(List.of(createEI(5)));
-		assertTrue(sys.getIssues().isEmpty());
+		sys.performDynamicCheck(List.of(eo("EI", 5)));
+		assertIssues(sys);
 	}
 
 	@Test
 	void singleEventTooEarlyTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
-		sys.performDynamicCheck(List.of(createEI(2)));
+		sys.performDynamicCheck(List.of(eo("EI", 2)));
 		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_TOO_EARLY);
 	}
 
 	@Test
 	void singleEventTooLateTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
-		sys.performDynamicCheck(List.of(createEI(12)));
+		sys.performDynamicCheck(List.of(eo("EI", 12)));
 		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_MISSED, ContractIssue.Code.SINGLE_EVENT_TOO_LATE);
 	}
 
 	@Test
 	void singleEventTooOftenTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs within [5, 10]ns");
-		sys.performDynamicCheck(List.of(createEI(5), createEI(8)));
+		sys.performDynamicCheck(List.of(eo("EI", 5), eo("EI", 8)));
 		assertIssues(sys, ContractIssue.Code.SINGLE_EVENT_MULTIPLE);
 	}
 
@@ -69,21 +68,21 @@ class DynamicContractCheckTest {
 	@Test
 	void repetitionMissedAfter4Test() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns");
-		sys.performDynamicCheck(List.of(createEI(0), createEI(7), createEI(14), createEI(21)));
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI", 7), eo("EI", 14), eo("EI", 21)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooEarlyOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
-		sys.performDynamicCheck(List.of(createEI(3)));
+		sys.performDynamicCheck(List.of(eo("EI", 3)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooLateOffsetTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
-		sys.performDynamicCheck(List.of(createEI(8)));
+		sys.performDynamicCheck(List.of(eo("EI", 8)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
 				ContractIssue.Code.REPETITION_MISSED);
 	}
@@ -91,14 +90,14 @@ class DynamicContractCheckTest {
 	@Test
 	void repetitionTooEarlyIntervalTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
-		sys.performDynamicCheck(List.of(createEI(4), createEI(8)));
+		sys.performDynamicCheck(List.of(eo("EI", 4), eo("EI", 8)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionTooLateIntervalTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns");
-		sys.performDynamicCheck(List.of(createEI(5), createEI(14)));
+		sys.performDynamicCheck(List.of(eo("EI", 5), eo("EI", 14)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
 				ContractIssue.Code.REPETITION_MISSED);
 	}
@@ -106,44 +105,178 @@ class DynamicContractCheckTest {
 	@Test
 	void repetitionWithJitterTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
-		sys.performDynamicCheck(List.of(createEI(3), createEI(10)));
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 10)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionWithJitterTooEarlyTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
-		sys.performDynamicCheck(List.of(createEI(3), createEI(8)));
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 8)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_TOO_EARLY, ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionWithJitterTooLateTest() {
 		final ContractSystem sys = createSimpleSystem("EI occurs every [6, 8]ns with offset [4, 5]ns and jitter 1ns");
-		sys.performDynamicCheck(List.of(createEI(3), createEI(14)));
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 14)));
 		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED, ContractIssue.Code.REPETITION_TOO_LATE,
 				ContractIssue.Code.REPETITION_MISSED);
 	}
 
 	@Test
 	void repetitionOverlappingIntervalTest() {
-		// TODO: test repetition causing overlapping intervals
+		final ContractSystem sys = createSimpleSystem("EI occurs every [1, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI", 2), eo("EI", 4), eo("EI", 6)));
+		assertIssues(sys, ContractIssue.Code.REPETITION_MISSED);
+	}
+
+	// === test reaction
+	@Test
+	void reactionEmptyTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within 5ns");
+		sys.performDynamicCheck(List.of());
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionFulfilledTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within 5ns");
+		sys.performDynamicCheck(List.of(eo("EI", 2), eo("EO", 7), eo("EI", 13), eo("EO", 18)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionMissedTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within 5ns");
+		sys.performDynamicCheck(List.of(eo("EI", 2), eo("EI", 13)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void reactionOverlapMultiFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 1), eo("EI", 2), eo("EO", 8)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionOverlapEarlyTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 1), eo("EI", 2), eo("EO", 6)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void reactionOverlapLateTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 1), eo("EI", 2), eo("EO", 12)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void reactionOverlapBothTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 1), eo("EI", 2), eo("EO", 6), eo("EO", 12)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void slidingWindow12CorrectTest() {
+		final ContractSystem sys = createSimpleSystem(
+				"whenever EI occurs then EO occurs within [5, 10]ns 1 out of 2 times");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI", 10), eo("EO", 18)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void slidingWindow12IssueTest() {
+		final ContractSystem sys = createSimpleSystem(
+				"whenever EI occurs then EO occurs within [5, 10]ns 1 out of 2 times");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI", 10)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void slidingWindow23CorrectTest() {
+		final ContractSystem sys = createSimpleSystem(
+				"whenever EI occurs then EO occurs within [5, 10]ns 2 out of 3 times");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 8), eo("EI", 10), eo("EI", 20), eo("EO", 28)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void slidingWindow23IssueTest() {
+		final ContractSystem sys = createSimpleSystem(
+				"whenever EI occurs then EO occurs within [5, 10]ns 2 out of 3 times");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 8), eo("EI", 10), eo("EI", 20)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void slidingWindow23IssuesTest() {
+		final ContractSystem sys = createSimpleSystem(
+				"whenever EI occurs then EO occurs within [5, 10]ns 2 out of 3 times");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI", 10), eo("EI", 20)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void inputSequenceIncompleteTest() {
+		final ContractSystem sys = createSimpleSystem("whenever (EI, EI2, EI3) occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI2", 10)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void inputSequenceWrongOrderTest() {
+		final ContractSystem sys = createSimpleSystem("whenever (EI, EI2, EI3) occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI3", 10), eo("EI2", 20)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void inputSequenceCompleteTest() {
+		final ContractSystem sys = createSimpleSystem("whenever (EI, EI2, EI3) occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI2", 10), eo("EI3", 20)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void inputSetIncompleteTest() {
+		final ContractSystem sys = createSimpleSystem("whenever {EI, EI2, EI3} occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI2", 10)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void inputSetCompleteTest() {
+		final ContractSystem sys = createSimpleSystem("whenever {EI, EI2, EI3} occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EI2", 10), eo("EI3", 10)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void inputSetComplete2Test() {
+		final ContractSystem sys = createSimpleSystem("whenever {EI, EI2, EI3} occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI3", 0), eo("EI", 10), eo("EI2", 10)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
 	}
 
 	// === helper methods
 	/**
-	 * creates a system with a single component which has an input "EI", an output
-	 * "EO" and the specified contract
+	 * creates a system with a single component with inputs ("EI", "EI2", "EI3"),
+	 * outputs ("EO", "EO1", "EO2"), and the specified contract
 	 */
 	private static ContractSystem createSimpleSystem(final String contract) {
 		final ContractSystem sys = new ContractSystem();
 		final ContractComponent comp = new ContractComponent("component");
-		sys.addComponent(comp, contract, List.of("EI"), List.of("EO"));
+		sys.addComponent(comp, contract, List.of("EI", "EI2", "EI3"), List.of("EO", "EO2", "EO3"));
 		return sys;
 	}
 
-	private EventOccurrence createEI(final double timestamp) {
-		return new EventOccurrence("component.EI", timestamp);
+	private EventOccurrence eo(final String shortName, final double timestamp) {
+		return new EventOccurrence("component." + shortName, timestamp);
 	}
 
 	private static void assertIssues(final ContractSystem sys, final ContractIssue.Code... code) {

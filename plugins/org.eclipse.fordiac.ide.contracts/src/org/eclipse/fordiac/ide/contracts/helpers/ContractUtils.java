@@ -17,8 +17,6 @@ package org.eclipse.fordiac.ide.contracts.helpers;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-
 @SuppressWarnings("nls") // translating doesn't make sense here
 public final class ContractUtils {
 
@@ -26,22 +24,13 @@ public final class ContractUtils {
 
 	}
 
-	public static String createSingleEvent(final List<Event> pins, final String timeExpr) {
-		return createSingleEvent(createEventList(pins), timeExpr);
+	public static String createSingleEvent(final List<String> pins, final String timeExpr) {
+		return "%s occurs within %s".formatted(createEventList(pins), timeExpr);
 	}
 
-	public static String createSingleEvent(final String pins, final String timeExpr) {
-		return "%s occurs within %s".formatted(pins, timeExpr);
-	}
-
-	public static String createRepetition(final List<Event> pins, final String timeExpr, final String offsetExpr,
+	public static String createRepetition(final List<String> pins, final String timeExpr, final String offsetExpr,
 			final String jitterExpr) {
-		return createRepetition(createEventList(pins), timeExpr, offsetExpr, jitterExpr);
-	}
-
-	public static String createRepetition(final String pins, final String timeExpr, final String offsetExpr,
-			final String jitterExpr) {
-		String repetition = "%s occurs every %s".formatted(pins, timeExpr);
+		String repetition = "%s occurs every %s".formatted(createEventList(pins), timeExpr);
 
 		final boolean offset = offsetExpr != null && !offsetExpr.isBlank();
 		final boolean jitter = jitterExpr != null && !jitterExpr.isBlank();
@@ -56,56 +45,40 @@ public final class ContractUtils {
 		return repetition;
 	}
 
-	public static String createReaction(final List<Event> iPins, final List<Event> oPins, final String timeExpr,
-			final boolean once, final int n, final int outOf) {
-		return createReaction(createEventSequence(iPins), createEventSequence(oPins), timeExpr, once, n, outOf);
-	}
-
-	public static String createReaction(final String iPins, final String oPins, final String timeExpr,
-			final boolean once, final int n, final int outOf) {
-		final String reaction = "whenever %s occurs then %s occurs within %s".formatted(iPins, oPins, timeExpr);
+	public static String createReaction(final List<String> iPins, final List<String> oPins, final boolean inputIsSeq,
+			final boolean outputIsSeq, final String timeExpr, final boolean once, final int n, final int outOf) {
+		final String reaction = "whenever %s occurs then %s occurs within %s"
+				.formatted(createEventExpr(iPins, inputIsSeq), createEventExpr(oPins, outputIsSeq), timeExpr);
 		return addReactionProperties(reaction, once, n, outOf);
 	}
 
-	public static String createAge(final List<Event> iPins, final List<Event> oPins, final String timeExpr,
-			final boolean once, final int n, final int outOf) {
-		return createAge(createEventSequence(iPins), createEventSequence(oPins), timeExpr, once, n, outOf);
-	}
-
-	public static String createAge(final String iPins, final String oPins, final String timeExpr, final boolean once,
-			final int n, final int outOf) {
-		final String age = "whenever %s occurs then %s has occurred within %s".formatted(oPins, iPins, timeExpr);
+	public static String createAge(final List<String> iPins, final List<String> oPins, final boolean inputIsSeq,
+			final boolean outputIsSeq, final String timeExpr, final boolean once, final int n, final int outOf) {
+		final String age = "whenever %s occurs then %s has occurred within %s"
+				.formatted(createEventExpr(oPins, outputIsSeq), createEventExpr(iPins, inputIsSeq), timeExpr);
 		return addReactionProperties(age, once, n, outOf);
-	}
-
-	public static String createCausalReaction(final Event iPin, final Event oPin, final String timeExpr) {
-		return createCausalReaction(iPin.getName(), oPin.getName(), timeExpr);
 	}
 
 	public static String createCausalReaction(final String iPin, final String oPin, final String timeExpr) {
 		return "Reaction(%s, %s) within %s".formatted(iPin, oPin, timeExpr);
 	}
 
-	public static String createCausalAge(final Event iPin, final Event oPin, final String timeExpr) {
-		return createCausalAge(iPin.getName(), oPin.getName(), timeExpr);
-	}
-
 	public static String createCausalAge(final String iPin, final String oPin, final String timeExpr) {
 		return "Age(%s, %s) within %s".formatted(oPin, iPin, timeExpr);
 	}
 
-	private static String createEventList(final List<Event> pins) {
-		return String.join(", ", pins.stream().map(Event::getName).toList()); //$NON-NLS-1$
+	private static String createEventList(final List<String> pins) {
+		return String.join(", ", pins); //$NON-NLS-1$
 	}
 
-	private static String createEventSequence(final List<Event> pins) {
+	private static String createEventExpr(final List<String> pins, final boolean isSequence) {
 		if (pins.size() == 1) {
-			return pins.get(0).getName();
+			return pins.get(0);
 		}
 		final StringBuilder sb = new StringBuilder();
-		sb.append('(');
+		sb.append(isSequence ? '(' : '{');
 		sb.append(createEventList(pins));
-		sb.append(')');
+		sb.append(isSequence ? ')' : '}');
 		return sb.toString();
 	}
 

@@ -35,18 +35,13 @@ public class StaticContractChecker {
 	public void checkSystem() {
 		// try to resolve all reactions
 		for (final ContractComponent comp : components) {
-			for (final ContractRule guarantee : comp.getGuarantees().values()) {
-				switch (guarantee.getType()) {
-				case REACTION:
-				case AGE:
-				case CAUSAL_REACTION:
-				case CAUSAL_AGE:
-					seenComponents.clear();
-					resolveReaction(guarantee);
-					break;
-				default:
-					break;
-				}
+			// iterate in reverse, so we can remove from reaction list
+			for (int i = comp.getReactions().size() - 1; i >= 0; i--) {
+				seenComponents.clear();
+				resolveReaction(comp.getReactions().get(i));
+			}
+			if (!comp.getReactions().isEmpty()) {
+				unresolvedReactionInfo(comp);
 			}
 		}
 
@@ -54,13 +49,13 @@ public class StaticContractChecker {
 		for (final ContractComponent comp : components) {
 			for (final CConnection conn : comp.getInputs()) {
 				switch (conn.type()) {
-				case CConnection.Type.NORMAL:
+				case NORMAL:
 					checkNormalConnection(comp, conn);
 					break;
-				case CConnection.Type.FROM_OUTER:
+				case FROM_OUTER:
 					checkFromOuterConnection(comp, conn);
 					break;
-				case CConnection.Type.FROM_INNER:
+				case FROM_INNER:
 					checkFromInnerConnection(comp, conn);
 					break;
 				default:
@@ -76,9 +71,15 @@ public class StaticContractChecker {
 			return;
 		}
 
+		// TODO: tmp issue until support added
+		if (reaction.getInputs().size() > 1 || reaction.getOutputs().size() > 1) {
+			system.warning("Reactions with multiple inputs/outputs not supported yet.", ContractIssue.Code.UNKOWN);
+			return;
+		}
+
 		// check for assumption on input port
 		final ContractComponent comp = reaction.getOwner();
-		final ContractRule assumption = comp.getAssumptions().get(reaction.getInput());
+		final ContractRule assumption = comp.getAssumptions().get(reaction.getInputs().getFirst());
 		if (assumption != null) {
 			resolveReactionWith(reaction, assumption);
 			return;
@@ -91,7 +92,7 @@ public class StaticContractChecker {
 				// resolve with assumption from outer component
 				final ContractRule a = conn.from().getAssumptions().get(conn.fromPort());
 
-				if (a != null && isResolver(a)) {
+				if (a != null) {
 					if (resolved) {
 						multipleResolveError(reaction);
 					} else {
@@ -101,30 +102,37 @@ public class StaticContractChecker {
 				}
 			} else if (conn.type() == CConnection.Type.NORMAL) {
 				// resolve reaction with guarantee from connected component
-				final ContractRule g = conn.from().getGuarantees().get(conn.fromPort());
+				ContractRule g = conn.from().getGuarantees().get(conn.fromPort());
+				if (g == null) {
+					// recursively resolve other reactions first
+					tryRecursiveResolve(conn.from(), conn.fromPort());
+				}
 
+				g = conn.from().getGuarantees().get(conn.fromPort());
 				if (g != null) {
-					if (!isResolver(g)) {
-						resolveReaction(g); // recursively resolve other reactions
+					if (resolved) {
+						multipleResolveError(reaction);
+					} else {
+						resolveReactionWith(reaction, g);
 					}
-					if (isResolver(g)) {
-						if (resolved) {
-							multipleResolveError(reaction);
-						} else {
-							resolveReactionWith(reaction, g);
-						}
-						resolved = true;
-					}
+					resolved = true;
 				}
 			}
 		}
 	}
 
-	private static boolean isResolver(final ContractRule rule) {
-		return rule.getType() == SINGLE_EVENT || rule.getType() == REPETITION;
+	private void tryRecursiveResolve(final ContractComponent comp, final String port) {
+		for (final ContractRule reaction : comp.getReactions()) {
+			for (final String output : reaction.getOutputs()) {
+				if (port.equals(output)) {
+					resolveReaction(reaction);
+					return;
+				}
+			}
+		}
 	}
 
-	private static void resolveReactionWith(final ContractRule reaction, final ContractRule resolver) {
+	private void resolveReactionWith(final ContractRule reaction, final ContractRule resolver) {
 		if (resolver.getType() == SINGLE_EVENT) {
 			resolveReactionSingle(reaction, resolver);
 		} else if (resolver.getType() == REPETITION) {
@@ -132,40 +140,47 @@ public class StaticContractChecker {
 		}
 	}
 
-	private static void resolveReactionSingle(final ContractRule reaction, final ContractRule singleEvent) {
-		reaction.setType(SINGLE_EVENT);
-		reaction.setInterval(reaction.getInterval().add(singleEvent.getInterval()));
-		reaction.setInput(null);
-		// TODO: clock, "once" and "n out of m times" ignored for now
+	private void resolveReactionSingle(final ContractRule reaction, final ContractRule singleEvent) {
+		final CInterval interval = reaction.getInterval().add(singleEvent.getInterval());
+
+		for (final String output : reaction.getOutputs()) {
+			final ContractRule rule = new ContractRule(output, interval);
+			reaction.getOwner().addRule(rule, system);
+		}
+		reaction.getOwner().getReactions().remove(reaction);
+		// TODO: clock and "n out of m times" ignored for now
 	}
 
-	private static void resolveReactionRepetition(final ContractRule reaction, final ContractRule repetition) {
-		final CInterval reactionInter = reaction.getInterval();
-		reaction.setType(REPETITION);
-		reaction.setInterval(repetition.getInterval());
-		reaction.setOffset(reactionInter.add(repetition.getOffset()));
-		reaction.setJitter(repetition.getJitter());
-		reaction.setInput(null);
-		// TODO: clock, "once" and "n out of m times" ignored for now
+	private void resolveReactionRepetition(final ContractRule reaction, final ContractRule repetition) {
+		final CInterval interval = repetition.getInterval();
+		final CInterval offset = reaction.getInterval().add(repetition.getOffset());
+
+		for (final String output : reaction.getOutputs()) {
+			final ContractRule rule = new ContractRule(output, interval, offset, repetition.getJitter());
+			reaction.getOwner().addRule(rule, system);
+		}
+		reaction.getOwner().getReactions().remove(reaction);
+		// TODO: clock and "n out of m times" ignored for now
 	}
 
 	private void checkNormalConnection(final ContractComponent comp, final CConnection conn) {
+		if (comp == conn.from()) {
+			// special case where it actually is a direct inner connection
+			// (input of component is connected to its output internally)
+			checkDirectInnerConnection(comp, conn);
+		}
 		final ContractRule assumption = comp.getAssumptions().get(conn.toPort());
 		final ContractRule guarantee = conn.from().getGuarantees().get(conn.fromPort());
 
 		if (assumption != null && guarantee != null) {
 			checkRules(assumption, guarantee);
-		} else if (comp == conn.from()) {
-			// special case where it actually is a direct inner connection
-			// (input of component is connected to its output internally)
-			checkDirectInnerConnection(comp, conn);
 		}
 	}
 
 	private void checkDirectInnerConnection(final ContractComponent comp, final CConnection conn) {
 		// input of component is internally directly connected to its output
 		final ContractRule assumption = comp.getAssumptions().get(conn.fromPort());
-		final ContractRule guarantee = conn.from().getGuarantees().get(conn.toPort());
+		final ContractRule guarantee = comp.getGuarantees().get(conn.toPort());
 
 		if (assumption != null && guarantee != null) {
 			checkRules(guarantee, assumption);
@@ -201,8 +216,6 @@ public class StaticContractChecker {
 				}
 			} else if (stronger.getType() == REPETITION) {
 				contractRuleTypeError(weaker, stronger);
-			} else {
-				unresolvedReactionInfo(stronger);
 			}
 		} else if (weaker.getType() == REPETITION) {
 			if (stronger.getType() == REPETITION) {
@@ -214,21 +227,16 @@ public class StaticContractChecker {
 				}
 			} else if (stronger.getType() == SINGLE_EVENT) {
 				contractRuleTypeError(weaker, stronger);
-			} else {
-				unresolvedReactionInfo(stronger);
 			}
-		} else {
-			unresolvedReactionInfo(weaker);
 		}
 	}
 
 	private boolean checkSingleEvents(final ContractRule weaker, final ContractRule stronger) {
 		// TODO: clocks ignored for now
 		if (!weaker.getInterval().contains(stronger.getInterval())) {
-			system.error(
-					Messages.ContractSingleEventMatchError.formatted(weaker.getOwner().getName(), weaker.getPortName(),
-							weaker.getInterval(), stronger.getOwner().getName(), stronger.getInterval()),
-					ContractIssue.Code.SINGLE_EVENT_MATCH);
+			system.error(Messages.ContractSingleEventMatchError.formatted(weaker.getOwner().getName(),
+					weaker.getSinglePort(), weaker.getInterval(), stronger.getOwner().getName(),
+					stronger.getInterval()), ContractIssue.Code.SINGLE_EVENT_MATCH);
 			return false;
 		}
 		return true;
@@ -241,7 +249,7 @@ public class StaticContractChecker {
 		if (!wO.contains(sO)) {
 			system.error(
 					Messages.ContractRepetitionOffsetMatchError.formatted(weaker.getOwner().getName(),
-							weaker.getPortName(), wO, stronger.getOwner().getName(), sO),
+							weaker.getSinglePort(), wO, stronger.getOwner().getName(), sO),
 					ContractIssue.Code.REPETITION_MATCH);
 			return false;
 		}
@@ -250,7 +258,7 @@ public class StaticContractChecker {
 		if (!wI.contains(sI)) {
 			system.error(
 					Messages.ContractRepetitionIntervalMatchError.formatted(weaker.getOwner().getName(),
-							weaker.getPortName(), wI, stronger.getOwner().getName(), sI),
+							weaker.getSinglePort(), wI, stronger.getOwner().getName(), sI),
 					ContractIssue.Code.REPETITION_MATCH);
 			return false;
 		}
@@ -258,17 +266,17 @@ public class StaticContractChecker {
 	}
 
 	private void contractRuleTypeError(final ContractRule r1, final ContractRule r2) {
-		system.error(Messages.ContractRuleTypeError.formatted(r1.getOwner().getName(), r1.getPortName(), r1.getType(),
+		system.error(Messages.ContractRuleTypeError.formatted(r1.getOwner().getName(), r1.getSinglePort(), r1.getType(),
 				r2.getOwner().getName(), r2.getType()), ContractIssue.Code.TYPE_MATCH);
 	}
 
-	private void unresolvedReactionInfo(final ContractRule rule) {
-		system.info(Messages.ContractUnresolvedReactionInfo.formatted(rule.getOwner().getName()),
+	private void unresolvedReactionInfo(final ContractComponent comp) {
+		system.info(Messages.ContractUnresolvedReactionInfo.formatted(comp.getName()),
 				ContractIssue.Code.UNRESOLVED_REACTION);
 	}
 
 	private void multipleFulfillsError(final ContractRule rule) {
-		system.error(Messages.ContractMultipleFulfillError.formatted(rule.getOwner().getName(), rule.getPortName()),
+		system.error(Messages.ContractMultipleFulfillError.formatted(rule.getOwner().getName(), rule.getSinglePort()),
 				ContractIssue.Code.MULTIPLE_FULFILL);
 	}
 
