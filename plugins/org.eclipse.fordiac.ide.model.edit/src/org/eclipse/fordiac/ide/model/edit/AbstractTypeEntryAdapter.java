@@ -69,7 +69,7 @@ public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
 	}
 
 	protected boolean isActiveEditor() {
-		return getEditor().equals(getEditor().getSite().getPage().getActiveEditor());
+		return !editorClosed() && getEditor().equals(getEditor().getSite().getPage().getActiveEditor());
 	}
 
 	protected boolean editorClosed() {
