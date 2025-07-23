@@ -57,6 +57,7 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 	public static final String PORT_NOT_OUTPUT = "portNotOutput"; //$NON-NLS-1$
 	public static final String SLIDING_WINDOW_UNNEEDED = "slidingWindowUnneeded"; //$NON-NLS-1$
 	public static final String SLIDING_WINDOW_INVALID = "slidingWindowInvalid"; //$NON-NLS-1$
+	public static final String SET_EXPR_CONTAINS_DUPLICATES = "setExprContainsDuplicates"; //$NON-NLS-1$
 	public static final String CLOCK_ALREADY_DEFINED = "clockAlreadyDefined"; //$NON-NLS-1$
 	public static final String MAXDIFF_AND_SKEW = "maxdiffAndSkew"; //$NON-NLS-1$
 	public static final String MAXDIFF_AND_DRIFT = "maxdiffAndDrift"; //$NON-NLS-1$
@@ -134,6 +135,8 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		checkPortsOfType(reaction.getInput(), INPUT, ContractSpecPackage.Literals.REACTION__INPUT);
 		checkPortsOfType(reaction.getOutput(), OUTPUT, ContractSpecPackage.Literals.REACTION__OUTPUT);
 		validateNOutOfM(reaction.getN(), reaction.getOutOf(), ContractSpecPackage.Literals.REACTION__N);
+		validateSetNoDuplicates(reaction.getInput(), ContractSpecPackage.Literals.REACTION__INPUT);
+		validateSetNoDuplicates(reaction.getOutput(), ContractSpecPackage.Literals.REACTION__OUTPUT);
 	}
 
 	@Check
@@ -147,6 +150,8 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 		checkPortsOfType(age.getOutput(), OUTPUT, ContractSpecPackage.Literals.AGE__OUTPUT);
 		checkPortsOfType(age.getInput(), INPUT, ContractSpecPackage.Literals.AGE__INPUT);
 		validateNOutOfM(age.getN(), age.getOutOf(), ContractSpecPackage.Literals.AGE__N);
+		validateSetNoDuplicates(age.getOutput(), ContractSpecPackage.Literals.AGE__OUTPUT);
+		validateSetNoDuplicates(age.getInput(), ContractSpecPackage.Literals.AGE__INPUT);
 	}
 
 	@Check
@@ -215,6 +220,18 @@ public class ContractSpecValidator extends AbstractContractSpecValidator {
 			warning(Messages.SlidingWindowNotNeededWarning, feature, SLIDING_WINDOW_UNNEEDED);
 		} else if (n > m) {
 			error(Messages.SlidingWindowInvalidError, feature, SLIDING_WINDOW_INVALID);
+		}
+	}
+
+	private void validateSetNoDuplicates(final EventExpr expr, final EStructuralFeature feature) {
+		if (expr.getEvent() != null || expr.isSequence()) {
+			return; // only one event or sequence -> nothing to validate
+		}
+		final EList<EventSpec> list = expr.getEvents().getEvents();
+
+		final long c = list.stream().map(e -> e.getPort().getName()).distinct().count();
+		if (c != list.size()) {
+			warning(Messages.SetExprContainsDuplicatesWarning, feature, SET_EXPR_CONTAINS_DUPLICATES);
 		}
 	}
 }
