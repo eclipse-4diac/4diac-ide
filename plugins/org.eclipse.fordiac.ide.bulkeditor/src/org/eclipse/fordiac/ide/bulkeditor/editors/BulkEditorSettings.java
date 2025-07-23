@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.ui.IMemento;
 
+@SuppressWarnings("squid:S1104")
 public class BulkEditorSettings {
 	enum ScopeOption {
 		PROJECT, WORKSPACE, SUBAPP_HIERARCHY
@@ -49,8 +50,8 @@ public class BulkEditorSettings {
 	public ScopeOption scope = ScopeOption.PROJECT;
 	private static final String LINKED_LIBRARIES_TAG = "_ignoreLinkedLibraries"; //$NON-NLS-1$
 	public boolean ignoreLinkedLibraries = true;
-	private static final String SELECTED_SUBAPP_HIERARCHIES = "_selectedSubappHierarchies";
-	private static final String SELECTED_SUBAPP_HIERARCHY_VALUE = "_hierarchyValue";
+	private static final String SELECTED_SUBAPP_HIERARCHIES = "_selectedSubappHierarchies"; //$NON-NLS-1$
+	private static final String SELECTED_SUBAPP_HIERARCHY_VALUE = "_hierarchyValue"; //$NON-NLS-1$
 	public List<URI> subappHierarchies = Collections.emptyList();
 
 	public static final List<String> whereSearchList = List.of("_where-name", "_where-type", "_where-comment", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
