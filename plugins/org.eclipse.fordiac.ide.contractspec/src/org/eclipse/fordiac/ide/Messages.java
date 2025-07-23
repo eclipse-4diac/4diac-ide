@@ -39,6 +39,8 @@ public final class Messages extends NLS {
 
 	public static String SlidingWindowInvalidError;
 
+	public static String SetExprContainsDuplicatesWarning;
+
 	public static String ClockAlreadyDefinedError;
 
 	public static String MaxdiffAndSkewError;
