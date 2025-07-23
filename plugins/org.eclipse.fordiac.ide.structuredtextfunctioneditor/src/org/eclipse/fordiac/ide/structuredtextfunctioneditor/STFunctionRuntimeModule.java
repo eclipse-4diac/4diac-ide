@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.documentation.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.naming.STCoreQualifiedNameConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionManager;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryAllContainersState;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.TypeLibraryResourceDescriptions;
@@ -45,6 +46,7 @@ import org.eclipse.xtext.naming.IQualifiedNameConverter;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
+import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
@@ -99,6 +101,10 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	public Class<? extends IDefaultResourceDescriptionStrategy> bindIDefaultResourceDescriptionStrategy() {
 		return STCoreResourceDescriptionStrategy.class;
+	}
+
+	public Class<? extends IResourceDescription.Manager> bindIResourceDescription$Manager() {
+		return STCoreResourceDescriptionManager.class;
 	}
 
 	@Override
