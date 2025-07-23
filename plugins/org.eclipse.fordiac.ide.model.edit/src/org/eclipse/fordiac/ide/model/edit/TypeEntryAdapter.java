@@ -80,7 +80,13 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 		}
 
 		switch (feature) {
-		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE:
+		case TypeEntry.TYPE_ENTRY_TYPE_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE:
+			// make sure type was reloaded and not just loaded
+			if (notification.getOldValue() != null) {
+				handleFileContentChange();
+			}
+			break;
+		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
 			handleFileContentChange();
 			break;
 		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:

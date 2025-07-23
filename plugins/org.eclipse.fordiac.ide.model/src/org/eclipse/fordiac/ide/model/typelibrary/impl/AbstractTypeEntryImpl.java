@@ -428,6 +428,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	@Override
 	public void notifyChanged(final Notification notification) {
 		if ((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE
 				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
 
