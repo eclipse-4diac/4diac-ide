@@ -105,7 +105,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		displayRange = new CInterval('[', 0, upperBound, ']');
 		displayUnit = Utils.getFittingUnit(upperBound);
 		// max diagram is last event + some padding
-		diagramMax = lastEvent + Utils.getInNs(1, displayUnit);
+		diagramMax = lastEvent + Utils.getInNs(10, displayUnit);
 	}
 
 	@Override
@@ -356,7 +356,8 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 						interval.getLowerBound(), middlePos);
 				break;
 			case AGE, CAUSAL_AGE:
-				// TODO: backwards arrow for ages
+				drawArrowLR(gc, interval.getUpperBound() + ruleData.rule().getInterval().getLowerBound(),
+						interval.getUpperBound(), middlePos);
 				break;
 			default:
 				break; // no arrows to draw for otherwise
@@ -421,7 +422,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		if (start < end) {
 			drawArrowHeadLR(gc, endP - markerAndHalf, y, MARKER_SIZE, markerAndHalf);
 		} else {
-			drawArrowHeadLR(gc, endP - markerAndHalf, y, MARKER_SIZE, -markerAndHalf);
+			drawArrowHeadLR(gc, endP + markerAndHalf, y, MARKER_SIZE, -markerAndHalf);
 		}
 	}
 

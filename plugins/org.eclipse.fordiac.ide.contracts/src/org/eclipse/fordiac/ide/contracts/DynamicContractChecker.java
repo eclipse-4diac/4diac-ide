@@ -14,15 +14,16 @@
 package org.eclipse.fordiac.ide.contracts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import org.eclipse.fordiac.ide.Utils;
+import org.eclipse.fordiac.ide.contracts.ContractIssue.Code;
 import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData;
+import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData.SearchResult;
 
 public class DynamicContractChecker {
 
@@ -144,19 +145,17 @@ public class DynamicContractChecker {
 		final ContractRule rule = ruleData.rule();
 		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
 			if (!rule.isFulFilled()) {
-				eventMissedError(eo, ContractIssue.Code.SINGLE_EVENT_MISSED);
+				eventMissedError(eo, Code.SINGLE_EVENT_MISSED);
 				ruleData.markers().add(eo);
 			}
 			return;
 		}
 
 		if (rule.isFulFilled()) {
-			system.error("\"%s\" occurred more than once.".formatted(eo.eventName()),
-					ContractIssue.Code.SINGLE_EVENT_MULTIPLE);
+			system.error("\"%s\" occurred more than once.".formatted(eo.eventName()), Code.SINGLE_EVENT_MULTIPLE);
 			ruleData.markers().add(issueMarker(eo));
 		} else if (!rule.getInterval().contains(eo.timestampNs())) {
-			eventOutsideIntervalError(rule.getInterval(), eo, ContractIssue.Code.SINGLE_EVENT_TOO_EARLY,
-					ContractIssue.Code.SINGLE_EVENT_TOO_LATE);
+			eventOutsideIntervalError(rule.getInterval(), eo, Code.SINGLE_EVENT_TOO_EARLY, Code.SINGLE_EVENT_TOO_LATE);
 			ruleData.markers().add(issueMarker(eo));
 		} else {
 			ruleData.markers().add(fulfillMarker(eo));
@@ -176,7 +175,7 @@ public class DynamicContractChecker {
 
 		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
 			if (eo.timestampNs() >= intervalJitter.getUpperBound()) {
-				eventMissedError(eo, ContractIssue.Code.REPETITION_MISSED);
+				eventMissedError(eo, Code.REPETITION_MISSED);
 				ruleData.markers().add(eo);
 			}
 			return;
@@ -184,8 +183,7 @@ public class DynamicContractChecker {
 
 		final double shift;
 		if (!intervalJitter.contains(eo.timestampNs())) {
-			eventOutsideIntervalError(intervalJitter, eo, ContractIssue.Code.REPETITION_TOO_EARLY,
-					ContractIssue.Code.REPETITION_TOO_LATE);
+			eventOutsideIntervalError(intervalJitter, eo, Code.REPETITION_TOO_EARLY, Code.REPETITION_TOO_LATE);
 			ruleData.markers().add(issueMarker(eo));
 			shift = eo.timestampNs();
 		} else {
@@ -202,22 +200,27 @@ public class DynamicContractChecker {
 		final ContractRule rule = ruleData.rule();
 
 		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
-			final double until = eo.timestampNs() - rule.getInterval().getDiameter();
-			final boolean fulfill = searchFor(ruleData, rule.outputIsSequence(), until, rule.isOnce());
+			final CInterval interval = rule.getInterval().translate(
+					eo.timestampNs() - rule.getInterval().getDiameter() - rule.getInterval().getLowerBound());
+			final var searchResult = ruleData.searchInterval(interval);
+			final boolean fulfill = searchResult == SearchResult.VALID || searchResult == SearchResult.TOO_OFTEN;
 
+			if (searchResult == SearchResult.TOO_OFTEN) {
+				reactionAgeTooOftenError(eo, true);
+			}
 			if (ruleData.hasSlidingWindow()) {
 				if (!ruleData.add2SlidingWindow(fulfill)) {
-					reactionMissedSlidingWindowError(eo, rule.getNOutOfM(), ContractIssue.Code.REACTION_MISSED);
+					reactionAgeMissedSlidingWindowError(eo, rule.getNOutOfM(), true);
 					ruleData.markers().add(eo);
 				}
 			} else if (!fulfill) {
-				reactionMissedError(eo, ContractIssue.Code.REACTION_MISSED);
+				reactionAgeMissedError(eo, true);
 				ruleData.markers().add(eo);
 			}
 			return;
 		}
 
-		ruleData.markers().add(eo);
+		ruleData.markers().add(normalMarker(eo));
 		for (int i = 0; i < rule.getInputs().size(); i++) {
 			if (eo.eventName().endsWith(rule.getInputs().get(i))) {
 				if (ruleData.triggerOccurred(eo, i)) {
@@ -230,73 +233,39 @@ public class DynamicContractChecker {
 		}
 	}
 
-	private static boolean searchFor(final RuleData ruleData, final boolean isSequence, final double until,
-			final boolean once) {
-		if (isSequence) {
-			return searchForSequence(ruleData, until, once);
-		}
-		return searchForSet(ruleData, until, once);
-	}
-
-	private static boolean searchForSequence(final RuleData ruleData, final double until, final boolean once) {
-		// TODO: once - sequence only occurs once
-		final List<String> seq = ruleData.rule().getOutputs();
-		int sequenceIdx = seq.size() - 1;
-
-		// search backwards for event sequence
-		for (int i = ruleData.markers().size() - 1; i > 0; i--) {
-			final EventOccurrence eo = ruleData.markers().get(i);
-			if (eo.type() != EventOccurrence.Type.RECORDED) {
-				continue;
-			}
-			if (eo.timestampNs() < until) {
-				return false;
-			}
-			if (eo.eventName().endsWith(seq.get(sequenceIdx))) {
-				sequenceIdx--;
-				if (sequenceIdx < 0) {
-					// update state of occurrences in sequence
-					for (int j = 0; j < seq.size(); j++) {
-						final EventOccurrence eoSeq = ruleData.markers().get(i + j);
-						eoSeq.setState(EventOccurrence.State.FULFILLING);
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private static boolean searchForSet(final RuleData ruleData, final double until, final boolean once) {
-		// TODO: once - set only occurs once
-		final Set<String> set = new HashSet<>(ruleData.rule().getOutputs());
-		final List<EventOccurrence> fulfill = new ArrayList<>(set.size());
-
-		// search backwards for event set
-		for (int i = ruleData.markers().size() - 1; i > 0; i--) {
-			final EventOccurrence eo = ruleData.markers().get(i);
-			if (eo.type() != EventOccurrence.Type.RECORDED) {
-				continue;
-			}
-			if (eo.timestampNs() < until) {
-				return false;
-			}
-			if (set.remove(eo.getShortName())) {
-				fulfill.add(eo);
-				if (set.isEmpty()) {
-					// update state of occurrences in set
-					for (final EventOccurrence eoSet : fulfill) {
-						eoSet.setState(EventOccurrence.State.FULFILLING);
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	private void checkAge(final RuleData ruleData, final EventOccurrence eo) {
-		// TODO
+		final ContractRule rule = ruleData.rule();
+		ruleData.markers().add(normalMarker(eo));
+		for (int i = 0; i < rule.getOutputs().size(); i++) {
+			if (eo.eventName().endsWith(rule.getOutputs().get(i))) {
+				if (ruleData.triggerOccurred(eo, i)) {
+					final CInterval inter = rule.getInterval();
+					final CInterval next = inter
+							.translate(eo.timestampNs() - inter.getLowerBound() * 2 - inter.getDiameter());
+					ruleData.intervals().add(next);
+					checkAgeHelper(ruleData, next, eo);
+				}
+				return;
+			}
+		}
+	}
+
+	private void checkAgeHelper(final RuleData ruleData, final CInterval interval, final EventOccurrence eo) {
+		final var searchResult = ruleData.searchInterval(interval);
+		final boolean fulfill = searchResult == SearchResult.VALID || searchResult == SearchResult.TOO_OFTEN;
+
+		if (searchResult == SearchResult.TOO_OFTEN) {
+			reactionAgeTooOftenError(eo, false);
+		}
+		if (ruleData.hasSlidingWindow()) {
+			if (!ruleData.add2SlidingWindow(fulfill)) {
+				reactionAgeMissedSlidingWindowError(eo, ruleData.rule().getNOutOfM(), false);
+				insertSorted(ruleData.markers(), missedMarker(interval.getUpperBound()));
+			}
+		} else if (!fulfill) {
+			reactionAgeMissedError(eo, false);
+			insertSorted(ruleData.markers(), missedMarker(interval.getUpperBound()));
+		}
 	}
 
 	private void checkCausalReaction(final RuleData ruleData, final EventOccurrence eo) {
@@ -307,26 +276,45 @@ public class DynamicContractChecker {
 		// TODO
 	}
 
-	private void eventMissedError(final EventOccurrence eo, final ContractIssue.Code code) {
+	private static void insertSorted(final List<EventOccurrence> list, final EventOccurrence element) {
+		int index = Collections.binarySearch(list, element);
+		if (index < 0) {
+			index = -index - 1;
+		}
+		list.add(index, element);
+	}
+
+	private void eventMissedError(final EventOccurrence eo, final Code code) {
 		system.error(
 				"\"%s\" did not arrive in time at %s.".formatted(eo.eventName(), Utils.nsToString(eo.timestampNs())),
 				code);
 	}
 
-	private void reactionMissedError(final EventOccurrence eo, final ContractIssue.Code code) {
-		system.error("Reaction for \"%s\" did not arrive in time at %s.".formatted(eo.eventName(),
+	private void reactionAgeMissedError(final EventOccurrence eo, final boolean isReaction) {
+		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
+		final Code code = isReaction ? Code.REACTION_MISSED : Code.AGE_MISSED;
+		system.error("%s for \"%s\" did not arrive in time at %s.".formatted(type, eo.eventName(),
+				Utils.nsToString(eo.timestampNs())), code);
+	}
+
+	private void reactionAgeTooOftenError(final EventOccurrence eo, final boolean isReaction) {
+		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
+		final Code code = isReaction ? Code.REACTION_TOO_OFTEN : Code.AGE_TOO_OFTEN;
+		system.error("%s for \"%s\" occurred more than once until %s.".formatted(type, eo.eventName(),
 				Utils.nsToString(eo.timestampNs())), code);
 	}
 
 	@SuppressWarnings("boxing")
-	private void reactionMissedSlidingWindowError(final EventOccurrence eo, final ContractRule.SlidingWindow window,
-			final ContractIssue.Code code) {
-		system.error("Reaction for \"%s\" did not arrive %d out of %d times at %s.".formatted(eo.eventName(),
+	private void reactionAgeMissedSlidingWindowError(final EventOccurrence eo, final ContractRule.SlidingWindow window,
+			final boolean isReaction) {
+		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
+		final Code code = isReaction ? Code.REACTION_MISSED : Code.AGE_MISSED;
+		system.error("%s for \"%s\" did not arrive %d out of %d times at %s.".formatted(type, eo.eventName(),
 				window.n(), window.outOf(), Utils.nsToString(eo.timestampNs())), code);
 	}
 
-	private void eventOutsideIntervalError(final CInterval interval, final EventOccurrence eo,
-			final ContractIssue.Code tooEarly, final ContractIssue.Code tooLate) {
+	private void eventOutsideIntervalError(final CInterval interval, final EventOccurrence eo, final Code tooEarly,
+			final Code tooLate) {
 		if (eo.timestampNs() <= interval.getLowerBound()) {
 			system.error("\"%s\" occurred %s too early.".formatted(eo.eventName(),
 					Utils.nsToString(interval.getLowerBound() - eo.timestampNs())), tooEarly);
@@ -342,6 +330,14 @@ public class DynamicContractChecker {
 
 	private void createMissedMarker(final String key, final double time, final int i) {
 		queue.offer(new EventOccurrence(key, time, EventOccurrence.Type.MISSED_MARKER, EventOccurrence.State.ISSUE, i));
+	}
+
+	private static EventOccurrence missedMarker(final double time) {
+		return new EventOccurrence("", time, EventOccurrence.Type.MISSED_MARKER, EventOccurrence.State.ISSUE, 0); //$NON-NLS-1$
+	}
+
+	private static EventOccurrence normalMarker(final EventOccurrence eo) {
+		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.NOT_SET, 0);
 	}
 
 	private static EventOccurrence issueMarker(final EventOccurrence eo) {

@@ -263,6 +263,117 @@ class DynamicContractCheckTest {
 		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
 	}
 
+	@Test
+	void reactionIntervalBoundaryLeftClosedTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 5)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionIntervalBoundaryLeftOpenTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within ]5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 5)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void reactionIntervalBoundaryRightClosedTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 10)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionIntervalBoundaryRightOpenTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then EO occurs within [5, 10[ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 10)));
+		assertIssues(sys, ContractIssue.Code.REACTION_MISSED);
+	}
+
+	@Test
+	void reactionSetOnceValidTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then {EO, EO2} occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 6), eo("EO2", 7), eo("EO2", 8), eo("EO", 9)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionSetOnceInvalidTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then {EO, EO2} occurs within [5, 10]ns once");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 6), eo("EO2", 7), eo("EO2", 8), eo("EO", 9)));
+		assertIssues(sys, ContractIssue.Code.REACTION_TOO_OFTEN);
+	}
+
+	@Test
+	void reactionSequenceValidTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then (EO, EO2) occurs within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 6), eo("EO2", 7), eo("EO", 8), eo("EO2", 9)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void reactionSequenceInvalidTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EI occurs then (EO, EO2) occurs within [5, 10]ns once");
+		sys.performDynamicCheck(List.of(eo("EI", 0), eo("EO", 6), eo("EO2", 7), eo("EO", 8), eo("EO2", 9)));
+		assertIssues(sys, ContractIssue.Code.REACTION_TOO_OFTEN);
+	}
+
+	// === test age
+	// age is symmetric to reaction above in many aspects -> less extensive tests
+	@Test
+	void ageEmptyTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within 5ns");
+		sys.performDynamicCheck(List.of());
+		assertIssues(sys);
+	}
+
+	@Test
+	void ageFulfilledTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within 5ns");
+		sys.performDynamicCheck(List.of(eo("EI", 2), eo("EO", 7), eo("EI", 13), eo("EO", 18)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void ageMissedTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within 5ns");
+		sys.performDynamicCheck(List.of(eo("EO", 2), eo("EO", 13)));
+		assertIssues(sys, ContractIssue.Code.AGE_MISSED, ContractIssue.Code.AGE_MISSED);
+	}
+
+	@Test
+	void ageOverlapMultiFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 6), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void ageOverlapEarlyTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys, ContractIssue.Code.AGE_MISSED);
+	}
+
+	@Test
+	void ageOverlapLateTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 8), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys, ContractIssue.Code.AGE_MISSED);
+	}
+
+	@Test
+	void ageOverlapBothTest() {
+		final ContractSystem sys = createSimpleSystem("whenever EO occurs then EI has occurred within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 8), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys);
+	}
+
+	// === test causal reaction
+
+	// === test causal age
+
 	// === helper methods
 	/**
 	 * creates a system with a single component with inputs ("EI", "EI2", "EI3"),
