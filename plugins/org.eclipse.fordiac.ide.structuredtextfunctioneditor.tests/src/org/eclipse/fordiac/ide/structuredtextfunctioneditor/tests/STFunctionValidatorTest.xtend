@@ -771,7 +771,7 @@ class STFunctionValidatorTest {
 				CONST3 : INT := 0;
 				CONST4 : INT := 0;
 			END_VAR
-
+			
 			IF TEMP1 THEN
 				TEMP1 := TRUE;
 			ELSIF TEMP2 THEN
@@ -1202,111 +1202,82 @@ class STFunctionValidatorTest {
 			STCoreValidator.STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS)
 	}
 
-	@ParameterizedTest(name="{index}: {0} with {1}")
-	@MethodSource("typeUnaryOperatorArgumentsCartesianProvider")
-	def void testUnaryOperatorNotApplicableErrorValidator(String operatorName, String typeName) {
-		val operator = STUnaryOperator.getByName(operatorName)
-		val type = ElementaryTypes.getTypeByName(typeName)
-		val result = '''
-		FUNCTION hubert
-		VAR
-		    var1 : «type.name»;
-		END_VAR
-		var1 := «operator.literal» var1;
-		END_FUNCTION'''.parse
-		if (STCoreUtil.isApplicableTo(operator, type))
-			result.assertNoErrors
-		else
-			result.assertError(STCorePackage.eINSTANCE.STUnaryExpression, STCoreValidator.OPERATOR_NOT_APPLICABLE)
-	}
-
-	@ParameterizedTest(name="{index}: {0} with {1} and {2}")
-	@MethodSource("typeBinaryOperatorArgumentsCartesianProvider")
-	def void testBinaryOperatorNotApplicableErrorValidator(String operatorName, String leftTypeName,
-		String rightTypeName) {
-		val operator = STBinaryOperator.getByName(operatorName)
-		val leftType = ElementaryTypes.getTypeByName(leftTypeName)
-		val rightType = ElementaryTypes.getTypeByName(rightTypeName)
-		val result = '''
-		FUNCTION hubert
-		VAR
-		    var1 : «leftType.name»;
-		    var2 : «rightType.name»;
-		    var3 : BOOL;
-		END_VAR
-		var3 := (var1 «operator.literal» var2) = (var1 «operator.literal» var2);
-		END_FUNCTION'''.parse
-		if (STCoreUtil.isApplicableTo(operator, leftType, rightType))
-			result.assertNoErrors
-		else
-			result.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.OPERATOR_NOT_APPLICABLE)
-	}
-
-	@ParameterizedTest(name="{index}: {0} with {1}")
-	@MethodSource("typeUnaryOperatorApplicableArgumentsCartesianProvider")
-	def void testUnaryOperatorResultType(String operatorName, String typeName) {
-		val operator = STUnaryOperator.getByName(operatorName)
-		val type = ElementaryTypes.getTypeByName(typeName)
-		val result = '''
-		FUNCTION hubert
-		VAR
-		    var1 : «type.name»;
-		END_VAR
-		«operator.literal» var1;
-		END_FUNCTION'''.parse
-		val expression = result.functions.head.code.head as STUnaryExpression
-		assertNotNull(expression.resultType, "invalid result type from applicable operator")
-	}
-
-	@ParameterizedTest(name="{index}: {0} with {1} and {2}")
-	@MethodSource("typeBinaryOperatorApplicableArgumentsCartesianProvider")
-	def void testBinaryOperatorResultType(String operatorName, String leftTypeName, String rightTypeName) {
-		val operator = STBinaryOperator.getByName(operatorName)
-		val leftType = ElementaryTypes.getTypeByName(leftTypeName)
-		val rightType = ElementaryTypes.getTypeByName(rightTypeName)
-		val result = '''
-		FUNCTION hubert
-		VAR
-		    var1 : «leftType.name»;
-		    var2 : «rightType.name»;
-		END_VAR
-		var1 «operator.literal» var2;
-		END_FUNCTION'''.parse
-		val expression = result.functions.head.code.head as STBinaryExpression
-		assertNotNull(expression.resultType, "invalid result type from applicable operator")
-	}
-
-	def static Stream<Arguments> typeUnaryOperatorArgumentsCartesianProvider() {
-		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ type |
-			STUnaryOperator.VALUES.stream.map [ op |
-				arguments(op.getName, type.name)
+	@Test
+	def void testUnaryOperatorNotApplicableErrorValidator() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ type |
+			STUnaryOperator.VALUES.forEach [ operator |
+				val result = '''
+				FUNCTION hubert
+				VAR
+				    var1 : «type.name»;
+				END_VAR
+				var1 := «operator.literal» var1;
+				END_FUNCTION'''.parse
+				if (STCoreUtil.isApplicableTo(operator, type))
+					result.assertNoErrors
+				else
+					result.assertError(STCorePackage.eINSTANCE.STUnaryExpression,
+						STCoreValidator.OPERATOR_NOT_APPLICABLE)
 			]
 		]
 	}
 
-	def static Stream<Arguments> typeBinaryOperatorArgumentsCartesianProvider() {
-		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
-			DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ second |
-				STBinaryOperator.VALUES.stream.map [ op |
-					arguments(op.getName, first.name, second.name)
+	@Test
+	def void testBinaryOperatorNotApplicableErrorValidator() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ leftType |
+			DataTypeLibrary.nonUserDefinedDataTypes.forEach [ rightType |
+				STBinaryOperator.VALUES.forEach [ operator |
+					val result = '''
+					FUNCTION hubert
+					VAR
+					    var1 : «leftType.name»;
+					    var2 : «rightType.name»;
+					    var3 : BOOL;
+					END_VAR
+					var3 := (var1 «operator.literal» var2) = (var1 «operator.literal» var2);
+					END_FUNCTION'''.parse
+					if (STCoreUtil.isApplicableTo(operator, leftType, rightType))
+						result.assertNoErrors
+					else
+						result.assertError(STCorePackage.eINSTANCE.STBinaryExpression,
+							STCoreValidator.OPERATOR_NOT_APPLICABLE)
 				]
 			]
 		]
 	}
 
-	def static Stream<Arguments> typeUnaryOperatorApplicableArgumentsCartesianProvider() {
-		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ type |
-			STUnaryOperator.VALUES.stream.filter[op|STCoreUtil.isApplicableTo(op, type)].map [ op |
-				arguments(op.getName, type.name)
+	@Test
+	def void testUnaryOperatorResultType() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ type |
+			STUnaryOperator.VALUES.filter[op|STCoreUtil.isApplicableTo(op, type)].forEach [ operator |
+				val result = '''
+				FUNCTION hubert
+				VAR
+				    var1 : «type.name»;
+				END_VAR
+				«operator.literal» var1;
+				END_FUNCTION'''.parse
+				val expression = result.functions.head.code.head as STUnaryExpression
+				assertNotNull(expression.resultType, "invalid result type from applicable operator")
 			]
 		]
 	}
 
-	def static Stream<Arguments> typeBinaryOperatorApplicableArgumentsCartesianProvider() {
-		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
-			DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ second |
-				STBinaryOperator.VALUES.stream.filter[op|STCoreUtil.isApplicableTo(op, first, second)].map [ op |
-					arguments(op.getName, first.name, second.name)
+	@Test
+	def void testBinaryOperatorResultType() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ leftType |
+			DataTypeLibrary.nonUserDefinedDataTypes.forEach [ rightType |
+				STBinaryOperator.VALUES.filter[op|STCoreUtil.isApplicableTo(op, leftType, rightType)].forEach [ operator |
+					val result = '''
+					FUNCTION hubert
+					VAR
+					    var1 : «leftType.name»;
+					    var2 : «rightType.name»;
+					END_VAR
+					var1 «operator.literal» var2;
+					END_FUNCTION'''.parse
+					val expression = result.functions.head.code.head as STBinaryExpression
+					assertNotNull(expression.resultType, "invalid result type from applicable operator")
 				]
 			]
 		]
