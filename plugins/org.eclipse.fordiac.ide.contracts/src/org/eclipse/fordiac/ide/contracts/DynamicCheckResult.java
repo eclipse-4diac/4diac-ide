@@ -15,11 +15,19 @@ package org.eclipse.fordiac.ide.contracts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 
 	public static class RuleData {
+
+		public enum SearchResult {
+			VALID, MISSED, TOO_OFTEN
+		}
 
 		private final ContractRule rule;
 		private final List<CInterval> intervals;
@@ -42,7 +50,7 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 				slidingWindow = null;
 			}
 
-			if (rule.getType() == ContractRule.Type.REACTION) {
+			if (rule.getType() == ContractRule.Type.REACTION || rule.getType() == ContractRule.Type.AGE) {
 				triggerSet = new boolean[rule.getInputs().size()];
 			} else {
 				triggerSet = null;
@@ -115,6 +123,133 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 			}
 			Arrays.fill(triggerSet, false); // reset for next
 			return true;
+		}
+
+		/**
+		 * searches if the rules reaction or age is fulfilled within the given interval
+		 * based on the recorded event occurrence markers
+		 *
+		 * @param interval the interval to search within
+		 * @return whether the searched interval is valid or has an issue
+		 */
+		public SearchResult searchInterval(final CInterval interval) {
+			final List<String> ports;
+			final boolean isSequence;
+			if (rule.getType() == ContractRule.Type.REACTION) {
+				ports = rule.getOutputs();
+				isSequence = rule.outputIsSequence();
+			} else {
+				ports = rule.getInputs();
+				isSequence = rule.inputIsSequence();
+			}
+
+			if (isSequence) {
+				return searchForSequence(interval, ports, rule.isOnce());
+			}
+			return searchForSet(interval, ports, rule.isOnce());
+		}
+
+		private SearchResult searchForSequence(final CInterval inter, final List<String> ports, boolean once) {
+			int sequenceIdx = 0;
+			int eventIdx = firstIndex(markers, inter); // TODO not so nice to do this twice
+			boolean checkingOnce = false;
+
+			for (final EventOccurrence eo : iterateInterval(markers, inter)) {
+				eventIdx++;
+				if (eo.type() != EventOccurrence.Type.RECORDED) {
+					continue;
+				}
+				if (eo.eventName().endsWith(ports.get(sequenceIdx))) {
+					sequenceIdx++;
+					if (sequenceIdx >= ports.size()) {
+						// update state of occurrences in sequence
+						final EventOccurrence.State state = checkingOnce ? EventOccurrence.State.ISSUE
+								: EventOccurrence.State.FULFILLING;
+						for (int j = 0; j < ports.size(); j++) {
+							final EventOccurrence eoSeq = markers.get(eventIdx - ports.size() + j);
+							eoSeq.setState(state);
+						}
+						if (once) { // reset and continue to check for once violations
+							sequenceIdx = 0;
+							once = false;
+							checkingOnce = true;
+						} else if (checkingOnce) { // we reached this again, violating "once"
+							return SearchResult.TOO_OFTEN;
+						} else {
+							return SearchResult.VALID;
+						}
+					}
+				}
+			}
+			return checkingOnce ? SearchResult.VALID : SearchResult.MISSED;
+		}
+
+		private SearchResult searchForSet(final CInterval inter, final List<String> ports, boolean once) {
+			final Set<String> set = new HashSet<>(ports);
+			final List<EventOccurrence> fulfill = new ArrayList<>(set.size());
+			boolean checkingOnce = false;
+
+			for (final EventOccurrence eo : iterateInterval(markers, inter)) {
+				if (eo.type() != EventOccurrence.Type.RECORDED) {
+					continue;
+				}
+				if (set.remove(eo.getShortName())) {
+					fulfill.add(eo);
+					if (set.isEmpty()) {
+						// update state of occurrences in set
+						final EventOccurrence.State state = checkingOnce ? EventOccurrence.State.ISSUE
+								: EventOccurrence.State.FULFILLING;
+						for (final EventOccurrence eoSet : fulfill) {
+							eoSet.setState(state);
+						}
+						if (once) { // reset and continue to check for once violations
+							set.addAll(ports);
+							fulfill.clear();
+							once = false;
+							checkingOnce = true;
+						} else if (checkingOnce) { // we reached this again, violating "once"
+							return SearchResult.TOO_OFTEN;
+						} else {
+							return SearchResult.VALID;
+						}
+					}
+				}
+			}
+			return checkingOnce ? SearchResult.VALID : SearchResult.MISSED;
+		}
+
+		private static Iterable<EventOccurrence> iterateInterval(final List<EventOccurrence> list,
+				final CInterval interval) {
+			return () -> new Iterator<>() {
+
+				int index = firstIndex(list, interval);
+
+				@Override
+				public boolean hasNext() {
+					return index < list.size() && interval.contains(list.get(index).timestampNs());
+				}
+
+				@Override
+				public EventOccurrence next() {
+					final int i = index;
+					index++;
+					return list.get(i);
+				}
+			};
+		}
+
+		private static int firstIndex(final List<EventOccurrence> list, final CInterval interval) {
+			final EventOccurrence key = new EventOccurrence("", interval.getLowerBound()); //$NON-NLS-1$
+
+			int index = Collections.binarySearch(list, key);
+			if (index < 0) {
+				// if result <0, binarySearch returns the insertion point (see documentation)
+				index = Math.abs(index + 1);
+			}
+			if (index < list.size() && !interval.contains(list.get(index).timestampNs())) {
+				index++; // can happen because lower bound is open in interval
+			}
+			return index;
 		}
 
 		public ContractRule rule() {
