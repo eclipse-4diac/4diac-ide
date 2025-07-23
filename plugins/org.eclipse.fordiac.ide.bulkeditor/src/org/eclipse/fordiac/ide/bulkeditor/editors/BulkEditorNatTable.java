@@ -21,11 +21,10 @@ import java.util.stream.IntStream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.nat.AbstractAnnotatedConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.AttributeDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
@@ -38,8 +37,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
-import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -139,7 +136,7 @@ public class BulkEditorNatTable {
 			// make sure NatTable is drawn to get Correct Cell-height
 			final GridData natTableGridData = new GridData(SWT.FILL, SWT.TOP, true, false);
 			int height = (int) (24 * (double) Display.getCurrent().getDPI().x / 96);
-			if (mappedList.size() > 0) {
+			if (!mappedList.isEmpty()) {
 				height = Math.max(height,
 						NatTableWidgetFactory.getDataLayer(natTable).getBoundsByPosition(0, 0).height);
 			}
@@ -166,113 +163,9 @@ public class BulkEditorNatTable {
 			natTable.dispose();
 		}
 		if (this.currentMode == 0) {
-			final var accessor = new VarDeclarationColumnAccessor(commandExecutor,
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			varDeclProvider = new ChangeableListDataProvider<>(accessor);
-			this.varDeclarationSorterModel = new SorterModel<>(accessor);
-			final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
-					varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
-				@Override
-				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
-						final int rowPosition) {
-					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-					switch (getColumns().get(columnPosition)) {
-					case NAME:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					case TYPE:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					default:
-						break;
-					}
-				}
-			};
-			inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
-			final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-					VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-					new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
-							VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
-					null, null, varDeclarationSorterModel, false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
+			createDefaultVarDeclTable();
 		} else {
-			final var accessor = new AttributeColumnAccessor(commandExecutor,
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			attributeProvider = new ChangeableListDataProvider<>(accessor);
-			this.attributeSorterModel = new SorterModel<>(accessor);
-			final DataLayer dataLayer = new DataLayer(attributeProvider);
-
-			final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
-					attributeProvider, () -> null, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
-				@Override
-				public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
-						final int rowPosition) {
-					super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-					switch (getColumns().get(columnPosition)) {
-					case NAME:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					case TYPE:
-						configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						break;
-					default:
-						break;
-					}
-				}
-			};
-			dataLayer.setConfigLabelAccumulator(configLabelProvider);
-			final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
-					AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-			natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
-					new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
-							AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-							AttributeTableColumn.EDITABLE_COMMENT_VALUE, attributeProvider),
-					new TypeSelectionButton(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						if (EcoreUtil.getRootContainer(attributeProvider
-								.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
-							return libElement.getTypeLibrary();
-						}
-						return null;
-					}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
-					attributeSorterModel, false);
-			natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
-			natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
-
-			final Predicate<TypeEntry> targetFilter = entry -> {
-				if (entry.getType() instanceof final AttributeDeclaration decl) {
-					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-							.getLastSelectedCellPosition().getRowPosition();
-					if (attributeProvider.getRowObject(relevantRowIndex)
-							.eContainer() instanceof final ConfigurableObject configurableObject) {
-						return decl.isValidObject(configurableObject);
-					}
-				}
-				return true;
-			};
-
-			final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
-			attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
-					new ImportTypeSelectionProposalProvider(() -> {
-						final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
-								.getLastSelectedCellPosition().getRowPosition();
-						return attributeProvider.getRowObject(relevantRowIndex).eContainer();
-					}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
-					KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
-			natTable.addConfiguration(new AbstractRegistryConfiguration() {
-				@Override
-				public void configureRegistry(final IConfigRegistry configRegistry) {
-					configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
-							DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
-				}
-			});
+			createDefaultAttributeTable();
 		}
 
 		natTable.addConfiguration(new SingleClickSortConfiguration());
@@ -284,6 +177,118 @@ public class BulkEditorNatTable {
 
 			final int newY = Math.max(0, origin.y - event.count * 20);
 			scrolledParent.setOrigin(origin.x, newY);
+		});
+	}
+
+	public void createDefaultVarDeclTable() {
+		final var accessor = new VarDeclarationColumnAccessor(commandExecutor,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		varDeclProvider = new ChangeableListDataProvider<>(accessor);
+		this.varDeclarationSorterModel = new SorterModel<>(accessor);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
+				varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+			@Override
+			public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+					final int rowPosition) {
+				super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+				switch (getColumns().get(columnPosition)) {
+				case NAME:
+					configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+					break;
+				case TYPE:
+					configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
+				new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
+						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
+						VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
+				null, null, varDeclarationSorterModel, false);
+		natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
+		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
+		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
+	}
+
+	public void createDefaultAttributeTable() {
+		final var accessor = new AttributeColumnAccessor(commandExecutor,
+				AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		attributeProvider = new ChangeableListDataProvider<>(accessor);
+		this.attributeSorterModel = new SorterModel<>(accessor);
+		final DataLayer dataLayer = new DataLayer(attributeProvider);
+
+		final AttributeConfigLabelAccumulator configLabelProvider = new AttributeConfigLabelAccumulator(
+				attributeProvider, () -> null, AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+			@Override
+			public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
+					final int rowPosition) {
+				super.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+				switch (getColumns().get(columnPosition)) {
+				case NAME:
+					configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+					break;
+				case TYPE:
+					configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		dataLayer.setConfigLabelAccumulator(configLabelProvider);
+		final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
+				AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, columnProvider,
+				new AttributeEditableRule(new LinkedElementsEditableRule(attributeProvider),
+						AttributeTableColumn.DEFAULT_COLUMNS_WITH_LOCATION, AttributeTableColumn.EDITABLE_COMMENT_VALUE,
+						attributeProvider),
+				new TypeSelectionButton(() -> {
+					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+							.getLastSelectedCellPosition().getRowPosition();
+					if (EcoreUtil.getRootContainer(attributeProvider
+							.getRowObject(relevantRowIndex)) instanceof final LibraryElement libElement) {
+						return libElement.getTypeLibrary();
+					}
+					return null;
+				}, DataTypeSelectionContentProvider.INSTANCE, DataTypeSelectionTreeContentProvider.INSTANCE), null,
+				attributeSorterModel, false);
+		natTable.addConfiguration(new InitialValueEditorConfiguration(attributeProvider));
+		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
+
+		final Predicate<TypeEntry> targetFilter = entry -> {
+			if (entry.getType() instanceof final AttributeDeclaration decl) {
+				final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+						.getLastSelectedCellPosition().getRowPosition();
+				if (attributeProvider.getRowObject(relevantRowIndex)
+						.eContainer() instanceof final ConfigurableObject configurableObject) {
+					return decl.isValidObject(configurableObject);
+				}
+			}
+			return true;
+		};
+
+		final AttributeNameCellEditor attributeNameCellEditor = new AttributeNameCellEditor();
+		attributeNameCellEditor.enableContentProposal(new TextContentAdapter(),
+				new ImportTypeSelectionProposalProvider(() -> {
+					final int relevantRowIndex = NatTableWidgetFactory.getSelectionLayer(natTable)
+							.getLastSelectedCellPosition().getRowPosition();
+					return attributeProvider.getRowObject(relevantRowIndex).eContainer();
+				}, TypeLibrary::getAttributeTypeEntry, AttributeSelectionContentProvider.INSTANCE, targetFilter),
+				KeyStroke.getInstance(SWT.CTRL, SWT.SPACE), null);
+		natTable.addConfiguration(new AbstractRegistryConfiguration() {
+			@Override
+			public void configureRegistry(final IConfigRegistry configRegistry) {
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
+						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+			}
 		});
 	}
 
@@ -304,32 +309,7 @@ public class BulkEditorNatTable {
 		final var dataProvider = new NatTableColumnProvider<>(columns);
 
 		dataLayer.setConfigLabelAccumulator(
-				new AbstractAnnotatedConfigLabelAccumulator<>(attributeProvider, () -> null) {
-					@Override
-					public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
-							final int rowPosition) {
-						final var column = columns.get(columnPosition);
-						if (column == AttributeDeclarationTableColumn.COMMENT) {
-							configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-							if (!CommentHelper.hasComment(attributeProvider.getRowObject(rowPosition))) {
-								configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
-							}
-						}
-						if (column == AttributeDeclarationTableColumn.FILE_PATH
-								|| column == AttributeDeclarationTableColumn.LOCATION
-								|| column == AttributeDeclarationTableColumn.TYPE) {
-							configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_TRUNCATING);
-						}
-						if (column == AttributeDeclarationTableColumn.VALUE) {
-							configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-							if (!InitialValueHelper.hasInitalValue(attributeProvider.getRowObject(rowPosition))) {
-								configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
-							}
-							accumulateAttributeConfigLabels(configLabels, attributeProvider.getRowObject(rowPosition),
-									FordiacAnnotationUtil::showOnTargetValue);
-						}
-					}
-				});
+				new AttributeDeclarationConfigLabelAccumulator(attributeProvider, () -> null, columns));
 
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, dataLayer, dataProvider,
 				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE, columns, editColumns),

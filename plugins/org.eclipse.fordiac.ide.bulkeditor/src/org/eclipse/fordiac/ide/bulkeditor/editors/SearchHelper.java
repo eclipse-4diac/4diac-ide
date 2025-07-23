@@ -223,13 +223,13 @@ public class SearchHelper {
 		return new ISearchChildrenProvider() {
 			@Override
 			public boolean hasChildren(final EObject obj) {
-				return (obj instanceof FBType) || (obj instanceof AutomationSystem)
+				return obj instanceof FBType || obj instanceof AutomationSystem
 						|| (untypedSubappRecord.selected && obj instanceof UntypedSubApp)
 						|| (dataTypesRecord.selected && obj instanceof StructuredType)
 						|| (attributeTypesRecord.selected && obj instanceof AttributeDeclaration)
-						|| (obj instanceof final Application)
+						|| obj instanceof Application
 						|| (blockInstanceRecord.selected && obj instanceof FBNetworkElement)
-						|| (obj instanceof IInterfaceElement);
+						|| obj instanceof IInterfaceElement;
 			}
 
 			@Override
@@ -238,35 +238,7 @@ public class SearchHelper {
 				case final FBType fbType -> SearchChildrenProviderHelper.getFBTypeChildren(fbType);
 				case final AutomationSystem system ->
 					Stream.concat(system.getAttributes().stream(), system.getApplication().stream());
-				case final Application application -> {
-					Stream<? extends EObject> stream = Stream.empty();
-					if (untypedSubappRecord.selected) {
-						stream = Stream.concat(stream,
-								application.getFBNetwork().getNetworkElements().stream()
-										.filter(fbne -> (fbne instanceof UntypedSubApp
-												&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
-														untypedSubappRecord.namePattern)
-												&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
-														untypedSubappRecord.typePattern)
-												&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
-														untypedSubappRecord.commentPattern))));
-					}
-					if (blockInstanceRecord.selected) {
-						stream = Stream.concat(stream,
-								application.getFBNetwork().getNetworkElements().stream()
-										.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
-												&& matchesString(fbne.getName(), blockInstanceRecord.nameFilter,
-														blockInstanceRecord.namePattern)
-												&& matchesString(fbne.getTypeName(), blockInstanceRecord.typeFilter,
-														blockInstanceRecord.typePattern)
-												&& matchesString(fbne.getComment(), blockInstanceRecord.commentFilter,
-														blockInstanceRecord.commentPattern)));
-					}
-					stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
-					stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
-					stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
-					yield Stream.concat(stream, application.getAttributes().stream());
-				}
+				case final Application application -> getApplicationChildren(application);
 				case final UntypedSubApp untypedSubapp ->
 					SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);
 				case final StructuredType structType ->
@@ -279,6 +251,35 @@ public class SearchHelper {
 				case final ConfigurableObject configurableObject -> configurableObject.getAttributes().stream();
 				default -> null;
 				};
+			}
+
+			private Stream<? extends EObject> getApplicationChildren(final Application application) {
+				Stream<? extends EObject> stream = Stream.empty();
+				if (untypedSubappRecord.selected) {
+					stream = application.getFBNetwork().getNetworkElements().stream()
+							.filter(fbne -> fbne instanceof UntypedSubApp
+									&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
+											untypedSubappRecord.namePattern)
+									&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
+											untypedSubappRecord.typePattern)
+									&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
+											untypedSubappRecord.commentPattern));
+				}
+				if (blockInstanceRecord.selected) {
+					stream = Stream.concat(stream,
+							application.getFBNetwork().getNetworkElements().stream()
+									.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
+											&& matchesString(fbne.getName(), blockInstanceRecord.nameFilter,
+													blockInstanceRecord.namePattern)
+											&& matchesString(fbne.getTypeName(), blockInstanceRecord.typeFilter,
+													blockInstanceRecord.typePattern)
+											&& matchesString(fbne.getComment(), blockInstanceRecord.commentFilter,
+													blockInstanceRecord.commentPattern)));
+				}
+				stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
+				stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
+				stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
+				return Stream.concat(stream, application.getAttributes().stream());
 			}
 		};
 	}
