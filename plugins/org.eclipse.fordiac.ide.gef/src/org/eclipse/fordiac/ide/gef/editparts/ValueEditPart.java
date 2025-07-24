@@ -376,9 +376,17 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		final IInterfaceElement interfaceElement = getIInterfaceElement();
 		if (interfaceElement instanceof final VarDeclaration varDecl) {
 			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl,
-					getFigure().getText());
+					getDirectEditInitialValue());
 		}
 		return new LabelDirectEditManager(this, getFigure());
+	}
+
+	protected String getDirectEditInitialValue() {
+		final String text = getFigure().getText();
+		if (FordiacMessages.ComputingPlaceholderValue.equals(text) || FordiacMessages.ValueTooLarge.equals(text)) {
+			return ""; //$NON-NLS-1$
+		}
+		return text;
 	}
 
 	/** performs the directEdit. */
