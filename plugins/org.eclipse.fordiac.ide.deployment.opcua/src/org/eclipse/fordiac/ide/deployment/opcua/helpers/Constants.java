@@ -75,9 +75,9 @@ public class Constants {
 	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String CLEAR_FORCE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String QUERY_RESOURCES = "<Request Action=\"QUERY\"></Request>"; //$NON-NLS-1$
-	public static final String QUERY_FB_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
-	public static final String QUERY_DATA_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><DataType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
-	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><GlobalConstType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_FB_TYPE = "<Request Action=\"QUERY\"><FBType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_DATA_TYPE = "<Request Action=\"QUERY\"><DataType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request Action=\"QUERY\"><GlobalConstType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 

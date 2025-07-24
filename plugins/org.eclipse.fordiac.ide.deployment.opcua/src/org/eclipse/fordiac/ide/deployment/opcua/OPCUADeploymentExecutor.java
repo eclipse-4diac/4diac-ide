@@ -54,6 +54,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.SessionActivityListener;
@@ -574,8 +576,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_FB_TYPE_NODE,
 				new Variant[] {});
-		final String message = Constants.QUERY_FB_TYPE;
 		try {
+			final String message = MessageFormat.format(Constants.QUERY_FB_TYPE, getTypeNameWithHash(entry));
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
@@ -584,7 +586,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryFBType,
 					getIEC61499Status(result.getStatusCode())));
 
-		} catch (final IOException | ExecutionException e) {
+		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryFBTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -598,8 +600,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_DATA_TYPE_NODE,
 				new Variant[] {});
-		final String message = Constants.QUERY_DATA_TYPE;
 		try {
+			final String message = MessageFormat.format(Constants.QUERY_DATA_TYPE, getTypeNameWithHash(entry));
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
@@ -608,7 +610,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
 					getIEC61499Status(result.getStatusCode())));
 
-		} catch (final IOException | ExecutionException e) {
+		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryDataTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -622,8 +624,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE,
 				Constants.QUERY_GLOBAL_CONST_TYPE_NODE, new Variant[] {});
-		final String message = Constants.QUERY_DATA_TYPE;
+
 		try {
+			final String message = MessageFormat.format(Constants.QUERY_GLOBAL_CONST_TYPE, getTypeNameWithHash(entry));
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
@@ -632,7 +635,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryGlobalConstType,
 					getIEC61499Status(result.getStatusCode())));
 
-		} catch (final IOException | ExecutionException e) {
+		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryGlobalConstTypeFailed, e);
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -640,6 +643,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return Constants.EMPTY_RESPONSE;
+	}
+
+	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+		final String hash = entry.getTypeHash();
+		if (hash.isEmpty()) {
+			return ForteTypeNameCreator.getForteTypeName(entry);
+		}
+		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
 	}
 
 	@Override
