@@ -119,7 +119,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final Set<TypeEntry> dirtyEntries = new HashSet<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
-	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
+	private BulkEditorTypeEntryAdapter adapter;
 	private final IPartListener2 focusListener = new IPartListener2() {
 		@Override
 		public void partBroughtToTop(final IWorkbenchPartReference partRef) {
@@ -163,6 +163,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		adapter = new BulkEditorTypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
 		registerActions(site);
 		setSite(site);
 		setInput(input);
@@ -780,7 +781,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void setFocus() {
-		adapter.checkFileReload();
+		// nothing to be done
 	}
 
 	public void reloadType() {
@@ -846,6 +847,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		super.dispose();
 		getSite().getPage().removePartListener(focusListener);
 		copiedElementsMap.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
+		adapter.dispose();
 	}
 
 	@Override

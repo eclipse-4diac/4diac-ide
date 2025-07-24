@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Johannes Kepler University, Linz,
  * 							Primetals Technologies Austria GmbH
  *
@@ -95,7 +95,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	private final CommandStack commandStack = new CommandStack();
 	private Collection<ITypeEditorPage> editorPages;
-	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
+	private TypeEntryAdapter typeEntryAdapter;
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
 	private boolean wasDirtyBeforeExecute = false;
@@ -176,8 +176,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	@Override
 	public void dispose() {
 		final TypeEntry typeEntry = getTypeEntry();
-		if ((typeEntry != null) && typeEntry.eAdapters().contains(adapter)) {
-			typeEntry.eAdapters().remove(adapter);
+		if ((typeEntry != null) && typeEntry.eAdapters().contains(typeEntryAdapter)) {
+			typeEntry.eAdapters().remove(typeEntryAdapter);
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -202,6 +202,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
+		typeEntryAdapter.dispose();
 	}
 
 	@Override
@@ -283,7 +284,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		if (adapter == GraphicalAnnotationModel.class) {
 			return adapter.cast(annotationModel);
 		}
-
 		if (isEditorActive()) {
 			// we should only call super if the editor is active otherwise we may get
 			// disposed errors
@@ -362,6 +362,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
+		typeEntryAdapter = new TypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
 		getCommandStack().addCommandStackEventListener(this);
 		super.init(site, editorInput);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -394,8 +395,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		final LibraryElement newFBType = getTypeEntry().copyType();
 		final LibraryElement curType = getType();
 		if (newFBType != curType) {
-			if ((curType != null) && getTypeEntry().eAdapters().contains(adapter)) {
-				getTypeEntry().eAdapters().remove(adapter);
+			if ((curType != null) && getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
+				getTypeEntry().eAdapters().remove(typeEntryAdapter);
 			}
 			final TypeEditorInput typeEI = getTypeEditorInput();
 			if (typeEI != null) {
@@ -408,7 +409,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
 			}
 			getCommandStack().flush();
-			getTypeEntry().eAdapters().add(adapter);
+			getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setPartName(getTypeEntry().getTypeName());
 		}
 	}
@@ -431,12 +432,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	}
 
 	@Override
-	public void setFocus() {
-		super.setFocus();
-		adapter.checkFileReload();
-	}
-
-	@Override
 	public void setInput(final IEditorInput input) {
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -452,7 +447,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
 		if (isValidTypeEditorInput(typeEditorInput)) {
-			typeEditorInput.getTypeEntry().eAdapters().add(adapter);
+			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
 					typeEditorInput::getContent);
 			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
