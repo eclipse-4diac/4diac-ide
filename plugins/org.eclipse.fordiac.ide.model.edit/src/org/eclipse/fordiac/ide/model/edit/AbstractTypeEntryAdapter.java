@@ -18,26 +18,57 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
+
+	private final IEditorPart editor;
+	private ActivationListener activationListener;
 	private boolean reloadPending;
 
 	protected abstract void reloadEditorType();
 
-	protected abstract IEditorPart getEditor();
+	public void dispose() {
+		if (activationListener != null) {
+			activationListener.dispose();
+			activationListener = null;
+		}
+	}
 
-	public void checkFileReload() {
+	protected IEditorPart getEditor() {
+		return editor;
+	}
+
+	protected AbstractTypeEntryAdapter(final IEditorPart editor, final IPartService partService) {
+		this.editor = editor;
+		activationListener = new ActivationListener(partService);
+	}
+
+	/**
+	 * This method performs any updates / reloads required when the editor of this
+	 * adapter is activated.
+	 */
+	protected void checkEditorActivated() {
 		if (reloadPending) {
 			performReload();
 		}
 	}
 
 	protected void handleFileContentChange() {
-		if (getEditor().equals(getEditor().getSite().getPage().getActiveEditor())) {
+		if (isActiveEditor()) {
 			performReload();
 		} else {
 			reloadPending = true;
 		}
+	}
+
+	protected boolean isActiveEditor() {
+		return getEditor().equals(getEditor().getSite().getPage().getActiveEditor());
 	}
 
 	protected boolean editorClosed() {
@@ -63,5 +94,79 @@ public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
 				0);
 
 		return dialog.open();
+	}
+
+	class ActivationListener implements IPartListener, IWindowListener {
+
+		private IPartService partService;
+		private boolean ignoreUpdates;
+
+		public ActivationListener(final IPartService partService) {
+			this.partService = partService;
+			partService.addPartListener(this);
+			PlatformUI.getWorkbench().addWindowListener(this);
+		}
+
+		public void dispose() {
+			partService.removePartListener(this);
+			PlatformUI.getWorkbench().removeWindowListener(this);
+			partService = null;
+		}
+
+		@Override
+		public void windowActivated(final IWorkbenchWindow window) {
+			window.getShell().getDisplay().asyncExec(() -> handleActivation(window.getActivePage().getActivePart()));
+		}
+
+		@Override
+		public void partActivated(final IWorkbenchPart part) {
+			handleActivation(part);
+		}
+
+		private void handleActivation(final IWorkbenchPart part) {
+			if (getEditor() == part && !ignoreUpdates) {
+				// some editor activations (e.g., location changes) may result in a recursive
+				// call of this method that can be ignored.
+				ignoreUpdates = true;
+				checkEditorActivated();
+				ignoreUpdates = false;
+			}
+		}
+
+		@Override
+		public void partBroughtToTop(final IWorkbenchPart part) {
+			// nothing to do
+		}
+
+		@Override
+		public void partClosed(final IWorkbenchPart part) {
+			// nothing to do
+		}
+
+		@Override
+		public void partDeactivated(final IWorkbenchPart part) {
+			// nothing to do
+		}
+
+		@Override
+		public void partOpened(final IWorkbenchPart part) {
+			// nothing to do
+		}
+
+		@Override
+		public void windowDeactivated(final IWorkbenchWindow window) {
+			// nothing to do
+		}
+
+		@Override
+		public void windowClosed(final IWorkbenchWindow window) {
+			// nothing to do
+		}
+
+		@Override
+		public void windowOpened(final IWorkbenchWindow window) {
+			// nothing to do
+		}
+
 	}
 }

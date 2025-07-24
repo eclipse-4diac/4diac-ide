@@ -21,14 +21,13 @@ import org.eclipse.fordiac.ide.model.edit.AbstractTypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.edit.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartService;
 
 public class BulkEditorTypeEntryAdapter extends AbstractTypeEntryAdapter {
 	private final Set<String> changedFiles = new HashSet<>();
-	private final BulkEditor editor;
 
-	public BulkEditorTypeEntryAdapter(final BulkEditor editor) {
-		this.editor = editor;
+	public BulkEditorTypeEntryAdapter(final BulkEditor editor, final IPartService partService) {
+		super(editor, partService);
 	}
 
 	@Override
@@ -50,13 +49,13 @@ public class BulkEditorTypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 	@Override
 	protected void reloadEditorType() {
-		editor.reloadType();
+		getEditor().reloadType();
 		changedFiles.clear();
 	}
 
 	@Override
-	protected IEditorPart getEditor() {
-		return editor;
+	protected BulkEditor getEditor() {
+		return (BulkEditor) super.getEditor();
 	}
 
 	@Override

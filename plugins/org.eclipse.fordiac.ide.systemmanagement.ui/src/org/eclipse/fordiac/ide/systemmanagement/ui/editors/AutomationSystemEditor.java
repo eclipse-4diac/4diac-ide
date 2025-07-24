@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -84,6 +84,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -105,7 +106,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
 	}
 
-	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
+	private TypeEntryAdapter typeEntryAdapter;
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		typeEntryAdapter = new TypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
+		super.init(site, input);
+	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -310,7 +317,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				final TypeEntry newSystemEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject())
 						.createTypeEntry(file);
 				newSystemEntry.save(system, monitor);
-				oldSystemEntry.eAdapters().remove(adapter);
+				oldSystemEntry.eAdapters().remove(typeEntryAdapter);
 				oldSystemEntry.setType(null);
 				setInput(new FileEditorInput(file));
 			}
@@ -366,8 +373,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void dispose() {
-		if (system != null && system.getTypeEntry() != null && system.getTypeEntry().eAdapters().contains(adapter)) {
-			system.getTypeEntry().eAdapters().remove(adapter);
+		if (system != null && system.getTypeEntry() != null
+				&& system.getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
+			system.getTypeEntry().eAdapters().remove(typeEntryAdapter);
 		}
 
 		// get these values here before calling super dispose
@@ -388,6 +396,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			((SystemEntry) system.getTypeEntry()).setSystem(null);
 			system = null;
 		}
+		typeEntryAdapter.dispose();
 	}
 
 	@Override
@@ -398,15 +407,15 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
 
-		if (typeEntry.eAdapters().contains(adapter)) {
-			typeEntry.eAdapters().remove(adapter);
+		if (typeEntry.eAdapters().contains(typeEntryAdapter)) {
+			typeEntry.eAdapters().remove(typeEntryAdapter);
 		}
 
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
-		typeEntry.eAdapters().add(adapter);
+		typeEntry.eAdapters().add(typeEntryAdapter);
 		setPartName(system.getName());
 
 		if (!getBreadcrumb().openPath(path, system)) {
@@ -438,8 +447,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				if (system != null) {
 					getCommandStack().addCommandStackEventListener(this);
 					getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-					QualNameChangeListenerManager.INSTANCE.addCommandStackEventListener(getCommandStack());
-					system.getTypeEntry().eAdapters().add(adapter);
+					QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
+					system.getTypeEntry().eAdapters().add(typeEntryAdapter);
 				}
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
@@ -451,13 +460,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 					.forEach(e -> e.setInput(e.getEditorInput()));
 		}
 		setInputWithNotify(input);
-	}
-
-	@Override
-	public void setFocus() {
-		super.setFocus();
-		// we got focus check if the content needs reload
-		adapter.checkFileReload();
 	}
 
 	private void selectRootModelOfEditor() {
