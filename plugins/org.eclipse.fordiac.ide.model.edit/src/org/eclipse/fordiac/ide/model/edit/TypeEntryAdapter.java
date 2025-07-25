@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,27 +47,42 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
-	private final ITypeEntryEditor editor;
+	private INavigationLocation location;
 
-	public TypeEntryAdapter(final ITypeEntryEditor editor) {
-		this.editor = editor;
+	public TypeEntryAdapter(final ITypeEntryEditor editor, final IPartService partService) {
+		super(editor, partService);
 	}
 
 	@Override
-	protected IEditorPart getEditor() {
-		return editor;
+	protected ITypeEntryEditor getEditor() {
+		return (ITypeEntryEditor) super.getEditor();
+	}
+
+	@Override
+	protected void checkEditorActivated() {
+		super.checkEditorActivated();
+		performLocationRestore();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (location != null) {
+			location.dispose();
+			location = null;
+		}
 	}
 
 	@Override
 	protected void reloadEditorType() {
-		editor.reloadType();
+		getEditor().reloadType();
 	}
 
 	@Override
@@ -80,13 +95,19 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 		}
 
 		switch (feature) {
-		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE:
+		case TypeEntry.TYPE_ENTRY_TYPE_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE:
+			// make sure type was reloaded and not just loaded
+			if (notification.getOldValue() != null) {
+				handleFileContentChange();
+			}
+			break;
+		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
 			handleFileContentChange();
 			break;
 		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:
 			Display.getDefault().asyncExec(() -> {
 				if (!editorClosed() && notification.getNewValue() instanceof final IFile newFile) {
-					editor.setInput(new FileEditorInput(newFile));
+					getEditor().setInput(new FileEditorInput(newFile));
 				}
 			});
 			break;
@@ -104,7 +125,7 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 	}
 
 	private void handleDependencyUpdate(final TypeEntry typeEntry) {
-		final LibraryElement editedElement = editor.getAdapter(LibraryElement.class);
+		final LibraryElement editedElement = getEditor().getAdapter(LibraryElement.class);
 		if (editedElement != null) {
 			Display.getDefault().asyncExec(() -> {
 				if (editorClosed()) {
@@ -141,7 +162,7 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 	private void handleBlockTypeDependencyUpdate(final LibraryElement editedElement, final TypeEntry typeEntry) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(editedElement, typeEntry);
 
-		final INavigationLocation location = getEditorLocation();
+		checkEditorLocation();
 
 		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
 				.map(fbnEl -> {
@@ -151,17 +172,17 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
 				}).forEach(Command::execute);
 
-		if (location != null) {
-			location.restoreLocation();
+		if (isActiveEditor()) {
+			performLocationRestore();
 		}
 	}
 
-	private INavigationLocation getEditorLocation() {
-		if (editor.getAdapter(FBNetwork.class) == null
-				&& editor instanceof final INavigationLocationProvider provider) {
-			return provider.createNavigationLocation();
+	private void checkEditorLocation() {
+		if (location == null && getEditor().getAdapter(FBNetwork.class) == null
+				&& getEditor().getAdapter(FBNetworkElement.class) != null
+				&& getEditor() instanceof final INavigationLocationProvider provider) {
+			location = provider.createNavigationLocation();
 		}
-		return null;
 	}
 
 	private static void handleDataTypeEntryUpdate(final LibraryElement editedElement, final DataTypeEntry dtEntry) {
@@ -184,6 +205,14 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 			}
 			return null;
 		}).filter(Objects::nonNull).forEach(Command::execute);
+	}
+
+	private void performLocationRestore() {
+		if (location != null) {
+			location.restoreLocation();
+			location.dispose();
+			location = null;
+		}
 	}
 
 }

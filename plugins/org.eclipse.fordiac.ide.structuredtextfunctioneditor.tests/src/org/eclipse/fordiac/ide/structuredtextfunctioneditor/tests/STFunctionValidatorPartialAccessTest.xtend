@@ -42,17 +42,18 @@ class STFunctionValidatorPartialAccessTest {
 		new DataTypeLibrary
 	}
 
-	@ParameterizedTest(name="Check valid index {0}")
-	@MethodSource("generateValidByteIndices")
-	def void testValidBytePartialAccess(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : BYTE;
-			END_VAR
-			x.«input» := 1;
-			END_FUNCTION
-		'''.parse.assertNoErrors
+	@Test
+	def void testValidBytePartialAccess() {
+		generateValidByteIndices.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : BYTE;
+				END_VAR
+				x.«input» := 1;
+				END_FUNCTION
+			'''.parse.assertNoErrors
+		]
 	}
 
 	def static generateValidByteIndices() {
@@ -61,17 +62,18 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess
 	}
 
-	@ParameterizedTest(name="Check valid index {0}")
-	@MethodSource("generateValidWordIndices")
-	def void testValidWordPartialAccess(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : WORD;
-			END_VAR
-			x.«input» := true;
-			END_FUNCTION
-		'''.parse.assertNoErrors
+	@Test
+	def void testValidWordPartialAccess() {
+		generateValidWordIndices.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : WORD;
+				END_VAR
+				x.«input» := true;
+				END_FUNCTION
+			'''.parse.assertNoErrors
+		]
 	}
 
 	def static generateValidWordIndices() {
@@ -81,17 +83,18 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess
 	}
 
-	@ParameterizedTest(name="Check valid index {0}")
-	@MethodSource("generateValidDWordIndices")
-	def void testValidDWordPartialAccess(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : DWORD;
-			END_VAR
-			x.«input» := true;
-			END_FUNCTION
-		'''.parse.assertNoErrors
+	@Test
+	def void testValidDWordPartialAccess() {
+		generateValidDWordIndices.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : DWORD;
+				END_VAR
+				x.«input» := true;
+				END_FUNCTION
+			'''.parse.assertNoErrors
+		]
 	}
 
 	def static generateValidDWordIndices() {
@@ -102,17 +105,18 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess + wordAccess
 	}
 
-	@ParameterizedTest(name="Check valid index {0}")
-	@MethodSource("generateValidLWordIndices")
-	def void testValidLWordPartialAccess(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : LWORD;
-			END_VAR
-			x.«input» := true;
-			END_FUNCTION
-		'''.parse.assertNoErrors
+	@Test
+	def void testValidLWordPartialAccess() {
+		generateValidLWordIndices.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : LWORD;
+				END_VAR
+				x.«input» := true;
+				END_FUNCTION
+			'''.parse.assertNoErrors
+		]
 	}
 
 	def static generateValidLWordIndices() {
@@ -124,47 +128,50 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess + wordAccess + dwordAccess
 	}
 
-	@ParameterizedTest
-	@MethodSource("generateTypeNonAnyBitTypeNames")
-	def void testNonAnyBitTypesCannotPerformPartialAccess(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : «input»;
-			END_VAR
-			x.1 := true;
-			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INVALID_FOR_TYPE,
-			"Partial access invalid for type " + input + ", which is not of ANY_BIT")
+	@Test
+	def void testNonAnyBitTypesCannotPerformPartialAccess() {
+		generateTypeNonAnyBitTypeNames.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : «input»;
+				END_VAR
+				x.1 := true;
+				END_FUNCTION
+			'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INVALID_FOR_TYPE,
+				"Partial access invalid for type " + input + ", which is not of ANY_BIT")
+		]
 	}
 
 	def static generateTypeNonAnyBitTypeNames() {
 		return DataTypeLibrary.nonUserDefinedDataTypes.filter[!(it instanceof AnyBitType)].map[it.name]
 	}
 
-	@ParameterizedTest(name="Check invalid index {0}")
-	@MethodSource("generateInvalidByteIndices")
-	def void testInvalidBytePartialAccess(String input) {
-		var exprString = "";
-		try {
-			Integer.parseInt(input)
-			exprString = "%X" + input
-		} catch (NumberFormatException e) {
-			exprString = input
-		}
-		'''
-			FUNCTION partialTest
-			VAR
-			x : BYTE;
-			END_VAR
-			x.«input» := 1;
-			END_FUNCTION
-		'''.parse.assertError(
-			STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
-			"Partial access index " + exprString + " of out range"
-		)
+	@Test
+	def void testInvalidBytePartialAccess() {
+		generateInvalidByteIndices.forEach [ input |
+			var exprString = "";
+			try {
+				Integer.parseInt(input)
+				exprString = "%X" + input
+			} catch (NumberFormatException e) {
+				exprString = input
+			}
+
+			'''
+				FUNCTION partialTest
+				VAR
+				x : BYTE;
+				END_VAR
+				x.«input» := 1;
+				END_FUNCTION
+			'''.parse.assertError(
+				STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
+				"Partial access index " + exprString + " of out range"
+			)
+		]
 	}
 
 	def static generateInvalidByteIndices() {
@@ -174,28 +181,30 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess
 	}
 
-	@ParameterizedTest(name="Check invalid index {0}")
-	@MethodSource("generateInvalidWordIndices")
-	def void testInvalidWordPartialAccess(String input) {
-		var exprString = "";
-		try {
-			Integer.parseInt(input)
-			exprString = "%X" + input
-		} catch (NumberFormatException e) {
-			exprString = input
-		}
-		'''
-			FUNCTION partialTest
-			VAR
-			x : WORD;
-			END_VAR
-			x.«input» := 1;
-			END_FUNCTION
-		'''.parse.assertError(
-			STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
-			"Partial access index " + exprString + " of out range"
-		)
+	@Test
+	def void testInvalidWordPartialAccess() {
+		generateInvalidWordIndices.forEach [ input |
+			var exprString = "";
+			try {
+				Integer.parseInt(input)
+				exprString = "%X" + input
+			} catch (NumberFormatException e) {
+				exprString = input
+			}
+
+			'''
+				FUNCTION partialTest
+				VAR
+				x : WORD;
+				END_VAR
+				x.«input» := 1;
+				END_FUNCTION
+			'''.parse.assertError(
+				STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
+				"Partial access index " + exprString + " of out range"
+			)
+		]
 	}
 
 	def static generateInvalidWordIndices() {
@@ -206,28 +215,30 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess + wordAccess
 	}
 
-	@ParameterizedTest(name="Check invalid index {0}")
-	@MethodSource("generateInvalidDWordIndices")
-	def void testInvalidDWordPartialAccess(String input) {
-		var exprString = "";
-		try {
-			Integer.parseInt(input)
-			exprString = "%X" + input
-		} catch (NumberFormatException e) {
-			exprString = input
-		}
-		'''
-			FUNCTION partialTest
-			VAR
-			x : DWORD;
-			END_VAR
-			x.«input» := 1;
-			END_FUNCTION
-		'''.parse.assertError(
-			STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
-			"Partial access index " + exprString + " of out range"
-		)
+	@Test
+	def void testInvalidDWordPartialAccess() {
+		generateInvalidDWordIndices.forEach [ input |
+			var exprString = "";
+			try {
+				Integer.parseInt(input)
+				exprString = "%X" + input
+			} catch (NumberFormatException e) {
+				exprString = input
+			}
+
+			'''
+				FUNCTION partialTest
+				VAR
+				x : DWORD;
+				END_VAR
+				x.«input» := 1;
+				END_FUNCTION
+			'''.parse.assertError(
+				STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
+				"Partial access index " + exprString + " of out range"
+			)
+		]
 	}
 
 	def static generateInvalidDWordIndices() {
@@ -239,28 +250,30 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess + wordAccess + dwordAccess
 	}
 
-	@ParameterizedTest(name="Check invalid index {0}")
-	@MethodSource("generateInvalidLWordIndices")
-	def void testInvalidLWordPartialAccess(String input) {
-		var exprString = "";
-		try {
-			Integer.parseInt(input)
-			exprString = "%X" + input
-		} catch (NumberFormatException e) {
-			exprString = input
-		}
-		'''
-			FUNCTION partialTest
-			VAR
-			x : LWORD;
-			END_VAR
-			x.«input» := 1;
-			END_FUNCTION
-		'''.parse.assertError(
-			STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
-			"Partial access index " + exprString + " of out range"
-		)
+	@Test
+	def void testInvalidLWordPartialAccess() {
+		generateInvalidLWordIndices.forEach [ input |
+			var exprString = "";
+			try {
+				Integer.parseInt(input)
+				exprString = "%X" + input
+			} catch (NumberFormatException e) {
+				exprString = input
+			}
+
+			'''
+				FUNCTION partialTest
+				VAR
+				x : LWORD;
+				END_VAR
+				x.«input» := 1;
+				END_FUNCTION
+			'''.parse.assertError(
+				STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INDEX_OUT_OF_RANGE,
+				"Partial access index " + exprString + " of out range"
+			)
+		]
 	}
 
 	def static generateInvalidLWordIndices() {
@@ -273,18 +286,19 @@ class STFunctionValidatorPartialAccessTest {
 		return shortBitAccess + longBitAccess + byteAccess + wordAccess + dwordAccess + lwordAccess
 	}
 
-	@ParameterizedTest(name="Check invalid access on non Variable expression with index {0}")
-	@MethodSource("generateValidLWordIndices")
-	def void testInvalidPartialAccessOnNonVariable(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			x : LWORD;
-			END_VAR
-			x := (x OR x).«input»;
-			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_INVALID_RECEIVER, "Receiving expression invalid for partial access")
+	@Test
+	def void testInvalidPartialAccessOnNonVariable() {
+		generateValidLWordIndices.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				x : LWORD;
+				END_VAR
+				x := (x OR x).«input»;
+				END_FUNCTION
+			'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_INVALID_RECEIVER, "Receiving expression invalid for partial access")
+		]
 	}
 
 	@Test
@@ -300,38 +314,41 @@ class STFunctionValidatorPartialAccessTest {
 		'''.parse.assertNoErrors
 	}
 
-	@ParameterizedTest(name="Check valid access expression of type {0}")
-	@MethodSource("generateValidAccessExpressionTypes")
-	def void testValidPartialAccessExpressions(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			accessor : «input»;
-			accessed : LWORD;
-			END_VAR
-			accessed.(accessor);
-			END_FUNCTION
-		'''.parse.assertNoErrors
+	@Test
+	def void testValidPartialAccessExpressions() {
+		generateValidAccessExpressionTypes.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				accessor : «input»;
+				accessed : LWORD;
+				END_VAR
+				accessed.(accessor);
+				END_FUNCTION
+			'''.parse.assertNoErrors
+		]
 	}
 
 	def static generateValidAccessExpressionTypes() {
 		return DataTypeLibrary.nonUserDefinedDataTypes.filter[it instanceof AnyIntType].map[it.name]
 	}
-	
-	@ParameterizedTest(name="Check valid access expression of type {0}")
-	@MethodSource("generateInvalidAccessExpressionTypes")
-	def void testInvalidPartialAccessExpressions(String input) {
-		'''
-			FUNCTION partialTest
-			VAR
-			accessor : «input»;
-			accessed : LWORD;
-			END_VAR
-			accessed.(accessor);
-			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
-			STCoreValidator.BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT, "Partial bit access expression is not resulting in an ANY_INT, but in " + input)
-		
+
+	@Test
+	def void testInvalidPartialAccessExpressions() {
+		generateInvalidAccessExpressionTypes.forEach [ input |
+			'''
+				FUNCTION partialTest
+				VAR
+				accessor : «input»;
+				accessed : LWORD;
+				END_VAR
+				accessed.(accessor);
+				END_FUNCTION
+			'''.parse.assertError(STCorePackage.eINSTANCE.STMultibitPartialExpression,
+				STCoreValidator.BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT,
+				"Partial bit access expression is not resulting in an ANY_INT, but in " + input)
+
+		]
 	}
 
 	def static generateInvalidAccessExpressionTypes() {

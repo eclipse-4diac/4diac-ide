@@ -69,13 +69,13 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
@@ -119,7 +119,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private final Set<TypeEntry> dirtyEntries = new HashSet<>();
 	private BulkEditorSettings settings;
 	private List<URI> selectedSubApps = Collections.emptyList();
-	private final BulkEditorTypeEntryAdapter adapter = new BulkEditorTypeEntryAdapter(this);
+	private BulkEditorTypeEntryAdapter adapter;
 	private final IPartListener2 focusListener = new IPartListener2() {
 		@Override
 		public void partBroughtToTop(final IWorkbenchPartReference partRef) {
@@ -163,6 +163,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		adapter = new BulkEditorTypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
 		registerActions(site);
 		setSite(site);
 		setInput(input);
@@ -296,9 +297,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if (advancedMode) {
 			searchFilter = new FilterComposite(searchWhereGroup, SWT.NONE, DEFAULT_LIST, settings,
 					BulkEditorSettings.whereSearchList);
-			searchFilter.addFilterChangedListener(() -> {
-				this.changedSearchParameter = true;
-			});
+			searchFilter.addFilterChangedListener(() -> this.changedSearchParameter = true);
 		} else {
 			final Composite simpleTextComposite = new Composite(searchWhereGroup, SWT.NONE);
 			GridLayoutFactory.fillDefaults().numColumns(2).margins(0, 0).generateLayout(simpleTextComposite);
@@ -311,10 +310,10 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
 					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
 					AttributeSelectionContentProvider.INSTANCE);
-			final ContentProposalAdapter adapter = new ContentProposalAdapter(searchText, new TextContentAdapter(),
-					proposalProvider, KeyStroke.getInstance(SWT.CTRL, SWT.SPACE),
+			final ContentProposalAdapter proposalAdapter = new ContentProposalAdapter(searchText,
+					new TextContentAdapter(), proposalProvider, KeyStroke.getInstance(SWT.CTRL, SWT.SPACE),
 					NatTableWidgetFactory.getActivationChars());
-			adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+			proposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 		searchWhereGroup.layout();
 	}
@@ -372,45 +371,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			checkTypeEntriesForDirty();
 
 			if (modeSelectionDropDown.getSelectionIndex() == 1 && addDeleteComposite.getChildren().length == 0) {
-				final AttributeTypeEntry attributeTypeEntry = advancedButton.getSelection() ? null
-						: TypeLibraryManager.INSTANCE.getTypeLibrary(project)
-								.getAttributeTypeEntry(searchText.getText());
-
-				final var addDeleteWidget = new AddDeleteWidget();
-				addDeleteWidget.createControls(addDeleteComposite, new FormToolkit(Display.getDefault()), true);
-				addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this, refElement -> {
-					final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
-							this.getSite().getShell(),
-							copiedElementsMap.entrySet().stream()
-									.filter(entry -> SearchHelper.linkedElementsFilter.test(entry.getKey()))
-									.map(Entry::getValue).toList(),
-							helper.createChildrenSearchProvider(),
-							attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project,
-							new HashSet<>());
-					if (addAttributeDialog.open() == Dialog.OK) {
-						final DataType dataType = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
-								.getDataTypeLibrary().getType(addAttributeDialog.getAttributeType());
-
-						final CompoundCommand addAttributesCompoundCommand = new CompoundCommand();
-						Arrays.stream(addAttributeDialog.getResult()).filter(ConfigurableObject.class::isInstance)
-								.map(ConfigurableObject.class::cast)
-								.map(configureableObject -> new CreateAttributeBulkEditorCommand(natTable,
-										configureableObject, addAttributeDialog.getAttributeName(),
-										addAttributeDialog.getAttributeComment(), dataType,
-										attributeTypeEntry != null ? attributeTypeEntry.getType() : null,
-										addAttributeDialog.getAttributeValue()))
-								.forEach(addAttributesCompoundCommand::add);
-						return addAttributesCompoundCommand;
-					}
-					return null;
-				}, refElement -> {
-					if (refElement instanceof final Attribute attribute
-							&& attribute.eContainer() instanceof final ConfigurableObject configurableObject) {
-						return new DeleteAttributeBulkEditorCommand(natTable, configurableObject, attribute);
-					}
-					return null;
-				});
-				addDeleteComposite.getParent().layout();
+				createAddDeleteButtons();
 			}
 		}).create(composite);
 
@@ -423,6 +384,45 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		searchInformation = WidgetFactory.label(SWT.NONE).create(composite);
 		searchInformation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
+
+	private void createAddDeleteButtons() {
+		final AttributeTypeEntry attributeTypeEntry = advancedButton.getSelection() ? null
+				: TypeLibraryManager.INSTANCE.getTypeLibrary(project).getAttributeTypeEntry(searchText.getText());
+
+		final var addDeleteWidget = new AddDeleteWidget();
+		addDeleteWidget.createControls(addDeleteComposite, new FormToolkit(Display.getDefault()), true);
+		addDeleteWidget.bindToTableViewer(natTable.getCurrentTable(), this, refElement -> {
+			final AddAttributeTreeSelectionDialog addAttributeDialog = new AddAttributeTreeSelectionDialog(
+					this.getSite().getShell(),
+					copiedElementsMap.entrySet().stream()
+							.filter(entry -> SearchHelper.linkedElementsFilter.test(entry.getKey()))
+							.map(Entry::getValue).toList(),
+					helper.createChildrenSearchProvider(),
+					attributeTypeEntry != null ? attributeTypeEntry.getFullTypeName() : null, project, new HashSet<>());
+			if (addAttributeDialog.open() == Window.OK) {
+				final DataType dataType = TypeLibraryManager.INSTANCE.getTypeLibrary(project).getDataTypeLibrary()
+						.getType(addAttributeDialog.getAttributeType());
+
+				final CompoundCommand addAttributesCompoundCommand = new CompoundCommand();
+				Arrays.stream(addAttributeDialog.getResult()).filter(ConfigurableObject.class::isInstance)
+						.map(ConfigurableObject.class::cast)
+						.map(configureableObject -> new CreateAttributeBulkEditorCommand(natTable, configureableObject,
+								addAttributeDialog.getAttributeName(), addAttributeDialog.getAttributeComment(),
+								dataType, attributeTypeEntry != null ? attributeTypeEntry.getType() : null,
+								addAttributeDialog.getAttributeValue()))
+						.forEach(addAttributesCompoundCommand::add);
+				return addAttributesCompoundCommand;
+			}
+			return null;
+		}, refElement -> {
+			if (refElement instanceof final Attribute attribute
+					&& attribute.eContainer() instanceof final ConfigurableObject configurableObject) {
+				return new DeleteAttributeBulkEditorCommand(natTable, configurableObject, attribute);
+			}
+			return null;
+		});
+		addDeleteComposite.getParent().layout();
 	}
 
 	private static Group createCollapsibleGroup(final Composite parent, final String groupLabel,
@@ -600,7 +600,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	}
 
 	private void createSubappHierarchyText() {
-		if (selectedSubApps.size() == 0) {
+		if (selectedSubApps.isEmpty()) {
 			subappHierarchyScopeLabel.setForeground(new Color(255, 0, 0));
 			subappHierarchyScopeLabel.setText(Messages.NoHierarchySelected);
 			return;
@@ -737,7 +737,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		// Fill Search Entries with copy of Type
 		copiedElementsMap.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
 		copiedElementsMap.clear();
-		contexts.stream().flatMap(context -> context.getTypes().map(uri -> context.mapTypes(uri))).forEach(eobj -> {
+		contexts.stream().flatMap(context -> context.getTypes().map(context::mapTypes)).forEach(eobj -> {
 			if (EcoreUtil.getRootContainer(eobj) instanceof final LibraryElement rootLibE) {
 				final TypeEntry entry = rootLibE.getTypeEntry();
 				copiedElementsMap.computeIfAbsent(entry, e -> {
@@ -781,7 +781,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 	@Override
 	public void setFocus() {
-		adapter.checkFileReload();
+		// nothing to be done
 	}
 
 	public void reloadType() {
@@ -847,6 +847,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		super.dispose();
 		getSite().getPage().removePartListener(focusListener);
 		copiedElementsMap.keySet().forEach(typeEntry -> typeEntry.eAdapters().remove(adapter));
+		adapter.dispose();
 	}
 
 	@Override

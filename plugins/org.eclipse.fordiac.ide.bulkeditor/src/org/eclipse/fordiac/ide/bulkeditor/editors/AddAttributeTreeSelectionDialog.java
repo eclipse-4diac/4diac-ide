@@ -85,79 +85,8 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 	public AddAttributeTreeSelectionDialog(final Shell shell, final Collection<LibraryElement> initial,
 			final ISearchChildrenProvider childProv, final String attributeDeclName, final IProject project,
 			final Set<Object> disabledElements) {
-		super(shell, new DisabledElementsLabelProvider(disabledElements), new ITreeContentProvider() {
-			@Override
-			public boolean hasChildren(final Object element) {
-				if (element instanceof DirectlyDerivedType) {
-					return false;
-				}
-				if (element instanceof IInterfaceElement) {
-					return false;
-				}
-				if (element instanceof final UntypedSubApp untypedSubApp
-						&& untypedSubApp.getSubAppNetwork().getNetworkElements().isEmpty()
-						&& untypedSubApp.getInterface().getAllInterfaceElements().isEmpty()) {
-					return false;
-				}
-				if (element instanceof final EObject eObject) {
-					return childProv.hasChildren(eObject);
-				}
-				return false;
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				return switch (element) {
-				case final EObject eobj -> {
-					EObject current = eobj.eContainer();
-					while (!(current instanceof ConfigurableObject)) {
-						current = current.eContainer();
-					}
-					yield current;
-				}
-				default -> null;
-				};
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-				for (final Object object : (Object[]) inputElement) {
-					if (object instanceof final ConfigurableObject configElement) {
-						configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
-								.forEach(asdfasdfsadf -> {
-									final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
-									if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
-										disabledElements.add(object);
-									}
-								});
-					} else {
-						disabledElements.add(object);
-					}
-				}
-				return (Object[]) inputElement;
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof final EObject eObject) {
-					final var configElements = childProv.getChildren(eObject)
-							.filter(ConfigurableObject.class::isInstance).toArray(ConfigurableObject[]::new);
-
-					for (final ConfigurableObject configElement : configElements) {
-						configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
-								.forEach(asdfasdfsadf -> {
-									final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
-									if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
-										disabledElements.add(configElement);
-									}
-								});
-					}
-
-					return configElements;
-				}
-				return new Object[0];
-			}
-		});
+		super(shell, new DisabledElementsLabelProvider(disabledElements),
+				new AttributeTreeContentProvider(childProv, attributeDeclName, disabledElements));
 		this.setInput(initial.toArray(LibraryElement[]::new));
 		this.attributeDeclName = attributeDeclName;
 		this.project = project;
@@ -295,6 +224,91 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 		@Override
 		public Color getBackground(final Object element) {
 			return null;
+		}
+	}
+
+	private static class AttributeTreeContentProvider implements ITreeContentProvider {
+		private final ISearchChildrenProvider childProv;
+		private final String attributeDeclName;
+		private final Set<Object> disabledElements;
+
+		public AttributeTreeContentProvider(final ISearchChildrenProvider childProv, final String attributeDeclName,
+				final Set<Object> disabledElements) {
+			this.childProv = childProv;
+			this.attributeDeclName = attributeDeclName;
+			this.disabledElements = disabledElements;
+		}
+
+		@Override
+		public boolean hasChildren(final Object element) {
+			if (element instanceof DirectlyDerivedType) {
+				return false;
+			}
+			if (element instanceof IInterfaceElement) {
+				return false;
+			}
+			if (element instanceof final UntypedSubApp untypedSubApp
+					&& untypedSubApp.getSubAppNetwork().getNetworkElements().isEmpty()
+					&& untypedSubApp.getInterface().getAllInterfaceElements().isEmpty()) {
+				return false;
+			}
+			if (element instanceof final EObject eObject) {
+				return childProv.hasChildren(eObject);
+			}
+			return false;
+		}
+
+		@Override
+		public Object getParent(final Object element) {
+			return switch (element) {
+			case final EObject eobj -> {
+				EObject current = eobj.eContainer();
+				while (!(current instanceof ConfigurableObject)) {
+					current = current.eContainer();
+				}
+				yield current;
+			}
+			default -> null;
+			};
+		}
+
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			for (final Object object : (Object[]) inputElement) {
+				if (object instanceof final ConfigurableObject configElement) {
+					configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
+							.forEach(asdfasdfsadf -> {
+								final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
+								if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
+									disabledElements.add(object);
+								}
+							});
+				} else {
+					disabledElements.add(object);
+				}
+			}
+			return (Object[]) inputElement;
+		}
+
+		@Override
+		public Object[] getChildren(final Object parentElement) {
+			if (parentElement instanceof final EObject eObject) {
+				final var configElements = childProv.getChildren(eObject).filter(ConfigurableObject.class::isInstance)
+						.toArray(ConfigurableObject[]::new);
+
+				for (final ConfigurableObject configElement : configElements) {
+					configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
+							.forEach(asdfasdfsadf -> {
+								final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
+								if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
+									disabledElements.add(configElement);
+								}
+							});
+				}
+
+				return configElements;
+			}
+			return new Object[0];
 		}
 	}
 }

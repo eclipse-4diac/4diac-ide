@@ -63,9 +63,7 @@ public class FilterComposite extends Composite {
 	}
 
 	public void clear() {
-		filterList.forEach(filter -> {
-			filter.clear();
-		});
+		filterList.forEach(Filter::clear);
 	}
 
 	private static int calculateMaxCheckboxWidth(final Composite parent, final List<String> names) {

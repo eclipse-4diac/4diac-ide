@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.test.model.eval.value
 
 import java.time.LocalDate
-import java.util.stream.Stream
 import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
@@ -27,8 +26,6 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetu
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 
 import static org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 
@@ -45,47 +42,47 @@ class ValueTest {
 		StructuredTextEvaluatorFactory.register
 	}
 
-	@ParameterizedTest(name="{index}: {0}")
-	@MethodSource("typeArgumentsProvider")
-	def void testValueEquals(String typeName) {
-		val type = ElementaryTypes.getTypeByName(typeName)
-		assertTrue(type.defaultValue.equals(type.defaultValue))
-		assertFalse(type.defaultValue.equals(null))
-		switch (type) {
-			AnyCharType,
-			AnyStringType: assertFalse(type.defaultValue.equals("a".wrapValue(type)))
-			default: assertFalse(type.defaultValue.equals(1.wrapValue(type)))
-		}
+	@Test
+	def void testValueEquals() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ type |
+			assertTrue(type.defaultValue.equals(type.defaultValue))
+			assertFalse(type.defaultValue.equals(null))
+			switch (type) {
+				AnyCharType,
+				AnyStringType: assertFalse(type.defaultValue.equals("a".wrapValue(type)))
+				default: assertFalse(type.defaultValue.equals(1.wrapValue(type)))
+			}
+		]
 	}
 
-	@ParameterizedTest(name="{index}: {0}")
-	@MethodSource("typeArgumentsProvider")
-	def void testValueHashCode(String typeName) {
-		val type = ElementaryTypes.getTypeByName(typeName)
-		type.defaultValue.hashCode.assertEquals(type.defaultValue.hashCode)
-		switch (type) {
-			AnyCharType,
-			AnyStringType: type.defaultValue.hashCode.assertNotEquals("a".wrapValue(type).hashCode)
-			default: type.defaultValue.hashCode.assertNotEquals(1.wrapValue(type).hashCode)
-		}
+	@Test
+	def void testValueHashCode() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ type |
+			type.defaultValue.hashCode.assertEquals(type.defaultValue.hashCode)
+			switch (type) {
+				AnyCharType,
+				AnyStringType: type.defaultValue.hashCode.assertNotEquals("a".wrapValue(type).hashCode)
+				default: type.defaultValue.hashCode.assertNotEquals(1.wrapValue(type).hashCode)
+			}
+		]
 	}
 
-	@ParameterizedTest(name="{index}: {0}")
-	@MethodSource("typeArgumentsProvider")
-	def void testValueStringConversion(String typeName) {
-		val type = ElementaryTypes.getTypeByName(typeName)
-		type.defaultValue.assertEquals(type.defaultValue.toString.parseValue(type))
-		switch (type) {
-			AnyCharType,
-			AnyStringType:
-				"a".wrapValue(type).assertEquals("a".wrapValue(type).toString.parseValue(type))
-			DateType,
-			LdateType:
-				LocalDate.of(1970, 01, 02).wrapValue(type).assertEquals(
-					LocalDate.of(1970, 01, 02).wrapValue(type).toString.parseValue(type))
-			default:
-				1.wrapValue(type).assertEquals(1.wrapValue(type).toString.parseValue(type))
-		}
+	@Test
+	def void testValueStringConversion() {
+		DataTypeLibrary.nonUserDefinedDataTypes.forEach [ type |
+			type.defaultValue.assertEquals(type.defaultValue.toString.parseValue(type))
+			switch (type) {
+				AnyCharType,
+				AnyStringType:
+					"a".wrapValue(type).assertEquals("a".wrapValue(type).toString.parseValue(type))
+				DateType,
+				LdateType:
+					LocalDate.of(1970, 01, 02).wrapValue(type).assertEquals(
+						LocalDate.of(1970, 01, 02).wrapValue(type).toString.parseValue(type))
+				default:
+					1.wrapValue(type).assertEquals(1.wrapValue(type).toString.parseValue(type))
+			}
+		]
 	}
 
 	@Test
@@ -103,9 +100,5 @@ class ValueTest {
 		assertIterableEquals((0 .. 255).map[1.toDIntValue], largeArray.value)
 		largeDistinctArray.value = "[17(4)]"
 		assertIterableEquals((0 .. 255).map[(it < 17 ? 4 : 0).toDIntValue], largeDistinctArray.value)
-	}
-
-	def static Stream<String> typeArgumentsProvider() {
-		DataTypeLibrary.nonUserDefinedDataTypes.stream.map[name]
 	}
 }

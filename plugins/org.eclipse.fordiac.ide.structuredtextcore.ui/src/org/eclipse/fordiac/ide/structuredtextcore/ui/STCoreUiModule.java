@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactori
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRegionDiffFormatter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEmfResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedResourcesProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
@@ -72,6 +73,7 @@ import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RegionDiffFormatter;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
@@ -294,6 +296,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	public Class<? extends RelatedResourcesProvider> bindRelatedResourcesProvider() {
+		return STCoreRelatedResourcesProvider.class;
 	}
 
 	@Override

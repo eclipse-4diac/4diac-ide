@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedResourcesProvider.STCoreRelatedResource;
 import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion;
 import org.eclipse.xtext.formatting2.regionaccess.ITextRegionDiffBuilder;
 import org.eclipse.xtext.ide.serializer.hooks.IReferenceUpdaterContext;
 import org.eclipse.xtext.ide.serializer.hooks.IUpdatableReference;
+import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Delta;
+import org.eclipse.xtext.ide.serializer.impl.EObjectDescriptionDeltaProvider.Deltas;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider.RelatedResource;
 import org.eclipse.xtext.naming.IQualifiedNameConverter;
@@ -41,9 +44,25 @@ public class STCoreReferenceUpdater extends ReferenceUpdater {
 	private IScopeProvider scopeProvider;
 
 	@Override
-	protected void updateExternalReferences(final IReferenceUpdaterContext context,
-			final RelatedResource relatedResource) {
-		super.updateExternalReferences(context, relatedResource);
+	public boolean isAffected(final Deltas deltas, final RelatedResource resource) {
+		if (resource instanceof final STCoreRelatedResource coreRelatedResource) {
+			final Iterable<QualifiedName> importedNames = coreRelatedResource.getImportedNames();
+			for (final Delta delta : deltas.getDeltas()) {
+				for (final IEObjectDescription desc : delta.getSnapshot().getDescriptions()) {
+					for (final QualifiedName name : importedNames) {
+						if (name.equalsIgnoreCase(desc.getQualifiedName())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return super.isAffected(deltas, resource);
+	}
+
+	@Override
+	public void update(final IReferenceUpdaterContext context) {
+		super.update(context);
 		context.modifyModel(() -> importUpdater.updateImports(context));
 	}
 

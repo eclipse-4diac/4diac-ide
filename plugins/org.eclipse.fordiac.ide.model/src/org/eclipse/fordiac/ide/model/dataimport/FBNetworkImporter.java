@@ -50,7 +50,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 class FBNetworkImporter extends CommonElementImporter {
@@ -312,43 +311,6 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	FBNetworkElement findFBNetworkElement(final String fbName) {
 		return fbNetworkElementMap.get(fbName);
-	}
-
-	protected static VarDeclaration getVarNamed(final InterfaceList interfaceList, final String varName,
-			final boolean input) {
-		VarDeclaration retVal;
-		boolean hasType = true;
-
-		if (interfaceList.eContainer() instanceof final FB fb) {
-			// only if it is an FB check if it is typed
-			hasType = (null != fb.getTypeEntry());
-		}
-
-		if (hasType) {
-			// we have a typed FB
-			retVal = interfaceList.getVariable(varName);
-			if ((null != retVal) && (retVal.isIsInput() != input)) {
-				retVal = null;
-			}
-		} else {
-			// if we couldn't load the type create the interface entry
-			retVal = createVarDecl(interfaceList, varName, input);
-		}
-		return retVal;
-	}
-
-	private static VarDeclaration createVarDecl(final InterfaceList interfaceList, final String varName,
-			final boolean input) {
-		final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		variable.setName(varName);
-		variable.setIsInput(input);
-		if (input) {
-			interfaceList.getInputVars().add(variable);
-		} else {
-			interfaceList.getOutputVars().add(variable);
-		}
-
-		return variable;
 	}
 
 	@Override

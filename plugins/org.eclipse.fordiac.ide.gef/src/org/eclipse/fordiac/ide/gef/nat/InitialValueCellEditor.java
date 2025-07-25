@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -42,6 +43,15 @@ public class InitialValueCellEditor extends XtextStyledTextCellEditor {
 	@Override
 	protected IEditedResourceProvider createEditedResourceProvider() {
 		return new STAlgorithmInitialValueEditedResourceProvider(getRowObject());
+	}
+
+	@Override
+	public void setEditorValue(final Object value) {
+		if (FordiacMessages.ComputingPlaceholderValue.equals(value) || FordiacMessages.ValueTooLarge.equals(value)) {
+			super.setEditorValue(""); //$NON-NLS-1$
+		} else {
+			super.setEditorValue(value);
+		}
 	}
 
 	protected ITypedElement getRowObject() {
