@@ -83,6 +83,7 @@ public class Constants {
 
 	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
 	public static final String QUERY_RESPONSE = "<Response>\n  <FBList>\n    {0}\n  </FBList>\n</Response>"; //$NON-NLS-1$
+	public static final String QUERY_TYPE_RESPONSE = "<Response>\n  {0}\n</Response>"; //$NON-NLS-1$
 	public static final Response EMPTY_RESPONSE;
 
 	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
