@@ -574,12 +574,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
-		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_FB_TYPE_NODE,
-				new Variant[] {});
 		try {
-			final String message = MessageFormat.format(Constants.QUERY_FB_TYPE, getTypeNameWithHash(entry));
+			final String hashedFBType = getTypeNameWithHash(entry);
+			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_FB_TYPE_NODE,
+					new Variant[] { new Variant(hashedFBType) });
+			final String message = MessageFormat.format(Constants.QUERY_FB_TYPE, hashedFBType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
-			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
 				return response;
 			}
@@ -598,12 +599,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
-		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_DATA_TYPE_NODE,
-				new Variant[] {});
 		try {
-			final String message = MessageFormat.format(Constants.QUERY_DATA_TYPE, getTypeNameWithHash(entry));
+			final String hashedDataType = getTypeNameWithHash(entry);
+			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_DATA_TYPE_NODE,
+					new Variant[] { new Variant(hashedDataType) });
+			final String message = MessageFormat.format(Constants.QUERY_DATA_TYPE, hashedDataType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
-			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
 				return response;
 			}
@@ -622,13 +624,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 
 	@Override
 	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
-		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE,
-				Constants.QUERY_GLOBAL_CONST_TYPE_NODE, new Variant[] {});
-
 		try {
-			final String message = MessageFormat.format(Constants.QUERY_GLOBAL_CONST_TYPE, getTypeNameWithHash(entry));
+			final String hashedGlobalConstType = getTypeNameWithHash(entry);
+			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE,
+					Constants.QUERY_GLOBAL_CONST_TYPE_NODE, new Variant[] { new Variant(hashedGlobalConstType) });
+			final String message = MessageFormat.format(Constants.QUERY_GLOBAL_CONST_TYPE, hashedGlobalConstType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
-			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
+			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
 			if (response != Constants.EMPTY_RESPONSE) {
 				return response;
 			}
