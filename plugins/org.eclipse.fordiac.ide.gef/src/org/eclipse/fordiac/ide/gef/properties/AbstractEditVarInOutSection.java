@@ -117,12 +117,13 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 
 	protected abstract CreationCommand newInsertCommand(final IInterfaceElement ie, final int index);
 
-	protected static DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
+	@SuppressWarnings("static-method")
+	protected DeleteInterfaceCommand newDeleteCommand(final IInterfaceElement selection) {
 		return new DeleteInterfaceCommand(selection);
 	}
 
-	protected static ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection,
-			final boolean moveUp) {
+	@SuppressWarnings("static-method")
+	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return new ChangeInterfaceOrderCommand(selection, moveUp);
 	}
 

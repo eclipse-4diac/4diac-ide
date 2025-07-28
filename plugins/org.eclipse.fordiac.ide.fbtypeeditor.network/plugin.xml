@@ -80,13 +80,6 @@
                id="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                label="Instance">
          </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
-               category="FB-Network"
-               id="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab"
-               image="fordiacimage://ICON_FB_TYPE"
-               label="Type Info">
-         </propertyTab>
          
          <propertyTab
                category="FB-Network"
@@ -110,7 +103,7 @@
                label="Struct Element">
          </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
+               afterTab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab"
                category="FB-Network"
                id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                image="fordiacimage://ICON_EVENT"
@@ -125,14 +118,27 @@
                indented="true"
                label="Edit Data">
          </propertyTab>
+         <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+               category="FB-Network"
+               id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
+               indented="true"
+               label="Edit Var In/Out">
+         </propertyTab>
          <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
                category="FB-Network"
                image="fordiacimage://ICON_ADAPTER_LIST"
                id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                indented="true"
                label="Edit Adapters">
           </propertyTab>
+         <propertyTab
+               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
+               category="FB-Network"
+               id="org.eclipse.fordiac.ide.fbnet.propertyFBTypeInfoTab"
+               image="fordiacimage://ICON_FB_TYPE"
+               label="Type Info">
+         </propertyTab>
       </propertyTabs>
    </extension>
    <extension

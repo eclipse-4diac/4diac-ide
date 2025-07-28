@@ -92,36 +92,6 @@
          <propertyTab
                afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                category="FB"
-               image="fordiacimage://ICON_ADAPTER_LIST"
-               id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
-               indented="true"
-               label="Edit Events">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
-               category="FB"
-               image="fordiacimage://ICON_DATA"
-               id="org.eclipse.fordiac.ide.application.property.tab.EditData"
-               indented="true"
-               label="Edit Data">
-         </propertyTab>
-         <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
-               category="FB"
-               id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
-               indented="true"
-               label="Edit Var In/Out">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
-               category="FB"
-               image="fordiacimage://ICON_ADAPTER_LIST"
-               id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
-               indented="true"
-               label="Edit Adapters">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
-               category="FB"
                id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                image="fordiacimage://ICON_FB_TYPE"
                label="Type Info">
@@ -243,9 +213,32 @@
                tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
          </propertySection>
          <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappInterfaceEventSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.EditTypedEvents"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappInterfaceDataSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.EditTypedData"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
+         </propertySection>
+         <propertySection class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappVarInOutSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.EditTypedVarInOut"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
+         </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditInterfaceAdapterSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditAdapters"
                filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
+               tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.application.properties.EditTypedInterfaceAdapterSection"
+               id="org.eclipse.fordiac.ide.application.properties.section.EditTypedAdapters"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
          </propertySection>
          <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
