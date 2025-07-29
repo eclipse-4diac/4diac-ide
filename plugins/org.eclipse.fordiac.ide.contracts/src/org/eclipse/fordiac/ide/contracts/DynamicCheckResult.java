@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
@@ -231,6 +232,9 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 
 				@Override
 				public EventOccurrence next() {
+					if (!hasNext()) {
+						throw new NoSuchElementException();
+					}
 					final int i = index;
 					index++;
 					return list.get(i);
