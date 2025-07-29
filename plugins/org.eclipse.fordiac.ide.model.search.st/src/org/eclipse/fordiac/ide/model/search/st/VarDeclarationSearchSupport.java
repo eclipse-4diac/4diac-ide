@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
@@ -34,7 +35,8 @@ public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	@Override
 	public Set<String> getImportedNamespaces() {
 		final Set<String> result = super.getImportedNamespaces();
-		if (!PackageNameHelper.getPackageName(varDeclaration.getType()).isEmpty()) {
+		if (!FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration)
+				&& !PackageNameHelper.getPackageName(varDeclaration.getType()).isEmpty()) {
 			result.add(PackageNameHelper.getFullTypeName(varDeclaration.getType()));
 		}
 		return result;
@@ -47,7 +49,8 @@ public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	}
 
 	protected IParseResult prepareResultType() {
-		if (parseResultType == null && varDeclaration.isArray()) {
+		if (parseResultType == null && varDeclaration.isArray()
+				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration)) {
 			parseResultType = STAlgorithmParseUtil.parseTypeDeclaration(varDeclaration.getFullTypeName(),
 					varDeclaration);
 		}
