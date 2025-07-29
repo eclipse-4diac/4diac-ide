@@ -246,7 +246,6 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		canvas.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseDoubleClick(final MouseEvent e) {
-
 				final FileDialog dialog = new FileDialog(parentShell, SWT.SAVE);
 				final String fname = dialog.open();
 				if (fname == null) {
@@ -340,7 +339,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		for (int i = 0; i < nTicks; i++) {
 			final int xPos = ns2Pixel(lowest + i * stepSizeNs);
 			painter.setForeground(AXIS_LIGHT_COLOR);
-			painter.drawLine(xPos, diagramArea.height, xPos, DIAGRAM_PAD);
+			painter.drawLine(xPos, diagramArea.height, xPos, LINE_HEIGHT);
 			painter.setForeground(AXIS_COLOR);
 			painter.drawLine(xPos, diagramArea.height, xPos, diagramArea.height - 5);
 
@@ -369,7 +368,6 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			// draw intervals
 			painter.setForeground(INTERVAL_COLOR);
 			painter.setBackground(INTERVAL_COLOR);
-			painter.setAlpha(128);
 			int start = drawInterval(painter, interval, linePos, true);
 
 			if (jitter > 0) {
@@ -380,7 +378,6 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			// draw arrows to intervals
 			painter.setForeground(EVENT_COLOR);
 			painter.setBackground(EVENT_COLOR);
-			painter.setAlpha(255);
 
 			switch (ruleData.rule().getType()) {
 			case REPETITION:
@@ -446,7 +443,9 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		final int width = Math.max(end - start, 1);
 		painter.drawRectangle(start, yPos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
 		if (fill) {
+			painter.setAlpha(128);
 			painter.fillRectangle(start, yPos + LINE_PAD, width, LINE_HEIGHT - LINE_PAD * 2);
+			painter.setAlpha(255);
 		}
 		return start;
 	}
@@ -508,7 +507,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			// if result <0, binarySearch returns the insertion point (see documentation)
 			firstIndex = Math.abs(firstIndex + 1);
 		}
-		return firstIndex;
+		return Math.max(firstIndex - 1, 0); // draw one more if possible for backwards arrows
 	}
 
 	private void navigateDiagramStep(final int direction, final boolean zoom) {

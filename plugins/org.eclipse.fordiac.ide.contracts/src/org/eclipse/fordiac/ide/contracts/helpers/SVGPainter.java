@@ -19,6 +19,8 @@ import org.eclipse.swt.graphics.Rectangle;
 @SuppressWarnings("nls") // translating doesn't make sense here
 public class SVGPainter implements Painter {
 
+	private static final Color CANVAS_COLOR = new Color(240, 240, 240);
+
 	private final StringBuilder sb;
 	private Color fgCol;
 	private Color bgCol;
@@ -31,6 +33,9 @@ public class SVGPainter implements Painter {
 		sb.append(' ');
 		sb.append(view.height);
 		sb.append("\" xmlns=\"http://www.w3.org/2000/svg\">");
+
+		setBackground(CANVAS_COLOR);
+		fillRectangle(0, 0, view.width, view.height);
 	}
 
 	@Override
@@ -105,6 +110,7 @@ public class SVGPainter implements Painter {
 		addAttribute("x", x);
 		addAttribute("y", y + 10);
 		addAttribute("text-anchor", "middle");
+		addAttribute("font-size", "12px");
 		addFillCol(fgCol);
 		sb.append(">");
 		sb.append(string); // FIXME escape string, otherwise could produce invalid SVG
