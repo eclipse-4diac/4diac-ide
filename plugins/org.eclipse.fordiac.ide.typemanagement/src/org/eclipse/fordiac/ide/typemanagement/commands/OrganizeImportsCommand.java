@@ -12,20 +12,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.commands;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.ISearchSupport;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -57,18 +58,26 @@ public class OrganizeImportsCommand extends Command implements ScopedCommand {
 	}
 
 	private Set<String> getAllImportedNamespaces(final EObject object) {
-		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(object.eAllContents(), 0), false)
-				.map(this::getImportedNamespaces).flatMap(Collection::stream).collect(Collectors.toSet());
+		final Set<String> dependencies = new HashSet<>();
+		final TreeIterator<EObject> contents = object.eAllContents();
+		while (contents.hasNext()) {
+			final EObject content = contents.next();
+			if (content instanceof final FBNetwork network
+					&& (network.eContainer() instanceof TypedSubApp || network.eContainer() instanceof CFBInstance)) {
+				contents.prune(); // skip networks of typed subapps or CFBs
+			} else {
+				getImportedNamespaces(content, dependencies);
+			}
+		}
+		return dependencies;
 	}
 
-	private Set<String> getImportedNamespaces(final EObject object) {
+	private void getImportedNamespaces(final EObject object, final Set<String> dependencies) {
 		final ISearchSupport support = ISearchFactory.createSearchSupport(object, object.eClass().getInstanceClass());
 		if (support != null) {
-			final Set<String> dependencies = support.getImportedNamespaces();
+			dependencies.addAll(support.getImportedNamespaces());
 			incompleteResult |= support.isIncompleteResult();
-			return dependencies;
 		}
-		return Set.of();
 	}
 
 	@Override
