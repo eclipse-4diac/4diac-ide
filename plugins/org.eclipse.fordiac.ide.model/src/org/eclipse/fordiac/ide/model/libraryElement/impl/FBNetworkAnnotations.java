@@ -148,7 +148,7 @@ final class FBNetworkAnnotations {
 				parent.getVisibleHeight() - (commentLines + 1) * FBShapeHelper.IEC61499_LINE_HEIGHT);
 		if (parent instanceof SubApp) {
 			// for subapps remove space needed for left and right interface bar
-			parentSize.setPreciseWidth(parentSize.preciseWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth());
+			parentSize.setPreciseWidth(parentSize.preciseWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth(parent));
 		}
 		return parentSize;
 	}
