@@ -39,6 +39,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -274,7 +275,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	protected void encloseInResource(final LibraryElement newType) {
 		if (newType.eResource() == null) {
-			new FordiacTypeResource(getURI()).getContents().add(newType);
+			new FordiacTypeResource(Objects.requireNonNullElseGet(getURI(),
+					() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))).getContents().add(newType); //$NON-NLS-1$
 		}
 	}
 

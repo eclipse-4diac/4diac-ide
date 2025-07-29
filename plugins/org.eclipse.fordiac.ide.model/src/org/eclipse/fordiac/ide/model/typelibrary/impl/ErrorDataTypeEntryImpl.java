@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMarkerDataType>
 		implements ErrorDataTypeEntry {
@@ -53,5 +54,10 @@ public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMa
 	@Override
 	public EClass getTypeEClass() {
 		return getType().eClass();
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.DATA_TYPE_FILE_ENDING;
 	}
 }

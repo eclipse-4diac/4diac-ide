@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSystem> implements SystemEntry {
 
@@ -80,6 +81,11 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING;
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class SubAppTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SubAppType> implements SubAppTypeEntry {
 
@@ -43,5 +44,10 @@ public class SubAppTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SubAppType
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.SUB_APP_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING;
 	}
 }
