@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FunctionFBType>
 		implements FunctionFBTypeEntry {
@@ -41,5 +42,10 @@ public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Functi
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.FUNCTION_FB_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.FC_TYPE_FILE_ENDING;
 	}
 }

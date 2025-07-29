@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implements FBTypeEntry {
@@ -99,5 +100,10 @@ public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implem
 			}
 		}
 		return LibraryElementPackage.Literals.FB_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.FB_TYPE_FILE_ENDING;
 	}
 }

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ResourceType> implements ResourceTypeEntry {
 
@@ -45,4 +46,8 @@ public class ResourceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Resource
 		return LibraryElementPackage.Literals.RESOURCE_TYPE;
 	}
 
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING;
+	}
 }

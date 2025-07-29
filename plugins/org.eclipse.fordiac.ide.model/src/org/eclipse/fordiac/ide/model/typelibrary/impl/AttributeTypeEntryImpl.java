@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AttributeDeclaration>
 		implements AttributeTypeEntry {
@@ -41,5 +42,10 @@ public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Attribu
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.ATTRIBUTE_DECLARATION;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING;
 	}
 }
