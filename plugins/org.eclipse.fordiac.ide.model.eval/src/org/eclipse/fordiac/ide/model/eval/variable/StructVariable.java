@@ -12,7 +12,6 @@
  */
 package org.eclipse.fordiac.ide.model.eval.variable;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -86,7 +85,7 @@ public class StructVariable extends AbstractVariable<StructValue> implements Ite
 
 	@Override
 	public Stream<Variable<?>> getChildren() {
-		return getMembers().values().stream().sorted(Comparator.comparing(Variable::getName));
+		return getMembers().values().stream();
 	}
 
 	@Override
