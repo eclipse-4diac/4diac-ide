@@ -359,10 +359,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void setType(DataType newType) {
+		java.util.Objects.requireNonNull(newType, "DataType of a VarDeclaration must not be null! " + getQualifiedName());
 		DataType oldType = type;
 		type = newType;
 		if (eNotificationRequired())
