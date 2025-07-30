@@ -129,7 +129,7 @@ public class DynamicContractChecker {
 		case REPETITION -> checkRepetition(ruleData, eo, ruleIdx);
 		case REACTION -> checkReaction(ruleData, eo, ruleIdx);
 		case AGE -> checkAge(ruleData, eo);
-		case CAUSAL_REACTION -> checkCausalReaction(ruleData, eo);
+		case CAUSAL_REACTION -> checkCausalReaction(ruleData, eo, ruleIdx);
 		case CAUSAL_AGE -> checkCausalAge(ruleData, eo);
 		default -> { // no more types
 		}
@@ -259,21 +259,97 @@ public class DynamicContractChecker {
 		}
 		if (ruleData.hasSlidingWindow()) {
 			if (!ruleData.add2SlidingWindow(fulfill)) {
-				reactionAgeMissedSlidingWindowError(eo, ruleData.rule().getNOutOfM(), false);
-				insertSorted(ruleData.markers(), missedMarker(interval.getUpperBound()));
+				final EventOccurrence mm = missedMarker(eo.eventName(), interval.getUpperBound());
+				reactionAgeMissedSlidingWindowError(mm, ruleData.rule().getNOutOfM(), false);
+				insertSorted(ruleData.markers(), mm);
 			}
 		} else if (!fulfill) {
-			reactionAgeMissedError(eo, false);
-			insertSorted(ruleData.markers(), missedMarker(interval.getUpperBound()));
+			final EventOccurrence mm = missedMarker(eo.eventName(), interval.getUpperBound());
+			reactionAgeMissedError(mm, false);
+			insertSorted(ruleData.markers(), mm);
 		}
 	}
 
-	private void checkCausalReaction(final RuleData ruleData, final EventOccurrence eo) {
-		// TODO
+	private void checkCausalReaction(final RuleData ruleData, final EventOccurrence eo, final int ruleIdx) {
+		final ContractRule rule = ruleData.rule();
+		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
+			if (eo.state() == EventOccurrence.State.ISSUE) {
+				eventMissedError(eo, Code.CAUSAL_REACTION_MISSED);
+				ruleData.markers().add(eo);
+			}
+			return;
+		}
+
+		final String input = rule.getInputs().getFirst();
+		if (eo.eventName().endsWith(input)) { // input occurred -> setup interval
+			final CInterval interval = rule.getInterval().translate(eo.timestampNs());
+			final EventOccurrence missedM = createMissedMarker(rule, input, interval.getUpperBound(), ruleIdx);
+			ruleData.rememberCausalEvent(missedM);
+			ruleData.intervals().add(interval);
+			ruleData.markers().add(normalMarker(eo));
+		} else { // output occurred -> perform check
+			final EventOccurrence missedM = ruleData.getAssociatedCausalEvent(eo);
+			if (missedM == null) {
+				ruleData.markers().add(normalMarker(eo));
+				return;
+			}
+
+			final CInterval inter = rule.getInterval();
+			final CInterval checkI = inter
+					.translate(missedM.timestampNs() - inter.getDiameter() - inter.getLowerBound());
+			if (!checkI.contains(eo.timestampNs())) {
+				eventOutsideIntervalError(checkI, eo, Code.CAUSAL_REACTION_TOO_EARLY, Code.CAUSAL_REACTION_TOO_LATE);
+				ruleData.markers().add(issueMarker(eo));
+
+				if (eo.timestampNs() <= checkI.getLowerBound()) {
+					// do not raise an "event missed" issue when it is too early
+					missedM.setState(EventOccurrence.State.FULFILLING);
+				}
+			} else {
+				ruleData.markers().add(fulfillMarker(eo));
+				missedM.setState(EventOccurrence.State.FULFILLING);
+			}
+		}
 	}
 
 	private void checkCausalAge(final RuleData ruleData, final EventOccurrence eo) {
-		// TODO
+		final ContractRule rule = ruleData.rule();
+
+		final String input = rule.getInputs().getFirst();
+		if (eo.eventName().endsWith(input)) { // input occurred -> setup queue/stack
+			final EventOccurrence marker = normalMarker(eo);
+			ruleData.rememberCausalEvent(marker);
+			ruleData.markers().add(marker);
+		} else { // output occurred -> perform check
+			final CInterval inter = rule.getInterval();
+			final CInterval checkI = inter
+					.translate(eo.timestampNs() - inter.getLowerBound() * 2 - inter.getDiameter());
+			ruleData.markers().add(normalMarker(eo));
+			ruleData.intervals().add(checkI);
+
+			final EventOccurrence age = ruleData.getAssociatedCausalEvent(eo);
+			if (age == null) {
+				final String missedEventName = createKey(rule, rule.getInputs().getFirst());
+				final EventOccurrence mm = missedMarker(missedEventName, checkI.getUpperBound());
+				eventMissedError(mm, Code.CAUSAL_AGE_MISSED);
+				insertSorted(ruleData.markers(), mm);
+				return;
+			}
+
+			if (!checkI.contains(age.timestampNs())) {
+				// also raise a missed issue when too late (for consistency with other rules)
+				if (age.timestampNs() >= checkI.getUpperBound()) {
+					final EventOccurrence mm = missedMarker(age.eventName(), checkI.getUpperBound());
+					eventMissedError(mm, Code.CAUSAL_AGE_MISSED);
+					insertSorted(ruleData.markers(), mm);
+				}
+
+				eventOutsideIntervalError(checkI, age, Code.CAUSAL_AGE_TOO_EARLY, Code.CAUSAL_AGE_TOO_LATE);
+				age.setState(EventOccurrence.State.ISSUE);
+			} else {
+				age.setState(EventOccurrence.State.FULFILLING);
+			}
+		}
 	}
 
 	private static void insertSorted(final List<EventOccurrence> list, final EventOccurrence element) {
@@ -324,16 +400,20 @@ public class DynamicContractChecker {
 		}
 	}
 
-	private void createMissedMarker(final ContractRule rule, final String port, final double time, final int i) {
-		createMissedMarker(createKey(rule, port), time, i);
+	private EventOccurrence createMissedMarker(final ContractRule rule, final String port, final double time,
+			final int ruleIdx) {
+		return createMissedMarker(createKey(rule, port), time, ruleIdx);
 	}
 
-	private void createMissedMarker(final String key, final double time, final int i) {
-		queue.offer(new EventOccurrence(key, time, EventOccurrence.Type.MISSED_MARKER, EventOccurrence.State.ISSUE, i));
+	private EventOccurrence createMissedMarker(final String key, final double time, final int ruleIdx) {
+		final EventOccurrence eo = new EventOccurrence(key, time, EventOccurrence.Type.MISSED_MARKER,
+				EventOccurrence.State.ISSUE, ruleIdx);
+		queue.offer(eo);
+		return eo;
 	}
 
-	private static EventOccurrence missedMarker(final double time) {
-		return new EventOccurrence("", time, EventOccurrence.Type.MISSED_MARKER, EventOccurrence.State.ISSUE, 0); //$NON-NLS-1$
+	private static EventOccurrence missedMarker(final String name, final double time) {
+		return new EventOccurrence(name, time, EventOccurrence.Type.MISSED_MARKER, EventOccurrence.State.ISSUE, 0);
 	}
 
 	private static EventOccurrence normalMarker(final EventOccurrence eo) {

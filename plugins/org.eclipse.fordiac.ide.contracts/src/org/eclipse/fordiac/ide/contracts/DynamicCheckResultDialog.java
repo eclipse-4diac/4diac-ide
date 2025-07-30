@@ -247,6 +247,8 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			@Override
 			public void mouseDoubleClick(final MouseEvent e) {
 				final FileDialog dialog = new FileDialog(parentShell, SWT.SAVE);
+				dialog.setFilterExtensions(new String[] { "*.svg", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
+				dialog.setFileName("result.svg"); //$NON-NLS-1$
 				final String fname = dialog.open();
 				if (fname == null) {
 					return;
@@ -458,7 +460,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			painter.drawLine(startP, y, endP - MARKER_SIZE, y);
 			drawArrowHeadLR(painter, endP - markerAndHalf, y, MARKER_SIZE, markerAndHalf);
 		} else {
-			painter.drawLine(startP + MARKER_SIZE, y, endP, y);
+			painter.drawLine(startP, y, endP + MARKER_SIZE, y);
 			drawArrowHeadLR(painter, endP + markerAndHalf, y, MARKER_SIZE, -markerAndHalf);
 		}
 	}

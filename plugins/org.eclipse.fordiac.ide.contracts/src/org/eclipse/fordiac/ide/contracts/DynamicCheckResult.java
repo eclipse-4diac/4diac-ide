@@ -18,9 +18,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
+
+import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
+import org.eclipse.fordiac.ide.contracts.ContractRule.Type;
 
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 
@@ -34,8 +40,10 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		private final List<CInterval> intervals;
 		private final List<EventOccurrence> markers;
 
+		private Queue<EventOccurrence> causalFIFO;
+		private Stack<EventOccurrence> causalLIFO;
 		private final boolean[] slidingWindow;
-		private final boolean[] triggerSet;
+		private boolean[] triggerSet;
 		private int triggerSequence;
 
 		public RuleData(final ContractRule rule) {
@@ -51,10 +59,15 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 				slidingWindow = null;
 			}
 
-			if (rule.getType() == ContractRule.Type.REACTION || rule.getType() == ContractRule.Type.AGE) {
+			if (rule.getType() == Type.REACTION || rule.getType() == Type.AGE) {
 				triggerSet = new boolean[rule.getInputs().size()];
-			} else {
-				triggerSet = null;
+			}
+			if (rule.getType() == Type.CAUSAL_REACTION || rule.getType() == Type.CAUSAL_AGE) {
+				if (rule.getCausalRelation() == CausalRelation.FIFO) {
+					causalFIFO = new LinkedList<>();
+				} else if (rule.getCausalRelation() == CausalRelation.LIFO) {
+					causalLIFO = new Stack<>();
+				}
 			}
 		}
 
@@ -95,15 +108,14 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		 * @return whether this completes the sequence/set causing a reaction/age
 		 */
 		public boolean triggerOccurred(final EventOccurrence eo, final int index) {
-			if (rule.getType() == ContractRule.Type.REACTION ? rule.inputIsSequence() : rule.outputIsSequence()) {
+			if (rule.getType() == Type.REACTION ? rule.inputIsSequence() : rule.outputIsSequence()) {
 				return sequenceTrigger(eo);
 			}
 			return setTrigger(index);
 		}
 
 		private boolean sequenceTrigger(final EventOccurrence eo) {
-			final List<String> seq = rule.getType() == ContractRule.Type.REACTION ? rule.getInputs()
-					: rule.getOutputs();
+			final List<String> seq = rule.getType() == Type.REACTION ? rule.getInputs() : rule.getOutputs();
 			if (eo.eventName().endsWith(seq.get(triggerSequence))) {
 				triggerSequence++;
 				if (triggerSequence >= seq.size()) {
@@ -127,6 +139,39 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		}
 
 		/**
+		 * report that a new causal event has occurred (e.g. an input for a causal
+		 * reaction or an output for a causal age)
+		 *
+		 * @param eo the event that occurred which should be remembered
+		 */
+		public void rememberCausalEvent(final EventOccurrence eo) {
+			if (causalFIFO != null) {
+				causalFIFO.offer(eo);
+			} else if (causalLIFO != null) {
+				causalLIFO.push(eo);
+			} else {
+				// TODO: ID relation...
+			}
+		}
+
+		/**
+		 * returns the associated causal event which has been reported via
+		 * <code>rememberCausalEvent()</code>
+		 *
+		 * @param eo the event for which the associated event should be returned
+		 * @return the associated causal event or null if there is none
+		 */
+		public EventOccurrence getAssociatedCausalEvent(final EventOccurrence eo) {
+			if (causalFIFO != null) {
+				return causalFIFO.isEmpty() ? null : causalFIFO.poll();
+			}
+			if (causalLIFO != null) {
+				return causalLIFO.isEmpty() ? null : causalLIFO.pop();
+			}
+			return null; // TODO: ID relation...
+		}
+
+		/**
 		 * searches if the rules reaction or age is fulfilled within the given interval
 		 * based on the recorded event occurrence markers
 		 *
@@ -136,7 +181,7 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		public SearchResult searchInterval(final CInterval interval) {
 			final List<String> ports;
 			final boolean isSequence;
-			if (rule.getType() == ContractRule.Type.REACTION) {
+			if (rule.getType() == Type.REACTION) {
 				ports = rule.getOutputs();
 				isSequence = rule.outputIsSequence();
 			} else {
@@ -152,7 +197,7 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 
 		private SearchResult searchForSequence(final CInterval inter, final List<String> ports, boolean once) {
 			int sequenceIdx = 0;
-			int eventIdx = firstIndex(markers, inter); // TODO not so nice to do this twice
+			int eventIdx = firstIndex(markers, inter);
 			boolean checkingOnce = false;
 
 			for (final EventOccurrence eo : iterateInterval(markers, inter)) {
