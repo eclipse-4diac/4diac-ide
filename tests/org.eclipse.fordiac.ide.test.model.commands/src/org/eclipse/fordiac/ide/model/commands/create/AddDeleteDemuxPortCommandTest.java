@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -36,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.test.model.typelibrary.DataTypeEntryMock;
@@ -85,8 +88,12 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			final Demultiplexer d = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 			d.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 			final Event inputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+			inputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 			final Event outputEvent = LibraryElementFactory.eINSTANCE.createEvent();
+			outputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 			final VarDeclaration dataInput = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			dataInput.setType(GenericTypes.ANY);
+
 			d.getInterface().getEventInputs().add(inputEvent);
 			d.getInterface().getEventOutputs().add(outputEvent);
 			d.getInterface().getInputVars().add(dataInput);
@@ -96,8 +103,8 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			final FBTypeEntryMock te = new FBTypeEntryMock(dummyType, typeLib, null);
 			typeLib.addTypeEntry(te);
 			d.setTypeEntry(te);
-
 			d.setDataType(struct);
+
 			d.updateConfiguration();
 			final FBNetwork dummyFbN = LibraryElementFactory.eINSTANCE.createFBNetwork();
 			dummyFbN.getNetworkElements().add(d);
@@ -132,16 +139,22 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			type.setName(name);
 			final VarDeclaration var1 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var1.setName(VARIABLE1);
+			var1.setType(ElementaryTypes.BOOL);
 			final VarDeclaration var2 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var2.setName(VARIABLE2);
+			var2.setType(ElementaryTypes.BOOL);
 			final VarDeclaration var3 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var3.setName(VARIABLE3);
+			var3.setType(ElementaryTypes.BOOL);
 			final VarDeclaration var4 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var4.setName(VARIABLE4);
+			var4.setType(ElementaryTypes.BOOL);
 			final VarDeclaration var5 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var5.setName(VARIABLE5);
+			var5.setType(ElementaryTypes.BOOL);
 			final VarDeclaration var6 = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			var6.setName(VARIABLE6);
+			var6.setType(ElementaryTypes.BOOL);
 			type.getMemberVariables().add(var1);
 			type.getMemberVariables().add(var2);
 			type.getMemberVariables().add(var3);
