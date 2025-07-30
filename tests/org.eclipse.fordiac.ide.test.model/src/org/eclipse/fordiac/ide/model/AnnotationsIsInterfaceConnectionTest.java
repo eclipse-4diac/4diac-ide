@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.junit.jupiter.api.Test;
 
 class AnnotationsIsInterfaceConnectionTest {
@@ -197,8 +198,10 @@ class AnnotationsIsInterfaceConnectionTest {
 
 		final var muxEvIn = LibraryElementFactory.eINSTANCE.createEvent();
 		muxEvIn.setName(MUXDEMUX_EVENT_IN);
+		muxEvIn.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		final var muxEvOut = LibraryElementFactory.eINSTANCE.createEvent();
 		muxEvOut.setName(MUXDEMUX_EVENT_OUT);
+		muxEvOut.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		muxblock.getInterface().getEventInputs().add(muxEvIn);
 		muxblock.getInterface().getEventOutputs().add(muxEvOut);
 
@@ -217,8 +220,10 @@ class AnnotationsIsInterfaceConnectionTest {
 		demuxblock.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 
 		final var demuxEvIn = LibraryElementFactory.eINSTANCE.createEvent();
+		demuxEvIn.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		demuxEvIn.setName(MUXDEMUX_EVENT_IN);
 		final var demuxEvOut = LibraryElementFactory.eINSTANCE.createEvent();
+		demuxEvOut.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		demuxEvOut.setName(MUXDEMUX_EVENT_OUT);
 		demuxblock.getInterface().getEventInputs().add(demuxEvIn);
 		demuxblock.getInterface().getEventOutputs().add(demuxEvOut);
