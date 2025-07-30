@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.Utils;
+import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contractSpec.EventExpr;
 import org.eclipse.fordiac.ide.contractSpec.EventSpec;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
@@ -57,7 +58,9 @@ class ContractRule {
 	private boolean outputIsSequence;
 	private boolean once;
 	private SlidingWindow nOutOfM;
-	// TODO: clock, causal relation
+	// only for CAUSAL REACTION/CAUSAL AGE
+	private CausalRelation causalRelation;
+	// TODO: clock
 
 	ContractRule(final String event, final CInterval interval) {
 		this.type = Type.SINGLE_EVENT;
@@ -261,5 +264,13 @@ class ContractRule {
 
 	void setNOutOfM(final SlidingWindow nOutOfM) {
 		this.nOutOfM = nOutOfM;
+	}
+
+	CausalRelation getCausalRelation() {
+		return causalRelation;
+	}
+
+	void setCausalRelation(final CausalRelation causalRelation) {
+		this.causalRelation = causalRelation;
 	}
 }

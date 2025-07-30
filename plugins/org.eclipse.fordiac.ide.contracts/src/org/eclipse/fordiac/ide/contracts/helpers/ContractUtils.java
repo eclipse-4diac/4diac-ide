@@ -17,6 +17,9 @@ package org.eclipse.fordiac.ide.contracts.helpers;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
+import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
+
 @SuppressWarnings("nls") // translating doesn't make sense here
 public final class ContractUtils {
 
@@ -65,6 +68,11 @@ public final class ContractUtils {
 
 	public static String createCausalAge(final String iPin, final String oPin, final String timeExpr) {
 		return "Age(%s, %s) within %s".formatted(oPin, iPin, timeExpr);
+	}
+
+	public static String createCausalFuncDecl(final CausalFuncName name, final String port1, final String port2,
+			final CausalRelation relation) {
+		return "%s (%s, %s) := %s".formatted(name, port1, port2, relation);
 	}
 
 	private static String createEventList(final List<String> pins) {

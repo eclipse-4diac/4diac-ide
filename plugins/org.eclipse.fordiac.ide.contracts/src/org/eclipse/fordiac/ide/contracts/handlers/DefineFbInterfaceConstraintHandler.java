@@ -24,6 +24,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
+import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contracts.Messages;
 import org.eclipse.fordiac.ide.contracts.PrepareContractCommand;
 import org.eclipse.fordiac.ide.contracts.dialogs.DefineContractDecisionDialog;
@@ -48,17 +50,17 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		// get input and output pins from event
 		final List<Event> eventPins = getSelectedPins(event);
 		final List<Event> iPins = new ArrayList<>();
-		final List<String> iPinNames = new ArrayList<>();
+		final List<String> iPinN = new ArrayList<>();
 		final List<Event> oPins = new ArrayList<>();
-		final List<String> oPinNames = new ArrayList<>();
+		final List<String> oPinN = new ArrayList<>();
 
 		for (final Event pin : eventPins) {
 			if (pin.isIsInput()) {
 				iPins.add(pin);
-				iPinNames.add(pin.getName());
+				iPinN.add(pin.getName());
 			} else {
 				oPins.add(pin);
-				oPinNames.add(pin.getName());
+				oPinN.add(pin.getName());
 			}
 		}
 
@@ -74,14 +76,20 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		final List<String> names = new ArrayList<>();
 		final List<String> templates = new ArrayList<>();
 		final List<Event> pins = iPins.isEmpty() ? oPins : iPins;
-		final List<String> pinNames = iPinNames.isEmpty() ? oPinNames : iPinNames;
+		final List<String> pinNames = iPinN.isEmpty() ? oPinN : iPinN;
 
 		if (iPins.size() == 1 && oPins.size() == 1) {
 			names.add(Messages.ContractRuleCausalReaction);
-			templates.add(ContractUtils.createCausalReaction(iPinNames.get(0), oPinNames.get(0), DEFAULT_TIME));
+			templates.add(ContractUtils.createCausalReaction(iPinN.get(0), oPinN.get(0), DEFAULT_TIME));
+			names.add(Messages.ContractRuleCausalReaction);
+			templates.add(ContractUtils.createCausalFuncDecl(CausalFuncName.REACTION, iPinN.get(0), oPinN.get(0),
+					CausalRelation.FIFO));
 
 			names.add(Messages.ContractRuleCausalAge);
-			templates.add(ContractUtils.createCausalAge(iPinNames.get(0), oPinNames.get(0), DEFAULT_TIME));
+			templates.add(ContractUtils.createCausalAge(iPinN.get(0), oPinN.get(0), DEFAULT_TIME));
+			names.add(Messages.ContractRuleCausalReaction);
+			templates.add(ContractUtils.createCausalFuncDecl(CausalFuncName.AGE, oPinN.get(0), iPinN.get(0),
+					CausalRelation.FIFO));
 		} else if (iPins.isEmpty() || oPins.isEmpty()) {
 			names.add(Messages.ContractRuleSingleEvent);
 			templates.add(ContractUtils.createSingleEvent(pinNames, DEFAULT_TIME));
@@ -97,14 +105,18 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 		}
 		if (!iPins.isEmpty() && !oPins.isEmpty()) {
 			names.add(Messages.ContractRuleReaction);
-			templates.add(ContractUtils.createReaction(iPinNames, oPinNames, false, false, DEFAULT_TIME, false, 0, 0));
-			names.add(Messages.ContractRuleReaction);
-			templates.add(ContractUtils.createReaction(iPinNames, oPinNames, true, true, DEFAULT_TIME, false, 0, 0));
+			templates.add(ContractUtils.createReaction(iPinN, oPinN, false, false, DEFAULT_TIME, false, 0, 0));
 
 			names.add(Messages.ContractRuleAge);
-			templates.add(ContractUtils.createAge(iPinNames, oPinNames, false, false, DEFAULT_TIME, false, 0, 0));
-			names.add(Messages.ContractRuleAge);
-			templates.add(ContractUtils.createAge(iPinNames, oPinNames, true, true, DEFAULT_TIME, false, 0, 0));
+			templates.add(ContractUtils.createAge(iPinN, oPinN, false, false, DEFAULT_TIME, false, 0, 0));
+
+			if (iPins.size() > 1 || oPins.size() > 1) { // add alternative reaction/age with sequence(s)
+				names.add(Messages.ContractRuleReaction);
+				templates.add(ContractUtils.createReaction(iPinN, oPinN, true, true, DEFAULT_TIME, false, 0, 0));
+
+				names.add(Messages.ContractRuleAge);
+				templates.add(ContractUtils.createAge(iPinN, oPinN, true, true, DEFAULT_TIME, false, 0, 0));
+			}
 		}
 		// add an empty suggestion in case that the others don't fit well
 		names.add(Messages.ContractRuleEmpty);

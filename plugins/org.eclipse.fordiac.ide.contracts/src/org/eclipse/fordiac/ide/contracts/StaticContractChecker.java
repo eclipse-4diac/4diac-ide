@@ -73,7 +73,7 @@ public class StaticContractChecker {
 
 		// TODO: tmp issue until support added
 		if (reaction.getInputs().size() > 1 || reaction.getOutputs().size() > 1) {
-			system.warning("Reactions with multiple inputs/outputs not supported yet.", ContractIssue.Code.UNKOWN);
+			system.warning("Reactions with multiple inputs/outputs not supported yet.", ContractIssue.Code.UNKOWN); //$NON-NLS-1$
 			return;
 		}
 

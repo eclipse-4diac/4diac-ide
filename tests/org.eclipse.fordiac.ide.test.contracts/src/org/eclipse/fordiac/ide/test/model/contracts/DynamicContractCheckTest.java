@@ -371,8 +371,79 @@ class DynamicContractCheckTest {
 	}
 
 	// === test causal reaction
+	@Test
+	void causalReactionFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 8), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void causalReactionMissedTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_REACTION_MISSED);
+	}
+
+	@Test
+	void causalReactionTooEarlyTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EO", 4)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_REACTION_TOO_EARLY);
+	}
+
+	@Test
+	void causalReactionTooLateTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EO", 23)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_REACTION_MISSED, ContractIssue.Code.CAUSAL_REACTION_TOO_LATE);
+	}
+
+	@Test
+	void causalReactionLIFOFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns \n |> (EI, EO) := LIFO");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 5), eo("EO", 12), eo("EO", 13)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void causalReactionLIFOIssueTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [5, 10]ns \n |> (EI, EO) := LIFO");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 8), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_REACTION_TOO_EARLY, ContractIssue.Code.CAUSAL_REACTION_MISSED,
+				ContractIssue.Code.CAUSAL_REACTION_TOO_LATE);
+	}
+
 
 	// === test causal age
+	// causal age is symmetric to causal reaction above -> less extensive tests
+	@Test
+	void causalAgeFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("Age(EO, EI) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 3), eo("EI", 8), eo("EO", 12), eo("EO", 14)));
+		assertIssues(sys);
+	}
+
+	@Test
+	void causalAgeMissedTest() {
+		final ContractSystem sys = createSimpleSystem("Age(EO, EI) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EO", 10)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_AGE_MISSED);
+	}
+
+	@Test
+	void causalAgeTooEarlyTest() {
+		final ContractSystem sys = createSimpleSystem("Age(EO, EI) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 1), eo("EO", 12)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_AGE_TOO_EARLY);
+	}
+
+	@Test
+	void causalAgeTooLateTest() {
+		final ContractSystem sys = createSimpleSystem("Age(EO, EI) within [5, 10]ns");
+		sys.performDynamicCheck(List.of(eo("EI", 8), eo("EO", 12)));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_AGE_MISSED, ContractIssue.Code.CAUSAL_AGE_TOO_LATE);
+	}
 
 	// === helper methods
 	/**

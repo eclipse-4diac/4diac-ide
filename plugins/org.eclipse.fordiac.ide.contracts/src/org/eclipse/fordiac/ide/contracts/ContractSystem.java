@@ -25,12 +25,16 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.contractSpec.Age;
 import org.eclipse.fordiac.ide.contractSpec.CausalAge;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncDecl;
+import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalReaction;
+import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contractSpec.ClockDefinition;
 import org.eclipse.fordiac.ide.contractSpec.Reaction;
 import org.eclipse.fordiac.ide.contractSpec.Repetition;
 import org.eclipse.fordiac.ide.contractSpec.SingleEvent;
+import org.eclipse.fordiac.ide.contractSpec.TimeSpec;
 import org.eclipse.fordiac.ide.contractSpec.impl.ModelImpl;
+import org.eclipse.fordiac.ide.contracts.ContractRule.Type;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeContractCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -49,14 +53,12 @@ public class ContractSystem {
 
 	private final List<ContractComponent> components;
 	private final List<Clock> clocks;
-	private final List<CausalFuncDecl> causalFuncDecls;
 	private final List<ContractIssue> issues;
 	private final Map<SubApp, ContractComponent> processedSubApps;
 
 	public ContractSystem() {
 		components = new ArrayList<>();
 		clocks = new ArrayList<>();
-		causalFuncDecls = new ArrayList<>();
 		issues = new ArrayList<>();
 		processedSubApps = new HashMap<>();
 	}
@@ -202,8 +204,13 @@ public class ContractSystem {
 			return;
 		}
 
+		addContractRules(model.getTimeSpec(), component);
+	}
+
+	private void addContractRules(final List<TimeSpec> timeSpecs, final ContractComponent component) {
+		final List<CausalFuncDecl> causalFuncDecls = new ArrayList<>();
 		final ContractRuleBuilder ruleBuilder = new ContractRuleBuilder(this, component);
-		for (final var timespec : model.getTimeSpec()) {
+		for (final var timespec : timeSpecs) {
 			switch (timespec) {
 			case final SingleEvent se:
 				ruleBuilder.addSingleEvent(se);
@@ -229,12 +236,41 @@ public class ContractSystem {
 			case final ClockDefinition clock:
 				clocks.add(new Clock(clock));
 				break;
-			default: // can't really happen if no new rules added
+			default: // can't happen unless new rules are added to the language
 				warning(Messages.ContractUnkownRuleWarning.formatted(component.getName()),
 						ContractIssue.Code.UNKOWN_RULE);
 				break;
 			}
 		}
+
+		// find associated causal relations for rules
+		for (final ContractRule reaction : component.getReactions()) {
+			associateCausalFuncDecl(reaction, causalFuncDecls);
+		}
+	}
+
+	private static void associateCausalFuncDecl(final ContractRule reaction, final List<CausalFuncDecl> funcDecls) {
+		if (reaction.getType() == Type.CAUSAL_AGE) {
+			for (final CausalFuncDecl funcDecl : funcDecls) {
+				if (funcDecl.getFuncName() == CausalFuncName.AGE
+						&& funcDecl.getPort1().getName().equals(reaction.getOutputs().getFirst())
+						&& funcDecl.getPort2().getName().equals(reaction.getInputs().getFirst())) {
+					reaction.setCausalRelation(funcDecl.getRelation());
+					return;
+				}
+			}
+		} else if (reaction.getType() == Type.CAUSAL_REACTION) {
+			for (final CausalFuncDecl funcDecl : funcDecls) {
+				if (funcDecl.getFuncName() == CausalFuncName.REACTION
+						&& funcDecl.getPort1().getName().equals(reaction.getInputs().getFirst())
+						&& funcDecl.getPort2().getName().equals(reaction.getOutputs().getFirst())) {
+					reaction.setCausalRelation(funcDecl.getRelation());
+					return;
+				}
+			}
+		}
+		// no fitting causal function declaration found, set relation to default (FIFO)
+		reaction.setCausalRelation(CausalRelation.FIFO);
 	}
 
 	/**
