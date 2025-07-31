@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - Added Margin to Drag Figure
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
@@ -20,13 +21,29 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
+import org.eclipse.fordiac.ide.gef.utilities.MarginBoundsHelper;
 import org.eclipse.gef.tools.ResizeTracker;
 
 public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 
+	private final MarginBoundsHelper boundsHelper = new MarginBoundsHelper();
+
 	@Override
 	protected ResizeTracker getResizeTracker(final int direction) {
 		return new ContainerResizeTracker(getHost(), direction);
+	}
+
+	@Override
+	protected IFigure createDragSourceFeedbackFigure() {
+		boundsHelper.updateMargins(getHost().getModel());
+		return super.createDragSourceFeedbackFigure();
+	}
+
+	@Override
+	protected Rectangle getInitialFeedbackBounds() {
+		final Rectangle bounds = super.getInitialFeedbackBounds().getCopy();
+		boundsHelper.expandRectangle(bounds);
+		return bounds;
 	}
 
 	@Override
@@ -49,7 +66,8 @@ public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 		final RectangleFigure commentArea = new RectangleFigure() {
 			@Override
 			public void setBounds(final Rectangle rect) {
-				// the layouter is putting us on the same position as the outer figure which is to high, left, and to
+				// the layouter is putting us on the same position as the outer figure which is
+				// to high, left, and to
 				// wide correct this here
 				rect.translate(figure.getLineWidth(), figure.getLineWidth());
 				rect.width -= 2 * figure.getLineWidth();
