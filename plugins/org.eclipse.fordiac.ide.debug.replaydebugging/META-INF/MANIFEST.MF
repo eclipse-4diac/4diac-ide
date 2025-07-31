@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Replay Debugging Core
+Bundle-SymbolicName: org.eclipse.fordiac.ide.debug.replaydebugging;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.debug.replaydebugging
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: org.eclipse.fordiac.ide.debug.replaydebugging
+Require-Bundle: org.eclipse.debug.core,
+ org.eclipse.equinox.common,
+ org.eclipse.fordiac.ide.deployment.debug,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.debug,
+ org.eclipse.core.runtime,
+ org.eclipse.fordiac.ide.deployment,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.ui
