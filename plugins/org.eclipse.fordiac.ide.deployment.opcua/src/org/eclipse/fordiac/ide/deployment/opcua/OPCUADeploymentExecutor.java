@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -799,6 +800,63 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}
 		logResponseStatus(result.getStatusCode(), resName, fullFbName,
 				Messages.OPCUADeploymentExecutor_ErrorOnMonitoringRequest);
+	}
+
+	@Override
+	public void readTraces(final Device device, final String path) throws DeploymentException {
+
+		final String devName = device.getName();
+		try {
+			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.READ_TRACES_NODE,
+					new Variant[] { new Variant(path) });
+
+			final CallMethodResult result = sendREQ(devName, request,
+					MessageFormat.format(Constants.READ_TRACES, devName, path)).get();
+			if (!result.getStatusCode().isGood()) {
+				throw new DeploymentException(
+						MessageFormat.format(Messages.OPCUADeploymentExecutor_ReadTracesFailed, devName));
+			}
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_ReadTracesFailed, devName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
+	}
+
+	@Override
+	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
+		final String resName = resource.getName();
+		if (availableResources.isEmpty() && !getResourcesHandle()) {
+			throw new DeploymentException(MessageFormat.format(Messages.OPCUADeploymentExecutor_ResourceNotFoundError,
+					resName, device.getName()));
+		}
+
+		try {
+			final CallMethodRequest request = new CallMethodRequest(availableResources.get(resName),
+					Constants.REPLAY_NEXT_EVENT_NODE, new Variant[] {});
+
+			final CallMethodResult result = sendREQ(resName, request,
+					MessageFormat.format(Constants.REPLAY_NEXT_EVENT, resName)).get();
+			if (!result.getStatusCode().isGood()) {
+				throw new DeploymentException(
+						MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName));
+			}
+			final String returnedValue = (String) result.getOutputArguments()[0].getValue();
+
+			return returnedValue.isEmpty() ? Optional.empty() : Optional.of(returnedValue);
+
+		} catch (final ExecutionException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_ReplayNextEventFailed, resName), e);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
+		}
+		return Optional.empty();
 	}
 
 	/**************************************************************************

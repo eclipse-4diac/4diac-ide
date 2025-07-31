@@ -51,6 +51,9 @@ public final class Messages extends NLS {
 	public static String DeploymentExecutor_ClearForceFailed;
 	public static String DeploymentExecutor_TriggerEventFailed;
 
+	public static String DeploymentExecutor_ReadTracesNotSupported;
+	public static String DeploymentExecutor_ReplayNextEventNotSupported;
+
 	public static String DynamicTypeLoadDeploymentExecutor_QueryFailed;
 	public static String DynamicTypeLoadDeploymentExecutor_CreateTypeFailed;
 	public static String DynamicTypeLoadDeploymentExecutor_LUAScriptForFBTypeNotExecuted;

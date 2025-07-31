@@ -58,6 +58,10 @@ public final class Messages extends NLS {
 	public static String OPCUADeploymentExecutor_ErrorOnQueryGlobalConstType;
 
 	public static String OPCUADeploymentExecutor_BrowseOPCUAFailed;
+	public static String OPCUADeploymentExecutor_ResourceNotFoundError;
+
+	public static String OPCUADeploymentExecutor_ReadTracesFailed;
+	public static String OPCUADeploymentExecutor_ReplayNextEventFailed;
 
 	public static String OPCUADeploymentExecutor_RequestFailed;
 	public static String OPCUADeploymentExecutor_RequestInterrupted;

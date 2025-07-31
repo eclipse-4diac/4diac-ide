@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -501,5 +502,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		} catch (final IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ClearForceFailed, name), e);
 		}
+	}
+
+	@Override
+	public void readTraces(final Device device, final String path) throws DeploymentException {
+		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReadTracesNotSupported);
+	}
+
+	@Override
+	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
+		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReplayNextEventNotSupported);
 	}
 }

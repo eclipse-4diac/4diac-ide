@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -372,4 +373,28 @@ public interface IDeviceManagementExecutorService extends IDeviceManagementInter
 	 * @return true if terminated, false otherwise
 	 */
 	boolean isTerminated();
+
+	/********************************************************************************************
+	 * Replay Commands
+	 ********************************************************************************************/
+
+	/**
+	 * Read traces from a given path asynchronously
+	 *
+	 * @param device The device where to execute the command
+	 * @param path   Path to the traces to load
+	 * @throws DeploymentException if an error occurred
+	 */
+	Future<Void> readTracesAsync(final Device device, final String path) throws DeploymentException;
+
+	/**
+	 * Replay the next event asynchronously. It simulates the next event from the
+	 * loaded traces
+	 *
+	 * @param resource The resource in which the event will be replayed
+	 * @return An optional containing the name of the event that was replayed, or
+	 *         empty if no more events are available to replay
+	 * @throws DeploymentException if an error occurred
+	 */
+	Future<Optional<String>> replayNextEventAsync(final Resource resource) throws DeploymentException;
 }

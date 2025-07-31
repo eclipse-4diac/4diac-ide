@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -480,6 +481,19 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 		if (getDelegate().isConnected()) {
 			getDelegate().disconnect();
 		}
+	}
+
+	@Override
+	public Future<Void> readTracesAsync(final Device device, final String path) throws DeploymentException {
+		return executorService.submit(() -> {
+			getDelegate().readTraces(device, path);
+			return null;
+		});
+	}
+
+	@Override
+	public Future<Optional<String>> replayNextEventAsync(final Resource resource) throws DeploymentException {
+		return executorService.submit(() -> getDelegate().replayNextEvent(resource));
 	}
 
 	private static <T> T unwrap(final Future<T> future) throws DeploymentException {

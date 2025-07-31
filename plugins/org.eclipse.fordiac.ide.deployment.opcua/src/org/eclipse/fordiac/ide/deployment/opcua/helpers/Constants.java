@@ -53,6 +53,9 @@ public class Constants {
 	public static final NodeId QUERY_DATA_TYPE_NODE = new NodeId(1, "queryDataType"); //$NON-NLS-1$
 	public static final NodeId QUERY_GLOBAL_CONST_TYPE_NODE = new NodeId(1, "queryGlobalConstType"); //$NON-NLS-1$
 
+	public static final NodeId READ_TRACES_NODE = new NodeId(1, "Read Traces"); //$NON-NLS-1$
+	public static final NodeId REPLAY_NEXT_EVENT_NODE = new NodeId(1, "Replay Next Event"); //$NON-NLS-1$
+
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String CREATE_FB_INSTANCE = "<Request Action=\"CREATE FB\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -78,6 +81,9 @@ public class Constants {
 	public static final String QUERY_FB_TYPE = "<Request Action=\"QUERY\"><FBType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String QUERY_DATA_TYPE = "<Request Action=\"QUERY\"><DataType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request Action=\"QUERY\"><GlobalConstType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+
+	public static final String READ_TRACES = "<Request Action=\"READ TRACES\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String REPLAY_NEXT_EVENT = "<Request Action=\"REPLAY NEXT EVENT\"><Connection Destination=\"{0}\"/></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 

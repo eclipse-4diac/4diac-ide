@@ -67,6 +67,7 @@ public class Messages extends NLS {
 	public static String OnlineCreateFBHandler_OnlineCreateFunctionBlockError;
 	public static String OnlineStartFBHandler_OnlineStartFunctionBlockError;
 	public static String RestartDeviceHandler_RestartError;
+	public static String ReadTracesHandler_ReadError;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogMessage;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeDialogTitle;
 	public static String RuntimeLaunchConfigurationTab_DeviceTypeLabel;

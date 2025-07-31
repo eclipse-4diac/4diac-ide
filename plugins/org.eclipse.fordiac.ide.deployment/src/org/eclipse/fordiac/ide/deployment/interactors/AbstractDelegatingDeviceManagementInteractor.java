@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
@@ -196,6 +197,16 @@ public abstract class AbstractDelegatingDeviceManagementInteractor implements ID
 	@Override
 	public void clearForce(final Resource resource, final String name) throws DeploymentException {
 		delegate.clearForce(resource, name);
+	}
+
+	@Override
+	public void readTraces(final Device device, final String path) throws DeploymentException {
+		delegate.readTraces(device, path);
+	}
+
+	@Override
+	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
+		return delegate.replayNextEvent(resource);
 	}
 
 	protected IDeviceManagementInteractor getDelegate() {
