@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
@@ -320,4 +321,27 @@ public interface IDeviceManagementInteractor {
 	 * @throws DeploymentException if an error occurred
 	 */
 	void clearForce(Resource resource, String name) throws DeploymentException;
+
+	/********************************************************************************************
+	 * Replay Commands
+	 ********************************************************************************************/
+
+	/**
+	 * Read traces from a given path
+	 *
+	 * @param device The device where to execute the command
+	 * @param path   Path to the traces to load
+	 * @throws DeploymentException if an error occurred
+	 */
+	void readTraces(final Device device, final String path) throws DeploymentException;
+
+	/**
+	 * Replay the next event. It simulates the next event from the loaded traces
+	 *
+	 * @param resource The resource in which the event will be replayed
+	 * @return An optional containing the name of the event that was replayed, or
+	 *         empty if no more events are available to replay
+	 * @throws DeploymentException if an error occurred
+	 */
+	Optional<String> replayNextEvent(final Resource resource) throws DeploymentException;
 }
