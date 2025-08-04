@@ -17,11 +17,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
@@ -52,6 +54,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -68,9 +71,11 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.data.validate.IDataValidator;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -128,6 +133,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
+						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+				configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR, attributeNameValidator,
 						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
 			}
 		});
@@ -246,6 +253,31 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			cmd.add(new DeleteAttributeCommand(getType(), attribute));
 		}
 	}
+
+	public static boolean isInternalAttribute(final String name) {
+		return InternalAttributeDeclarations.getInternalAttributeByName(name) != null;
+	}
+
+	private final IDataValidator attributeNameValidator = new IDataValidator() {
+		@Override
+		public boolean validate(final int columnIndex, final int rowIndex, final Object newValue) {
+			if (!(newValue instanceof final String name)) {
+				return true;
+			}
+
+			if (isInternalAttribute(name)) {
+				ErrorMessenger
+						.popUpErrorMessage(MessageFormat.format(Messages.AttributeSection_NameReservedKeyWord, name));
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean validate(final ILayerCell cell, final IConfigRegistry configRegistry, final Object newValue) {
+			return validate(cell.getColumnIndex(), cell.getRowIndex(), newValue);
+		}
+	};
 
 	@Override
 	protected ConfigurableObject getType() {
