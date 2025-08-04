@@ -19,9 +19,11 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.gef.utilities.CollisionChangeBoundsRequest;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
@@ -51,6 +53,18 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 		figure.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		figure.setLineWidth(ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
 		return figure;
+	}
+
+	@Override
+	protected void showChangeBoundsFeedback(final ChangeBoundsRequest request) {
+		super.showChangeBoundsFeedback(request);
+		if (request instanceof final CollisionChangeBoundsRequest collisionBoundsRequest) {
+			final IFigure dragFigure = getDragSourceFeedbackFigure();
+			final boolean collision = collisionBoundsRequest.checkCollision(dragFigure.getBounds());
+			dragFigure.setBackgroundColor(
+					collision ? ModifiedMoveHandle.getCollisionColor() : ModifiedMoveHandle.getSelectionColor());
+			dragFigure.validate();
+		}
 	}
 
 	@Override

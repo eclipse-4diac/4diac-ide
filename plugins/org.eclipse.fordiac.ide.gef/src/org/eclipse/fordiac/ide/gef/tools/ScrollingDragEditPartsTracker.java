@@ -25,13 +25,16 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
+import org.eclipse.fordiac.ide.gef.utilities.CollisionChangeBoundsRequest;
 import org.eclipse.fordiac.ide.gef.utilities.MarginBoundsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.LayerManager;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
@@ -48,6 +51,14 @@ public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 
 	public ScrollingDragEditPartsTracker(final EditPart sourceEditPart) {
 		super(sourceEditPart);
+	}
+
+	@Override
+	protected Request createTargetRequest() {
+		if (isCloneActive()) {
+			return new ChangeBoundsRequest(REQ_CLONE);
+		}
+		return new CollisionChangeBoundsRequest(REQ_MOVE, figureList);
 	}
 
 	@Override
