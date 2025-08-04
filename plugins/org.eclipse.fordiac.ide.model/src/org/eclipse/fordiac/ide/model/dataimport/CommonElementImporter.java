@@ -24,6 +24,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -86,6 +87,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
@@ -422,36 +424,40 @@ public abstract class CommonElementImporter {
 
 	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
 			throws XMLStreamException, TypeImportException {
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
-
 		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
 				.getInternalAttributeByName(attribute.getName());
 		if (internalAttributeDecl != null) {
-			// Internal Attributes
+			if ((typeName != null) && !typeName.isBlank()) {
+				final String fqn = FordiacMarkerHelper.getLocation(confObject);
+				errors.add(new TypeImportDiagnostic(
+						MessageFormat.format(Messages.CommonElementImporter_ReservedAttributesValidation,
+								attribute.getName(), typeName, fqn),
+						attribute.getName() + " (Type=" + typeName + ")", getLineNumber()));
+				return;
+			}
 			attribute.setAttributeDeclaration(internalAttributeDecl);
 			attribute.setType(internalAttributeDecl.getType());
-		} else {
-			final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-			if (typeName != null) {
-				if (typeName.equals(HelperTypes.CDATA.getName())) {
-					attribute.setType(HelperTypes.CDATA);
-				} else {
-					attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
-				}
+		} else if (typeName != null) {
+			if (typeName.equals(HelperTypes.CDATA.getName())) {
+				attribute.setType(HelperTypes.CDATA);
 			} else {
-				// AttributeDeclarations
-				// use element for resolving import since confObject may not have been added to
-				// enclosing type yet
-				final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), getElement(),
-						name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
-				final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
-				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-					attribute.setType(attributeTypeEntry.getType().getType());
-				} else {
-					FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
-				}
+				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
+			}
+		} else {
+			// AttributeDeclarations
+			// use element for resolving import since confObject may not have been added to
+			// enclosing type yet
+			final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), getElement(),
+					name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
+			final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
+			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
+				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+				attribute.setType(attributeTypeEntry.getType().getType());
+			} else {
+				FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
 			}
 		}
 

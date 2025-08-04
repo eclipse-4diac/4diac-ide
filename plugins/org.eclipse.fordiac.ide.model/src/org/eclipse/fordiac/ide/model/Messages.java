@@ -27,6 +27,7 @@ public final class Messages extends NLS {
 	public static String CommonElementImporter_ERROR_DeclarationNotSet;
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
+	public static String CommonElementImporter_ReservedAttributesValidation;
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
 	public static String CompilableElementImporter_ERROR_VendorNotSet;
