@@ -18,7 +18,9 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.utilities.CollisionChangeBoundsRequest;
 import org.eclipse.fordiac.ide.gef.utilities.MarginBoundsHelper;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPolicy {
 
@@ -31,6 +33,20 @@ public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPo
 		figure.setOutline(true);
 		figure.setLineWidth(2 * ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
 		return figure;
+	}
+
+	@Override
+	protected void showChangeBoundsFeedback(final ChangeBoundsRequest request) {
+		super.showChangeBoundsFeedback(request);
+		if (request instanceof final CollisionChangeBoundsRequest collisionBoundsRequest) {
+			final IFigure dragFigure = getDragSourceFeedbackFigure();
+			if (dragFigure.getBorder() instanceof final ModifiedMoveHandle.SelectionBorder border) {
+				final boolean collision = collisionBoundsRequest.checkCollision(dragFigure.getBounds());
+				border.setColor(
+						collision ? ModifiedMoveHandle.getCollisionColor() : ModifiedMoveHandle.getSelectionColor());
+			}
+			dragFigure.validate();
+		}
 	}
 
 	@Override
