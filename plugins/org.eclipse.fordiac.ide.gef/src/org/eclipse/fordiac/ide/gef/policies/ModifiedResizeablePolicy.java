@@ -24,12 +24,18 @@ import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.tools.ResizeTracker;
 
 public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 	private final Insets insets = new Insets(2);
 
 	private IFigure selectionFeedback;
+
+	@Override
+	protected ResizeTracker getResizeTracker(final int direction) {
+		return new MarginBoundsResizeTracker(getHost(), direction);
+	}
 
 	@Override
 	public void deactivate() {
@@ -81,7 +87,8 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	protected IFigure createSelectionFeedbackFigure() {
-		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), GefPreferenceConstants.CORNER_DIM);
+		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(),
+				GefPreferenceConstants.CORNER_DIM);
 	}
 
 	@Override
