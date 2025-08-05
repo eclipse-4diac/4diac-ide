@@ -13,8 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import org.eclipse.draw2d.GhostImageFigure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
@@ -25,6 +27,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPolicy {
 
 	private final MarginBoundsHelper boundsHelper = new MarginBoundsHelper();
+	private GhostImageFigure ghostFigure;
 
 	@Override
 	protected RoundedRectangle createSelectionFeedbackFigure() {
@@ -38,6 +41,15 @@ public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPo
 	@Override
 	protected void showChangeBoundsFeedback(final ChangeBoundsRequest request) {
 		super.showChangeBoundsFeedback(request);
+
+		final PrecisionRectangle rect = new PrecisionRectangle(super.getInitialFeedbackBounds().getCopy());
+		getHostFigure().translateToAbsolute(rect);
+		rect.translate(request.getMoveDelta());
+		rect.resize(request.getSizeDelta());
+		ghostFigure.translateToRelative(rect);
+		ghostFigure.setBounds(rect);
+		ghostFigure.validate();
+
 		if (request instanceof final CollisionChangeBoundsRequest collisionBoundsRequest) {
 			final IFigure dragFigure = getDragSourceFeedbackFigure();
 			if (dragFigure.getBorder() instanceof final ModifiedMoveHandle.SelectionBorder border) {
@@ -52,6 +64,8 @@ public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPo
 	@Override
 	protected IFigure createDragSourceFeedbackFigure() {
 		boundsHelper.updateMargins(getHost().getModel());
+		ghostFigure = new GhostImageFigure(getHostFigure(), 2 * ModifiedMoveHandle.SELECTION_FILL_ALPHA, null);
+		addFeedback(ghostFigure);
 		return super.createDragSourceFeedbackFigure();
 	}
 
@@ -60,5 +74,24 @@ public class FBNetworkElementNonResizeableEP extends ModifiedNonResizeableEditPo
 		final Rectangle bounds = super.getInitialFeedbackBounds().getCopy();
 		boundsHelper.expandRectangle(bounds);
 		return bounds;
+	}
+
+	@Override
+	public void deactivate() {
+		super.deactivate();
+		removeGhostFigure();
+	}
+
+	@Override
+	public void eraseChangeBoundsFeedback(final ChangeBoundsRequest request) {
+		super.eraseChangeBoundsFeedback(request);
+		removeGhostFigure();
+	}
+
+	private void removeGhostFigure() {
+		if (ghostFigure != null) {
+			removeFeedback(ghostFigure);
+			ghostFigure = null;
+		}
 	}
 }
