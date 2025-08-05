@@ -16,11 +16,11 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
+import org.eclipse.fordiac.ide.gef.policies.MarginBoundsResizeTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.tools.ResizeTracker;
 
-class ContainerResizeTracker extends ResizeTracker {
+class ContainerResizeTracker extends MarginBoundsResizeTracker {
 	private Rectangle minBounds;
 
 	public ContainerResizeTracker(final IContainerEditPart owner, final int direction) {
@@ -66,15 +66,11 @@ class ContainerResizeTracker extends ResizeTracker {
 	private int getMinHeight(final Rectangle bounds, final int resizeDirection) {
 		int height = minBounds.height;
 		switch (resizeDirection) {
-		case PositionConstants.NORTH:
-		case PositionConstants.NORTH_WEST:
-		case PositionConstants.NORTH_EAST:
+		case PositionConstants.NORTH, PositionConstants.NORTH_WEST, PositionConstants.NORTH_EAST:
 			// ensure that the bottom border is not lost
 			height += bounds.height - (minBounds.y - bounds.y) - minBounds.height;
 			break;
-		case PositionConstants.SOUTH:
-		case PositionConstants.SOUTH_EAST:
-		case PositionConstants.SOUTH_WEST:
+		case PositionConstants.SOUTH, PositionConstants.SOUTH_EAST, PositionConstants.SOUTH_WEST:
 			// ensure that the top border is not lost
 			height += (minBounds.y - bounds.y);
 			break;
@@ -89,15 +85,11 @@ class ContainerResizeTracker extends ResizeTracker {
 	private int getMinWidth(final Rectangle bounds, final int resizeDirection) {
 		int width = minBounds.width;
 		switch (resizeDirection) {
-		case PositionConstants.WEST:
-		case PositionConstants.NORTH_WEST:
-		case PositionConstants.SOUTH_WEST:
+		case PositionConstants.WEST, PositionConstants.NORTH_WEST, PositionConstants.SOUTH_WEST:
 			// ensure that the right border is not lost
 			width += bounds.width - (minBounds.x - bounds.x) - minBounds.width;
 			break;
-		case PositionConstants.EAST:
-		case PositionConstants.NORTH_EAST:
-		case PositionConstants.SOUTH_EAST:
+		case PositionConstants.EAST, PositionConstants.NORTH_EAST, PositionConstants.SOUTH_EAST:
 			// ensure that the top border is not lost
 			width += (minBounds.x - bounds.x);
 			break;
