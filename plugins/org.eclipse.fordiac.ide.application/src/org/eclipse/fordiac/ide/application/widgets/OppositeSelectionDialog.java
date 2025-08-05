@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.handlers.FollowConnectionHandler;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -39,12 +40,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.IHandlerService;
 
 public class OppositeSelectionDialog extends PopupDialog {
 
@@ -191,19 +186,10 @@ public class OppositeSelectionDialog extends PopupDialog {
 		return dialogArea;
 	}
 
-	private static IHandlerService getHandlerService() {
-		final IWorkbench wb = PlatformUI.getWorkbench();
-		final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
-		final IWorkbenchPage page = window.getActivePage();
-
-		final IWorkbenchPart active = page.getActivePart();
-		return active.getSite().getService(IHandlerService.class);
-
-	}
-
 	private static void invokeFollowRightConnectionHandler() {
 		try {
-			getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
+			HandlerHelper.getHandlerService().executeCommand(
+					"org.eclipse.fordiac.ide.application.commands.followRightConnection", //$NON-NLS-1$
 					null);
 		} catch (final Exception e) {
 			throw new RuntimeException("followRightConnection.command not found"); //$NON-NLS-1$
@@ -212,7 +198,8 @@ public class OppositeSelectionDialog extends PopupDialog {
 
 	private static void invokeFollowLeftConnectionHandler() {
 		try {
-			getHandlerService().executeCommand("org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
+			HandlerHelper.getHandlerService().executeCommand(
+					"org.eclipse.fordiac.ide.application.commands.followLeftConnection", //$NON-NLS-1$
 					null);
 		} catch (final Exception e) {
 			throw new RuntimeException("followLeftConnection.command not found"); //$NON-NLS-1$
