@@ -12,6 +12,8 @@
  *    - initial API and implementation and/or initial documentation
  *   Ernst Blecha
  *    - add cancelation of search
+ *   Qemal Alliu
+ *    - Add Global Constant search
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
@@ -33,7 +35,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -50,7 +51,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
@@ -63,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.model.search.types.GlobalConstantsTypeInstanceSearch;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -323,16 +324,10 @@ public class ModelSearchQuery implements ISearchQuery {
 	            interfaceList.getPlugs().stream()
 	    )
 	    .flatMap(Function.identity());
+		// @formatter:on
 
-		Stream<IInterfaceElement> results;
-
-		if(modelQuerySpec.referenceObject() instanceof STVarDeclaration) {
-			results = searchableElements.filter((final INamedElement modelElement) -> this.checkGlobalConstant(modelElement, monitor));
-		} else {
-			results = searchableElements.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor));
-		}
-
-		results.forEach(searchResult::addResult);
+		searchableElements.filter((final INamedElement modelElement) -> this.matchEObject(modelElement, monitor))
+				.forEach(searchResult::addResult);
 	}
 
 	private boolean matchEObject(final INamedElement modelElement, final IProgressMonitor monitor) {
@@ -363,11 +358,11 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 
-				if(modelQuerySpec.referenceObject() != null
-						&& (modelQuerySpec.referenceObject() instanceof STFunction || modelQuerySpec.referenceObject() instanceof FunctionFBType)
-				) {
-					final String packageName = PackageNameHelper.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
-					if(!packageName.equals(config.getTypeEntry().getPackageName())){
+				if (modelQuerySpec.referenceObject() != null && (modelQuerySpec.referenceObject() instanceof STFunction
+						|| modelQuerySpec.referenceObject() instanceof FunctionFBType)) {
+					final String packageName = PackageNameHelper
+							.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
+					if (!packageName.equals(config.getTypeEntry().getPackageName())) {
 						return false;
 					}
 				}
@@ -380,48 +375,26 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (modelElement instanceof final VarDeclaration varDecl) {
 
+				if (modelQuerySpec.referenceObject() instanceof STVarDeclaration) {
+					// format is PackageName::TypeName::VariableName
+					final List<String> segments = new ArrayList<>(
+							List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER)));
+
+					final String variableName = segments.removeLast();
+					final String typeName = segments.removeLast();
+					final String packageName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments);
+
+					return GlobalConstantsTypeInstanceSearch
+							.createSearchFilter(new GlobalConstantsMatcher(packageName, typeName, variableName))
+							.apply(varDecl);
+				}
+
 				return compareStrings(varDecl.getTypeName())
 						|| (varDecl.getType() != null && varDecl.getType().getTypeEntry() != null
 								&& compareStrings(varDecl.getType().getTypeEntry().getFullTypeName()));
 			}
 		}
 		return false;
-	}
-
-
-	private boolean checkGlobalConstant(final INamedElement modelElement, final IProgressMonitor monitor) {
-		SearchCanceledException.throwIfCanceled(monitor);
-
-		if(!(modelElement instanceof final VarDeclaration varDecl) || varDecl.getValue() == null)
-		{
-			return false;
-		}
-
-		// format is PackageName::TypeName::VariableName
-		final List<String> segments = new ArrayList<>(List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER)));
-
-		final String variableName = segments.removeLast();
-		final String typeName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments); // might be more than one word
-
-		// if there is no variable match, we do not check anything else
-		if(!varDecl.getValue().getValue().contains(variableName)) {
-			return false;
-		}
-
-		// if it has the full qualified name, no need to check imports
-		if(varDecl.getValue().getValue().contains(modelQuerySpec.searchString())) {
-			return true;
-		}
-
-		final List<Import> imports = ImportHelper.getContainerImports(varDecl);
-
-		// if variable is used explicitly, we check if the variable is imported
-		if(!varDecl.getValue().getValue().contains(PackageNameHelper.PACKAGE_NAME_DELIMITER + variableName)) { // if delimiter is before the variable name, then its not imported
-			return imports.stream().anyMatch(imp -> modelQuerySpec.searchString().equals(imp.getImportedNamespace()));
-		}
-
-		// we check if the type is part of the imports
-		return imports.stream().anyMatch(imp -> typeName.equals(imp.getImportedNamespace()));
 	}
 
 	private void addMatchesForSTOccurance(final INamedElement modelElement) {

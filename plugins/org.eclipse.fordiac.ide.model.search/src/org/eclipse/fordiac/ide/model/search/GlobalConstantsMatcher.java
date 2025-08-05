@@ -23,10 +23,18 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 public class GlobalConstantsMatcher implements IModelMatcher {
-	private final GlobalConstantsEntry gcEntry;
+	private final String packageName;
+	private final String typeName;
+	private final String varName;
 
 	public GlobalConstantsMatcher(final GlobalConstantsEntry gcEntry) {
-		this.gcEntry = gcEntry;
+		this(gcEntry.getPackageName(), gcEntry.getTypeName(), null);
+	}
+
+	public GlobalConstantsMatcher(final String packageName, final String typeName, final String varName) {
+		this.packageName = packageName;
+		this.typeName = typeName;
+		this.varName = varName;
 	}
 
 	@Override
@@ -36,8 +44,8 @@ public class GlobalConstantsMatcher implements IModelMatcher {
 				&& candidate.eContainer() instanceof final STVarGlobalDeclarationBlock block
 				&& block.eContainer() instanceof final STGlobalConstants constants
 				&& constants.eContainer() instanceof final STGlobalConstsSource source
-				&& Objects.equals(constants.getName(), gcEntry.getTypeName())
-				&& Objects.equals(Objects.requireNonNullElse(source.getName(), ""), gcEntry.getPackageName()); //$NON-NLS-1$
+				&& Objects.equals(constants.getName(), typeName)
+				&& Objects.equals(Objects.requireNonNullElse(source.getName(), ""), packageName) //$NON-NLS-1$
+				&& (varName == null || Objects.equals(candidate.getName(), varName));
 	}
-
 }

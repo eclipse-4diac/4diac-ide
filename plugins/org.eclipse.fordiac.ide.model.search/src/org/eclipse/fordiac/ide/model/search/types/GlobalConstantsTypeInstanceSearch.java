@@ -41,12 +41,12 @@ import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 public class GlobalConstantsTypeInstanceSearch extends IEC61499ElementSearch {
 
 	public GlobalConstantsTypeInstanceSearch(final GlobalConstantsEntry gcEntry) {
-		super(new LocalLiveSearchContext(gcEntry.getTypeLibrary()), createSearchFilter(gcEntry),
+		super(new LocalLiveSearchContext(gcEntry.getTypeLibrary()),
+				createSearchFilter(new GlobalConstantsMatcher(gcEntry)),
 				new GlobalConstantsTypeInstanceSearchChildrenProvider());
 	}
 
-	private static IEC61499SearchFilter createSearchFilter(final GlobalConstantsEntry gcEntry) {
-		final GlobalConstantsMatcher matcher = new GlobalConstantsMatcher(gcEntry);
+	public static IEC61499SearchFilter createSearchFilter(final GlobalConstantsMatcher matcher) {
 		return searchCandidate -> searchCandidate != null && switch (searchCandidate) {
 		case final VarDeclaration varDecl -> isGlobalConstantValue(varDecl, matcher);
 		case final Attribute attr -> isGlobalConstantValue(attr, matcher);
@@ -57,7 +57,7 @@ public class GlobalConstantsTypeInstanceSearch extends IEC61499ElementSearch {
 		};
 	}
 
-	private static boolean isGlobalConstantValue(final VarDeclaration varDecl, final GlobalConstantsMatcher matcher) {
+	public static boolean isGlobalConstantValue(final VarDeclaration varDecl, final GlobalConstantsMatcher matcher) {
 		if (varDecl.getValue() == null) {
 			return false;
 		}
