@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -38,19 +39,20 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		if (HandlerUtil.getCurrentStructuredSelection(event) instanceof final TreeSelection treeSelection) {
 			final Map<IProject, List<URI>> projectMap = new HashMap<>();
-			Arrays.stream(treeSelection.getPaths()).filter(
-					treePath -> treePath.getFirstSegment() instanceof final IProject project && project.isOpen())
-					.forEach(treePath -> {
-						final IProject project = ((IProject) treePath.getFirstSegment());
-						projectMap.computeIfAbsent(project, key -> new ArrayList<URI>());
+			Arrays.stream(treeSelection.getPaths()).forEach(treePath -> {
+				final IProject project = getProjectFromPath(treePath);
+				if (project == null) {
+					return;
+				}
+				projectMap.computeIfAbsent(project, key -> new ArrayList<URI>());
 
-						if (treePath.getLastSegment() instanceof final UntypedSubApp untypedSubapp) {
-							projectMap.get(project).add(EcoreUtil.getURI(untypedSubapp));
-						} else if (treePath.getLastSegment() instanceof final IFile file && TypeLibraryManager.INSTANCE
-								.getTypeEntryForFile(file) instanceof final SubAppTypeEntry typeEntry) {
-							projectMap.get(project).add(EcoreUtil.getURI(typeEntry.getType()));
-						}
-					});
+				if (treePath.getLastSegment() instanceof final UntypedSubApp untypedSubapp) {
+					projectMap.get(project).add(EcoreUtil.getURI(untypedSubapp));
+				} else if (treePath.getLastSegment() instanceof final IFile file && TypeLibraryManager.INSTANCE
+						.getTypeEntryForFile(file) instanceof final SubAppTypeEntry typeEntry) {
+					projectMap.get(project).add(EcoreUtil.getURI(typeEntry.getType()));
+				}
+			});
 
 			projectMap.forEach((project, subAppList) -> {
 				final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -62,6 +64,16 @@ public class OpenBulkEditorHandler extends AbstractHandler {
 				}
 			});
 		}
+		return null;
+	}
+
+	private static IProject getProjectFromPath(final TreePath treePath) {
+		for (int i = 0; i < treePath.getSegmentCount(); i++) {
+			if (treePath.getSegment(i) instanceof final IProject project && project.isOpen()) {
+				return project;
+			}
+		}
+
 		return null;
 	}
 }
