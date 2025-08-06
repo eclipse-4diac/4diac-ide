@@ -16,7 +16,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Objects;
 
+import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -70,6 +73,36 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		}
 	}
 
+	public void deploy(final FBDeploymentData deploymentData) throws DeploymentException {
+		deviceManagementInteractor.createFBInstance(deploymentData, resource);
+		deviceManagementInteractor.startFB(resource, deploymentData);
+	}
+
+	public void deploy(final ResourceDeploymentData deploymentData) throws DeploymentException {
+		for (final FBDeploymentData fb : deploymentData.getFbs()) {
+			deviceManagementInteractor.createFBInstance(fb, deploymentData.getRes());
+		}
+		for (final ParameterDeploymentData param : deploymentData.getParams()) {
+			deviceManagementInteractor.writeFBParameter(deploymentData.getRes(), param.value(),
+					new FBDeploymentData(param.prefix(), param.variable().getFBNetworkElement()), param.variable());
+		}
+		for (final ConnectionDeploymentData connection : deploymentData.getConnections()) {
+			deviceManagementInteractor.createConnection(deploymentData.getRes(), connection);
+		}
+		for (final FBDeploymentData fb : deploymentData.getFbs()) {
+			deviceManagementInteractor.startFB(deploymentData.getRes(), fb);
+		}
+	}
+
+	public void delete(final ResourceDeploymentData deploymentData) throws DeploymentException {
+		for (final ConnectionDeploymentData connection : deploymentData.getConnections()) {
+			deviceManagementInteractor.deleteConnection(deploymentData.getRes(), connection);
+		}
+		for (final FBDeploymentData fb : deploymentData.getFbs()) {
+			deviceManagementInteractor.deleteFB(deploymentData.getRes(), fb);
+		}
+	}
+
 	public void createFBInstance(final FBDeploymentData deploymentData) throws DeploymentException {
 		deviceManagementInteractor.createFBInstance(deploymentData, resource);
 	}
@@ -82,11 +115,11 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		deviceManagementInteractor.deleteFB(resource, deploymentData);
 	}
 
-	public void addWatch(final Resource resource, final String name) throws DeploymentException {
+	public void addWatch(final String name) throws DeploymentException {
 		deviceManagementInteractor.addWatch(resource, name);
 	}
 
-	public void removeWatch(final Resource resource, final String name) throws DeploymentException {
+	public void removeWatch(final String name) throws DeploymentException {
 		deviceManagementInteractor.removeWatch(resource, name);
 	}
 
@@ -94,7 +127,7 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		return deviceManagementInteractor.readWatches();
 	}
 
-	public void triggerEvent(final Resource resource, final String name) throws DeploymentException {
+	public void triggerEvent(final String name) throws DeploymentException {
 		deviceManagementInteractor.triggerEvent(resource, name);
 	}
 
@@ -103,8 +136,20 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		deviceManagementInteractor.writeFBParameter(resource, value, deploymentData, varDeclaration);
 	}
 
+	public void writeFBParameter(final String name, final String value) throws DeploymentException {
+		deviceManagementInteractor.writeFBParameter(resource, name, value);
+	}
+
 	public void writeDeviceParameter(final String name, final String value) throws DeploymentException {
 		deviceManagementInteractor.writeDeviceParameter(resource.getDevice(), name, value);
+	}
+
+	public void createConnection(final ConnectionDeploymentData connection) throws DeploymentException {
+		deviceManagementInteractor.createConnection(resource, connection);
+	}
+
+	public void deleteConnection(final ConnectionDeploymentData connection) throws DeploymentException {
+		deviceManagementInteractor.deleteConnection(resource, connection);
 	}
 
 	public Resource getResource() {

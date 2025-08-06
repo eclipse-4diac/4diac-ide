@@ -8,6 +8,9 @@
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
+         </source>
       </factory>
       <factory
             class="org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorFactory"
@@ -23,6 +26,9 @@
          </source>
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
          </source>
       </factory>
    </extension>
