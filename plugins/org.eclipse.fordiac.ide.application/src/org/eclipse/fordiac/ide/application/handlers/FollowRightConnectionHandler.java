@@ -47,8 +47,10 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final boolean stepMode = Platform.getPreferencesService().getBoolean(
 				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
 
-		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
+		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
+		final IInterfaceElement originPin = interfaceEditPart.getModel();
 
+		// Jump-mode, jump over Struct
 		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && memberVarDecl.isIsInput()) {
 			final Set<IInterfaceElement> connectedInt = new HashSet<>();
 			FBEndpointFinder.traceMembers(memberVarDecl, connectedInt);
@@ -58,23 +60,20 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			}
 		}
 
-		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
+		// Go out of Editor (EditorBorderPin)
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
 				&& !interfaceEditPart.getModel().isIsInput()) {
 			gotoParent(event);
 			return Status.OK_STATUS;
 		}
 
+		// Switch between in/out on FB
 		if (interfaceEditPart.isInput() && !isExpandedSubappPin(interfaceEditPart.getModel())) {
-			HandlerHelper.selectElement(getInternalOppositePin(selection), viewer);
+			HandlerHelper.selectElement(getInternalOppositePin(interfaceEditPart), viewer);
 			return Status.OK_STATUS;
 		}
 
-		List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		if (!stepMode) {
-			opposites = resolveTargetPins(opposites, viewer);
-		}
-
+		final List<IInterfaceElement> opposites = getOppositePins(originPin, stepMode);
 		selectOpposites(event, viewer, originPin, opposites, editor);
 		return Status.OK_STATUS;
 	}
@@ -132,11 +131,6 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
 		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty()
 				&& il.getInOutVars().isEmpty());
-	}
-
-	@Override
-	protected boolean isLeft() {
-		return false;
 	}
 
 	@Override
