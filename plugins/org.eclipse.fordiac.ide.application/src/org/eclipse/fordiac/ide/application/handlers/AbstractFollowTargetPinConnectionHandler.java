@@ -17,7 +17,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,12 +40,12 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
 
 		if (useTargetRefElement(targetIEEditPart) && !stepMode) {
-			// select the element the target pin is referring to
+			// Jump to target-pin reference
 			selectInterfaceElement(targetIEEditPart.getModel().getRefElement(), editor);
 		} else {
-			// select the elements that have incoming connections
+			// Select next pin (Step mode)
 			selectOpposites(event, viewer, null,
-					getConnectionOposites((InterfaceEditPart) targetIEEditPart.getParent()), editor);
+					getConnectionOpposites((IInterfaceElement) targetIEEditPart.getParent().getModel()), editor);
 		}
 
 		return Status.OK_STATUS;
