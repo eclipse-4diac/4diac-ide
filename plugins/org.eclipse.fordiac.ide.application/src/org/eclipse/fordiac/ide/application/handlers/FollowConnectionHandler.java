@@ -14,12 +14,13 @@
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -46,7 +48,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		return Status.CANCEL_STATUS;
+		return null;
 	}
 
 	protected static FBNetwork getFBNetwork(final IEditorPart editor) {
@@ -84,13 +86,12 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		return structSel.getFirstElement() instanceof InterfaceEditPart;
 	}
 
-	protected List<IInterfaceElement> getOppositePins(final IInterfaceElement pin, final boolean stepMode) {
-		final List<IInterfaceElement> opposites;
+	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode) {
 		if (stepMode) {
-			opposites = getConnectionOpposites(pin);
-		} else {
-			opposites = new ArrayList<>(FBEndpointFinder.findConnectedInterfaceElements(pin));
+			return getConnectionOpposites(pin);
 		}
+		final List<IInterfaceElement> opposites = new ArrayList<>();
+		jumpOverConnections(pin, opposites);
 		return opposites;
 	}
 
@@ -201,6 +202,29 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		if (!HandlerHelper.selectElement(element, currentViewer)) {
 			// we have a subappcrossing element
 			TargetInterfaceElementEditPart.openInBreadCrumb(element);
+		}
+	}
+
+	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations) {
+		if (getConnectionList(startPin).isEmpty()) {
+			// skip over struct
+			if (startPin instanceof final MemberVarDeclaration member) {
+				final Set<IInterfaceElement> memberEnd = new HashSet<>();
+				FBEndpointFinder.traceMembers(member, memberEnd);
+				memberEnd.forEach(mem -> jumpOverConnections(mem, destinations));
+				return;
+			}
+			// FB-Pin / dead-end found
+			destinations.add(startPin);
+			return;
+		}
+		for (final Connection conn : getConnectionList(startPin)) {
+			final IInterfaceElement next = conn.getSource() == startPin ? conn.getDestination() : conn.getSource();
+			if (conn.isVisible()) {
+				destinations.add(next);
+			} else {
+				jumpOverConnections(next, destinations);
+			}
 		}
 	}
 }

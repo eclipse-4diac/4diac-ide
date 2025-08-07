@@ -22,7 +22,6 @@ import java.util.Set;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
@@ -56,7 +55,7 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			FBEndpointFinder.traceMembers(memberVarDecl, connectedInt);
 			if (!connectedInt.isEmpty()) {
 				selectOpposites(event, viewer, originPin, new ArrayList<>(connectedInt), editor);
-				return Status.OK_STATUS;
+				return null;
 			}
 		}
 
@@ -64,18 +63,18 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
 				&& !interfaceEditPart.getModel().isIsInput()) {
 			gotoParent(event);
-			return Status.OK_STATUS;
+			return null;
 		}
 
 		// Switch between in/out on FB
 		if (interfaceEditPart.isInput() && !isExpandedSubappPin(interfaceEditPart.getModel())) {
 			HandlerHelper.selectElement(getInternalOppositePin(interfaceEditPart), viewer);
-			return Status.OK_STATUS;
+			return null;
 		}
 
-		final List<IInterfaceElement> opposites = getOppositePins(originPin, stepMode);
+		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode);
 		selectOpposites(event, viewer, originPin, opposites, editor);
-		return Status.OK_STATUS;
+		return null;
 	}
 
 	@Override
