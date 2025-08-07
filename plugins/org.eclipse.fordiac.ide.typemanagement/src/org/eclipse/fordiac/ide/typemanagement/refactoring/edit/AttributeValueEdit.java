@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.edit;
 
 import java.util.Objects;
 
@@ -21,15 +21,16 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class AttributeValueChange extends AbstractCommandChange<Attribute> {
+public class AttributeValueEdit extends ModelEdit<Attribute> {
 
 	private final String newValue;
 	private String oldValue;
 
-	public AttributeValueChange(final String name, final URI elementURI, final String newValue) {
+	public AttributeValueEdit(final String name, final URI elementURI, final String newValue) {
 		super(name, elementURI, Attribute.class);
 		this.newValue = newValue;
 	}
