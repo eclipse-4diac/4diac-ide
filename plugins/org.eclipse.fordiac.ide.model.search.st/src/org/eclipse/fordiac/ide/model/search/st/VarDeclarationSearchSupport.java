@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmParseUtil;
 import org.eclipse.xtext.parser.IParseResult;
@@ -35,7 +35,7 @@ public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	@Override
 	public Set<String> getImportedNamespaces() {
 		final Set<String> result = super.getImportedNamespaces();
-		if (!FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration)
+		if (!isContainedInTypedInstance(varDeclaration)
 				&& !PackageNameHelper.getPackageName(varDeclaration.getType()).isEmpty()) {
 			result.add(PackageNameHelper.getFullTypeName(varDeclaration.getType()));
 		}
@@ -49,8 +49,7 @@ public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	}
 
 	protected IParseResult prepareResultType() {
-		if (parseResultType == null && varDeclaration.isArray()
-				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration)) {
+		if (parseResultType == null && varDeclaration.isArray() && !isContainedInTypedInstance(varDeclaration)) {
 			parseResultType = STAlgorithmParseUtil.parseTypeDeclaration(varDeclaration.getFullTypeName(),
 					varDeclaration);
 		}
@@ -70,5 +69,14 @@ public class VarDeclarationSearchSupport extends StructuredTextSearchSupport {
 	public boolean isIncompleteResult() {
 		return (parseResultType != null && parseResultType.hasSyntaxErrors())
 				|| (parseResult != null && parseResult.hasSyntaxErrors());
+	}
+
+	public static boolean isContainedInTypedInstance(EObject element) {
+		while ((element = element.eContainer()) != null) {
+			if (element instanceof final FBNetworkElement fbne && fbne.getTypeEntry() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
