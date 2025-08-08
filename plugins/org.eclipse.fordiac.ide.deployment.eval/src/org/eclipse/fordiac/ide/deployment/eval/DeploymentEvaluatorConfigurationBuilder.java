@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,6 +35,7 @@ public class DeploymentEvaluatorConfigurationBuilder {
 	private ResourceTypeEntry resourceType;
 	private String deviceProfile;
 	private String deviceMgrID;
+	private boolean trace;
 
 	public DeploymentEvaluatorConfigurationBuilder(final DeviceTypeEntry deviceType,
 			final ResourceTypeEntry resourceType) {
@@ -54,10 +55,11 @@ public class DeploymentEvaluatorConfigurationBuilder {
 				Objects.requireNonNull(DeploymentEvaluatorConfiguration.getResourceType(context, typeLibrary),
 						"No such resource type")) //$NON-NLS-1$
 				.setDeviceProfile(DeploymentEvaluatorConfiguration.getDeviceProfile(context))
-				.setDeviceMgrID(DeploymentEvaluatorConfiguration.getMgrID(context));
+				.setDeviceMgrID(DeploymentEvaluatorConfiguration.getMgrID(context))
+				.setTrace(DeploymentEvaluatorConfiguration.isTrace(context));
 	}
 
-	public Resource build() {
+	public Resource createResource() {
 		final Resource resource = LibraryElementFactory.eINSTANCE.createResource();
 		resource.setName(RESOURCE_NAME_PREFIX + UUID.randomUUID().toString());
 		resource.setTypeEntry(resourceType);
@@ -131,6 +133,15 @@ public class DeploymentEvaluatorConfigurationBuilder {
 
 	public DeploymentEvaluatorConfigurationBuilder setDeviceMgrID(final String deviceMgrID) {
 		this.deviceMgrID = deviceMgrID;
+		return this;
+	}
+
+	public boolean isTrace() {
+		return trace;
+	}
+
+	public DeploymentEvaluatorConfigurationBuilder setTrace(final boolean trace) {
+		this.trace = trace;
 		return this;
 	}
 }
