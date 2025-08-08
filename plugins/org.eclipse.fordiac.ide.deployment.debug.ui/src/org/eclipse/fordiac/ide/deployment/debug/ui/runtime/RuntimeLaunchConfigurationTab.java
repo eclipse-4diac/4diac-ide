@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,6 +50,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 	private Combo profileCombo;
 	private Text deviceTypeText;
 	private Text resourceTypeText;
+	private Button traceButton;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -132,6 +133,11 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		resourceTypeButton.setText(Messages.RuntimeLaunchConfigurationTab_Dots);
 		resourceTypeButton.addSelectionListener(widgetSelectedAdapter(e -> handleResourceTypeButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(resourceTypeButton);
+
+		traceButton = new Button(comp, SWT.CHECK);
+		traceButton.setText(Messages.RuntimeLaunchConfigurationTab_TraceLabel);
+		traceButton.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		GridDataFactory.swtDefaults().span(2, 1).applyTo(traceButton);
 		return group;
 	}
 
@@ -190,6 +196,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		configuration.removeAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE);
 		configuration.removeAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE);
 		configuration.removeAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE);
+		configuration.removeAttribute(DeploymentEvaluatorConfiguration.TRACE);
 	}
 
 	@Override
@@ -203,6 +210,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 					DeploymentEvaluatorConfiguration.DEFAULT_DEVICE_TYPE));
 			resourceTypeText.setText(configuration.getAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE,
 					DeploymentEvaluatorConfiguration.DEFAULT_RESOURCE_TYPE));
+			traceButton.setSelection(configuration.getAttribute(DeploymentEvaluatorConfiguration.TRACE, false));
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
@@ -214,6 +222,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 		configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE, profileCombo.getText());
 		configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE, deviceTypeText.getText());
 		configuration.setAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE, resourceTypeText.getText());
+		configuration.setAttribute(DeploymentEvaluatorConfiguration.TRACE, traceButton.getSelection());
 	}
 
 	@Override
