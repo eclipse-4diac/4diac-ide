@@ -244,12 +244,15 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			}
 		};
 		try {
+			typeEntryAdapter.setBlockUpdates(true);
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} catch (final InterruptedException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			Thread.currentThread().interrupt();
+		} finally {
+			typeEntryAdapter.setBlockUpdates(false);
 		}
 
 		getCommandStack().markSaveLocation();
