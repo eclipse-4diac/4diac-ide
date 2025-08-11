@@ -51,11 +51,12 @@ public final class FBShapeHelper {
 	private static final double WIDTH_ADJUST_INTERFACE_ADAPTER = CoordinateConverter.INSTANCE.screenToIEC61499(17);
 	private static final double WIDTH_ADJUST_INTERFACE_INOUT = CoordinateConverter.INSTANCE.screenToIEC61499(18);
 	private static final double WIDTH_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(21);
+	private static final double WIDTH_ADJUST_SUBAPP_INTERFACE = CoordinateConverter.INSTANCE.screenToIEC61499(35);
 
 	private static final double HEIGHT_ADJUST = CoordinateConverter.INSTANCE.screenToIEC61499(7);
 	private static final double HEIGHT_ADJUST_MUX = CoordinateConverter.INSTANCE.screenToIEC61499(8);
 	private static final double HEIGHT_ADJUST_HIDDEN = CoordinateConverter.INSTANCE.screenToIEC61499(15);
-
+	private static final double HEIGHT_ADJUST_SUBAPP = CoordinateConverter.INSTANCE.screenToIEC61499(19);
 	/*
 	 * Note for debugging: Add a tracepoint with the following condition in
 	 * FBNetworkElementFigure.setupMouseListener(...).new MouseMotionListener(){...}
@@ -120,11 +121,32 @@ public final class FBShapeHelper {
 		return lines * IEC61499_LINE_HEIGHT + getHiddenHeightAdjust(element) + heightAdjust;
 	}
 
-	public static double getMaxInterfaceBarWidth(final FBNetworkElement element) {
+	/**
+	 * Get the max width of the interface bars of an expanded SubApp
+	 *
+	 * @param element The SubApp
+	 * @return The width in X coordinates
+	 */
+	public static double getSubappWidthAdjust(final FBNetworkElement element) {
 		final IProject project = getProjectFromFBNE(element);
 		final int maxInterfaceBarSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
-				ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 0, project);
-		return AVARAGE_CHAR_WIDTH * maxInterfaceBarSize + 2 + WIDTH_ADJUST_INTERFACE * 2;
+				ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40, project);
+		return 2 * (AVARAGE_CHAR_WIDTH * maxInterfaceBarSize + WIDTH_ADJUST_SUBAPP_INTERFACE);
+	}
+
+	/**
+	 * Get the height difference of an expanded SubApp and it's inner network
+	 *
+	 * @param element The SubApp
+	 * @return The height in Y coordinates
+	 */
+	public static double getSubappHeightAdjust(final FBNetworkElement element) {
+		int commentLines = 1;
+		if (element.getComment() != null && !element.getComment().isBlank()) {
+			commentLines += element.getComment().chars().filter(c -> c == '\n').count();
+		}
+
+		return (commentLines + 1) * FBShapeHelper.IEC61499_LINE_HEIGHT + HEIGHT_ADJUST_SUBAPP;
 	}
 
 	private static int getTypeNameCharacters(final FBNetworkElement element, final int maxTypeLabelSize) {
