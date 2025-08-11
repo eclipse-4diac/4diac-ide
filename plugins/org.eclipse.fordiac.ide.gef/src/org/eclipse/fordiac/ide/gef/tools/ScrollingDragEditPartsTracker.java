@@ -67,13 +67,13 @@ public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 
 	@Override
 	protected void eraseSourceFeedback() {
-		super.eraseSourceFeedback();
 		boundsHelper.clearFigureList();
+		super.eraseSourceFeedback();
 	}
 
 	@Override
 	protected void showSourceFeedback() {
-		super.showSourceFeedback();
 		boundsHelper.createFigures(getTargetEditPart());
+		super.showSourceFeedback();
 	}
 }
