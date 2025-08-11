@@ -55,6 +55,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 	private INavigationLocation location;
+	private boolean blockUpdates;
 
 	public TypeEntryAdapter(final ITypeEntryEditor editor, final IPartService partService) {
 		super(editor, partService);
@@ -89,6 +90,10 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 
+		if (blockUpdates) {
+			return;
+		}
+
 		String feature = ""; //$NON-NLS-1$
 		if (notification.getFeature() instanceof final String string) {
 			feature = string;
@@ -122,6 +127,10 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 		default:
 			break;
 		}
+	}
+
+	public void setBlockUpdates(final boolean blockupdates) {
+		this.blockUpdates = blockupdates;
 	}
 
 	private void handleDependencyUpdate(final TypeEntry typeEntry) {
