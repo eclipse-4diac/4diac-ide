@@ -37,7 +37,7 @@ public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 		if (isCloneActive()) {
 			return new ChangeBoundsRequest(REQ_CLONE);
 		}
-		return new CollisionChangeBoundsRequest(REQ_MOVE, boundsHelper.getFigures());
+		return new CollisionChangeBoundsRequest(REQ_MOVE, boundsHelper.getFigures(), boundsHelper.getParentFigure());
 	}
 
 	@Override
