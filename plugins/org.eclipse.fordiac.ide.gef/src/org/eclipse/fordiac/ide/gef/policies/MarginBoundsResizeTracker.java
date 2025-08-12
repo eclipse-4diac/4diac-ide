@@ -28,7 +28,8 @@ public class MarginBoundsResizeTracker extends ResizeTracker {
 
 	@Override
 	protected Request createSourceRequest() {
-		final ChangeBoundsRequest request = new CollisionChangeBoundsRequest(REQ_RESIZE, boundsHelper.getFigures());
+		final ChangeBoundsRequest request = new CollisionChangeBoundsRequest(REQ_RESIZE, boundsHelper.getFigures(),
+				boundsHelper.getParentFigure());
 		request.setResizeDirection(getResizeDirection());
 		return request;
 	}

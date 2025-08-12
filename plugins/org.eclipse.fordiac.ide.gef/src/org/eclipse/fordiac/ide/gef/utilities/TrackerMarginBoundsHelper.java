@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.gef.utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -22,9 +23,11 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.LayerManager;
@@ -38,6 +41,7 @@ public class TrackerMarginBoundsHelper extends MarginBoundsHelper {
 	private IFigure feedbackLayer;
 	private List<? extends EditPart> selection;
 	private final List<Figure> figureList = new ArrayList<>();
+	private final List<Figure> parentFigureList = Arrays.asList((Figure) null);
 
 	public void initDrag(final EditPart sourceEP, final List<? extends EditPart> selected) {
 		super.updateMargins(sourceEP.getModel());
@@ -47,6 +51,10 @@ public class TrackerMarginBoundsHelper extends MarginBoundsHelper {
 
 	public List<Figure> getFigures() {
 		return figureList;
+	}
+
+	public List<Figure> getParentFigure() {
+		return parentFigureList;
 	}
 
 	public void createFigures(final EditPart targetEditPart) {
@@ -67,6 +75,16 @@ public class TrackerMarginBoundsHelper extends MarginBoundsHelper {
 						figureList.add(figure);
 					});
 
+			if (targetEditPart instanceof final AbstractFBNetworkEditPart networkEditPart
+					&& networkEditPart.getModel() != null
+					&& networkEditPart.getModel().eContainer() instanceof final SubApp subApp && subApp.isUnfolded()) {
+				final Rectangle bounds = networkEditPart.getFigure().getBounds().getCopy();
+				final Figure figureFigure = new Figure();
+				figureFigure.setBounds(bounds);
+				figureFigure.validate();
+				parentFigureList.set(0, figureFigure);
+			}
+
 			figureList.forEach(feedbackLayer::add);
 		}
 	}
@@ -78,6 +96,7 @@ public class TrackerMarginBoundsHelper extends MarginBoundsHelper {
 			}
 		});
 		figureList.clear();
+		parentFigureList.set(0, null);
 		currentTarget = null;
 	}
 
