@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -168,6 +169,7 @@ class InOutVarsTest {
 
 	private static VarDeclaration newInOutVarDeclaration(final String name) {
 		final VarDeclaration inOutVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		inOutVar.setType(ElementaryTypes.BOOL);
 		inOutVar.setName(name);
 		inOutVar.setIsInput(true);
 		return inOutVar;

@@ -21,6 +21,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -68,7 +69,7 @@ public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
 	}
 
 	protected boolean isActiveEditor() {
-		return getEditor().equals(getEditor().getSite().getPage().getActiveEditor());
+		return !editorClosed() && getEditor().equals(getEditor().getSite().getPage().getActiveEditor());
 	}
 
 	protected boolean editorClosed() {
@@ -115,7 +116,12 @@ public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
 
 		@Override
 		public void windowActivated(final IWorkbenchWindow window) {
-			window.getShell().getDisplay().asyncExec(() -> handleActivation(window.getActivePage().getActivePart()));
+			window.getShell().getDisplay().asyncExec(() -> {
+				final IWorkbenchPage activePage = window.getActivePage();
+				if (activePage != null) {
+					handleActivation(activePage.getActivePart());
+				}
+			});
 		}
 
 		@Override

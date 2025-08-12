@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType> implements DeviceTypeEntry {
 
@@ -51,5 +52,10 @@ public class DeviceTypeEntryImpl extends AbstractCheckedTypeEntryImpl<DeviceType
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.DEVICE_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.DEVICE_TYPE_FILE_ENDING;
 	}
 }

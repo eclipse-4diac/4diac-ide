@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.folding.STAlgorithmFoldingRegionProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.STAlgorithmLinkedPositionGroupCalculator;
@@ -98,6 +99,7 @@ import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions;
+import org.eclipse.xtext.ui.editor.folding.IFoldingRegionProvider;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
@@ -213,6 +215,10 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
 		return STAlgorithmHyperlinkHelper.class;
+	}
+
+	public Class<? extends IFoldingRegionProvider> bindIFoldingRegionProvider() {
+		return STAlgorithmFoldingRegionProvider.class;
 	}
 
 	@Override

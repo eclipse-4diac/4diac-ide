@@ -54,6 +54,7 @@ public final class Messages extends NLS {
 	public static String STCoreQuickfixProvider_RemoveInvalidContinueStatementDescription;
 	public static String STCoreQuickfixProvider_OrganizeImports;
 	public static String STCoreChangeConverter_LinkingErrors;
+	public static String STCoreChangeConverter_ModelChanges;
 	public static String STCoreChangeConverter_ReadOnly;
 	public static String STCoreChangeConverter_SyntaxErrors;
 	public static String STCoreCodeMiningPreferencePage_EnableCodeMinings;

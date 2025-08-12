@@ -29,9 +29,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -40,6 +44,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -126,6 +131,9 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
+			if (eObject instanceof final FBNetworkElement elem) {
+				change.add(new UpdateInstanceChange(elem, dtEntry));
+			}
 		}
 
 		return change;
@@ -154,4 +162,26 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		}
 		return typeDeclaration.toString();
 	}
+
+	class UpdateInstanceChange extends UpdateFBInstanceChange {
+		final String visibleChildrenString;
+
+		public UpdateInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
+			super(instance, typeEntry);
+			visibleChildrenString = (instance instanceof final StructManipulator structManipulator)
+					? ConfigurableFBManagement.buildVisibleChildrenString(structManipulator.getMemberVars())
+					: ""; //$NON-NLS-1$
+		}
+
+		@Override
+		protected Command createCommand(final FBNetworkElement element) {
+			if (element instanceof final StructManipulator demux
+					&& typeEntry.getType() instanceof final StructuredType structuredType) {
+				return new ChangeStructCommand(demux, structuredType, visibleChildrenString, true);
+			}
+			return super.createCommand(element);
+		}
+
+	}
+
 }

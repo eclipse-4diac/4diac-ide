@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class DataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AnyDerivedType> implements DataTypeEntry {
 
@@ -43,5 +44,10 @@ public class DataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AnyDerivedTy
 	@Override
 	public EClass getTypeEClass() {
 		return DataPackage.Literals.ANY_DERIVED_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.DATA_TYPE_FILE_ENDING;
 	}
 }

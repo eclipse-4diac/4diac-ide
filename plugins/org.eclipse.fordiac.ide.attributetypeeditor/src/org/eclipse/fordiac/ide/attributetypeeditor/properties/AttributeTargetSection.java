@@ -14,16 +14,22 @@
 package org.eclipse.fordiac.ide.attributetypeeditor.properties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.AttributeTarget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTargetAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -34,22 +40,26 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class AttributeTargetSection extends AbstractSection {
+	private static final String TARGET_CATEGORY = "category"; //$NON-NLS-1$
+
 	private final List<Button> buttons = new ArrayList<>();
-	private StructuredType target;
+	private StructuredType lock;
 
 	private final SelectionListener buttonListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(final SelectionEvent event) {
 			final Button btn = (Button) event.getSource();
-			target.getMemberVariables().stream().filter(member -> member.getName().equals(btn.getText())).findFirst()
+			lock.getMemberVariables().stream().filter(member -> AttributeTarget.checkTargetName(member.getName(),
+					btn.getText(), (String) btn.getParent().getData(TARGET_CATEGORY))).findFirst()
 					.ifPresent(correctMember -> {
 						final Value val = correctMember.getValue();
 						val.setValue(Boolean.toString(btn.getSelection()).toUpperCase());
-						executeCommand(new ChangeTargetAttributeCommand(getType(), target));
+						executeCommand(new ChangeTargetAttributeCommand(getType(), lock));
 						refresh();
 					});
 		}
@@ -63,16 +73,48 @@ public class AttributeTargetSection extends AbstractSection {
 
 	public void createCheckBoxes(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(7, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		((StructuredType) InternalAttributeDeclarations.TARGET.getType()).getMemberVariables()
-				.forEach(member -> createButton(composite, member.getName()));
+
+		final Composite ungroupedComposite = new Composite(composite, SWT.NONE);
+		ungroupedComposite.setData(TARGET_CATEGORY, AttributeTarget.EMPTY_GROUP);
+		ungroupedComposite.setLayout(new GridLayout(1, false));
+		ungroupedComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		final Map<String, Composite> groups = new HashMap<>();
+		final StructuredType targetType = (StructuredType) InternalAttributeDeclarations.TARGET.getType();
+
+		targetType.getMemberVariables().stream().map(member -> AttributeTarget.fromName(member.getName()))
+				.filter(Objects::nonNull).forEach(target -> {
+					final String category = target.getCategory();
+					Composite container = composite;
+
+					if (category.equals(AttributeTarget.EMPTY_GROUP)) {
+						container = ungroupedComposite;
+					} else {
+						container = groups.computeIfAbsent(category, cat -> {
+							final Composite group = new Composite(composite, SWT.NONE);
+							group.setLayout(new GridLayout(1, false));
+							group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+							final Label groupHeading = new Label(group, SWT.NONE);
+							groupHeading.setText(cat);
+
+							group.setData(TARGET_CATEGORY, cat);
+							return group;
+						});
+					}
+
+					createButton(container, target);
+				});
+
 	}
 
-	private void createButton(final Composite parent, final String buttonName) {
+	private void createButton(final Composite parent, final AttributeTarget target) {
 		final Button button = new Button(parent, SWT.CHECK);
 		button.setBackground(parent.getBackground());
-		button.setText(buttonName);
+		button.setText(target.getDisplayName());
+		button.setToolTipText(target.getToolTip());
 		button.addSelectionListener(buttonListener);
 		buttons.add(button);
 	}
@@ -86,7 +128,8 @@ public class AttributeTargetSection extends AbstractSection {
 		final StructuredType targetStruct = getTarget(attributeDeclaration);
 		targetStruct.getMemberVariables().forEach(member -> {
 			for (final Button button : buttons) {
-				if (member.getName().equals(button.getText())) {
+				if (AttributeTarget.checkTargetName(member.getName(), button.getText(),
+						(String) button.getParent().getData(TARGET_CATEGORY))) {
 					button.setSelection(Boolean.parseBoolean(member.getValue().getValue()));
 				}
 			}
@@ -95,7 +138,10 @@ public class AttributeTargetSection extends AbstractSection {
 
 	private static StructuredType getTarget(final AttributeDeclaration attributeDeclaration) {
 		final StructuredType targetStruct = attributeDeclaration.getTarget();
-		if (targetStruct == null) {
+		if (targetStruct == null || targetStruct.getMemberVariables().stream()
+				.anyMatch(member -> member.getName().equals(IInterfaceElement.class.getSimpleName())
+						|| member.getName().equals(SubApp.class.getSimpleName()))) {
+			// no/old lock
 			return (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.TARGET.getType());
 		}
 		return targetStruct;
@@ -106,7 +152,7 @@ public class AttributeTargetSection extends AbstractSection {
 		super.setInput(part, selection);
 		if (part instanceof final AttributeTypeEditor editor) {
 			setType(editor.getAdapter(LibraryElement.class));
-			target = getTarget(getType());
+			lock = getTarget(getType());
 		}
 	}
 
@@ -119,7 +165,7 @@ public class AttributeTargetSection extends AbstractSection {
 	protected Object getInputType(final Object input) {
 		if (input instanceof final AttributeDeclaration attDecl) {
 			updateButtons(attDecl);
-			target = getTarget(attDecl);
+			lock = getTarget(attDecl);
 			return attDecl;
 		}
 		return null;

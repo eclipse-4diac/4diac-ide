@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,18 +33,21 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 	private final Resource resource;
 	private final IDeviceManagementInteractor deviceManagementInteractor;
 
-	protected DeploymentEvaluatorSharedState(final Resource resource) {
-		this.resource = Objects.requireNonNull(resource, "Resource must not be null"); //$NON-NLS-1$
+	protected DeploymentEvaluatorSharedState(final DeploymentEvaluatorConfigurationBuilder builder) {
+		resource = builder.createResource();
 		deviceManagementInteractor = Objects.requireNonNull(
 				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(
 						Objects.requireNonNull(resource.getDevice(), "Resource not in device")), //$NON-NLS-1$
 				"No valid device management interactor for profile " + resource.getDevice().getProfile()); //$NON-NLS-1$
+		if (builder.isTrace()) {
+			deviceManagementInteractor.addDeploymentListener(new DeploymentEvaluatorTraceProxy());
+		}
 	}
 
 	public static DeploymentEvaluatorSharedState fromContext(final TypeLibrary typeLibrary) {
 		return (DeploymentEvaluatorSharedState) AbstractEvaluator.getSharedResources().computeIfAbsent(
 				SHARED_STATE_NAME, unused -> new DeploymentEvaluatorSharedState(DeploymentEvaluatorConfigurationBuilder
-						.fromContext(AbstractEvaluator.currentContext(), typeLibrary).build()));
+						.fromContext(AbstractEvaluator.currentContext(), typeLibrary)));
 	}
 
 	public void prepare() throws DeploymentException {

@@ -56,6 +56,12 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		this(mux, newStruct, getOldVisibleChildren(mux));
 	}
 
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final String visibleChildren,
+			final boolean doNotReload) {
+		this(mux, newStruct, visibleChildren);
+		reloadDatatype = !doNotReload;
+	}
+
 	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final boolean doNotReload) {
 		this(mux, newStruct, getOldVisibleChildren(mux));
 		reloadDatatype = !doNotReload;

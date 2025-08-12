@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubAppTypeEntry {
 
@@ -146,5 +147,10 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.SUB_APP_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING;
 	}
 }

@@ -95,6 +95,8 @@ public interface TypeEntry extends Notifier {
 
 	String getFullTypeName();
 
+	String getFileExtension();
+
 	String getComment();
 
 	EClass getTypeEClass();

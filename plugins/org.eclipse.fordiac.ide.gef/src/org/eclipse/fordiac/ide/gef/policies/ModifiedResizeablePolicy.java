@@ -19,15 +19,23 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.gef.utilities.CollisionChangeBoundsRequest;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.tools.ResizeTracker;
 
 public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 	private final Insets insets = new Insets(2);
 
 	private IFigure selectionFeedback;
+
+	@Override
+	protected ResizeTracker getResizeTracker(final int direction) {
+		return new MarginBoundsResizeTracker(getHost(), direction);
+	}
 
 	@Override
 	public void deactivate() {
@@ -54,6 +62,18 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	@Override
+	protected void showChangeBoundsFeedback(final ChangeBoundsRequest request) {
+		super.showChangeBoundsFeedback(request);
+		if (request instanceof final CollisionChangeBoundsRequest collisionBoundsRequest) {
+			final IFigure dragFigure = getDragSourceFeedbackFigure();
+			final boolean collision = collisionBoundsRequest.checkCollision(dragFigure.getBounds());
+			dragFigure.setBackgroundColor(
+					collision ? ModifiedMoveHandle.getCollisionColor() : ModifiedMoveHandle.getSelectionColor());
+			dragFigure.validate();
+		}
+	}
+
+	@Override
 	public void showTargetFeedback(final Request request) {
 		super.showTargetFeedback(request);
 
@@ -67,7 +87,8 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	protected IFigure createSelectionFeedbackFigure() {
-		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), GefPreferenceConstants.CORNER_DIM);
+		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(),
+				GefPreferenceConstants.CORNER_DIM);
 	}
 
 	@Override

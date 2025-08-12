@@ -13,9 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Objects;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -56,7 +59,9 @@ public final class OutMappedInOutVarAdapter extends EContentAdapter {
 		final VarDeclaration outMappedInOutVar = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		outMappedInOutVar.setName(varDeclaration.getName());
 		outMappedInOutVar.setComment(varDeclaration.getComment());
-		outMappedInOutVar.setType(varDeclaration.getType());
+		// type may be null while copying with EcoreUtil.Copier,
+		// temporarily use ANY instead
+		outMappedInOutVar.setType(Objects.requireNonNullElse(varDeclaration.getType(), GenericTypes.ANY));
 		outMappedInOutVar.setArraySize(EcoreUtil.copy(varDeclaration.getArraySize()));
 		return outMappedInOutVar;
 	}

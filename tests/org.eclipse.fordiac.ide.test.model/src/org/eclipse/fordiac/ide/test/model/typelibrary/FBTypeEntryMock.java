@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 
@@ -145,5 +146,10 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	@Override
 	public EClass getTypeEClass() {
 		return fbType.eClass();
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.FB_TYPE_FILE_ENDING;
 	}
 }

@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class AttributeTypeEntryMock extends BasicNotifierImpl implements AttributeTypeEntry {
 
@@ -146,5 +147,10 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	@Override
 	public EClass getTypeEClass() {
 		return attributeDeclaration.eClass();
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING;
 	}
 }

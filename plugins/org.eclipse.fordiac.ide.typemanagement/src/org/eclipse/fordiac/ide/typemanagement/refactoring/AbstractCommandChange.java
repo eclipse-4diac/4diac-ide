@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -195,8 +195,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 *
 	 * @param element The element
 	 * @return The command (must not be null)
+	 * @throws CoreException if the command could not be created
 	 */
-	protected abstract Command createCommand(T element);
+	protected abstract Command createCommand(T element) throws CoreException;
 
 	/**
 	 * Acquire the library element for the element URI

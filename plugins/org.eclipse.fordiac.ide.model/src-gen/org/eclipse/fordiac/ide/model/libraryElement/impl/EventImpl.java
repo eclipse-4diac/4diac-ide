@@ -339,10 +339,11 @@ public class EventImpl extends EObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void setType(DataType newType) {
+		java.util.Objects.requireNonNull(newType, "DataType of a Events must not be null! " + getQualifiedName());
 		DataType oldType = type;
 		type = newType;
 		if (eNotificationRequired())

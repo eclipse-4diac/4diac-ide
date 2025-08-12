@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTypeEntry {
 
@@ -147,5 +148,10 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	@Override
 	public EClass getTypeEClass() {
 		return DataPackage.Literals.ANY_DERIVED_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.DATA_TYPE_FILE_ENDING;
 	}
 }

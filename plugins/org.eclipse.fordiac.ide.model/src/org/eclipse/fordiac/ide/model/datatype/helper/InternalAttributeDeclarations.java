@@ -18,22 +18,17 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.fordiac.ide.model.AttributeTarget;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 public final class InternalAttributeDeclarations {
@@ -81,23 +76,18 @@ public final class InternalAttributeDeclarations {
 
 		final StructuredType structType = DataFactory.eINSTANCE.createStructuredType();
 
-		structType.getMemberVariables().add(createTargetMember(IInterfaceElement.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(SubApp.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(FBType.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(Application.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(Connection.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(FB.class.getSimpleName()));
-		structType.getMemberVariables().add(createTargetMember(DataType.class.getSimpleName()));
-
+		for (final AttributeTarget target : AttributeTarget.values()) {
+			structType.getMemberVariables().add(createTargetMember(target));
+		}
 		declaration.setType(structType);
 
 		addAttribbuteDeclarationToResource(declaration);
 		return declaration;
 	}
 
-	private static MemberVarDeclaration createTargetMember(final String name) {
+	private static MemberVarDeclaration createTargetMember(final AttributeTarget target) {
 		final MemberVarDeclaration member = LibraryElementFactory.eINSTANCE.createMemberVarDeclaration();
-		member.setName(name);
+		member.setName(target.name());
 		member.setType(ElementaryTypes.BOOL);
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue("TRUE"); //$NON-NLS-1$

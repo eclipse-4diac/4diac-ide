@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
@@ -444,9 +445,11 @@ public abstract class ExporterTestBase<T extends FBType> {
 	protected void setupAdvancedInterface() {
 		inputEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		inputEvent.setName(EVENT_INPUT_NAME);
+		inputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		functionBlock.getInterfaceList().getEventInputs().add(inputEvent);
 		outputEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		outputEvent.setName(EVENT_OUTPUT_NAME);
+		outputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		functionBlock.getInterfaceList().getEventOutputs().add(outputEvent);
 		inputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		inputData.setType(new DataTypeLibrary().getType(FordiacKeywords.INT));
