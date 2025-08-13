@@ -100,6 +100,7 @@ public final class Messages extends NLS {
 	public static String IdentifierVerifier_NameReservedKeyWord;
 	public static String IdentifierVerifier_NameTrailingUnderscore;
 	public static String IdentifierVerifier_PackageNameMessage;
+	public static String IdentifierVerifier_QualifiedNameNotValid;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;

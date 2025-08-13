@@ -828,6 +828,15 @@ public interface LibraryElementFactory extends EFactory {
 	With createWith();
 
 	/**
+	 * Returns a new object of class '<em>Var Config Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Var Config Instance</em>'.
+	 * @generated
+	 */
+	VarConfigInstance createVarConfigInstance();
+
+	/**
 	 * Returns a new object of class '<em>Member Var Declaration</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

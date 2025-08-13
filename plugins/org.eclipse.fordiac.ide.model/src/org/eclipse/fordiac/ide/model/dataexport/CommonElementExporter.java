@@ -456,7 +456,7 @@ public class CommonElementExporter {
 		}
 	}
 
-	protected void addParamsConfig(final EList<VarDeclaration> inputVars) throws XMLStreamException {
+	protected void addParamsConfig(final EList<? extends VarDeclaration> inputVars) throws XMLStreamException {
 		for (final VarDeclaration inVar : inputVars) {
 			addParam(inVar);
 		}

@@ -511,6 +511,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createWithAdapter();
 			}
 			@Override
+			public Adapter caseVarConfigInstance(VarConfigInstance object) {
+				return createVarConfigInstanceAdapter();
+			}
+			@Override
 			public Adapter caseDataType(DataType object) {
 				return createDataTypeAdapter();
 			}
@@ -2015,6 +2019,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createWithAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance <em>Var Config Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance
+	 * @generated
+	 */
+	public Adapter createVarConfigInstanceAdapter() {
 		return null;
 	}
 

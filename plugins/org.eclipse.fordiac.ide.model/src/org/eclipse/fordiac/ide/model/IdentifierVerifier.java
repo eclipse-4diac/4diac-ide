@@ -35,6 +35,7 @@ public final class IdentifierVerifier {
 
 	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z0-9]*+"; //$NON-NLS-1$
 	private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(IDENTIFIER_REGEX);
+	private static final String QUALIFIED_NAME_DELIMITER = "\\."; //$NON-NLS-1$
 
 	private IdentifierVerifier() {
 		throw new UnsupportedOperationException();
@@ -82,9 +83,22 @@ public final class IdentifierVerifier {
 		if (packageName == null || packageName.isEmpty()) {
 			return Optional.empty(); // allow empty package names
 		}
-		return Stream.of(packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER, -1))
-				.map(IdentifierVerifier::verifyIdentifier).flatMap(Optional::stream).map(message -> MessageFormat
-						.format(Messages.IdentifierVerifier_PackageNameMessage, message, packageName))
-				.findFirst();
+		return verifyByDelimiter(packageName, PackageNameHelper.PACKAGE_NAME_DELIMITER,
+				Messages.IdentifierVerifier_PackageNameMessage);
+	}
+
+	public static Optional<String> verifyQualifiedIdentifier(final String qualifiedName) {
+		if (qualifiedName == null || qualifiedName.isBlank()) {
+			return Optional
+					.of(MessageFormat.format(Messages.IdentifierVerifier_NameNotAValidIdentifier, qualifiedName));
+		}
+		return verifyByDelimiter(qualifiedName, QUALIFIED_NAME_DELIMITER,
+				Messages.IdentifierVerifier_QualifiedNameNotValid);
+	}
+
+	private static Optional<String> verifyByDelimiter(final String name, final String delimiterRegex,
+			final String formatString) {
+		return Stream.of(name.split(delimiterRegex, -1)).map(IdentifierVerifier::verifyIdentifier)
+				.flatMap(Optional::stream).map(msg -> MessageFormat.format(formatString, msg, name)).findFirst();
 	}
 }

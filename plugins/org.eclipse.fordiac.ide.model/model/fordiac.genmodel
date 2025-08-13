@@ -947,6 +947,12 @@
     <genClasses ecoreClass="lib.ecore#//With">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//With/variables"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//VarConfigInstance">
+      <genOperations ecoreOperation="lib.ecore#//VarConfigInstance/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarConfigInstanceAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/context"/>
+      </genOperations>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">
