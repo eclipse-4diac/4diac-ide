@@ -83,6 +83,9 @@ public class STCoreImportUpdater {
 		}
 		// find matching delta
 		final Optional<Delta> delta = findDelta(deltas, imported);
+		if (delta.isEmpty()) {
+			return; // no delta for import
+		}
 		// find longest qualified name and set as imported namespace
 		// or remove import
 		updater.accept(imp, delta.flatMap(STCoreImportUpdater::findLongestQualifiedName)
