@@ -231,10 +231,7 @@ public class STCoreChangeConverter extends ChangeConverter {
 	}
 
 	protected static String getSourceElementName(final EObject element) {
-		if (element != null) {
-			return element.eResource().getURI().lastSegment() + ": " + FordiacMarkerHelper.getLocation(element); //$NON-NLS-1$
-		}
-		return ""; //$NON-NLS-1$
+		return FordiacMarkerHelper.getLocation(element);
 	}
 
 	protected String getEditedText(final String original, final TextEdit textEdit) {
