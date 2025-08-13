@@ -39,9 +39,9 @@ public final class NamedElementAnnotations {
 	static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
 	/**
-	 * Do not call directly! Use {@link INamedElement#getQualifiedName()} instead.
-	 *
-	 * Must be accessible from derived models.
+	 * @apiNote Do not call directly, use {@link INamedElement#getQualifiedName()}
+	 *          instead.
+	 * @implNote Must be accessible from derived models.
 	 */
 	public static String getQualifiedName(final INamedElement element) {
 		final INamedElement namedContainer = getNamedContainer(element);
@@ -69,20 +69,28 @@ public final class NamedElementAnnotations {
 	}
 
 	/**
-	 * Do not call directly! Use {@link INamedElement#findBySimpleName(String)}
-	 * instead.
+	 * Find element by simple name
 	 *
-	 * Must be accessible from derived models.
+	 * @param root The root to search in
+	 * @param name The simple name
+	 * @return A stream of elements matching the simple name
+	 * @apiNote Do not call directly, use
+	 *          {@link INamedElement#findBySimpleName(String)} instead.
+	 * @implNote Must be accessible from derived models.
 	 */
 	public static Stream<INamedElement> findBySimpleName(final INamedElement root, final String name) {
 		return StreamSupport.stream(new NamedContentsSpliterator(root, name), false);
 	}
 
 	/**
-	 * Do not call directly! Use {@link INamedElement#findByQualifiedName(String)}
-	 * instead.
+	 * Find element by qualified name
 	 *
-	 * Must be accessible from derived models.
+	 * @param root          The root to search in
+	 * @param qualifiedName The qualified name
+	 * @return A stream of elements matching the qualified name
+	 * @apiNote Do not call directly, use
+	 *          {@link INamedElement#findByQualifiedName(String)} instead.
+	 * @implNote Must be accessible from derived models.
 	 */
 	public static Stream<INamedElement> findByQualifiedName(final INamedElement root, final String qualifiedName) {
 		final int separator = qualifiedName.indexOf('.');
@@ -94,6 +102,22 @@ public final class NamedElementAnnotations {
 		return root.findBySimpleName(qualifiedName);
 	}
 
+	/**
+	 * Validate name
+	 *
+	 * @param element     The element to validate
+	 * @param diagnostics The diagnostic chain
+	 * @param context     The diagnostic context
+	 * @return true on success, false if an invalid name was found
+	 * @apiNote Do not call directly, use
+	 *          {@link INamedElement#validateName(DiagnosticChain, Map)} instead,
+	 *          unless when overriding the annotation from a subclass.
+	 * @implNote Do not add validations for a specific subclass to this generic
+	 *           implementation. If you need specific behavior for a subclass,
+	 *           override the invariant for the subclass in the model and create a
+	 *           separate annotation. Must be accessible from derived models or
+	 *           overriding annotations for subclasses.
+	 */
 	public static boolean validateName(final INamedElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
 		if (element.getName() != null && !element.getName().isEmpty()) {
@@ -130,6 +154,22 @@ public final class NamedElementAnnotations {
 		return true;
 	}
 
+	/**
+	 * Validate duplicate names
+	 *
+	 * @param element     The element to validate
+	 * @param diagnostics The diagnostic chain
+	 * @param context     The diagnostic context
+	 * @param key         The key for which to check for a duplicate name
+	 * @return true on success, false if a duplicate was found
+	 *
+	 * @apiNote This is intended to be called only from an annotation for a specific
+	 *          subclass of {@link INamedElement}.
+	 * @implNote Do not add validations for a specific subclass to this generic
+	 *           implementation. If you need specific behavior for a subclass,
+	 *           override the invariant for the subclass in the model and create a
+	 *           separate annotation.
+	 */
 	public static boolean validateDuplicateName(final INamedElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context, final String key) {
 		final Map<String, INamedElement> namedContents = getNamedContents(context, key);
