@@ -220,16 +220,24 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
 		if (!DeploymentEvaluatorConfiguration.DEFAULT_MGR_ID.equals(runtimeText.getText())) {
 			configuration.setAttribute(DeploymentEvaluatorConfiguration.MGR_ID, runtimeText.getText());
+		} else {
+			configuration.removeAttribute(DeploymentEvaluatorConfiguration.MGR_ID);
 		}
 		if (!DeploymentEvaluatorConfiguration.DEFAULT_DEVICE_PROFILE.equals(profileCombo.getText())) {
 			configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE, profileCombo.getText());
+		} else {
+			configuration.removeAttribute(DeploymentEvaluatorConfiguration.DEVICE_PROFILE);
 		}
 		if (!DeploymentEvaluatorConfiguration.getDefaultDeviceType(getTypeLibrary()).equals(deviceTypeText.getText())) {
 			configuration.setAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE, deviceTypeText.getText());
+		} else {
+			configuration.removeAttribute(DeploymentEvaluatorConfiguration.DEVICE_TYPE);
 		}
 		if (!DeploymentEvaluatorConfiguration.getDefaultResourceType(getTypeLibrary())
 				.equals(resourceTypeText.getText())) {
 			configuration.setAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE, resourceTypeText.getText());
+		} else {
+			configuration.removeAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE);
 		}
 		configuration.setAttribute(DeploymentEvaluatorConfiguration.TRACE, traceButton.getSelection());
 	}
