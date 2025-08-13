@@ -231,6 +231,7 @@ public class RuntimeLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 				.equals(resourceTypeText.getText())) {
 			configuration.setAttribute(DeploymentEvaluatorConfiguration.RESOURCE_TYPE, resourceTypeText.getText());
 		}
+		configuration.setAttribute(DeploymentEvaluatorConfiguration.TRACE, traceButton.getSelection());
 	}
 
 	@Override
