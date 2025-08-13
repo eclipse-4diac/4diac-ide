@@ -1054,6 +1054,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE: {
+				VarConfigInstance varConfigInstance = (VarConfigInstance)theEObject;
+				T result = caseVarConfigInstance(varConfigInstance);
+				if (result == null) result = caseVarDeclaration(varConfigInstance);
+				if (result == null) result = caseIInterfaceElement(varConfigInstance);
+				if (result == null) result = caseITypedElement(varConfigInstance);
+				if (result == null) result = caseHiddenElement(varConfigInstance);
+				if (result == null) result = caseINamedElement(varConfigInstance);
+				if (result == null) result = caseConfigurableObject(varConfigInstance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -2645,6 +2657,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseWith(With object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Var Config Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Var Config Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVarConfigInstance(VarConfigInstance object) {
 		return null;
 	}
 

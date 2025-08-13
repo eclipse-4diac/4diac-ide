@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelp
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
@@ -84,6 +85,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
@@ -758,15 +760,18 @@ public abstract class CommonElementImporter {
 				}
 
 				final var relativeName = computeRelativeName(path, tsa.getName());
-				final var copy = EcoreUtil.copy(vd);
-				copy.getAttributes().clear();
-				copy.setName(relativeName);
-				copy.setValue(vd.getValue());
-				copy.setComment(vd.getComment());
-				result = copy;
-				if (!isAlreadyPresent(tsa.getVarConfigParams(), copy.getName())) {
+
+				final VarConfigInstance existing = tsa.getVarConfigParams().stream()
+						.filter(v -> relativeName.equals(v.getName())).findFirst().orElse(null);
+
+				if (existing != null) {
+					result = existing;
+				} else {
+					final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
 					tsa.getVarConfigParams().add(copy);
+					result = copy;
 				}
+
 			}
 		}
 		return result;
@@ -777,10 +782,6 @@ public abstract class CommonElementImporter {
 			return fullName.substring(rootName.length() + 1);
 		}
 		return fullName;
-	}
-
-	private static boolean isAlreadyPresent(final List<VarDeclaration> list, final String name) {
-		return list.stream().anyMatch(elem -> elem.getName().equals(name));
 	}
 
 	private static VarDeclaration getVarConfigVD(final FBNetworkElement context, final List<String> remainingPath,

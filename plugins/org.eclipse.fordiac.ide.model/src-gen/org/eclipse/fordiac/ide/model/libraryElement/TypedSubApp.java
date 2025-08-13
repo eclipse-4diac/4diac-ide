@@ -62,7 +62,7 @@ public interface TypedSubApp extends SubApp {
 
 	/**
 	 * Returns the value of the '<em><b>Var Config Params</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Var Config Params</em>' containment reference list.
@@ -70,7 +70,7 @@ public interface TypedSubApp extends SubApp {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<VarDeclaration> getVarConfigParams();
+	EList<VarConfigInstance> getVarConfigParams();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -2,13 +2,13 @@
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *               2022-2023 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -19,16 +19,13 @@ package org.eclipse.fordiac.ide.model.libraryElement.util;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.draw2d.geometry.Point;
-
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -135,35 +132,33 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.*;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-
 import org.eclipse.gef.commands.CommandStack;
 
 /**
- * <!-- begin-user-doc -->
- * The <b>Validator</b> for the model.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> The <b>Validator</b> for the model. <!-- end-user-doc
+ * -->
+ *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
  * @generated
  */
 public class LibraryElementValidator extends EObjectValidator {
 	/**
 	 * The cached model package
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final LibraryElementValidator INSTANCE = new LibraryElementValidator();
 
 	/**
 	 * A constant for the {@link org.eclipse.emf.common.util.Diagnostic#getSource() source} of diagnostic {@link org.eclipse.emf.common.util.Diagnostic#getCode() codes} from this package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see org.eclipse.emf.common.util.Diagnostic#getSource()
 	 * @see org.eclipse.emf.common.util.Diagnostic#getCode()
 	 * @generated
@@ -172,24 +167,25 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Attribute'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static final int ATTRIBUTE__VALIDATE_NAME = 1;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Attribute Declaration' of 'Attribute'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Attribute Declaration' of 'Attribute'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION = 2;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Package Name' of 'Compiler Info'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int COMPILER_INFO__VALIDATE_PACKAGE_NAME = 3;
@@ -211,33 +207,36 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int CONNECTION__VALIDATE_MISSING_SOURCE = 5;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Source Endpoint' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Missing Source Endpoint' of 'Connection'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_MISSING_SOURCE_ENDPOINT = 6;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Destination' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Missing Destination' of 'Connection'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_MISSING_DESTINATION = 7;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Missing Destination Endpoint' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Missing Destination Endpoint' of 'Connection'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT = 8;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Duplicate' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_DUPLICATE = 9;
@@ -252,64 +251,62 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Mapped Var In Outs Do Not Cross Resource Boundaries' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_MAPPED_VAR_IN_OUTS_DO_NOT_CROSS_RESOURCE_BOUNDARIES = 11;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Array Sizes Are Compatible' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_ARRAY_SIZES_ARE_COMPATIBLE = 12;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out String Lengths Match' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Var In Out String Lengths Match' of 'Connection'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_STRING_LENGTHS_MATCH = 13;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Outs Are Not Connected To Outs' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUTS_ARE_NOT_CONNECTED_TO_OUTS = 14;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Connections Forms No Loop' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_VAR_IN_OUT_CONNECTIONS_FORMS_NO_LOOP = 15;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Negated Connection' of 'Connection'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int CONNECTION__VALIDATE_NEGATED_CONNECTION = 16;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value' of 'Error Marker Interface'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int ERROR_MARKER_INTERFACE__VALIDATE_VALUE = 17;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Attributes' of 'Error Marker Interface'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Attributes' of 'Error Marker Interface'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES = 18;
@@ -332,8 +329,8 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Collisions' of 'Group'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static final int GROUP__VALIDATE_COLLISIONS = 21;
@@ -348,99 +345,109 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static final int INAMED_ELEMENT__VALIDATE_NAME = 23;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'ITyped Element'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 24;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'Typed Configureable Object'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Type' of 'Typed Configureable Object'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 25;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Multiple Input Connections' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Multiple Input Connections' of 'Var Declaration'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 26;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Generic Type Variable' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = 27;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Variable Length Array Variable' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE = 28;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value For Generic Instance Variable' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 29;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 30;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Var In Out Is Withed' of 'Var Declaration'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 31;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Interface' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Var In Out Subapp Interface' of 'Var Declaration'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 32;
 
 	/**
-	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Network' of 'Var Declaration'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for
+	 * constraint 'Validate Var In Out Subapp Network' of 'Var Declaration'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 33;
 
 	/**
-	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Var Config Instance'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 33;
+	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 34;
+
+	/**
+	 * A constant with a fixed name that can be used as the base value for
+	 * additional hand written constants. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 */
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 34;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -451,9 +458,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	protected static final int DIAGNOSTIC_CODE_COUNT = GENERATED_DIAGNOSTIC_CODE_COUNT;
 
 	/**
-	 * Creates an instance of the switch.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the switch. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
 	 * @generated
 	 */
 	public LibraryElementValidator() {
@@ -462,8 +469,8 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Returns the package of this validator switch.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -473,8 +480,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Calls <code>validateXXX</code> for the corresponding classifier of the model.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -695,6 +701,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateVersionInfo((VersionInfo)value, diagnostics, context);
 			case LibraryElementPackage.WITH:
 				return validateWith((With)value, diagnostics, context);
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE:
+				return validateVarConfigInstance((VarConfigInstance)value, diagnostics, context);
 			case LibraryElementPackage.LANGUAGE:
 				return validateLanguage((Language)value, diagnostics, context);
 			case LibraryElementPackage.COMMAND_STACK:
@@ -721,8 +729,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAdapterConnection(AdapterConnection adapterConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -751,8 +758,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAdapterDeclaration(AdapterDeclaration adapterDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -771,8 +777,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAdapterFB(AdapterFB adapterFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -791,8 +796,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAdapterType(AdapterType adapterType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -810,8 +814,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAlgorithm(Algorithm algorithm, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -829,8 +832,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateApplication(Application application, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -848,8 +850,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateArraySize(ArraySize arraySize, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -857,8 +858,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAttribute(Attribute attribute, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -878,9 +878,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateName constraint of '<em>Attribute</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateName constraint of '<em>Attribute</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateAttribute_validateName(Attribute attribute, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -889,8 +889,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateAttributeDeclaration constraint of '<em>Attribute</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAttribute_validateAttributeDeclaration(Attribute attribute, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -898,8 +897,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAttributeDeclaration(AttributeDeclaration attributeDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -918,8 +916,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateBaseFBType(BaseFBType baseFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -937,8 +934,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateBasicFBType(BasicFBType basicFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -956,8 +952,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateAutomationSystem(AutomationSystem automationSystem, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -975,8 +970,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCFBInstance(CFBInstance cfbInstance, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -995,8 +989,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateColor(Color color, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1004,8 +997,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateColorizableElement(ColorizableElement colorizableElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1013,8 +1005,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateComment(Comment comment, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1033,8 +1024,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCommunicationChannel(CommunicationChannel communicationChannel, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1053,8 +1043,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCommunicationConfiguration(CommunicationConfiguration communicationConfiguration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1062,8 +1051,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCommunicationMappingTarget(CommunicationMappingTarget communicationMappingTarget, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1081,8 +1069,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCompiler(org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1090,8 +1077,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCompilerInfo(CompilerInfo compilerInfo, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1110,8 +1096,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validatePackageName constraint of '<em>Compiler Info</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCompilerInfo_validatePackageName(CompilerInfo compilerInfo, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1119,8 +1104,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCompositeFBType(CompositeFBType compositeFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1138,8 +1122,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConfigurableObject(ConfigurableObject configurableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1147,8 +1130,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConfigurableFB(ConfigurableFB configurableFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1168,9 +1150,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateDataType constraint of '<em>Configurable FB</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateDataType constraint of '<em>Configurable FB</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateConfigurableFB_validateDataType(ConfigurableFB configurableFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1178,8 +1160,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConfigurableMoveFB(ConfigurableMoveFB configurableMoveFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1199,8 +1180,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1229,9 +1209,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateMissingSource constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateMissingSource constraint of '<em>Connection</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateConnection_validateMissingSource(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1240,8 +1220,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateMissingSourceEndpoint constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateMissingSourceEndpoint(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1250,8 +1229,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateMissingDestination constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateMissingDestination(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1260,8 +1238,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateMissingDestinationEndpoint constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateMissingDestinationEndpoint(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1269,9 +1246,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateDuplicate constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateDuplicate constraint of '<em>Connection</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateConnection_validateDuplicate(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1279,9 +1256,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateTypeMismatch constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateTypeMismatch constraint of '<em>Connection</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateConnection_validateTypeMismatch(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1290,8 +1267,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateMappedVarInOutsDoNotCrossResourceBoundaries constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateMappedVarInOutsDoNotCrossResourceBoundaries(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1300,8 +1276,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutArraySizesAreCompatible constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateVarInOutArraySizesAreCompatible(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1310,8 +1285,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutStringLengthsMatch constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateVarInOutStringLengthsMatch(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1320,8 +1294,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutsAreNotConnectedToOuts constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateVarInOutsAreNotConnectedToOuts(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1330,8 +1303,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutConnectionsFormsNoLoop constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateVarInOutConnectionsFormsNoLoop(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1340,8 +1312,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateNegatedConnection constraint of '<em>Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnection_validateNegatedConnection(Connection connection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1349,8 +1320,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateConnectionRoutingData(ConnectionRoutingData connectionRoutingData, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1358,8 +1328,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateDataConnection(DataConnection dataConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1388,8 +1357,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateDemultiplexer(Demultiplexer demultiplexer, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1409,8 +1377,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateDevice(Device device, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1429,8 +1396,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateDeviceType(DeviceType deviceType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1448,8 +1414,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateECAction(ECAction ecAction, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1457,8 +1422,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateECC(ECC ecc, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1466,8 +1430,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateECState(ECState ecState, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1485,8 +1448,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateECTransition(ECTransition ecTransition, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1494,8 +1456,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateErrorMarkerDataType(ErrorMarkerDataType errorMarkerDataType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1513,8 +1474,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateErrorMarkerFBNElement(ErrorMarkerFBNElement errorMarkerFBNElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1533,8 +1493,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateErrorMarkerInterface(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1556,8 +1515,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateValue constraint of '<em>Error Marker Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateErrorMarkerInterface_validateValue(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1566,8 +1524,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateAttributes constraint of '<em>Error Marker Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateErrorMarkerInterface_validateAttributes(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1575,8 +1532,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateEvent(Event event, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1595,8 +1551,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateEventConnection(EventConnection eventConnection, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1625,8 +1580,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFB(FB fb, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1645,8 +1599,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFBNetwork(FBNetwork fbNetwork, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1664,9 +1617,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateCollisions constraint of '<em>FB Network</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateCollisions constraint of '<em>FB Network</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateFBNetwork_validateCollisions(FBNetwork fbNetwork, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1674,8 +1627,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFBNetworkElement(FBNetworkElement fbNetworkElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1694,9 +1646,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateName constraint of '<em>FB Network Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateName constraint of '<em>FB Network Element</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateFBNetworkElement_validateName(FBNetworkElement fbNetworkElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1704,8 +1656,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFBType(FBType fbType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1723,8 +1674,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFunction(Function function, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1742,8 +1692,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFunctionBody(FunctionBody functionBody, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1751,8 +1700,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateFunctionFBType(FunctionFBType functionFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1770,8 +1718,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateGlobalConstants(GlobalConstants globalConstants, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1789,8 +1736,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateGroup(Group group, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1810,9 +1756,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateCollisions constraint of '<em>Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateCollisions constraint of '<em>Group</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateGroup_validateCollisions(Group group, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1820,8 +1766,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateHiddenElement(HiddenElement hiddenElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1829,8 +1774,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateICallable(ICallable iCallable, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1848,8 +1792,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateIdentification(Identification identification, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1857,8 +1800,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateIInterfaceElement(IInterfaceElement iInterfaceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1877,9 +1819,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateName constraint of '<em>IInterface Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateName constraint of '<em>IInterface Element</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateIInterfaceElement_validateName(IInterfaceElement iInterfaceElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1887,8 +1829,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateImport(Import import_, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1896,8 +1837,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateINamedElement(INamedElement iNamedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1915,9 +1855,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateName constraint of '<em>INamed Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateName constraint of '<em>INamed Element</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateINamedElement_validateName(INamedElement iNamedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1925,8 +1865,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateInputPrimitive(InputPrimitive inputPrimitive, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1934,8 +1873,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateInterfaceList(InterfaceList interfaceList, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1943,8 +1881,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateITypedElement(ITypedElement iTypedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1963,9 +1900,9 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * Validates the validateType constraint of '<em>ITyped Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Validates the validateType constraint of '<em>ITyped Element</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public boolean validateITypedElement_validateType(ITypedElement iTypedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1973,8 +1910,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateIVarElement(IVarElement iVarElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -1982,8 +1918,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateLibraryElement(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2001,8 +1936,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateLink(Link link, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2020,8 +1954,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateLocalVariable(LocalVariable localVariable, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2048,8 +1981,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateMapping(Mapping mapping, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2057,8 +1989,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateMappingTarget(MappingTarget mappingTarget, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2076,8 +2007,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateMethod(Method method, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2095,8 +2025,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateMultiplexer(Multiplexer multiplexer, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2116,8 +2045,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateOriginalSource(OriginalSource originalSource, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2125,8 +2053,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateOtherAlgorithm(OtherAlgorithm otherAlgorithm, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2144,8 +2071,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateOtherMethod(OtherMethod otherMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2163,8 +2089,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateOutputPrimitive(OutputPrimitive outputPrimitive, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2172,8 +2097,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validatePosition(Position position, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2181,8 +2105,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validatePositionableElement(PositionableElement positionableElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2190,8 +2113,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validatePrimitive(Primitive primitive, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2199,8 +2121,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateResource(Resource resource, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2219,8 +2140,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateResourceTypeName(ResourceTypeName resourceTypeName, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2228,8 +2148,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateResourceType(ResourceType resourceType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2247,8 +2166,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateResourceTypeFB(ResourceTypeFB resourceTypeFB, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2267,8 +2185,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSegment(Segment segment, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2287,8 +2204,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSegmentType(SegmentType segmentType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2306,8 +2222,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateService(Service service, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2315,8 +2230,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateServiceSequence(ServiceSequence serviceSequence, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2334,8 +2248,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateServiceTransaction(ServiceTransaction serviceTransaction, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2343,8 +2256,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateServiceInterface(ServiceInterface serviceInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2362,8 +2274,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateServiceInterfaceFBType(ServiceInterfaceFBType serviceInterfaceFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2381,8 +2292,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSimpleECAction(SimpleECAction simpleECAction, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2390,8 +2300,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSimpleECState(SimpleECState simpleECState, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2409,8 +2318,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSimpleFBType(SimpleFBType simpleFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2428,8 +2336,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSTAlgorithm(STAlgorithm stAlgorithm, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2447,8 +2354,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSTFunction(STFunction stFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2466,8 +2372,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSTFunctionBody(STFunctionBody stFunctionBody, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2475,8 +2380,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSTMethod(STMethod stMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2494,8 +2398,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSubApp(SubApp subApp, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2514,8 +2417,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateStructManipulator(StructManipulator structManipulator, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2535,8 +2437,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSubAppType(SubAppType subAppType, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2554,8 +2455,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateSystemConfiguration(SystemConfiguration systemConfiguration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2563,8 +2463,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTextAlgorithm(TextAlgorithm textAlgorithm, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2582,8 +2481,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTextFunction(TextFunction textFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2601,8 +2499,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTextFunctionBody(TextFunctionBody textFunctionBody, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2610,8 +2507,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTextMethod(TextMethod textMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2629,8 +2525,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTypedConfigureableObject(TypedConfigureableObject typedConfigureableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2650,17 +2545,16 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateType constraint of '<em>Typed Configureable Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateTypedConfigureableObject_validateType(TypedConfigureableObject typedConfigureableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateTypedConfigureableObject_validateType(
+			TypedConfigureableObject typedConfigureableObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return typedConfigureableObject.validateType(diagnostics, context);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTypedSubApp(TypedSubApp typedSubApp, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2679,8 +2573,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateUntypedSubApp(UntypedSubApp untypedSubApp, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2699,8 +2592,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateValue(Value value, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2708,8 +2600,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2737,8 +2628,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateMultipleInputConnections constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateMultipleInputConnections(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2747,8 +2637,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateNoValueForGenericTypeVariable constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateNoValueForGenericTypeVariable(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2757,18 +2646,17 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateNoValueForVariableLengthArrayVariable constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(
+			VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return varDeclaration.validateNoValueForVariableLengthArrayVariable(diagnostics, context);
 	}
 
 	/**
 	 * Validates the validateValueForGenericInstanceVariable constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateValueForGenericInstanceVariable(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2777,8 +2665,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutSourceTypeIsWellDefined constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2787,8 +2674,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutIsWithed constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateVarInOutIsWithed(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2797,8 +2683,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutSubappInterface constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateVarInOutSubappInterface(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2807,8 +2692,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Validates the validateVarInOutSubappNetwork constraint of '<em>Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclaration_validateVarInOutSubappNetwork(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2816,8 +2700,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVersionInfo(VersionInfo versionInfo, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2825,8 +2708,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateWith(With with, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2834,8 +2716,44 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarConfigInstance(VarConfigInstance varConfigInstance, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(varConfigInstance, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarConfigInstance_validateName(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(varConfigInstance, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateName constraint of '<em>Var Config Instance</em>'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public boolean validateVarConfigInstance_validateName(VarConfigInstance varConfigInstance, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varConfigInstance.validateName(diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2862,8 +2780,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateLanguage(Language language, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2871,8 +2788,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateCommandStack(CommandStack commandStack, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2880,8 +2796,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateIFile(IFile iFile, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2889,8 +2804,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateInterfaceElementStream(Stream<IInterfaceElement> interfaceElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2898,8 +2812,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateIProject(IProject iProject, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2907,8 +2820,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateNamedElementStream(Stream<INamedElement> namedElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2916,8 +2828,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validatePoint(Point point, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2925,8 +2836,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTypeEntry(TypeEntry typeEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2934,8 +2844,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateTypeLibrary(TypeLibrary typeLibrary, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2943,8 +2852,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean validateVarDeclList(List<VarDeclaration> varDeclList, DiagnosticChain diagnostics, Map<Object, Object> context) {
@@ -2953,8 +2861,7 @@ public class LibraryElementValidator extends EObjectValidator {
 
 	/**
 	 * Returns the resource locator that will be used to fetch messages for this validator's diagnostics.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -2965,4 +2872,4 @@ public class LibraryElementValidator extends EObjectValidator {
 		return super.getResourceLocator();
 	}
 
-} //LibraryElementValidator
+} // LibraryElementValidator
