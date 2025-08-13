@@ -22,7 +22,6 @@ import java.util.Set;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
@@ -47,36 +46,35 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final boolean stepMode = Platform.getPreferencesService().getBoolean(
 				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
 
-		final IInterfaceElement originPin = ((InterfaceEditPart) selection.getFirstElement()).getModel();
+		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
+		final IInterfaceElement originPin = interfaceEditPart.getModel();
 
+		// Jump-mode, jump over Struct
 		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && memberVarDecl.isIsInput()) {
 			final Set<IInterfaceElement> connectedInt = new HashSet<>();
 			FBEndpointFinder.traceMembers(memberVarDecl, connectedInt);
 			if (!connectedInt.isEmpty()) {
 				selectOpposites(event, viewer, originPin, new ArrayList<>(connectedInt), editor);
-				return Status.OK_STATUS;
+				return null;
 			}
 		}
 
-		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
+		// Go out of Editor (EditorBorderPin)
 		if (isEditorBorderPin(interfaceEditPart.getModel(), getFBNetwork(editor))
 				&& !interfaceEditPart.getModel().isIsInput()) {
 			gotoParent(event);
-			return Status.OK_STATUS;
+			return null;
 		}
 
+		// Switch between in/out on FB
 		if (interfaceEditPart.isInput() && !isExpandedSubappPin(interfaceEditPart.getModel())) {
-			HandlerHelper.selectElement(getInternalOppositePin(selection), viewer);
-			return Status.OK_STATUS;
+			HandlerHelper.selectElement(getInternalOppositePin(interfaceEditPart), viewer);
+			return null;
 		}
 
-		List<IInterfaceElement> opposites = getConnectionOposites(interfaceEditPart);
-		if (!stepMode) {
-			opposites = resolveTargetPins(opposites, viewer);
-		}
-
+		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode);
 		selectOpposites(event, viewer, originPin, opposites, editor);
-		return Status.OK_STATUS;
+		return null;
 	}
 
 	@Override
@@ -132,11 +130,6 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
 		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty()
 				&& il.getInOutVars().isEmpty());
-	}
-
-	@Override
-	protected boolean isLeft() {
-		return false;
 	}
 
 	@Override

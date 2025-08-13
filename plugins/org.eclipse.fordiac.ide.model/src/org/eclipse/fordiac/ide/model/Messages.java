@@ -214,6 +214,8 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_Links_tooltip;
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
+	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,34 +14,28 @@ package org.eclipse.fordiac.ide.typemanagement.util;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class FBTypePropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-		if (receiver instanceof IFile) {
-			return getFBTypeStringFromFile((IFile) receiver).equals(expectedValue);
+		if (receiver instanceof final IFile file) {
+			return getFBTypeStringFromFile(file).equals(expectedValue);
 		}
 		return false;
 	}
 
 	private static String getFBTypeStringFromFile(final IFile file) {
-		final FBType type = getFBTypeFromFile(file);
-		if (type != null) {
-			return type.eClass().getName();
+		if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) instanceof final FBTypeEntry fbTypeEntry) {
+			final EClass typeEClass = fbTypeEntry.getTypeEClass();
+			if (typeEClass != null) {
+				typeEClass.getName();
+			}
 		}
 		return ""; //$NON-NLS-1$
 	}
 
-	private static FBType getFBTypeFromFile(final IFile file) {
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof FBTypeEntry) {
-			return ((FBTypeEntry) entry).getType();
-		}
-		return null;
-	}
 }

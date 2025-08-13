@@ -84,7 +84,11 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			}
 		} else { // inputStream contains full XML for library element
 			// chain load library element from inputStream
-			final LibraryElement libraryElement = loadLibraryElement(inputStream);
+			final Resource typeResource = loadLibraryElement(inputStream);
+			if (typeResource == null) {
+				return;
+			}
+			final LibraryElement libraryElement = findInternalLibraryElement(typeResource);
 			if (libraryElement == null) {
 				return;
 			}
@@ -93,10 +97,14 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			super.doLoad(new LazyStringInputStream(text, getEncoding()), actualOptions);
 			// and add library element to contents
 			addInternalLibraryElement(libraryElement);
+			// add errors and warnings from type resource
+			// has to be done _after_ super.doLoad, because that clears them
+			getErrors().addAll(typeResource.getErrors());
+			getWarnings().addAll(typeResource.getWarnings());
 		}
 	}
 
-	protected LibraryElement loadLibraryElement(final InputStream inputStream) {
+	protected Resource loadLibraryElement(final InputStream inputStream) {
 		try {
 			final Resource typeResource;
 			if (uri.hasQuery() && resourceSet != null) {
@@ -105,9 +113,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 				typeResource = new FordiacTypeResource(uri);
 				typeResource.load(inputStream, Collections.emptyMap());
 			}
-			getErrors().addAll(typeResource.getErrors());
-			getWarnings().addAll(typeResource.getWarnings());
-			return findInternalLibraryElement(typeResource);
+			return typeResource;
 		} catch (final Exception e) {
 			handleTypeLoadException(e);
 		}

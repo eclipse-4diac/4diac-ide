@@ -18,6 +18,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -36,13 +39,13 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.EditPart;
@@ -51,8 +54,10 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
@@ -166,14 +171,11 @@ public class InstancePropertySection extends AbstractSection {
 
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
-				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
-						VarDeclarationTableColumn.DEFAULT_EDITABLE));
+				instanceEditableRule);
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, columnProvider,
-				new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
-						VarDeclarationTableColumn.DEFAULT_EDITABLE_NO_INITIAL_VALUE));
+				instanceEditableRule);
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -292,8 +294,15 @@ public class InstancePropertySection extends AbstractSection {
 	@Override
 	protected void setInputInit() {
 		if (getType() != null) {
-			inputDataProvider.setInput(getType().getInterface().getInputVars());
-			outputDataProvider.setInput(getType().getInterface().getOutputVars());
+			final List<VarDeclaration> allInputs = new ArrayList<>();
+			allInputs.addAll(getType().getInterface().getInputVars());
+			allInputs.addAll(getType().getInterface().getInOutVars());
+			inputDataProvider.setInput(allInputs);
+
+			final List<VarDeclaration> allOutputs = new ArrayList<>();
+			allOutputs.addAll(getType().getInterface().getOutputVars());
+			allOutputs.addAll(getType().getInterface().getOutMappedInOutVars());
+			outputDataProvider.setInput(allOutputs);
 		}
 		inputTable.refresh();
 		outputTable.refresh();
@@ -338,4 +347,27 @@ public class InstancePropertySection extends AbstractSection {
 		// as we have our own adapters we need our own shouldRefresh implementation
 		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
 	}
+
+	private final IEditableRule instanceEditableRule = new IEditableRule() {
+		@Override
+		public boolean isEditable(final int columnIndex, final int rowIndex) {
+			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
+					.get(columnIndex);
+			final VarDeclaration varDecl = inputDataProvider.getRowObject(rowIndex);
+
+			if (getType() instanceof TypedSubApp && varDecl.isInOutVar()
+					&& (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VISIBLEIN
+							|| column == VarDeclarationTableColumn.VISIBLEOUT)) {
+				return false;
+			}
+
+			return VarDeclarationTableColumn.DEFAULT_EDITABLE.contains(column);
+		}
+
+		@Override
+		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+			return isEditable(cell.getColumnIndex(), cell.getRowIndex());
+		}
+	};
+
 }
