@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010  Profactor GmbH, TU Wien ACIN
+ * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
+ * 								   Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Sebastian Hollersbacher
+ *	  - externalized translatable strings
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -18,7 +21,7 @@ import org.eclipse.osgi.util.NLS;
 /** The Class Messages. */
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String ArrayValueConverter_IllegalElementValue;
 
