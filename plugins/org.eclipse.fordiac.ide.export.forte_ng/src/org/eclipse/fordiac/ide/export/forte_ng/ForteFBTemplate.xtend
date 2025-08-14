@@ -482,26 +482,4 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
 			).toSet
 	}
-
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		val strings = super.getUsedStrings(options)
-		type.interfaceList.allInterfaceElements.forEach[getUsedIEStrings(it, strings)]
-		return strings
-	}
-
-	def protected void getUsedIEStrings(IInterfaceElement ie, Set<String> strings) {
-		strings.add(ie.name)
-		strings.add(ie.type.generateTypeNamePlain)
-		if (ie instanceof VarDeclaration) {
-			if (ie.array) {
-				strings.add("ARRAY")
-			}
-		}
-	}
-
-	def protected void getUsedFBStrings(FB fb, Set<String> strings) {
-		strings.add(fb.name)
-		strings.add(fb.type.generateTypeNamePlain)
-	}
-
 }

@@ -79,6 +79,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		«type.compilerInfo?.header»
 		
 		using namespace std::literals;
+		using namespace forte::core::literals;
 	'''
 	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
@@ -159,28 +160,10 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_PARAM -> Boolean.TRUE})
 	}
 
-	def CharSequence generateVariableTypeSpec(VarDeclaration decl) {
-		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_SPEC -> Boolean.TRUE})
-	}
-
-	def protected generateUseStringId() '''
-		«getUsedStrings(emptyMap).generateUseStringIdDecls»
-	'''
-	
-	def generateUseStringIdDecls(Set<String> strings) '''
-		«FOR str : strings.sort»
-			USE_STRING_ID(«str»);
-		«ENDFOR»
-	'''
-	
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEStringId].join(", ")
 	}
 
-	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map[generateVariableTypeSpec].join(", ")
-	}
-	
 	def protected getFORTEEventTypeList(List<? extends Event> elements) {
 		elements.map[it.typeName.FORTEStringId].join(", ")
 	}
@@ -199,10 +182,6 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 
 	def Set<INamedElement> getDependencies(Map<?, ?> options) {
 		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
-	}
-	
-	def protected Set<String> getUsedStrings(Map<?, ?> options) {
-		newHashSet(type.generateTypeNamePlain)
 	}
 	
 	def protected generateTypeHash() '''

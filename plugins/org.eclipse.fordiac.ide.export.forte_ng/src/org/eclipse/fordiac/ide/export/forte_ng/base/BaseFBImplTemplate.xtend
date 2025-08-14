@@ -48,8 +48,6 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		namespace {
 		  «generateTypeHash»
 		
@@ -63,7 +61,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			«type.internalConstVars.generateVariableDefinitions(true)»			
 		«ENDIF»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		«FBClassName»::«FBClassName»(const forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
 		    			»«type.internalFbs.generateInternalFBInitializer»«// no newline
 		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
@@ -151,12 +149,5 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 				getDependencies(options)
 			]
 		).toSet
-	}
-	
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		val strings = super.getUsedStrings(options)
-		type.internalVars.forEach[getUsedIEStrings(it, strings)]
-		type.internalFbs.forEach[getUsedFBStrings(it, strings)]		
-		return strings	
 	}
 }

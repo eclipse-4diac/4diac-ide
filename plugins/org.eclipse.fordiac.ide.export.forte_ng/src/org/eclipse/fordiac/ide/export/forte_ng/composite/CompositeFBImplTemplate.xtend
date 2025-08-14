@@ -53,8 +53,6 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		namespace {
 		  «generateTypeHash»
 		
@@ -67,7 +65,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«generateFBDefinition»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		«FBClassName»::«FBClassName»(const forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, cFBNData)«//no newline
 		    »«fbs.generateInternalFBInitializer»«// no newline
 		    »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
@@ -116,7 +114,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		return if (type.FBNetwork.networkElements.contains(elem))
 			'''«elem.name.FORTEStringId», «iface.name.FORTEStringId»'''
 		else
-			'''CStringDictionary::scmInvalidStringId, «iface.name.FORTEStringId»'''
+			'''{}, «iface.name.FORTEStringId»'''
 	}
 
 	def private generateConnections(EList<? extends Connection> connections, String listName) '''
@@ -187,33 +185,4 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 			getDependencies(options)
 		]).toSet
 	}
-
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		val strings = super.getUsedStrings(options)
-		fbs.forEach [
-			{
-				getUsedFBStrings(it, strings)
-				getUsedInitialFBVarStrings(it, strings)
-			}
-		]
-		type.FBNetwork.eventConnections.forEach[getUsedConStrings(it, strings)]
-		type.FBNetwork.dataConnections.forEach[getUsedConStrings(it, strings)]
-		type.FBNetwork.adapterConnections.forEach[getUsedConStrings(it, strings)]
-		return strings
-	}
-
-	def protected void getUsedConStrings(Connection con, Set<String> strings) {
-		// fb instances names are already added when the network elements are added so we can ignore them here
-		strings.add(con.source.name)
-		strings.add(con.destination.name)
-	}
-
-	def protected void getUsedInitialFBVarStrings(FBNetworkElement fbe, Set<String> strings) {
-		if (fbe.type.genericType) {
-			for (variable : fbe.interface.inputVars.filter[!value?.value.nullOrEmpty]) {
-				strings.add(variable.name)
-			}
-		}
-	}
-
 }

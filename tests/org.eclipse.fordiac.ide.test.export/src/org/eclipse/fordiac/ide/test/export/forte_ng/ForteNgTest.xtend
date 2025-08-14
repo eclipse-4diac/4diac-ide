@@ -267,7 +267,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						    void setInitialValues() override;
 						
 						  public:
-						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+						    «EXPORTED_FUNCTIONBLOCK_NAME»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 						
 						    CIEC_ANY *getDI(size_t) override;
 						    CIEC_ANY *getDO(size_t) override;
@@ -302,8 +302,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#include "core/datatypes/forte_array_variable.h"
 						
 						using namespace std::literals;
-						
-						USE_STRING_ID(functionblock);
+						using namespace forte::core::literals;
 						
 						namespace {
 						  constexpr std::string_view TypeHash ="1234"sv;
@@ -321,9 +320,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						  };
 						}
 						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(functionblock), TypeHash)
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», "functionblock"_STRID, TypeHash)
 						
-						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
 						}
 						

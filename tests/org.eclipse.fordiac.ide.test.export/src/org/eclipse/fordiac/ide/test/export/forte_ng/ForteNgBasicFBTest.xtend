@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.fail
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.getFORTEStringId;
+
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
@@ -82,7 +84,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						    void setInitialValues() override;
 						
 						  public:
-						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+						    «EXPORTED_FUNCTIONBLOCK_NAME»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 						
 						    CIEC_ANY *getDI(size_t) override;
 						    CIEC_ANY *getDO(size_t) override;
@@ -119,8 +121,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						#include "core/datatypes/forte_array_variable.h"
 						
 						using namespace std::literals;
-						
-						USE_STRING_ID(«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»);
+						using namespace forte::core::literals;
 						
 						namespace {
 						  constexpr std::string_view TypeHash ="1234"sv;
@@ -138,9 +139,9 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  };
 						}
 						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», STRID(«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»), TypeHash)
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», «ExporterTestBase.BASICFUNCTIONBLOCK_NAME.FORTEStringId», TypeHash)
 						
-						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
 						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
 						}
 						

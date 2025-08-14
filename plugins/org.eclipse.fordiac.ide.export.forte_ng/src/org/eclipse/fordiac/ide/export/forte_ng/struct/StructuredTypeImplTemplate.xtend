@@ -33,15 +33,13 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		namespace {
 			«generateTypeHash»
 		}
 		
 		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
 		
-		const CStringDictionary::TStringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		const forte::core::StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
 		
 		«className»::«className»() :
 		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
@@ -53,7 +51,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		}
 		«ENDIF»
 		
-		CStringDictionary::TStringId «className»::getStructTypeNameID() const {
+		forte::core::StringId «className»::getStructTypeNameID() const {
 		  return «type.generateTypeSpec»;
 		}
 		
@@ -73,8 +71,4 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		  }
 		}
 	'''
-
-	override Set<String> getUsedStrings(Map<?, ?> options) {
-		(super.getUsedStrings(options) + type.memberVariables.map[name]).toSet
-	}
 }

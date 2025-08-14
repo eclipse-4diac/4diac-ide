@@ -127,15 +127,8 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence generateTypeSpec(INamedElement type) {
-		switch (type) {
-			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeNamePlain.FORTEStringId) [ result, subrange |
-					'''«type.generateTypeNamePlain.FORTEStringId», static_cast<CStringDictionary::TStringId>(«subrange.lowerLimit»), static_cast<CStringDictionary::TStringId>(«subrange.upperLimit»), «result»'''
-				].toString
-			default:
-				type.generateTypeNamePlain.FORTEStringId
-		}
+	def static CharSequence generateTypeSpec(LibraryElement type) {
+		type.generateTypeNamePlain.FORTEStringId
 	}
 
 	def static CharSequence generateDefiningTypeName(EObject object) {
@@ -274,7 +267,7 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence getFORTEStringId(String s) '''STRID(«s»)'''
+	def static CharSequence getFORTEStringId(String s) '''"«s»"_STRID'''
 
 	def static int getAbsoluteDataPortIndex(IInterfaceElement element) {
 		val interfaceList = element.interfaceList

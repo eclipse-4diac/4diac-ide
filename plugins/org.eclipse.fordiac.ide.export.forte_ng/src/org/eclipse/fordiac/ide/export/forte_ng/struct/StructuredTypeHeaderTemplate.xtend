@@ -50,11 +50,11 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		      return «type.memberVariables.size»;
 		    }
 		
-		    const CStringDictionary::TStringId* elementNames() const override {
+		    const forte::core::StringId* elementNames() const override {
 		      return scmElementNames;
 		    }
 		
-		    CStringDictionary::TStringId getStructTypeNameID() const override;
+		    forte::core::StringId getStructTypeNameID() const override;
 		
 		    void setValue(const CIEC_ANY &paValue) override;
 		
@@ -62,7 +62,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		    «generateAccessorDeclaration("getMember", true)»
 		
 		  private:
-		    static const CStringDictionary::TStringId scmElementNames[];
+		    static const forte::core::StringId scmElementNames[];
 		
 		};
 		
