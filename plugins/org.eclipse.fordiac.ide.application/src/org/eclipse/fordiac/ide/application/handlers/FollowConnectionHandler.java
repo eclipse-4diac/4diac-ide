@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
@@ -206,7 +207,13 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations) {
-		if (getConnectionList(startPin).isEmpty()) {
+		if (startPin.getFBNetworkElement() instanceof TypedSubApp
+				|| startPin.getFBNetworkElement() instanceof CFBInstance) {
+			destinations.add(startPin);
+			return;
+		}
+		final List<Connection> connections = getConnectionList(startPin);
+		if (connections.isEmpty()) {
 			// skip over struct
 			if (startPin instanceof final MemberVarDeclaration member) {
 				final Set<IInterfaceElement> memberEnd = new HashSet<>();
@@ -218,13 +225,9 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			destinations.add(startPin);
 			return;
 		}
-		for (final Connection conn : getConnectionList(startPin)) {
+		for (final Connection conn : connections) {
 			final IInterfaceElement next = conn.getSource() == startPin ? conn.getDestination() : conn.getSource();
-			if (conn.isVisible()) {
-				destinations.add(next);
-			} else {
-				jumpOverConnections(next, destinations);
-			}
+			jumpOverConnections(next, destinations);
 		}
 	}
 }

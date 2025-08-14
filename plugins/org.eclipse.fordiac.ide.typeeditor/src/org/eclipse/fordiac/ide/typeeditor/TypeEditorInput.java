@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -59,7 +59,11 @@ public class TypeEditorInput extends PlatformObject implements ITypeEditorInput,
 
 	@Override
 	public String getName() {
-		return type.getName() == null ? "" : type.getName(); //$NON-NLS-1$
+		if (type != null) {
+			return type.getName() == null ? "" : type.getName(); //$NON-NLS-1$
+		}
+		// if we don't have a type use the file name as type name
+		return TypeEntry.getTypeNameFromFile(file);
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class TypeEditorInput extends PlatformObject implements ITypeEditorInput,
 
 	@Override
 	public String getToolTipText() {
-		return type.getComment() == null ? "" //$NON-NLS-1$
+		return (type == null || type.getComment() == null) ? "" //$NON-NLS-1$
 				: type.getComment() + " (" + getFile().getProjectRelativePath().toString() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 

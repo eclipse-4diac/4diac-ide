@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.gef.filters;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -37,6 +38,8 @@ public class AttributeFilter implements IFilter {
 		// handle exception: interface elements of functions
 		case final IInterfaceElement interfaceElement when interfaceElement.getFBType() instanceof FunctionFBType ->
 			null;
+		// handle exception: struct of MUX/DEMUX
+		case final EditPart editpart when editpart.getModel() instanceof StructuredType -> null;
 		case final ConfigurableObject configurableObject -> configurableObject;
 		case final FBNetwork fbNetwork -> parseObject(fbNetwork.eContainer());
 		case final EditPart editpart -> parseObject(editpart.getModel());

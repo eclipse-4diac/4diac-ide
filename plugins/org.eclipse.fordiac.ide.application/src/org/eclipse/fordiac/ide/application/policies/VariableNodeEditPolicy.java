@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -64,9 +65,11 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 		final IInterfaceElement pin = getHost().getModel();
 
 		if (command instanceof StructDataConnectionCreateCommand) {
-			// if we drag from a struct manipulater but target is not a struct use normal
+			// if we drag from a struct manipulater but target is not a struct or
+			// configureable F_MOVE pin use normal
 			// data connection creation
-			if (!(pin.getType() instanceof StructuredType)) {
+			if (!(pin.getType() instanceof StructuredType)
+					&& !(pin.eContainer().eContainer() instanceof ConfigurableMoveFB)) {
 				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(command.getParent());
 				structCmd.setSource(command.getSource());
 				request.setStartCommand(structCmd);
@@ -77,7 +80,6 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			structCmd.setSource(command.getSource());
 			request.setStartCommand(structCmd);
 		}
-
 		return super.getConnectionCompleteCommand(request);
 	}
 }
