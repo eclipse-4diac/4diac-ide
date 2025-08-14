@@ -225,13 +225,16 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 * @throws CoreException if there was a problem saving the library element
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
-		if (typeEntry != null) {
-			typeEntry.save(libraryElement, pm);
-		}
 		if (editor != null) {
 			// if we have an editor mark the save location in the command stack to tell the
 			// editor that it is not dirty anymore
+			// must do that _before_ saving the type entry, so that when the notification
+			// reaches the editor, it is not considered dirty and we do not trigger a reload
+			// dialog
 			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
+		}
+		if (typeEntry != null) {
+			typeEntry.save(libraryElement, pm);
 		}
 	}
 

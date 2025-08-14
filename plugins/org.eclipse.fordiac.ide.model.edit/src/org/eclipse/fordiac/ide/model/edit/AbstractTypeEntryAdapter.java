@@ -77,7 +77,8 @@ public abstract class AbstractTypeEntryAdapter extends AdapterImpl {
 	}
 
 	private void performReload() {
-		Display.getDefault().asyncExec(() -> {
+		// make sure editor reloads happen synchronously when saving from an UI context
+		Display.getDefault().execute(() -> {
 			if (!editorClosed() && (!getEditor().isDirty() || openFileChangedDialog() == 0)) {
 				reloadEditorType();
 			}
