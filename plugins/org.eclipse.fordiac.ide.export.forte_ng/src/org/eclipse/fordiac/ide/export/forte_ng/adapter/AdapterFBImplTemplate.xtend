@@ -43,8 +43,6 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateImplIncludes»
 		
-		«generateUseStringId»
-		
 		namespace {
 		  «generateTypeHash»
 		
@@ -58,7 +56,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«FBClassName»::«FBClassName»(forte::core::CFBContainer &paContainer,
 		                             const SFBInterfaceSpec &paInterfaceSpec,
-		                             const CStringDictionary::TStringId paInstanceNameId,
+		                             const forte::core::StringId paInstanceNameId,
 		                             TForteUInt8 paParentAdapterlistID) :
 		    CAdapter(paContainer, paInterfaceSpec, paInstanceNameId, paParentAdapterlistID)«// no newline
 		    »«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer» {
@@ -148,7 +146,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 	
 	def generatePlugConstructorImpl() '''
-		«plugClassName»::«plugClassName»(CStringDictionary::TStringId paInstanceNameId,
+		«plugClassName»::«plugClassName»(forte::core::StringId paInstanceNameId,
 		                                         forte::core::CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
 		    «FBClassName»(paContainer, cFBInterfaceSpecPlug, paInstanceNameId, paParentAdapterlistID)«//no newline
@@ -159,7 +157,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 	
 	def generateSocketConstructorImpl() '''
-		«socketClassName»::«socketClassName»(CStringDictionary::TStringId paInstanceNameId,
+		«socketClassName»::«socketClassName»(forte::core::StringId paInstanceNameId,
 		                                         forte::core::CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
 		    «FBClassName»(paContainer, cFBInterfaceSpecSocket, paInstanceNameId, paParentAdapterlistID)«//no newline

@@ -65,7 +65,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		    «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
 		  public:
-		    «FBClassName»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 		
 		    «generateInterfaceDeclarations»
 		};
