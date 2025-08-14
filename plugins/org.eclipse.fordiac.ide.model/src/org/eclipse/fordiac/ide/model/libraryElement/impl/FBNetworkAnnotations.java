@@ -89,10 +89,18 @@ final class FBNetworkAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context, final IProject project) {
 		boolean result = true;
 
-		final double marginLeftRight = getIntPreference(context, ModelPreferenceConstants.MARGIN_LEFT_RIGHT, project)
+		final double marginLeftRight = getIntPreference(context, ModelPreferenceConstants.MARGIN_LEFT_RIGHT, project, 0)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
-		final double marginTopBottom = getIntPreference(context, ModelPreferenceConstants.MARGIN_TOP_BOTTOM, project)
+		final double marginTopBottom = getIntPreference(context, ModelPreferenceConstants.MARGIN_TOP_BOTTOM, project, 0)
 				* FBShapeHelper.IEC61499_LINE_HEIGHT;
+		final int minInterfaceBarSize = getIntPreference(context, ModelPreferenceConstants.MIN_INTERFACE_BAR_SIZE,
+				project, 40);
+		final int maxInterfaceBarSize = getIntPreference(context, ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE,
+				project, 40);
+		// Interface Bar can not be calculated correctly due to TargetInterface
+		// only check parent width collision if size is fixed
+		final boolean checkParentWidth = minInterfaceBarSize == maxInterfaceBarSize;
+
 		final int gridSize = Math.clamp(networkElements.size(), GRID_SIZE_MIN, GRID_SIZE_MAX);
 		final SpatialHash<FBNetworkElement> spatialHash = new SpatialHash<>(CELL_SIZE, gridSize);
 
@@ -107,7 +115,7 @@ final class FBNetworkAnnotations {
 			// check parent collision
 			if (parent.isPresent() && parentSize != null) {
 				final boolean parentCollision = checkParentCollision(parent.get(), diagnostics, parentSize, element,
-						elementBounds);
+						elementBounds, checkParentWidth);
 				result &= parentCollision;
 			}
 			// check sibling collision
@@ -123,32 +131,28 @@ final class FBNetworkAnnotations {
 	}
 
 	private static boolean checkParentCollision(final FBNetworkElement parent, final DiagnosticChain diagnostics,
-			final Dimension parentSize, final FBNetworkElement element, final Rectangle elementBounds) {
-		final int elementRight = elementBounds.x + elementBounds.width;
-		final boolean parentCollision = elementBounds.x < 0 || elementBounds.y < 0 || elementRight > parentSize.width
+			final Dimension parentSize, final FBNetworkElement element, final Rectangle elementBounds,
+			final boolean checkParentWidth) {
+		final boolean widthCollision = checkParentWidth
+				&& (elementBounds.x < 0 || elementBounds.x + elementBounds.width > parentSize.width);
+		final boolean heightCollision = elementBounds.y < 0
 				|| elementBounds.y + elementBounds.height > parentSize.height;
-		if (diagnostics != null && parentCollision) {
-			if (elementRight > parentSize.width) {
+		if (diagnostics != null && (widthCollision || heightCollision)) {
+			if (widthCollision) {
 				diagnostics.add(createInterfaceBarCollisionDiagnostic(element, parent));
 			} else {
 				diagnostics.add(createCollisionDiagnostic(element, parent));
 			}
 		}
-		return parentCollision;
+		return widthCollision || heightCollision;
 	}
 
 	private static PrecisionDimension getParentSize(final FBNetworkElement parent) {
-		int commentLines = 1;
-		if (parent.getComment() != null && !parent.getComment().isBlank()) {
-			commentLines += parent.getComment().chars().filter(c -> c == '\n').count();
-		}
-
-		// remove the space needed for the comment lines and the instance name
 		final PrecisionDimension parentSize = new PrecisionDimension(parent.getVisibleWidth(),
-				parent.getVisibleHeight() - (commentLines + 1) * FBShapeHelper.IEC61499_LINE_HEIGHT);
+				parent.getVisibleHeight());
 		if (parent instanceof SubApp) {
-			// for subapps remove space needed for left and right interface bar
-			parentSize.setPreciseWidth(parentSize.preciseWidth() - 2 * FBShapeHelper.getMaxInterfaceBarWidth());
+			parentSize.setPreciseHeight(parentSize.preciseHeight() - FBShapeHelper.getSubappHeightAdjust(parent));
+			parentSize.setPreciseWidth(parentSize.preciseWidth() - FBShapeHelper.getSubappWidthAdjust(parent));
 		}
 		return parentSize;
 	}
@@ -199,13 +203,15 @@ final class FBNetworkAnnotations {
 		return null;
 	}
 
-	private static int getIntPreference(final Map<Object, Object> context, final String name, final IProject project) {
-		return ((Integer) context.computeIfAbsent(name, key -> internalGetIntPreference(key, project))).intValue();
+	private static int getIntPreference(final Map<Object, Object> context, final String name, final IProject project,
+			final int defaultValue) {
+		return ((Integer) context.computeIfAbsent(name, key -> internalGetIntPreference(key, project, defaultValue)))
+				.intValue();
 	}
 
-	private static Integer internalGetIntPreference(final Object key, final IProject project) {
-		return Integer.valueOf(
-				PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID, (String) key, 0, project));
+	private static Integer internalGetIntPreference(final Object key, final IProject project, final int defaultValue) {
+		return Integer.valueOf(PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID, (String) key,
+				defaultValue, project));
 	}
 
 	private static boolean isUnfoldedSubapp(final FBNetworkElement parent) {

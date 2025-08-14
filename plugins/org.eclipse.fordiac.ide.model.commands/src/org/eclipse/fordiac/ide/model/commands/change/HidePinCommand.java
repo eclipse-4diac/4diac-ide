@@ -16,11 +16,16 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public class HidePinCommand extends Command implements ScopedCommand {
@@ -50,6 +55,10 @@ public class HidePinCommand extends Command implements ScopedCommand {
 
 	@Override
 	public boolean canExecute() {
+		if (!visible && isConnectedInsideSubApp(interfaceElement)) {
+			ErrorMessenger.popUpErrorMessage(Messages.HidePinCommand_PinCannotBeHidden_ConnectedInside);
+			return false;
+		}
 		return (interfaceElement instanceof VarDeclaration || interfaceElement instanceof AdapterDeclaration)
 				&& (interfaceElement.isIsInput() && interfaceElement.getInputConnections().isEmpty()
 						|| !interfaceElement.isIsInput() && interfaceElement.getOutputConnections().isEmpty())
@@ -60,6 +69,22 @@ public class HidePinCommand extends Command implements ScopedCommand {
 		return interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
 				&& !interfaceElement.getInputConnections().isEmpty()
 				&& !interfaceElement.getOutputConnections().isEmpty();
+	}
+
+	private static boolean isConnectedInsideSubApp(final IInterfaceElement element) {
+		if (element instanceof final VarDeclaration varDecl && element.isIsInput()
+				&& element.eContainer().eContainer() instanceof final SubAppType sat) {
+
+			final String name = varDecl.getName();
+			final FBNetwork subNet = sat.getFBNetwork();
+			for (final FBNetworkElement fb : subNet.getNetworkElements()) {
+				final IInterfaceElement internal = fb.getInterfaceElement(name);
+				if (internal != null && !internal.getInputConnections().isEmpty()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

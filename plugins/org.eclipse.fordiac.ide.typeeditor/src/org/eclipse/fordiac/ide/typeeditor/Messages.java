@@ -16,7 +16,7 @@ import org.eclipse.osgi.util.NLS;
 
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typeeditor.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String TypeEditor_CouldNotLoadType;
 
@@ -26,6 +26,10 @@ public final class Messages extends NLS {
 
 	public static String TypeEditor_WarningDialog_Headline;
 	public static String TypeEditor_WarningDialog_NotSaved;
+
+	public static String BulkEditorDirty;
+	public static String Continue;
+	public static String Cancel;
 
 	static {
 		// initialize resource bundle

@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -98,6 +99,7 @@ public abstract class AbstractEvaluatorTest {
 	public static Event newEvent(final String name, final boolean input) {
 		final Event event = LibraryElementFactory.eINSTANCE.createEvent();
 		event.setName(name);
+		event.setType(EventTypeLibrary.getInstance().getType(null));
 		event.setIsInput(input);
 		return event;
 	}

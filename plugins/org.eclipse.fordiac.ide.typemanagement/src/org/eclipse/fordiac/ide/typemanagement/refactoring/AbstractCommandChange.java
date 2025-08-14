@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -195,8 +195,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 *
 	 * @param element The element
 	 * @return The command (must not be null)
+	 * @throws CoreException if the command could not be created
 	 */
-	protected abstract Command createCommand(T element);
+	protected abstract Command createCommand(T element) throws CoreException;
 
 	/**
 	 * Acquire the library element for the element URI
@@ -224,13 +225,16 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 * @throws CoreException if there was a problem saving the library element
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
-		if (typeEntry != null) {
-			typeEntry.save(libraryElement, pm);
-		}
 		if (editor != null) {
 			// if we have an editor mark the save location in the command stack to tell the
 			// editor that it is not dirty anymore
+			// must do that _before_ saving the type entry, so that when the notification
+			// reaches the editor, it is not considered dirty and we do not trigger a reload
+			// dialog
 			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
+		}
+		if (typeEntry != null) {
+			typeEntry.save(libraryElement, pm);
 		}
 	}
 
@@ -249,6 +253,10 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 
 	@Override
 	public final IFile getModifiedElement() {
+		if (typeEntry != null) {
+			return typeEntry.getFile();
+		}
+
 		if (elementURI.isPlatformResource()) {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(elementURI.toPlatformString(true)));
 		}

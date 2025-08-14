@@ -258,7 +258,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 				return isInput() ? getLabelText() + " ".repeat(diff) : " ".repeat(diff) + getLabelText(); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			if (getLabelText().length() > getMaxWidth()) {
-				return getLabelText().substring(0, getMaxWidth()) + getTruncationString();
+				return getLabelText().substring(0, getMaxWidth() - 1) + getTruncationString();
 			}
 			return getLabelText();
 		}

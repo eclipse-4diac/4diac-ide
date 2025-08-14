@@ -13,21 +13,15 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.resource;
 
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtext.naming.IQualifiedNameConverter;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResourceDescriptionManager;
 import org.eclipse.xtext.resource.IDefaultResourceDescriptionStrategy;
 import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.resource.impl.DefaultResourceDescriptionManager;
 
-import com.google.inject.Inject;
-
-public class STAlgorithmResourceDescriptionManager extends DefaultResourceDescriptionManager {
-
-	@Inject
-	private IQualifiedNameConverter nameConverter;
+public class STAlgorithmResourceDescriptionManager extends STCoreResourceDescriptionManager {
 
 	@Override
 	protected IResourceDescription internalGetResourceDescription(final Resource resource,
 			final IDefaultResourceDescriptionStrategy strategy) {
-		return new STAlgorithmResourceDescription(resource, strategy, getCache(), nameConverter);
+		return new STAlgorithmResourceDescription(resource, strategy, getCache(), getNameConverter());
 	}
 }

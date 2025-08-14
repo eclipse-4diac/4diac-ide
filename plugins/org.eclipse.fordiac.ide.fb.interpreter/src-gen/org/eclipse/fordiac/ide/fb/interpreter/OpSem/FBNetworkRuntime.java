@@ -41,13 +41,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  */
 public interface FBNetworkRuntime extends FBRuntimeAbstract {
 	/**
-	 * Returns the value of the '<em><b>Fbnetwork</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Fbnetwork</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the value of the '<em>Fbnetwork</em>' containment reference.
+	 * @return the value of the '<em>Fbnetwork</em>' reference.
 	 * @see #setFbnetwork(FBNetwork)
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBNetworkRuntime_Fbnetwork()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	FBNetwork getFbnetwork();
@@ -55,10 +55,9 @@ public interface FBNetworkRuntime extends FBRuntimeAbstract {
 	/**
 	 * Sets the value of the
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbnetwork
-	 * <em>Fbnetwork</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <em>Fbnetwork</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @param value the new value of the '<em>Fbnetwork</em>' containment reference.
+	 * @param value the new value of the '<em>Fbnetwork</em>' reference.
 	 * @see #getFbnetwork()
 	 * @generated
 	 */

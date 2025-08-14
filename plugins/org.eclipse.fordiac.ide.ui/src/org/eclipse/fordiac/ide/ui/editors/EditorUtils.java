@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -69,17 +70,12 @@ public final class EditorUtils {
 		return editor;
 	}
 
-	public static IEditorPart findEditor(final EditorFilter filter) {
+	public static IEditorPart[] findEditor(final EditorFilter filter) {
 		final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getEditorReferences();
 
-		for (final IEditorReference editorReference : editorReferences) {
-			final IEditorPart editor = editorReference.getEditor(false);
-			if (null != editor && filter.filter(editor)) {
-				return editor;
-			}
-		}
-		return null;
+		return Arrays.stream(editorReferences).map(ref -> ref.getEditor(false)).filter(Objects::nonNull)
+				.filter(editor -> filter.filter(editor)).toArray(IEditorPart[]::new);
 	}
 
 	public static void forEachOpenEditorFiltered(final EditorFilter filter, final EditorAction action) {

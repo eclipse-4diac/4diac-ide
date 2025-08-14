@@ -138,6 +138,8 @@ public final class Messages extends NLS {
 
 	public static String MoveElementDialogTitle;
 
+	public static String SubAppHierarchyDialogTitle;
+
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
 

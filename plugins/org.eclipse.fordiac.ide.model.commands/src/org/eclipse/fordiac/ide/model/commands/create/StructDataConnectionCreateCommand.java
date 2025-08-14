@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -48,23 +49,56 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 		final IInterfaceElement source = getSource();
 		final IInterfaceElement target = getDestination();
 
-		if (source.getType() instanceof final StructuredType sourceVar
-				&& target.getType() instanceof final StructuredType targetVar
-				&& !sourceVar.getName().equals(targetVar.getName())) {
-
-			if (isUnconfiguredStructManipulatorDefPin(source)) {
-				changeStructCommand = new ChangeStructCommand((StructManipulator) source.getFBNetworkElement(),
-						targetVar);
+		if (shouldChangeStruct(source, target)) {
+			if (isUnconfiguredStructManipulatorDefPin(source)
+					&& target.getType() instanceof final StructuredType targetVar) {
+				changeStructCommand = (source.getFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
+						? new ChangeStructCommand(cmfb, targetVar)
+						: new ChangeStructCommand((StructManipulator) source.getFBNetworkElement(), targetVar);
 				changeStructCommand.execute();
-				setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
-			} else if (isUnconfiguredStructManipulatorDefPin(target)) {
-				changeStructCommand = new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(),
-						sourceVar);
+				if (source.getFBNetworkElement() instanceof ConfigurableMoveFB) {
+					setSource(changeStructCommand.getNewElement().getInterfaceElement(getSource().getName()));
+				} else {
+					setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
+				}
+			} else if (isUnconfiguredStructManipulatorDefPin(target)
+					&& source.getType() instanceof final StructuredType sourceVar) {
+				changeStructCommand = (target.getFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
+						? new ChangeStructCommand(cmfb, sourceVar)
+						: new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(), sourceVar);
 				changeStructCommand.execute();
-				setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));
+				if (target.getFBNetworkElement() instanceof ConfigurableMoveFB) {
+					setDestination(changeStructCommand.getNewElement().getInterfaceElement(getDestination().getName()));
+				} else {
+					setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));
+				}
 			}
 		}
 		super.execute();
+	}
+
+	private static boolean shouldChangeStruct(final IInterfaceElement source, final IInterfaceElement target) {
+		final var sourceType = source.getType();
+		final var targetType = target.getType();
+		final var sourceParent = source.eContainer().eContainer();
+		final var targetParent = target.eContainer().eContainer();
+
+		if (sourceType instanceof final StructuredType sourceVar && targetType instanceof final StructuredType targetVar
+				&& !sourceVar.getName().equals(targetVar.getName())) {
+			return true;
+		}
+
+		if (sourceType instanceof StructuredType && targetParent instanceof ConfigurableMoveFB
+				&& !source.getName().equals(target.getName())) {
+			return true;
+		}
+
+		if (targetType instanceof StructuredType && sourceParent instanceof ConfigurableMoveFB
+				&& !target.getName().equals(source.getName())) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -85,12 +119,13 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 
 	private static boolean isStructPin(final IInterfaceElement pin) {
 		return pin instanceof final VarDeclaration varDecl && !varDecl.isArray()
-				&& varDecl.getType() instanceof StructuredType;
+				&& ((varDecl.getType() instanceof StructuredType)
+						|| pin.eContainer().eContainer() instanceof ConfigurableMoveFB);
 	}
 
 	private static boolean isUnconfiguredStructManipulatorDefPin(final IInterfaceElement pin) {
 		return AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin)
-				&& GenericTypes.ANY_STRUCT == pin.getType();
+				&& (GenericTypes.ANY_STRUCT == pin.getType() || GenericTypes.ANY == pin.getType());
 	}
 
 }

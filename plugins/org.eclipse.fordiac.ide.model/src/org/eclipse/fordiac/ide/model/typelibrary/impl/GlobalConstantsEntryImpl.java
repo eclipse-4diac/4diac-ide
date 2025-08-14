@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.dataimport.GlobalConstantsImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class GlobalConstantsEntryImpl extends AbstractCheckedTypeEntryImpl<GlobalConstants>
 		implements GlobalConstantsEntry {
@@ -41,5 +42,10 @@ public class GlobalConstantsEntryImpl extends AbstractCheckedTypeEntryImpl<Globa
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.GLOBAL_CONSTANTS;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.GLOBAL_CONST_FILE_ENDING;
 	}
 }

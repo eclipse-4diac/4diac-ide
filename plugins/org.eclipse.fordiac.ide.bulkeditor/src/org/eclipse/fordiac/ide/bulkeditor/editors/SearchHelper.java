@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.bulkeditor.editors;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -86,8 +83,8 @@ public class SearchHelper {
 		}
 	}
 
-	final FilterRecordClass fbSubappTypesRecord;
-	final FilterRecordClass fbTypedSubappInstanceRecord;
+	final FilterRecordClass blockTypesRecord;
+	final FilterRecordClass blockInstanceRecord;
 	final FilterRecordClass untypedSubappRecord;
 	final FilterRecordClass dataTypesRecord;
 	final FilterRecordClass attributeTypesRecord;
@@ -98,12 +95,27 @@ public class SearchHelper {
 			final FilterRecordClass dataTypesRecord, final FilterRecordClass attributeTypesRecord,
 			final boolean ignoreLinkedLibraries) {
 
-		this.fbSubappTypesRecord = fbSubappTypesRecord;
-		this.fbTypedSubappInstanceRecord = fbTypedSubappInstanceRecord;
+		this.blockTypesRecord = fbSubappTypesRecord;
+		this.blockInstanceRecord = fbTypedSubappInstanceRecord;
 		this.untypedSubappRecord = untypedSubappRecord;
 		this.dataTypesRecord = dataTypesRecord;
 		this.attributeTypesRecord = attributeTypesRecord;
 		this.ignoreLinkedLibraries = ignoreLinkedLibraries;
+	}
+
+	public static List<ISearchContext> createSearchContextList(final IProject project, final List<URI> uriList) {
+		return List.of(new AbstractLiveSearchContext(project) {
+			@Override
+			public Stream<URI> getTypes() {
+				return uriList.stream();
+			}
+
+			@Override
+			public EObject mapTypes(final URI uri) {
+				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
+				return typeEntry.getType().eResource().getEObject(uri.fragment());
+			}
+		});
 	}
 
 	public List<ISearchContext> createSearchContextList(final boolean workspace, final boolean project,
@@ -124,17 +136,17 @@ public class SearchHelper {
 			@Override
 			public Stream<URI> getTypes() {
 				Stream<TypeEntry> s = Stream.empty();
-				if (fbSubappTypesRecord.selected) {
+				if (blockTypesRecord.selected) {
 					final Predicate<TypeEntry> filter = entry -> (matchesString(entry.getFullTypeName(),
-							fbSubappTypesRecord.nameFilter, fbSubappTypesRecord.namePattern)
-							&& matchesString(entry.getTypeName(), fbSubappTypesRecord.typeFilter,
-									fbSubappTypesRecord.typePattern)
-							&& matchesString(entry.getComment(), fbSubappTypesRecord.commentFilter,
-									fbSubappTypesRecord.commentPattern));
+							blockTypesRecord.nameFilter, blockTypesRecord.namePattern)
+							&& matchesString(entry.getTypeName(), blockTypesRecord.typeFilter,
+									blockTypesRecord.typePattern)
+							&& matchesString(entry.getComment(), blockTypesRecord.commentFilter,
+									blockTypesRecord.commentPattern));
 					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().stream().filter(filter),
 							getTypelib().getSubAppTypes().stream().filter(filter)));
 				}
-				if (fbTypedSubappInstanceRecord.selected || untypedSubappRecord.selected) {
+				if (blockInstanceRecord.selected || untypedSubappRecord.selected) {
 					s = Stream.concat(s, getTypelib().getSystems().stream());
 				}
 				if (dataTypesRecord.selected) {
@@ -164,26 +176,18 @@ public class SearchHelper {
 			}
 
 			@Override
-			public LibraryElement getLibraryElement(final URI uri) {
+			public EObject mapTypes(final URI uri) {
 				final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 				return typeEntry.getType(); // use original for search
 			}
-
-			@Override
-			public Collection<URI> getSubappTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getFBTypes() {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public Collection<URI> getAllTypes() {
-				return Collections.emptyList();
-			}
 		};
+	}
+
+	public static IEC61499SearchFilter createAttributeDeclarationSearchFilter(
+			final AttributeDeclaration attributeDeclaration) {
+		return searchCandidate -> searchCandidate instanceof final Attribute attribute
+				&& attribute.getAttributeDeclaration() != null
+				&& attributeDeclaration.getTypeEntry() == attribute.getAttributeDeclaration().getTypeEntry();
 	}
 
 	public static IEC61499SearchFilter createSearchFilter(final int mode, final List<Filter> filters) {
@@ -219,13 +223,13 @@ public class SearchHelper {
 		return new ISearchChildrenProvider() {
 			@Override
 			public boolean hasChildren(final EObject obj) {
-				return (obj instanceof FBType) || (obj instanceof AutomationSystem)
+				return obj instanceof FBType || obj instanceof AutomationSystem
 						|| (untypedSubappRecord.selected && obj instanceof UntypedSubApp)
 						|| (dataTypesRecord.selected && obj instanceof StructuredType)
 						|| (attributeTypesRecord.selected && obj instanceof AttributeDeclaration)
-						|| (obj instanceof final Application)
-						|| (fbTypedSubappInstanceRecord.selected && obj instanceof FBNetworkElement)
-						|| (obj instanceof IInterfaceElement);
+						|| obj instanceof Application
+						|| (blockInstanceRecord.selected && obj instanceof FBNetworkElement)
+						|| obj instanceof IInterfaceElement;
 			}
 
 			@Override
@@ -234,37 +238,12 @@ public class SearchHelper {
 				case final FBType fbType -> SearchChildrenProviderHelper.getFBTypeChildren(fbType);
 				case final AutomationSystem system ->
 					Stream.concat(system.getAttributes().stream(), system.getApplication().stream());
-				case final Application application -> {
-					Stream<? extends EObject> stream = Stream.empty();
-					if (untypedSubappRecord.selected) {
-						stream = Stream.concat(stream,
-								application.getFBNetwork().getNetworkElements().stream()
-										.filter(fbne -> (fbne instanceof UntypedSubApp
-												&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
-														untypedSubappRecord.namePattern)
-												&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
-														untypedSubappRecord.typePattern)
-												&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
-														untypedSubappRecord.commentPattern))));
-					}
-					if (fbTypedSubappInstanceRecord.selected) {
-						stream = Stream.concat(stream, application.getFBNetwork().getNetworkElements().stream()
-								.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
-										&& matchesString(fbne.getName(), fbTypedSubappInstanceRecord.nameFilter,
-												fbTypedSubappInstanceRecord.namePattern)
-										&& matchesString(fbne.getTypeName(), fbTypedSubappInstanceRecord.typeFilter,
-												fbTypedSubappInstanceRecord.typePattern)
-										&& matchesString(fbne.getComment(), fbTypedSubappInstanceRecord.commentFilter,
-												fbTypedSubappInstanceRecord.commentPattern)));
-					}
-					stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
-					stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
-					stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
-					yield Stream.concat(stream, application.getAttributes().stream());
-				}
+				case final Application application -> getApplicationChildren(application);
 				case final UntypedSubApp untypedSubapp ->
 					SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);
-				case final StructuredType structType -> SearchChildrenProviderHelper.getStructChildren(structType);
+				case final StructuredType structType ->
+					Stream.concat(SearchChildrenProviderHelper.getStructChildren(structType),
+							structType.getAttributes().stream());
 				case final AttributeDeclaration attrdecl ->
 					SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
 				case final FBNetworkElement elem -> Stream.concat(elem.getAttributes().stream(),
@@ -272,6 +251,35 @@ public class SearchHelper {
 				case final ConfigurableObject configurableObject -> configurableObject.getAttributes().stream();
 				default -> null;
 				};
+			}
+
+			private Stream<? extends EObject> getApplicationChildren(final Application application) {
+				Stream<? extends EObject> stream = Stream.empty();
+				if (untypedSubappRecord.selected) {
+					stream = application.getFBNetwork().getNetworkElements().stream()
+							.filter(fbne -> fbne instanceof UntypedSubApp
+									&& matchesString(fbne.getName(), untypedSubappRecord.nameFilter,
+											untypedSubappRecord.namePattern)
+									&& matchesString(fbne.getTypeName(), untypedSubappRecord.typeFilter,
+											untypedSubappRecord.typePattern)
+									&& matchesString(fbne.getComment(), untypedSubappRecord.commentFilter,
+											untypedSubappRecord.commentPattern));
+				}
+				if (blockInstanceRecord.selected) {
+					stream = Stream.concat(stream,
+							application.getFBNetwork().getNetworkElements().stream()
+									.filter(fbne -> (fbne instanceof TypedSubApp || fbne instanceof FB)
+											&& matchesString(fbne.getName(), blockInstanceRecord.nameFilter,
+													blockInstanceRecord.namePattern)
+											&& matchesString(fbne.getTypeName(), blockInstanceRecord.typeFilter,
+													blockInstanceRecord.typePattern)
+											&& matchesString(fbne.getComment(), blockInstanceRecord.commentFilter,
+													blockInstanceRecord.commentPattern)));
+				}
+				stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
+				stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
+				stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
+				return Stream.concat(stream, application.getAttributes().stream());
 			}
 		};
 	}

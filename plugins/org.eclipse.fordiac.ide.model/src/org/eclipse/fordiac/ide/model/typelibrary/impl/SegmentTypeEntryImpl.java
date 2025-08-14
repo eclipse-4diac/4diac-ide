@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class SegmentTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SegmentType> implements SegmentTypeEntry {
 
@@ -51,5 +52,10 @@ public class SegmentTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SegmentTy
 	@Override
 	public EClass getTypeEClass() {
 		return LibraryElementPackage.Literals.SEGMENT_TYPE;
+	}
+
+	@Override
+	public String getFileExtension() {
+		return TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,6 +34,8 @@ public final class DeploymentEvaluatorConfiguration {
 	public static final String MGR_ID = PREFIX + ".MGR_ID"; //$NON-NLS-1$
 	public static final String DEFAULT_MGR_ID = "\"localhost:61499\""; //$NON-NLS-1$
 
+	public static final String TRACE = PREFIX + ".TRACE"; //$NON-NLS-1$
+
 	public static DeviceTypeEntry getDeviceType(final Map<String, Object> context, final TypeLibrary typeLibrary) {
 		return typeLibrary.getDeviceTypeEntry((String) context.getOrDefault(DEVICE_TYPE, DEFAULT_DEVICE_TYPE));
 	}
@@ -48,6 +50,10 @@ public final class DeploymentEvaluatorConfiguration {
 
 	public static String getMgrID(final Map<String, Object> context) {
 		return (String) context.getOrDefault(MGR_ID, DEFAULT_MGR_ID);
+	}
+
+	public static boolean isTrace(final Map<String, Object> context) {
+		return ((Boolean) context.getOrDefault(TRACE, Boolean.FALSE)).booleanValue();
 	}
 
 	private DeploymentEvaluatorConfiguration() {

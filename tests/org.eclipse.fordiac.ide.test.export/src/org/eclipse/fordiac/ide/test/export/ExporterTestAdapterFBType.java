@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.AdapterTypeEntryImpl;
@@ -43,10 +44,12 @@ public class ExporterTestAdapterFBType extends ExporterTestBase<AdapterType> {
 		final Event adpInputEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		adpInputEvent.setName(ADAPTER_EVENT_INPUT_NAME);
 		adpInputEvent.setIsInput(true);
+		adpInputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		functionBlock.getInterfaceList().getEventInputs().add(adpInputEvent);
 
 		final Event adpOutputEvent = LibraryElementFactory.eINSTANCE.createEvent();
 		adpOutputEvent.setName(ADAPTER_EVENT_OUTPUT_NAME);
+		adpOutputEvent.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		functionBlock.getInterfaceList().getEventOutputs().add(adpOutputEvent);
 
 		final VarDeclaration adapterInputData = LibraryElementFactory.eINSTANCE.createVarDeclaration();

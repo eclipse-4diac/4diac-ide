@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -50,7 +51,11 @@ public class AddDeleteWidget {
 	protected Composite container;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-		container = createContainer(widgetFactory, parent);
+		createControls(parent, widgetFactory, false);
+	}
+
+	public void createControls(final Composite parent, final FormToolkit widgetFactory, final boolean horizontal) {
+		container = createContainer(widgetFactory, parent, horizontal ? 2 : 1);
 
 		createAddButton(widgetFactory, container);
 
@@ -96,10 +101,12 @@ public class AddDeleteWidget {
 		createButton.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 	}
 
-	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent) {
+	protected static Composite createContainer(final FormToolkit widgetFactory, final Composite parent,
+			final int columns) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
 		container.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
-		GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).margins(1, 0).spacing(1, 0).applyTo(container);
+		GridLayoutFactory.fillDefaults().numColumns(columns).equalWidth(true).margins(1, 0).spacing(1, 0)
+				.applyTo(container);
 		return container;
 	}
 
@@ -133,7 +140,7 @@ public class AddDeleteWidget {
 	}
 
 	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider addCommand, final CommandProvider deleteCommand) {
+			final CommandProvider addCommand, final CommandProvider deleteCommand) {
 
 		final Listener createListener = getAddListener(table, executor, addCommand);
 
@@ -300,7 +307,7 @@ public class AddDeleteWidget {
 	}
 
 	private static Listener getAddListener(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider commandProvider) {
+			final CommandProvider commandProvider) {
 		return ev -> {
 			Object refObject = null;
 			int[] rows = null;
@@ -314,7 +321,7 @@ public class AddDeleteWidget {
 				}
 			}
 
-			final CreationCommand cmd = commandProvider.getCommand(refObject);
+			final Command cmd = commandProvider.getCommand(refObject);
 			executor.executeCommand(cmd);
 			table.refresh();
 			if ((selectionLayer != null) && (rows != null) && (rows.length > 0)) {

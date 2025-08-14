@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Johannes Kepler University, Linz,
  * 							Primetals Technologies Austria GmbH
  *
@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
@@ -94,9 +95,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	private final CommandStack commandStack = new CommandStack();
 	private Collection<ITypeEditorPage> editorPages;
-	private final TypeEntryAdapter adapter = new TypeEntryAdapter(this);
+	private TypeEntryAdapter typeEntryAdapter;
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private boolean wasDirtyBeforeExecute = false;
 
 	@Override
 	protected void addPages() {
@@ -174,8 +176,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	@Override
 	public void dispose() {
 		final TypeEntry typeEntry = getTypeEntry();
-		if ((typeEntry != null) && typeEntry.eAdapters().contains(adapter)) {
-			typeEntry.eAdapters().remove(adapter);
+		if ((typeEntry != null) && typeEntry.eAdapters().contains(typeEntryAdapter)) {
+			typeEntry.eAdapters().remove(typeEntryAdapter);
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -200,6 +202,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
+		typeEntryAdapter.dispose();
 	}
 
 	@Override
@@ -241,12 +244,15 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			}
 		};
 		try {
+			typeEntryAdapter.setBlockUpdates(true);
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} catch (final InterruptedException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			Thread.currentThread().interrupt();
+		} finally {
+			typeEntryAdapter.setBlockUpdates(false);
 		}
 
 		getCommandStack().markSaveLocation();
@@ -281,7 +287,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		if (adapter == GraphicalAnnotationModel.class) {
 			return adapter.cast(annotationModel);
 		}
-
 		if (isEditorActive()) {
 			// we should only call super if the editor is active otherwise we may get
 			// disposed errors
@@ -360,6 +365,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
+		typeEntryAdapter = new TypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
 		getCommandStack().addCommandStackEventListener(this);
 		super.init(site, editorInput);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
@@ -389,11 +395,11 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void reloadType() {
-		final LibraryElement newFBType = getTypeEntry().getTypeEditable();
+		final LibraryElement newFBType = getTypeEntry().copyType();
 		final LibraryElement curType = getType();
 		if (newFBType != curType) {
-			if ((curType != null) && getTypeEntry().eAdapters().contains(adapter)) {
-				getTypeEntry().eAdapters().remove(adapter);
+			if ((curType != null) && getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
+				getTypeEntry().eAdapters().remove(typeEntryAdapter);
 			}
 			final TypeEditorInput typeEI = getTypeEditorInput();
 			if (typeEI != null) {
@@ -406,7 +412,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
 			}
 			getCommandStack().flush();
-			getTypeEntry().eAdapters().add(adapter);
+			getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setPartName(getTypeEntry().getTypeName());
 		}
 	}
@@ -429,12 +435,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	}
 
 	@Override
-	public void setFocus() {
-		super.setFocus();
-		adapter.checkFileReload();
-	}
-
-	@Override
 	public void setInput(final IEditorInput input) {
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -450,7 +450,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
 		if (isValidTypeEditorInput(typeEditorInput)) {
-			typeEditorInput.getTypeEntry().eAdapters().add(adapter);
+			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
 					typeEditorInput::getContent);
 			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
@@ -485,6 +485,22 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
+		final var commandStack = getCommandStack();
+		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
+			wasDirtyBeforeExecute = commandStack.isDirty();
+		}
+		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
+				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
+						&& bulkEditor.hasDirtyType(getTypeEntry())).length > 0) {
+			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.BulkEditorDirty, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			if (dialog.open() == 1) {
+				// Cancel
+				commandStack.undo();
+				commandStack.flush();
+			}
+		}
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 

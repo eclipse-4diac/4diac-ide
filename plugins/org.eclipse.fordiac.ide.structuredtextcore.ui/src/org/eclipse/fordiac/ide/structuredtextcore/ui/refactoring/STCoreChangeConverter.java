@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,10 +32,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AttributeValueChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ImportChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.InitialValueChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.AttributeValueEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ImportEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.InitialValueEdit;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -98,6 +101,8 @@ public class STCoreChangeConverter extends ChangeConverter {
 
 	private final IGlobalServiceProvider globalServiceProvider;
 
+	private final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+
 	protected STCoreChangeConverter(final String name, final Predicate<Change> changeFilter,
 			final RefactoringIssueAcceptor issues, final ResourceURIConverter uriConverter, final IWorkbench workbench,
 			final IGlobalServiceProvider globalServiceProvider) {
@@ -109,12 +114,19 @@ public class STCoreChangeConverter extends ChangeConverter {
 	}
 
 	@Override
+	public Change getChange() {
+		addChange(ModelEditChange.fromModelEdits(Messages.STCoreChangeConverter_ModelChanges, modelEdits));
+		modelEdits.clear();
+		return super.getChange();
+	}
+
+	@Override
 	protected void _handleReplacements(final IEmfResourceChange change) {
 		// ignore pure-EMF changes
 		// those are handled via a separate participant
 		if (change instanceof final ImportedNamespaceChange importedNamespaceChange) {
 			final Import imp = importedNamespaceChange.getImport();
-			addChange(new ImportChange(getSourceElementName(imp), LibraryElementXtextResource.getExternalURI(imp),
+			addModelEdit(new ImportEdit(getSourceElementName(imp), LibraryElementXtextResource.getExternalURI(imp),
 					importedNamespaceChange.getImportedNamespace()));
 		}
 	}
@@ -146,17 +158,17 @@ public class STCoreChangeConverter extends ChangeConverter {
 			final EObject sourceElement = coreResource.getSourceElement();
 			final String sourceElementName = getSourceElementName(sourceElement);
 			if (sourceElement instanceof final Attribute attribute) {
-				addChange(new AttributeValueChange(sourceElementName,
-						LibraryElementXtextResource.getExternalURI(attribute),
-						getEditedText(attribute.getValue(), textEdit)));
+				addModelEdit(
+						new AttributeValueEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(attribute),
+								getEditedText(attribute.getValue(), textEdit)));
 			} else if (sourceElement instanceof final ArraySize arraySize
 					&& arraySize.eContainer() instanceof final VarDeclaration varDeclaration) {
-				addChange(new DataTypeChange(sourceElementName,
-						LibraryElementXtextResource.getExternalURI(varDeclaration),
-						getEditedText(varDeclaration.getFullTypeName(), textEdit)));
+				addModelEdit(
+						new DataTypeEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(varDeclaration),
+								getEditedText(varDeclaration.getFullTypeName(), textEdit)));
 			} else if (sourceElement instanceof final Value value
 					&& value.eContainer() instanceof final VarDeclaration varDeclaration) {
-				addChange(new InitialValueChange(sourceElementName,
+				addModelEdit(new InitialValueEdit(sourceElementName,
 						LibraryElementXtextResource.getExternalURI(varDeclaration),
 						getEditedText(value.getValue(), textEdit)));
 			} else {
@@ -188,6 +200,10 @@ public class STCoreChangeConverter extends ChangeConverter {
 		final TextFileChange textFileChange = new TextFileChange(change.getOldURI().lastSegment(), file);
 		textFileChange.setSaveMode(TextFileChange.FORCE_SAVE);
 		return textFileChange;
+	}
+
+	protected void addModelEdit(final ModelEdit<?> edit) {
+		modelEdits.add(edit);
 	}
 
 	protected IDocumentProvider getDocumentProvider(final URI resourceURI) {

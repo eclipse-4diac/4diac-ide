@@ -19,6 +19,7 @@
  *   Martin Jobst - adopt new ST editor for values
  *                - rewrite based on MonitoringEditPart
  *                  for new deployment monitoring framework
+ *   Mario Kastner - add watch label for negated connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.editparts;
 
@@ -27,14 +28,11 @@ import static org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGR
 import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.ui.DeploymentDebugModelPresentation;
+import org.eclipse.fordiac.ide.deployment.debug.ui.figures.WatchValueLabel;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
@@ -49,30 +47,21 @@ import org.eclipse.swt.graphics.FontMetrics;
 
 public class WatchValueEditPart extends AbstractWatchValueEditPart {
 
-	public static final int MONITORING_VALUE_LR_MARGIN = 5;
-
 	private int maxWidth = Integer.MAX_VALUE;
 
 	@Override
 	protected IFigure createFigure() {
-		final SetableAlphaLabel figure = new SetableAlphaLabel();
-		figure.setOpaque(true);
-		if (getInterfaceElement().isIsInput()) {
-			figure.setLabelAlignment(PositionConstants.RIGHT);
-			figure.setTextAlignment(PositionConstants.RIGHT);
-		} else {
-			figure.setTextAlignment(PositionConstants.LEFT);
-			figure.setLabelAlignment(PositionConstants.LEFT);
-		}
-		figure.setBorder(new MarginBorder(0, MONITORING_VALUE_LR_MARGIN, 0, MONITORING_VALUE_LR_MARGIN));
-		figure.setText(Messages.MonitoringEditPart_Not_Available);
-		figure.setMinimumSize(new Dimension(50, 1));
-		return figure;
+		return WatchValueLabel.getLabel(getInterfaceElement());
 	}
 
-	@Override
-	public Label getFigure() {
-		return (Label) super.getFigure();
+	public Label getLabelFigure() {
+		if (getFigure() instanceof final WatchValueLabel interfaceValueWatchLabel) {
+			return interfaceValueWatchLabel.getLabelFigure();
+		}
+		if (getFigure() instanceof final Label label) {
+			return label;
+		}
+		return null;
 	}
 
 	@Override
@@ -141,10 +130,12 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		getFigure().setText(getModel().getText());
-		getFigure().setForegroundColor(getWatchTextColor());
-		getFigure().setBackgroundColor(getWatchColor());
-		showPinValues(false);
+		if (getLabelFigure() != null) {
+			getLabelFigure().setText(getModel().getText());
+			getLabelFigure().setForegroundColor(getWatchTextColor());
+			getLabelFigure().setBackgroundColor(getWatchColor());
+			showPinValues(false);
+		}
 	}
 
 	protected Color getWatchColor() {
@@ -177,6 +168,7 @@ public class WatchValueEditPart extends AbstractWatchValueEditPart {
 		final int maxLabelSize = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
 				.getMaxValueLabelSize();
 		final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
-		maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
+		maxWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth())
+				+ 2 * WatchValueLabel.MONITORING_VALUE_LR_MARGIN;
 	}
 }

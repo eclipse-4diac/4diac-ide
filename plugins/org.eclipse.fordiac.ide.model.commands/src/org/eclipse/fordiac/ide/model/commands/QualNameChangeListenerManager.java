@@ -127,12 +127,11 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 
 	private static TypeEntry getTypeEntryKeyFromCommandStack(final CommandStack stack) {
 		final EditorFilter filter = ((final IEditorPart editor) -> editor.getAdapter(CommandStack.class) == stack);
-		final IEditorPart currentActiveEditor = EditorUtils.findEditor(filter);
+		final IEditorPart[] currentActiveEditors = EditorUtils.findEditor(filter);
 
-		if (currentActiveEditor != null) {
-			final LibraryElement libraryElement = currentActiveEditor.getAdapter(LibraryElement.class);
+		if (currentActiveEditors.length > 0) {
+			final LibraryElement libraryElement = currentActiveEditors[0].getAdapter(LibraryElement.class);
 			return libraryElement.getTypeEntry();
-
 		}
 
 		return null;

@@ -14,30 +14,29 @@
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement;
-import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElement.GroupTargetInterfaceElement;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.application.widgets.OppositeSelectionDialog;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -50,7 +49,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		return Status.CANCEL_STATUS;
+		return null;
 	}
 
 	protected static FBNetwork getFBNetwork(final IEditorPart editor) {
@@ -88,68 +87,22 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		return structSel.getFirstElement() instanceof InterfaceEditPart;
 	}
 
-	protected List<IInterfaceElement> getConnectionOposites(final InterfaceEditPart iep) {
-		final IInterfaceElement ie = iep.getModel();
-		final EList<Connection> connList = getConnectionList(ie);
-
-		final boolean stepMode = Platform.getPreferencesService().getBoolean(
-				UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID, UIPreferenceConstants.P_TOGGLE_JUMP_STEP, false, null);
-
+	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode) {
 		if (stepMode) {
-			if (isLeft()) {
-				return connList.stream().map(Connection::getSource).toList();
-			}
-			return connList.stream().map(Connection::getDestination).toList();
+			return getConnectionOpposites(pin);
 		}
+		final List<IInterfaceElement> opposites = new ArrayList<>();
+		jumpOverConnections(pin, opposites);
+		return opposites;
+	}
 
-		if (useTargetPins(iep)) {
-			return getTargetPins(iep);
-		}
-
+	protected List<IInterfaceElement> getConnectionOpposites(final IInterfaceElement ie) {
+		final EList<Connection> connList = getConnectionList(ie);
 		return connList.stream().map(con -> (con.getSource().equals(ie) ? con.getDestination() : con.getSource()))
 				.toList();
 	}
 
-	protected List<IInterfaceElement> resolveTargetPins(final List<IInterfaceElement> opposites,
-			final GraphicalViewer viewer) {
-		final List<IInterfaceElement> resolvedOpposites = new ArrayList<>();
-		for (final IInterfaceElement element : opposites) {
-			final EditPart ep = viewer.getEditPartForModel(element);
-			if ((ep instanceof final InterfaceEditPart iep) && isExpandedSubappPin(element)) {
-				if (useTargetPins(iep)) {
-					resolvedOpposites.addAll(getTargetPins(iep));
-				} else {
-					resolvedOpposites.addAll(getConnectionOposites(iep));
-				}
-			} else {
-				resolvedOpposites.add(element);
-			}
-		}
-		return resolvedOpposites;
-	}
-
-	private boolean useTargetPins(final InterfaceEditPart iep) {
-		return !iep.getChildren().isEmpty()
-				&& ((iep.getModel().isIsInput() && isLeft()) || (!iep.getModel().isIsInput() && !isLeft()));
-	}
-
-	protected abstract boolean isLeft();
-
 	protected abstract EList<Connection> getConnectionList(final IInterfaceElement ie);
-
-	private static List<IInterfaceElement> getTargetPins(final InterfaceEditPart iep) {
-		final List<IInterfaceElement> result = new ArrayList<>();
-		for (final EditPart ep : iep.getChildren()) {
-			switch (ep.getModel()) {
-			case final GroupTargetInterfaceElement gtIE -> result.addAll(gtIE.getRefElements());
-			case final TargetInterfaceElement targetIE -> result.add(targetIE.getRefElement());
-			default -> {
-				// we should never get here, even if we do we don't want to do anything
-			}
-			}
-		}
-		return result;
-	}
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
 		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
@@ -168,9 +121,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		dialog.open();
 	}
 
-	protected IInterfaceElement getInternalOppositePin(final ISelection selection) {
-		final InterfaceEditPart pin = (InterfaceEditPart) ((IStructuredSelection) selection).getFirstElement();
-
+	protected IInterfaceElement getInternalOppositePin(final InterfaceEditPart pin) {
 		if (hasOpposites(pin)) {
 			if (pin.isEvent()) {
 				return getInternalOppositeEventPin(pin);
@@ -252,6 +203,31 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		if (!HandlerHelper.selectElement(element, currentViewer)) {
 			// we have a subappcrossing element
 			TargetInterfaceElementEditPart.openInBreadCrumb(element);
+		}
+	}
+
+	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations) {
+		if (startPin.getFBNetworkElement() instanceof TypedSubApp
+				|| startPin.getFBNetworkElement() instanceof CFBInstance) {
+			destinations.add(startPin);
+			return;
+		}
+		final List<Connection> connections = getConnectionList(startPin);
+		if (connections.isEmpty()) {
+			// skip over struct
+			if (startPin instanceof final MemberVarDeclaration member) {
+				final Set<IInterfaceElement> memberEnd = new HashSet<>();
+				FBEndpointFinder.traceMembers(member, memberEnd);
+				memberEnd.forEach(mem -> jumpOverConnections(mem, destinations));
+				return;
+			}
+			// FB-Pin / dead-end found
+			destinations.add(startPin);
+			return;
+		}
+		for (final Connection conn : connections) {
+			final IInterfaceElement next = conn.getSource() == startPin ? conn.getDestination() : conn.getSource();
+			jumpOverConnections(next, destinations);
 		}
 	}
 }

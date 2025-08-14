@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
@@ -67,8 +68,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -77,26 +78,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private final EventOccurrence eventOccurrence;
-	private final Map<String, FBNetworkElement> nameToFBNetwork;
 	private static Map<String, Evaluator> evaluatorCache = new HashMap<>();
 
 	public DefaultRunFBType(final EventOccurrence eventOccurrence) {
 		this.eventOccurrence = eventOccurrence;
-		this.nameToFBNetwork = new HashMap<>();
-		if (this.eventOccurrence.getFbRuntime() instanceof final FBNetworkRuntime fbNetworkRuntime) {
-			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
-			fbNetwork.getNetworkElements()
-					.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
-		}
 	}
 
 	public static void clearCaches() {
@@ -238,6 +233,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static void executeEvaluator(final Evaluator eval, final List<VarDeclaration> varDecls, final FBType type,
 			final EventOccurrence eventOccurrence, final String name) {
 		setEvaluatorInputState(eval, type.getInterfaceList().getInputVars());
+
+		if (!(eventOccurrence.eContainer() instanceof final Transaction t)) {
+			throw new IllegalArgumentException("Container of EO was not a Transaction"); //$NON-NLS-1$
+		}
+
 		try (final EvaluatorThreadPoolExecutor tpe = new EvaluatorThreadPoolExecutor(name)) {
 			final Clock clock = Clock.fixed(Instant.ofEpochMilli(eventOccurrence.getStartTime()), ZoneOffset.UTC);
 			tpe.setMonotonicClock(clock);
@@ -246,9 +246,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 					eval.evaluate();
 					getEvaluatorOutputState(eval, varDecls);
 				} catch (final EvaluatorException e) {
-					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					t.getExceptions().add(e);
 				} catch (final InterruptedException e) {
-					FordiacLogHelper.logError("Algorithm/Function: " + name, e); //$NON-NLS-1$
+					t.getExceptions().add(e);
 					Thread.currentThread().interrupt();
 				}
 			});
@@ -279,11 +279,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 	}
 
-	private static boolean processConditionWithEvaluator(final BasicFBType basicFBType,
-			final ECTransition ecTransition) {
+	private static boolean processConditionWithEvaluator(final EventOccurrence eventOccurrence,
+			final BasicFBType basicFBType, final ECTransition ecTransition) {
 
 		if (ecTransition.getConditionExpression().isEmpty()) {
 			throw new IllegalArgumentException("ConditionExpression object cannot be empty"); //$NON-NLS-1$
+		}
+		if (!(eventOccurrence.eContainer() instanceof final Transaction t)) {
+			throw new IllegalArgumentException("Container of EO was not a Transaction"); //$NON-NLS-1$
 		}
 		final List<VarDeclaration> varDecls = new ArrayList<>(basicFBType.getInterfaceList().getInputVars());
 		varDecls.addAll(basicFBType.getInterfaceList().getOutputVars());
@@ -306,20 +309,17 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 			final Evaluator evaluator = findEvaluator.get().getValue();
 			try {
-				final org.eclipse.fordiac.ide.model.eval.value.Value value = evaluator.evaluate();
+				final var value = evaluator.evaluate();
 				if (value instanceof final BoolValue boolValue) {
 					return boolValue.boolValue();
 				}
 				throw new IllegalStateException("The evaluator does not return a boolean value"); //$NON-NLS-1$
 			} catch (final EvaluatorException e) {
-				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
-						e);
+				t.getExceptions().add(e);
 			} catch (final InterruptedException e) {
-				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
-						e);
+				t.getExceptions().add(e);
 				Thread.currentThread().interrupt();
 			}
-
 		}
 		return false;
 	}
@@ -362,7 +362,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
 				return true;
 			}
-			return processConditionWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), outTransition);
+			return processConditionWithEvaluator(eventOccurrence, basicFBTypeRuntime.getBasicfbtype(), outTransition);
 
 		}
 		return false;
@@ -426,6 +426,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runFBNetwork(final FBNetworkRuntime fBNetworkRuntime) {
+		if (eventOccurrence.getParentFB() instanceof final UntypedSubApp uSubApp) {
+			return runUntypedSubApp(uSubApp);
+		}
+		if (eventOccurrence.getParentFB() instanceof TypedSubApp) {
+			// TODO: typed SubApps not supported yet, return empty to avoid crash
+			return ECollections.emptyEList();
+		}
+
 		// run FB Type to get the output events for the instance in the network
 		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
 		if (runtime == null) {
@@ -446,6 +454,34 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		createTransactionsForConnectedPins(typeOutputEos, fBNetworkRuntime);
 
 		return typeOutputEos;
+	}
+
+	private EList<EventOccurrence> runUntypedSubApp(final UntypedSubApp subApp) {
+		final var outputEvents = new BasicEList<EventOccurrence>();
+
+		for (final Connection conn : eventOccurrence.getEvent().getOutputConnections()) {
+			final FBNetworkRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
+
+			if (eventOccurrence.getEvent().isIsInput()) {
+				// we are entering a SubApp, change network to SubApp network
+				runtime.setFbnetwork(subApp.getSubAppNetwork());
+			} else {
+				// we are leaving a SubApp, change network to outer network
+				runtime.setFbnetwork(subApp.getFbNetwork());
+			}
+			final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
+
+			// add transaction
+			final EventConnection eventConn = (EventConnection) conn;
+			final EventOccurrence inputEO = EventOccFactory.createFrom(eventConn.getEventDestination());
+			inputEO.setResultFBRuntime(runtime);
+			final FBTransaction fbTrans = TransactionFactory.createFrom(inputEO);
+			outputEO.getCreatedTransactions().add(fbTrans);
+
+			outputEvents.add(outputEO);
+		}
+		// TODO: also handle data connections?
+		return outputEvents;
 	}
 
 	private void writeDataOutput(final FBNetworkRuntime fBNetworkRuntime, final EList<EventOccurrence> typeOutputEos) {
@@ -511,20 +547,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	protected static VarDeclaration getEquivalentDataPinFromType(final FBRuntimeAbstract runtime,
 			final VarDeclaration varDec) {
 		final FBType type = (FBType) runtime.getModel();
-		if (type == null) {
-			// TODO untyped subapp
-			throw new UnsupportedOperationException("untyped subapps are not supported yet"); //$NON-NLS-1$
-		}
 		return (VarDeclaration) type.getInterfaceList().getInterfaceElement(varDec.getName());
 	}
 
 	private static Event getEquivalentEventTypePin(final EventOccurrence sourceEventOcurrence) {
-		final FBType type = sourceEventOcurrence.getParentFB().getType();
-		if (type == null) {
-			// TODO untyped subapp
-			throw new UnsupportedOperationException("untyped subapps are not supported yet"); //$NON-NLS-1$
-		}
-		return (Event) type.getInterfaceList().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
+		final FBNetworkElement fbElem = sourceEventOcurrence.getParentFB();
+		return (Event) fbElem.getInterface().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
 	}
 
 	private static List<FBTransaction> processEventConns(final FBNetworkRuntime fBNetworkRuntime,
@@ -535,9 +563,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			generatedT.add(createNewInitialTransaction(outputEo.getEvent(), fBNetworkRuntime));
 		} else {
 			// Find the Original Pins for all connected FBs
-			final List<IInterfaceElement> destinations = findConnectedPins(outputEo.getEvent());
-			for (final IInterfaceElement dest : destinations) {
-				generatedT.add(createNewTransaction(dest, outputEo));
+			for (final Connection conn : outputEo.getEvent().getOutputConnections()) {
+				generatedT.add(createNewTransaction(conn.getDestination(), outputEo));
 			}
 		}
 		return generatedT;
@@ -578,7 +605,6 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(
 				outputConnection -> map.put(outputConnection, EcoreUtil.copy(getOutputValue(variable, runtime)))));
-
 	}
 
 	private static IInterfaceElement getEquivalentNetworkPin(final FBNetworkRuntime runtime,
@@ -614,11 +640,5 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			networkVarsSample.add((VarDeclaration) interfaceElement);
 		});
 		return networkVarsSample;
-	}
-
-	private static List<IInterfaceElement> findConnectedPins(final IInterfaceElement interfaceElement) {
-		final List<IInterfaceElement> destinations = new ArrayList<>();
-		interfaceElement.getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
-		return destinations;
 	}
 }

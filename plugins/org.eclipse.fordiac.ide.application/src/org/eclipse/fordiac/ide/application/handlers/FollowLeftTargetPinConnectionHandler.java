@@ -26,11 +26,6 @@ public class FollowLeftTargetPinConnectionHandler extends AbstractFollowTargetPi
 	}
 
 	@Override
-	protected boolean isLeft() {
-		return true;
-	}
-
-	@Override
 	protected EList<Connection> getConnectionList(final IInterfaceElement ie) {
 		return ie.getInputConnections();
 	}

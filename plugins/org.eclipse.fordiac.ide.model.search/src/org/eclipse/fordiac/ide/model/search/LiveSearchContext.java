@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -36,20 +35,4 @@ public class LiveSearchContext extends AbstractLiveSearchContext {
 	public Stream<URI> getTypes() {
 		return getTypelib().getAllTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull);
 	}
-
-	@Override
-	public Collection<URI> getAllTypes() {
-		return getTypelib().getAllTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
-	}
-
-	@Override
-	public Collection<URI> getSubappTypes() {
-		return getTypelib().getSubAppTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
-	}
-
-	@Override
-	public Collection<URI> getFBTypes() {
-		return getTypelib().getFbTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull).toList();
-	}
-
 }

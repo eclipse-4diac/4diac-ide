@@ -12,25 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.emf.ecore.EObject;
 
 public interface ISearchContext {
 
 	Stream<URI> getTypes();
 
-	@Deprecated
-	Collection<URI> getAllTypes();
-
-	@Deprecated
-	Collection<URI> getSubappTypes();
-
-	@Deprecated
-	Collection<URI> getFBTypes();
-
-	LibraryElement getLibraryElement(URI uri);
-
+	EObject mapTypes(URI uri);
 }

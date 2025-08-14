@@ -19,6 +19,7 @@ import java.util.EventObject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
@@ -63,6 +64,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -155,14 +157,34 @@ public abstract class DiagramEditor extends GraphicalEditor
 			// do not use getSelection() here because it will return always at least one
 			// element
 			if (viewer.getSelectedEditParts().isEmpty()) {
-				final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
-				final Point scrollPos = getInitialScrollPos(rootEditPart);
-				canvas.scrollTo(scrollPos.x, scrollPos.y);
+				performUnselectedInitialisationScroll(viewer);
 			} else {
 				// if we have a selected edit part we want to show it in the middle
 				viewer.revealEditPart(viewer.getSelectedEditParts().get(0));
 			}
 		}
+	}
+
+	private void performUnselectedInitialisationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
+		final IFigure figure = rootEditPart.getFigure();
+
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (canvas != null && !canvas.isDisposed()) {
+					viewer.flush();
+					if (figure.isShowing() && !figure.getBounds().isEmpty()) {
+						final Point scrollPos = getInitialScrollPos(rootEditPart);
+						canvas.scrollTo(scrollPos.x, scrollPos.y);
+					} else {
+						// Retry until the figure is laid out
+						Display.getDefault().timerExec(50, this);
+					}
+				}
+			}
+		});
 	}
 
 	@SuppressWarnings("static-method") // allow subclases to override this method

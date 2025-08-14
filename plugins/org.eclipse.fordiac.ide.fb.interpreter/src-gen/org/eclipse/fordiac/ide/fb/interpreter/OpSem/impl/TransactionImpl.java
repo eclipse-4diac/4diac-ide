@@ -15,10 +15,12 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -36,6 +38,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
  * <em>Parent EO</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getDuration
  * <em>Duration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getExceptions
+ * <em>Exceptions</em>}</li>
  * </ul>
  *
  * @generated
@@ -81,6 +85,16 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 	 * @ordered
 	 */
 	protected long duration = DURATION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getExceptions() <em>Exceptions</em>}'
+	 * attribute list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getExceptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Exception> exceptions;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -304,6 +318,20 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@Override
+	public EList<Exception> getExceptions() {
+		if (exceptions == null) {
+			exceptions = new EDataTypeUniqueEList<>(Exception.class, this,
+					OperationalSemanticsPackage.TRANSACTION__EXCEPTIONS);
+		}
+		return exceptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__PARENT_EO:
@@ -355,6 +383,8 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			return basicGetParentEO();
 		case OperationalSemanticsPackage.TRANSACTION__DURATION:
 			return getDuration();
+		case OperationalSemanticsPackage.TRANSACTION__EXCEPTIONS:
+			return getExceptions();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -420,6 +450,8 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			return parentEO != null;
 		case OperationalSemanticsPackage.TRANSACTION__DURATION:
 			return duration != DURATION_EDEFAULT;
+		case OperationalSemanticsPackage.TRANSACTION__EXCEPTIONS:
+			return exceptions != null && !exceptions.isEmpty();
 		default:
 			return super.eIsSet(featureID);
 		}
@@ -439,6 +471,8 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (duration: "); //$NON-NLS-1$
 		result.append(duration);
+		result.append(", exceptions: "); //$NON-NLS-1$
+		result.append(exceptions);
 		result.append(')');
 		return result.toString();
 	}

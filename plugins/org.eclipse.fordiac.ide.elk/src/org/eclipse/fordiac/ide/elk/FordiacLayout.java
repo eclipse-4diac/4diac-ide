@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPa
 import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.elk.commands.BlockLayoutCommand;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
+import org.eclipse.fordiac.ide.elk.preferences.ElkPreferences;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.GraphicalViewer;
@@ -60,7 +61,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-public class FordiacLayout {
+public final class FordiacLayout {
 
 	public static void blockLayout(final IEditorPart part, final AbstractFBNetworkEditPart ep) {
 		executeLayout(part, ep, true);
@@ -99,9 +100,7 @@ public class FordiacLayout {
 
 	private static Command performLayoutRun(final IEditorPart part, final AbstractFBNetworkEditPart ep,
 			final RecursiveGraphLayoutEngine engine, final boolean isBlockLayout) {
-		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(part, ep);
-
-		new FordiacGraphBuilder(mapping).build();
+		final FordiacLayoutMapping mapping = new FordiacGraphBuilder(part, ep).build();
 
 		if (isBlockLayout) {
 			performBlockLayout(mapping, engine);
@@ -193,12 +192,16 @@ public class FordiacLayout {
 
 	private static void configureConnectionLayoutGraph(final ElkGraphElement graph) {
 		graph.setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid") //$NON-NLS-1$
+				.setProperty(CoreOptions.OMIT_NODE_MICRO_LAYOUT, Boolean.TRUE)
+				.setProperty(CoreOptions.DEBUG_MODE, Boolean.TRUE)
 				.setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10))
 				.setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5))
 				.setProperty(LibavoidMetaDataProvider.NUDGE_SHARED_PATHS_WITH_COMMON_END_POINT, Boolean.FALSE)
 				.setProperty(LibavoidMetaDataProvider.ENABLE_HYPEREDGES_FROM_COMMON_SOURCE, Boolean.TRUE)
 				.setProperty(LibavoidMetaDataProvider.IMPROVE_HYPEREDGE_ROUTES_MOVING_ADDING_AND_DELETING_JUNCTIONS,
 						Boolean.TRUE)
+				.setProperty(LibavoidMetaDataProvider.PROCESS_TIMEOUT,
+						Integer.valueOf(ElkPreferences.getConnectionLaoyutTimeout()))
 				.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS)
 				.setProperty(CoreOptions.DIRECTION, Direction.RIGHT);
 	}
@@ -228,5 +231,9 @@ public class FordiacLayout {
 				.findAbstractContainerContentEditPartAtPosition((IEditorPart) workbenchPart, point,
 						networkEP.getModel());
 		return (containerEP != null) ? containerEP : networkEP;
+	}
+
+	private FordiacLayout() {
+		throw new UnsupportedOperationException("Helper class shall not be instantiated!"); //$NON-NLS-1$
 	}
 }

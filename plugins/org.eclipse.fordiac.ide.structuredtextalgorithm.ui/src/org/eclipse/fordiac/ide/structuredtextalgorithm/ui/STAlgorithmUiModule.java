@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentPartitioner;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentUpdaterChangeAdapterFilter;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorActions;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.folding.STAlgorithmFoldingRegionProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.STAlgorithmLinkedPositionGroupCalculator;
@@ -53,6 +54,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactori
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRegionDiffFormatter;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEmfResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedResourcesProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
@@ -81,6 +83,7 @@ import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.RegionDiffFormatter;
 import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider;
 import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
 import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
 import org.eclipse.xtext.resource.IContainer;
@@ -96,6 +99,7 @@ import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions;
+import org.eclipse.xtext.ui.editor.folding.IFoldingRegionProvider;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
@@ -211,6 +215,10 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
 		return STAlgorithmHyperlinkHelper.class;
+	}
+
+	public Class<? extends IFoldingRegionProvider> bindIFoldingRegionProvider() {
+		return STAlgorithmFoldingRegionProvider.class;
 	}
 
 	@Override
@@ -334,6 +342,10 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
 		return STCoreResourceLifecycleManager.class;
+	}
+
+	public Class<? extends RelatedResourcesProvider> bindRelatedResourcesProvider() {
+		return STCoreRelatedResourcesProvider.class;
 	}
 
 	@Override

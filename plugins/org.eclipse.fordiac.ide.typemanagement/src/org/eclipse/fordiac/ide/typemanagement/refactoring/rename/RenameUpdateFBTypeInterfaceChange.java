@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -22,9 +23,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
@@ -34,12 +35,18 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> {
 
-	final StructuredType struct;
+	private final List<String> affectedVarNames = new ArrayList<>();
+	private final String oldTypeName;
+	private final String newTypeName;
+	private final String packageName;
 
-	public RenameUpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
+	public RenameUpdateFBTypeInterfaceChange(final FBType type, final String oldTypeName, final String newTypeName,
+			final String packageName) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
-				struct.getName()), EcoreUtil.getURI(type), FBType.class);
-		this.struct = struct;
+				oldTypeName), EcoreUtil.getURI(type), FBType.class);
+		this.oldTypeName = oldTypeName;
+		this.newTypeName = newTypeName;
+		this.packageName = packageName;
 	}
 
 	@Override
@@ -51,11 +58,19 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
+		affectedVarNames.clear();
 
-		final List<VarDeclaration> varDeclaration = getVarDeclarationsForStruct(element);
+		final String oldQualName = packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + oldTypeName;
+		for (final IInterfaceElement elem : element.getInterfaceList().getAllInterfaceElements()) {
+			if ((elem instanceof final VarDeclaration vd)
+					&& (packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + vd.getType().getName())
+							.equals(oldQualName)) {
+				affectedVarNames.add(vd.getName());
+			}
+		}
 
-		if (varDeclaration.isEmpty()) {
-			status.addError(struct.getQualifiedName() + " is not part of the interface of " + getName());
+		if (affectedVarNames.isEmpty()) {
+			status.addError(oldTypeName + " is not part of the interface of " + getName());
 		}
 
 		if (element.getTypeLibrary() == null || element.getTypeLibrary().getDataTypeLibrary() == null) {
@@ -67,21 +82,15 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 
 	@Override
 	protected Command createCommand(final FBType type) {
-
-		final List<VarDeclaration> varDeclarations = getVarDeclarationsForStruct(type);
 		final CompoundCommand cmd = new CompoundCommand();
 
-		for (final VarDeclaration varDec : varDeclarations) {
-			cmd.add(ChangeDataTypeCommand.forDataType(varDec, struct));
+		for (final String varName : affectedVarNames) {
+			final IInterfaceElement iie = type.getInterfaceList().getInterfaceElement(varName);
+			if (iie instanceof final VarDeclaration vd) {
+				cmd.add(ChangeDataTypeCommand.forTypeName(vd, newTypeName));
+			}
 		}
 
 		return cmd;
-	}
-
-	private List<VarDeclaration> getVarDeclarationsForStruct(final FBType element) {
-		return element.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
-				.map(VarDeclaration.class::cast).filter(decl -> PackageNameHelper.getFullTypeName(decl.getType())
-						.equalsIgnoreCase(PackageNameHelper.getFullTypeName(struct)))
-				.toList();
 	}
 }

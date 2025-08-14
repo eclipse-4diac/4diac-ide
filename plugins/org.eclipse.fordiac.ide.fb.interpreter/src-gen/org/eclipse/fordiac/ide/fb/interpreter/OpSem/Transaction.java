@@ -13,6 +13,7 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -29,6 +30,8 @@ import org.eclipse.emf.ecore.EObject;
  * <em>Parent EO</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getDuration
  * <em>Duration</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getExceptions
+ * <em>Exceptions</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction()
@@ -111,5 +114,18 @@ public interface Transaction extends EObject {
 	 * @generated
 	 */
 	void setDuration(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Exceptions</b></em>' attribute list. The
+	 * list contents are of type {@link java.lang.Exception}. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Exceptions</em>' attribute list.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction_Exceptions()
+	 * @model dataType="org.eclipse.fordiac.ide.fb.interpreter.OpSem.Exception"
+	 *        changeable="false"
+	 * @generated
+	 */
+	EList<Exception> getExceptions();
 
 } // Transaction

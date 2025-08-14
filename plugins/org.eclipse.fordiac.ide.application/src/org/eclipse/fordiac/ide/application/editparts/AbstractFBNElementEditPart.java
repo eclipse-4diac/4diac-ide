@@ -46,7 +46,6 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
-import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -64,7 +63,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -625,11 +623,6 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			}
 		}
 		super.setTransparency(value);
-	}
-
-	@Override
-	public DragTracker getDragTracker(final Request request) {
-		return new ScrollingDragEditPartsTracker(this);
 	}
 
 	@Override

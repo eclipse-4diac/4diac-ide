@@ -34,7 +34,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 
 	@Override
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
-		container = createContainer(widgetFactory, parent);
+		container = createContainer(widgetFactory, parent, 1);
 
 		createAddButton(widgetFactory, container);
 
@@ -73,7 +73,7 @@ public class AddDeleteChangeDestinationSourceWidget extends AddDeleteWidget {
 	}
 
 	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
-			final CreationCommandProvider addCommand, final CommandProvider deleteCommand,
+			final CommandProvider addCommand, final CommandProvider deleteCommand,
 			final MessageDialogProvider changeSourceDestinationMessageBox) {
 		super.bindToTableViewer(table, executor, addCommand, deleteCommand);
 		final Listener createListener = getChangeListener(table, executor, changeSourceDestinationMessageBox);
