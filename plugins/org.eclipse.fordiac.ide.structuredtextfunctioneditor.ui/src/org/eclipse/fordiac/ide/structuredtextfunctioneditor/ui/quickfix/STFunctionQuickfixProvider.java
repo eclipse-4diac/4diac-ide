@@ -21,8 +21,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.quickfix;
 
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.VarDeclarationKind;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
@@ -57,7 +57,7 @@ public class STFunctionQuickfixProvider extends STCoreQuickfixProvider {
 	}
 
 	@Override
-	protected void createMissingVariable(final ICallable callable, final String name, final INamedElement type,
+	protected void createMissingVariable(final ICallable callable, final String name, final DataType type,
 			final VarDeclarationKind kind) {
 		if (callable instanceof final STFunction function) {
 			createSTVarDeclaration(function.getVarDeclarations(), name, type, kind);

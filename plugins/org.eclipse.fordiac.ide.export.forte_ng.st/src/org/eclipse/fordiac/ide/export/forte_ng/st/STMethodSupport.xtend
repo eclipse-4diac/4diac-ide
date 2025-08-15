@@ -16,6 +16,7 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
@@ -111,7 +112,7 @@ class STMethodSupport extends StructuredTextSupport {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
 					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				].flatMap[varDeclarations].map[type]).toSet
+				].flatMap[varDeclarations].map[type as INamedElement]).toSet
 			else
 				parseResult.containedDependencies
 		} else

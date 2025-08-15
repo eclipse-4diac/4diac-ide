@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -84,7 +85,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			if (source.constants !== null)
-				source.constants.elements.flatMap[varDeclarations].map[type].toSet
+				source.constants.elements.flatMap[varDeclarations].map[type as INamedElement].toSet
 			else
 				emptySet
 		else

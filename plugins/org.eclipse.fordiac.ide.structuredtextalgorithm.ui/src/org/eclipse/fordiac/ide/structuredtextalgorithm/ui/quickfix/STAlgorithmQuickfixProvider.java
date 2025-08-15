@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm;
@@ -106,34 +105,33 @@ public class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	}
 
 	@Override
-	protected void createMissingVariable(final ICallable callable, final String name, final INamedElement type,
+	protected void createMissingVariable(final ICallable callable, final String name, final DataType type,
 			final VarDeclarationKind kind) {
-		if (callable instanceof final STAlgorithm algorithm && kind == VarDeclarationKind.TEMP) {
+		switch (callable) {
+		case final STAlgorithm algorithm when kind == VarDeclarationKind.TEMP ->
 			createSTVarTempDeclaration(algorithm.getBody().getVarTempDeclarations(), name, type);
-		} else if (callable instanceof final STMethod method && kind != VarDeclarationKind.PLAIN) {
+		case final STMethod method when kind != VarDeclarationKind.PLAIN ->
 			createSTVarDeclaration(method.getBody().getVarDeclarations(), name, type, kind);
-		} else {
-			createVarDeclaration(callable, name, type, kind);
+		default -> createVarDeclaration(callable, name, type, kind);
 		}
 	}
 
-	protected static void createVarDeclaration(final ICallable callable, final String name, final INamedElement type,
+	protected static void createVarDeclaration(final ICallable callable, final String name, final DataType type,
 			final VarDeclarationKind kind) {
 		if (callable.eResource() instanceof final LibraryElementXtextResource resource
-				&& resource.getLibraryElement() instanceof final BaseFBType baseFBType
-				&& type instanceof final DataType dataType) {
+				&& resource.getLibraryElement() instanceof final BaseFBType baseFBType) {
 			STAlgorithmEditorUtils.executeCommand(resource.getURI(), switch (kind) {
-			case INPUT -> new CreateInterfaceElementCommand(dataType, name, baseFBType.getInterfaceList(), true, -1);
-			case INOUT -> new CreateVarInOutCommand(dataType, name, baseFBType.getInterfaceList(), -1);
-			case OUTPUT -> new CreateInterfaceElementCommand(dataType, name, baseFBType.getInterfaceList(), false, -1);
-			case PLAIN -> new CreateInternalVariableCommand(baseFBType, -1, name, dataType);
+			case INPUT -> new CreateInterfaceElementCommand(type, name, baseFBType.getInterfaceList(), true, -1);
+			case INOUT -> new CreateVarInOutCommand(type, name, baseFBType.getInterfaceList(), -1);
+			case OUTPUT -> new CreateInterfaceElementCommand(type, name, baseFBType.getInterfaceList(), false, -1);
+			case PLAIN -> new CreateInternalVariableCommand(baseFBType, -1, name, type);
 			default -> null;
 			});
 		}
 	}
 
 	protected static void createSTVarTempDeclaration(final EList<STVarTempDeclarationBlock> blocks, final String name,
-			final INamedElement type) {
+			final DataType type) {
 		final STVarTempDeclarationBlock block = getOrCreateSTVarTempDeclarationBlock(blocks);
 		final STVarDeclaration varDeclaration = createSTVarDeclaration(name, type);
 		block.getVarDeclarations().add(varDeclaration);

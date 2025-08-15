@@ -221,7 +221,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		case final AnyStringType anyStringType when declaration.getMaxLength() != null -> STCoreUtil.newStringType(
 				anyStringType, ValueOperations.asInteger(evaluateExpression(declaration.getMaxLength())));
 		case final DataType dataType -> dataType;
-		case null, default -> null;
+		case null -> null;
 		};
 		if (declaration.isArray()) {
 			if (declaration.getRanges().isEmpty()) {
