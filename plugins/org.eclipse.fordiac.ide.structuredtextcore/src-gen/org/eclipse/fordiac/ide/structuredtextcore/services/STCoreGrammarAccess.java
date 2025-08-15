@@ -407,8 +407,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightSquareBracketKeyword_4_1_1_3 = (Keyword)cGroup_4_1_1.eContents().get(3);
 		private final Keyword cOFKeyword_4_2 = (Keyword)cGroup_4.eContents().get(2);
 		private final Assignment cTypeAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final CrossReference cTypeINamedElementCrossReference_5_0 = (CrossReference)cTypeAssignment_5.eContents().get(0);
-		private final RuleCall cTypeINamedElementSTAnyTypeParserRuleCall_5_0_1 = (RuleCall)cTypeINamedElementCrossReference_5_0.eContents().get(1);
+		private final CrossReference cTypeDataTypeCrossReference_5_0 = (CrossReference)cTypeAssignment_5.eContents().get(0);
+		private final RuleCall cTypeDataTypeSTAnyTypeParserRuleCall_5_0_1 = (RuleCall)cTypeDataTypeCrossReference_5_0.eContents().get(1);
 		private final Group cGroup_6 = (Group)cGroup.eContents().get(6);
 		private final Keyword cLeftSquareBracketKeyword_6_0 = (Keyword)cGroup_6.eContents().get(0);
 		private final Assignment cMaxLengthAssignment_6_1 = (Assignment)cGroup_6.eContents().get(1);
@@ -426,14 +426,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//    {STVarDeclaration}
 		//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-		//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+		//    (type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 		//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STVarDeclaration}
 		//name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 		//ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-		//(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+		//(type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 		//defaultValue=STInitializerExpression)? pragma=STPragma? ';'
 		public Group getGroup() { return cGroup; }
 		
@@ -537,14 +537,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'OF'
 		public Keyword getOFKeyword_4_2() { return cOFKeyword_4_2; }
 		
-		//(type=[libraryElement::INamedElement|STAnyType])
+		//(type=[datatype::DataType|STAnyType])
 		public Assignment getTypeAssignment_5() { return cTypeAssignment_5; }
 		
-		//[libraryElement::INamedElement|STAnyType]
-		public CrossReference getTypeINamedElementCrossReference_5_0() { return cTypeINamedElementCrossReference_5_0; }
+		//[datatype::DataType|STAnyType]
+		public CrossReference getTypeDataTypeCrossReference_5_0() { return cTypeDataTypeCrossReference_5_0; }
 		
 		//STAnyType
-		public RuleCall getTypeINamedElementSTAnyTypeParserRuleCall_5_0_1() { return cTypeINamedElementSTAnyTypeParserRuleCall_5_0_1; }
+		public RuleCall getTypeDataTypeSTAnyTypeParserRuleCall_5_0_1() { return cTypeDataTypeSTAnyTypeParserRuleCall_5_0_1; }
 		
 		//('[' maxLength=STExpression ']')?
 		public Group getGroup_6() { return cGroup_6; }
@@ -611,8 +611,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cRightSquareBracketKeyword_1_1_1_3 = (Keyword)cGroup_1_1_1.eContents().get(3);
 		private final Keyword cOFKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Assignment cTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final CrossReference cTypeINamedElementCrossReference_2_0 = (CrossReference)cTypeAssignment_2.eContents().get(0);
-		private final RuleCall cTypeINamedElementSTAnyTypeParserRuleCall_2_0_1 = (RuleCall)cTypeINamedElementCrossReference_2_0.eContents().get(1);
+		private final CrossReference cTypeDataTypeCrossReference_2_0 = (CrossReference)cTypeAssignment_2.eContents().get(0);
+		private final RuleCall cTypeDataTypeSTAnyTypeParserRuleCall_2_0_1 = (RuleCall)cTypeDataTypeCrossReference_2_0.eContents().get(1);
 		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
 		private final Keyword cLeftSquareBracketKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cMaxLengthAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
@@ -623,14 +623,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//    {STTypeDeclaration}
 		//    (array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
 		//    ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-		//    (type=[libraryElement::INamedElement|STAnyType])
+		//    (type=[datatype::DataType|STAnyType])
 		//    ('[' maxLength=STExpression ']')?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STTypeDeclaration}
 		//(array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
 		//('[' count+='*' (',' count+='*')* ']')) 'OF')?
-		//(type=[libraryElement::INamedElement|STAnyType])
+		//(type=[datatype::DataType|STAnyType])
 		//('[' maxLength=STExpression ']')?
 		public Group getGroup() { return cGroup; }
 		
@@ -708,14 +708,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'OF'
 		public Keyword getOFKeyword_1_2() { return cOFKeyword_1_2; }
 		
-		//(type=[libraryElement::INamedElement|STAnyType])
+		//(type=[datatype::DataType|STAnyType])
 		public Assignment getTypeAssignment_2() { return cTypeAssignment_2; }
 		
-		//[libraryElement::INamedElement|STAnyType]
-		public CrossReference getTypeINamedElementCrossReference_2_0() { return cTypeINamedElementCrossReference_2_0; }
+		//[datatype::DataType|STAnyType]
+		public CrossReference getTypeDataTypeCrossReference_2_0() { return cTypeDataTypeCrossReference_2_0; }
 		
 		//STAnyType
-		public RuleCall getTypeINamedElementSTAnyTypeParserRuleCall_2_0_1() { return cTypeINamedElementSTAnyTypeParserRuleCall_2_0_1; }
+		public RuleCall getTypeDataTypeSTAnyTypeParserRuleCall_2_0_1() { return cTypeDataTypeSTAnyTypeParserRuleCall_2_0_1; }
 		
 		//('[' maxLength=STExpression ']')?
 		public Group getGroup_3() { return cGroup_3; }
@@ -4698,7 +4698,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//    {STVarDeclaration}
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	//    (type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 	public STVarDeclarationElements getSTVarDeclarationAccess() {
 		return pSTVarDeclaration;
@@ -4712,7 +4712,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	//    {STTypeDeclaration}
 	//    (array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
 	//    ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	//    (type=[libraryElement::INamedElement|STAnyType])
+	//    (type=[datatype::DataType|STAnyType])
 	//    ('[' maxLength=STExpression ']')?;
 	public STTypeDeclarationElements getSTTypeDeclarationAccess() {
 		return pSTTypeDeclaration;

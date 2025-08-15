@@ -2,13 +2,13 @@
  * *******************************************************************************
  * Copyright (c) 2022 Primetals Technologies GmbH,
  *               2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Martin Jobst, Martin Melik Merkumians
  *      - initial API and implementation and/or initial documentation
@@ -20,29 +20,22 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Type Declaration</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>ST Type
+ * Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -58,9 +51,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
  */
 public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implements STTypeDeclaration {
 	/**
-	 * The default value of the '{@link #isArray() <em>Array</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #isArray() <em>Array</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isArray()
 	 * @generated
 	 * @ordered
@@ -68,9 +61,9 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	protected static final boolean ARRAY_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isArray() <em>Array</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #isArray() <em>Array</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isArray()
 	 * @generated
 	 * @ordered
@@ -79,8 +72,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 
 	/**
 	 * The cached value of the '{@link #getRanges() <em>Ranges</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getRanges()
 	 * @generated
 	 * @ordered
@@ -89,8 +81,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 
 	/**
 	 * The cached value of the '{@link #getCount() <em>Count</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCount()
 	 * @generated
 	 * @ordered
@@ -98,19 +89,18 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	protected EList<String> count;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected INamedElement type;
+	protected DataType type;
 
 	/**
 	 * The cached value of the '{@link #getMaxLength() <em>Max Length</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxLength()
 	 * @generated
 	 * @ordered
@@ -118,8 +108,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	protected STExpression maxLength;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected STTypeDeclarationImpl() {
@@ -127,8 +116,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -137,8 +125,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -147,8 +134,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -160,8 +146,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -173,8 +158,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -186,15 +170,14 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public INamedElement getType() {
+	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject)type;
-			type = (INamedElement)eResolveProxy(oldType);
+			type = (DataType)eResolveProxy(oldType);
 			if (type != oldType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_TYPE_DECLARATION__TYPE, oldType, type));
@@ -204,30 +187,27 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public INamedElement basicGetType() {
+	public DataType basicGetType() {
 		return type;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setType(INamedElement newType) {
-		INamedElement oldType = type;
+	public void setType(DataType newType) {
+		DataType oldType = type;
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_TYPE_DECLARATION__TYPE, oldType, type));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -236,8 +216,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetMaxLength(STExpression newMaxLength, NotificationChain msgs) {
@@ -251,8 +230,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -271,8 +249,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -288,8 +265,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -312,8 +288,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -332,7 +307,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 				getCount().addAll((Collection<? extends String>)newValue);
 				return;
 			case STCorePackage.ST_TYPE_DECLARATION__TYPE:
-				setType((INamedElement)newValue);
+				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_TYPE_DECLARATION__MAX_LENGTH:
 				setMaxLength((STExpression)newValue);
@@ -344,8 +319,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -361,7 +335,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 				getCount().clear();
 				return;
 			case STCorePackage.ST_TYPE_DECLARATION__TYPE:
-				setType((INamedElement)null);
+				setType((DataType)null);
 				return;
 			case STCorePackage.ST_TYPE_DECLARATION__MAX_LENGTH:
 				setMaxLength((STExpression)null);
@@ -373,8 +347,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -396,8 +369,7 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -413,4 +385,4 @@ public class STTypeDeclarationImpl extends MinimalEObjectImpl.Container implemen
 		return result.toString();
 	}
 
-} //STTypeDeclarationImpl
+} // STTypeDeclarationImpl
