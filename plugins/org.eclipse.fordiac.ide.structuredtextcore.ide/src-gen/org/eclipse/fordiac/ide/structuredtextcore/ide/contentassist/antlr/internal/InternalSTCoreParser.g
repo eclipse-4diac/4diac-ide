@@ -12817,13 +12817,13 @@ rule__STVarDeclaration__TypeAssignment_5
 	}
 :
 	(
-		{ before(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0()); }
+		{ before(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0()); }
 		(
-			{ before(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_5_0_1()); }
+			{ before(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_5_0_1()); }
 			ruleSTAnyType
-			{ after(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_5_0_1()); }
+			{ after(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_5_0_1()); }
 		)
-		{ after(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0()); }
+		{ after(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0()); }
 	)
 ;
 finally {
@@ -12968,13 +12968,13 @@ rule__STTypeDeclaration__TypeAssignment_2
 	}
 :
 	(
-		{ before(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0()); }
+		{ before(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0()); }
 		(
-			{ before(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_2_0_1()); }
+			{ before(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_2_0_1()); }
 			ruleSTAnyType
-			{ after(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_2_0_1()); }
+			{ after(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_2_0_1()); }
 		)
-		{ after(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0()); }
+		{ after(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0()); }
 	)
 ;
 finally {

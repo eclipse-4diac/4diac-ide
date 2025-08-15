@@ -1339,11 +1339,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STTypeDeclaration0 returns STTypeDeclaration
 	 *
 	 * Constraint:
-	 *     (
-	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
-	 *         type=[INamedElement|STAnyType] 
-	 *         maxLength=STExpression?
-	 *     )
+	 *     ((array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? type=[DataType|STAnyType] maxLength=STExpression?)
 	 * </pre>
 	 */
 	protected void sequence_STTypeDeclaration(ISerializationContext context, STTypeDeclaration semanticObject) {
@@ -1424,7 +1420,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *         name=ID 
 	 *         locatedAt=[INamedElement|ID]? 
 	 *         (array?='ARRAY' ((ranges+=STExpression ranges+=STExpression*) | (count+='*' count+='*'*)))? 
-	 *         type=[INamedElement|STAnyType] 
+	 *         type=[DataType|STAnyType] 
 	 *         maxLength=STExpression? 
 	 *         defaultValue=STInitializerExpression? 
 	 *         pragma=STPragma?
