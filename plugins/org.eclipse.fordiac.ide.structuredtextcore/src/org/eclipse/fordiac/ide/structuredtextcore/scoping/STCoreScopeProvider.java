@@ -32,7 +32,6 @@ import java.util.stream.StreamSupport;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -123,11 +122,11 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	public IScope getScope(final EObject context, final EReference reference) {
 		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForVariableType));
+			return scopeForNonUserDefinedDataTypes(globalScope);
 		}
 		if (reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForTypeDeclaration));
+			return scopeForNonUserDefinedDataTypes(globalScope);
 		}
 		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(LITERAL_TYPES_DESCRIPTIONS, true);
@@ -242,17 +241,6 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected static IScope filterScope(final IScope scope, final Predicate<IEObjectDescription> filter) {
 		return new FilteringScope(scope, filter);
-	}
-
-	protected boolean isApplicableForVariableType(final IEObjectDescription description) {
-		final var clazz = description.getEClass();
-		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz)
-				|| LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz);
-	}
-
-	protected boolean isApplicableForTypeDeclaration(final IEObjectDescription description) {
-		final var clazz = description.getEClass();
-		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz);
 	}
 
 	protected boolean isApplicableForVariableReference(final IEObjectDescription description) {

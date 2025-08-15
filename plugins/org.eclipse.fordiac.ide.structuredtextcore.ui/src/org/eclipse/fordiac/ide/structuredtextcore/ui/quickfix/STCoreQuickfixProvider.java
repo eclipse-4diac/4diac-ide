@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -552,26 +553,27 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
 			final String name = getFeatureText(expression);
 			final INamedElement type = getExpectedFeatureType(expression);
-			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty() && type != null) {
-				createMissingVariable(callable, name, type, kind);
+			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
+					&& type instanceof final DataType dataType) {
+				createMissingVariable(callable, name, dataType, kind);
 			}
 		}
 	}
 
 	@SuppressWarnings("static-method") // subclasses may override
-	protected void createMissingVariable(final ICallable callable, final String name, final INamedElement type,
+	protected void createMissingVariable(final ICallable callable, final String name, final DataType type,
 			final VarDeclarationKind kind) {
 		throw new UnsupportedOperationException();
 	}
 
 	protected static void createSTVarDeclaration(final EList<STVarDeclarationBlock> blocks, final String name,
-			final INamedElement type, final VarDeclarationKind kind) {
+			final DataType type, final VarDeclarationKind kind) {
 		final STVarDeclarationBlock block = getOrCreateSTVarDeclarationBlock(blocks, kind.getBlockClass());
 		final STVarDeclaration varDeclaration = createSTVarDeclaration(name, type);
 		block.getVarDeclarations().add(varDeclaration);
 	}
 
-	protected static STVarDeclaration createSTVarDeclaration(final String name, final INamedElement type) {
+	protected static STVarDeclaration createSTVarDeclaration(final String name, final DataType type) {
 		final STVarDeclaration varDeclaration = STCoreFactory.eINSTANCE.createSTVarDeclaration();
 		varDeclaration.setName(name);
 		varDeclaration.setType(type);
