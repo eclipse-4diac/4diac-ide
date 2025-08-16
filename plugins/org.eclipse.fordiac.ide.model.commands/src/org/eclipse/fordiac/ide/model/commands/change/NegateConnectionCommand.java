@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -28,10 +29,18 @@ public class NegateConnectionCommand extends Command implements ScopedCommand {
 
 	private final Connection connection;
 	private final boolean isNegated;
+	private final boolean performMappingCheck;
+	private NegateConnectionCommand mappedNegateConnCmd;
 
 	public NegateConnectionCommand(final Connection connection, final boolean isNegated) {
+		this(connection, isNegated, true);
+	}
+
+	private NegateConnectionCommand(final Connection connection, final boolean isNegated,
+			final boolean performMappingCheck) {
 		this.connection = Objects.requireNonNull(connection);
 		this.isNegated = isNegated;
+		this.performMappingCheck = performMappingCheck;
 	}
 
 	@Override
@@ -53,20 +62,41 @@ public class NegateConnectionCommand extends Command implements ScopedCommand {
 	@Override
 	public void execute() {
 		setNegated(isNegated);
+		if (performMappingCheck) {
+			mappedNegateConnCmd = checkAndNegateMirroredConnection();
+			if (mappedNegateConnCmd != null) {
+				mappedNegateConnCmd.execute();
+			}
+		}
 	}
 
 	@Override
 	public void undo() {
 		setNegated(!isNegated);
+		if (mappedNegateConnCmd != null) {
+			mappedNegateConnCmd.undo();
+		}
 	}
 
 	@Override
 	public void redo() {
 		setNegated(isNegated);
+		if (mappedNegateConnCmd != null) {
+			mappedNegateConnCmd.redo();
+		}
 	}
 
 	public void setNegated(final boolean negated) {
 		connection.setNegated(negated);
+	}
+
+	private NegateConnectionCommand checkAndNegateMirroredConnection() {
+		final Connection opposite = ConnectionsHelper.getOppositeConnection(connection);
+		if (null != opposite) {
+			final NegateConnectionCommand cmd = new NegateConnectionCommand(opposite, isNegated, false);
+			return (cmd.canExecute()) ? cmd : null;
+		}
+		return null;
 	}
 
 }
