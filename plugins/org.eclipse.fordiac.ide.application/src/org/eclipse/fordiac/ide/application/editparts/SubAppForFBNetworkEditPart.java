@@ -113,7 +113,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				layoutExpandedInterface();
 			}
 			refreshToolTip();
-			backgroundColorChanged(getFigure());
+			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
+				updateDeviceListener();
+			}
 		}
 
 		private static boolean isUnfoldedAttribute(final Object obj) {
