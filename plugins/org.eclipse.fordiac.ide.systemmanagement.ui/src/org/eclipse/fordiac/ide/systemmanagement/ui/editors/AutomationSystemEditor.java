@@ -357,6 +357,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		if (adapter == GraphicalAnnotationModel.class) {
 			return adapter.cast(annotationModel);
 		}
+		if (adapter == TypeEntryAdapter.class) {
+			return adapter.cast(typeEntryAdapter);
+		}
 		return super.getAdapter(adapter);
 	}
 
