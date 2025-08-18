@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
@@ -28,7 +29,7 @@ import org.eclipse.xtext.util.ITextRegion;
 
 import com.google.inject.Inject;
 
-public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
+public class StructuredTextFBTypeEditor extends FBTypeXtextEditor implements STCoreSaveActionsEditor {
 
 	@Inject
 	private STCoreMapper algorithmMapper;
@@ -102,5 +103,26 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor {
 	@Override
 	public String getEditorId() {
 		return getLanguageName();
+	}
+
+	private boolean saveActionsDisabled;
+
+	@Override
+	public void doRevertToSaved() {
+		setSaveActionsDisabled(true);
+		try {
+			super.doRevertToSaved();
+		} finally {
+			setSaveActionsDisabled(false);
+		}
+	}
+
+	@Override
+	public boolean isSaveActionsDisabled() {
+		return saveActionsDisabled;
+	}
+
+	public void setSaveActionsDisabled(final boolean saveActionsDisabled) {
+		this.saveActionsDisabled = saveActionsDisabled;
 	}
 }
