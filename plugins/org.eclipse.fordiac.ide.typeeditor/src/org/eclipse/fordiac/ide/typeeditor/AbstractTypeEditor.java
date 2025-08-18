@@ -287,6 +287,9 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		if (adapter == GraphicalAnnotationModel.class) {
 			return adapter.cast(annotationModel);
 		}
+		if (adapter == TypeEntryAdapter.class) {
+			return adapter.cast(typeEntryAdapter);
+		}
 		if (isEditorActive()) {
 			// we should only call super if the editor is active otherwise we may get
 			// disposed errors
