@@ -88,11 +88,13 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode) {
-		if (stepMode) {
-			return getConnectionOpposites(pin);
+		final List<IInterfaceElement> opposites = getConnectionOpposites(pin);
+		if (!stepMode) {
+			// before jump, we take 1 step to not fulfill the ending-condition early
+			final List<IInterfaceElement> newOpposites = new ArrayList<>();
+			opposites.forEach(ie -> jumpOverConnections(ie, newOpposites));
+			return newOpposites;
 		}
-		final List<IInterfaceElement> opposites = new ArrayList<>();
-		jumpOverConnections(pin, opposites);
 		return opposites;
 	}
 
