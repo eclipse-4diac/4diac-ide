@@ -408,6 +408,9 @@ public class FBEndpointFinder {
 		final EList<Connection> varCons = (state.inputSide) ? vars.get(0).getInputConnections()
 				: vars.get(0).getOutputConnections();
 		if (varCons.isEmpty()) {
+			if (state.traceMember) {
+				state.connections.add(vars.get(0));
+			}
 			return;
 		}
 
@@ -457,7 +460,9 @@ public class FBEndpointFinder {
 			else if (structMem.getName().equals(state.plexStack.peek())) {
 				subStack = ((ArrayDeque<String>) state.plexStack).clone();
 				subStack.pop();
-				if (state.traceMember && subStack.isEmpty()) {
+				if (state.traceMember
+						&& (subStack.isEmpty() || (state.inputSide ? realInt.getInputConnections().isEmpty()
+								: realInt.getOutputConnections().isEmpty()))) {
 					state.connections.add(realInt);
 				}
 			} else {

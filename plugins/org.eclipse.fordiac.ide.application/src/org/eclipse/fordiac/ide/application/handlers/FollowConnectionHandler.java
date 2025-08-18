@@ -220,7 +220,15 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			if (startPin instanceof final MemberVarDeclaration member) {
 				final Set<IInterfaceElement> memberEnd = new HashSet<>();
 				FBEndpointFinder.traceMembers(member, memberEnd);
-				memberEnd.forEach(mem -> jumpOverConnections(mem, destinations));
+				memberEnd.forEach(mem -> {
+					final List<Connection> cons = getConnectionList(mem);
+					if (cons.isEmpty()) {
+						destinations.add(mem);
+					} else {
+						// only continue with pins where connections exist to avoid loop
+						jumpOverConnections(mem, destinations);
+					}
+				});
 				return;
 			}
 			// FB-Pin / dead-end found
