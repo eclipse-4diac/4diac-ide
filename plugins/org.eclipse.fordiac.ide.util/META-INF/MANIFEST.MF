@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Export-Package: org.eclipse.fordiac.ide.util
+Export-Package: org.eclipse.fordiac.ide.util,
+ org.eclipse.fordiac.util.marker
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gef,
  org.eclipse.fordiac.ide.model,

@@ -34,6 +34,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
+import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
 import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
@@ -65,6 +66,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
+import org.eclipse.fordiac.util.marker.MarkerStore;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -111,6 +113,8 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	}
 
 	private Adapter interfaceAdapter;
+
+	private MarkerStore store;
 
 	private Adapter getInterfaceAdapter() {
 		if (null == interfaceAdapter) {
@@ -186,6 +190,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	@Override
 	public void activate() {
 		super.activate();
+		store = MarkerStore.getStoreFromEditor().orElse(null);
 		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 		if (getColorChangeListener() != null) {
@@ -198,6 +203,9 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 
 	@Override
 	public void deactivate() {
+		if (store != null && store.isMarkedEditPart(this)) {
+			MarkPredecessorHandler.removePredecessor();
+		}
 		super.deactivate();
 		if (referencedDevice != null) {
 			referencedDevice.eAdapters().remove(colorChangeListener);

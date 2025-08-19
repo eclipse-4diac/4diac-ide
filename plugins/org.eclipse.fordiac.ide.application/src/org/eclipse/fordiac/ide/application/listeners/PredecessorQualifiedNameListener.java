@@ -17,34 +17,29 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
-import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.fordiac.util.marker.MarkerStore;
 
 public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 
 	@Override
 	public void onCommandExecuted(final List<QualNameChange> qualNameChange) {
-		updateMarkerEntries(qualNameChange);
+		removeMarkerEntries(qualNameChange);
 		super.onCommandExecuted(qualNameChange);
 	}
 
 	@Override
 	public void onCommandUndoExecuted(final List<QualNameChange> qualNameChange) {
-		updateMarkerEntries(qualNameChange);
+		removeMarkerEntries(qualNameChange);
 		super.onCommandUndoExecuted(qualNameChange);
 	}
 
 	@Override
 	public void onCommandRedoExecuted(final List<QualNameChange> qualNameChange) {
-		updateMarkerEntries(qualNameChange);
+		removeMarkerEntries(qualNameChange);
 		super.onCommandRedoExecuted(qualNameChange);
 	}
 
@@ -70,38 +65,13 @@ public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 		// do nothing
 	}
 
-	private static void updateMarkerEntries(final List<QualNameChange> qualNameChange) {
-		// handle deleted elements
-		qualNameChange.stream().filter(change -> change.newQualName() == null).map(QualNameChange::notifier)
-				.filter(MarkPredecessorHandler::hasPredecessorMarker).forEach(t -> {
-					if (t instanceof final FBNetworkElement fbe) {
-						final AbstractBlockFBNElementEditPart ep = getEP(fbe);
-						if (ep.getRoot() instanceof final FBNetworkRootEditPart root) {
-							MarkPredecessorHandler.removePredecessor(root);
-						}
-					}
-				});
-
-		// handle moved elements
-		qualNameChange.stream().map(QualNameChange::notifier).filter(MarkPredecessorHandler::hasPredecessorMarker)
-				.forEach(t -> {
-					if (t instanceof final FBNetworkElement fbe) {
-						final AbstractBlockFBNElementEditPart ep = getEP(fbe);
-						if (ep.getRoot() instanceof final FBNetworkRootEditPart root) {
-							MarkPredecessorHandler.setPredecessor(root, ep);
-						}
-					}
-				});
-	}
-
-	private static AbstractBlockFBNElementEditPart getEP(final FBNetworkElement elem) {
-		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
-		if (currentActiveEditor != null) {
-			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
-			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractBlockFBNElementEditPart ep) {
-				return ep;
-			}
+	private static void removeMarkerEntries(final List<QualNameChange> qualNameChange) {
+		// here the element already has a new URI
+		final MarkerStore store = MarkerStore.getStoreFromEditor().orElse(null);
+		if (store != null) {
+			qualNameChange.stream().map(QualNameChange::notifier)
+					.filter(s -> store.isMarkedElement(s.getQualifiedName()))
+					.forEach(s -> MarkPredecessorHandler.removePredecessor());
 		}
-		return null;
 	}
 }
