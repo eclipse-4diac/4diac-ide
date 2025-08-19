@@ -103,9 +103,9 @@ public final class Messages extends NLS {
 
 	public static String FBMarker_ActivePredecessor;
 
-	public static String FBMarker_MarkAsPredecessor;
+	public static String FBMarker_MarkAs;
 
-	public static String FBMarker_RemovePredecessorMarker;
+	public static String FBMarker_RemoveMarker;
 
 	public static String FunctionBlock;
 
