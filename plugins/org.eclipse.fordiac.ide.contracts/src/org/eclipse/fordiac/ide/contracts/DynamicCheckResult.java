@@ -13,19 +13,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 
-import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contracts.ContractRule.Type;
 
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
@@ -40,8 +40,9 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		private final List<CInterval> intervals;
 		private final List<EventOccurrence> markers;
 
-		private Queue<EventOccurrence> causalFIFO;
-		private Stack<EventOccurrence> causalLIFO;
+		private Deque<EventOccurrence> causalFIFO;
+		private Deque<EventOccurrence> causalLIFO;
+		private Map<String, EventOccurrence> causalID;
 		private final boolean[] slidingWindow;
 		private boolean[] triggerSet;
 		private int triggerSequence;
@@ -63,10 +64,18 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 				triggerSet = new boolean[rule.getInputs().size()];
 			}
 			if (rule.getType() == Type.CAUSAL_REACTION || rule.getType() == Type.CAUSAL_AGE) {
-				if (rule.getCausalRelation() == CausalRelation.FIFO) {
-					causalFIFO = new LinkedList<>();
-				} else if (rule.getCausalRelation() == CausalRelation.LIFO) {
-					causalLIFO = new Stack<>();
+				switch (rule.getCausalRelation()) {
+				case FIFO:
+					causalFIFO = new ArrayDeque<>();
+					break;
+				case LIFO:
+					causalLIFO = new ArrayDeque<>();
+					break;
+				case ID:
+					causalID = new HashMap<>();
+					break;
+				default: // no other types yet
+					break;
 				}
 			}
 		}
@@ -143,15 +152,17 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 		 * reaction or an output for a causal age)
 		 *
 		 * @param eo the event that occurred which should be remembered
+		 * @return false if an event with the same ID is already in use, otherwise true
 		 */
-		public void rememberCausalEvent(final EventOccurrence eo) {
+		public boolean rememberCausalEvent(final EventOccurrence eo) {
 			if (causalFIFO != null) {
 				causalFIFO.offer(eo);
 			} else if (causalLIFO != null) {
 				causalLIFO.push(eo);
-			} else {
-				// TODO: ID relation...
+			} else if (causalID != null) {
+				return causalID.put(eo.eventID(), eo) == null;
 			}
+			return true;
 		}
 
 		/**
@@ -168,7 +179,10 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 			if (causalLIFO != null) {
 				return causalLIFO.isEmpty() ? null : causalLIFO.pop();
 			}
-			return null; // TODO: ID relation...
+			if (causalID != null) {
+				return causalID.remove(eo.eventID());
+			}
+			return null;
 		}
 
 		/**

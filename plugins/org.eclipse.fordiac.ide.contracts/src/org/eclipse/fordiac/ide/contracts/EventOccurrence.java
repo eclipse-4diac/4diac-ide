@@ -31,22 +31,29 @@ public class EventOccurrence implements Comparable<EventOccurrence> {
 	private final Type type;
 	private State state;
 	private final int ruleIndex;
+	private final String eventID;
 
 	public EventOccurrence(final String eventName, final double timestampNs) {
-		this(eventName, timestampNs, 0);
+		this(eventName, timestampNs, Type.RECORDED, State.NOT_SET, 0);
 	}
 
-	public EventOccurrence(final String eventName, final double timestampNs, final int ruleIndex) {
-		this(eventName, timestampNs, Type.RECORDED, State.NOT_SET, ruleIndex);
+	public EventOccurrence(final String eventName, final double timestampNs, final String eventID) {
+		this(eventName, timestampNs, Type.RECORDED, State.NOT_SET, 0, eventID);
 	}
 
 	public EventOccurrence(final String eventName, final double timestampNs, final Type type, final State state,
 			final int ruleIndex) {
+		this(eventName, timestampNs, type, state, ruleIndex, null);
+	}
+
+	public EventOccurrence(final String eventName, final double timestampNs, final Type type, final State state,
+			final int ruleIndex, final String eventID) {
 		this.eventName = eventName;
 		this.timestampNs = timestampNs;
 		this.type = type;
 		this.state = state;
 		this.ruleIndex = ruleIndex;
+		this.eventID = eventID;
 	}
 
 	public String getShortName() {
@@ -103,5 +110,9 @@ public class EventOccurrence implements Comparable<EventOccurrence> {
 
 	public int ruleIndex() {
 		return ruleIndex;
+	}
+
+	public String eventID() {
+		return eventID;
 	}
 }
