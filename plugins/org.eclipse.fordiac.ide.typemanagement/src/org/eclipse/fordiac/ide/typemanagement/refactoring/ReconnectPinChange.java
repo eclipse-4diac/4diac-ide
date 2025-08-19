@@ -16,9 +16,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
@@ -37,7 +35,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 
@@ -46,7 +43,7 @@ public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 
 	public ReconnectPinChange(final URI elementURI, final Class<FBNetworkElement> elementClass, final String newName,
 			final String oldName) {
-		super("Handle connection of : " + oldName, elementURI, elementClass);
+		super("Handle connection of : " + oldName, elementURI, elementClass); //$NON-NLS-1$
 		this.newName = newName;
 		this.oldName = oldName;
 	}
@@ -59,7 +56,7 @@ public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.RECONNECT, ChangeState.NO_CHANGE, ChangeState.DELETE);
+		return EnumSet.of(ChangeState.RECONNECT, ChangeState.DELETE);
 	}
 
 	@Override
@@ -71,13 +68,6 @@ public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
 		// No special initialization required
 	}
-
-	@Override
-	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		return super.isValid(element, pm);
-	}
-
 }
 
 class ReconnectPinByName extends Command {
