@@ -72,7 +72,7 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			return null;
 		}
 
-		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode);
+		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode, true);
 		selectOpposites(event, viewer, originPin, opposites, editor);
 		return null;
 	}
