@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui.editor;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.typeeditor.XtextTypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -22,7 +23,7 @@ import org.eclipse.ui.IEditorInput;
 
 import com.google.inject.Inject;
 
-public class GlobalConstantsEditor extends XtextTypeEditorPage {
+public class GlobalConstantsEditor extends XtextTypeEditorPage implements STCoreSaveActionsEditor {
 	@Inject
 	private STCoreEditorPreferences editorPreferences;
 
@@ -41,5 +42,26 @@ public class GlobalConstantsEditor extends XtextTypeEditorPage {
 	@Override
 	public String getEditorId() {
 		return getLanguageName();
+	}
+
+	private boolean saveActionsDisabled;
+
+	@Override
+	public void doRevertToSaved() {
+		setSaveActionsDisabled(true);
+		try {
+			super.doRevertToSaved();
+		} finally {
+			setSaveActionsDisabled(false);
+		}
+	}
+
+	@Override
+	public boolean isSaveActionsDisabled() {
+		return saveActionsDisabled;
+	}
+
+	public void setSaveActionsDisabled(final boolean saveActionsDisabled) {
+		this.saveActionsDisabled = saveActionsDisabled;
 	}
 }

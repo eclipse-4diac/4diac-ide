@@ -126,7 +126,6 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
-	public static String ConfigurableChange_noChangeErrorMessage;
 
 	public static String ImportChange_ImportedNamespaceChanged;
 
@@ -192,7 +191,6 @@ public final class Messages extends NLS {
 	public static String PreviewChange_DeleteChoice;
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
-	public static String PreviewChange_NoChange;
 
 	public static String SafeStructDeletionChange_RootNodeChangeText;
 

@@ -43,16 +43,17 @@ public class DeleteUpdateFBTypeInterfaceChange extends ConfigurableChange<FBType
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
 				struct.getName()), EcoreUtil.getURI(type), FBType.class);
 		this.struct = struct;
+		setEnabled(false); // not enabled by default
 	}
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.DELETE, ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.DELETE);
 	}
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.CHANGE_TO_ANY);
 	}
 
 	@Override
@@ -68,11 +69,11 @@ public class DeleteUpdateFBTypeInterfaceChange extends ConfigurableChange<FBType
 		final List<VarDeclaration> varDeclaration = getVarDeclarationsForStruct(element);
 
 		if (varDeclaration.isEmpty()) {
-			status.addError(struct.getQualifiedName() + " is not part of the interface of " + getName());
+			status.addError(struct.getQualifiedName() + " is not part of the interface of " + getName()); //$NON-NLS-1$
 		}
 
 		if (element.getTypeLibrary() == null || element.getTypeLibrary().getDataTypeLibrary() == null) {
-			status.addError("Type Library is null");
+			status.addError("Type Library is null"); //$NON-NLS-1$
 		}
 
 		return status;

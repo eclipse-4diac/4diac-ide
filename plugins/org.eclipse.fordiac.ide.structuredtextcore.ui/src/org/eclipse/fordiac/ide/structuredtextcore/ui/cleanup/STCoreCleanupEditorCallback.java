@@ -38,7 +38,9 @@ public class STCoreCleanupEditorCallback extends IXtextEditorCallback.NullImpl {
 
 	@Override
 	public void afterSave(final XtextEditor editor) {
-		if (!running && preferences.isEnableSaveActions(getProject(editor))) {
+		if (!running && preferences.isEnableSaveActions(getProject(editor))
+				&& editor instanceof final STCoreSaveActionsEditor stCoreXtextEditor
+				&& !stCoreXtextEditor.isSaveActionsDisabled()) {
 			try {
 				running = true;
 				performSaveActions(editor);

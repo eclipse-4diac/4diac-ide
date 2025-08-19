@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public abstract class ConfigurableChange<T extends EObject> extends AbstractCommandChange<T>
@@ -31,29 +30,17 @@ public abstract class ConfigurableChange<T extends EObject> extends AbstractComm
 	@Override
 	public RefactoringStatus isValid(final T element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-		if (getState().contains(ChangeState.NO_CHANGE)) {
-			status.addFatalError(Messages.ConfigurableChange_noChangeErrorMessage);
-		}
-		return status;
+		return new RefactoringStatus();
 	}
 
 	protected ConfigurableChange(final String name, final URI elementURI, final Class<T> elementClass) {
 		super(name, elementURI, elementClass);
 		this.state = getDefaultSelection();
-		initEnablement();
 	}
 
 	protected ConfigurableChange(final URI elementURI, final Class<T> elementClass) {
 		super(elementURI, elementClass);
 		this.state = getDefaultSelection();
-		initEnablement();
-	}
-
-	private void initEnablement() {
-		if (getDefaultSelection().contains(ChangeState.NO_CHANGE)) {
-			setEnabled(false);
-		}
 	}
 
 	@Override
@@ -64,10 +51,5 @@ public abstract class ConfigurableChange<T extends EObject> extends AbstractComm
 	@Override
 	public void addState(final ChangeState newState) {
 		state.add(newState);
-	}
-
-	@Override
-	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
 	}
 }

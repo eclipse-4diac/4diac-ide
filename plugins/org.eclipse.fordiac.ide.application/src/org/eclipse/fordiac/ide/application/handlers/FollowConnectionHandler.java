@@ -88,11 +88,13 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode) {
-		if (stepMode) {
-			return getConnectionOpposites(pin);
+		final List<IInterfaceElement> opposites = getConnectionOpposites(pin);
+		if (!stepMode) {
+			// before jump, we take 1 step to not fulfill the ending-condition early
+			final List<IInterfaceElement> newOpposites = new ArrayList<>();
+			opposites.forEach(ie -> jumpOverConnections(ie, newOpposites));
+			return newOpposites;
 		}
-		final List<IInterfaceElement> opposites = new ArrayList<>();
-		jumpOverConnections(pin, opposites);
 		return opposites;
 	}
 
@@ -218,7 +220,15 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			if (startPin instanceof final MemberVarDeclaration member) {
 				final Set<IInterfaceElement> memberEnd = new HashSet<>();
 				FBEndpointFinder.traceMembers(member, memberEnd);
-				memberEnd.forEach(mem -> jumpOverConnections(mem, destinations));
+				memberEnd.forEach(mem -> {
+					final List<Connection> cons = getConnectionList(mem);
+					if (cons.isEmpty()) {
+						destinations.add(mem);
+					} else {
+						// only continue with pins where connections exist to avoid loop
+						jumpOverConnections(mem, destinations);
+					}
+				});
 				return;
 			}
 			// FB-Pin / dead-end found

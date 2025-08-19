@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
-import java.util.EnumSet;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,10 +26,11 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateManipulatorChange extends ConfigurableChange<StructManipulator> {
+public class UpdateManipulatorChange extends AbstractCommandChange<StructManipulator> {
 
 	public UpdateManipulatorChange(final StructManipulator manipulator) {
 		super(getName(manipulator), EcoreUtil.getURI(manipulator), StructManipulator.class);
+		setEnabled(false); // not enabled by default
 	}
 
 	public static String getName(final StructManipulator manipulator) {
@@ -46,26 +46,15 @@ public class UpdateManipulatorChange extends ConfigurableChange<StructManipulato
 	@Override
 	public RefactoringStatus isValid(final StructManipulator manipulator, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(manipulator, pm);
+		final RefactoringStatus status = new RefactoringStatus();
 		if (manipulator.eContainer() == null) {
-			status.addError(getName() + " invalid element");
+			status.addError(getName() + " invalid element"); //$NON-NLS-1$
 		}
 		return status;
 	}
 
 	@Override
 	protected Command createCommand(final StructManipulator manipulator) {
-		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
-			return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY, true);
-		}
-		// only return null if the UI has an incosistency, so returning null will force
-		// an error
-		return null;
+		return new ChangeStructCommand(manipulator, IecTypes.GenericTypes.ANY, true);
 	}
-
-	@Override
-	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
-	}
-
 }
