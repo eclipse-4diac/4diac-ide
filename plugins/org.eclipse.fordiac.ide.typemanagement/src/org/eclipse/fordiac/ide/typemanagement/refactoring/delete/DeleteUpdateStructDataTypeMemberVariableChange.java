@@ -38,16 +38,17 @@ public class DeleteUpdateStructDataTypeMemberVariableChange extends Configurable
 				varDeclaration.getName(), varDeclaration.getTypeName(),
 				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
 				VarDeclaration.class);
+		setEnabled(false); // not enabled by default
 	}
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY);
 	}
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.DELETE);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class DeleteUpdateStructDataTypeMemberVariableChange extends Configurable
 		final RefactoringStatus status = super.isValid(element, pm);
 
 		if (!(element.getType() instanceof StructuredType)) {
-			status.addError("This should not happen");
+			status.addError("This should not happen"); //$NON-NLS-1$
 		}
 
 		return status;
@@ -75,10 +76,6 @@ public class DeleteUpdateStructDataTypeMemberVariableChange extends Configurable
 		}
 		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
 			return ChangeDataTypeCommand.forDataType(varDeclaration, IecTypes.GenericTypes.ANY_STRUCT);
-		}
-
-		if (getState().contains(ChangeState.NO_CHANGE)) {
-			return ChangeDataTypeCommand.forDataType(varDeclaration, varDeclaration.getType());
 		}
 
 		return null;

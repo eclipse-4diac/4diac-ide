@@ -24,13 +24,6 @@ public abstract class ConfigurableModelEdit<T extends EObject> extends ModelEdit
 	protected ConfigurableModelEdit(final String name, final URI elementURI, final Class<T> elementClass) {
 		super(name, elementURI, elementClass);
 		this.state = getDefaultSelection();
-		initEnablement();
-	}
-
-	private void initEnablement() {
-		if (getDefaultSelection().contains(ChangeState.NO_CHANGE)) {
-			setEnabled(false);
-		}
 	}
 
 	@Override
@@ -41,10 +34,5 @@ public abstract class ConfigurableModelEdit<T extends EObject> extends ModelEdit
 	@Override
 	public void addState(final ChangeState newState) {
 		state.add(newState);
-	}
-
-	@Override
-	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
 	}
 }

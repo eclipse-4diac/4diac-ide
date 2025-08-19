@@ -36,6 +36,7 @@ public class UpdateUntypedSubappPinChange extends ConfigurableChange<VarDeclarat
 	public UpdateUntypedSubappPinChange(final VarDeclaration varDecl) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins, varDecl.getName(),
 				getSubappName(varDecl)), EcoreUtil.getURI(varDecl), VarDeclaration.class);
+		setEnabled(false); // not enabled by default
 	}
 
 	private static String getSubappName(final VarDeclaration varDecl) {
@@ -44,12 +45,12 @@ public class UpdateUntypedSubappPinChange extends ConfigurableChange<VarDeclarat
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY, ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.DELETE, ChangeState.CHANGE_TO_ANY);
 	}
 
 	@Override
 	public EnumSet<ChangeState> getDefaultSelection() {
-		return EnumSet.of(ChangeState.NO_CHANGE);
+		return EnumSet.of(ChangeState.DELETE);
 	}
 
 	@Override
@@ -64,9 +65,6 @@ public class UpdateUntypedSubappPinChange extends ConfigurableChange<VarDeclarat
 		}
 		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
 			return ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
-		}
-		if (getState().contains(ChangeState.NO_CHANGE)) {
-			return ChangeDataTypeCommand.forDataType(varDecl, varDecl.getType());
 		}
 		return null;
 	}
