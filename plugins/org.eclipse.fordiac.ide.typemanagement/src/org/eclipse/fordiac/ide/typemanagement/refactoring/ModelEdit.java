@@ -24,9 +24,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public abstract class ModelEdit<T extends EObject> {
+public abstract class ModelEdit<T extends EObject> extends Change {
 	private final String name;
 	private final URI elementURI;
 	private final Class<T> elementClass;
@@ -120,6 +121,7 @@ public abstract class ModelEdit<T extends EObject> {
 	 *
 	 * @return The name (will never be null)
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -163,6 +165,26 @@ public abstract class ModelEdit<T extends EObject> {
 				return elementClass.cast(element);
 			}
 		}
+		return null;
+	}
+
+	@Override
+	public final void initializeValidationData(final IProgressMonitor pm) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public final RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public final Change perform(final IProgressMonitor pm) throws CoreException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public final Object getModifiedElement() {
 		return null;
 	}
 }

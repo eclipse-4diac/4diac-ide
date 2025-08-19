@@ -42,7 +42,9 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 	public void initializeValidationData(final LibraryElement element, final IProgressMonitor pm) {
 		final SubMonitor subMonitor = SubMonitor.convert(pm, edits.size());
 		for (final ModelEdit<?> edit : edits) {
-			edit.initializeValidationData(element, subMonitor.newChild(1));
+			if (edit.isEnabled()) {
+				edit.initializeValidationData(element, subMonitor.newChild(1));
+			}
 		}
 	}
 
@@ -52,7 +54,9 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 		final RefactoringStatus result = new RefactoringStatus();
 		final SubMonitor subMonitor = SubMonitor.convert(pm, edits.size());
 		for (final ModelEdit<?> edit : edits) {
-			result.merge(edit.isValid(element, subMonitor.split(1)));
+			if (edit.isEnabled()) {
+				result.merge(edit.isValid(element, subMonitor.split(1)));
+			}
 		}
 		return result;
 	}
@@ -61,7 +65,9 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 	protected Command createCommand(final LibraryElement element) throws CoreException {
 		final CompoundCommand result = new CompoundCommand(getName());
 		for (final ModelEdit<?> edit : edits) {
-			result.add(edit.createCommand(element));
+			if (edit.isEnabled()) {
+				result.add(edit.createCommand(element));
+			}
 		}
 		return result;
 	}
@@ -73,6 +79,19 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 	 */
 	public List<ModelEdit<?>> getModelEdits() {
 		return Collections.unmodifiableList(edits);
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		super.setEnabled(enabled);
+		for (final ModelEdit<?> edit : edits) {
+			edit.setEnabled(enabled);
+		}
+	}
+
+	@Override
+	public Change[] getChildren() {
+		return edits.toArray(Change[]::new);
 	}
 
 	public static CompositeChange fromModelEdits(final String name, final List<? extends ModelEdit<?>> edits) {

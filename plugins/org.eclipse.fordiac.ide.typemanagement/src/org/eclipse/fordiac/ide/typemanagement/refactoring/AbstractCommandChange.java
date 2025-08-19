@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -49,9 +50,8 @@ import org.eclipse.ui.part.FileEditorInput;
  *           become out of date. Always use the element parameter passed to the
  *           respective methods.
  */
-public abstract class AbstractCommandChange<T extends EObject> extends Change {
+public abstract class AbstractCommandChange<T extends EObject> extends CompositeChange {
 
-	private final String name;
 	private final URI elementURI;
 	private final Class<T> elementClass;
 	private final TypeEntry typeEntry;
@@ -77,7 +77,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 * @param elementClass The element class
 	 */
 	protected AbstractCommandChange(final String name, final URI elementURI, final Class<T> elementClass) {
-		this.name = Objects.requireNonNull(name);
+		super(name);
 		this.elementURI = Objects.requireNonNull(elementURI);
 		this.elementClass = Objects.requireNonNull(elementClass);
 		this.typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
@@ -248,7 +248,18 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 	 *           {@link CommandRedoChange}.
 	 */
 	protected Change createUndoChange(final Command command, final LibraryElement libraryElement) {
-		return new CommandUndoChange<>(name, elementURI, elementClass, command, libraryElement);
+		return new CommandUndoChange<>(getName(), elementURI, elementClass, command, libraryElement);
+	}
+
+	/**
+	 * @throws UnsupportedOperationException adding changes is not supported
+	 * @implNote We need to inherit from {@link CompositeChange} to support showing
+	 *           child nodes in subclasses, but do not actually support adding any
+	 *           changes.
+	 */
+	@Override
+	public final void add(final Change change) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("Cannot add any changes to this " + getClass().getName()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -270,11 +281,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Change {
 			return new Object[] { modifiedElement };
 		}
 		return super.getAffectedObjects();
-	}
-
-	@Override
-	public final String getName() {
-		return name;
 	}
 
 	/**

@@ -651,7 +651,7 @@
          <or>
          <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateFBTypeInterfaceChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateStructDataTypeMemberVariableChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteInternalFBChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteInternalFBModelEdit"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange"/>

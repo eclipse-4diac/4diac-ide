@@ -17,16 +17,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
+import java.text.MessageFormat;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
@@ -60,11 +70,11 @@ public class DeleteTypeRefactoringParticipant extends DeleteParticipant {
 		try {
 			pm.beginTask("Creating change...", 1); //$NON-NLS-1$
 
-			if (typeEntry.getType() instanceof final StructuredType struct) {
+			if (typeEntry instanceof DataTypeEntry && typeEntry.getType() instanceof final StructuredType struct) {
 				return new SafeStructDeletionChange(struct);
 			}
-			if (typeEntry.getType() instanceof final FBType type) {
-				return new SafeFBTypeDeletionChange(type);
+			if (typeEntry instanceof final FBTypeEntry fbTypeEntry) {
+				return createFBTypeDeletionChange(fbTypeEntry.getType());
 			}
 
 			return null;
@@ -73,4 +83,14 @@ public class DeleteTypeRefactoringParticipant extends DeleteParticipant {
 		}
 	}
 
+	private static CompositeChange createFBTypeDeletionChange(final FBType type) {
+		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(type.getTypeEntry());
+		return ModelEditChange.fromModelEdits(
+				MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle, type.getName()),
+				search.performSearch().stream().filter(FBNetworkElement.class::isInstance)
+						.map(FBNetworkElement.class::cast)
+						.filter(fbnEl -> fbnEl instanceof FB && fbnEl.eContainer() instanceof BaseFBType)
+						.map(FB.class::cast).map(DeleteInternalFBModelEdit::new).toList());
+
+	}
 }
