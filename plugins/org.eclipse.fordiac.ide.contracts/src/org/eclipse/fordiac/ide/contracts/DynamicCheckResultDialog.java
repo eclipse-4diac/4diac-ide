@@ -260,7 +260,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 				try (FileOutputStream fstream = new FileOutputStream(fname)) {
 					fstream.write(svg.getBytes());
 				} catch (final Exception ex) {
-					return;
+					// could display an error message here
 				}
 			}
 
@@ -550,7 +550,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		canvas.redraw();
 	}
 
-	private void navigateRules(final int changeAmount) {
+	private void navigateRules(final long changeAmount) {
 		final int nRules = result.rules().size();
 		firstRuleIdx = Math.clamp(firstRuleIdx + changeAmount, 0, nRules - MAX_RULES);
 		fillRuleList();
