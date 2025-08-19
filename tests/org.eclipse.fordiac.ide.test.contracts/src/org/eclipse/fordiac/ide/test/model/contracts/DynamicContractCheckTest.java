@@ -414,6 +414,28 @@ class DynamicContractCheckTest {
 				ContractIssue.Code.CAUSAL_REACTION_TOO_LATE);
 	}
 
+	@Test
+	void causalReactionIDFulfillTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [2, 4]ns \n |> (EI, EO) := ID");
+		sys.performDynamicCheck(List.of(eo("EI", 3, "A"), eo("EO", 5, "A"), eo("EI", 12, "B"), eo("EO", 15, "B")));
+		assertIssues(sys);
+	}
+
+	@Test
+	void causalReactionIDIssueTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [2, 4]ns \n |> (EI, EO) := ID");
+		sys.performDynamicCheck(List.of(eo("EI", 3, "A"), eo("EO", 5, "B"), eo("EI", 12, "B"), eo("EO", 15, "A")));
+		assertIssues(sys, ContractIssue.Code.CAUSAL_REACTION_MISSED, ContractIssue.Code.CAUSAL_REACTION_TOO_LATE,
+				ContractIssue.Code.CAUSAL_REACTION_MISSED);
+	}
+
+	@Test
+	void causalReactionDuplicateIDTest() {
+		final ContractSystem sys = createSimpleSystem("Reaction(EI, EO) within [2, 4]ns \n |> (EI, EO) := ID");
+		sys.performDynamicCheck(List.of(eo("EI", 3, "A"), eo("EI", 5, "A")));
+		assertIssues(sys, ContractIssue.Code.DUPLICATE_CAUSAL_ID, ContractIssue.Code.CAUSAL_REACTION_MISSED,
+				ContractIssue.Code.CAUSAL_REACTION_MISSED);
+	}
 
 	// === test causal age
 	// causal age is symmetric to causal reaction above -> less extensive tests
@@ -459,6 +481,10 @@ class DynamicContractCheckTest {
 
 	private EventOccurrence eo(final String shortName, final double timestamp) {
 		return new EventOccurrence("component." + shortName, timestamp);
+	}
+
+	private EventOccurrence eo(final String shortName, final double timestamp, final String eventID) {
+		return new EventOccurrence("component." + shortName, timestamp, eventID);
 	}
 
 	private static void assertIssues(final ContractSystem sys, final ContractIssue.Code... code) {

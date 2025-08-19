@@ -283,8 +283,10 @@ public class DynamicContractChecker {
 		final String input = rule.getInputs().getFirst();
 		if (eo.eventName().endsWith(input)) { // input occurred -> setup interval
 			final CInterval interval = rule.getInterval().translate(eo.timestampNs());
-			final EventOccurrence missedM = createMissedMarker(rule, input, interval.getUpperBound(), ruleIdx);
-			ruleData.rememberCausalEvent(missedM);
+			final EventOccurrence mm = createMissedMarker(rule, input, interval.getUpperBound(), ruleIdx, eo.eventID());
+			if (!ruleData.rememberCausalEvent(mm)) {
+				duplicateIDError(mm);
+			}
 			ruleData.intervals().add(interval);
 			ruleData.markers().add(normalMarker(eo));
 		} else { // output occurred -> perform check
@@ -318,7 +320,9 @@ public class DynamicContractChecker {
 		final String input = rule.getInputs().getFirst();
 		if (eo.eventName().endsWith(input)) { // input occurred -> setup queue/stack
 			final EventOccurrence marker = normalMarker(eo);
-			ruleData.rememberCausalEvent(marker);
+			if (!ruleData.rememberCausalEvent(marker)) {
+				duplicateIDError(marker);
+			}
 			ruleData.markers().add(marker);
 		} else { // output occurred -> perform check
 			final CInterval inter = rule.getInterval();
@@ -400,14 +404,29 @@ public class DynamicContractChecker {
 		}
 	}
 
+	private void duplicateIDError(final EventOccurrence eo) {
+		system.error("The event ID \"%s\" was already in use for \"%s\"".formatted(eo.eventID(), eo.eventName()),
+				ContractIssue.Code.DUPLICATE_CAUSAL_ID);
+	}
+
 	private EventOccurrence createMissedMarker(final ContractRule rule, final String port, final double time,
 			final int ruleIdx) {
 		return createMissedMarker(createKey(rule, port), time, ruleIdx);
 	}
 
+	private EventOccurrence createMissedMarker(final ContractRule rule, final String port, final double time,
+			final int ruleIdx, final String eventID) {
+		return createMissedMarker(createKey(rule, port), time, ruleIdx, eventID);
+	}
+
 	private EventOccurrence createMissedMarker(final String key, final double time, final int ruleIdx) {
+		return createMissedMarker(key, time, ruleIdx, null);
+	}
+
+	private EventOccurrence createMissedMarker(final String key, final double time, final int ruleIdx,
+			final String eventID) {
 		final EventOccurrence eo = new EventOccurrence(key, time, EventOccurrence.Type.MISSED_MARKER,
-				EventOccurrence.State.ISSUE, ruleIdx);
+				EventOccurrence.State.ISSUE, ruleIdx, eventID);
 		queue.offer(eo);
 		return eo;
 	}
@@ -417,14 +436,17 @@ public class DynamicContractChecker {
 	}
 
 	private static EventOccurrence normalMarker(final EventOccurrence eo) {
-		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.NOT_SET, 0);
+		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.NOT_SET, 0,
+				eo.eventID());
 	}
 
 	private static EventOccurrence issueMarker(final EventOccurrence eo) {
-		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.ISSUE, 0);
+		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.ISSUE, 0,
+				eo.eventID());
 	}
 
 	private static EventOccurrence fulfillMarker(final EventOccurrence eo) {
-		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.FULFILLING, 0);
+		return new EventOccurrence(eo.eventName(), eo.timestampNs(), eo.type(), EventOccurrence.State.FULFILLING, 0,
+				eo.eventID());
 	}
 }

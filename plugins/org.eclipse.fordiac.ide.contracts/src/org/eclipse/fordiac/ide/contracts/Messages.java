@@ -96,6 +96,8 @@ public final class Messages extends NLS {
 
 	public static String EventOccurrence_LoadFromFile;
 
+	public static String EventOccurrence_LoadExample;
+
 	public static String EventOccurrence_Error_Title;
 
 	public static String EventOccurrence_Error_Info;
