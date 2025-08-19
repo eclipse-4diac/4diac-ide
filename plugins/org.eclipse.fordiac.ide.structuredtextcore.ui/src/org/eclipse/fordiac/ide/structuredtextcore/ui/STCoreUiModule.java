@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposa
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreURIEditorOpener;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreXtextEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
@@ -185,6 +186,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
 		return STCoreQuickAssistProcessor.class;
+	}
+
+	public Class<? extends XtextEditor> bindXtextEditor() {
+		return STCoreXtextEditor.class;
 	}
 
 	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {

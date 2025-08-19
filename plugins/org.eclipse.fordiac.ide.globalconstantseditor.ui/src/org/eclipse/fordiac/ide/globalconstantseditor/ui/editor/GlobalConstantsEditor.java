@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui.editor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.properties.GlobalConstantsPropertySheetPage;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreXtextEditor;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -27,9 +28,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.eclipse.xtext.ui.editor.XtextEditor;
 
-public class GlobalConstantsEditor extends XtextEditor
+public class GlobalConstantsEditor extends STCoreXtextEditor
 		implements CommandStackEventListener, ITabbedPropertySheetPageContributor {
 
 	private final CommandStack commandStack = new CommandStack();

@@ -32,7 +32,7 @@ public class FBTypePropertyTester extends PropertyTester {
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) instanceof final FBTypeEntry fbTypeEntry) {
 			final EClass typeEClass = fbTypeEntry.getTypeEClass();
 			if (typeEClass != null) {
-				typeEClass.getName();
+				return typeEClass.getName();
 			}
 		}
 		return ""; //$NON-NLS-1$
