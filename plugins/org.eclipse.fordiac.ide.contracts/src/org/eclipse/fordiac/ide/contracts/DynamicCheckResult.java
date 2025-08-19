@@ -55,7 +55,7 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 			final ContractRule.SlidingWindow nOutOfM = rule.getNOutOfM();
 			if (nOutOfM != null && nOutOfM.n() != nOutOfM.outOf()) {
 				slidingWindow = new boolean[nOutOfM.outOf()];
-				Arrays.fill(slidingWindow, true); // all true at first
+				Arrays.fill(slidingWindow, true); // sliding window fulfilled at start
 			} else {
 				slidingWindow = null;
 			}
@@ -63,6 +63,7 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 			if (rule.getType() == Type.REACTION || rule.getType() == Type.AGE) {
 				triggerSet = new boolean[rule.getInputs().size()];
 			}
+
 			if (rule.getType() == Type.CAUSAL_REACTION || rule.getType() == Type.CAUSAL_AGE) {
 				switch (rule.getCausalRelation()) {
 				case FIFO:

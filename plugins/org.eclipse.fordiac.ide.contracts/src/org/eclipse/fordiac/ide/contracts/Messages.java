@@ -72,6 +72,22 @@ public final class Messages extends NLS {
 
 	public static String ContractConflictingGuaranteesError;
 
+	public static String ContractSingleEventOnceError;
+
+	public static String ContractEventMissedError;
+
+	public static String ContractReactionAgeMissedError;
+
+	public static String ContractReactionAgeTooOftenError;
+
+	public static String ContractReactionAgeSlidingWindowError;
+
+	public static String ContractEventTooEarlyError;
+
+	public static String ContractEventTooLateError;
+
+	public static String ContractDuplicateEventIDError;
+
 	public static String ContractCheckSuccess_Title;
 
 	public static String ContractCheckIssue_Title;

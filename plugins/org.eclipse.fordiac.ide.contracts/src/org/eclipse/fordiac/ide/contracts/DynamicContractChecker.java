@@ -152,7 +152,7 @@ public class DynamicContractChecker {
 		}
 
 		if (rule.isFulFilled()) {
-			system.error("\"%s\" occurred more than once.".formatted(eo.eventName()), Code.SINGLE_EVENT_MULTIPLE);
+			system.error(Messages.ContractSingleEventOnceError.formatted(eo.eventName()), Code.SINGLE_EVENT_MULTIPLE);
 			ruleData.markers().add(issueMarker(eo));
 		} else if (!rule.getInterval().contains(eo.timestampNs())) {
 			eventOutsideIntervalError(rule.getInterval(), eo, Code.SINGLE_EVENT_TOO_EARLY, Code.SINGLE_EVENT_TOO_LATE);
@@ -365,22 +365,21 @@ public class DynamicContractChecker {
 	}
 
 	private void eventMissedError(final EventOccurrence eo, final Code code) {
-		system.error(
-				"\"%s\" did not arrive in time at %s.".formatted(eo.eventName(), Utils.nsToString(eo.timestampNs())),
+		system.error(Messages.ContractEventMissedError.formatted(eo.eventName(), Utils.nsToString(eo.timestampNs())),
 				code);
 	}
 
 	private void reactionAgeMissedError(final EventOccurrence eo, final boolean isReaction) {
 		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
 		final Code code = isReaction ? Code.REACTION_MISSED : Code.AGE_MISSED;
-		system.error("%s for \"%s\" did not arrive in time at %s.".formatted(type, eo.eventName(),
+		system.error(Messages.ContractReactionAgeMissedError.formatted(type, eo.eventName(),
 				Utils.nsToString(eo.timestampNs())), code);
 	}
 
 	private void reactionAgeTooOftenError(final EventOccurrence eo, final boolean isReaction) {
 		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
 		final Code code = isReaction ? Code.REACTION_TOO_OFTEN : Code.AGE_TOO_OFTEN;
-		system.error("%s for \"%s\" occurred more than once until %s.".formatted(type, eo.eventName(),
+		system.error(Messages.ContractReactionAgeTooOftenError.formatted(type, eo.eventName(),
 				Utils.nsToString(eo.timestampNs())), code);
 	}
 
@@ -389,23 +388,23 @@ public class DynamicContractChecker {
 			final boolean isReaction) {
 		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
 		final Code code = isReaction ? Code.REACTION_MISSED : Code.AGE_MISSED;
-		system.error("%s for \"%s\" did not arrive %d out of %d times at %s.".formatted(type, eo.eventName(),
-				window.n(), window.outOf(), Utils.nsToString(eo.timestampNs())), code);
+		system.error(Messages.ContractReactionAgeSlidingWindowError.formatted(type, eo.eventName(), window.n(),
+				window.outOf(), Utils.nsToString(eo.timestampNs())), code);
 	}
 
 	private void eventOutsideIntervalError(final CInterval interval, final EventOccurrence eo, final Code tooEarly,
 			final Code tooLate) {
 		if (eo.timestampNs() <= interval.getLowerBound()) {
-			system.error("\"%s\" occurred %s too early.".formatted(eo.eventName(),
+			system.error(Messages.ContractEventTooEarlyError.formatted(eo.eventName(),
 					Utils.nsToString(interval.getLowerBound() - eo.timestampNs())), tooEarly);
 		} else {
-			system.error("\"%s\" occurred %s too late.".formatted(eo.eventName(),
+			system.error(Messages.ContractEventTooLateError.formatted(eo.eventName(),
 					Utils.nsToString(eo.timestampNs() - interval.getUpperBound())), tooLate);
 		}
 	}
 
 	private void duplicateIDError(final EventOccurrence eo) {
-		system.error("The event ID \"%s\" was already in use for \"%s\"".formatted(eo.eventID(), eo.eventName()),
+		system.error(Messages.ContractDuplicateEventIDError.formatted(eo.eventID(), eo.eventName()),
 				ContractIssue.Code.DUPLICATE_CAUSAL_ID);
 	}
 
