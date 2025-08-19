@@ -64,7 +64,7 @@ public class EditTypedSubappVarInOutSection extends EditUntypedSubappVarInOutSec
 	protected IEditableRule getSectionEditableRule() {
 		return new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS,
-				VarDeclarationTableColumn.DEFAULT_EDITABLE);
+				VarDeclarationTableColumn.DEFAULT_EDITABLE_NO_VISIBLE);
 	}
 
 }
