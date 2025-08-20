@@ -207,6 +207,24 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		}
 	}
 
+	public List<IInterfaceElement> jumpOverStruct(final MemberVarDeclaration startPin, final boolean goRight) {
+		final Set<IInterfaceElement> structEndpoints = new HashSet<>();
+		FBEndpointFinder.traceMembers(startPin, structEndpoints);
+
+		// continue jumping
+		final List<IInterfaceElement> opposites = new ArrayList<>();
+		for (final var endpoint : structEndpoints) {
+			final List<IInterfaceElement> nextPins = getNextFollowPins(endpoint, false, goRight);
+			if (nextPins.isEmpty()) {
+				// add pin after jump over mux if no further jumping is possible
+				opposites.add(endpoint);
+			} else {
+				opposites.addAll(nextPins);
+			}
+		}
+		return opposites;
+	}
+
 	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations,
 			final boolean goRight) {
 		if (isValidPin(startPin, goRight)) {
