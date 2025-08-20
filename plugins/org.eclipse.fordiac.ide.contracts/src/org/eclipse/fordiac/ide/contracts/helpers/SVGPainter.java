@@ -16,6 +16,9 @@ package org.eclipse.fordiac.ide.contracts.helpers;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
+/**
+ * "Paints" shapes to an SVG text instead of a canvas.
+ */
 @SuppressWarnings("nls") // translating doesn't make sense here
 public class SVGPainter implements Painter {
 

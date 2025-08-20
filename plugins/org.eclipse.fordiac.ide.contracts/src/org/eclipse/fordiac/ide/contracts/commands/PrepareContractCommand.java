@@ -13,7 +13,7 @@
  *   Felix Schmid
  *     - add connections from selected pins to SubApp
  *******************************************************************************/
-package org.eclipse.fordiac.ide.contracts;
+package org.eclipse.fordiac.ide.contracts.commands;
 
 import java.util.ArrayList;
 import java.util.List;

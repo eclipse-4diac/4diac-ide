@@ -32,6 +32,10 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Used to define new contract rules for an FB element based on a list of
+ * suggested templates.
+ */
 public class DefineContractDecisionDialog extends MessageDialog {
 
 	private final List<String> names;

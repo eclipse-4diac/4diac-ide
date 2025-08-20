@@ -20,6 +20,10 @@ import java.util.List;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 
+/**
+ * Contains helper methods to construct the string representation of contract
+ * rules.
+ */
 @SuppressWarnings("nls") // translating doesn't make sense here
 public final class ContractUtils {
 

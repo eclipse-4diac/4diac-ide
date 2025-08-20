@@ -18,6 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Used for the ContractSystem data structure and represents a sub application.
+ * Holds a set of ContractRules and connections to other ContractComponents.
+ */
 public class ContractComponent {
 
 	private final List<CConnection> inputs;

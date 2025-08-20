@@ -49,6 +49,11 @@ import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
 
+/**
+ * Represents a network of ContractComponents, which can be constructed from a
+ * set of SubApps. Static/Dynamic checks are then performed on this network.
+ * Also contains a list of errors which have occurred during checking.
+ */
 public class ContractSystem {
 
 	private final List<ContractComponent> components;
