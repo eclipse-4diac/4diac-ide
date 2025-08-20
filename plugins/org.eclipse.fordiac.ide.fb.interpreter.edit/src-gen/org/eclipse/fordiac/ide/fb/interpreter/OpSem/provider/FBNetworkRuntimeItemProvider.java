@@ -57,6 +57,7 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 			super.getPropertyDescriptors(object);
 
 			addFbnetworkPropertyDescriptor(object);
+			addOuterNetworkRuntimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -75,6 +76,22 @@ public class FBNetworkRuntimeItemProvider extends FBRuntimeAbstractItemProvider 
 								"_UI_FBNetworkRuntime_type"), //$NON-NLS-1$
 						OperationalSemanticsPackage.Literals.FB_NETWORK_RUNTIME__FBNETWORK, true, false, true, null,
 						null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Outer Network Runtime feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected void addOuterNetworkRuntimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_FBNetworkRuntime_outerNetworkRuntime_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
+								"_UI_FBNetworkRuntime_outerNetworkRuntime_feature", "_UI_FBNetworkRuntime_type"), //$NON-NLS-1$ //$NON-NLS-2$
+						OperationalSemanticsPackage.Literals.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME, true, false,
+						true, null, null, null));
 	}
 
 	/**
