@@ -162,9 +162,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 	private void collectVarConfigsRecursive(final INamedElement type, final Map<String, VarDeclaration> result,
 			final Set<INamedElement> visited, final String currentPrefix) {
-		if (!visited.add(type)) {
-			return;
-		}
+
 		switch (type) {
 		case final TypedSubApp tsa:
 			traverseInterfaceElements(tsa, result, visited, currentPrefix);
@@ -173,15 +171,11 @@ public class VarConfigurationSection extends AbstractSection {
 		case final UntypedSubApp utsa:
 			traverseFBNetwork(utsa.getSubAppNetwork().getNetworkElements(), result, visited, currentPrefix);
 			break;
-		case final SubAppType sat:
-			traverseFBNetwork(sat.getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
-			break;
 		case final Application app:
 			traverseFBNetwork(app.getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
 			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -200,11 +194,12 @@ public class VarConfigurationSection extends AbstractSection {
 			final String prefix = currentPrefix + fbne.getName() + separationPoint;
 			final boolean shouldCopy = !isPartOfEditedStructure(getType(), fbne);
 			addPossibleVarConfigs(fbne, result, prefix, shouldCopy);
-			if (fbne.getType() != null) {
-				collectVarConfigsRecursive(fbne.getType(), result, visited, prefix);
+
+			if (fbne instanceof final TypedSubApp tsa) {
+				collectVarConfigsRecursive(tsa, result, visited, prefix);
 			}
 			if (fbne instanceof final UntypedSubApp usa) {
-				traverseFBNetwork(usa.getSubAppNetwork().getNetworkElements(), result, visited, currentPrefix);
+				traverseFBNetwork(usa.getSubAppNetwork().getNetworkElements(), result, visited, prefix);
 			}
 		}
 	}
@@ -252,12 +247,13 @@ public class VarConfigurationSection extends AbstractSection {
 		if (result.containsKey(qualifiedName)) {
 			return;
 		}
-		final String subAppTypeName = qualifiedName.split("\\.")[0]; //$NON-NLS-1$
 		switch (getType()) {
-		case final Application app -> rootTSA = (TypedSubApp) app.getFBNetwork().getNetworkElements().stream()
-				.filter(x -> x.getName().equals(subAppTypeName)).toList().getFirst();
+		case final Application app ->
+			rootTSA = findTypedSubAppByQualifiedNameInNetwork(app.getFBNetwork().getNetworkElements(), qualifiedName);
 		case final TypedSubApp tsa -> rootTSA = tsa;
-		case final UntypedSubApp usa -> rootTSA = findTypedSubAppByTypeNameInUntypedSubApp(usa, subAppTypeName);
+		case final UntypedSubApp usa ->
+			rootTSA = findTypedSubAppByQualifiedNameInNetwork(usa.getSubAppNetwork().getNetworkElements(),
+					qualifiedName);
 		default -> {
 			break;
 		}
@@ -265,12 +261,10 @@ public class VarConfigurationSection extends AbstractSection {
 
 		final String relativeName = rootTSA != null ? getRelativeName(qualifiedName, rootTSA.getName()) : qualifiedName;
 		VarDeclaration existing = null;
-		if (rootTSA != null) {
-			existing = (rootTSA != null)
-					? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
-							.orElse(null)
-					: null;
-		}
+		existing = (rootTSA != null)
+				? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
+						.orElse(null)
+				: null;
 
 		final VarDeclaration targetVD;
 		if (existing != null) {
@@ -287,27 +281,67 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 		result.put(qualifiedName, targetVD);
 		copiedMap.put(targetVD, Boolean.TRUE);
+		cleanVarConfigParams(rootTSA);
 	}
 
-	private static TypedSubApp findTypedSubAppByTypeNameInUntypedSubApp(final UntypedSubApp root,
-			final String satName) {
-		for (final FBNetworkElement element : root.getSubAppNetwork().getNetworkElements()) {
-			if (element instanceof final TypedSubApp tsa && tsa.getType().getName().equals(satName)) {
+	private void cleanVarConfigParams(final TypedSubApp rootTSA) {
+		for (final VarDeclaration vd : rootTSA.getVarConfigParams()) {
+			if (!displayMap.values().contains(vd)) {
+				rootTSA.getVarConfigParams().remove(vd);
+			}
+		}
+	}
+
+	private static TypedSubApp findTypedSubAppByQualifiedNameInNetwork(final Iterable<FBNetworkElement> roots,
+			final String qualifiedName) {
+
+		final int lastDot = qualifiedName.lastIndexOf('.');
+		final String path = (lastDot > 0) ? qualifiedName.substring(0, lastDot) : qualifiedName;
+		Iterable<FBNetworkElement> current = roots;
+		for (final String seg : path.split("\\.")) {
+			if (seg.isEmpty()) {
+				continue;
+			}
+
+			FBNetworkElement elem = null;
+			for (final FBNetworkElement fbE : current) {
+				if (seg.equals(fbE.getName())) {
+					elem = fbE;
+					break;
+				}
+			}
+			if (elem == null) {
+				return null;
+			}
+			if (elem instanceof final TypedSubApp tsa) {
 				return tsa;
 			}
-			if (element instanceof final UntypedSubApp nested) {
-				final TypedSubApp result = findTypedSubAppByTypeNameInUntypedSubApp(nested, satName);
-				if (result != null) {
-					return result;
-				}
+
+			if (elem instanceof final UntypedSubApp usa) {
+				current = usa.getSubAppNetwork().getNetworkElements();
+				continue;
 			}
 		}
 		return null;
 	}
 
 	private static String getRelativeName(final String qualifiedName, final String rootName) {
-		if (qualifiedName.startsWith(rootName + separationPoint)) {
-			return qualifiedName.substring(rootName.length() + 1);
+		final String[] parts = qualifiedName.split(java.util.regex.Pattern.quote(separationPoint));
+
+		for (int i = 0; i < parts.length; i++) {
+			if (rootName.equals(parts[i])) {
+				if (i + 1 >= parts.length) {
+					return "";
+				}
+				final StringBuilder sb = new StringBuilder();
+				for (int j = i + 1; j < parts.length; j++) {
+					if (sb.length() > 0) {
+						sb.append(separationPoint);
+					}
+					sb.append(parts[j]);
+				}
+				return sb.toString();
+			}
 		}
 		return qualifiedName;
 	}
