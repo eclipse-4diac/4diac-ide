@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>FB
@@ -43,6 +44,6 @@ public interface FBRuntimeAbstract extends EObject {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	EObject getModel();
+	FBType getModel();
 
 } // FBRuntimeAbstract

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -92,6 +93,8 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createSimpleFBTypeRuntime();
 		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME:
 			return createFunctionFBTypeRuntime();
+		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME:
+			return createCompositeFBTypeRuntime();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
 			return createFBNetworkRuntime();
 		case OperationalSemanticsPackage.FB_TRANSACTION:
@@ -194,6 +197,17 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public FunctionFBTypeRuntime createFunctionFBTypeRuntime() {
 		FunctionFBTypeRuntimeImpl functionFBTypeRuntime = new FunctionFBTypeRuntimeImpl();
 		return functionFBTypeRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public CompositeFBTypeRuntime createCompositeFBTypeRuntime() {
+		CompositeFBTypeRuntimeImpl compositeFBTypeRuntime = new CompositeFBTypeRuntimeImpl();
+		return compositeFBTypeRuntime;
 	}
 
 	/**

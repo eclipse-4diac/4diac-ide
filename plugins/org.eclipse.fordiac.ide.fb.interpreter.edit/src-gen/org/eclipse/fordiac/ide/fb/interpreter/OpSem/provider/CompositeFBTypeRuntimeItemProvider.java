@@ -15,43 +15,32 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.provider;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
-import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 /**
- * This is the item provider adapter for a {@link java.util.Map.Entry} object.
- * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime}
+ * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  *
  * @generated
  */
-public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
-		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class CompositeFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 */
-	public RuntimeMapItemProvider(AdapterFactory adapterFactory) {
+	public CompositeFBTypeRuntimeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,24 +55,42 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addKeyPropertyDescriptor(object);
+			addFbElementPropertyDescriptor(object);
+			addNetworkRuntimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Key feature. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Fb Element feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 */
-	protected void addKeyPropertyDescriptor(Object object) {
+	protected void addFbElementPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_RuntimeMap_key_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_RuntimeMap_key_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_RuntimeMap_type"), //$NON-NLS-1$
-						OperationalSemanticsPackage.Literals.RUNTIME_MAP__KEY, true, false, true, null, null, null));
+						getResourceLocator(), getString("_UI_CompositeFBTypeRuntime_fbElement_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_CompositeFBTypeRuntime_fbElement_feature", //$NON-NLS-1$ //$NON-NLS-2$
+								"_UI_CompositeFBTypeRuntime_type"), //$NON-NLS-1$
+						OperationalSemanticsPackage.Literals.COMPOSITE_FB_TYPE_RUNTIME__FB_ELEMENT, true, false, true,
+						null, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Network Runtime feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected void addNetworkRuntimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors
+				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+						getResourceLocator(), getString("_UI_CompositeFBTypeRuntime_networkRuntime_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
+								"_UI_CompositeFBTypeRuntime_networkRuntime_feature", "_UI_CompositeFBTypeRuntime_type"), //$NON-NLS-1$ //$NON-NLS-2$
+						OperationalSemanticsPackage.Literals.COMPOSITE_FB_TYPE_RUNTIME__NETWORK_RUNTIME, true, false,
+						true, null, null, null));
 	}
 
 	/**
@@ -99,7 +106,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE);
+			childrenFeatures.add(OperationalSemanticsPackage.Literals.COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE);
 		}
 		return childrenFeatures;
 	}
@@ -119,29 +126,25 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	}
 
 	/**
-	 * This returns RuntimeMap.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This returns CompositeFBTypeRuntime.gif. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
-	public Object getImage(final Object object) {
-		return overlayImage(object, FordiacImage.ICON_DEVICE);
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CompositeFBTypeRuntime")); //$NON-NLS-1$
 	}
 
 	/**
 	 * This returns the label text for the adapted class. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
-	public String getText(final Object object) {
-		final Map.Entry<?, ?> runtimeMap = (Map.Entry<?, ?>) object;
-		if (runtimeMap.getKey() instanceof final FBNetworkElement fb
-				&& runtimeMap.getValue() instanceof final FBRuntimeAbstract rt) {
-			return "Contained Runtime for FB " + fb.getQualifiedName(); //$NON-NLS-1$
-		}
-		return "" + runtimeMap.getKey() + " -> " + runtimeMap.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(Object object) {
+		return getString("_UI_CompositeFBTypeRuntime_type"); //$NON-NLS-1$
 	}
 
 	/**
@@ -155,8 +158,8 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Map.Entry.class)) {
-		case OperationalSemanticsPackage.RUNTIME_MAP__VALUE:
+		switch (notification.getFeatureID(CompositeFBTypeRuntime.class)) {
+		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		default:
@@ -176,31 +179,13 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
-				OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime()));
+		newChildDescriptors.add(
+				createChildParameter(OperationalSemanticsPackage.Literals.COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE,
+						LibraryElementFactory.eINSTANCE.createCompositeFBType()));
 
-		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
-				OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime()));
-
-		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
-				OperationalSemanticsFactory.eINSTANCE.createFunctionFBTypeRuntime()));
-
-		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
-				OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime()));
-
-		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,
-				OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return OperationalSemanticsEditPlugin.INSTANCE;
+		newChildDescriptors.add(
+				createChildParameter(OperationalSemanticsPackage.Literals.COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE,
+						LibraryElementFactory.eINSTANCE.createSubAppType()));
 	}
 
 }
