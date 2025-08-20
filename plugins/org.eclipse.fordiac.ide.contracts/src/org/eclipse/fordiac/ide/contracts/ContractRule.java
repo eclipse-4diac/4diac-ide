@@ -24,6 +24,11 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.RepetitionOptions;
 import org.eclipse.fordiac.ide.contracts.helpers.ContractUtils;
 
+/**
+ * Represents a single contract rule of any type for further processing by the
+ * static/dynamic checker. Some fields are only relevant for certain types (see
+ * further comments).
+ */
 class ContractRule {
 	enum Type {
 		SINGLE_EVENT, REPETITION, REACTION, AGE, CAUSAL_REACTION, CAUSAL_AGE;

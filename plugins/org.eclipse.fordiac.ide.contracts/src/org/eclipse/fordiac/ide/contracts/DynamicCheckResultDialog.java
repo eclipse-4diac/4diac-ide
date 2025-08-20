@@ -45,6 +45,11 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Mainly responsible for the diagram visualization of the dynamic check result.
+ * Structurally, it should be in the dialogs package, but it needs access to a
+ * lot of package internal data which would all need to be changed to public.
+ */
 public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 
 	private static final Color AXIS_COLOR = new Color(0, 0, 0);

@@ -31,6 +31,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Used to enter or load a sequence of event occurrences for the dynamic
+ * contract check.
+ */
 public class EventOccurrencesDialog extends MessageDialog {
 
 	private static final int OK = 0;

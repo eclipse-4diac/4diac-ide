@@ -20,6 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Main class for performing the static check. Tries to find contradictions
+ * between connected rules without concrete event occurrences.
+ */
 public class StaticContractChecker {
 
 	private final ContractSystem system;

@@ -25,6 +25,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 
+/**
+ * Scans a string representation of contract rules and turns them into a token
+ * stream with additional information about syntax highlighting. In theory, one
+ * should be able to reuse the existing Xtext parser for this purpose, but doing
+ * so proved to be difficult...
+ */
 public class ContractScanner implements Iterable<ContractScanner.Token> {
 	public record Token(TokenType type, String value) {
 	}

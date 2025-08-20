@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Displays a list of errors that occurred during the contract check.
+ */
 public class ContractCheckResultDialog extends MessageDialog {
 
 	private static final int MAX_LIST_HEIGHT = 200;

@@ -28,6 +28,11 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.contracts.ContractRule.Type;
 
+/**
+ * Data structure that is created by the dynamic checker. Used to store various
+ * internal states of rules during the dynamic check. Afterwards provided to the
+ * result dialog for visualization.
+ */
 public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 
 	public static class RuleData {

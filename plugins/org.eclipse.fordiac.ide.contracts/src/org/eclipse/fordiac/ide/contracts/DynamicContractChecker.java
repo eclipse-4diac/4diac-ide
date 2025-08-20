@@ -25,6 +25,11 @@ import org.eclipse.fordiac.ide.contracts.ContractIssue.Code;
 import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData;
 import org.eclipse.fordiac.ide.contracts.DynamicCheckResult.RuleData.SearchResult;
 
+/**
+ * Main class for performing the dynamic check. Uses a priority queue for the
+ * main event sequence. Each event is mapped to its associated rules and checked
+ * for each of those rules depending on the rule type.
+ */
 public class DynamicContractChecker {
 
 	private final ContractSystem system;

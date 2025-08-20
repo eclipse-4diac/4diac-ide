@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.contractSpec.CausalFuncName;
 import org.eclipse.fordiac.ide.contractSpec.CausalRelation;
 import org.eclipse.fordiac.ide.contracts.Messages;
-import org.eclipse.fordiac.ide.contracts.PrepareContractCommand;
+import org.eclipse.fordiac.ide.contracts.commands.PrepareContractCommand;
 import org.eclipse.fordiac.ide.contracts.dialogs.DefineContractDecisionDialog;
 import org.eclipse.fordiac.ide.contracts.helpers.ContractUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
