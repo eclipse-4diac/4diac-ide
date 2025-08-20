@@ -36,6 +36,8 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 	private ModelEditChange(final List<ModelEdit<?>> edits) {
 		super(edits.getFirst().getLibraryElementURI(), LibraryElement.class);
 		this.edits = edits;
+		// disable if none of the ModelEdits are enabled
+		setEnabledShallow(edits.stream().anyMatch(ModelEdit::isEnabled));
 	}
 
 	@Override
