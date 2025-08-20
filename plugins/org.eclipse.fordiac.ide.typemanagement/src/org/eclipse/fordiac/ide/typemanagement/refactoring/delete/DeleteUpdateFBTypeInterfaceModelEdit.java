@@ -30,16 +30,16 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class DeleteUpdateFBTypeInterfaceChange extends ConfigurableChange<FBType> {
+public class DeleteUpdateFBTypeInterfaceModelEdit extends ConfigurableModelEdit<FBType> {
 
 	final StructuredType struct;
 
-	public DeleteUpdateFBTypeInterfaceChange(final FBType type, final StructuredType struct) {
+	public DeleteUpdateFBTypeInterfaceModelEdit(final FBType type, final StructuredType struct) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
 				struct.getName()), EcoreUtil.getURI(type), FBType.class);
 		this.struct = struct;
@@ -64,7 +64,7 @@ public class DeleteUpdateFBTypeInterfaceChange extends ConfigurableChange<FBType
 	@Override
 	public RefactoringStatus isValid(final FBType element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(element, pm);
+		final RefactoringStatus status = new RefactoringStatus();
 
 		final List<VarDeclaration> varDeclaration = getVarDeclarationsForStruct(element);
 

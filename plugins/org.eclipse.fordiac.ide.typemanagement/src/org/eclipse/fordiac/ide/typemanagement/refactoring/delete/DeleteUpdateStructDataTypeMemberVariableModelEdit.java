@@ -21,26 +21,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ConfigurableModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateUntypedSubappPinChange extends ConfigurableChange<VarDeclaration> {
+public class DeleteUpdateStructDataTypeMemberVariableModelEdit extends ConfigurableModelEdit<VarDeclaration> {
 
-	public UpdateUntypedSubappPinChange(final VarDeclaration varDecl) {
-		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteSubappPins, varDecl.getName(),
-				getSubappName(varDecl)), EcoreUtil.getURI(varDecl), VarDeclaration.class);
+	public DeleteUpdateStructDataTypeMemberVariableModelEdit(final VarDeclaration varDeclaration) {
+		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
+				varDeclaration.getName(), varDeclaration.getTypeName(),
+				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
+				VarDeclaration.class);
 		setEnabled(false); // not enabled by default
-	}
-
-	private static String getSubappName(final VarDeclaration varDecl) {
-		return ((SubApp) varDecl.eContainer().eContainer()).getQualifiedName();
 	}
 
 	@Override
@@ -59,23 +57,28 @@ public class UpdateUntypedSubappPinChange extends ConfigurableChange<VarDeclarat
 	}
 
 	@Override
-	protected Command createCommand(final VarDeclaration varDecl) {
-		if (getState().contains(ChangeState.DELETE)) {
-			return new DeleteSubAppInterfaceElementCommand(varDecl);
+	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+
+		if (!(element.getType() instanceof StructuredType)) {
+			status.addError("This should not happen"); //$NON-NLS-1$
 		}
-		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
-			return ChangeDataTypeCommand.forDataType(varDecl, IecTypes.GenericTypes.ANY_STRUCT);
-		}
-		return null;
+
+		return status;
 	}
 
 	@Override
-	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = super.isValid(element, pm);
-		if (!(element.eContainer() != null && element.eContainer().eContainer() instanceof UntypedSubApp)) {
-			status.addFatalError(element.getQualifiedName() + Messages.UpdateUntypedSubappPinChange_0);
+	protected Command createCommand(final VarDeclaration varDeclaration) {
+		if (getState().contains(ChangeState.DELETE)
+				&& varDeclaration.eContainer() instanceof final StructuredType type) {
+			return new DeleteMemberVariableCommand(type, varDeclaration);
 		}
-		return status;
+		if (getState().contains(ChangeState.CHANGE_TO_ANY)) {
+			return ChangeDataTypeCommand.forDataType(varDeclaration, IecTypes.GenericTypes.ANY_STRUCT);
+		}
+
+		return null;
 	}
+
 }

@@ -11,39 +11,44 @@
  *   Daniel Lindhuber
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - rework to new struct search
+ *   Patrick Aigner - now based on ModelEditChange
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.delete;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorModelEdit;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
 public class SafeStructDeletionChange extends CompositeChange {
-	final DataTypeEntry deletedStruct;
-	/* map connecting root nodes with their composite change */
-	final Map<EObject, RootNodeChange> rootChanges = new HashMap<>();
+	private final List<ModelEdit<?>> changes = new ArrayList<>();
 
 	public SafeStructDeletionChange(final StructuredType struct) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle, struct.getName()));
-		deletedStruct = (DataTypeEntry) struct.getTypeEntry();
-		createChanges(deletedStruct);
+		createChanges((DataTypeEntry) struct.getTypeEntry());
+		final CompositeChange comp = ModelEditChange.fromModelEdits("", changes); //$NON-NLS-1$
+		if (comp != null) {
+			this.merge(comp);
+		}
 	}
 
 	public void createChanges(final DataTypeEntry entry) {
@@ -51,33 +56,22 @@ public class SafeStructDeletionChange extends CompositeChange {
 		if (entry != null) {
 			final var results = new DataTypeInstanceSearch(entry).performSearch();
 			results.forEach(eObject -> {
-				final RootNodeChange rootChange = getOrCreateRootChange(eObject);
 				if (eObject instanceof final VarDeclaration varDecl && doneElements.add(varDecl)) {
 					if (varDecl.eContainer() instanceof StructuredType) {
-						rootChange.add(new DeleteUpdateStructDataTypeMemberVariableChange(varDecl));
-						handleTransitiveRefactoring(varDecl, rootChange, doneElements);
+						changes.add(new DeleteUpdateStructDataTypeMemberVariableModelEdit(varDecl));
+						handleTransitiveRefactoring(varDecl, doneElements);
 					} else if (isUntypedSubappPin(varDecl)) {
-						rootChange.add(new UpdateUntypedSubappPinChange(varDecl));
+						changes.add(new UpdateUntypedSubappPinModelEdit(varDecl));
 					} else if (isFbTypePin(varDecl)) {
-						handleTransitiveRefactoring(varDecl, rootChange, doneElements);
+						handleTransitiveRefactoring(varDecl, doneElements);
 					}
 				} else if (eObject instanceof final StructManipulator muxer && doneElements.add(muxer)) {
-					rootChange.add(new UpdateManipulatorChange(muxer));
+					changes.add(new UpdateManipulatorModelEdit(muxer));
+				} else if (eObject instanceof final Attribute attribute) {
+					changes.add(new DeleteAttributeModelEdit(attribute, IecTypes.GenericTypes.ANY_STRUCT));
 				}
 			});
 		}
-	}
-
-	private RootNodeChange getOrCreateRootChange(EObject eObject) {
-		if (eObject instanceof INamedElement) {
-			eObject = EcoreUtil.getRootContainer(eObject);
-			final RootNodeChange change = new RootNodeChange(eObject);
-			if (!rootChanges.containsKey(eObject)) {
-				rootChanges.put(eObject, change);
-				this.add(change);
-			}
-		}
-		return rootChanges.get(eObject);
 	}
 
 	/**
@@ -92,20 +86,19 @@ public class SafeStructDeletionChange extends CompositeChange {
 	 * of c.B is not valid any more.
 	 *
 	 */
-	private void handleTransitiveRefactoring(final VarDeclaration varDecl, final RootNodeChange rootChange,
-			final Set<EObject> rootElements) {
+	private void handleTransitiveRefactoring(final VarDeclaration varDecl, final Set<EObject> rootElements) {
 		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
 		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
 		if (varDecl.getFBNetworkElement() != null) {
 			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				rootChange.add(new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry));
+				changes.add(new UpdateFBInstanceModelEdit(varDecl.getFBNetworkElement(), dataTypeEntry));
 			}
 		} else if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {
 				createChanges((DataTypeEntry) stElement.getTypeEntry());
 			} else if (rootContainer instanceof final FBType fbType
 					&& dataTypeEntry.getType() instanceof final StructuredType type) {
-				rootChange.add(new DeleteUpdateFBTypeInterfaceChange(fbType, type));
+				changes.add(new DeleteUpdateFBTypeInterfaceModelEdit(fbType, type));
 			}
 		}
 	}
@@ -118,5 +111,4 @@ public class SafeStructDeletionChange extends CompositeChange {
 	private static boolean isFbTypePin(final VarDeclaration varDecl) {
 		return varDecl.eContainer() != null && varDecl.eContainer().eContainer() instanceof FBType;
 	}
-
 }
