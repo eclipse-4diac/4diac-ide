@@ -342,7 +342,7 @@ public class FBEndpointFinder {
 			}
 		}
 		// FBs, CFBs, typed SubApps
-		else if (!state.traceMember) {
+		else {
 			state.connections.add(state.ifElem);
 		}
 	}
@@ -464,6 +464,7 @@ public class FBEndpointFinder {
 						&& (subStack.isEmpty() || (state.inputSide ? realInt.getInputConnections().isEmpty()
 								: realInt.getOutputConnections().isEmpty()))) {
 					state.connections.add(realInt);
+					continue;
 				}
 			} else {
 				continue;

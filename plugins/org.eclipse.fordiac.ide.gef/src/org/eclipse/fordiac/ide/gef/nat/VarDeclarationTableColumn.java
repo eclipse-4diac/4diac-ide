@@ -49,6 +49,10 @@ public enum VarDeclarationTableColumn implements NatTableColumn {
 			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.VISIBLE, VarDeclarationTableColumn.VAR_CONFIG,
 			VarDeclarationTableColumn.VISIBLEIN, VarDeclarationTableColumn.VISIBLEOUT);
 
+	public static final Set<VarDeclarationTableColumn> DEFAULT_EDITABLE_NO_VISIBLE = Set.of(
+			VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.INITIAL_VALUE,
+			VarDeclarationTableColumn.VAR_CONFIG, VarDeclarationTableColumn.RETAIN);
+
 	public static final Set<VarDeclarationTableColumn> EDITABLE_COMMENT_VALUE = Set.of(COMMENT, INITIAL_VALUE);
 
 	public static final Set<VarDeclarationTableColumn> ALL_EDITABLE = Set.of(VarDeclarationTableColumn.values());

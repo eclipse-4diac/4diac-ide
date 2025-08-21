@@ -649,12 +649,15 @@
             id="org.eclipse.fordiac.ide.typemanagement.wizards.DeleteStructChangeViewer">
          <enablement>
          <or>
-         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateFBTypeInterfaceChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateStructDataTypeMemberVariableChange"/>
+         <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateFBTypeInterfaceModelEdit"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteUpdateStructDataTypeMemberVariableModelEdit"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteInternalFBModelEdit"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.UpdateUntypedSubappPinModelEdit"/>
 		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange"/>
-		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorChange"/>
+		 <instanceof value="org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorModelEdit"/>
+   <instanceof
+         value="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteAttributeModelEdit">
+   </instanceof>
          </or>
          </enablement>
       </changePreviewViewer>

@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.GraphicalViewer;
@@ -79,7 +79,6 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		} else {
 			setBaseEnabled(false);
 		}
-
 	}
 
 	@SuppressWarnings("static-method") // allow subclasses to override this method
@@ -87,15 +86,15 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		return structSel.getFirstElement() instanceof InterfaceEditPart;
 	}
 
-	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode) {
-		final List<IInterfaceElement> opposites = getConnectionOpposites(pin);
-		if (!stepMode) {
-			// before jump, we take 1 step to not fulfill the ending-condition early
-			final List<IInterfaceElement> newOpposites = new ArrayList<>();
-			opposites.forEach(ie -> jumpOverConnections(ie, newOpposites));
-			return newOpposites;
+	protected List<IInterfaceElement> getNextFollowPins(final IInterfaceElement pin, final boolean stepMode,
+			final boolean goRight) {
+		if (stepMode) {
+			return getConnectionOpposites(pin);
 		}
-		return opposites;
+		// we start by following the connections to not get stuck at starting pin
+		final List<IInterfaceElement> newOpposites = new ArrayList<>();
+		followConnections(newOpposites, goRight, getConnectionList(pin));
+		return newOpposites;
 	}
 
 	protected List<IInterfaceElement> getConnectionOpposites(final IInterfaceElement ie) {
@@ -208,36 +207,76 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		}
 	}
 
-	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations) {
-		if (startPin.getFBNetworkElement() instanceof TypedSubApp
-				|| startPin.getFBNetworkElement() instanceof CFBInstance) {
+	public List<IInterfaceElement> jumpOverStruct(final MemberVarDeclaration startPin, final boolean goRight) {
+		final Set<IInterfaceElement> structEndpoints = new HashSet<>();
+		FBEndpointFinder.traceMembers(startPin, structEndpoints);
+
+		// continue jumping
+		final List<IInterfaceElement> opposites = new ArrayList<>();
+		for (final var endpoint : structEndpoints) {
+			final List<IInterfaceElement> nextPins = getNextFollowPins(endpoint, false, goRight);
+			if (nextPins.isEmpty()) {
+				// add pin after jump over mux if no further jumping is possible
+				opposites.add(endpoint);
+			} else {
+				opposites.addAll(nextPins);
+			}
+		}
+		return opposites;
+	}
+
+	public void jumpOverConnections(final IInterfaceElement startPin, final List<IInterfaceElement> destinations,
+			final boolean goRight) {
+		if (isValidPin(startPin, goRight)) {
+			// valid pin (Endpoint)
 			destinations.add(startPin);
 			return;
 		}
+
 		final List<Connection> connections = getConnectionList(startPin);
 		if (connections.isEmpty()) {
-			// skip over struct
-			if (startPin instanceof final MemberVarDeclaration member) {
-				final Set<IInterfaceElement> memberEnd = new HashSet<>();
-				FBEndpointFinder.traceMembers(member, memberEnd);
-				memberEnd.forEach(mem -> {
-					final List<Connection> cons = getConnectionList(mem);
-					if (cons.isEmpty()) {
-						destinations.add(mem);
-					} else {
-						// only continue with pins where connections exist to avoid loop
-						jumpOverConnections(mem, destinations);
-					}
-				});
+			if (!(startPin instanceof final MemberVarDeclaration memberDeclaration)) {
+				// dead-end (Endpoint)
+				destinations.add(startPin);
 				return;
 			}
-			// FB-Pin / dead-end found
-			destinations.add(startPin);
+			// skip over Struct
+			final Set<IInterfaceElement> memberEnd = new HashSet<>();
+			FBEndpointFinder.traceMembers(memberDeclaration, memberEnd);
+			memberEnd.forEach(member -> {
+				final List<Connection> cons = getConnectionList(member);
+				if (cons.isEmpty()) {
+					// dead-end Struct (Endpoint)
+					destinations.add(member);
+				} else {
+					jumpOverConnections(member, destinations, goRight);
+				}
+			});
 			return;
 		}
+		followConnections(destinations, goRight, connections);
+	}
+
+	private static boolean isValidPin(final IInterfaceElement startPin, final boolean goRight) {
+		if (startPin instanceof MemberVarDeclaration) {
+			return false; // jump over struct
+		}
+		if (startPin.getFBNetworkElement() instanceof UntypedSubApp) {
+			return false; // don't stop at UntypedSubApp (exception in followConnections())
+		}
+		return startPin.isIsInput() == goRight;
+	}
+
+	private void followConnections(final List<IInterfaceElement> destinations, final boolean goRight,
+			final List<Connection> connections) {
 		for (final Connection conn : connections) {
-			final IInterfaceElement next = conn.getSource() == startPin ? conn.getDestination() : conn.getSource();
-			jumpOverConnections(next, destinations);
+			final IInterfaceElement next = goRight ? conn.getDestination() : conn.getSource();
+			if (conn.isVisible() && next.isIsInput() == goRight && !(next instanceof MemberVarDeclaration)) {
+				// visible connection with correct pin (exception Struct) (Endpoint)
+				destinations.add(next);
+			} else {
+				jumpOverConnections(next, destinations, goRight);
+			}
 		}
 	}
 }

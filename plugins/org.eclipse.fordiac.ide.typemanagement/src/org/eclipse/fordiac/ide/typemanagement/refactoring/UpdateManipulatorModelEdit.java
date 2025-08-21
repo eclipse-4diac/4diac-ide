@@ -26,9 +26,9 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateManipulatorChange extends AbstractCommandChange<StructManipulator> {
+public class UpdateManipulatorModelEdit extends ModelEdit<StructManipulator> {
 
-	public UpdateManipulatorChange(final StructManipulator manipulator) {
+	public UpdateManipulatorModelEdit(final StructManipulator manipulator) {
 		super(getName(manipulator), EcoreUtil.getURI(manipulator), StructManipulator.class);
 		setEnabled(false); // not enabled by default
 	}
