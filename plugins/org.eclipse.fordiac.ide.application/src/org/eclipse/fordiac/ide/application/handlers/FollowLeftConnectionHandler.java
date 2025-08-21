@@ -14,17 +14,13 @@
 
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -51,12 +47,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 		// Jump-mode, jump over Struct
 		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && !memberVarDecl.isIsInput()) {
-			final Set<IInterfaceElement> connectedInt = new HashSet<>();
-			FBEndpointFinder.traceMembers(memberVarDecl, connectedInt);
-			if (!connectedInt.isEmpty()) {
-				selectOpposites(event, viewer, originPin, new ArrayList<>(connectedInt), editor);
-				return null;
-			}
+			selectOpposites(event, viewer, originPin, jumpOverStruct(memberVarDecl, false), editor);
+			return null;
 		}
 
 		// Go out of Editor (EditorBorderPin)
@@ -72,7 +64,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 			return null;
 		}
 
-		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode);
+		final List<IInterfaceElement> opposites = getNextFollowPins(originPin, stepMode, false);
 		selectOpposites(event, viewer, originPin, opposites, editor);
 		return null;
 	}
