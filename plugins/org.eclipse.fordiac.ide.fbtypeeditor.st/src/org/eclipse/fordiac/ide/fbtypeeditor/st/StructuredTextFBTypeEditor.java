@@ -15,11 +15,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.st;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreNestedEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -29,7 +31,8 @@ import org.eclipse.xtext.util.ITextRegion;
 
 import com.google.inject.Inject;
 
-public class StructuredTextFBTypeEditor extends FBTypeXtextEditor implements STCoreSaveActionsEditor {
+public class StructuredTextFBTypeEditor extends FBTypeXtextEditor
+		implements STCoreSaveActionsEditor, STCoreNestedEditor {
 
 	@Inject
 	private STCoreMapper algorithmMapper;
@@ -124,5 +127,13 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor implements STC
 
 	public void setSaveActionsDisabled(final boolean saveActionsDisabled) {
 		this.saveActionsDisabled = saveActionsDisabled;
+	}
+
+	@Override
+	public void setBlockUpdates(final boolean block) {
+		final TypeEntryAdapter typeEntryAdapter = getTypeEntryAdapter();
+		if (typeEntryAdapter != null) {
+			typeEntryAdapter.setBlockUpdates(block);
+		}
 	}
 }
