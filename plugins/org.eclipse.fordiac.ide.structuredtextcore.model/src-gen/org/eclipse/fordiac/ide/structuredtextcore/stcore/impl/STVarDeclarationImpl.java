@@ -493,7 +493,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	 */
 	@Override
 	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
 		if(type != null){
 			return type.getName();
 		}

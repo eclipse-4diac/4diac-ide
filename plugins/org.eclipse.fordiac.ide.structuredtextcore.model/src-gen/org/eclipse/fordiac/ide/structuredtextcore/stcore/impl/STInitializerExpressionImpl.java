@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
@@ -57,7 +58,7 @@ public class STInitializerExpressionImpl extends MinimalEObjectImpl.Container im
 	 * @generated
 	 */
 	@Override
-	public INamedElement getResultType() {
+	public LibraryElement getResultType() {
 		return null;
 	}
 
@@ -67,7 +68,7 @@ public class STInitializerExpressionImpl extends MinimalEObjectImpl.Container im
 	 * @generated
 	 */
 	@Override
-	public INamedElement getDeclaredResultType() {
+	public LibraryElement getDeclaredResultType() {
 		return null;
 	}
 

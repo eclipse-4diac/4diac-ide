@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
@@ -191,7 +192,7 @@ public class STBuiltinFeatureExpressionImpl extends STExpressionImpl implements 
 	 * @generated
 	 */
 	@Override
-	public INamedElement getResultType() {
+	public LibraryElement getResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
 	}
 
@@ -201,7 +202,7 @@ public class STBuiltinFeatureExpressionImpl extends STExpressionImpl implements 
 	 * @generated
 	 */
 	@Override
-	public INamedElement getDeclaredResultType() {
+	public LibraryElement getDeclaredResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);
 	}
 
