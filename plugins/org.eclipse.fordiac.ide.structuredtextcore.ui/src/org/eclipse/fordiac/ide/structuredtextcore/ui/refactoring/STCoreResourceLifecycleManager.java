@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
 import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider.RelatedResource;
@@ -50,7 +50,7 @@ public class STCoreResourceLifecycleManager extends ResourceLifecycleManager {
 		}
 	}
 
-	protected static <T extends INamedElement> void updateType(final T type, final Consumer<? super T> consumer,
+	protected static <T extends LibraryElement> void updateType(final T type, final Consumer<? super T> consumer,
 			final ResourceSet resourceSet) {
 		if (type instanceof AnyDerivedType) {
 			final Class<? extends T> clazz = getClass(type);

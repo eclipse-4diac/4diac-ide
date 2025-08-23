@@ -72,6 +72,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
@@ -175,7 +176,7 @@ final class STCoreUtil {
 		operator == STBinaryOperator.RANGE
 	}
 
-	def static boolean isApplicableTo(STUnaryOperator operator, INamedElement type) {
+	def static boolean isApplicableTo(STUnaryOperator operator, LibraryElement type) {
 		switch (operator) {
 			case type.anyType: false
 			case PLUS,
@@ -184,7 +185,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
+	def static boolean isApplicableTo(STBinaryOperator operator, LibraryElement first, LibraryElement second) {
 		switch (operator) {
 			case first.anyType || second.anyType:
 				false
@@ -322,7 +323,7 @@ final class STCoreUtil {
 		value.signum >= 0 && value <= upper
 	}
 
-	def static INamedElement getExpectedType(STExpression expression) {
+	def static LibraryElement getExpectedType(STExpression expression) {
 		val resource = expression.eResource
 		if (resource instanceof STResource)
 			resource.getExpectedType(expression)
@@ -330,7 +331,7 @@ final class STCoreUtil {
 			expression.computeExpectedType
 	}
 
-	def static INamedElement getExpectedType(STInitializerExpression expression) {
+	def static LibraryElement getExpectedType(STInitializerExpression expression) {
 		val resource = expression.eResource
 		if (resource instanceof STResource)
 			resource.getExpectedType(expression)
@@ -338,7 +339,7 @@ final class STCoreUtil {
 			expression.computeExpectedType
 	}
 
-	def static INamedElement computeExpectedType(STExpression expression) {
+	def static LibraryElement computeExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
 			STUnaryExpression case op.arithmetic:
 				expectedType.equivalentAnyNumType
@@ -375,7 +376,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static INamedElement computeExpectedType(STInitializerExpression expression) {
+	def static LibraryElement computeExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
 			STAttribute:
 				declaration.featureType
@@ -394,7 +395,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def private static INamedElement computeExpectedType(STArrayInitElement initElement) {
+	def private static LibraryElement computeExpectedType(STArrayInitElement initElement) {
 		switch (it : initElement.eContainer) {
 			STArrayInitializerExpression:
 				switch (type : expectedType) {
@@ -407,7 +408,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def private static INamedElement computeExpectedType(STCallArgument argument) {
+	def private static LibraryElement computeExpectedType(STCallArgument argument) {
 		val featureExpression = argument.eContainer
 		if (featureExpression instanceof STFeatureExpression) {
 			val feature = featureExpression.feature
@@ -492,7 +493,7 @@ final class STCoreUtil {
 		].filterNull.toList
 	}
 
-	def static getFeatureType(INamedElement feature) {
+	def static LibraryElement getFeatureType(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
@@ -599,7 +600,7 @@ final class STCoreUtil {
 			other
 	}
 
-	def static AnyNumType getEquivalentAnyNumType(INamedElement type) {
+	def static AnyNumType getEquivalentAnyNumType(LibraryElement type) {
 		switch (type) {
 			BoolType: ElementaryTypes.SINT
 			ByteType: ElementaryTypes.USINT
@@ -610,7 +611,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static AnyUnsignedType getEquivalentAnyUnsignedType(INamedElement type) {
+	def static AnyUnsignedType getEquivalentAnyUnsignedType(LibraryElement type) {
 		switch (type) {
 			SintType: ElementaryTypes.USINT
 			IntType: ElementaryTypes.UINT
@@ -620,7 +621,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static AnyBitType getEquivalentAnyBitType(INamedElement type) {
+	def static AnyBitType getEquivalentAnyBitType(LibraryElement type) {
 		switch (type) {
 			SintType,
 			UsintType: ElementaryTypes.BYTE
@@ -634,7 +635,7 @@ final class STCoreUtil {
 		}
 	}
 
-	def static getEquivalentAnyLDateType(INamedElement type) {
+	def static getEquivalentAnyLDateType(LibraryElement type) {
 		switch (type) {
 			DateType: ElementaryTypes.LDATE
 			TimeOfDayType: ElementaryTypes.LTOD
@@ -643,23 +644,23 @@ final class STCoreUtil {
 		}
 	}
 
-	def static boolean isInstanceofAnySimpleDateType(INamedElement type) {
+	def static boolean isInstanceofAnySimpleDateType(LibraryElement type) {
 		return type instanceof DateType || type instanceof LdateType
 	}
 
-	def static boolean isInstanceofAnyTimeOfDayType(INamedElement type) {
+	def static boolean isInstanceofAnyTimeOfDayType(LibraryElement type) {
 		return type instanceof TimeOfDayType || type instanceof LtodType
 	}
 
-	def static boolean isInstanceofAnyDateAndTimeType(INamedElement type) {
+	def static boolean isInstanceofAnyDateAndTimeType(LibraryElement type) {
 		return type instanceof DateAndTimeType || type instanceof LdtType
 	}
 
-	def static boolean isInstanceofAnySDateType(INamedElement type) {
+	def static boolean isInstanceofAnySDateType(LibraryElement type) {
 		return type instanceof DateType || type instanceof TimeOfDayType || type instanceof DateAndTimeType
 	}
 
-	def static boolean isInstanceofAnyLDateType(INamedElement type) {
+	def static boolean isInstanceofAnyLDateType(LibraryElement type) {
 		return type instanceof LdateType || type instanceof LtodType || type instanceof LdtType
 	}
 
@@ -676,7 +677,7 @@ final class STCoreUtil {
 			null
 	}
 
-	def static hasCommonSupertype(INamedElement type1, INamedElement type2) {
+	def static hasCommonSupertype(LibraryElement type1, LibraryElement type2) {
 		if (type1 == type2)
 			true
 		else if (type1 instanceof DataType)

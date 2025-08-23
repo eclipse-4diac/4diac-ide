@@ -69,6 +69,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
@@ -215,7 +216,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		};
 	}
 
-	protected INamedElement evaluateType(final STVarDeclaration declaration)
+	protected LibraryElement evaluateType(final STVarDeclaration declaration)
 			throws EvaluatorException, InterruptedException {
 		final DataType type = switch (declaration.getType()) {
 		case final AnyStringType anyStringType when declaration.getMaxLength() != null -> STCoreUtil.newStringType(

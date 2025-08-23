@@ -12,14 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 
 final class STVarDeclarationAnnotations {
 
 	static String getFullTypeName(final STVarDeclaration varDeclaration) {
-		final INamedElement featureType = STCoreUtil.getFeatureType(varDeclaration);
+		final LibraryElement featureType = STCoreUtil.getFeatureType(varDeclaration);
 		if (featureType != null) {
 			return featureType.getName();
 		}

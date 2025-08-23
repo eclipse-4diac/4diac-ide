@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -135,7 +136,7 @@ public final class DeploymentDebugWatchUtils {
 		};
 	}
 
-	public static INamedElement evaluateWatchType(final VarDeclaration varDeclaration) {
+	public static LibraryElement evaluateWatchType(final VarDeclaration varDeclaration) {
 		if (varDeclaration.isInOutVar() && varDeclaration.isArray()
 				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())) {
 			// use type of defining InOut declaration for arrays with variable length

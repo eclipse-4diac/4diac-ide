@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public final class EvaluatorCache implements AutoCloseable {
 
@@ -27,7 +27,7 @@ public final class EvaluatorCache implements AutoCloseable {
 	private final AtomicInteger stackDepth = new AtomicInteger(0);
 
 	private final Map<ITypedElement, Value> cachedInitialValues = new ConcurrentHashMap<>();
-	private final Map<ITypedElement, INamedElement> cachedResultType = new ConcurrentHashMap<>();
+	private final Map<ITypedElement, LibraryElement> cachedResultType = new ConcurrentHashMap<>();
 
 	private EvaluatorCache() {
 	}
@@ -63,16 +63,16 @@ public final class EvaluatorCache implements AutoCloseable {
 		return value;
 	}
 
-	public <K extends ITypedElement> INamedElement computeResultTypeIfAbsent(final K key,
-			final CacheFunction<? super K, ? extends INamedElement> comp)
+	public <K extends ITypedElement> LibraryElement computeResultTypeIfAbsent(final K key,
+			final CacheFunction<? super K, ? extends LibraryElement> comp)
 			throws EvaluatorException, InterruptedException {
 		// cannot use computeIfAbsent due to recursive update
 		// use optimistic computation and putIfAbsent instead
-		final INamedElement type = cachedResultType.get(key);
+		final LibraryElement type = cachedResultType.get(key);
 		if (type == null) {
-			final INamedElement newType = comp.apply(key);
+			final LibraryElement newType = comp.apply(key);
 			if (newType != null) {
-				final INamedElement oldType = cachedResultType.putIfAbsent(key, newType);
+				final LibraryElement oldType = cachedResultType.putIfAbsent(key, newType);
 				if (oldType != null) {
 					return oldType; // concurrent update -> discard computed value and return current value
 				}

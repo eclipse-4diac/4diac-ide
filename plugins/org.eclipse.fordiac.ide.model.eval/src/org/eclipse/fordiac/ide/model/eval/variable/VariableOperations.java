@@ -49,15 +49,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 @SuppressWarnings("java:S1452")
 public final class VariableOperations {
-	public static Variable<?> newVariable(final String name, final INamedElement type) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType);
@@ -72,7 +72,7 @@ public final class VariableOperations {
 		};
 	}
 
-	public static Variable<?> newVariable(final String name, final INamedElement type, final String value) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type, final String value) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
@@ -88,7 +88,7 @@ public final class VariableOperations {
 		};
 	}
 
-	public static Variable<?> newVariable(final String name, final INamedElement type, final Value value) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type, final Value value) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
@@ -226,7 +226,7 @@ public final class VariableOperations {
 		return newVariable(withValue(type, initialValue));
 	}
 
-	public static INamedElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {
+	public static LibraryElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {
 		if (decl.isArray()) {
 			try (EvaluatorCache cache = EvaluatorCache.open()) {
 				return cache.computeResultTypeIfAbsent(decl, VariableOperations::doEvaluateResultType);
@@ -237,7 +237,7 @@ public final class VariableOperations {
 		return decl.getType();
 	}
 
-	private static INamedElement doEvaluateResultType(final VarDeclaration varDeclaration)
+	private static LibraryElement doEvaluateResultType(final VarDeclaration varDeclaration)
 			throws EvaluatorException, InterruptedException {
 		if (TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue())) {
 			return TypeDeclarationParser.parseSimpleTypeDeclaration(varDeclaration.getType(),

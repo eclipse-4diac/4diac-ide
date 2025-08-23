@@ -12,17 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface STResource {
 
 	String OPTION_EXPECTED_TYPE = STResource.class.getName() + ".EXPECTED_TYPE"; //$NON-NLS-1$
 
-	INamedElement getExpectedType();
+	LibraryElement getExpectedType();
 
-	void setExpectedType(INamedElement expectedType);
+	void setExpectedType(LibraryElement expectedType);
 
-	INamedElement getExpectedType(STExpression expression);
+	LibraryElement getExpectedType(STExpression expression);
 
-	INamedElement getExpectedType(STInitializerExpression expression);
+	LibraryElement getExpectedType(STInitializerExpression expression);
 }

@@ -12,7 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.eval.value;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface Value {
 	/**
@@ -20,7 +20,7 @@ public interface Value {
 	 *
 	 * @return The type
 	 */
-	INamedElement getType();
+	LibraryElement getType();
 
 	/**
 	 * Returns a string representation of the value, with optional pretty

@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.eval.st.ConstantExpressionEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 @SuppressWarnings("java:S1452")
@@ -39,7 +39,7 @@ public final class STVariableOperations {
 		return VariableOperations.newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration), value);
 	}
 
-	public static INamedElement evaluateResultType(final STVarDeclaration varDeclaration) throws EvaluatorException {
+	public static LibraryElement evaluateResultType(final STVarDeclaration varDeclaration) throws EvaluatorException {
 		try {
 			return ConstantExpressionEvaluator.evaluateResultType(varDeclaration);
 		} catch (final InterruptedException e) {

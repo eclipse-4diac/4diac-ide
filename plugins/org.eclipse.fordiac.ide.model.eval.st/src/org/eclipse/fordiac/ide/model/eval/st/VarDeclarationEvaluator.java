@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
@@ -44,7 +43,7 @@ import org.eclipse.xtext.EcoreUtil2;
 
 public class VarDeclarationEvaluator extends StructuredTextEvaluator implements VariableEvaluator {
 	private final VarDeclaration varDeclaration;
-	private INamedElement resultType;
+	private LibraryElement resultType;
 	private STTypeDeclaration parseResultType;
 	private STInitializerExpressionSource parseResult;
 
@@ -135,7 +134,7 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 	}
 
 	@Override
-	public INamedElement evaluateResultType() throws EvaluatorException, InterruptedException {
+	public LibraryElement evaluateResultType() throws EvaluatorException, InterruptedException {
 		if (resultType == null) {
 			prepareResultType();
 			if (parseResultType != null) {
@@ -156,7 +155,7 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 		return true;
 	}
 
-	protected INamedElement evaluateTypeDeclaration(final STTypeDeclaration declaration)
+	protected LibraryElement evaluateTypeDeclaration(final STTypeDeclaration declaration)
 			throws EvaluatorException, InterruptedException {
 		final DataType type = switch (declaration.getType()) {
 		case final AnyStringType anyStringType when declaration.getMaxLength() != null -> STCoreUtil.newStringType(

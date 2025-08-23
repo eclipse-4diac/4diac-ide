@@ -46,7 +46,7 @@ final class STAlgorithmEmbeddedEditorUtil {
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,
-		Collection<? extends EObject> additionalContent, INamedElement expectedType) {
+		Collection<? extends EObject> additionalContent, LibraryElement expectedType) {
 		editor.updateEditor(uri, type, additionalContent, #{STResource.OPTION_EXPECTED_TYPE -> expectedType})
 	}
 
