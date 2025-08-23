@@ -140,7 +140,7 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 				.map(INode::getText).collect(Collectors.joining()).trim();
 	}
 
-	protected static DataType resolveDataType(final INamedElement type, final EObject context,
+	protected static DataType resolveDataType(final LibraryElement type, final EObject context,
 			final DataType defaultType) {
 		if (type != null && type.eIsProxy()) {
 			final String linkName = extractLinkName(type, context);

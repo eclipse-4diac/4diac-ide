@@ -629,7 +629,7 @@
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//ITypedElement">
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getType"/>
-      <genOperations ecoreOperation="lib.ecore#//ITypedElement/getTypeName" body="org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//ITypedElement/getTypeName" body="org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getFullTypeName" body="return getTypeName();"/>
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/validateType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//ITypedElement/validateType/diagnostics"/>

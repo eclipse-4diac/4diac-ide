@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
@@ -552,7 +553,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		if (element instanceof final STFeatureExpression expression) {
 			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
 			final String name = getFeatureText(expression);
-			final INamedElement type = getExpectedFeatureType(expression);
+			final LibraryElement type = getExpectedFeatureType(expression);
 			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
 					&& type instanceof final DataType dataType) {
 				createMissingVariable(callable, name, dataType, kind);
@@ -595,14 +596,14 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 				.stream().map(INode::getText).map(String::trim).collect(Collectors.joining());
 	}
 
-	protected static INamedElement getExpectedFeatureType(final STFeatureExpression element) {
-		final INamedElement expectedType = STCoreUtil.getExpectedType(element);
+	protected static LibraryElement getExpectedFeatureType(final STFeatureExpression element) {
+		final LibraryElement expectedType = STCoreUtil.getExpectedType(element);
 		if (expectedType != null) {
 			return expectedType;
 		}
 		if (element.eContainer() instanceof final STAssignment assignment && assignment.getLeft() == element
 				&& assignment.getRight() != null) {
-			final INamedElement resultType = assignment.getRight().getResultType();
+			final LibraryElement resultType = assignment.getRight().getResultType();
 			if (resultType != null) {
 				return resultType;
 			}

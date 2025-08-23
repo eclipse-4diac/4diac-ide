@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
@@ -41,7 +42,7 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 		if (context.getReference() == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
 			final var receiverType = getReceiverType(context);
 			if (context.getContext() instanceof final STFeatureExpression expression && expression.isCall()) {
-				final List<INamedElement> argumentTypes = expression.getParameters().stream()
+				final List<LibraryElement> argumentTypes = expression.getParameters().stream()
 						.map(STCallArgument::getDeclaredResultType).toList();
 				return createCallableDiagnosticMessage(context, argumentTypes, receiverType);
 			}
@@ -67,7 +68,7 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 		return super.getUnresolvedProxyMessage(context);
 	}
 
-	protected static INamedElement getReceiverType(final ILinkingDiagnosticContext context) {
+	protected static LibraryElement getReceiverType(final ILinkingDiagnosticContext context) {
 		final var receiver = STCoreScopeProvider.getReceiver(context.getContext());
 		// if there is a receiver, which is not the same EObject as the context
 		if (receiver != null && receiver != context.getContext()) {
@@ -83,7 +84,7 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 	}
 
 	protected static DiagnosticMessage createVariableDiagnosticMessage(final ILinkingDiagnosticContext context,
-			final INamedElement type) {
+			final LibraryElement type) {
 		if (type != null && !type.eIsProxy()) {
 			return new DiagnosticMessage(
 					MessageFormat.format(Messages.STCoreLinkingDiagnosticMessageProvider_UndefinedVariableForType,
@@ -96,7 +97,7 @@ public class STCoreLinkingDiagnosticMessageProvider extends LinkingDiagnosticMes
 	}
 
 	protected static DiagnosticMessage createCallableDiagnosticMessage(final ILinkingDiagnosticContext context,
-			final List<INamedElement> argumentTypes, final INamedElement type) {
+			final List<LibraryElement> argumentTypes, final LibraryElement type) {
 		final String argumentTypesString = argumentTypes.stream()
 				.map(t -> t != null ? t.getName() : Messages.STCoreLinkingDiagnosticMessageProvider_UnknownType)
 				.collect(Collectors.joining(", ")); //$NON-NLS-1$

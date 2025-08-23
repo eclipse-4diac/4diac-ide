@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface VariableEvaluator extends Evaluator {
 	/**
@@ -48,7 +48,7 @@ public interface VariableEvaluator extends Evaluator {
 	 * @throws EvaluatorException   if an exception occurred during evaluation
 	 * @throws InterruptedException if the evaluation was interrupted
 	 */
-	INamedElement evaluateResultType() throws EvaluatorException, InterruptedException;
+	LibraryElement evaluateResultType() throws EvaluatorException, InterruptedException;
 
 	/**
 	 * Validate the result type

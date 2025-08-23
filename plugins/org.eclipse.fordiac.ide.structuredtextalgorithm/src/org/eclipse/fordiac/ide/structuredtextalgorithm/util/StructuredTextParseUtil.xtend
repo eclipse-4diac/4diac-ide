@@ -19,7 +19,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
@@ -103,7 +102,7 @@ class StructuredTextParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
-	def static STInitializerExpressionSource validate(String expression, URI uri, INamedElement expectedType,
+	def static STInitializerExpressionSource validate(String expression, URI uri, LibraryElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, type,
@@ -118,12 +117,12 @@ class StructuredTextParseUtil {
 			typeVariable.getContainerOfType(LibraryElement), null, issues).rootASTElement as STTypeDeclaration
 	}
 
-	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
+	def static STExpressionSource parse(String expression, LibraryElement expectedType, LibraryElement type,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		expression.parse(expectedType, type, null, errors, warnings, infos)
 	}
 
-	def static STExpressionSource parse(String expression, INamedElement expectedType, LibraryElement type,
+	def static STExpressionSource parse(String expression, LibraryElement expectedType, LibraryElement type,
 		Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
@@ -131,7 +130,7 @@ class StructuredTextParseUtil {
 			additionalContent, errors, warnings, infos)?.rootASTElement as STExpressionSource
 	}
 
-	def static STInitializerExpressionSource parse(String expression, URI uri, INamedElement expectedType,
+	def static STInitializerExpressionSource parse(String expression, URI uri, LibraryElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
 		List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
@@ -154,7 +153,7 @@ class StructuredTextParseUtil {
 		text.parse(entryPoint, type?.eResource?.URI, null, name, type, null, errors, warnings, infos)
 	}
 
-	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, LibraryElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
 		List<String> warnings, List<String> infos) {
 		val issues = newArrayList
@@ -162,7 +161,7 @@ class StructuredTextParseUtil {
 			issues)
 	}
 
-	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, LibraryElement expectedType,
 		String name, LibraryElement type, Collection<? extends EObject> additionalContent, List<String> errors,
 		List<String> warnings, List<String> infos) {
 		val issues = newArrayList
@@ -170,7 +169,7 @@ class StructuredTextParseUtil {
 		name.postProcess(errors, warnings, infos, issues, parseResult)
 	}
 
-	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, LibraryElement expectedType,
 		LibraryElement type, Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER_FBT.get(ResourceSet) as XtextResourceSet
 		resourceSet.resourceFactoryRegistry.extensionToFactoryMap.put("fbt", SERVICE_PROVIDER_FBT.get(IResourceFactory))

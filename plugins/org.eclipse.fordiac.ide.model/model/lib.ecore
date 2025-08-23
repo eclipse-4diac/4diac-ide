@@ -1720,10 +1720,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true"
       eSuperTypes="#//INamedElement">
-    <eOperations name="getType" eType="#//INamedElement"/>
+    <eOperations name="getType" eType="#//LibraryElement"/>
     <eOperations name="getTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();&#xA;if(type != null){&#xA;&#x9;return type.getName();&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getFullTypeName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

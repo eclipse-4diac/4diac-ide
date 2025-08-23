@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorInitializerException;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 @SuppressWarnings("java:S1452")
@@ -60,7 +60,7 @@ public final class StructValue implements AnyDerivedValue, Iterable<Value> {
 
 	protected static Variable<?> initializeMember(final VarDeclaration variable, final Object value) {
 		try {
-			final INamedElement type = VariableOperations.evaluateResultType(variable);
+			final LibraryElement type = VariableOperations.evaluateResultType(variable);
 			return VariableOperations.newVariable(variable.getName(), type, ValueOperations.wrapValue(value, type));
 		} catch (final Exception e) {
 			throw new EvaluatorInitializerException(variable, e);

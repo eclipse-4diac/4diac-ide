@@ -16,7 +16,6 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
@@ -30,7 +29,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 class VarDeclarationSupport extends StructuredTextSupport {
 	final VarDeclaration varDeclaration
 
-	INamedElement resultType
+	LibraryElement resultType
 	STInitializerExpressionSource parseResult
 
 	override prepare() {

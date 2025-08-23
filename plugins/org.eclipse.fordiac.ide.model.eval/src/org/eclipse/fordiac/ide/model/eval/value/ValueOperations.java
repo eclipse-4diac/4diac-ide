@@ -106,7 +106,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.value.TypedValue;
@@ -1013,7 +1012,7 @@ public final class ValueOperations {
 		return 0xffffffffffffffffL >>> (64 - type.getBitSize());
 	}
 
-	public static Value defaultValue(final INamedElement type) {
+	public static Value defaultValue(final LibraryElement type) {
 		return switch (type) { // NOSONAR
 		case null -> null;
 		case final LrealType unused -> LRealValue.DEFAULT;
@@ -1065,7 +1064,7 @@ public final class ValueOperations {
 		};
 	}
 
-	public static Value castValue(final Value value, final INamedElement type) {
+	public static Value castValue(final Value value, final LibraryElement type) {
 		if (value == null) {
 			return null;
 		}
@@ -1086,7 +1085,7 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final BoolValue value, final INamedElement type) {
+	private static Value castValue(final BoolValue value, final LibraryElement type) {
 		return switch (type) {
 		case final LwordType unused -> toLWordValue(value.longValue());
 		case final DwordType unused -> toDWordValue(value.intValue());
@@ -1097,7 +1096,7 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final AnyMagnitudeValue value, final INamedElement type) {
+	private static Value castValue(final AnyMagnitudeValue value, final LibraryElement type) {
 		return switch (type) {
 		case final LrealType unused -> toLRealValue(value);
 		case final RealType unused -> toRealValue(value);
@@ -1120,7 +1119,7 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final AnyBitValue value, final INamedElement type) {
+	private static Value castValue(final AnyBitValue value, final LibraryElement type) {
 		return switch (type) {
 		case final LrealType unused -> toLRealValue(value.longValue());
 		case final RealType unused -> toRealValue(value.longValue());
@@ -1142,7 +1141,7 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final AnyCharsValue value, final INamedElement type) {
+	private static Value castValue(final AnyCharsValue value, final LibraryElement type) {
 		return switch (type) {
 		case final WstringType wstringType ->
 			wstringType.isSetMaxLength() ? toWStringValue(value, wstringType.getMaxLength()) : toWStringValue(value);
@@ -1155,7 +1154,7 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final AnyDateValue value, final INamedElement type) {
+	private static Value castValue(final AnyDateValue value, final LibraryElement type) {
 		return switch (type) {
 		case final LdtType unused -> toLDateAndTimeValue(value);
 		case final DateAndTimeType unused -> toDateAndTimeValue(value);
@@ -1168,14 +1167,14 @@ public final class ValueOperations {
 		};
 	}
 
-	private static Value castValue(final AnyDerivedValue value, final INamedElement type) {
+	private static Value castValue(final AnyDerivedValue value, final LibraryElement type) {
 		return switch (type) {
 		case final DataType dataType when dataType.isAssignableFrom(value.getType()) -> value;
 		case null, default -> throw createCastException(value, type);
 		};
 	}
 
-	public static Value wrapValue(final Object value, final INamedElement type) {
+	public static Value wrapValue(final Object value, final LibraryElement type) {
 		if (value == null) {
 			return defaultValue(type);
 		}
@@ -1383,11 +1382,11 @@ public final class ValueOperations {
 		};
 	}
 
-	public static Value parseValue(final String value, final INamedElement type) {
+	public static Value parseValue(final String value, final LibraryElement type) {
 		return parseValue(value, type, null);
 	}
 
-	public static Value parseValue(final String value, final INamedElement type, final DataTypeLibrary typeLibrary) {
+	public static Value parseValue(final String value, final LibraryElement type, final DataTypeLibrary typeLibrary) {
 		if (value == null || value.isEmpty()) {
 			return defaultValue(type);
 		}
@@ -1397,7 +1396,7 @@ public final class ValueOperations {
 		throw createUnsupportedTypeException(type);
 	}
 
-	public static Class<? extends Value> valueType(final INamedElement type) {
+	public static Class<? extends Value> valueType(final LibraryElement type) {
 		return switch (type) { // NOSONAR
 		case final LrealType unused -> LRealValue.class;
 		case final RealType unused -> RealValue.class;
@@ -1555,12 +1554,12 @@ public final class ValueOperations {
 				MessageFormat.format(Messages.ValueOperations_UnsupportedType, typeName(value)));
 	}
 
-	private static RuntimeException createUnsupportedTypeException(final INamedElement type) {
+	private static RuntimeException createUnsupportedTypeException(final LibraryElement type) {
 		return new UnsupportedOperationException(
 				MessageFormat.format(Messages.ValueOperations_UnsupportedType, typeName(type)));
 	}
 
-	private static RuntimeException createCastException(final Value value, final INamedElement type) {
+	private static RuntimeException createCastException(final Value value, final LibraryElement type) {
 		return new ClassCastException(
 				MessageFormat.format(Messages.ValueOperations_UnsupportedCast, value, typeName(value), typeName(type)));
 	}
@@ -1569,12 +1568,8 @@ public final class ValueOperations {
 		return value != null ? typeName(value.getType()) : null;
 	}
 
-	private static String typeName(final INamedElement type) {
-		return switch (type) {
-		case null -> null;
-		case final LibraryElement libraryElement -> PackageNameHelper.getFullTypeName(libraryElement);
-		default -> type.getName();
-		};
+	private static String typeName(final LibraryElement type) {
+		return PackageNameHelper.getFullTypeName(type);
 	}
 
 	@SuppressWarnings("unchecked")

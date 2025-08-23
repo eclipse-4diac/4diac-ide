@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.variable;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.value.TypedValue;
 
@@ -32,7 +32,7 @@ public interface Variable<T extends Value> {
 	 *
 	 * @return The type
 	 */
-	INamedElement getType();
+	LibraryElement getType();
 
 	/**
 	 * Get the current value of the variable
