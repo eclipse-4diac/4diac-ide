@@ -4,53 +4,50 @@
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
+	<VersionInfo Version="1.0" Author="Martin Erich Jobst" Date="2025-08-25" Remarks="remove erroneous F_SUB">
+	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="START" Type="Event" Comment="">
+			<Event Name="START" Type="Event">
 				<With Var="DT"/>
 				<With Var="N"/>
 			</Event>
-			<Event Name="STOP" Type="Event" Comment="">
+			<Event Name="STOP" Type="Event">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="EO0" Type="Event" Comment="">
+			<Event Name="EO0" Type="Event">
 			</Event>
-			<Event Name="EO1" Type="Event" Comment="">
+			<Event Name="EO1" Type="Event">
 			</Event>
-			<Event Name="EO2" Type="Event" Comment="">
+			<Event Name="EO2" Type="Event">
 			</Event>
-			<Event Name="EO3" Type="Event" Comment="">
+			<Event Name="EO3" Type="Event">
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="DT" Type="TIME" Comment="" ArraySize="4"/>
-			<VarDeclaration Name="N" Type="UINT" Comment=""/>
+			<VarDeclaration Name="DT" Type="TIME" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT"/>
 		</InputVars>
 	</InterfaceList>
 	<FBNetwork>
-		<FB Name="E_TABLE" Type="E_TABLE" Comment="" x="-105.26315789473684" y="105.26315789473684">
+		<FB Name="E_TABLE" Type="E_TABLE" x="-105.26" y="105.26">
 		</FB>
-		<FB Name="E_DEMUX" Type="E_DEMUX" Comment="" x="1789.4736842105262" y="105.26315789473684">
-		</FB>
-		<FB Name="F_SUB" Type="F_SUB" Comment="" x="1052.6315789473683" y="105.26315789473684">
-			<Parameter Name="IN2" Value="UINT#1"/>
+		<FB Name="E_DEMUX" Type="E_DEMUX" x="1789.47" y="105.26">
 		</FB>
 		<EventConnections>
-			<Connection Source="START" Destination="E_TABLE.START" Comment="" dx1="478.9473684210526"/>
-			<Connection Source="STOP" Destination="E_TABLE.STOP" Comment="" dx1="357.89473684210526"/>
-			<Connection Source="E_TABLE.EO" Destination="F_SUB.REQ" Comment=""/>
-			<Connection Source="F_SUB.CNF" Destination="E_DEMUX.EI" Comment=""/>
-			<Connection Source="E_DEMUX.EO0" Destination="EO0" Comment="" dx1="115.78947368421052"/>
-			<Connection Source="E_DEMUX.EO1" Destination="EO1" Comment="" dx1="147.3684210526316"/>
-			<Connection Source="E_DEMUX.EO2" Destination="EO2" Comment="" dx1="210.52631578947367"/>
-			<Connection Source="E_DEMUX.EO3" Destination="EO3" Comment="" dx1="273.6842105263158"/>
+			<Connection Source="START" Destination="E_TABLE.START" dx1="478.95"/>
+			<Connection Source="STOP" Destination="E_TABLE.STOP" dx1="357.89"/>
+			<Connection Source="E_TABLE.EO" Destination="E_DEMUX.EI" dx1="80"/>
+			<Connection Source="E_DEMUX.EO0" Destination="EO0" dx1="115.79"/>
+			<Connection Source="E_DEMUX.EO1" Destination="EO1" dx1="147.37"/>
+			<Connection Source="E_DEMUX.EO2" Destination="EO2" dx1="210.53"/>
+			<Connection Source="E_DEMUX.EO3" Destination="EO3" dx1="273.68"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="DT" Destination="E_TABLE.DT" Comment="" dx1="231.57894736842104"/>
-			<Connection Source="N" Destination="E_TABLE.N" Comment="" dx1="147.3684210526316"/>
-			<Connection Source="E_TABLE.CV" Destination="F_SUB.IN1" Comment="" dx1="131.57894736842104"/>
-			<Connection Source="F_SUB.OUT" Destination="E_DEMUX.K" Comment="" dx1="173.68421052631578"/>
+			<Connection Source="DT" Destination="E_TABLE.DT" dx1="231.58"/>
+			<Connection Source="N" Destination="E_TABLE.N" dx1="147.37"/>
+			<Connection Source="E_TABLE.CV" Destination="E_DEMUX.K" dx1="173.68"/>
 		</DataConnections>
 	</FBNetwork>
 	<Attribute Name="TypeHash" Value="''"/>
