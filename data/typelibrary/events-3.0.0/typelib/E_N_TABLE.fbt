@@ -6,6 +6,8 @@
 	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Martin Erich Jobst" Date="2025-08-25" Remarks="remove erroneous F_SUB">
+	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
 	<InterfaceList>
@@ -37,14 +39,10 @@
 		</FB>
 		<FB Name="E_DEMUX" Type="iec61499::events::E_DEMUX" x="1789.47" y="105.26">
 		</FB>
-		<FB Name="F_SUB" Type="iec61131::arithmetic::F_SUB" x="1052.63" y="105.26">
-			<Parameter Name="IN2" Value="UINT#1"/>
-		</FB>
 		<EventConnections>
 			<Connection Source="START" Destination="E_TABLE.START" dx1="478.95"/>
 			<Connection Source="STOP" Destination="E_TABLE.STOP" dx1="357.89"/>
-			<Connection Source="E_TABLE.EO" Destination="F_SUB.REQ" dx1="120"/>
-			<Connection Source="F_SUB.CNF" Destination="E_DEMUX.EI" dx1="80" dx2="80" dy="160"/>
+			<Connection Source="E_TABLE.EO" Destination="E_DEMUX.EI" dx1="80"/>
 			<Connection Source="E_DEMUX.EO0" Destination="EO0" dx1="115.79"/>
 			<Connection Source="E_DEMUX.EO1" Destination="EO1" dx1="147.37"/>
 			<Connection Source="E_DEMUX.EO2" Destination="EO2" dx1="210.53"/>
@@ -53,8 +51,7 @@
 		<DataConnections>
 			<Connection Source="DT" Destination="E_TABLE.DT" dx1="231.58"/>
 			<Connection Source="N" Destination="E_TABLE.N" dx1="147.37"/>
-			<Connection Source="E_TABLE.CV" Destination="F_SUB.IN1" dx1="131.58"/>
-			<Connection Source="F_SUB.OUT" Destination="E_DEMUX.K" dx1="173.68"/>
+			<Connection Source="E_TABLE.CV" Destination="E_DEMUX.K" dx1="173.68"/>
 		</DataConnections>
 	</FBNetwork>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
