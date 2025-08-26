@@ -26,7 +26,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -183,7 +182,6 @@ public class CommonElementExporter {
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
 	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
-	protected static final DecimalFormat positionFormater = new DecimalFormat("#.##"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
 	private final ByteBufferOutputStream outputStream;
@@ -524,8 +522,8 @@ public class CommonElementExporter {
 	}
 
 	protected void addXYAttributes(final double x, final double y) throws XMLStreamException {
-		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, positionFormater.format(x));
-		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, positionFormater.format(y));
+		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, formatPosOrSizeVal(x));
+		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, formatPosOrSizeVal(y));
 	}
 
 	protected void writeCDataSection(final String cdataText) throws XMLStreamException {
@@ -560,5 +558,10 @@ public class CommonElementExporter {
 			addDependency(libraryElement.getTypeEntry());
 		}
 		return libraryElement;
+	}
+
+	protected static String formatPosOrSizeVal(final double val) {
+		final String stringVal = Double.toString(Math.round(val * 100.0) / 100.0);
+		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal;
 	}
 }
