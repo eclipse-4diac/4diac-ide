@@ -218,17 +218,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		return fontChangeListener;
 	}
 
-	public boolean isOnlyThisOrNothingSelected() {
-		final List<? extends EditPart> selection = getViewer().getSelectedEditParts();
-		if (selection.size() > 1) {
-			return false;
-		}
-		if (selection.size() == 1) {
-			return selection.get(0) == this;
-		}
-		return true;
-	}
-
 	protected void refreshToolTip() {
 		getFigure().refreshToolTips();
 	}
