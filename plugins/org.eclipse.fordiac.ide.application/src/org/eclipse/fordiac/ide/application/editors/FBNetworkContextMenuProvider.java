@@ -31,10 +31,7 @@ import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -51,7 +48,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -201,19 +197,10 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	}
 
 	private static void setActionIcon(final Action action, final TypeEntry entry) {
-		ImageDescriptor image = null;
-		if (entry.getType() instanceof SubAppType) {
-			image = FordiacImage.ICON_SUB_APP_TYPE.getImageDescriptor();
-		} else if (entry.getType() instanceof BasicFBType) {
-			image = FordiacImage.ICON_BASIC_FB.getImageDescriptor();
-		} else if (entry.getType() instanceof SimpleFBType) {
-			image = FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
-		} else if (entry.getType() instanceof CompositeFBType) {
-			image = FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
-		} else {
-			image = FordiacImage.ICON_SIFB.getImageDescriptor();
+		final FordiacImage image = TypeImageProvider.get4diacImageForTypeEntry(entry);
+		if (image != null) {
+			action.setImageDescriptor(image.getImageDescriptor());
 		}
-		action.setImageDescriptor(image);
 	}
 
 	private UpdateFBTypeAction createChangeFBTypeAction(final TypeEntry entry) {

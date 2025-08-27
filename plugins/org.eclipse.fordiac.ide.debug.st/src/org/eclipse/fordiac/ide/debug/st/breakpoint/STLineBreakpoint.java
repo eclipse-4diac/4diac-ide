@@ -21,14 +21,12 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class STLineBreakpoint extends EvaluatorLineBreakpoint {
 	public static final String BREAKPOINT_MARKER = "org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"; //$NON-NLS-1$
 
 	public STLineBreakpoint() {
-		super();
 	}
 
 	public STLineBreakpoint(final IResource resource, final int lineNumber) throws CoreException {
@@ -37,14 +35,9 @@ public class STLineBreakpoint extends EvaluatorLineBreakpoint {
 
 	public FBType getFBType() {
 		final IMarker m = getMarker();
-		if (m != null) {
-			final IResource resource = m.getResource();
-			if (resource instanceof IFile) {
-				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
-				if (typeEntry instanceof FBTypeEntry) {
-					return ((FBTypeEntry) typeEntry).getType();
-				}
-			}
+		if (m != null && m.getResource() instanceof final IFile file
+				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) instanceof final FBTypeEntry typeEntry) {
+			return typeEntry.getType();
 		}
 		return null;
 	}

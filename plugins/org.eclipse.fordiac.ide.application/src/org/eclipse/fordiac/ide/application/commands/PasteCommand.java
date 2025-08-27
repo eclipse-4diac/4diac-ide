@@ -246,7 +246,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 				copiedElement.setTypeEntry(dstTypeEntry);
 			} else {
 				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
-						element.getTypeEntry().getType().eClass());
+						element.getTypeEntry().getTypeEClass());
 				copiedElement.setInterface(InterfaceListCopier.copy(element.getInterface()));
 			}
 		} else {

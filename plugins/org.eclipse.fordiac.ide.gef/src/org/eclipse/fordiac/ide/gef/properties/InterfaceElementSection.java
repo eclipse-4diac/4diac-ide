@@ -103,7 +103,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
-			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
+			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getTypeName()));
 		} else if (getType() instanceof VarDeclaration) {
 			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}

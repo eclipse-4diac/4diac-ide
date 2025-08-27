@@ -194,8 +194,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				if (rootContainer instanceof AttributeDeclaration) {
 					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl);
 				}
-				if (rootContainer instanceof final FBType fbType
-						&& dataTypeEntry.getType() instanceof final StructuredType type) {
+				if (rootContainer instanceof final FBType fbType && dataTypeEntry.getType() instanceof StructuredType) {
 					return new RenameUpdateFBTypeInterfaceChange(fbType, oldName, newName, packageName);
 				}
 			}

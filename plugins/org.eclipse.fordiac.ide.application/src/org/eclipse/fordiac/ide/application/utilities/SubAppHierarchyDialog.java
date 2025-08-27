@@ -82,15 +82,11 @@ public class SubAppHierarchyDialog {
 
 				final Button expandAll = WidgetFactory.button(SWT.NONE).image(FordiacImage.ICON_EXPAND_ALL.getImage())
 						.create(buttonsComposite);
-				expandAll.addListener(SWT.Selection, event -> {
-					viewer.expandAll();
-				});
+				expandAll.addListener(SWT.Selection, event -> viewer.expandAll());
 				final Button collapseAll = WidgetFactory.button(SWT.NONE)
 						.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL))
 						.create(buttonsComposite);
-				collapseAll.addListener(SWT.Selection, event -> {
-					viewer.collapseAll();
-				});
+				collapseAll.addListener(SWT.Selection, event -> viewer.collapseAll());
 				return viewer;
 			}
 		};
@@ -158,8 +154,7 @@ public class SubAppHierarchyDialog {
 	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
 		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getSystem),
 				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
-		final var list = stream.toList();
-		return buildNodeList(list.stream(), Collections.emptyList());
+		return buildNodeList(stream, Collections.emptyList());
 	}
 
 	private List<TreeNode> buildNodeList(final List<FBNetworkElement> filterList) {
