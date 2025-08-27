@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -41,7 +42,8 @@ public class ResourceCreateCommand extends Command {
 		this.deviceTypeRes = deviceTypeRes;
 	}
 
-	public ResourceCreateCommand(final ResourceTypeEntry entry, final Device device, final int index, final boolean deviceTypeRes) {
+	public ResourceCreateCommand(final ResourceTypeEntry entry, final Device device, final int index,
+			final boolean deviceTypeRes) {
 		this.entry = entry;
 		this.device = device;
 		this.index = index;
@@ -63,6 +65,7 @@ public class ResourceCreateCommand extends Command {
 		// resource name needs to be added after it is inserted in the device so that
 		// name checking works
 		resource.setName(NameRepository.createUniqueName(resource, entry.getTypeName()));
+		AttributeInheritMode.copyAttributeValuesFromType(resource);
 	}
 
 	@Override
@@ -90,7 +93,7 @@ public class ResourceCreateCommand extends Command {
 			final InterfaceList il = LibraryElementFactory.eINSTANCE.createInterfaceList();
 			il.getInputVars().addAll(resource.getVarDeclarations());
 			resourceFBNetwork = FBNetworkHelper.createResourceFBNetwork(entry.getType().getFBNetwork(), il);
-			resource.getVarDeclarations().addAll(il.getInputVars());  // ensure that the data inputs are back with us.
+			resource.getVarDeclarations().addAll(il.getInputVars()); // ensure that the data inputs are back with us.
 		} else {
 			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		}

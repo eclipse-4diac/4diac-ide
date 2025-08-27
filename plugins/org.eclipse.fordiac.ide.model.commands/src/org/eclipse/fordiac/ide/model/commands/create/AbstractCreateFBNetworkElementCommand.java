@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -67,7 +66,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 	public void execute() {
 		element.setInterface(createInterfaceList());
 		if (element.getType() != null) {
-			transferAttributes(element);
+			AttributeInheritMode.copyAttributeValuesFromType(element);
 		}
 		element.setPosition(position);
 		insertFBNetworkElement();
@@ -128,19 +127,6 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		if (fbNetwork != null) {
 			fbNetwork.getNetworkElements().remove(element);
 		}
-	}
-
-	private static void transferAttributes(final FBNetworkElement newElement) {
-		if (newElement.getTypeEntry() == null
-				|| !(newElement.getTypeEntry().getType() instanceof final FBType fbType)) {
-			return;
-		}
-
-		AttributeInheritMode.copyAttributes(newElement, fbType.getAttributes());
-		fbType.getInterfaceList().getAllInterfaceElements().forEach(typeInterfaceElement -> {
-			final var newInterface = newElement.getInterfaceElement(typeInterfaceElement.getName());
-			AttributeInheritMode.copyAttributes(newInterface, typeInterfaceElement.getAttributes());
-		});
 	}
 
 	@Override
