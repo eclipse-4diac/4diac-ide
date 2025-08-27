@@ -13,10 +13,10 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -54,7 +54,7 @@ public final class BlockInstanceFactory {
 		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
-		if (entry.getType() instanceof CompositeFBType) {
+		if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}
 		return LibraryElementFactory.eINSTANCE.createFB();
