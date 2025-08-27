@@ -489,8 +489,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// AbstractReconnectCommand::getCreateConnectionCommand
 		cmd.setSource(source);
 		cmd.setDestination(dest);
-		cmd.setNegated(oldConn.isNegated());
-		cmd.setVisible(oldConn.isVisible());
+		cmd.setAttributes(oldConn.getAttributes());
 		cmd.setArrangementConstraints(oldConn.getRoutingData());
 		cmd.setElementIndex(fbn.getConnectionIndex(oldConn));
 		reconnCmds.add(cmd);

@@ -18,15 +18,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -71,7 +75,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	private boolean visible = true;
 
-	private boolean negated = false;
+	private final List<Attribute> attributes = new ArrayList<>();
 
 	private int elementIndex = -1;
 
@@ -131,10 +135,9 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setRoutingData(routingData);
 
 		parent.addConnectionWithIndex(connection, elementIndex);
-		// visible needs to be setup after the connection is added to correctly update
-		// ui
+		// setup visible after connection is add for correct UI refresh
 		connection.setVisible(visible);
-		connection.setNegated(negated);
+		connection.getAttributes().addAll(EcoreUtil.copyAll(attributes));
 
 		if (performMappingCheck) {
 			mirroredConnection = checkAndCreateMirroredConnection();
@@ -212,6 +215,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 					cmd.setSource(opSrcIE);
 					cmd.setDestination(opDstIE);
 					cmd.setVisible(visible);
+					cmd.setAttributes(attributes);
 					return cmd;
 				}
 			}
@@ -263,16 +267,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	public void setVisible(final boolean visible) {
 		this.visible = visible;
-		if (null != mirroredConnection) {
-			mirroredConnection.setVisible(visible);
-		}
 	}
 
-	public void setNegated(final boolean negated) {
-		this.negated = negated;
-		if (null != mirroredConnection) {
-			mirroredConnection.setNegated(negated);
-		}
+	public void setAttributes(final List<Attribute> attributes) {
+		this.attributes.addAll(attributes);
 	}
 
 	public static AbstractConnectionCreateCommand createCommand(final FBNetwork network,
