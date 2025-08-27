@@ -157,7 +157,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 			}
 		}
 		final EObject destContainer = EcoreUtil.getRootContainer(dstFBNetwork);
-		if (destContainer instanceof final LibraryElement le) {
+		if (destContainer instanceof final LibraryElement le && le.getCompilerInfo() != null) {
 			final List<String> importNames = le.getCompilerInfo().getImports().stream()
 					.map(Import::getImportedNamespace).toList();
 
