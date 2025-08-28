@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -123,7 +124,7 @@ public class FBTypeSearchResultTable extends Composite {
 			@Override
 			public String getText(final Object element) {
 				if (dataHandler.getTypeOfElement(element) != null) {
-					return dataHandler.getTypeOfElement(element).getTypeEditable().getName();
+					return dataHandler.getTypeOfElement(element).getType().getName();
 				}
 				return element.getClass().getSimpleName();
 			}
@@ -170,7 +171,7 @@ public class FBTypeSearchResultTable extends Composite {
 			@Override
 			public boolean hasChildren(final Object element) {
 				if (element instanceof final FBType type) {
-					final Set<INamedElement> child = dataHandler.getChild(type.getName());
+					final Set<EObject> child = dataHandler.getChild(type.getName());
 					return child != null && !child.isEmpty();
 				}
 				return false;

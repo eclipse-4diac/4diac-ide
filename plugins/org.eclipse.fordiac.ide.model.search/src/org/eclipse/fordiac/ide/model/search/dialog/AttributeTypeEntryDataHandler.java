@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search.dialog;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.search.types.AttributeTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 
@@ -28,12 +26,9 @@ public class AttributeTypeEntryDataHandler extends AbstractTypeEntryDataHandler<
 	}
 
 	@Override
-	protected Map<INamedElement, AttributeTypeEntry> createInputSet(final AttributeTypeEntry inputTypeEntry) {
+	protected Map<EObject, AttributeTypeEntry> createInputSet(final AttributeTypeEntry inputTypeEntry) {
 		final AttributeTypeInstanceSearch search = new AttributeTypeInstanceSearch(inputTypeEntry);
-		final List<? extends EObject> performSearch = search.performSearch();
-		final Map<INamedElement, AttributeTypeEntry> result = new HashMap<>();
-		performSearch.forEach(e -> result.put((INamedElement) e, inputTypeEntry));
-		return result;
+		return search.performSearch().stream().collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
 	}
 
 }

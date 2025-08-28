@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.search.dialog;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -25,10 +25,8 @@ public class FBTypeEntryDataHandler extends AbstractTypeEntryDataHandler<TypeEnt
 	}
 
 	@Override
-	public Map<INamedElement, TypeEntry> createInputSet(final TypeEntry inputTypeEntry) {
+	public Map<EObject, TypeEntry> createInputSet(final TypeEntry inputTypeEntry) {
 		final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(typeEntry);
-		return search.performSearch().stream().filter(INamedElement.class::isInstance).map(INamedElement.class::cast)
-				.collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
+		return search.performSearch().stream().collect(Collectors.toMap(el -> el, el -> inputTypeEntry));
 	}
-
 }
