@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 
 	protected final T typeEntry;
 
-	protected final Map<String, Set<INamedElement>> children;
-	protected Map<INamedElement, T> inputSet;
+	protected final Map<String, Set<EObject>> children;
+	protected Map<EObject, T> inputSet;
 
 	protected AbstractTypeEntryDataHandler(final T typeEntry) {
 		this.typeEntry = typeEntry;
@@ -37,39 +37,39 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 		return typeEntry;
 	}
 
-	public Map<INamedElement, T> getInputSet() {
+	public Map<EObject, T> getInputSet() {
 		return inputSet;
 	}
 
-	public void setInputSet(final Map<INamedElement, T> inputSet) {
+	public void setInputSet(final Map<EObject, T> inputSet) {
 		this.inputSet = inputSet;
 	}
 
-	public Map<String, Set<INamedElement>> getChildren() {
+	public Map<String, Set<EObject>> getChildren() {
 		return children;
 	}
 
-	public Set<INamedElement> getChild(final String key) {
+	public Set<EObject> getChild(final String key) {
 		return children.get(key);
 	}
 
-	public Set<INamedElement> putChild(final String key, final Set<INamedElement> child) {
+	public Set<EObject> putChild(final String key, final Set<EObject> child) {
 		return children.put(key, child);
 	}
 
-	public Set<INamedElement> getCollectedElements() {
+	public Set<EObject> getCollectedElements() {
 		return inputSet.keySet();
 	}
 
 	public T getTypeOfElement(final Object element) {
-		if (element instanceof final INamedElement iNamedElement && getInputSet().containsKey(iNamedElement)) {
-			return getInputSet().get(iNamedElement);
+		if (element instanceof final EObject eObject && getInputSet().containsKey(eObject)) {
+			return getInputSet().get(eObject);
 		}
 		return null;
 	}
 
 	public List<T> getTypeOfElementList(final List<?> elements) {
-		return elements.stream().map(e -> getTypeOfElement(e)).toList();
+		return elements.stream().map(this::getTypeOfElement).toList();
 	}
 
 	public boolean loadInputSet() {
@@ -77,5 +77,5 @@ public abstract class AbstractTypeEntryDataHandler<T extends TypeEntry> {
 		return inputSet.isEmpty();
 	}
 
-	protected abstract Map<INamedElement, T> createInputSet(final T inputTypeEntry);
+	protected abstract Map<EObject, T> createInputSet(final T inputTypeEntry);
 }

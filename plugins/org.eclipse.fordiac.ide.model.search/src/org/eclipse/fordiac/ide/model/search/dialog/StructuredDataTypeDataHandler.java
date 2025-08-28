@@ -32,14 +32,14 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 	}
 
 	@Override
-	public HashMap<INamedElement, DataTypeEntry> createInputSet(final DataTypeEntry inputDataTypeEntry) {
-		final HashMap<INamedElement, DataTypeEntry> inputElementsSet = new HashMap<>();
+	public HashMap<EObject, DataTypeEntry> createInputSet(final DataTypeEntry inputDataTypeEntry) {
+		final HashMap<EObject, DataTypeEntry> inputElementsSet = new HashMap<>();
 		handleStruct(inputDataTypeEntry, inputElementsSet);
 		return inputElementsSet;
 	}
 
 	private static void handleVarDecl(final VarDeclaration varDecl,
-			final HashMap<INamedElement, DataTypeEntry> inputElementsSet, final DataTypeEntry inputDataTypeEntry) {
+			final HashMap<EObject, DataTypeEntry> inputElementsSet, final DataTypeEntry inputDataTypeEntry) {
 		if (varDecl.eContainer() instanceof final StructuredType st) {
 			final DataTypeEntry stTypeEntry = (DataTypeEntry) st.getTypeEntry();
 			inputElementsSet.put(st, inputDataTypeEntry);
@@ -50,7 +50,7 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 			}
 		} else if (varDecl.eContainer() instanceof InterfaceList) {
 			// we are either in an untyped subapp or in the interface of a FB or subapp type
-			inputElementsSet.put((INamedElement) varDecl.eContainer().eContainer(), inputDataTypeEntry);
+			inputElementsSet.put(varDecl.eContainer().eContainer(), inputDataTypeEntry);
 
 			if (varDecl.eContainer().eContainer() instanceof final FBType type) {
 				final BlockTypeInstanceSearch search = new BlockTypeInstanceSearch(type.getTypeEntry());
@@ -64,7 +64,7 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 	}
 
 	private static void handleStruct(final DataTypeEntry stTypeEntry,
-			final HashMap<INamedElement, DataTypeEntry> inputElementsSet) {
+			final HashMap<EObject, DataTypeEntry> inputElementsSet) {
 		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(stTypeEntry);
 
 		dataTypeInstanceSearch.performSearch().forEach(obj -> {
