@@ -122,6 +122,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -264,6 +265,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE: return createVarConfigInstance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1301,6 +1303,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public With createWith() {
 		WithImpl with = new WithImpl();
 		return with;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VarConfigInstance createVarConfigInstance() {
+		VarConfigInstanceImpl varConfigInstance = new VarConfigInstanceImpl();
+		return varConfigInstance;
 	}
 
 	/**

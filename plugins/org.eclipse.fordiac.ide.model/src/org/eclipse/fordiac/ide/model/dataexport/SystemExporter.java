@@ -138,7 +138,7 @@ public class SystemExporter extends AbstractTypeExporter {
 			addStartElement(LibraryElementTags.SEGMENT_ELEMENT);
 			addNameTypeCommentAttribute(segment, segment.getType());
 			addXYAttributes(segment);
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(segment.getWidth()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, formatPosOrSizeVal(segment.getWidth()));
 			addColorAttributeElement(segment);
 			addAttributes(segment.getAttributes());
 			addParamsConfig(segment.getCommunication().getParameters());

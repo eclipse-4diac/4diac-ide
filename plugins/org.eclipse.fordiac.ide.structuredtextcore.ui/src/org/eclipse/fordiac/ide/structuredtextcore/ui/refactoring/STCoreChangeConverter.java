@@ -190,7 +190,8 @@ public class STCoreChangeConverter extends ChangeConverter {
 		if (editor != null) {
 			final IDocumentProvider documentProvider = editor.getDocumentProvider();
 			if (documentProvider != null) {
-				return new ProviderDocumentChange(change.getOldURI().lastSegment(), editorInput, documentProvider);
+				return new EditorDocumentChange(change.getOldURI().lastSegment(), editorInput, documentProvider,
+						editor);
 			}
 		}
 		final IDocumentProvider documentProvider = getDocumentProvider(change.getOldURI());

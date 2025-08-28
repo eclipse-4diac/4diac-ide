@@ -129,8 +129,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		addCommentAttribute(comment.getComment());
 		addXYAttributes(comment);
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(comment.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(comment.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(comment.getHeight()));
 
 		if (comment.isInGroup()) {
 			addGroupAttribute(comment.getGroup());
@@ -145,8 +145,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(group.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(group.getHeight()));
 		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
 	}
 
@@ -184,11 +184,11 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					positionFormater.format(subApp.getWidth()), null);
+					formatPosOrSizeVal(subApp.getWidth()), null);
 		}
 		if (subApp.getHeight() != 0) {
 			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					positionFormater.format(subApp.getHeight()), null);
+					formatPosOrSizeVal(subApp.getHeight()), null);
 		}
 	}
 
@@ -293,13 +293,11 @@ class FBNetworkExporter extends CommonElementExporter {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
 		if (routingData != null && !routingData.is1SegementData()) {
 			// only export connection routing information if not a straight line
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(routingData.getDx1()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx1()));
 			if (routingData.is5SegementData()) {
 				// only export the second two if a five segment connection
-				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						positionFormater.format(routingData.getDx2()));
-				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						positionFormater.format(routingData.getDy()));
+				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx2()));
+				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE, formatPosOrSizeVal(routingData.getDy()));
 			}
 		}
 	}

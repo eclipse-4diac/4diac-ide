@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -75,7 +75,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 		if (entry instanceof AdapterTypeEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
-		} else if (entry.getType() instanceof CompositeFBType) {
+		} else if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();

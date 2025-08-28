@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
@@ -183,6 +184,20 @@ public final class InterfaceListCopier {
 		copy.getAdapterFB().setAdapterDecl(copy);
 		copy.setInterfaceOnlyAdapterFB(copy.getAdapterFB());
 		return copy;
+	}
+
+	public static VarConfigInstance copyVarConfigInstance(final VarDeclaration src, final String relativeName) {
+		final VarConfigInstance vci = LibraryElementFactory.eINSTANCE.createVarConfigInstance();
+		vci.setName(relativeName);
+		vci.setIsInput(src.isIsInput());
+		vci.setVisible(src.isVisible());
+		vci.setType(src.getType());
+		if (src.getValue() != null) {
+			vci.setValue(EcoreUtil.copy(src.getValue()));
+		}
+		vci.setArraySize(src.getArraySize());
+		vci.setComment(src.getComment());
+		return vci;
 	}
 
 	private InterfaceListCopier() {

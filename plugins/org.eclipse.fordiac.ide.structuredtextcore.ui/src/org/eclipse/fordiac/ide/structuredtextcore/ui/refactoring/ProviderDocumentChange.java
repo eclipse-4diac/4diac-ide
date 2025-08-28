@@ -99,4 +99,20 @@ public class ProviderDocumentChange extends TextChange {
 	public Object[] getAffectedObjects() {
 		return new Object[] { editorInput.getFile() };
 	}
+
+	public IFileEditorInput getEditorInput() {
+		return editorInput;
+	}
+
+	public IDocumentProvider getDocumentProvider() {
+		return documentProvider;
+	}
+
+	public boolean isDoSave() {
+		return doSave;
+	}
+
+	public long getModificationStamp() {
+		return modificationStamp;
+	}
 }

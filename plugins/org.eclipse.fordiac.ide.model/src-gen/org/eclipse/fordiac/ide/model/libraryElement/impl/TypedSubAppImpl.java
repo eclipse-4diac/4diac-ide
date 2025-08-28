@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 
 /**
  * <!-- begin-user-doc -->
@@ -68,7 +68,7 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VarDeclaration> varConfigParams;
+	protected EList<VarConfigInstance> varConfigParams;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -163,9 +163,9 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getVarConfigParams() {
+	public EList<VarConfigInstance> getVarConfigParams() {
 		if (varConfigParams == null) {
-			varConfigParams = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
+			varConfigParams = new EObjectContainmentEList.Resolving<VarConfigInstance>(VarConfigInstance.class, this, LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS);
 		}
 		return varConfigParams;
 	}
@@ -249,7 +249,7 @@ public class TypedSubAppImpl extends SubAppImpl implements TypedSubApp {
 				return;
 			case LibraryElementPackage.TYPED_SUB_APP__VAR_CONFIG_PARAMS:
 				getVarConfigParams().clear();
-				getVarConfigParams().addAll((Collection<? extends VarDeclaration>)newValue);
+				getVarConfigParams().addAll((Collection<? extends VarConfigInstance>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

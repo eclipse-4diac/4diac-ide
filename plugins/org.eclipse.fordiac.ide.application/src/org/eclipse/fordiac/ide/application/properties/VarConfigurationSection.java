@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -34,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
@@ -276,14 +277,9 @@ public class VarConfigurationSection extends AbstractSection {
 		if (existing != null) {
 			targetVD = existing;
 		} else {
-			targetVD = EcoreUtil.copy(vd);
-			targetVD.setName(relativeName);
-			if (vd.getValue() != null) {
-				targetVD.setValue(EcoreUtil.copy(vd.getValue()));
-			}
-			targetVD.setComment(vd.getComment());
-			targetVD.getAttributes().clear();
-			rootTSA.getVarConfigParams().add(targetVD);
+			final VarConfigInstance vcI = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
+			rootTSA.getVarConfigParams().add(vcI);
+			targetVD = vcI;
 		}
 		result.put(qualifiedName, targetVD);
 		copiedMap.put(targetVD, Boolean.TRUE);

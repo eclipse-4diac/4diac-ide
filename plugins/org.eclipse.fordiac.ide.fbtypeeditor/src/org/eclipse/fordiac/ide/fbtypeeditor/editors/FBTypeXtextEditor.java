@@ -15,9 +15,11 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.typeeditor.XtextTypeEditorPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 public abstract class FBTypeXtextEditor extends XtextTypeEditorPage implements IFBTEditorPart {
 
@@ -37,6 +39,13 @@ public abstract class FBTypeXtextEditor extends XtextTypeEditorPage implements I
 	public void dispose() {
 		removeFBTypeUpdater();
 		super.dispose();
+	}
+
+	public TypeEntryAdapter getTypeEntryAdapter() {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			return multiPageEditorSite.getMultiPageEditor().getAdapter(TypeEntryAdapter.class);
+		}
+		return null;
 	}
 
 	protected abstract void removeFBTypeUpdater();

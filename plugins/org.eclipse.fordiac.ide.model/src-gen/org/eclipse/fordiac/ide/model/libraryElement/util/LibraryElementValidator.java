@@ -18,7 +18,9 @@ package org.eclipse.fordiac.ide.model.libraryElement.util;
 
 import java.util.List;
 import java.util.Map;
+
 import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -30,6 +32,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -135,10 +138,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.libraryElement.*;
+
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -451,12 +455,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 35;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Var Config Instance'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 36;
+
+	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 35;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 36;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -711,6 +723,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateVersionInfo((VersionInfo)value, diagnostics, context);
 			case LibraryElementPackage.WITH:
 				return validateWith((With)value, diagnostics, context);
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE:
+				return validateVarConfigInstance((VarConfigInstance)value, diagnostics, context);
 			case LibraryElementPackage.LANGUAGE:
 				return validateLanguage((Language)value, diagnostics, context);
 			case LibraryElementPackage.COMMAND_STACK:
@@ -2098,6 +2112,36 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(memberVarDeclaration, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateIllegalVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(memberVarDeclaration, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateMethod(Method method, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(method, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(method, diagnostics, context);
@@ -2878,29 +2922,39 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateMemberVarDeclaration(MemberVarDeclaration memberVarDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(memberVarDeclaration, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateIInterfaceElement_validateName(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateITypedElement_validateType(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateIllegalVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
-		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(memberVarDeclaration, diagnostics, context);
+	public boolean validateVarConfigInstance(VarConfigInstance varConfigInstance, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(varConfigInstance, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarConfigInstance_validateName(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateMultipleInputConnections(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForGenericTypeVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateIllegalVariableLengthArrayVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateNoValueForVariableLengthArrayVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueForGenericInstanceVariable(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateValueOverriddenBySubAppInput(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSourceTypeIsWellDefined(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutIsWithed(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(varConfigInstance, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the validateName constraint of '<em>Var Config Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarConfigInstance_validateName(VarConfigInstance varConfigInstance, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varConfigInstance.validateName(diagnostics, context);
 	}
 
 	/**

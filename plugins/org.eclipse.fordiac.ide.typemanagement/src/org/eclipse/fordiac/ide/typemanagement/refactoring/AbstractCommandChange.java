@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -225,16 +226,27 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 * @throws CoreException if there was a problem saving the library element
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
-		if (editor != null) {
-			// if we have an editor mark the save location in the command stack to tell the
-			// editor that it is not dirty anymore
-			// must do that _before_ saving the type entry, so that when the notification
-			// reaches the editor, it is not considered dirty and we do not trigger a reload
-			// dialog
-			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
-		}
-		if (typeEntry != null) {
-			typeEntry.save(libraryElement, pm);
+		final CommandStack commandStack = getCommandStack();
+		final TypeEntryAdapter typeEntryAdapter = getTypeEntryAdapter();
+		try {
+			// block updates in type entry adapter to avoid unnecessary reloads
+			if (typeEntryAdapter != null) {
+				typeEntryAdapter.setBlockUpdates(true);
+			}
+			// save type entry
+			if (typeEntry != null) {
+				typeEntry.save(libraryElement, pm);
+			}
+			// mark the save location in the command stack to tell the editor that it is not
+			// dirty anymore
+			if (commandStack != null) {
+				commandStack.markSaveLocation();
+			}
+		} finally {
+			// re-enable updates
+			if (typeEntryAdapter != null) {
+				typeEntryAdapter.setBlockUpdates(false);
+			}
 		}
 	}
 
@@ -332,6 +344,15 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	protected final CommandStack getCommandStack() {
 		return Adapters.adapt(editor, CommandStack.class);
+	}
+
+	/**
+	 * Get the type entry adapter for the editor
+	 *
+	 * @return The typen entry adapter (may be null)
+	 */
+	protected final TypeEntryAdapter getTypeEntryAdapter() {
+		return Adapters.adapt(editor, TypeEntryAdapter.class);
 	}
 
 	/**
