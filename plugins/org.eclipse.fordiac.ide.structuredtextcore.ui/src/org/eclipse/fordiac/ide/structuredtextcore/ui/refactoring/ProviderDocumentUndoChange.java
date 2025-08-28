@@ -123,4 +123,16 @@ public class ProviderDocumentUndoChange extends Change {
 	protected Change createUndoChange(final UndoEdit edit) {
 		return new ProviderDocumentUndoChange(name, editorInput, documentProvider, edit, doSave);
 	}
+
+	public IFileEditorInput getEditorInput() {
+		return editorInput;
+	}
+
+	public IDocumentProvider getDocumentProvider() {
+		return documentProvider;
+	}
+
+	public boolean isDoSave() {
+		return doSave;
+	}
 }

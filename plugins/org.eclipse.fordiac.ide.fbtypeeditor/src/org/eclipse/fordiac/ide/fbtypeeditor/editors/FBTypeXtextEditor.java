@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
+import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -96,6 +97,13 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	public CommandStack getCommandStack() {
 		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			return multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
+		}
+		return null;
+	}
+
+	public TypeEntryAdapter getTypeEntryAdapter() {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			return multiPageEditorSite.getMultiPageEditor().getAdapter(TypeEntryAdapter.class);
 		}
 		return null;
 	}
