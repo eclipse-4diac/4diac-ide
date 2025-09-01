@@ -59,11 +59,23 @@ public interface IArchiveDownloader {
 	 * @param preferredVersion preferred version to be downloaded, ignored if
 	 *                         {@code null} or not contained in version range
 	 * @param monitor          progress monitor, can be {@code null}
-	 * @return {@code Path} of the downloaded library archive, or {@code null} if
-	 *         archive couldn't be downloaded
+	 * @return {@code DownloadResult} of the downloaded library archive
+	 * @throws OperationCanceledException
 	 */
 	DownloadResult<Path> downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion,
 			IProgressMonitor monitor) throws OperationCanceledException;
+
+	/**
+	 * Download manifest of the specified library with the given version
+	 *
+	 * @param symbolicName symbolic name of library
+	 * @param version      specific version
+	 * @param monitor      progress monitor, can be {@code null}
+	 * @return {@code DownloadResult} of the downloaded library manifest
+	 * @throws OperationCanceledException
+	 */
+	DownloadResult<Path> downloadManifest(String symbolicName, Version version, IProgressMonitor monitor)
+			throws OperationCanceledException;
 
 	/**
 	 * Returns if downloader is active (standard value is {@code true})

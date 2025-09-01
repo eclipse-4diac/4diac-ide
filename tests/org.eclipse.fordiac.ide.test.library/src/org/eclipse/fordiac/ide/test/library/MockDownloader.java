@@ -42,7 +42,7 @@ public class MockDownloader implements IArchiveDownloader {
 			Map.entry("test02", List.of("1.0.0", "1.1.0")), Map.entry("test03", List.of("1.0.0", "1.1.0")),
 			Map.entry("test04", List.of("1.0.0", "1.1.0")), Map.entry("test05", List.of("1.0.0")),
 			Map.entry("test06", List.of("1.0.0")), Map.entry("test07", List.of("1.0.0")));
-	private final static String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
+	private static final String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 
 	@Override
 	public String getName() {
@@ -104,6 +104,12 @@ public class MockDownloader implements IArchiveDownloader {
 	}
 
 	@Override
+	public DownloadResult<Path> downloadManifest(final String symbolicName, final Version version,
+			final IProgressMonitor monitor) throws OperationCanceledException {
+		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+	}
+
+	@Override
 	public boolean isActive() {
 		return active;
 	}
@@ -112,5 +118,4 @@ public class MockDownloader implements IArchiveDownloader {
 	public void setActive(final boolean active) {
 		this.active = active;
 	}
-
 }
