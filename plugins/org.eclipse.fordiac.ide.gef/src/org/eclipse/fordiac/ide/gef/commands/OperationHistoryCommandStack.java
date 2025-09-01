@@ -23,6 +23,7 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.OperationHistoryEvent;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -36,10 +37,14 @@ import org.eclipse.gef.commands.UnexecutableCommand;
 
 public class OperationHistoryCommandStack extends CommandStack {
 
-	private final IUndoContext undoContext;
+	private IUndoContext undoContext;
 	private final IOperationHistory opHistory;
 	private IUndoableOperation saveLocation;
 	private OperationHistoryListener opHistoryListener;
+
+	public OperationHistoryCommandStack() {
+		this(new UndoContext());
+	}
 
 	public OperationHistoryCommandStack(final IUndoContext undoContext) {
 		this.undoContext = undoContext;
@@ -182,6 +187,11 @@ public class OperationHistoryCommandStack extends CommandStack {
 	public void removeCommandStackListener(final CommandStackListener listener) {
 		throw new UnsupportedOperationException(
 				"removeCommandStackListener shall not be used anymore. Use removeCommandStackEventListener instead!"); //$NON-NLS-1$
+	}
+
+	public void setUndoContext(final IUndoContext undoContext) {
+		flush();
+		this.undoContext = undoContext;
 	}
 
 	@Override
