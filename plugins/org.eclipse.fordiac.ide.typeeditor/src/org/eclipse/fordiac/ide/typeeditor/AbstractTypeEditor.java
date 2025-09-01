@@ -35,8 +35,10 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.edit.LibraryElementUndoContext;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -94,7 +96,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
-	private final CommandStack commandStack = new CommandStack();
+	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
 	private Collection<ITypeEditorPage> editorPages;
 	private TypeEntryAdapter typeEntryAdapter;
 	private GraphicalAnnotationModel annotationModel;
@@ -223,6 +225,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
+		getCommandStack().dispose();
 		typeEntryAdapter.dispose();
 	}
 
@@ -439,7 +442,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
 						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
 			}
-			getCommandStack().flush();
+			commandStack.setUndoContext(new LibraryElementUndoContext(newFBType));
 			getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setPartName(getTypeEntry().getTypeName());
 		}
@@ -486,6 +489,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
 			}
 			setInputWithNotify(typeEditorInput);
+			commandStack.setUndoContext(new LibraryElementUndoContext(typeEditorInput.getContent()));
 		} else {
 			setInputWithNotify(input);
 		}
