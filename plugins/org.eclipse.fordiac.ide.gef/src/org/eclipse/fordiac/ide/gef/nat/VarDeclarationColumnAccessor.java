@@ -32,8 +32,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -74,12 +73,19 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	}
 
 	private static Boolean getVarConfString(final VarDeclaration rowObject) {
-		return isCompositeFBType(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
+		return isFBinsideCompositeNetwork(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
 	}
 
-	private static boolean isCompositeFBType(final VarDeclaration rowObject) {
-		final FBNetworkElement fbElement = rowObject.getFBNetworkElement();
-		return fbElement instanceof CFBInstance;
+	private static boolean isFBinsideCompositeNetwork(final VarDeclaration rowObject) {
+		final var fbElement = rowObject.getFBNetworkElement();
+		if (fbElement == null) {
+			return false;
+		}
+		final var fbNetwork = fbElement.getFbNetwork();
+		if (fbNetwork == null) {
+			return false;
+		}
+		return fbNetwork.eContainer() instanceof CompositeFBType;
 	}
 
 	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
