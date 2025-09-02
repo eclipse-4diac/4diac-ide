@@ -55,14 +55,18 @@ public final class EventManagerUtils {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof final FBTransaction fbtransaction) {
 				processFbTransaction(fbtransaction, time);
+				// use fb runtime in the resulting transactions
+				final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
+
 				if (network) {
-					fbtransaction.getOutputEventOccurrences().forEach(
-							outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
-				}
-				if ((i + 1) < transactions.size()) {
-					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
-					// use fb runtime in the next transaction
-					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+					for (final EventOccurrence eo : fbtransaction.getOutputEventOccurrences()) {
+						for (final Transaction t : eo.getCreatedTransactions()) {
+							t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+							eventManager.getTransactions().add(t);
+						}
+					}
+				} else if ((i + 1) < transactions.size()) {
+					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 				}
 			}
 			time += transaction.getDuration();
@@ -80,10 +84,8 @@ public final class EventManagerUtils {
 	public static void processFbTransaction(final FBTransaction transaction, final long startTime) {
 		// set the input vars
 		for (final var inputVar : transaction.getInputVariables()) {
-			final var element = transaction.getInputEventOccurrence().getFbRuntime().getModel();
-			if (element instanceof final FBType fbtype) {
-				setInputVariable(inputVar, fbtype);
-			}
+			final var fbtype = transaction.getInputEventOccurrence().getFbRuntime().getModel();
+			setInputVariable(inputVar, fbtype);
 		}
 		transaction.getInputEventOccurrence().setStartTime(startTime);
 		final var result = processEventOccurrence(transaction.getInputEventOccurrence());

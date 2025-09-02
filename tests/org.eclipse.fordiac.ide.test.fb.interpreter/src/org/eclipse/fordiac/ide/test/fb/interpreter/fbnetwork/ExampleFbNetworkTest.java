@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
@@ -46,8 +47,9 @@ public class ExampleFbNetworkTest extends AbstractInterpreterTest {
 		assertEquals("S", t0.getInputEventOccurrence().getEvent().getName()); //$NON-NLS-1$
 		assertEquals(EXECUTED_FB_1, t0.getInputEventOccurrence().getParentFB().getName());
 
-		final FBNetwork fbNetwork = (FBNetwork) t0.getInputEventOccurrence().getResultFBRuntime().getModel();
-		final VarDeclaration varQ = (VarDeclaration) fbNetwork.getFBNamed(EXECUTED_FB_1).getInterfaceElement("Q"); //$NON-NLS-1$
+		final FBNetwork fbnetwork = ((FBNetworkRuntime) t0.getInputEventOccurrence().getResultFBRuntime())
+				.getFbnetwork();
+		final VarDeclaration varQ = (VarDeclaration) fbnetwork.getFBNamed(EXECUTED_FB_1).getInterfaceElement("Q"); //$NON-NLS-1$
 		assertEquals("TRUE", varQ.getValue().getValue()); //$NON-NLS-1$
 
 		// transaction 1: connected block

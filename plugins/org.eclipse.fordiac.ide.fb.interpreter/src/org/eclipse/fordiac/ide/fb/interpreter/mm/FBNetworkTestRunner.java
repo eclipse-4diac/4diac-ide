@@ -76,7 +76,7 @@ public final class FBNetworkTestRunner {
 	}
 
 	private static void checkData(final String expectedResult, final EventOccurrence result, final boolean isInput) {
-		final FBType resultType = (FBType) result.getFbRuntime().getModel();
+		final FBType resultType = result.getFbRuntime().getModel();
 		final Optional<String> errorMsg = new SequenceMatcher(resultType).matchParameters(expectedResult, isInput);
 		if (errorMsg.isPresent()) {
 			throw new IllegalArgumentException(errorMsg.get());

@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -117,7 +116,7 @@ public final class ServiceSequenceUtils {
 		final List<OutputPrimitive> ops = new ArrayList<>();
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			final FBType typeInterface = seq.getService().getFBType();
-			final FBType typeRuntime = getFbTypeFromRuntime(outputEvent);
+			final FBType typeRuntime = outputEvent.getFbRuntime().getModel();
 			if (typeInterface != null && typeRuntime != null) {
 				ops.add(ServiceFactory.createOutputPrimitiveFrom(typeInterface.getService().getLeftInterface(),
 						outputEvent.getEvent(), typeRuntime.getInterfaceList().getOutputVars()));
@@ -133,14 +132,6 @@ public final class ServiceSequenceUtils {
 		for (int i = 0; i < parameter.size(); i++) {
 			seq.getServiceTransaction().get(i).getInputPrimitive().setParameters(parameter.get(i));
 		}
-	}
-
-	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {
-		final EObject type = eo.getFbRuntime().getModel();
-		if (type instanceof final FBType fbtype) {
-			return fbtype;
-		}
-		return null;
 	}
 
 	public static List<Event> getEvents(final FBType type, final List<String> eventNames) {
