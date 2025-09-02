@@ -173,9 +173,9 @@ public class InstancePropertySection extends AbstractSection {
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
-				instanceEditableRule);
+				new VarDeclEditRule(inputDataProvider));
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, columnProvider,
-				instanceEditableRule);
+				new VarDeclEditRule(outputDataProvider));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -348,19 +348,25 @@ public class InstancePropertySection extends AbstractSection {
 		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
 	}
 
-	private final IEditableRule instanceEditableRule = new IEditableRule() {
+	private class VarDeclEditRule implements IEditableRule {
+
+		final IChangeableRowDataProvider<VarDeclaration> dataProvider;
+
+		public VarDeclEditRule(final IChangeableRowDataProvider<VarDeclaration> dataProvider) {
+			this.dataProvider = dataProvider;
+		}
+
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
 			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
 					.get(columnIndex);
-			final VarDeclaration varDecl = inputDataProvider.getRowObject(rowIndex);
+			final VarDeclaration varDecl = dataProvider.getRowObject(rowIndex);
 
 			if (getType() instanceof TypedSubApp && varDecl.isInOutVar()
 					&& (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VISIBLEIN
 							|| column == VarDeclarationTableColumn.VISIBLEOUT)) {
 				return false;
 			}
-
 			return VarDeclarationTableColumn.DEFAULT_EDITABLE.contains(column);
 		}
 
@@ -368,6 +374,5 @@ public class InstancePropertySection extends AbstractSection {
 		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
 			return isEditable(cell.getColumnIndex(), cell.getRowIndex());
 		}
-	};
-
+	}
 }
