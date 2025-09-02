@@ -40,9 +40,7 @@ public class BulkEditorTypeEntryAdapter extends AbstractTypeEntryAdapter {
 		}
 
 		// make sure type was reloaded and not just loaded
-		if ((feature.equals(TypeEntry.TYPE_ENTRY_TYPE_FEATURE)
-				|| feature.equals(TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE))
-				&& (notification.getOldValue() != null)) {
+		if (feature.equals(TypeEntry.TYPE_ENTRY_TYPE_FEATURE) && (notification.getOldValue() != null)) {
 			if (notification.getNotifier() instanceof final TypeEntry tEntry) {
 				changedFiles.add(tEntry.getFile().getFullPath().toOSString());
 			}
