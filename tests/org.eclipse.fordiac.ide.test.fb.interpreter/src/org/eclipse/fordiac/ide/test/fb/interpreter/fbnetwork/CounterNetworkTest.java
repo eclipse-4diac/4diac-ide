@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -39,7 +40,7 @@ public class CounterNetworkTest extends AbstractInterpreterTest {
 		final Transaction finalResult = returnedTransactions.get(returnedTransactions.size() - 1);
 		final EventOccurrence finalProcessedEO = finalResult.getInputEventOccurrence();
 		final var rt = finalProcessedEO.getResultFBRuntime();
-		final var counterFBresult = ((FBNetwork) rt.getModel()).getFBNamed("E_CTUD"); //$NON-NLS-1$
+		final var counterFBresult = ((FBNetworkRuntime) rt).getFbnetwork().getFBNamed("E_CTUD"); //$NON-NLS-1$
 		assertEquals("CU", finalProcessedEO.getEvent().getName()); //$NON-NLS-1$
 		final VarDeclaration quPin = (VarDeclaration) (counterFBresult.getInterfaceElement("QU")); //$NON-NLS-1$
 		assertEquals("TRUE", quPin.getValue().getValue()); //$NON-NLS-1$
