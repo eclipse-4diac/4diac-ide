@@ -165,23 +165,6 @@
          </propertyTabs>
       </extension>
       <extension
-            point="org.eclipse.ui.views.properties.tabbed.propertySections">
-         <propertySections
-               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
-            <propertySection
-                  class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.AppearancePropertySection"
-                  tab="property.tab.system.appearance">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
-               </input>
-            </propertySection>
-         </propertySections>
-      </extension>
-      <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"

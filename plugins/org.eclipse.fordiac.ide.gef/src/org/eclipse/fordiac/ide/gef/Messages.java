@@ -33,7 +33,7 @@ public final class Messages extends NLS {
 	public static String AppearancePropertySection_ChangeBackgroundColor;
 	public static String AppearancePropertySection_LABEL_BackgroundColor;
 	public static String AppearancePropertySection_LABEL_ChooseColor;
-	public static String AppearancePropertySection_LABLE_Color;
+	public static String AppearancePropertySection_LABEL_Color;
 	public static String ChangeCommentCommand_LABEL_ChangeComment;
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_ShowConnection;
