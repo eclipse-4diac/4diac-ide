@@ -62,7 +62,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);
-		case VAR_CONFIG -> getVarConfString(rowObject);
+		case VAR_CONFIG -> getVarConfValue(rowObject);
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
@@ -72,7 +72,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		};
 	}
 
-	private static Boolean getVarConfString(final VarDeclaration rowObject) {
+	private static Boolean getVarConfValue(final VarDeclaration rowObject) {
 		return isFBinsideCompositeNetwork(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
 	}
 
