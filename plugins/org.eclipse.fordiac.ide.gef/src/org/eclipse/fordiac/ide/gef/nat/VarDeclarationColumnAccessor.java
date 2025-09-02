@@ -73,7 +73,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		};
 	}
 
-	private static boolean getVarConfString(final VarDeclaration rowObject) {
+	private static Boolean getVarConfString(final VarDeclaration rowObject) {
 		return isCompositeFBType(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
 	}
 
