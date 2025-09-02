@@ -25,17 +25,17 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.editparts;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.preferences.DeploymentDebugPreferences;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -60,16 +60,23 @@ public class WatchValueDirectEditPolicy extends DirectEditPolicy {
 		}
 		final IProject project = ((AdvancedScrollingGraphicalViewer) editPart.getViewer()).getPreferencesCache()
 				.getProject();
+		final CommandStack commandStack = getCommandStack();
 		if (PreferenceStoreProvider.getStore(DeploymentDebugPreferences.QUALIFIER, project)
 				.getBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH)
 				&& editPart.getInterfaceElement() instanceof final VarDeclaration varDeclaration
 				&& varDeclaration.isIsInput()
 				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getFBNetworkElement())
-				&& !isConnectedWithSubAppInput(varDeclaration)
-				&& EcoreUtil.getRootContainer(varDeclaration) instanceof final AutomationSystem system
-				&& system.getCommandStack() != null) {
-			system.getCommandStack().execute(new ChangeValueCommand(varDeclaration, value));
+				&& !isConnectedWithSubAppInput(varDeclaration) && commandStack != null) {
+			commandStack.execute(new ChangeValueCommand(varDeclaration, value));
 		}
+	}
+
+	private CommandStack getCommandStack() {
+		final EditPartViewer viewer = getHost().getViewer();
+		if (viewer == null) {
+			return null;
+		}
+		return viewer.getEditDomain().getCommandStack();
 	}
 
 	private static boolean isConnectedWithSubAppInput(final VarDeclaration varDeclaration) {
