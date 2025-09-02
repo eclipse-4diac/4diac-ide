@@ -489,13 +489,7 @@ public class CommonElementExporter {
 		addCommentAttribute(ie.getComment());
 
 		if (hasAttributes) {
-			for (final Attribute attribute : ie.getAttributes()) {
-				if (attribute.getAttributeDeclaration() != InternalAttributeDeclarations.VAR_CONFIG
-						|| !(ie instanceof final VarDeclaration varDecl) || varDecl.isVarConfig()) {
-					addAttributeElement(attribute.getName(), attribute.getType(), attribute.getValue(),
-							attribute.getComment());
-				}
-			}
+			addAttributes(ie.getAttributes());
 			addEndElement();
 		}
 	}

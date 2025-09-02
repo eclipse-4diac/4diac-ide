@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -352,7 +353,11 @@ public final class Annotations {
 	}
 
 	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {
-		setVarConfig(varDeclarationImpl, Boolean.toString(config));
+		if (!config) {
+			varDeclarationImpl.deleteAttribute(LibraryElementTags.VAR_CONFIG);
+		} else {
+			setVarConfig(varDeclarationImpl, Boolean.toString(config));
+		}
 	}
 
 	private static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final String config) {
@@ -531,10 +536,10 @@ public final class Annotations {
 
 	public static void setAttribute(final ConfigurableObject object, final AttributeDeclaration attributeDeclaration,
 			final String value, final String comment) {
-		Attribute attribute = getAttribute(object, attributeDeclaration.getName());
+		Attribute attribute = getAttribute(object, PackageNameHelper.getFullTypeName(attributeDeclaration));
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
-			attribute.setName(attributeDeclaration.getName());
+			attribute.setName(PackageNameHelper.getFullTypeName(attributeDeclaration));
 			attribute.setAttributeDeclaration(attributeDeclaration);
 			attribute.setType(attributeDeclaration.getType());
 			attribute.setValue(value);
