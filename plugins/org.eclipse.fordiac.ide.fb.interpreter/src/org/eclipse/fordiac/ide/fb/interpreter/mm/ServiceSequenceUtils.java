@@ -58,15 +58,14 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitAndCleanList(final String text, final String separator) {
+		return splitAndCleanList(text, separator, 0);
+	}
+
+	private static List<String> splitAndCleanList(final String text, final String separator, final int limit) {
 		if (text == null) {
 			return Collections.emptyList();
 		}
-		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank()).map(String::strip)
-				.map(ServiceSequenceUtils::removeSemicolon).toList();
-	}
-
-	private static String removeSemicolon(final String s) {
-		return s.replace(PARAMETER_SEPARATOR, " "); //$NON-NLS-1$
+		return Arrays.stream(text.split(separator, limit)).filter(s -> !s.isBlank()).map(String::strip).toList();
 	}
 
 	public static List<String> splitList(final String parameters) {
@@ -82,7 +81,7 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitParameter(final String parameter) {
-		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR);
+		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR, 2);
 	}
 
 	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
