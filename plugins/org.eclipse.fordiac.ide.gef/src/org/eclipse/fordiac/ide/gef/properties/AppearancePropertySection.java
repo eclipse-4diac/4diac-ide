@@ -11,40 +11,32 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - upgraded to AbstractSection, fixed refreshes and color drawing.
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeBackgroundcolorCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AppearancePropertySection extends AbstractPropertySection {
-	private ColorizableElement colorizableElement;
+public class AppearancePropertySection extends AbstractSection {
 	private Color color;
-	private Label colorLabel;
-	private Group colorsGroup;
+	private Canvas colorLabel;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -52,33 +44,19 @@ public class AppearancePropertySection extends AbstractPropertySection {
 		final Composite composite = getWidgetFactory().createFlatFormComposite(parent);
 		final FormLayout layout = (FormLayout) composite.getLayout();
 		layout.spacing = 3;
-		initializeControls(composite);
+		initializeControls(parent);
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		if (input instanceof AbstractViewEditPart
-				&& ((AbstractViewEditPart) input).getModel() instanceof ColorizableElement) {
-			colorizableElement = (ColorizableElement) ((AbstractViewEditPart) input).getModel();
-		} else if (input instanceof ColorizableElement) {
-			colorizableElement = (ColorizableElement) input;
-		}
-	}
-
-	@Override
-	public void refresh() {
-		if (colorizableElement != null && colorizableElement.getColor() != null) {
-			final org.eclipse.fordiac.ide.model.libraryElement.Color col = colorizableElement.getColor();
+	protected void performRefresh() {
+		if (getType().getColor() != null) {
+			final org.eclipse.fordiac.ide.model.libraryElement.Color col = getType().getColor();
 			color = new Color(new RGB(col.getRed(), col.getGreen(), col.getBlue()));
 			colorLabel.setBackground(this.color);
 		} else {
 			color = new Color(new RGB(255, 255, 255));
 			colorLabel.setBackground(this.color);
 		}
-		super.refresh();
 	}
 
 	protected void initializeControls(final Composite parent) {
@@ -86,17 +64,22 @@ public class AppearancePropertySection extends AbstractPropertySection {
 	}
 
 	protected void createColorsGroup(final Composite parent) {
-		colorsGroup = getWidgetFactory().createGroup(parent, Messages.AppearancePropertySection_LABEL_Color);
+		final Group colorsGroup = getWidgetFactory().createGroup(parent,
+				Messages.AppearancePropertySection_LABEL_Color);
 		final GridLayout layout = new GridLayout(1, false);
 		colorsGroup.setLayout(layout);
 		// Start with Celtics green
 		color = new Color(null, new RGB(255, 255, 255));
 		// Use a label full of spaces to show the color
-		colorLabel = getWidgetFactory().createLabel(colorsGroup, "          "); //$NON-NLS-1$
+		colorLabel = new Canvas(colorsGroup, SWT.NONE);
 		colorLabel.setBackground(color);
-		final GridData gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		colorLabel.setLayoutData(gd);
+		colorLabel.addPaintListener(e -> {
+			// directly use our color buffer here instead of the background color of the
+			// canvas to avoid strange race conditions.
+			e.gc.setBackground(color);
+			e.gc.fillRectangle(colorLabel.getClientArea());
+		});
+
 		final Button chooseColorBtn = new Button(colorsGroup, SWT.PUSH);
 		chooseColorBtn.setText(Messages.AppearancePropertySection_LABEL_BackgroundColor);
 		chooseColorBtn.addSelectionListener(new SelectionAdapter() {
@@ -112,15 +95,42 @@ public class AppearancePropertySection extends AbstractPropertySection {
 				// Open the dialog and retrieve the selected color
 				final RGB rgb = dlg.open();
 				if (rgb != null) {
-					final Command cmd = new ChangeBackgroundcolorCommand(colorizableElement, rgb);
-					if (cmd.canExecute()) {
-						((SystemConfiguration) colorizableElement.eContainer()).getAutomationSystem().getCommandStack()
-								.execute(cmd);
-						color = new Color(rgb);
-						colorLabel.setBackground(color);
-					}
+					executeCommand(new ChangeBackgroundcolorCommand(getType(), rgb));
+					performRefresh();
 				}
 			}
 		});
+
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(chooseColorBtn);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
+				.hint(SWT.DEFAULT, chooseColorBtn.computeSize(SWT.DEFAULT, SWT.DEFAULT).y).applyTo(colorLabel);
 	}
+
+	@Override
+	protected ColorizableElement getType() {
+		return (ColorizableElement) type;
+	}
+
+	@Override
+	protected Object getInputType(final Object input) {
+		Object inputToUse = input;
+		if (inputToUse instanceof final EditPart ep) {
+			inputToUse = ep.getModel();
+		}
+		if (inputToUse instanceof final ColorizableElement colEl) {
+			return colEl;
+		}
+		return null;
+	}
+
+	@Override
+	protected void setInputCode() {
+		// currently nothing to do here
+	}
+
+	@Override
+	protected void setInputInit() {
+		// currently nothing to do here
+	}
+
 }
