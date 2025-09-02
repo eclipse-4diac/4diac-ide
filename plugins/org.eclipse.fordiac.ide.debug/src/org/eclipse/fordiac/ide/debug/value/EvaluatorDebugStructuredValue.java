@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.value;
 
-import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
+import org.eclipse.fordiac.ide.debug.IEvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
@@ -44,7 +44,8 @@ public abstract class EvaluatorDebugStructuredValue extends EvaluatorDebugValue 
 
 	protected static String createSubExpression(final String expression, final int index) {
 		return switch (expression) {
-		case null, Evaluator.CONTEXT_NAME -> null;
+		case null -> null;
+		case Evaluator.CONTEXT_NAME -> null;
 		default -> expression + "[" + index + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		};
 	}
