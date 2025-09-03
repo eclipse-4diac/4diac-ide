@@ -19,7 +19,6 @@ import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -28,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
@@ -73,7 +71,7 @@ public final class FBShapeHelper {
 	 * @return The width in X coordinates
 	 */
 	public static double getWidth(final FBNetworkElement element) {
-		final IProject project = getProjectFromFBNE(element);
+		final IProject project = ModelHelper.getProjectFromContext(element);
 		final int minPinLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MIN_PIN_LABEL_SIZE, 0, project);
 		final int maxPinLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
@@ -128,7 +126,7 @@ public final class FBShapeHelper {
 	 * @return The width in X coordinates
 	 */
 	public static double getSubappWidthAdjust(final FBNetworkElement element) {
-		final IProject project = getProjectFromFBNE(element);
+		final IProject project = ModelHelper.getProjectFromContext(element);
 		final int maxInterfaceBarSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, 40, project);
 		return 2 * (AVARAGE_CHAR_WIDTH * maxInterfaceBarSize + WIDTH_ADJUST_SUBAPP_INTERFACE);
@@ -241,13 +239,6 @@ public final class FBShapeHelper {
 
 	private static int countVisiblePins(final Stream<? extends IInterfaceElement> pins) {
 		return (int) pins.filter(IInterfaceElement::isVisible).count();
-	}
-
-	private static IProject getProjectFromFBNE(final FBNetworkElement element) {
-		if (EcoreUtil.getRootContainer(element) instanceof final LibraryElement libElement) {
-			return libElement.getTypeEntry().getFile().getProject();
-		}
-		return null;
 	}
 
 	private FBShapeHelper() {

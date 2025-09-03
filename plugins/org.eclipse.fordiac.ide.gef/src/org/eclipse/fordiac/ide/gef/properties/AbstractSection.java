@@ -19,7 +19,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
@@ -27,10 +26,10 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -87,10 +86,9 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	}
 
 	public final TypeLibrary getTypeLibrary() {
-		final EObject root = EcoreUtil.getRootContainer(getType());
-
-		if (root instanceof final LibraryElement libEl) {
-			return libEl.getTypeLibrary();
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getType());
+		if (typeLib != null) {
+			return typeLib;
 		}
 		throw new IllegalStateException(
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$

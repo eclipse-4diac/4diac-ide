@@ -20,7 +20,6 @@ import java.util.Map;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -30,12 +29,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class InterfaceElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
@@ -132,11 +131,9 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static DataTypeLibrary getDataTypeLibrary(final IInterfaceElement element) {
-		if (EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement) {
-			final TypeLibrary typeLibrary = libraryElement.getTypeLibrary();
-			if (typeLibrary != null) {
-				return typeLibrary.getDataTypeLibrary();
-			}
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(element);
+		if (typeLibrary != null) {
+			return typeLibrary.getDataTypeLibrary();
 		}
 		return null;
 	}
