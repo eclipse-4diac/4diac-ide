@@ -52,7 +52,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -80,10 +79,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	protected void setModel(final FBNetwork model) {
 		this.model = model;
-	}
-
-	public CommandStack getFBEditorCommandStack() {
-		return getCommandStack();
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -103,7 +103,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	protected void addPages() {
 		try {
 			final TypedSubAppNetworkEditor initialEditor = new TypedSubAppNetworkEditor();
-			initialEditor.setCommonCommandStack(getCommandStack());
 			final int pagenum = addPage(initialEditor, getEditorInput());
 			getModelToEditorNumMapping().put(getType(), Integer.valueOf(pagenum)); // need to use the file as
 			// reference as this is
@@ -121,7 +120,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 				return new SubappInstanceViewer();
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
-			editor.setCommonCommandStack(getCommandStack());
 			editor.setTypeLib(getEditorInput().getTypeEntry().getTypeLibrary());
 			return editor;
 		}
@@ -227,11 +225,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
-	}
-
-	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
 				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
@@ -243,6 +236,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 		checkEditorInput(input);
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
 		}
 		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
 				.forEach(e -> e.setInput(e.getEditorInput()));
