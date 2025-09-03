@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -74,6 +75,8 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CommandStackEvent;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -101,6 +104,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private boolean wasDirtyBeforeExecute = false;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -466,6 +470,27 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 					.forEach(e -> e.setInput(e.getEditorInput()));
 		}
 		setInputWithNotify(input);
+	}
+
+	@Override
+	public void stackChanged(final CommandStackEvent event) {
+		final var commandStack = getCommandStack();
+		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
+			wasDirtyBeforeExecute = commandStack.isDirty();
+		}
+		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
+				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
+						&& bulkEditor.hasDirtyType(system.getTypeEntry())).length > 0) {
+			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.BulkEditorDirty, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			if (dialog.open() == 1) {
+				// Cancel
+				commandStack.undo();
+				commandStack.flush();
+			}
+		}
+		super.stackChanged(null);
 	}
 
 	private void selectRootModelOfEditor() {
