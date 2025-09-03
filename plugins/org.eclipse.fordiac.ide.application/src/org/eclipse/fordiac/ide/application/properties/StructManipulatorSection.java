@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
 import org.eclipse.fordiac.ide.application.editparts.StructInterfaceEditPart;
@@ -39,9 +38,9 @@ import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.nat.StructuredTypeSelectionTreeContentProvider;
@@ -196,9 +195,9 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 
 			final StructuredType newStruct = getDataTypeLib().getStructuredType(newStructName);
 			AddNewImportCommand importCommand = null;
-			if (packageStruct == null && newStruct != GenericTypes.ANY_STRUCT
-					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement) {
-				importCommand = new AddNewImportCommand(libraryElement, newStructName);
+			if (packageStruct == null && newStruct != GenericTypes.ANY_STRUCT) {
+				importCommand = new AddNewImportCommand(ModelHelper.getLibraryElementFromContextChecked(getType()),
+						newStructName);
 			}
 
 			final ChangeStructCommand cmd = new ChangeStructCommand(getType(), newStruct);

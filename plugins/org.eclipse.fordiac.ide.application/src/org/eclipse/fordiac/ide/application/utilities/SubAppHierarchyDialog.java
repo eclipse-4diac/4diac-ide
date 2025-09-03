@@ -26,12 +26,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -158,10 +160,11 @@ public class SubAppHierarchyDialog {
 	}
 
 	private List<TreeNode> buildNodeList(final List<FBNetworkElement> filterList) {
-		if (EcoreUtil.getRootContainer(root) instanceof final AutomationSystem automationSystem) {
+		final LibraryElement le = ModelHelper.getLibraryElementFromContextChecked(root);
+		if (le instanceof final AutomationSystem automationSystem) {
 			return buildNodeList(automationSystem.getApplication().stream(), filterList);
 		}
-		return buildNodeList(Stream.of(EcoreUtil.getRootContainer(root)), filterList);
+		return buildNodeList(Stream.of(le), filterList);
 	}
 
 	private List<TreeNode> buildNodeList(final Stream<? extends EObject> roots,
