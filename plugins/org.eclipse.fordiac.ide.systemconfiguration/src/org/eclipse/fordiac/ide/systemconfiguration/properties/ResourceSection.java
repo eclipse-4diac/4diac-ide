@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,35 +17,25 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 
 public class ResourceSection extends AbstractInterfaceSection {
+
 	@Override
-	protected CommandStack getCommandStack(IWorkbenchPart part, Object input) {
-		Resource helper = getInputType(input);
-		if (null != helper) {
-			return helper.getAutomationSystem().getCommandStack();
+	protected Resource getInputType(final Object input) {
+		final Object inputHelper = (input instanceof final EditPart e) ? e.getModel() : input;
+		if (inputHelper instanceof final Resource res) {
+			return res;
 		}
 		return null;
 	}
 
 	@Override
-	protected Resource getInputType(Object input) {
-		Object inputHelper = (input instanceof EditPart) ? ((EditPart) input).getModel() : input;
-		if (inputHelper instanceof Resource) {
-			return (Resource) inputHelper;
-		}
-		return null;
-	}
-
-	@Override
-	protected void createFBInfoGroup(Composite parent) {
-		Composite composite = getWidgetFactory().createComposite(parent);
+	protected void createFBInfoGroup(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, "Instance Name:");
