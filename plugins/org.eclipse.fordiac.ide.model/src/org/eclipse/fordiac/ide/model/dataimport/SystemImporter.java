@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurat
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
 
@@ -104,11 +103,9 @@ public class SystemImporter extends CommonElementImporter {
 	 */
 	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setCommandStack(new CommandStack());
 		// create PhysicalConfiguration
 		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
 		system.setSystemConfiguration(sysConf);
-
 		return system;
 	}
 
@@ -338,7 +335,7 @@ public class SystemImporter extends CommonElementImporter {
 	private FBNetworkElement findMappingTargetFromName(final String targetName,
 			final FBNetworkElement copyCommunication) {
 		if (null != targetName) {
-			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
 			if (parts.size() >= 2) {
 				final Segment segment = getElement().getSystemConfiguration().getSegmentNamed(parts.getFirst());
 				if (null != segment) {
@@ -364,7 +361,7 @@ public class SystemImporter extends CommonElementImporter {
 
 	private FBNetworkElement findMappingTargetFromName(final String targetName) {
 		if (null != targetName) {
-			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
 			if (parts.size() >= 2) {
 				final Application application = getElement().getApplicationNamed(parts.getFirst());
 				if (null != application) {

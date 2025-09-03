@@ -76,7 +76,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
@@ -97,6 +96,8 @@ public class SystemEditor extends EditorPart
 	private static final ComposedAdapterFactory systemAdapterFactory = new ComposedAdapterFactory(createFactoryList());
 
 	private AutomationSystem system;
+
+	private CommandStack commandStack;
 
 	private GraphicalAnnotationModel annotationModel;
 
@@ -178,6 +179,10 @@ public class SystemEditor extends EditorPart
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setSite(site);
+		if ((getSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
+			getCommandStack().addCommandStackEventListener(this);
+		}
 		setInput(input);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		initializeActionRegistry();
@@ -189,7 +194,6 @@ public class SystemEditor extends EditorPart
 		if (input instanceof final FileEditorInput fileEditorInput) {
 			system = SystemManager.INSTANCE.getSystem(fileEditorInput.getFile());
 			if (system != null) {
-				getCommandStack().addCommandStackEventListener(this);
 				setPartName(system.getName());
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
@@ -386,8 +390,8 @@ public class SystemEditor extends EditorPart
 		form.setFocus();
 	}
 
-	public CommandStack getCommandStack() {
-		return (null != system) ? system.getCommandStack() : null;
+	private CommandStack getCommandStack() {
+		return commandStack;
 	}
 
 	@Override
