@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University, Linz,
+ * Copyright (c) 2020, 2025 Johannes Kepler University, Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -26,7 +26,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
@@ -41,7 +40,6 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -54,7 +52,6 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -113,7 +110,6 @@ public class SystemEditor extends EditorPart
 	private final List<String> selectionActions = new ArrayList<>();
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
-	private boolean wasDirtyBeforeExecute = false;
 
 	private final Adapter appListener = new SingleRecursiveContentAdapter() {
 		@Override
@@ -146,23 +142,6 @@ public class SystemEditor extends EditorPart
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
-		final var commandStack = getCommandStack();
-		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = commandStack.isDirty();
-		}
-		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
-				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
-						&& bulkEditor.hasDirtyType(system.getTypeEntry())).length > 0) {
-			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
-					Messages.BulkEditorDirty, MessageDialog.QUESTION,
-					new String[] { Messages.Continue, Messages.Cancel }, 0);
-			if (dialog.open() == 1) {
-				// Cancel
-				commandStack.undo();
-				commandStack.flush();
-			}
-		}
-		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
