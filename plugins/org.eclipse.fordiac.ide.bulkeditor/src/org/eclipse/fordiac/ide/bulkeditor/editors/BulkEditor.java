@@ -871,8 +871,9 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		if ((event.getDetail() & CommandStack.POST_UNDO) != 0 || (event.getDetail() & CommandStack.POST_REDO) != 0) {
 			natTable.getCurrentTable().refresh();
 		}
-
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		if (event.isPostChangeEvent()) {
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 
 	@Override

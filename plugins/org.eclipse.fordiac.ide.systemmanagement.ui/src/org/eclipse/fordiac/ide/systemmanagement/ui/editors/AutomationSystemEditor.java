@@ -474,9 +474,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		final var commandStack = getCommandStack();
 		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = commandStack.isDirty();
+			wasDirtyBeforeExecute = getCommandStack().isDirty();
 		}
 		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
 				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
@@ -486,11 +485,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 					new String[] { Messages.Continue, Messages.Cancel }, 0);
 			if (dialog.open() == 1) {
 				// Cancel
-				commandStack.undo();
-				commandStack.flush();
+				getCommandStack().undo();
+				getCommandStack().flush();
 			}
 		}
 		super.stackChanged(null);
+		if (event.isPostChangeEvent()) {
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 
 	private void selectRootModelOfEditor() {

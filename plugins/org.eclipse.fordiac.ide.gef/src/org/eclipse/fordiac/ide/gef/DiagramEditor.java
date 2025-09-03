@@ -14,8 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import java.util.EventObject;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
@@ -67,7 +65,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
@@ -117,18 +114,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@SuppressWarnings("static-method") // allow subclasses to provide refined context ids
 	protected String getContextId() {
 		return "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
-	 * .EventObject)
-	 */
-	@Override
-	public void commandStackChanged(final EventObject event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-		super.commandStackChanged(event);
 	}
 
 	/** refresh all child editparts when editor gets focus. */

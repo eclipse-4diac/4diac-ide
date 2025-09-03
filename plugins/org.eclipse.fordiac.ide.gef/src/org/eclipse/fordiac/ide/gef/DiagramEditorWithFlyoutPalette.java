@@ -17,7 +17,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -83,7 +82,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
@@ -116,12 +114,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	private GraphicalAnnotationModel annotationModel;
 	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
-
-	@Override
-	public void commandStackChanged(final EventObject event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-		super.commandStackChanged(event);
-	}
 
 	/**
 	 * refresh all child editparts when editor gets focus.
