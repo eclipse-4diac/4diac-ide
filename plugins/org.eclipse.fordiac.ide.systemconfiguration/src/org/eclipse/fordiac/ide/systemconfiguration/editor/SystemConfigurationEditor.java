@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2018 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 								Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -44,7 +44,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new SysConfTemplateTransferDropTargetListener(getViewer(), getSystem());
+		return new SysConfTemplateTransferDropTargetListener(getViewer(), getModel().getAutomationSystem());
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	public AutomationSystem getSystem() {
-		return (AutomationSystem) sysConf.eContainer();
+		return sysConf.getAutomationSystem();
 	}
 
 	@Override
@@ -90,7 +90,6 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-
 		if (getModel() != null && getSystem() != null) {
 			return SystemConfPaletteFactory.createPalette(getSystem());
 		}

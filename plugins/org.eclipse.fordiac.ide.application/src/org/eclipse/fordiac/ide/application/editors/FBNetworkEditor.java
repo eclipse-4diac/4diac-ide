@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH
  *
@@ -21,9 +21,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editors;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.actions.CopyEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.CutEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
@@ -43,7 +45,9 @@ import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
@@ -118,13 +122,20 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 	}
 
 	protected TypeLibrary getTypeLibrary() {
-		return getSystem().getTypeLibrary();
+		return TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getModel());
+	}
+
+	private IProject getProject() {
+		if (EcoreUtil.getRootContainer(getModel()) instanceof final LibraryElement libElem) {
+			return libElem.getTypeEntry().getFile().getProject();
+		}
+		throw new IllegalStateException(
+				"Could not determine root element for finding the project for given element: " + getModel()); //$NON-NLS-1$
 	}
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				getSystem().getTypeLibrary().getProject());
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(), getProject());
 	}
 
 	@Override
@@ -220,8 +231,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getTypeLibrary().getProject(), getEditDomain(),
-				getPaletteNavigatorID());
+		return new FBTypePaletteViewerProvider(getProject(), getEditDomain(), getPaletteNavigatorID());
 	}
 
 	/**
