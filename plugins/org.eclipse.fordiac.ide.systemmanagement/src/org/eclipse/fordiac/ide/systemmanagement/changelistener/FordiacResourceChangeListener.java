@@ -20,6 +20,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -51,6 +52,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -129,7 +132,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	};
 
-	private boolean handleResourceChanged(final IResourceDelta delta) {
+	private static boolean handleResourceChanged(final IResourceDelta delta) {
 		switch (delta.getResource().getType()) {
 		case IResource.FILE:
 			if (testFlags(delta, IResourceDelta.CONTENT)) {
@@ -192,8 +195,24 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return false;
 	}
 
+	private static void validateProjectNature(final IProject project) {
+		try {
+			if (project.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) instanceof final FordiacNature nature) {
+				nature.validate();
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(MessageFormat
+					.format(Messages.FordiacResourceChangeListener_ErrorLoadingProjectNature, e.getMessage()), e);
+		}
+	}
+
 	private boolean handleResourceCopy(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
+
+		if (delta.getResource().getType() == IResource.PROJECT) {
+			validateProjectNature(project);
+		}
+
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
 		}
