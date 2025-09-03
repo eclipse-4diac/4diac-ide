@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -48,6 +48,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -343,14 +344,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		}
 
 		if (getEditorInput() == null) {
-			setEditDomain(createEditDomain());
-			getEditDomain().setDefaultTool(createDefaultTool());
-			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-			// use one "System - Wide" command stack to avoid inconsistencies due to undo
-			// redo
-			if (null != getSystem()) {
-				getEditDomain().setCommandStack(getSystem().getCommandStack());
-			}
+			setupEditDomain();
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			removeAnnotationModelDispatcher();
@@ -358,6 +352,17 @@ public abstract class DiagramEditor extends GraphicalEditor
 			addAnnotationModelDispatcher();
 		}
 		super.setInputWithNotify(input);
+	}
+
+	private void setupEditDomain() {
+		final CommandStack commandStack = (getSite() instanceof final MultiPageEditorSite multiPageEditorSite)
+				? multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class)
+				: new CommandStack();
+		final DefaultEditDomain editDomain = createEditDomain();
+		editDomain.setCommandStack(commandStack);
+		editDomain.setDefaultTool(createDefaultTool());
+		editDomain.setActiveTool(editDomain.getDefaultTool());
+		setEditDomain(editDomain);
 	}
 
 	protected DefaultEditDomain createEditDomain() {

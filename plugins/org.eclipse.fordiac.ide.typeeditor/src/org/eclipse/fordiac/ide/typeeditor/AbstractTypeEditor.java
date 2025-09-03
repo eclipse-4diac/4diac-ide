@@ -110,8 +110,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		editorPages = typeEditorPageFactory.getEditors(getType());
 		for (final ITypeEditorPage typeEditorPage : editorPages) {
 			try {
-				// set command stack has to be done before the page is added
-				typeEditorPage.setCommonCommandStack(getCommandStack());
 				final int index = addPage(typeEditorPage, ei);
 				setPageText(index, typeEditorPage.getTitle());
 				setPageImage(index, typeEditorPage.getTitleImage());

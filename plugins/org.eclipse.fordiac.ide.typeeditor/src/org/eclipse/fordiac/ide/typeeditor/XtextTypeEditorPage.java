@@ -142,11 +142,6 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	}
 
 	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		// not implemented
-	}
-
-	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		try {
 			return marker.getType().startsWith(

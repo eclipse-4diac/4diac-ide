@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 				             Johannes Kepler University Linz
+ * Copyright (c) 2011, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
@@ -38,11 +37,9 @@ import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -62,8 +59,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
 
-	private CommandStack commandStack;
-
 	private PaletteRoot paletteRoot;
 	private TypeLibrary typeLib;
 
@@ -75,11 +70,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
 		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
-	}
-
-	@Override
-	protected DefaultEditDomain createEditDomain() {
-		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override
@@ -134,11 +124,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 			return true;
 		}
 		return (selectedElement instanceof InterfaceList);
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override

@@ -394,7 +394,6 @@ public class SystemEditor extends EditorPart
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
 			updateActions(selectionActions);
-			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
 
