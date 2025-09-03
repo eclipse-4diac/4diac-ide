@@ -17,7 +17,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -25,11 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.editparts.ResourceDiagramEditPartFactory;
 import org.eclipse.fordiac.ide.util.ColorManager;
-import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
-import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 
@@ -84,12 +80,6 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	@Override
 	protected EditPartFactory getEditPartFactory() {
 		return new ResourceDiagramEditPartFactory(this);
-	}
-
-	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
-			final ZoomManager zoomManager) {
-		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getTypeLibrary());
 	}
 
 	@Override
