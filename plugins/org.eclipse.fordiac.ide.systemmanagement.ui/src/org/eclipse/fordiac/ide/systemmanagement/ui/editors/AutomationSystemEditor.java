@@ -41,9 +41,11 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
+import org.eclipse.fordiac.ide.model.edit.LibraryElementUndoContext;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -100,6 +102,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements ITypeEntryEditor {
 
 	private AutomationSystem system;
+	private OperationHistoryCommandStack commandStack;
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 	private GraphicalAnnotationModel annotationModel;
@@ -368,8 +371,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	public CommandStack getCommandStack() {
-		return (null != system) ? system.getCommandStack() : null;
+	public OperationHistoryCommandStack getCommandStack() {
+		return commandStack;
 	}
 
 	@Override
@@ -392,6 +395,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		final boolean dirty = isDirty();
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
+			commandStack.dispose();
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -411,8 +415,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void reloadType() {
-		final CommandStack commandStack = system.getCommandStack();
-
 		final String path = getBreadcrumb().serializePath();
 
 		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
@@ -423,8 +425,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
-		system.setCommandStack(commandStack);
-		getCommandStack().flush();
+		getCommandStack().setUndoContext(new LibraryElementUndoContext(system));
 		typeEntry.eAdapters().add(typeEntryAdapter);
 		setPartName(system.getName());
 
@@ -455,9 +456,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			if (getEditorInput() == null) {
 				system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
 				if (system != null) {
-					getCommandStack().addCommandStackEventListener(this);
-					getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-					QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
+					setupCommandStack();
 					system.getTypeEntry().eAdapters().add(typeEntryAdapter);
 				}
 			}
@@ -470,6 +469,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 					.forEach(e -> e.setInput(e.getEditorInput()));
 		}
 		setInputWithNotify(input);
+	}
+
+	private void setupCommandStack() {
+		commandStack = new OperationHistoryCommandStack(new LibraryElementUndoContext(system));
+		getCommandStack().addCommandStackEventListener(this);
+		getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
+		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
 	}
 
 	@Override
