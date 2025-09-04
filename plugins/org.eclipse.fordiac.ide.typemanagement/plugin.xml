@@ -109,7 +109,6 @@
                   </contentExtension>
                   <contentExtension
                   pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper" />
-                  
          </includes>
       </viewerContentBinding>
       <viewerActionBinding 
@@ -722,6 +721,15 @@
 				icon="platform:/plugin/org.eclipse.ui.ide/icons/full/obj16/quickfix_error_obj.png" 
 				style="push"> 
 		</command>
+	  </menuContribution>
+       <menuContribution
+      		allPopups="false"
+      		locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
+           <command
+                   commandId="org.eclipse.fordiac.ide.application.commands.searchReference"
+                   icon="platform:/plugin/org.eclipse.search/icons/full/etool16/search.png"
+                   style="push">
+           </command>
 	  </menuContribution>
       <menuContribution
 			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
