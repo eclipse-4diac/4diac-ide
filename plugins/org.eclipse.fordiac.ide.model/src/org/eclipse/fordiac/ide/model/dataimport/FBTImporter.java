@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2008, 2023  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                           TU Wien/ACIN, Johannes Kepler University, Linz,
  *                           Primetals Technologies Austria GmbH,
  *                           Martin Erich Jobst
@@ -12,16 +12,17 @@
  *
  * Contributors:
  *  Gerhard Ebenhofer, Ingo Hegny, Alois Zoitl, Martin Jobst
- *    - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *  Peter Gsellmann - incorporating simple fb
- *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
- *  			  parsing performance
+ *  Alois Zoitl  - Changed XML parsing to Staxx cursor interface for improved
+ *  			   parsing performance
  *  Martin Melik Merkumians - added import of internal FBs
  *  Martin Jobst - refactor marker handling
- *  Alois Zoitl - updated for new adapter FB handling
+ *  Alois Zoitl  - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +117,40 @@ public class FBTImporter extends TypeImporter {
 
 	protected FBTImporter(final CommonElementImporter importer) {
 		super(importer);
+	}
+
+	public FBType loadInterface() throws IOException, XMLStreamException, TypeImportException {
+		setElement(createRootModelElement());
+		try (ImporterStreams streams = createInputStreams(getInputStream())) {
+			proceedToStartElementNamed(getStartElementName());
+			readNameCommentAttributes(getElement());
+
+			boolean compilerInfo = false;
+			boolean interfaceList = false;
+
+			while (getReader().hasNext()) {
+				final int event = getReader().next();
+				if (XMLStreamConstants.START_ELEMENT == event) {
+					final String localName = getReader().getLocalName();
+					if (LibraryElementTags.COMPILER_INFO_ELEMENT.equals(localName)) {
+						getElement().setCompilerInfo(parseCompilerInfo());
+						compilerInfo = true;
+					} else if (getInterfaceListElementName().equals(localName)) {
+						getElement().setInterfaceList(parseInterfaceList(getInterfaceListElementName()));
+						interfaceList = true;
+					}
+				}
+				if (interfaceList && compilerInfo) {
+					break;
+				}
+			}
+		}
+		return getElement();
+	}
+
+	@SuppressWarnings("static-method") // allow subclasse to provide a different name (e.g., SubTypeImporter)
+	protected String getInterfaceListElementName() {
+		return LibraryElementTags.INTERFACE_LIST_ELEMENT;
 	}
 
 	@Override

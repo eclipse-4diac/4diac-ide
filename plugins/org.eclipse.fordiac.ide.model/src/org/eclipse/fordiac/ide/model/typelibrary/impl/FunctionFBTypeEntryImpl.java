@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FunctionFBType>
+public class FunctionFBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FunctionFBType>
 		implements FunctionFBTypeEntry {
 
 	public FunctionFBTypeEntryImpl() {

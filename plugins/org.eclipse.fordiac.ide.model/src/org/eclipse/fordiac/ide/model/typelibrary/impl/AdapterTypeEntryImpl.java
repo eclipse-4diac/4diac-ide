@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
+public class AdapterTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
 
 	public AdapterTypeEntryImpl() {
 		super(AdapterType.class);

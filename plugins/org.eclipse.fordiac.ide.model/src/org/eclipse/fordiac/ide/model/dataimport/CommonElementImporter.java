@@ -1,8 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University, Linz
- *               2020, 2021  Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -106,7 +106,7 @@ public abstract class CommonElementImporter {
 	private static final boolean IS_VISIBLE = false;
 	private static final boolean IS_VAR_CONFIGED = true;
 
-	private static class ImporterStreams implements AutoCloseable {
+	protected static final class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
 
@@ -225,7 +225,7 @@ public abstract class CommonElementImporter {
 
 	protected abstract IChildHandler getBaseChildrenHandler();
 
-	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
+	protected ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
 		final XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
 		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
