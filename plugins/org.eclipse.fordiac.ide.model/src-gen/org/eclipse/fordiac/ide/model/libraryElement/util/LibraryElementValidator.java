@@ -146,8 +146,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-import org.eclipse.gef.commands.CommandStack;
-
 /**
  * <!-- begin-user-doc -->
  * The <b>Validator</b> for the model.
@@ -727,8 +725,6 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateVarConfigInstance((VarConfigInstance)value, diagnostics, context);
 			case LibraryElementPackage.LANGUAGE:
 				return validateLanguage((Language)value, diagnostics, context);
-			case LibraryElementPackage.COMMAND_STACK:
-				return validateCommandStack((CommandStack)value, diagnostics, context);
 			case LibraryElementPackage.IFILE:
 				return validateIFile((IFile)value, diagnostics, context);
 			case LibraryElementPackage.INTERFACE_ELEMENT_STREAM:
@@ -2963,15 +2959,6 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateLanguage(Language language, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateCommandStack(CommandStack commandStack, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 
