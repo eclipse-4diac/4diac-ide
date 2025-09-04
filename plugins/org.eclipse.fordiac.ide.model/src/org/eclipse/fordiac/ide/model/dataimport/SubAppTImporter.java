@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2013 - 2017  Profactor GmbH, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -115,6 +115,11 @@ public class SubAppTImporter extends FBTImporter {
 	@Override
 	protected void processWiths() {
 		// supapps may not have a with construct. Therefore we are doing nothing here
+	}
+
+	@Override
+	protected String getInterfaceListElementName() {
+		return LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT;
 	}
 
 }

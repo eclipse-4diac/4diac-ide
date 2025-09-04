@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class SubAppTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SubAppType> implements SubAppTypeEntry {
+public class SubAppTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<SubAppType> implements SubAppTypeEntry {
 
 	public SubAppTypeEntryImpl() {
 		super(SubAppType.class);

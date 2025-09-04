@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -54,16 +55,6 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	}
 
 	@Override
-	public long getLastModificationTimestamp() {
-		return 0;
-	}
-
-	@Override
-	public void setLastModificationTimestamp(final long value) {
-		// currently not needed in mock
-	}
-
-	@Override
 	public void setType(final LibraryElement value) {
 		fbType = (FBType) value;
 	}
@@ -90,6 +81,11 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	@Override
 	public FBType getType() {
 		return fbType;
+	}
+
+	@Override
+	public InterfaceList getInterface() {
+		return fbType.getInterfaceList();
 	}
 
 	/**

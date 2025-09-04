@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -52,16 +52,6 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	@Override
 	public void setFile(final IFile value) {
 		file = value;
-	}
-
-	@Override
-	public long getLastModificationTimestamp() {
-		return 0;
-	}
-
-	@Override
-	public void setLastModificationTimestamp(final long value) {
-		// currently not needed in mock
 	}
 
 	@Override

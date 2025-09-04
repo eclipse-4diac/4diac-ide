@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implements FBTypeEntry {
+public class FBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FBType> implements FBTypeEntry {
 
 	private static final Pattern TYPE_CLASS_PATTERN = Pattern.compile("<" + //$NON-NLS-1$
 			LibraryElementTags.BASIC_F_B_ELEMENT + ">|<" //$NON-NLS-1$

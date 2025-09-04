@@ -36,6 +36,7 @@ public interface TypeEntry extends Notifier {
 	String TYPE_ENTRY_TYPE_EDITABLE_FEATURE = "TYPE_ENTRY_TYPE_EDITABLE_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_LIBRARY_FEATURE = "TYPE_ENTRY_TYPE_LIBRARY"; //$NON-NLS-1$
 	String TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE = "TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_INTERFACE_FEATURE = "TYPE_ENTRY_INTERFACE_FEATURE"; //$NON-NLS-1$
 
 	int TYPE_ENTRY_FILE_FEATURE_ID = 1;
 	int TYPE_ENTRY_FILE_CONTENT_FEATURE_ID = 2;
@@ -43,14 +44,11 @@ public interface TypeEntry extends Notifier {
 	int TYPE_ENTRY_TYPE_EDITABLE_FEATURE_ID = 4;
 	int TYPE_ENTRY_TYPE_LIBRARY_FEATURE_ID = 5;
 	int TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID = 6;
+	int TYPE_ENTRY_INTERFACE_FEATURE_ID = 7;
 
 	IFile getFile();
 
 	void setFile(IFile value);
-
-	long getLastModificationTimestamp();
-
-	void setLastModificationTimestamp(long value);
 
 	LibraryElement getType();
 

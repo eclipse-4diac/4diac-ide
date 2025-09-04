@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -55,16 +56,6 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	}
 
 	@Override
-	public long getLastModificationTimestamp() {
-		return 0;
-	}
-
-	@Override
-	public void setLastModificationTimestamp(final long value) {
-		// currently not needed in mock
-	}
-
-	@Override
 	public void setType(final LibraryElement value) {
 		subAppType = (SubAppType) value;
 	}
@@ -91,6 +82,11 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	@Override
 	public SubAppType getType() {
 		return subAppType;
+	}
+
+	@Override
+	public InterfaceList getInterface() {
+		return subAppType.getInterfaceList();
 	}
 
 	/**

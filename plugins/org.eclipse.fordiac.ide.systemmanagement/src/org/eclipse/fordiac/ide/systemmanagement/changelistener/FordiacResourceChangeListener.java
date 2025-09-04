@@ -162,8 +162,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IFile file = (IFile) delta.getResource();
 
 		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (typeEntryForFile != null
-				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
+		if (typeEntryForFile != null) {
 			typeEntryForFile.refresh();
 		}
 	}

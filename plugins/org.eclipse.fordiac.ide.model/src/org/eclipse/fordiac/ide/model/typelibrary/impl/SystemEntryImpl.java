@@ -32,8 +32,6 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 
 	public SystemEntryImpl() {
 		super(AutomationSystem.class);
-		// for system entries we don't want to perform any updates on save
-		setUpdateTypeOnSave(false);
 	}
 
 	@Override
@@ -97,6 +95,14 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 	@Override
 	protected LibraryElement basicGetTypeEditable() {
 		return super.basicGetType();
+	}
+
+	@Override
+	protected NotificationChain updateTypeOnSave(final LibraryElement savedType,
+			final NotificationChain notifications) {
+		// for systems we are not maintaining a separate type so nothing needs to be
+		// done here
+		return notifications;
 	}
 
 }
