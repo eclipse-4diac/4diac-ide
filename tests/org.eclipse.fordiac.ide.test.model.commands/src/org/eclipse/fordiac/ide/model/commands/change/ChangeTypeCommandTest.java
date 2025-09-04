@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.Arguments;
 public class ChangeTypeCommandTest extends FBNetworkTestBase {
 
 	private static State changeDataInputType(final State state) {
-		final InterfaceList fb = state.getFunctionblock().getType().getInterfaceList();
+		final InterfaceList fb = state.getFunctionblock().getInterface();
 
 		state.setCommand(ChangeDataTypeCommand.forDataType(fb.getInputVars().get(0),
 				getDatatypelib().getType(FordiacKeywords.LWORD)));
@@ -33,14 +33,14 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 	}
 
 	private static void validateDataInputType(final State state, final State oldState, final TestFunction t) {
-		final InterfaceList fb = state.getFunctionblock().getType().getInterfaceList();
+		final InterfaceList fb = state.getFunctionblock().getInterface();
 		t.test(fb.getInputVars().get(0).getTypeName(), FordiacKeywords.LWORD);
 		t.test(fb.getInputVars().get(0).getType(), getDatatypelib().getType(FordiacKeywords.LWORD));
 	}
 
 	private static void validateDataInputTypeNetworkElements(final State state, final State oldState,
 			final TestFunction t) {
-		final InterfaceList fb = state.getFunctionblock().getType().getInterfaceList();
+		final InterfaceList fb = state.getFunctionblock().getInterface();
 		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
 		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
 

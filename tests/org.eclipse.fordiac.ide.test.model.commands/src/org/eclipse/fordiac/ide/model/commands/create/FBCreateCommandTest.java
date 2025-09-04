@@ -48,17 +48,17 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getName());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).eContainer());
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getEventInputs()));
+				.equals(state.getFunctionblock().getInterface().getEventInputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getEventOutputs()));
+				.equals(state.getFunctionblock().getInterface().getEventOutputs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getInputVars()));
+				.equals(state.getFunctionblock().getInterface().getInputVars()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getOutputVars()));
+				.equals(state.getFunctionblock().getInterface().getOutputVars()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getPlugs()));
+				.equals(state.getFunctionblock().getInterface().getPlugs()));
 		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets()
-				.equals(state.getFunctionblock().getType().getInterfaceList().getSockets()));
+				.equals(state.getFunctionblock().getInterface().getSockets()));
 	}
 
 	// parameter creation function
@@ -67,8 +67,8 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 				new ExecutionDescription<>("Add Functionblock", //$NON-NLS-1$
 						FBCreateCommandTest::executeCommand, //
 						FBCreateCommandTest::verifyState //
-						) //
-				);
+				) //
+		);
 
 		return createCommands(executionDescriptions);
 	}

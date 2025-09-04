@@ -68,7 +68,7 @@ public class ChangeFbTypeCommand extends Command implements ScopedCommand {
 
 	private void setFBType(final FBTypeEntry entry) {
 		fb.setTypeEntry(entry);
-		fb.setInterface(entry.getType().getInterfaceList().copy());
+		fb.setInterface(entry.getInterface().copy());
 	}
 
 	@Override
