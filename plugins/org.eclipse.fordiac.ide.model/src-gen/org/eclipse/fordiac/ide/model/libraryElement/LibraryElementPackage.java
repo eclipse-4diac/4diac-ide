@@ -1879,22 +1879,13 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Command Stack</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AUTOMATION_SYSTEM__COMMAND_STACK = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Automation System</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 4;
+	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
@@ -8211,16 +8202,6 @@ public interface LibraryElementPackage extends EPackage {
 	int LANGUAGE = 108;
 
 	/**
-	 * The meta object id for the '<em>Command Stack</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.gef.commands.CommandStack
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
-	 * @generated
-	 */
-	int COMMAND_STACK = 109;
-
-	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8228,7 +8209,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 110;
+	int IFILE = 109;
 
 	/**
 	 * The meta object id for the '<em>Interface Element Stream</em>' data type.
@@ -8238,7 +8219,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getInterfaceElementStream()
 	 * @generated
 	 */
-	int INTERFACE_ELEMENT_STREAM = 111;
+	int INTERFACE_ELEMENT_STREAM = 110;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -8248,7 +8229,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 112;
+	int IPROJECT = 111;
 
 	/**
 	 * The meta object id for the '<em>Named Element Stream</em>' data type.
@@ -8258,7 +8239,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getNamedElementStream()
 	 * @generated
 	 */
-	int NAMED_ELEMENT_STREAM = 113;
+	int NAMED_ELEMENT_STREAM = 112;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -8268,7 +8249,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 114;
+	int POINT = 113;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -8278,7 +8259,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 115;
+	int TYPE_ENTRY = 114;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -8288,7 +8269,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 116;
+	int TYPE_LIBRARY = 115;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -8298,7 +8279,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 117;
+	int VAR_DECL_LIST = 116;
 
 
 	/**
@@ -8662,17 +8643,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAutomationSystem_SystemConfiguration();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Command Stack</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack()
-	 * @see #getAutomationSystem()
-	 * @generated
-	 */
-	EAttribute getAutomationSystem_CommandStack();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance <em>CFB Instance</em>}'.
@@ -11691,17 +11661,6 @@ public interface LibraryElementPackage extends EPackage {
 	EEnum getLanguage();
 
 	/**
-	 * Returns the meta object for data type '{@link org.eclipse.gef.commands.CommandStack <em>Command Stack</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Command Stack</em>'.
-	 * @see org.eclipse.gef.commands.CommandStack
-	 * @model instanceClass="org.eclipse.gef.commands.CommandStack"
-	 * @generated
-	 */
-	EDataType getCommandStack();
-
-	/**
 	 * Returns the meta object for data type '{@link org.eclipse.core.resources.IFile <em>IFile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12106,14 +12065,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = eINSTANCE.getAutomationSystem_SystemConfiguration();
-
-		/**
-		 * The meta object literal for the '<em><b>Command Stack</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute AUTOMATION_SYSTEM__COMMAND_STACK = eINSTANCE.getAutomationSystem_CommandStack();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
@@ -14572,16 +14523,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum LANGUAGE = eINSTANCE.getLanguage();
-
-		/**
-		 * The meta object literal for the '<em>Command Stack</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.gef.commands.CommandStack
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
-		 * @generated
-		 */
-		EDataType COMMAND_STACK = eINSTANCE.getCommandStack();
 
 		/**
 		 * The meta object literal for the '<em>IFile</em>' data type.

@@ -19,7 +19,6 @@
       <genEnumLiterals ecoreEnumLiteral="lib.ecore#//Language/Java"/>
       <genEnumLiterals ecoreEnumLiteral="lib.ecore#//Language/Cpp"/>
     </genEnums>
-    <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//InterfaceElementStream"/>
     <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
@@ -116,7 +115,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/application"/>
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/mapping"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
       <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getDeviceNamed/name"/>
