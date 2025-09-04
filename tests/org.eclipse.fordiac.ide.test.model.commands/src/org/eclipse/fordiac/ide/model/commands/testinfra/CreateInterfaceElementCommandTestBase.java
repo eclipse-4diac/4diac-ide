@@ -50,13 +50,13 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 				CreateInterfaceElementCommandTestBase::initializeState, //
 				(StateVerifier<State>) CreateInterfaceElementCommandTestBase::verifyInitialState, //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
 	}
 
 	protected static InterfaceList getTypeInterfaceList(final State s) {
-		return s.getFunctionblock().getType().getInterfaceList();
+		return s.getFunctionblock().getInterface();
 	}
 
 	protected static InterfaceList getInstanceInterfaceList(final State s) {
@@ -70,15 +70,15 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 		return commandExecution(state);
 	}
 
-	private static <V extends IInterfaceElement> State executeReorder(final State state, final Function<State, EList<V>> translator,
-			final int index, final boolean direction) {
+	private static <V extends IInterfaceElement> State executeReorder(final State state,
+			final Function<State, EList<V>> translator, final int index, final boolean direction) {
 		final EList<V> list = translator.apply(state);
 		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), direction));
 		return commandExecution(state);
 	}
 
-	private static <V extends IInterfaceElement> State executeReorder(final State state, final Function<State, EList<V>> translator,
-			final int index, final int newPosition) {
+	private static <V extends IInterfaceElement> State executeReorder(final State state,
+			final Function<State, EList<V>> translator, final int index, final int newPosition) {
 		final EList<V> list = translator.apply(state);
 		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), newPosition));
 		return commandExecution(state);
@@ -94,7 +94,8 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	protected static <V extends IInterfaceElement> Collection<ExecutionDescription<State>> createReordering(
-			final Function<State, EList<V>> translator, final String element1, final String element2, final String element3) {
+			final Function<State, EList<V>> translator, final String element1, final String element2,
+			final String element3) {
 		return List.of( //
 				new ExecutionDescription<>("validate order", //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeNOP, //
@@ -120,7 +121,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 						(final State s) -> executeReorder(s, translator, 0, 2), //
 						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, translator, element1,
 								element2, element3)) //
-				);
+		);
 	}
 
 	private static State executeUpdate(final State state) {
@@ -143,7 +144,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 				new ExecutionDescription<>("update FB", // //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeUpdate, //
 						v) //
-				);
+		);
 	}
 
 }

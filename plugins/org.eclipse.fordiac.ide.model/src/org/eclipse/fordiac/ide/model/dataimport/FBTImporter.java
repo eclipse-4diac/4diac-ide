@@ -78,7 +78,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** Managing class for importing *.fbt files */
@@ -995,15 +995,19 @@ public class FBTImporter extends TypeImporter {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		readNameCommentAttributes(fb);
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		TypeEntry entry = getTypeEntry(typeFbElement);
+		final FBTypeEntry entry = getTypeEntry(typeFbElement);
 		if (entry == null) {
-			entry = addDependency(
-					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType()));
+			fb.setTypeEntry(addDependency(
+					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType())));
+			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		} else {
+			fb.setTypeEntry(entry);
+			final InterfaceList typeInterface = entry.getInterface();
+			fb.setInterface((typeInterface != null) ? typeInterface.copy()
+					: LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}
-		fb.setTypeEntry(entry);
-		fb.setInterface(fb.getType().getInterfaceList().copy());
-		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 		type.getInternalFbs().add(fb);
+		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 	}
 
 	/**

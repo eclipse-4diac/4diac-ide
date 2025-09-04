@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -224,12 +223,14 @@ class FBNetworkImporter extends CommonElementImporter {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getFBType()));
 		}
-		final FBType type = entry.getType();
-		if (type == null) {
-			return FordiacMarkerHelper.createErrorMarkerFB(typeName, entry);
-		}
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
-		fb.setInterface(type.getInterfaceList().copy());
+		InterfaceList fbInterface = entry.getInterface();
+		if (fbInterface == null) {
+			fbInterface = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		} else {
+			fbInterface = fbInterface.copy();
+		}
+		fb.setInterface(fbInterface);
 		fb.setTypeEntry(entry);
 		return fb;
 	}
