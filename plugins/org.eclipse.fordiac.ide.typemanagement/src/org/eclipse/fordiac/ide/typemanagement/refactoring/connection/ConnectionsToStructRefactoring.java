@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -246,8 +247,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			status.merge(RefactoringStatus.createFatalErrorStatus(
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_InvalidName, target)));
 		}
-		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(fbURI).getType() instanceof final FBType fbType)
-				&& (fbType.getInterfaceList().getAllInterfaceElements().stream()
+		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(fbURI) instanceof final InterfaceTypeEntry ifTypeEntry)
+				&& (ifTypeEntry.getInterface().getAllInterfaceElements().stream()
 						.anyMatch(port -> port.getName().equals(name)) && !nameCol.contains(name))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus(
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_NameExists, target)));

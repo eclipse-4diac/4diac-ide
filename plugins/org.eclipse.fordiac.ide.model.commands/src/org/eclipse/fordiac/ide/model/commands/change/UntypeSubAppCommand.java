@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
@@ -46,6 +47,6 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	protected void setInterface() {
-		newElement.setInterface(oldElement.getType().getInterfaceList().copy());
+		newElement.setInterface(((InterfaceTypeEntry) oldElement.getTypeEntry()).getInterface().copy());
 	}
 }

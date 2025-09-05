@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -35,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class VarDeclarationAnnotations {
 
@@ -251,14 +251,12 @@ public class VarDeclarationAnnotations {
 	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
 		if (varDeclaration != null) {
 			final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
-			if (fbne != null) {
-				final FBType type = fbne.getType();
-				if (type != null) {
-					final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
-					return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
-							? typeVariable.getInOutVarOpposite()
-							: typeVariable;
-				}
+			if ((fbne != null) && (fbne.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry
+					&& ifTypeEntry.getInterface() != null)) {
+				final VarDeclaration typeVariable = ifTypeEntry.getInterface().getVariable(varDeclaration.getName());
+				return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
+						? typeVariable.getInOutVarOpposite()
+						: typeVariable;
 			}
 		}
 		return varDeclaration;

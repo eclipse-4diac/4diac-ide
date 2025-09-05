@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
@@ -127,8 +128,10 @@ public class ToolTipFigure extends Figure {
 					}
 				}
 			}
-		} else if (null != variable.getFBNetworkElement() && null != variable.getFBNetworkElement().getType()) {
-			return variable.getFBNetworkElement().getType().getInterfaceList().getVariable(variable.getName());
+		} else if ((variable.getFBNetworkElement() != null)
+				&& (variable.getFBNetworkElement().getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry
+						&& ifTypeEntry.getInterface() != null)) {
+			return ifTypeEntry.getInterface().getVariable(variable.getName());
 		}
 		return null;
 	}

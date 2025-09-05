@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 @SuppressWarnings("java:S1452")
@@ -455,14 +456,12 @@ public final class VariableOperations {
 	}
 
 	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
-		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
-		if (networkElement != null) {
-			final FBType type = networkElement.getType();
-			if (type != null) {
-				final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
-				if (typeVariable != null) {
-					return typeVariable;
-				}
+		final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
+		if ((fbne != null) && (fbne.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry
+				&& ifTypeEntry.getInterface() != null)) {
+			final VarDeclaration typeVariable = ifTypeEntry.getInterface().getVariable(varDeclaration.getName());
+			if (typeVariable != null) {
+				return typeVariable;
 			}
 		}
 		return null;

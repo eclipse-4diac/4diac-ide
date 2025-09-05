@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2023, 205 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
@@ -64,7 +65,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		newElement.setInterface(((InterfaceTypeEntry) newElement.getTypeEntry()).getInterface().copy());
 		newElement.setName(oldElement.getName());
 		createValues();
 		transferInstanceComments();
