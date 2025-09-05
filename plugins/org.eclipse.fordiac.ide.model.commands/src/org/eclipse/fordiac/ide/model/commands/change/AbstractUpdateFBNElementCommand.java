@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -133,12 +134,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// set Visible attribute after reconnect, to not hide connected In/Outputs
 		// transfer attributes from type first (for new vars), then override them from
 		// old instance
-		if (newElement.getType() != null) {
-			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInputVars());
-			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getOutputVars());
-			transferVisibleAndVarConfigAttributes(newElement.getType().getInterfaceList().getInOutVars());
-
+		if (newElement.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry) {
+			final InterfaceList interfaceList = ifTypeEntry.getInterface();
+			transferVisibleAndVarConfigAttributes(interfaceList.getInputVars());
+			transferVisibleAndVarConfigAttributes(interfaceList.getOutputVars());
+			transferVisibleAndVarConfigAttributes(interfaceList.getInOutVars());
 		}
+
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInOutVars());
@@ -223,7 +225,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected void setInterface() {
 		if (newElement.getType() != null) {
-			newElement.setInterface(newElement.getType().getInterfaceList().copy());
+			newElement.setInterface(((InterfaceTypeEntry) newElement.getTypeEntry()).getInterface().copy());
 		} else {
 			newElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}

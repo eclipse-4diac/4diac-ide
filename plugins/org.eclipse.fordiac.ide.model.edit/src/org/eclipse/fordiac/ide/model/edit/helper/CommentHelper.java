@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public final class CommentHelper {
 
@@ -46,8 +47,10 @@ public final class CommentHelper {
 					return structMember.getComment();
 				}
 			}
-			if (fbn != null && fbn.getType() != null) {
-				final IInterfaceElement typeElement = fbn.getType().getInterfaceList()
+
+			if ((fbn != null) && (fbn.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry
+					&& ifTypeEntry.getInterface() != null)) {
+				final IInterfaceElement typeElement = ifTypeEntry.getInterface()
 						.getInterfaceElement(interfaceElement.getName());
 				if (typeElement != null && typeElement.getComment() != null) {
 					return typeElement.getComment();
