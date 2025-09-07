@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -277,11 +276,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		// we don't need an additional transferdroptarget listener
 		return null;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null; // this is currently needed as the base class is targeted for system editors
 	}
 
 	@Override

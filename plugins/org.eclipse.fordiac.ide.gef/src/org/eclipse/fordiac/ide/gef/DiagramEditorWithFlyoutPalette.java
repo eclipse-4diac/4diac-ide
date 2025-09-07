@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.gef;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -39,7 +38,6 @@ import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
@@ -410,30 +408,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected AdvancedPanningSelectionTool createDefaultTool() {
 		return new AdvancedPanningSelectionTool();
 	}
-
-	/**
-	 * Gets the system.
-	 *
-	 * @return the system
-	 */
-	public abstract AutomationSystem getSystem();
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
-	 * IProgressMonitor)
-	 */
-	@Override
-	public abstract void doSave(final IProgressMonitor monitor);
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
-	 */
-	@Override
-	public abstract void doSaveAs();
 
 	/*
 	 * (non-Javadoc)

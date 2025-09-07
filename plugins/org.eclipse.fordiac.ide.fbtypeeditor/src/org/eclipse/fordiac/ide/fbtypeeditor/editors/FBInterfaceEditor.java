@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -161,11 +160,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		// we don't need an additional transferdroptarget listener
 		return null;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null; // this is currently needed as the base class is targeted for system editors
 	}
 
 	@Override
