@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
 import org.eclipse.gef.ContextMenuProvider;
@@ -73,11 +72,6 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 	}
 
 	@Override
-	public AutomationSystem getSystem() {
-		return sysConf.getAutomationSystem();
-	}
-
-	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// with the breadcrumb based automation system editor this editor should not
 		// support a save method
@@ -90,8 +84,8 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-		if (getModel() != null && getSystem() != null) {
-			return SystemConfPaletteFactory.createPalette(getSystem());
+		if (getModel() != null && getModel().getAutomationSystem() != null) {
+			return SystemConfPaletteFactory.createPalette(getModel().getAutomationSystem());
 		}
 		return new PaletteRoot();
 	}

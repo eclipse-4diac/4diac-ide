@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenu
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -128,11 +127,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected TypeLibrary getTypeLibrary() {
 		return typeLib;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null;
 	}
 
 	@Override

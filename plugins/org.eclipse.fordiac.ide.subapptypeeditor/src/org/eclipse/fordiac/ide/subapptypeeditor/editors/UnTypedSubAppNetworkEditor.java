@@ -17,7 +17,6 @@ import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -44,11 +43,6 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	@Override
 	protected TypeLibrary getTypeLibrary() {
 		return typeLib;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null;
 	}
 
 	@Override

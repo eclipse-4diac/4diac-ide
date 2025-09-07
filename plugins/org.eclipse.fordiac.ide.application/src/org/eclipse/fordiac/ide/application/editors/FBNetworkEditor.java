@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -148,11 +147,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING,
 				new Dimension((int) CoordinateConverter.INSTANCE.getLineHeight(),
 						(int) CoordinateConverter.INSTANCE.getLineHeight()));
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return getModel().getAutomationSystem();
 	}
 
 	@Override
