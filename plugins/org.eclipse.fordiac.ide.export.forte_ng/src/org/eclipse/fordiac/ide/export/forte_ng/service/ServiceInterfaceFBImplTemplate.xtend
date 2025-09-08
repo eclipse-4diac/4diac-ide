@@ -31,8 +31,9 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		«generateImplIncludes»
 		
 		namespace {
-		  «generateFBInterfaceDefinition»
+		  «generateTypeHash»
 		
+		  «generateFBInterfaceDefinition»
 		  «generateFBInterfaceSpecDefinition»
 		}
 		

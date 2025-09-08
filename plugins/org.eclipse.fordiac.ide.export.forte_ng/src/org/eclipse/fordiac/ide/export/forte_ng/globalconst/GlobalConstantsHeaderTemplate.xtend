@@ -18,6 +18,8 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.generateTypeNamespace
+
 class GlobalConstantsHeaderTemplate extends ForteLibraryElementTemplate<GlobalConstants> {
 
 	new(GlobalConstants type, String name, Path prefix, Map<?, ?> options) {
@@ -31,12 +33,14 @@ class GlobalConstantsHeaderTemplate extends ForteLibraryElementTemplate<GlobalCo
 		
 		«generateHeaderIncludes»
 		
-		class «className» final {
-			«generateGlobalConstDeclaration»
-		  public:
-		    «type.constants.generateVariableDeclarations(true)»
-		    «className»() = delete;
-		};
+		namespace «type.generateTypeNamespace» {
+		  class «className» final {
+		      «generateGlobalConstDeclaration»
+		    public:
+		      «type.constants.generateVariableDeclarations(true)»
+		      «className»() = delete;
+		  };
+		}
 		
 		«generateIncludeGuardEnd»
 		

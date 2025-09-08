@@ -45,30 +45,31 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		  private:
-		    «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		    «type.internalVars.generateVariableDeclarations(false)»
-		    «type.internalConstVars.generateVariableDeclarations(true)»
-		    «generateAccessorDeclaration("getVarInternal", false)»
+		      «type.internalVars.generateVariableDeclarations(false)»
+		      «type.internalConstVars.generateVariableDeclarations(true)»
+		      «generateAccessorDeclaration("getVarInternal", false)»
 		
-		    «type.internalFbs.generateInternalFBDeclarations»
-		    «generateAlgorithms»
-		    «generateMethods»
-		    «generateAdditionalDeclarations»
-		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+		      «type.internalFbs.generateInternalFBDeclarations»
+		      «generateAlgorithms»
+		      «generateMethods»
+		      «generateAdditionalDeclarations»
+		      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
-		    «generateReadInputDataDeclaration»
-		    «generateWriteOutputDataDeclaration»
-		    «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		      «generateReadInputDataDeclaration»
+		      «generateWriteOutputDataDeclaration»
+		      «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		  public:
-		    «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    public:
+		      «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 		
-		    «generateInterfaceDeclarations»
-		};
+		      «generateInterfaceDeclarations»
+		  };
+		}
 		
 		«generateIncludeGuardEnd»
 		

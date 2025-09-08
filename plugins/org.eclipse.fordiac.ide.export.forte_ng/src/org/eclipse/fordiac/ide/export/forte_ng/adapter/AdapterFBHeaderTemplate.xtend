@@ -41,40 +41,42 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		    «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		  private:
-		    «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		    «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
-		  public:
-		    «type.interfaceList.inputVars.generateVariableDeclarations(false)»
-		    «type.interfaceList.outputVars.generateVariableDeclarations(false)»
-		    «type.interfaceList.eventInputs.generateEventAccessors»
-		    «type.interfaceList.eventOutputs.generateEventAccessors»
-		    ~«FBClassName»() override = default;
-		    
-		  protected:
-		    «FBClassName»(forte::core::CFBContainer &paContainer,
-		                  const SFBInterfaceSpec &paInterfaceSpec,
-		                  const forte::core::StringId paInstanceNameId,
-		                  TForteUInt8 paParentAdapterlistID);
-		};
+		      «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    public:
+		      «type.interfaceList.inputVars.generateVariableDeclarations(false)»
+		      «type.interfaceList.outputVars.generateVariableDeclarations(false)»
+		      «type.interfaceList.eventInputs.generateEventAccessors»
+		      «type.interfaceList.eventOutputs.generateEventAccessors»
+		      ~«FBClassName»() override = default;
+		      
+		    protected:
+		      «FBClassName»(forte::core::CFBContainer &paContainer,
+		                    const SFBInterfaceSpec &paInterfaceSpec,
+		                    const forte::core::StringId paInstanceNameId,
+		                    TForteUInt8 paParentAdapterlistID);
+		  };
 		
-		«generatePlugClass»
+		  «generatePlugClass»
 		
-		«generateSocketClass»
+		  «generateSocketClass»
+		}
 		
 		«generateIncludeGuardEnd»		
 	'''
 
 	override protected generateHeaderIncludes() '''
-		«generateDependencyInclude("core/adapter.h")»
+		«generateDependencyInclude("forte/adapter.h")»
 		«super.generateHeaderIncludes»
 	'''
 
 	override protected generateFBClassHeader() '''
-		class «FBClassName» : public «baseClass» {
+		namespace «type.generateTypeNamespace» {
+		  class «FBClassName» : public «baseClass» {
 	'''
 
 	override protected generateFBDeclaration() '''

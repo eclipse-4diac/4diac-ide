@@ -18,7 +18,9 @@
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Paths
+import java.text.MessageFormat
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.export.Messages
 import org.eclipse.fordiac.ide.export.TemplateExportFilter
 import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBImplTemplate
@@ -29,6 +31,8 @@ import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTempla
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.function.FunctionFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.function.FunctionFBImplTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsHeaderTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.language.LanguageHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.language.LanguageImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.service.ServiceInterfaceFBHeaderTemplate
@@ -37,27 +41,23 @@ import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.simple.SimpleFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.struct.StructuredTypeImplTemplate
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration
-import org.eclipse.fordiac.ide.export.Messages
-import java.text.MessageFormat
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
-import org.eclipse.fordiac.ide.export.language.ILanguageSupport
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
-import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsHeaderTemplate
-import org.eclipse.fordiac.ide.export.forte_ng.globalconst.GlobalConstantsImplTemplate
 
 class ForteNgExportFilter extends TemplateExportFilter {
 
@@ -71,24 +71,24 @@ class ForteNgExportFilter extends TemplateExportFilter {
 		switch (source) {
 			BasicFBType:
 				#{
-					new BasicFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
-						options),
-					new BasicFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
-						options)
+					new BasicFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new BasicFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			SimpleFBType:
 				#{
-					new SimpleFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
-						options),
-					new SimpleFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
-						options)
+					new SimpleFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new SimpleFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			FunctionFBType:
 				#{
-					new FunctionFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
-						options),
-					new FunctionFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
-						options)
+					new FunctionFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new FunctionFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			SubAppType,
 			AttributeDeclaration,
@@ -101,51 +101,51 @@ class ForteNgExportFilter extends TemplateExportFilter {
 			}
 			CompositeFBType:
 				#{
-					new CompositeFBHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath), options),
-					new CompositeFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
-						options)
+					new CompositeFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new CompositeFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			AdapterType:
 				#{
-					new AdapterFBHeaderTemplate(source, source.generateTypeInclude, Paths.get(source.generateTypePath),
-						options),
-					new AdapterFBImplTemplate(source, source.generateTypeSource, Paths.get(source.generateTypePath),
-						options)
+					new AdapterFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new AdapterFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			ServiceInterfaceFBType:
 				#{
-					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath), options),
-					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSource,
-						Paths.get(source.generateTypePath), options)
+					new ServiceInterfaceFBHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new ServiceInterfaceFBImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			StructuredType:
 				#{
-					new StructuredTypeHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath), options),
-					new StructuredTypeImplTemplate(source, source.generateTypeSource,
-						Paths.get(source.generateTypePath), options)
+					new StructuredTypeHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new StructuredTypeImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			GlobalConstants:
 				#{
-					new GlobalConstantsHeaderTemplate(source, source.generateTypeInclude,
-						Paths.get(source.generateTypePath), options),
-					new GlobalConstantsImplTemplate(source, source.generateTypeSource,
-						Paths.get(source.generateTypePath), options)
+					new GlobalConstantsHeaderTemplate(source, source.generateTypeHeaderFileName,
+						source.generateTypeHeaderFilePath, options),
+					new GlobalConstantsImplTemplate(source, source.generateTypeSourceFileName,
+						source.generateTypeSourceFilePath, options)
 				}
 			CMakeListsMarker:
 				#{
 					new CMakeListsTemplate('''CMakeLists.txt''', Paths.get(""))
 				}
-			INamedElement: {
+			LibraryElement: {
 				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source, options)
 				if (languageSupport !== null) {
 					#{
-						new LanguageHeaderTemplate(languageSupport, source.generateTypeInclude,
-							Paths.get(source.generateTypePath)),
-						new LanguageImplTemplate(languageSupport, source.generateTypeSource,
-							Paths.get(source.generateTypePath))
+						new LanguageHeaderTemplate(languageSupport, source.generateTypeHeaderFileName,
+							source.generateTypeHeaderFilePath),
+						new LanguageImplTemplate(languageSupport, source.generateTypeSourceFileName,
+							source.generateTypeSourceFilePath)
 					}
 				} else {
 					errors.add('''Unknown source type «source.eClass.name»''')

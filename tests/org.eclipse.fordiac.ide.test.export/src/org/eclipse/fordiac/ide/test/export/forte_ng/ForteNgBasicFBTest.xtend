@@ -57,41 +57,43 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						#pragma once
 						
-						#include "core/basicfb.h"
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
-						#include "core/datatypes/forte_array.h"
-						#include "core/datatypes/forte_array_fixed.h"
-						#include "core/datatypes/forte_array_variable.h"
+						#include "forte/basicfb.h"
+						#include "forte/iec61131_functions.h"
+						#include "forte/datatypes/forte_array_common.h"
+						#include "forte/datatypes/forte_array.h"
+						#include "forte/datatypes/forte_array_fixed.h"
+						#include "forte/datatypes/forte_array_variable.h"
 						
-						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
-						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						namespace forte {
+						  class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
+						      DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
-						  private:
+						    private:
 						
-						    CIEC_ANY *getVarInternal(size_t) override;
+						      CIEC_ANY *getVarInternal(size_t) override;
 						
-						    void «EXPORTED_ALGORITHM_NAME»(void);
+						      void «EXPORTED_ALGORITHM_NAME»(void);
 						
-						    static const TForteInt16 scmStateINIT = 0;
+						      static const TForteInt16 scmStateINIT = 0;
 						
-						    void enterStateINIT(CEventChainExecutionThread *const paECET);
+						      void enterStateINIT(CEventChainExecutionThread *const paECET);
 						
-						    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+						      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 						
-						    void readInputData(TEventID paEIID) override;
-						    void writeOutputData(TEventID paEIID) override;
-						    void setInitialValues() override;
+						      void readInputData(TEventID paEIID) override;
+						      void writeOutputData(TEventID paEIID) override;
+						      void setInitialValues() override;
 						
-						  public:
-						    «EXPORTED_FUNCTIONBLOCK_NAME»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+						    public:
+						      «EXPORTED_FUNCTIONBLOCK_NAME»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 						
-						    CIEC_ANY *getDI(size_t) override;
-						    CIEC_ANY *getDO(size_t) override;
-						    CEventConnection *getEOConUnchecked(TPortId) override;
-						    CDataConnection **getDIConUnchecked(TPortId) override;
-						    CDataConnection *getDOConUnchecked(TPortId) override;
-						};
+						      CIEC_ANY *getDI(size_t) override;
+						      CIEC_ANY *getDO(size_t) override;
+						      CEventConnection *getEOConUnchecked(TPortId) override;
+						      CDataConnection **getDIConUnchecked(TPortId) override;
+						      CDataConnection *getDOConUnchecked(TPortId) override;
+						  };
+						}
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
@@ -110,18 +112,19 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						 *** Version:
 						 *************************************************************************/
 						
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
+						#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 						
-						#include "core/datatypes/forte_dword.h"
-						#include "core/datatypes/forte_sint.h"
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
-						#include "core/datatypes/forte_array.h"
-						#include "core/datatypes/forte_array_fixed.h"
-						#include "core/datatypes/forte_array_variable.h"
+						#include "forte/datatypes/forte_dword.h"
+						#include "forte/datatypes/forte_sint.h"
+						#include "forte/iec61131_functions.h"
+						#include "forte/datatypes/forte_array_common.h"
+						#include "forte/datatypes/forte_array.h"
+						#include "forte/datatypes/forte_array_fixed.h"
+						#include "forte/datatypes/forte_array_variable.h"
 						
 						using namespace std::literals;
 						using namespace forte::core::literals;
+						using namespace forte;
 						
 						namespace {
 						  constexpr std::string_view TypeHash ="1234"sv;

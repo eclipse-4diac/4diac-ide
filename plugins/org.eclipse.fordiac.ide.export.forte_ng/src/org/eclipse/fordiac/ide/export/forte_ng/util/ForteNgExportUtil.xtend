@@ -12,11 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
+import java.nio.file.Path
 import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
@@ -41,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -90,45 +92,41 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»'''
 
-	def static CharSequence generateTypeName(INamedElement type) {
+	def static CharSequence generateTypeName(LibraryElement type) {
 		switch (type) {
-			AdapterType: '''FORTE_«type.generateTypeNamePlain»'''
+			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
 					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
 					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
-			DataType: '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
-			FBType case type.genericType:
-				type.genericClassName
-			FBType,
-			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
-			default:
-				type.generateTypeNamePlain
+			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
+			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
+			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
+			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
+			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 		}
 	}
 
-	def static CharSequence generateTypeNameAsParameter(INamedElement type) {
+	def static CharSequence generateTypeNameAsParameter(LibraryElement type) {
 		switch (type) {
-			AdapterType: '''FORTE_«type.generateTypeNamePlain»'''
+			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
 					'''CIEC_ARRAY_COMMON<«result»>'''
 				].toString
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
-			DataType: '''CIEC_«type.generateTypeNamePlain»'''
-			FBType case type.genericType:
-				type.genericClassName
-			FBType,
-			GlobalConstants: '''FORTE_«type.generateTypeNamePlain»'''
-			default:
-				type.generateTypeNamePlain
+			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
+			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
+			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
+			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
+			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 		}
 	}
 
 	def static CharSequence generateTypeSpec(LibraryElement type) {
-		type.generateTypeNamePlain.FORTEStringId
+		PackageNameHelper.getFullTypeName(type).FORTEStringId
 	}
 
 	def static CharSequence generateDefiningTypeName(EObject object) {
@@ -154,25 +152,26 @@ final class ForteNgExportUtil {
 			'''«resource.URI.trimFileExtension.lastSegment».h'''
 	}
 
-	def static String generateTypeIncludePath(INamedElement type) {
-		switch (path : type.generateTypePath) {
-			case !path.empty: '''«path»/«type.generateTypeBasename».h'''
-			default: '''«type.generateTypeBasename».h'''
+	def static String generateTypeIncludePath(LibraryElement type) {
+		switch (path : type.generateTypePath.join('/')) {
+			case !path.empty: '''forte/«path»/«type.generateTypeBasename».h'''
+			default: '''forte/«type.generateTypeBasename».h'''
 		}
 	}
 
-	def static String generateTypeGenIncludePath(INamedElement type) {
-		switch (path : type.generateTypePath) {
-			case !path.empty: '''«path»/«type.generateTypeBasename»_gen.cpp'''
-			default: '''«type.generateTypeBasename»_gen.cpp'''
-		}
+	def static String generateTypeHeaderFileName(LibraryElement type) '''«type.generateTypeBasename».h'''
+
+	def static String generateTypeSourceFileName(LibraryElement type) '''«type.generateTypeBasename».cpp'''
+
+	def static Path generateTypeHeaderFilePath(LibraryElement type) {
+		Path.of("include", "forte").resolve(type.generateTypePath)
 	}
 
-	def static String generateTypeInclude(INamedElement type) '''«type.generateTypeBasename».h'''
+	def static Path generateTypeSourceFilePath(LibraryElement type) {
+		Path.of("src").resolve(type.generateTypePath)
+	}
 
-	def static String generateTypeSource(INamedElement type) '''«type.generateTypeBasename».cpp'''
-
-	def static String generateTypeBasename(INamedElement type) {
+	def static String generateTypeBasename(LibraryElement type) {
 		switch (type) {
 			TimeType:
 				"forte_time"
@@ -219,25 +218,26 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static String generateTypePath(INamedElement type) {
+	def static Path generateTypePath(LibraryElement type) {
 		switch (type) {
 			ArrayType:
 				type.baseType.generateTypePath
 			AnyType case type.typeEntry === null:
-				"core/datatypes"
-			LibraryElement:
-				type.compilerInfo?.packageName?.replace("::", "/") ?: ""
+				Path.of("datatypes")
 			default:
-				type.name
+				Path.of("", PackageNameHelper.getPackageName(type).split("::"))
 		}
 	}
 
-	def static String generateMangledPackageName(LibraryElement type) {
-		val packageName = type.compilerInfo?.packageName?.replace(":", "_")
-		packageName.nullOrEmpty ? "" : packageName + "__"
+	def static String generateTypeNamespace(LibraryElement type) {
+		val packageName = PackageNameHelper.getPackageName(type)
+		if (packageName.nullOrEmpty)
+			"forte"
+		else
+			'''forte::«packageName»'''
 	}
 
-	def static String generateTypeNamePlain(INamedElement type) {
+	def static String generateTypeNamePlain(LibraryElement type) {
 		switch (type) {
 			TimeType:
 				"TIME"
@@ -261,7 +261,6 @@ final class ForteNgExportUtil {
 				"STRING"
 			WstringType:
 				"WSTRING"
-			LibraryElement: '''«type.generateMangledPackageName»«type.name»'''
 			default:
 				type.name
 		}
@@ -302,11 +301,11 @@ final class ForteNgExportUtil {
 
 	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "GenericClassName"
 
-	def static boolean isGenericType(FBType type) {
+	def static boolean isGenericType(LibraryElement type) {
 		type.attributes.exists[name == GENERIC_CLASS_NAME_ATTRIBUTE]
 	}
 
-	def static String getGenericClassName(FBType type) {
+	def static String getGenericClassName(LibraryElement type) {
 		StringValueConverter.INSTANCE.toValue(type.attributes.findFirst[name == GENERIC_CLASS_NAME_ATTRIBUTE].value)
 	}
 

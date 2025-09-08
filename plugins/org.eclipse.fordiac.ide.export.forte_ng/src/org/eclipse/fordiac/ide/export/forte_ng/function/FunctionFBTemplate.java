@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType> {
@@ -62,7 +63,7 @@ public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType>
 	}
 
 	protected static CharSequence generateFunctionParameter(final VarDeclaration param) {
-		final INamedElement type = VariableOperations.evaluateResultType(param);
+		final LibraryElement type = VariableOperations.evaluateResultType(param);
 		final StringBuilder builder = new StringBuilder();
 		if (param.isInOutVar()) {
 			builder.append(ForteNgExportUtil.generateTypeNameAsParameter(type));

@@ -44,23 +44,24 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		  private:
-		    «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		    «fbs.generateInternalFBDeclarations»
+		      «fbs.generateInternalFBDeclarations»
 		
-		    «generateReadInputDataDeclaration»
-		    «generateWriteOutputDataDeclaration»
-		    «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
-		    «generateSetFBNetworkInitialValuesDeclaration»
+		      «generateReadInputDataDeclaration»
+		      «generateWriteOutputDataDeclaration»
+		      «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		      «generateSetFBNetworkInitialValuesDeclaration»
 		
-		  public:
-		    «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    public:
+		      «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 		
-		    «generateInterfaceDeclarations»
-		};
+		      «generateInterfaceDeclarations»
+		  };
+		}
 		
 		«generateIncludeGuardEnd»
 		
@@ -73,8 +74,8 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	override protected CharSequence generateHeaderIncludes() '''
-		«generateDependencyInclude("core/cfb.h")»
-		«generateDependencyInclude("core/typelib.h")»
+		«generateDependencyInclude("forte/cfb.h")»
+		«generateDependencyInclude("forte/typelib.h")»
 		«super.generateHeaderIncludes»
 	'''
 

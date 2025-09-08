@@ -31,22 +31,23 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		  private:
-		    «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+		      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
-		    «generateReadInputDataDeclaration»
-		    «generateWriteOutputDataDeclaration»
-		    «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		      «generateReadInputDataDeclaration»
+		      «generateWriteOutputDataDeclaration»
+		      «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		  public:
-		    «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		    public:
+		      «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
 		
-		    «generateInterfaceDeclarations»
-		};
+		      «generateInterfaceDeclarations»
+		  };
+		}
 		
 		«generateBody»
 		
@@ -55,7 +56,7 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 	'''
 
 	override protected generateHeaderIncludes() '''
-		«generateDependencyInclude("core/funcbloc.h")»
+		«generateDependencyInclude("forte/funcbloc.h")»
 		«super.generateHeaderIncludes»
 	'''
 
