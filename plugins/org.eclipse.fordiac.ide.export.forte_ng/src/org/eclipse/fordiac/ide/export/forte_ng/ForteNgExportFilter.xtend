@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.text.MessageFormat
 import org.eclipse.emf.ecore.EObject
@@ -26,7 +27,10 @@ import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBImplTemplate
-import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsUtil
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.IncludeCMakeListsTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.ProjectCMakeListsTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.SourceCMakeListsTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.composite.CompositeFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.function.FunctionFBHeaderTemplate
@@ -135,9 +139,15 @@ class ForteNgExportFilter extends TemplateExportFilter {
 						source.generateTypeSourceFilePath, options)
 				}
 			CMakeListsMarker:
-				#{
-					new CMakeListsTemplate('''CMakeLists.txt''', Paths.get(""))
-				}
+				(#{
+					new ProjectCMakeListsTemplate(source.project, source.output),
+					new IncludeCMakeListsTemplate(source.project, source.output, Path.of("include")),
+					new SourceCMakeListsTemplate(source.project, source.output, Path.of("src"))
+				} + CMakeListsUtil.getSubdirs(source.output, "include").map [ prefix |
+					new IncludeCMakeListsTemplate(source.project, source.output, prefix)
+				] + CMakeListsUtil.getSubdirs(source.output, "src").map [ prefix |
+					new SourceCMakeListsTemplate(source.project, source.output, prefix)
+				]).toSet.unmodifiableView
 			LibraryElement: {
 				val languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", source, options)
 				if (languageSupport !== null) {
