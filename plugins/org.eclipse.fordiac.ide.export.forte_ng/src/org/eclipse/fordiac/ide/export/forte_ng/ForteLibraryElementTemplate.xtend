@@ -48,7 +48,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		]
 	}
 
-	def protected getClassName() { type.generateTypeName }
+	def protected getClassName() '''FORTE_«type.generateTypeNamePlain»'''
 
 	def protected generateHeader() '''
 		/*************************************************************************
@@ -73,13 +73,14 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	'''
 
 	def protected generateImplIncludes() '''
-		#include "«fileBasename».h"
+		#include "«type.generateTypeIncludePath»"
 
 		«getDependencies(emptyMap).generateDependencyIncludes»
 		«type.compilerInfo?.header»
 		
 		using namespace std::literals;
 		using namespace forte::core::literals;
+		using namespace «type.generateTypeNamespace»;
 	'''
 	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''

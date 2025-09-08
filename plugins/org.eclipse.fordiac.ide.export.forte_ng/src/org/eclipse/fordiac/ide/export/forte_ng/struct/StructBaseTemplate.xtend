@@ -20,11 +20,15 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.generateTypeNamePlain
+
 abstract class StructBaseTemplate extends ForteLibraryElementTemplate<StructuredType> {
 
 	new(StructuredType type, String name, Path prefix, Map<?,?> options) {
 		super(type, name, prefix, options)
 	}
+	
+	override protected getClassName() '''CIEC_«type.generateTypeNamePlain»'''
 
 	def protected CharSequence generateConstructorParameters() //
 	'''«FOR param : type.memberVariables SEPARATOR ", "»const «param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''

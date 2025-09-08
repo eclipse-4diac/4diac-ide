@@ -49,7 +49,7 @@ class LanguageImplTemplate extends ForteNgExportTemplate {
 	def protected generateImplIncludes() '''
 		#include "«fileBasename».h"
 
-		«generateDependencyInclude("core/iec61131_functions.h")»
+		«generateDependencyInclude("forte/iec61131_functions.h")»
 		«IF languageSupport !== null»«languageSupport.getDependencies(emptyMap).generateDependencyIncludes»«ENDIF»
 	'''
 
