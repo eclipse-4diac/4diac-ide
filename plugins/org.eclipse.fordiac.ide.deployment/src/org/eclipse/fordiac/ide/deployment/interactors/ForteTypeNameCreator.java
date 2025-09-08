@@ -69,7 +69,7 @@ public class ForteTypeNameCreator {
 	}
 
 	private static String convertFullTypeNameToFORTE(final String fullTypeName) {
-		return fullTypeName.replace(':', '_');
+		return fullTypeName;
 	}
 
 	private ForteTypeNameCreator() {
