@@ -56,7 +56,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -358,11 +357,10 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (modelElement instanceof final TypedConfigureableObject config) {
 
-				if (modelQuerySpec.referenceObject() != null && (modelQuerySpec.referenceObject() instanceof STFunction
-						|| modelQuerySpec.referenceObject() instanceof FunctionFBType)) {
+				if (modelQuerySpec.referenceObject() != null) {
 					final String packageName = PackageNameHelper
 							.getPackageNameFromURI(modelQuerySpec.referenceObject().eResource().getURI());
-					if (!packageName.equals(config.getTypeEntry().getPackageName())) {
+					if (config.getTypeEntry() != null && !packageName.equals(config.getTypeEntry().getPackageName())) {
 						return false;
 					}
 				}
