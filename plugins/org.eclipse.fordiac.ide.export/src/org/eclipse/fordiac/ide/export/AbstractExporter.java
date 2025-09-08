@@ -13,6 +13,7 @@
 
 package org.eclipse.fordiac.ide.export;
 
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -57,7 +58,8 @@ public abstract class AbstractExporter {
 
 			if (enableCMakeLists && !monitor.isCanceled()) {
 				try {
-					exportElement(monitor, filter, null, new CMakeListsMarker());
+					exportElement(monitor, filter, null,
+							new CMakeListsMarker(exportees.getFirst().getProject(), Path.of(outputDirectory)));
 				} catch (final ExportException.UserInteraction e) {
 					// noop
 				}

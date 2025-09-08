@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
@@ -48,7 +49,8 @@ public abstract class AbstractExportFBs extends AbstractFBTask {
 		final File folder = new File(exportDirectory);
 		if (folder.exists() && exportCMakeList) {
 			try {
-				filter.export(null, folder.getPath(), true, new CMakeListsMarker());
+				filter.export(null, folder.getPath(), true,
+						new CMakeListsMarker(getFordiacProject(), Path.of(exportDirectory)));
 				log("CMakeLists.txt");//$NON-NLS-1$
 				if (!filter.getErrors().isEmpty()) {
 					filter.getErrors().forEach(this::log);
