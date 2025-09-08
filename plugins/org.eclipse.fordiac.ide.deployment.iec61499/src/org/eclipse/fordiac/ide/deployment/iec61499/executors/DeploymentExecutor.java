@@ -122,7 +122,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
 		final String request = MessageFormat.format(CREATE_RESOURCE_INSTANCE, getNextId(), resource.getName(),
-				resource.getTypeName());
+				ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry()));
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final EOFException e) {

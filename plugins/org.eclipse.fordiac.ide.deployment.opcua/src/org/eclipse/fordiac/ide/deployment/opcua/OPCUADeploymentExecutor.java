@@ -251,7 +251,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void createResource(final Resource resource) throws DeploymentException {
 		combinedRequest = true;
 		final String resName = resource.getName();
-		final String resType = resource.getTypeName();
+		final String resType = ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry());
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.CREATE_RESOURCE_NODE,
 				new Variant[] { new Variant(resName), new Variant(resType) });
 		final String message = MessageFormat.format(Constants.CREATE_RESOURCE_INSTANCE, resName, resType);
