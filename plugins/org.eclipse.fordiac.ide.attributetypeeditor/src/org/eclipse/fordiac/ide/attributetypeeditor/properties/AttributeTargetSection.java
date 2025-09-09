@@ -20,12 +20,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.AttributeTarget;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInheritAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTargetAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -50,6 +54,9 @@ public class AttributeTargetSection extends AbstractSection {
 	private final List<Button> buttons = new ArrayList<>();
 	private StructuredType lock;
 
+	private Button inheritButton;
+	private Button copyButton;
+
 	private final SelectionListener buttonListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(final SelectionEvent event) {
@@ -69,6 +76,7 @@ public class AttributeTargetSection extends AbstractSection {
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createCheckBoxes(parent);
+		createInheritButtons(parent);
 	}
 
 	public void createCheckBoxes(final Composite parent) {
@@ -119,9 +127,38 @@ public class AttributeTargetSection extends AbstractSection {
 		buttons.add(button);
 	}
 
+	public void createInheritButtons(final Composite parent) {
+		final Composite composite = getWidgetFactory().createComposite(parent);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		final Label title = new Label(composite, SWT.None);
+		title.setText(Messages.AttributeInherit_SectionTitle);
+
+		inheritButton = new Button(composite, SWT.CHECK);
+		inheritButton.setText(Messages.AttributeInherit_InheritAttribute);
+		inheritButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				executeCommand(new ChangeInheritAttributeCommand(getType(), getInheritModeFromButtons()));
+			}
+		});
+
+		copyButton = new Button(composite, SWT.CHECK);
+		copyButton.setText(Messages.AttributeInherit_CopyAttribute);
+		copyButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				executeCommand(new ChangeInheritAttributeCommand(getType(), getInheritModeFromButtons()));
+			}
+		});
+		updateInheritButtons();
+	}
+
 	@Override
 	public void performRefresh() {
 		updateButtons(getType());
+		updateInheritButtons();
 	}
 
 	private void updateButtons(final AttributeDeclaration attributeDeclaration) {
@@ -136,6 +173,16 @@ public class AttributeTargetSection extends AbstractSection {
 		});
 	}
 
+	private void updateInheritButtons() {
+		final Attribute inheritAttribute = getType().getAttribute(InternalAttributeDeclarations.INHERIT.getName());
+		final AttributeInheritMode mode = inheritAttribute != null
+				? AttributeInheritMode.valueOf(inheritAttribute.getValue())
+				: AttributeInheritMode.IGNORE;
+
+		inheritButton.setSelection(mode == AttributeInheritMode.COPY_INHERIT || mode == AttributeInheritMode.INHERIT);
+		copyButton.setSelection(mode == AttributeInheritMode.COPY_INHERIT || mode == AttributeInheritMode.COPY);
+	}
+
 	private static StructuredType getTarget(final AttributeDeclaration attributeDeclaration) {
 		final StructuredType targetStruct = attributeDeclaration.getTarget();
 		if (targetStruct == null || targetStruct.getMemberVariables().stream()
@@ -145,6 +192,19 @@ public class AttributeTargetSection extends AbstractSection {
 			return (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.TARGET.getType());
 		}
 		return targetStruct;
+	}
+
+	private AttributeInheritMode getInheritModeFromButtons() {
+		if (inheritButton.getSelection() && copyButton.getSelection()) {
+			return AttributeInheritMode.COPY_INHERIT;
+		}
+		if (copyButton.getSelection()) {
+			return AttributeInheritMode.COPY;
+		}
+		if (inheritButton.getSelection()) {
+			return AttributeInheritMode.INHERIT;
+		}
+		return AttributeInheritMode.IGNORE;
 	}
 
 	@Override

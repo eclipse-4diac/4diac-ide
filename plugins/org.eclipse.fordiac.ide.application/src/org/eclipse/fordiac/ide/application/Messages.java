@@ -300,6 +300,12 @@ public final class Messages extends NLS {
 
 	public static String Connection_Unnegate;
 
+	public static String AttributeInherit_SectionTitle;
+
+	public static String AttributeInherit_CopyAttribute;
+
+	public static String AttributeInherit_InheritAttribute;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
