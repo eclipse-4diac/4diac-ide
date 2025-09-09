@@ -192,6 +192,12 @@
              label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
              value="99, 179, 31">
        </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"
+             label="%FordiacPreferencePage_LABEL_ConnectionSourceMarkerColor"
+             value="57, 73, 171">
+       </colorDefinition>      
     </extension>
  <extension
        point="org.eclipse.ui.preferenceTransfer">
