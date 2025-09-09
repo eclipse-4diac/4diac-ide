@@ -163,7 +163,7 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 	}
 
 	private void removeListenerFromAttributeDeclaration() {
-		if (getType() != null && getType().eAdapters().contains(adapter)) {
+		if (getType() != null) {
 			getType().eAdapters().remove(adapter);
 		}
 	}

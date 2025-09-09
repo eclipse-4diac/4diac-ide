@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.AttributeTarget;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -41,12 +42,16 @@ public final class InternalAttributeDeclarations {
 		return ATTRIBUTE_DECLARATION_RES.getContents().add(decl);
 	}
 
+	public static final AttributeDeclaration INHERIT = createAttributeDeclaration(LibraryElementTags.INHERIT_ATTRIBUTE,
+			ElementaryTypes.STRING);
+
 	public static final AttributeDeclaration VAR_CONFIG = createAttributeDeclaration(LibraryElementTags.VAR_CONFIG,
-			ElementaryTypes.BOOL);
+			ElementaryTypes.BOOL, AttributeInheritMode.COPY);
 	public static final AttributeDeclaration VISIBLE = createAttributeDeclaration(LibraryElementTags.ELEMENT_VISIBLE,
-			ElementaryTypes.BOOL);
+			ElementaryTypes.BOOL, AttributeInheritMode.COPY);
 	public static final AttributeDeclaration INOUT_VISIBLE_OUT = createAttributeDeclaration(
-			LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, ElementaryTypes.BOOL);
+			LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, ElementaryTypes.BOOL, AttributeInheritMode.COPY);
+
 	public static final AttributeDeclaration UNFOLDED = createAttributeDeclaration(
 			LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE, ElementaryTypes.BOOL);
 	public static final AttributeDeclaration RETAIN = createAttributeDeclaration(LibraryElementTags.RETAIN_ATTRIBUTE,
@@ -56,7 +61,7 @@ public final class InternalAttributeDeclarations {
 			ElementaryTypes.BOOL);
 
 	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, INOUT_VISIBLE_OUT,
-			UNFOLDED, RETAIN, TARGET, NEGATED);
+			UNFOLDED, RETAIN, TARGET, NEGATED, INHERIT);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
@@ -67,6 +72,13 @@ public final class InternalAttributeDeclarations {
 		declaration.setType(directlyDerivedType);
 
 		addAttribbuteDeclarationToResource(declaration);
+		return declaration;
+	}
+
+	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type,
+			final AttributeInheritMode inheritMode) {
+		final AttributeDeclaration declaration = createAttributeDeclaration(name, type);
+		declaration.setAttribute(INHERIT, inheritMode.name(), null);
 		return declaration;
 	}
 
