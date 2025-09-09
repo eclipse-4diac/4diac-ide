@@ -438,6 +438,12 @@
              name="%FBMarker_MarkAsPredecessor">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
+             description="Mark as Connection Source"
+             id="org.eclipse.fordiac.ide.application.commands.markConnectionSource"
+             name="Mark as Connection Source">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
              id="org.eclipse.fordiac.ide.application.commands.gotoparent"
              name="%command.goToParent.name">
@@ -731,6 +737,23 @@
               </instanceof>
               <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
               </instanceof>
+            </or>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>
+    
+   <handler class="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
+      <activeWhen>
+        <with variable="selection">
+          <iterate ifEmpty="false">
+            <or>
+              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+              </instanceof>
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              </instanceof>
+              <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
             </or>
           </iterate>
         </with>
@@ -1044,6 +1067,11 @@
 	      </and>
         </visibleWhen>
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
+      	<visibleWhen checkEnabled="true">
+      	   <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        </visibleWhen>
+      </command>      
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
@@ -1271,6 +1299,17 @@
               <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             </with>
             <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+          </and>
+        </visibleWhen>
+      </command>
+      
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
+        <visibleWhen>
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
+            </with>
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
           </and>
         </visibleWhen>
       </command>

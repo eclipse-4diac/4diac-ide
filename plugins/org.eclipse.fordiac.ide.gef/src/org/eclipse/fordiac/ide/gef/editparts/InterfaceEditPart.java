@@ -24,9 +24,11 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.commands.Command;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
@@ -62,7 +64,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
+import org.eclipse.fordiac.util.marker.MarkerDescriptor;
+import org.eclipse.fordiac.util.marker.MarkerStore;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -73,7 +79,10 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
@@ -85,6 +94,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private Adapter sourcePinAdapter = null;
 
 	private String pinLabelStyle;
+
+	private MarkerStore store;
 
 	private final IPropertyChangeListener preferenceListener = event -> {
 		if (event.getProperty().equals(GefPreferenceConstants.PIN_LABEL_STYLE)
@@ -315,6 +326,61 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected IFigure createFigure() {
 		final InterfaceFigure figure = new InterfaceFigure();
 		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+
+		figure.addMouseListener(new MouseListener() {
+			private static final int MASK = SWT.SHIFT | SWT.CTRL;
+			private static final String CONNECTION_SOURCE_MARKER = MarkerDescriptor.CONNECTION_SOURCE.ID();
+			private static final String COMMAND_ID = "org.eclipse.fordiac.ide.application.commands.markConnectionSource"; //$NON-NLS-1$
+
+			@Override
+			public void mouseReleased(final MouseEvent me) {
+				// do nothing
+			}
+
+			@Override
+			public void mousePressed(final MouseEvent me) {
+				// CTRL + SHIFT + CLICK
+				if ((me.getState() & MASK) == MASK) {
+					invokeMarkConnectionSourceHandler(new org.eclipse.swt.widgets.Event());
+					return;
+				}
+
+				// LEFT CLICK
+				// store could probably be cashed as it has the same life cycle as the edit part
+				MarkerStore.getStoreFromEditor().ifPresent(s -> {
+					if (s.hasMarkerEntry(CONNECTION_SOURCE_MARKER)) {
+						invokeMarkConnectionSourceHandler(null);
+					}
+				});
+			}
+
+			@Override
+			public void mouseDoubleClicked(final MouseEvent me) {
+				// do nothing
+			}
+
+			private void invokeMarkConnectionSourceHandler(final org.eclipse.swt.widgets.Event event) {
+				try {
+					getViewer().select(InterfaceEditPart.this);
+					getViewer().reveal(InterfaceEditPart.this);
+					if (isCommandHandled()) {
+						HandlerHelper.getHandlerService().executeCommand(COMMAND_ID, event);
+					}
+				} catch (final Exception e) {
+					FordiacLogHelper.logError("commands.markConnectionSource not found"); //$NON-NLS-1$
+				}
+			}
+
+			private boolean isCommandHandled() {
+				final ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+				if (commandService != null) {
+					final Command command = commandService.getCommand(COMMAND_ID);
+					return command != null && command.isEnabled();
+				}
+				return false;
+			}
+
+		});
 		return figure;
 	}
 
@@ -435,6 +501,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
+			store = MarkerStore.getStoreFromEditor().orElse(null);
 			final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
 					.getStoreProvider();
 			storeProvider.addPropertyChangeListener(preferenceListener);
@@ -446,12 +513,17 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public void deactivate() {
-		super.deactivate();
-		getModel().eAdapters().remove(getContentAdapter());
-		((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
-				.removePropertyChangeListener(preferenceListener);
-		getModel().eAdapters().remove(getContentAdapter());
-		removeSourcePinAdapter();
+		if (isActive()) {
+			if (store != null && store.isMarkedEditPart(this)) {
+				store.removeEditPart(this);
+			}
+			super.deactivate();
+			getModel().eAdapters().remove(getContentAdapter());
+			((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+					.removePropertyChangeListener(preferenceListener);
+			getModel().eAdapters().remove(getContentAdapter());
+			removeSourcePinAdapter();
+		}
 	}
 
 	private ConnectionAnchor sourceConAnchor = null;
