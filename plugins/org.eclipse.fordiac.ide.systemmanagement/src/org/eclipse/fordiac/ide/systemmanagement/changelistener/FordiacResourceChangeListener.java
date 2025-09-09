@@ -144,6 +144,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				if (delta.getResource().isAccessible()) {
 					// refresh type library when opening project
 					TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject()).refresh();
+					validateProjectNature(delta.getResource().getProject());
 				} else {
 					// this is the odd way of Eclipse Platform telling us a project was closed
 					handleProjectRemove(delta);
