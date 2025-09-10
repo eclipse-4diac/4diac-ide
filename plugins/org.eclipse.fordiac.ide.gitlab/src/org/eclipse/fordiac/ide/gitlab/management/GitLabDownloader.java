@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
-import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
@@ -77,18 +76,19 @@ public class GitLabDownloader implements IArchiveDownloader {
 
 	private boolean active;
 
-	public GitLabDownloader() {
-		init();
+	public GitLabDownloader(final String token, final String baseUrl) {
+		init(token, baseUrl);
 		versionComparator = new VersionComparator();
 		active = true;
 	}
 
-	public void init() {
-		baseUrl = PreferenceConstants.getURL();
+	public void init(final String token, final String baseUrl) {
 		if (!baseUrl.isBlank() && !baseUrl.endsWith("/")) { //$NON-NLS-1$
-			baseUrl = baseUrl + "/"; //$NON-NLS-1$
+			this.baseUrl = baseUrl + "/"; //$NON-NLS-1$
+		} else {
+			this.baseUrl = baseUrl;
 		}
-		token = PreferenceConstants.getToken();
+		this.token = token;
 	}
 
 	public Map<String, List<LeafNode>> getPackagesAndLeaves() {

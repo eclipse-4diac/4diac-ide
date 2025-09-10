@@ -234,8 +234,12 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				return;
 			}
 			int result = DEFAULT_BUTTON_INDEX;
-			if (dependencyAffectingTypeChange()) {
-				result = createTypeUpdateDialog().open();
+			try {
+				if (dependencyAffectingTypeChange()) {
+					result = createTypeUpdateDialog().open();
+				}
+			} catch (final Exception e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 
 			switch (result) {

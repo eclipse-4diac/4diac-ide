@@ -19,9 +19,9 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
@@ -29,9 +29,9 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -67,9 +67,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 	public void execute() {
 		element.setInterface(createInterfaceList());
 		if (element.getType() != null) {
-			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInputVars());
-			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getOutputVars());
-			transferVisibleAndVarConfigAttributes(element.getType().getInterfaceList().getInOutVars());
+			transferAttributes(element);
 		}
 		element.setPosition(position);
 		insertFBNetworkElement();
@@ -132,14 +130,16 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 		}
 	}
 
-	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
-		varDeclList.forEach(varDecl -> {
-			final VarDeclaration newDecl = (VarDeclaration) element.getInterfaceElement(varDecl.getName());
-			newDecl.setVisible(varDecl.isVisible());
-			if (newDecl.isInOutVar()) {
-				newDecl.getInOutVarOpposite().setVisible(varDecl.getInOutVarOpposite().isVisible());
-			}
-			newDecl.setVarConfig(varDecl.isVarConfig());
+	private static void transferAttributes(final FBNetworkElement newElement) {
+		if (newElement.getTypeEntry() == null
+				|| !(newElement.getTypeEntry().getType() instanceof final FBType fbType)) {
+			return;
+		}
+
+		AttributeInheritMode.copyAttributes(newElement, fbType.getAttributes());
+		fbType.getInterfaceList().getAllInterfaceElements().forEach(typeInterfaceElement -> {
+			final var newInterface = newElement.getInterfaceElement(typeInterfaceElement.getName());
+			AttributeInheritMode.copyAttributes(newInterface, typeInterfaceElement.getAttributes());
 		});
 	}
 

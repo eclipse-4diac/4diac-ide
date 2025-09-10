@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.search.dialog;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.search.types.GlobalConstantsTypeInstanceSearch;
@@ -27,7 +28,7 @@ public class GlobalConstantsEntryDataHandler extends AbstractTypeEntryDataHandle
 	}
 
 	@Override
-	protected Map<INamedElement, GlobalConstantsEntry> createInputSet(final GlobalConstantsEntry inputTypeEntry) {
+	protected Map<EObject, GlobalConstantsEntry> createInputSet(final GlobalConstantsEntry inputTypeEntry) {
 		final GlobalConstantsTypeInstanceSearch search = new GlobalConstantsTypeInstanceSearch(inputTypeEntry);
 		return search.performSearch().stream().map(obj -> switch (obj) {
 		case final STFunctionBody func -> func.eContainer(); // STFunctionBody isn't an INamedElement

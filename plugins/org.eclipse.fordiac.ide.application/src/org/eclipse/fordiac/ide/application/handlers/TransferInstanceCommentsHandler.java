@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
@@ -65,8 +64,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 
 						final List<? extends EObject> result = search.performSearch();
 
-						result.removeIf(el -> el.equals(struct.getModel())
-								|| isTypedOrContainedInTypedInstance((INamedElement) el));
+						result.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
 						// output connected elements only searchFilter
 						if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
@@ -140,7 +138,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 
 	}
 
-	private static boolean isTypedOrContainedInTypedInstance(final INamedElement element) {
+	private static boolean isTypedOrContainedInTypedInstance(final EObject element) {
 		return element.eContainer() != null && element.eContainer().eContainer() instanceof final SubApp subApp
 				&& (subApp.isContainedInTypedInstance() || subApp.isTyped());
 	}
