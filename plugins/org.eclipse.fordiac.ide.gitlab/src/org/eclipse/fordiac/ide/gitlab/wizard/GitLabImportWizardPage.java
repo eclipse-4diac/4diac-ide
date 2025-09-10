@@ -61,7 +61,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	}
 
 	private void connect() {
-		downloadManager = new GitLabDownloader();
+		downloadManager = new GitLabDownloader(getToken(), getUrl());
 		downloadManager.fetchProjectsAndPackages();
 
 	}
