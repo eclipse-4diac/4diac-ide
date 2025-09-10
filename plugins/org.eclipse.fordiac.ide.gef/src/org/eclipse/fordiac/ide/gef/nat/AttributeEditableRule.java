@@ -38,7 +38,10 @@ public class AttributeEditableRule extends NatTableColumnEditableRule<AttributeT
 	@Override
 	public boolean isEditable(final int columnIndex, final int rowIndex) {
 		final Attribute rowItem = dataProvider.getRowObject(rowIndex);
-		if (rowItem.getAttributeDeclaration() != null && getColumns().get(columnIndex) == AttributeTableColumn.TYPE) {
+		if (getColumns().get(columnIndex) == AttributeTableColumn.TYPE && rowItem.getAttributeDeclaration() != null) {
+			return false;
+		}
+		if (getColumns().get(columnIndex) == AttributeTableColumn.NAME && rowItem.eContainer() == null) {
 			return false;
 		}
 		return super.isEditable(columnIndex, rowIndex);
