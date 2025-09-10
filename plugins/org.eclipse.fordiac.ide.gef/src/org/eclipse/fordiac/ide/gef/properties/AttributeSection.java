@@ -17,11 +17,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
@@ -29,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
@@ -42,8 +46,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
@@ -52,6 +58,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -69,7 +76,10 @@ import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
+import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
+import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
+import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
@@ -99,6 +109,10 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 		provider = new ChangeableListDataProvider<>(new AttributeColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
+
+		dataLayer.unregisterCommandHandler(UpdateDataCommand.class);
+		dataLayer.registerCommandHandler(new AttributeUpdateDataCommandHandler(dataLayer));
+
 		dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(provider, this::getAnnotationModel));
 		final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 				AttributeTableColumn.DEFAULT_COLUMNS);
@@ -178,12 +192,35 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 	private List<Attribute> getFilteredAttributeList() {
 		final ConfigurableObject confObject = getType();
-		return confObject != null
+		List<Attribute> filteredList = confObject != null
 				? confObject.getAttributes().stream()
 						.filter(att -> !(att.getType() instanceof InternalDataType)
 								&& !InternalAttributeDeclarations.isInternalAttribute(att.getAttributeDeclaration()))
 						.toList()
 				: Collections.emptyList();
+
+		final ConfigurableObject original = getTypeElement(confObject);
+		if (original != null) {
+			final var copiedInheritAttributes = EcoreUtil
+					.copyAll(AttributeInheritMode.getInheritAttributes(confObject, original.getAttributes()));
+			if (!copiedInheritAttributes.isEmpty()) {
+				filteredList = new ArrayList<>(filteredList);
+				filteredList.addAll(copiedInheritAttributes);
+			}
+		}
+		return filteredList;
+	}
+
+	private ConfigurableObject getTypeElement(final ConfigurableObject copy) {
+		if (copy instanceof final TypedConfigureableObject typedConfigObject) {
+			return typedConfigObject.getTypeEntry().getType();
+		}
+		if (copy instanceof final IInterfaceElement interfaceElement
+				&& getTypeElement(interfaceElement.getFBNetworkElement()) instanceof final FBType fbType) {
+			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
+		}
+
+		return null;
 	}
 
 	@Override
@@ -250,6 +287,44 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	@Override
 	protected ConfigurableObject getType() {
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+	}
+
+	protected class AttributeUpdateDataCommandHandler extends UpdateDataCommandHandler {
+		private final DataLayer dataLayer;
+
+		public AttributeUpdateDataCommandHandler(final DataLayer dataLayer) {
+			super(dataLayer);
+			this.dataLayer = dataLayer;
+		}
+
+		@Override
+		protected boolean doCommand(final UpdateDataCommand command) {
+			try {
+				final int columnPosition = command.getColumnPosition();
+				final int rowPosition = command.getRowPosition();
+
+				final Object currentValue = dataLayer.getDataValueByPosition(columnPosition, rowPosition);
+				final Object newValue = command.getNewValue();
+
+				if ((currentValue == null && newValue != null) || (newValue == null && currentValue != null)
+						|| (currentValue != null && !currentValue.equals(newValue))) {
+
+					final Attribute attribute = provider.getRowObject(rowPosition);
+					if (attribute.eContainer() == null) {
+						getType().getAttributes().add(attribute);
+					}
+
+					dataLayer.setDataValueByPosition(columnPosition, rowPosition, newValue);
+					dataLayer.fireLayerEvent(
+							new DataUpdateEvent(dataLayer, columnPosition, rowPosition, currentValue, newValue));
+				}
+				return true;
+			} catch (final Exception e) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()),
+						e);
+				return false;
+			}
+		}
 	}
 
 	protected class AttributeNameCellEditor extends TextCellEditor {

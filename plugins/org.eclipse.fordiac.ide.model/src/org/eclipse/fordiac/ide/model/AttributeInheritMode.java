@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -28,6 +29,15 @@ public enum AttributeInheritMode {
 				conf.setAttribute(attribute.getAttributeDeclaration(), attribute.getValue(), attribute.getComment());
 			}
 		});
+	}
+
+	public static List<Attribute> getInheritAttributes(final ConfigurableObject instance,
+			final List<Attribute> typeAttributes) {
+		final var instanceDeclarationList = instance.getAttributes().stream().map(Attribute::getAttributeDeclaration)
+				.filter(Objects::nonNull).toList();
+		return typeAttributes.stream()
+				.filter(attribute -> AttributeInheritMode.hasDeclarationWithInheritMode(attribute, INHERIT))
+				.filter(attribute -> !instanceDeclarationList.contains(attribute.getAttributeDeclaration())).toList();
 	}
 
 	public static boolean hasDeclarationWithInheritMode(final Attribute attribute, final AttributeInheritMode mode) {
