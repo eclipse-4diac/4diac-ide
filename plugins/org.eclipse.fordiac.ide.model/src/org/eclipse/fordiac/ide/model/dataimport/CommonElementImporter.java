@@ -432,13 +432,11 @@ public abstract class CommonElementImporter {
 		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
 				.getInternalAttributeByName(attribute.getName());
 		if (internalAttributeDecl != null) {
-			if ((typeName != null) && !typeName.isBlank()) {
-				final String fqn = FordiacMarkerHelper.getLocation(confObject);
-				errors.add(new TypeImportDiagnostic(
+			if (typeName != null && !typeName.isBlank()) {
+				warnings.add(new TypeImportDiagnostic(
 						MessageFormat.format(Messages.CommonElementImporter_ReservedAttributesValidation,
-								attribute.getName(), typeName, fqn),
-						attribute.getName() + " (Type=" + typeName + ")", getLineNumber()));
-				return;
+								attribute.getName(), typeName, FordiacMarkerHelper.getLocation(confObject)),
+						attribute.getName() + " (Type=" + typeName + ")", getLineNumber())); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			attribute.setAttributeDeclaration(internalAttributeDecl);
 			attribute.setType(internalAttributeDecl.getType());
