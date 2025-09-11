@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.edit.LibraryElementUndoContext;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -440,7 +440,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
 						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
 			}
-			commandStack.setUndoContext(new LibraryElementUndoContext(newFBType));
+			commandStack.setUndoContext(new ObjectUndoContext(newFBType));
 			getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setPartName(getTypeEntry().getTypeName());
 		}
@@ -487,7 +487,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
 			}
 			setInputWithNotify(typeEditorInput);
-			commandStack.setUndoContext(new LibraryElementUndoContext(typeEditorInput.getContent()));
+			commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
 		} else {
 			setInputWithNotify(input);
 		}

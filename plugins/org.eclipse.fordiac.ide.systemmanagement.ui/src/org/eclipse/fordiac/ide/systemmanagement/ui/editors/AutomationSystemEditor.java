@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.edit.LibraryElementUndoContext;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -425,7 +425,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
-		getCommandStack().setUndoContext(new LibraryElementUndoContext(system));
+		getCommandStack().setUndoContext(new ObjectUndoContext(system));
 		typeEntry.eAdapters().add(typeEntryAdapter);
 		setPartName(system.getName());
 
@@ -472,7 +472,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void setupCommandStack() {
-		commandStack = new OperationHistoryCommandStack(new LibraryElementUndoContext(system));
+		commandStack = new OperationHistoryCommandStack(new ObjectUndoContext(system));
 		getCommandStack().addCommandStackEventListener(this);
 		getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
 		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());

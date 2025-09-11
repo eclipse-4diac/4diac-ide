@@ -13,14 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.ITextViewerExtension6;
+import org.eclipse.jface.text.IUndoManagerExtension;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
@@ -41,7 +47,14 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
+		setupUndoContext();
 		checkPerformanceMode();
+	}
+
+	@Override
+	protected void doSetInput(final IEditorInput input) throws CoreException {
+		super.doSetInput(input);
+		setupUndoContext();
 	}
 
 	@Override
@@ -194,5 +207,21 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	@Override
 	public INavigationLocation createNavigationLocation() {
 		return new XtextTypeEditorPageNavigationLocation(this, true);
+	}
+
+	protected void setupUndoContext() {
+		if (getUndoContext() instanceof final ObjectUndoContext objectUndoContext
+				&& getCommandStack() instanceof final OperationHistoryCommandStack operationHistoryCommandStack
+				&& !objectUndoContext.matches(operationHistoryCommandStack.getUndoContext())) {
+			objectUndoContext.addMatch(operationHistoryCommandStack.getUndoContext());
+		}
+	}
+
+	protected IUndoContext getUndoContext() {
+		if (getSourceViewer() instanceof final ITextViewerExtension6 textViewerExtension
+				&& textViewerExtension.getUndoManager() instanceof final IUndoManagerExtension undoManagerExtension) {
+			return undoManagerExtension.getUndoContext();
+		}
+		return null;
 	}
 }

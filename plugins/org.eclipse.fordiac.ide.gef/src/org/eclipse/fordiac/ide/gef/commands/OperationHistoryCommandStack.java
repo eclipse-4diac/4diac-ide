@@ -189,6 +189,10 @@ public class OperationHistoryCommandStack extends CommandStack {
 				"removeCommandStackListener shall not be used anymore. Use removeCommandStackEventListener instead!"); //$NON-NLS-1$
 	}
 
+	public IUndoContext getUndoContext() {
+		return undoContext;
+	}
+
 	public void setUndoContext(final IUndoContext undoContext) {
 		flush();
 		this.undoContext = undoContext;
