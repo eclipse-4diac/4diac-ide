@@ -44,7 +44,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -84,7 +83,7 @@ public class AttributeTargetSection extends AbstractSection {
 		composite.setLayout(new GridLayout(7, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite ungroupedComposite = new Composite(composite, SWT.NONE);
+		final Composite ungroupedComposite = getWidgetFactory().createComposite(composite);
 		ungroupedComposite.setData(TARGET_CATEGORY, AttributeTarget.EMPTY_GROUP);
 		ungroupedComposite.setLayout(new GridLayout(1, false));
 		ungroupedComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -101,27 +100,22 @@ public class AttributeTargetSection extends AbstractSection {
 						container = ungroupedComposite;
 					} else {
 						container = groups.computeIfAbsent(category, cat -> {
-							final Composite group = new Composite(composite, SWT.NONE);
+							final Composite group = getWidgetFactory().createComposite(composite);
 							group.setLayout(new GridLayout(1, false));
 							group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-							final Label groupHeading = new Label(group, SWT.NONE);
-							groupHeading.setText(cat);
-
+							getWidgetFactory().createLabel(group, cat);
 							group.setData(TARGET_CATEGORY, cat);
 							return group;
 						});
 					}
-
 					createButton(container, target);
 				});
 
 	}
 
 	private void createButton(final Composite parent, final AttributeTarget target) {
-		final Button button = new Button(parent, SWT.CHECK);
-		button.setBackground(parent.getBackground());
-		button.setText(target.getDisplayName());
+		final Button button = getWidgetFactory().createButton(parent, target.getDisplayName(), SWT.CHECK);
 		button.setToolTipText(target.getToolTip());
 		button.addSelectionListener(buttonListener);
 		buttons.add(button);
@@ -132,11 +126,9 @@ public class AttributeTargetSection extends AbstractSection {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Label title = new Label(composite, SWT.None);
-		title.setText(Messages.AttributeInherit_SectionTitle);
+		getWidgetFactory().createLabel(composite, Messages.AttributeInherit_SectionTitle);
 
-		inheritButton = new Button(composite, SWT.CHECK);
-		inheritButton.setText(Messages.AttributeInherit_InheritAttribute);
+		inheritButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_InheritAttribute, SWT.CHECK);
 		inheritButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -144,8 +136,7 @@ public class AttributeTargetSection extends AbstractSection {
 			}
 		});
 
-		copyButton = new Button(composite, SWT.CHECK);
-		copyButton.setText(Messages.AttributeInherit_CopyAttribute);
+		copyButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
 		copyButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
