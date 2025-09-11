@@ -512,8 +512,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		handleConfigurableFB();
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		if (newElement instanceof final TypedSubApp tsa) {
-			tsa.getVarConfigParams().addAll(EcoreUtil.copyAll(((TypedSubApp) oldElement).getVarConfigParams()));
+		if (newElement instanceof final TypedSubApp newTsa && oldElement instanceof final TypedSubApp oldTsa
+				&& oldElement.getTypeEntry() == entry) {
+			newTsa.getVarConfigParams().addAll(EcoreUtil.copyAll(oldTsa.getVarConfigParams()));
 		}
 		copyAttributes();
 		createValues();
