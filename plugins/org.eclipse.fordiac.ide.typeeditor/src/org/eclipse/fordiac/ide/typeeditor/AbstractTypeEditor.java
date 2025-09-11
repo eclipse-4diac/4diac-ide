@@ -434,13 +434,13 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			if (typeEI != null) {
 				typeEI.setType(newFBType);
 			}
+			commandStack.setUndoContext(new ObjectUndoContext(newFBType));
 			getEditorPages().stream().forEach(ITypeEditorPage::reloadType);
 			final IEditorPart activeEditor = getActiveEditor();
 			if (activeEditor instanceof final ITypeEditorPage editorPage) {
 				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
 						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
 			}
-			commandStack.setUndoContext(new ObjectUndoContext(newFBType));
 			getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setPartName(getTypeEntry().getTypeName());
 		}

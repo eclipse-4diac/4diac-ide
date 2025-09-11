@@ -43,6 +43,7 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	private boolean restoringSelection;
 	private boolean performanceMode;
 	private boolean performanceModeShowDialog;
+	private IUndoContext typeEditorUndoContext;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -172,6 +173,7 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	@Override
 	public void reloadType() {
 		doRevertToSaved();
+		setupUndoContext();
 	}
 
 	@Override
@@ -210,10 +212,16 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	}
 
 	protected void setupUndoContext() {
-		if (getUndoContext() instanceof final ObjectUndoContext objectUndoContext
-				&& getCommandStack() instanceof final OperationHistoryCommandStack operationHistoryCommandStack
-				&& !objectUndoContext.matches(operationHistoryCommandStack.getUndoContext())) {
-			objectUndoContext.addMatch(operationHistoryCommandStack.getUndoContext());
+		if (getUndoContext() instanceof final ObjectUndoContext objectUndoContext) {
+			if (typeEditorUndoContext != null) {
+				objectUndoContext.removeMatch(typeEditorUndoContext);
+			}
+			if (getCommandStack() instanceof final OperationHistoryCommandStack operationHistoryCommandStack) {
+				typeEditorUndoContext = operationHistoryCommandStack.getUndoContext();
+			}
+			if (typeEditorUndoContext != null && !objectUndoContext.matches(typeEditorUndoContext)) {
+				objectUndoContext.addMatch(typeEditorUndoContext);
+			}
 		}
 	}
 
