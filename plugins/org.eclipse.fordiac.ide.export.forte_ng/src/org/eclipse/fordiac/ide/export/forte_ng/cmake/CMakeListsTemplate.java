@@ -40,21 +40,27 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static final String HEADER = "# This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!\n\n"; //$NON-NLS-1$
 
+	protected static final String FORTE = "forte"; //$NON-NLS-1$
+	protected static final String FORTE_VERSION = "3.0"; //$NON-NLS-1$
+	protected static final String CMAKE_MINIMUM_VERSION = "3.30"; //$NON-NLS-1$
+
 	private final IProject project;
 	private final Path output;
+	private final Manifest manifest;
 
 	protected CMakeListsTemplate(final IProject project, final Path output, final Path prefix) {
 		super("CMakeLists.txt", prefix); //$NON-NLS-1$
 		this.project = project;
 		this.output = output;
+		manifest = ManifestHelper.getContainerManifest(getProject());
+	}
+
+	protected static CharSequence generateCMakeMimumumRequired() {
+		return "cmake_minimum_required(VERSION " + CMAKE_MINIMUM_VERSION + ")" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected CharSequence generateModuleNamePlain() {
-		return project.getName();
-	}
-
-	protected CharSequence generateProjectName() {
-		return generateModuleNamePlain();
+		return getProjectName();
 	}
 
 	protected CharSequence generateTargetName() {
@@ -65,8 +71,30 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 		return "forte-" + name; //$NON-NLS-1$
 	}
 
+	protected CharSequence generateExportName() {
+		return generateExportName(generateTargetName());
+	}
+
+	protected static CharSequence generateExportName(final CharSequence name) {
+		return name + "-export"; //$NON-NLS-1$
+	}
+
 	protected static CharSequence generateHeader() {
 		return HEADER;
+	}
+
+	protected static CharSequence generateProject(final CharSequence name, final CharSequence comment,
+			final CharSequence version) {
+		return "project(" + name + System.lineSeparator() //$NON-NLS-1$
+				+ ((comment != null ? "DESCRIPTION \"" + comment + "\"" + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ (version != null ? "VERSION \"" + version + "\"" + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ "LANGUAGES C CXX" + System.lineSeparator() //$NON-NLS-1$
+				).indent(INDENT) //
+				+ ")" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateFindPackage(final String name, final String version, final boolean required) {
+		return "find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	protected static CharSequence generateAddSubdirectories(final List<? extends CharSequence> subdirs) {
@@ -89,7 +117,7 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 		return "target_sources(" + name + " " + access.name() + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
 				+ ((fileSet != null ? "FILE_SET " + fileSet + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$
 						+ (baseDirs != null ? "BASE_DIRS " + baseDirs + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$
-						+ (fileSet != null ? "FILES" + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$
+						+ ((fileSet != null && !sources.isEmpty()) ? "FILES" + System.lineSeparator() : "") //$NON-NLS-1$ //$NON-NLS-2$
 						+ sources.stream().map(source -> source + System.lineSeparator()).collect(Collectors.joining()))
 						.indent(INDENT)
 				+ ")" + System.lineSeparator(); //$NON-NLS-1$
@@ -107,20 +135,92 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static CharSequence generateTargetLinkLibrariesWholeArchive(final CharSequence name, final Access access,
 			final List<? extends CharSequence> libs) {
-		return "target_link_libraries(" + name + " " + access.name() + " $<LINK_LIBRARY:WHOLE_ARCHIVE," //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ libs.stream().map(CMakeListsTemplate::generateTargetName).collect(Collectors.joining(",")) + ">)" //$NON-NLS-1$//$NON-NLS-2$
+		return "get_target_property(" + name + "_IMPORTED " + name + " IMPORTED)" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ "if (NOT " + name + "_IMPORTED)" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
+				+ ("target_link_libraries(" + name + " " + access.name() //$NON-NLS-1$//$NON-NLS-2$
+						+ " $<LINK_LIBRARY:WHOLE_ARCHIVE," //$NON-NLS-1$
+						+ libs.stream().map(CMakeListsTemplate::generateTargetName).collect(Collectors.joining(",")) //$NON-NLS-1$
+						+ ">)" //$NON-NLS-1$
+						+ System.lineSeparator()).indent(INDENT) //
+				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateInstallPreamble(final CharSequence name) {
+		return "include(GNUInstallDirs)" + System.lineSeparator() //$NON-NLS-1$
+				+ "include(CMakePackageConfigHelpers)" + System.lineSeparator() //$NON-NLS-1$
+				+ System.lineSeparator() //
+				+ "set(ConfigPackageLocation lib/cmake/" + name.toString().toLowerCase() + "-${PROJECT_VERSION})" //$NON-NLS-1$ //$NON-NLS-2$
 				+ System.lineSeparator();
 	}
 
-	protected List<String> getDependencies() {
-		final Manifest manifest = ManifestHelper.getContainerManifest(getProject());
-		if (manifest != null) {
-			return Stream
-					.concat(IMPLICIT_DEPENDENCIES.stream(),
-							manifest.getDependencies().getRequired().stream().map(Required::getSymbolicName).sorted())
-					.distinct().toList();
+	protected static CharSequence generateConfigurePackageConfigFile(final CharSequence name) {
+		return "configure_package_config_file(" + System.lineSeparator() //$NON-NLS-1$
+				+ (name.toString().toLowerCase() + "-config.cmake.in" + System.lineSeparator() //$NON-NLS-1$
+						+ "${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() + "-config.cmake" //$NON-NLS-1$ //$NON-NLS-2$
+						+ System.lineSeparator() + "INSTALL_DESTINATION ${ConfigPackageLocation}" + System.lineSeparator() //$NON-NLS-1$
+				).indent(INDENT) //
+				+ ")" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateWriteBasicPackageVersionFile(final CharSequence name) {
+		return "write_basic_package_version_file(" + System.lineSeparator() //$NON-NLS-1$
+				+ ("${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() + "-config-version.cmake" //$NON-NLS-1$ //$NON-NLS-2$
+						+ System.lineSeparator() + "COMPATIBILITY SameMajorVersion" + System.lineSeparator() //$NON-NLS-1$
+				).indent(INDENT) //
+				+ ")" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateInstallTargets(final CharSequence name, final CharSequence exportName) {
+		return "install(TARGETS " + name + " EXPORT " + exportName + " FILE_SET HEADERS)" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	protected static CharSequence generateInstallFiles(final CharSequence name) {
+		return "install(FILES" + System.lineSeparator() //$NON-NLS-1$
+				+ ("${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() + "-config.cmake" //$NON-NLS-1$ //$NON-NLS-2$
+						+ System.lineSeparator() + "${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() //$NON-NLS-1$
+						+ "-config-version.cmake" //$NON-NLS-1$
+						+ System.lineSeparator() + "DESTINATION ${ConfigPackageLocation}" + System.lineSeparator() //$NON-NLS-1$
+				).indent(INDENT) //
+				+ ")" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected static CharSequence generateInstallExport(final CharSequence exportName) {
+		return "install(EXPORT " + exportName + System.lineSeparator() //$NON-NLS-1$
+				+ ("DESTINATION ${ConfigPackageLocation}" + System.lineSeparator() //$NON-NLS-1$
+						+ "EXPORT_LINK_INTERFACE_LIBRARIES" + System.lineSeparator() //$NON-NLS-1$
+				).indent(INDENT) //
+				+ ")" + System.lineSeparator(); //$NON-NLS-1$
+	}
+
+	protected String getProjectName() {
+		if (manifest == null || manifest.getProduct() == null || manifest.getProduct().getSymbolicName() == null) {
+			return project.getName();
 		}
-		return IMPLICIT_DEPENDENCIES;
+		return manifest.getProduct().getSymbolicName();
+	}
+
+	protected String getProjectComment() {
+		if (manifest == null || manifest.getProduct() == null) {
+			return null;
+		}
+		return manifest.getProduct().getComment();
+	}
+
+	protected String getProjectVersion() {
+		if (manifest == null || manifest.getProduct() == null || manifest.getProduct().getVersionInfo() == null) {
+			return null;
+		}
+		return manifest.getProduct().getVersionInfo().getVersion();
+	}
+
+	protected List<String> getDependencies() {
+		if (manifest == null) {
+			return IMPLICIT_DEPENDENCIES;
+		}
+		return Stream
+				.concat(IMPLICIT_DEPENDENCIES.stream(),
+						manifest.getDependencies().getRequired().stream().map(Required::getSymbolicName).sorted())
+				.distinct().toList();
 	}
 
 	protected List<String> getSubdirectories() {

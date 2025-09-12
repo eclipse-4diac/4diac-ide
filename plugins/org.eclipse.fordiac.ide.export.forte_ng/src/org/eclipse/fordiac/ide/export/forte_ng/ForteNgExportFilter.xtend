@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.adapter.AdapterFBImplTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBHeaderTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.basic.BasicFBImplTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeConfigTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.cmake.CMakeListsUtil
 import org.eclipse.fordiac.ide.export.forte_ng.cmake.IncludeCMakeListsTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.cmake.ProjectCMakeListsTemplate
@@ -142,7 +143,8 @@ class ForteNgExportFilter extends TemplateExportFilter {
 				(#{
 					new ProjectCMakeListsTemplate(source.project, source.output),
 					new IncludeCMakeListsTemplate(source.project, source.output, Path.of("include")),
-					new SourceCMakeListsTemplate(source.project, source.output, Path.of("src"))
+					new SourceCMakeListsTemplate(source.project, source.output, Path.of("src")),
+					new CMakeConfigTemplate(source.project)
 				} + CMakeListsUtil.getSubdirs(source.output, "include").map [ prefix |
 					new IncludeCMakeListsTemplate(source.project, source.output, prefix)
 				] + CMakeListsUtil.getSubdirs(source.output, "src").map [ prefix |
