@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -67,7 +66,7 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected InterfaceList getInterface() {
-		return ((InterfaceTypeEntry) getType().getTypeEntry()).getInterface();
+		return getType().getTypeInterface();
 	}
 
 }

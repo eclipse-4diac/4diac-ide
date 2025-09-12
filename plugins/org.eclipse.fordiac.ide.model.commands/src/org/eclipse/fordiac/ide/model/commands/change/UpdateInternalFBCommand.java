@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
@@ -65,7 +64,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-		newElement.setInterface(((InterfaceTypeEntry) newElement.getTypeEntry()).getInterface().copy());
+		newElement.setInterface(newElement.getTypeInterface().copy());
 		newElement.setName(oldElement.getName());
 		createValues();
 		transferInstanceComments();

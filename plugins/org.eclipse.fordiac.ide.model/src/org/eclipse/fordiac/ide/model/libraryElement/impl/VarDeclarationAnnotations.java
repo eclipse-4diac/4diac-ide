@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class VarDeclarationAnnotations {
 
@@ -251,12 +250,14 @@ public class VarDeclarationAnnotations {
 	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
 		if (varDeclaration != null) {
 			final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
-			if ((fbne != null) && (fbne.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry
-					&& ifTypeEntry.getInterface() != null)) {
-				final VarDeclaration typeVariable = ifTypeEntry.getInterface().getVariable(varDeclaration.getName());
-				return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
-						? typeVariable.getInOutVarOpposite()
-						: typeVariable;
+			if (fbne != null) {
+				final InterfaceList typeInterface = fbne.getTypeInterface();
+				if (typeInterface != null) {
+					final VarDeclaration typeVariable = typeInterface.getVariable(varDeclaration.getName());
+					return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
+							? typeVariable.getInOutVarOpposite()
+							: typeVariable;
+				}
 			}
 		}
 		return varDeclaration;

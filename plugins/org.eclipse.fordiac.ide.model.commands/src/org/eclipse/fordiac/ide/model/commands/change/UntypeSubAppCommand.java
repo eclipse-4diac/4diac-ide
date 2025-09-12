@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
@@ -47,6 +46,6 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	protected void setInterface() {
-		newElement.setInterface(((InterfaceTypeEntry) oldElement.getTypeEntry()).getInterface().copy());
+		newElement.setInterface(oldElement.getTypeInterface().copy());
 	}
 }

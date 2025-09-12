@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 
 public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
@@ -80,7 +79,7 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected InterfaceList getInterface() {
-		return ((InterfaceTypeEntry) getType().getTypeEntry()).getInterface();
+		return getType().getTypeInterface();
 	}
 
 }

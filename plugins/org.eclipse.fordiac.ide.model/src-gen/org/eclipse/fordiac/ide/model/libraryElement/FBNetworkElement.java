@@ -261,4 +261,12 @@ public interface FBNetworkElement extends TypedConfigureableObject, Positionable
 	 */
 	IInterfaceElement getOutput(String name);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	InterfaceList getTypeInterface();
+
 } // FBNetworkElement
