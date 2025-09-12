@@ -1320,6 +1320,11 @@
       </eAnnotations>
       <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
+    <eOperations name="getTypeInterface" lowerBound="1" eType="#//InterfaceList">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(getTypeEntry() instanceof final org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry ifTypeEntry){&#xA;&#x9;return ifTypeEntry.getInterface();&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true" eOpposite="#//InterfaceList/FBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//Mapping"/>

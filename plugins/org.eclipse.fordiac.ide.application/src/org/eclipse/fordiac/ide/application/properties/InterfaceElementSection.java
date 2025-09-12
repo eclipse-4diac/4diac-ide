@@ -44,9 +44,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
@@ -245,11 +245,13 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	protected void refreshTypeInitialValue() {
 		if (getType() instanceof final VarDeclaration varDeclaration && varDeclaration.isIsInput()
-				&& varDeclaration.getFBNetworkElement() != null && varDeclaration.getFBNetworkElement()
-						.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry) {
-			parameterText.setText(FordiacMessages.ComputingPlaceholderValue);
-			refreshJob.setInterfaceElement(ifTypeEntry.getInterface().getInterfaceElement(varDeclaration.getName()));
-			refreshJob.refresh();
+				&& varDeclaration.getFBNetworkElement() != null) {
+			final InterfaceList typeInterface = varDeclaration.getFBNetworkElement().getTypeInterface();
+			if (typeInterface != null) {
+				parameterText.setText(FordiacMessages.ComputingPlaceholderValue);
+				refreshJob.setInterfaceElement(typeInterface.getInterfaceElement(varDeclaration.getName()));
+				refreshJob.refresh();
+			}
 		} else {
 			parameterText.setText("");//$NON-NLS-1$
 		}

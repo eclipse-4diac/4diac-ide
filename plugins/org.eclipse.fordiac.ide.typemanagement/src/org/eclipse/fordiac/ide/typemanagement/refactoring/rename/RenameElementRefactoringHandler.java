@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -67,9 +67,11 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 		}
 		if (element instanceof final IInterfaceElement interfaceElement) {
 			final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
-			if (fbNetworkElement != null
-					&& fbNetworkElement.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry) {
-				return getElementURI(ifTypeEntry.getInterface().getInterfaceElement(interfaceElement.getName()));
+			if (fbNetworkElement != null) {
+				final InterfaceList typeInterface = fbNetworkElement.getTypeInterface();
+				if (typeInterface != null) {
+					return getElementURI(typeInterface.getInterfaceElement(interfaceElement.getName()));
+				}
 			}
 			// fall through
 		}

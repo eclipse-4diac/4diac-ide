@@ -574,6 +574,19 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
+	public InterfaceList getTypeInterface() {
+		if(getTypeEntry() instanceof final org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry ifTypeEntry){
+			return ifTypeEntry.getInterface();
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void updatePositionFromScreenCoordinates(final int x, final int y) {
 		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
 	}

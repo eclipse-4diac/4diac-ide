@@ -58,7 +58,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
-import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -134,11 +133,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		// set Visible attribute after reconnect, to not hide connected In/Outputs
 		// transfer attributes from type first (for new vars), then override them from
 		// old instance
-		if (newElement.getTypeEntry() instanceof final InterfaceTypeEntry ifTypeEntry) {
-			final InterfaceList interfaceList = ifTypeEntry.getInterface();
-			transferVisibleAndVarConfigAttributes(interfaceList.getInputVars());
-			transferVisibleAndVarConfigAttributes(interfaceList.getOutputVars());
-			transferVisibleAndVarConfigAttributes(interfaceList.getInOutVars());
+		final InterfaceList typeInterface = newElement.getTypeInterface();
+		if (typeInterface != null) {
+			transferVisibleAndVarConfigAttributes(typeInterface.getInputVars());
+			transferVisibleAndVarConfigAttributes(typeInterface.getOutputVars());
+			transferVisibleAndVarConfigAttributes(typeInterface.getInOutVars());
 		}
 
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInputVars());
@@ -224,8 +223,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	protected void setInterface() {
-		if (newElement.getType() != null) {
-			newElement.setInterface(((InterfaceTypeEntry) newElement.getTypeEntry()).getInterface().copy());
+		final InterfaceList typeInterface = newElement.getTypeInterface();
+		if (typeInterface != null) {
+			newElement.setInterface(typeInterface.copy());
 		} else {
 			newElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}

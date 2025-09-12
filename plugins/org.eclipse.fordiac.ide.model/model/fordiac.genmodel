@@ -497,6 +497,8 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getOutput" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOutput(this, name);">
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/getOutput/name"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getTypeInterface"
+          body="if(getTypeEntry() instanceof final org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry ifTypeEntry){&#xA;&#x9;return ifTypeEntry.getInterface();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
