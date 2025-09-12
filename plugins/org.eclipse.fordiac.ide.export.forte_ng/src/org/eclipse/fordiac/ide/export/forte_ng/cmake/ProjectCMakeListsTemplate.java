@@ -30,12 +30,29 @@ public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 	public CharSequence generate() throws ExportException {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(generateHeader());
+		builder.append(generateCMakeMimumumRequired());
+		builder.append(generateProject(generateTargetName(), getProjectVersion(), getProjectVersion()));
+		builder.append(System.lineSeparator());
+		builder.append(generateFindPackage(FORTE, FORTE_VERSION, true));
+		builder.append(System.lineSeparator());
 		builder.append(generateAddLibrary(generateTargetName()));
 		builder.append(generateTargetLinkLibraries(generateTargetName(), Access.PUBLIC, getDependencies()));
 		builder.append(
-				generateTargetLinkLibrariesWholeArchive("forte", Access.PUBLIC, List.of(generateModuleNamePlain()))); //$NON-NLS-1$
+				generateTargetLinkLibrariesWholeArchive(FORTE, Access.PUBLIC, List.of(generateModuleNamePlain())));
 		builder.append(System.lineSeparator());
 		builder.append(generateAddSubdirectories(SUBDIRS));
+		builder.append(System.lineSeparator());
+		builder.append(generateInstallPreamble(generateTargetName()));
+		builder.append(System.lineSeparator());
+		builder.append(generateConfigurePackageConfigFile(generateTargetName()));
+		builder.append(System.lineSeparator());
+		builder.append(generateWriteBasicPackageVersionFile(generateTargetName()));
+		builder.append(System.lineSeparator());
+		builder.append(generateInstallTargets(generateTargetName(), generateExportName()));
+		builder.append(System.lineSeparator());
+		builder.append(generateInstallFiles(generateTargetName()));
+		builder.append(System.lineSeparator());
+		builder.append(generateInstallExport(generateExportName()));
 		return builder;
 	}
 }
