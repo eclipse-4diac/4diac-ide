@@ -348,7 +348,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 
 	private static EObject getBreadCrumbRefElement(final EObject sel) {
 		EObject refElement = sel;
-		if ((sel instanceof final FBNetworkElement fbnEl && fbnEl.getType() != null) || (sel instanceof Group)) {
+		if ((sel instanceof final FBNetworkElement fbnEl && fbnEl.getTypeEntry() != null) || (sel instanceof Group)) {
 			refElement = sel.eContainer().eContainer();
 		}
 		// For unfolded subapps find the next parent that is not expanded as refElement

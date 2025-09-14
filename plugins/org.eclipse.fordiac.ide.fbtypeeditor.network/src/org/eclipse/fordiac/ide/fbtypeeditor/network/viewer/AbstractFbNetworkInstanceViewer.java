@@ -56,7 +56,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 			super.notifyChanged(msg);
 			final Object feature = msg.getFeature();
 			if (((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
-					&& (fbNetworkElement.getType() == null)) || isSubAppToggledToCollapsed(msg)) {
+					&& (fbNetworkElement.getTypeEntry() == null)) || isSubAppToggledToCollapsed(msg)) {
 				// the subapp/cfb was detached from the type or subapp is being collapsed
 				closeEditor();
 			}

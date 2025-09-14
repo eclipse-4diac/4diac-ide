@@ -76,7 +76,7 @@ public class CreateStructFromInterfaceElementsCommand extends Command {
 		}
 		// FBNElement must be untyped subapp
 		final InterfaceList il = getInterfaceList();
-		if (il.getFBNetworkElement().getType() != null) { // cannot edit instance of typed elements
+		if (il.getFBNetworkElement().getTypeEntry() != null) { // cannot edit instance of typed elements
 			return false;
 		}
 

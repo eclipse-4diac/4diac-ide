@@ -44,7 +44,7 @@ public class TypedInterfacePinFilter implements IFilter {
 	private static boolean isPinOfTypedElement(final Object element) {
 		if (element instanceof final IInterfaceElement ie) {
 			final FBNetworkElement fbEl = ie.getFBNetworkElement();
-			return ((fbEl != null) && ((fbEl.getType() != null) || isIndirectlyTyped(fbEl)));
+			return ((fbEl != null) && ((fbEl.getTypeEntry() != null) || isIndirectlyTyped(fbEl)));
 		}
 		return false;
 	}
