@@ -16,7 +16,6 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -48,15 +47,11 @@ public final class CommentHelper {
 				}
 			}
 
-			if (fbn != null) {
-				final InterfaceList typeInterface = fbn.getTypeInterface();
-				if (typeInterface != null) {
-					final IInterfaceElement typeElement = typeInterface.getInterfaceElement(interfaceElement.getName());
-					if (typeElement != null && typeElement.getComment() != null) {
-						return typeElement.getComment();
-					}
-				}
+			final IInterfaceElement typeElement = interfaceElement.findInTypeInterface();
+			if (typeElement != null && typeElement.getComment() != null) {
+				return typeElement.getComment();
 			}
+
 		}
 		return ""; //$NON-NLS-1$
 	}

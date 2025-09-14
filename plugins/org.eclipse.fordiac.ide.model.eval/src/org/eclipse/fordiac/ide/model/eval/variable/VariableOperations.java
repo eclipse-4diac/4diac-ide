@@ -47,10 +47,8 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -150,7 +148,7 @@ public final class VariableOperations {
 				}
 				if (hasInheritedInitialValue(varDeclaration)) {
 					// use variable from FB type since the initial value is inherited
-					final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+					final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 					return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration),
 							cache.computeInitialValueIfAbsent(typeVariable, VariableOperations::doEvaluateValue));
 				}
@@ -425,7 +423,7 @@ public final class VariableOperations {
 	}
 
 	public static boolean hasInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 		if (typeVariable != null) {
 			return hasDeclaredInitialValue(typeVariable);
 		}
@@ -448,23 +446,9 @@ public final class VariableOperations {
 	}
 
 	public static String getInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 		if (typeVariable != null && hasDeclaredInitialValue(typeVariable)) {
 			return typeVariable.getValue().getValue();
-		}
-		return null;
-	}
-
-	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
-		final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
-		if (fbne != null) {
-			final InterfaceList typeInterface = fbne.getTypeInterface();
-			if (typeInterface != null) {
-				final VarDeclaration typeVariable = typeInterface.getVariable(varDeclaration.getName());
-				if (typeVariable != null) {
-					return typeVariable;
-				}
-			}
 		}
 		return null;
 	}

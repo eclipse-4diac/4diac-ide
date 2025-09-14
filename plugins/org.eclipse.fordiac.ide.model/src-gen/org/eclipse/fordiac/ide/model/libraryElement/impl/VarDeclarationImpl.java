@@ -741,6 +741,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public VarDeclaration findInTypeInterface() {
+		return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
 	}

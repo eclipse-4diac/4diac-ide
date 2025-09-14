@@ -142,7 +142,7 @@ class StructuredTextParseUtil {
 		List<String> infos) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
-		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+		val typeVariable = decl.findInTypeInterface() ?: decl
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
 			decl.name, typeVariable.getContainerOfType(LibraryElement), null, errors, warnings, infos)?.
 			rootASTElement as STTypeDeclaration

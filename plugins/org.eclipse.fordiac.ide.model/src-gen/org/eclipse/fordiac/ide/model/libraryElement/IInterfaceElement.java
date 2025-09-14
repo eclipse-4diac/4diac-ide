@@ -146,4 +146,12 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 */
 	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	IInterfaceElement findInTypeInterface();
+
 } // IInterfaceElement
