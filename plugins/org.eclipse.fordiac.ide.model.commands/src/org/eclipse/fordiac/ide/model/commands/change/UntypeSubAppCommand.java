@@ -27,7 +27,7 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	public boolean canExecute() {
-		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getType() != null;
+		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getTypeEntry() != null;
 	}
 
 	@Override

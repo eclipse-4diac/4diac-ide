@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,16 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.filters;
 
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 public class TypedSubappFilter extends ViewerFilter {
 
-
 	@Override
 	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-		return !(element instanceof SubApp && ((SubApp) element).getType() != null);
+		return !(element instanceof TypedSubApp);
 	}
 
 }

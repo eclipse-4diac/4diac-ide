@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023  Profactor GmbH, fortiss GmbH, Johannes Kepler University,
- * 							 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH, Johannes Kepler University,
+ * 							Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -115,15 +115,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ConfigurableMoveFBEditPart();
 		}
 		if (element instanceof final FB fb) {
-			if (null != fb.getType() && null != fb.getType().getName()) {
-				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_MUX)) {
-					return new MultiplexerEditPart();
-				}
-				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
-					return new DemultiplexerEditPart();
-				}
-			}
-			return new FBEditPart();
+			return getPartForFBInstances(fb);
 		}
 		if (element instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart();
@@ -136,6 +128,19 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 
 		throw createEditpartCreationException(element);
+	}
+
+	protected static EditPart getPartForFBInstances(final FB fb) {
+		if (fb.getTypeEntry() != null && fb.getTypeEntry().getTypeName() != null) {
+			final String typeName = fb.getTypeEntry().getTypeName();
+			if (typeName.contentEquals(LibraryElementTags.TYPENAME_MUX)) {
+				return new MultiplexerEditPart();
+			}
+			if (typeName.contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
+				return new DemultiplexerEditPart();
+			}
+		}
+		return new FBEditPart();
 	}
 
 	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements

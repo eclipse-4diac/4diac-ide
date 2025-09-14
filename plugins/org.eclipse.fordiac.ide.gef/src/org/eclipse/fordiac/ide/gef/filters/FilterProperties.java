@@ -27,8 +27,7 @@ public class FilterProperties {
 	}
 
 	public static boolean isSubappPin(final Object o) {
-		if (o instanceof IInterfaceElement) {
-			final IInterfaceElement pin = (IInterfaceElement) o;
+		if (o instanceof final IInterfaceElement pin) {
 			final FBNetworkElement fbEl = pin.getFBNetworkElement();
 			return isSubapp(fbEl);
 		}
@@ -59,7 +58,7 @@ public class FilterProperties {
 	}
 
 	private static boolean isTyped(final FBNetworkElement fbNetworkElement) {
-		return fbNetworkElement.getType() != null || fbNetworkElement.isContainedInTypedInstance();
+		return fbNetworkElement.getTypeEntry() != null || fbNetworkElement.isContainedInTypedInstance();
 	}
 
 	public static boolean isUntypedSubappPin(final Object o) {

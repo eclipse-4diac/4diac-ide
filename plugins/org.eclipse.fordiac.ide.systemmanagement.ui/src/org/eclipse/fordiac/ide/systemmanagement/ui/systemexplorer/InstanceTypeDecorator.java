@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -43,10 +43,10 @@ public class InstanceTypeDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-		if (element instanceof FBNetworkElement) {
-			final FBType type = ((FBNetworkElement) element).getType();
-			if (null != type) {
-				decoration.addSuffix(" - " + type.getName()); //$NON-NLS-1$
+		if (element instanceof final FBNetworkElement fbnEl) {
+			final TypeEntry typeEntry = fbnEl.getTypeEntry();
+			if (typeEntry != null) {
+				decoration.addSuffix(" - " + typeEntry.getTypeName()); //$NON-NLS-1$
 			}
 		}
 	}

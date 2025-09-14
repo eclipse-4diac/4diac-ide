@@ -236,7 +236,7 @@ public class InfoPropertySection extends AbstractSection {
 	private HashMap<String, Integer> countFBInstances(final Iterable<FBNetworkElement> networkElements,
 			final HashMap<String, Integer> fbs) {
 		for (final FBNetworkElement fe : networkElements) {
-			if (null != fe.getType()) {
+			if (fe.getTypeEntry() != null) {
 				fbs.merge(fe.getTypeName(), 1, Integer::sum);
 			}
 			if (fe instanceof final UntypedSubApp sa) {

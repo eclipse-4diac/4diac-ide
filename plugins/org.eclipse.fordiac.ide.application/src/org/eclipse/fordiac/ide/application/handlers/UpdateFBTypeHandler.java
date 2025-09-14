@@ -76,7 +76,7 @@ public class UpdateFBTypeHandler extends AbstractHandler {
 				if (element instanceof final EditPart ep) {
 					element = ep.getModel();
 				}
-				if ((element instanceof final FBNetworkElement fb) && (null != fb.getType())) {
+				if ((element instanceof final FBNetworkElement fb) && (fb.getTypeEntry() != null)) {
 					selectedNetworkElements.add(fb);
 				}
 			}
