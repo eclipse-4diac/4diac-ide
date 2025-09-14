@@ -138,6 +138,28 @@ public final class InterfaceElementAnnotations {
 		return null;
 	}
 
+	static IInterfaceElement findInTypeInterface(final IInterfaceElement element) {
+		final FBNetworkElement fbnEl = element.getFBNetworkElement();
+		if (fbnEl == null) {
+			return null;
+		}
+
+		final InterfaceList typeInterface = fbnEl.getTypeInterface();
+		if (typeInterface == null) {
+			return null;
+		}
+
+		final IInterfaceElement typeIE = typeInterface.getInterfaceElement(element.getName());
+
+		if (typeIE instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !element.isIsInput()) {
+			// if the type pin is a varinout and the searched element is an output we need
+			// to get the output opposite
+			return varDecl.getInOutVarOpposite();
+		}
+
+		return typeIE;
+	}
+
 	private InterfaceElementAnnotations() {
 		throw new UnsupportedOperationException();
 	}

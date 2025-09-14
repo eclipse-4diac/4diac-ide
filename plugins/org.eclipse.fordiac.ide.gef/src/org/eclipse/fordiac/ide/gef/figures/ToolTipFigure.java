@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -120,21 +119,14 @@ public class ToolTipFigure extends Figure {
 	}
 
 	private static VarDeclaration getTypevariable(final VarDeclaration variable) {
-		if (variable.eContainer() instanceof final Device dev) {
-			if (null != dev.getType()) {
-				for (final VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
-					if (typeVar.getName().equals(variable.getName())) {
-						return typeVar;
-					}
+		if ((variable.eContainer() instanceof final Device dev) && (dev.getType() != null)) {
+			for (final VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
+				if (typeVar.getName().equals(variable.getName())) {
+					return typeVar;
 				}
 			}
-		} else if (variable.getFBNetworkElement() != null) {
-			final InterfaceList typeInterface = variable.getFBNetworkElement().getTypeInterface();
-			if (typeInterface != null) {
-				return typeInterface.getVariable(variable.getName());
-			}
 		}
-		return null;
+		return variable.findInTypeInterface();
 	}
 
 }

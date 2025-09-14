@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -238,29 +237,21 @@ public class VarDeclarationAnnotations {
 	}
 
 	static boolean hasAnyInputConnections(final VarDeclaration varDeclaration) {
-		return varDeclaration != null && (!varDeclaration.getInputConnections().isEmpty()
-				|| !getTypeVariable(varDeclaration).getInputConnections().isEmpty());
+		if (varDeclaration == null) {
+			return false;
+		}
+		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
+		return !varDeclaration.getInputConnections().isEmpty()
+				|| (typeIE != null && !typeIE.getInputConnections().isEmpty());
 	}
 
 	static boolean hasAnyOutputConnections(final VarDeclaration varDeclaration) {
-		return varDeclaration != null && (!varDeclaration.getOutputConnections().isEmpty()
-				|| !getTypeVariable(varDeclaration).getOutputConnections().isEmpty());
-	}
-
-	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
-		if (varDeclaration != null) {
-			final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
-			if (fbne != null) {
-				final InterfaceList typeInterface = fbne.getTypeInterface();
-				if (typeInterface != null) {
-					final VarDeclaration typeVariable = typeInterface.getVariable(varDeclaration.getName());
-					return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
-							? typeVariable.getInOutVarOpposite()
-							: typeVariable;
-				}
-			}
+		if (varDeclaration == null) {
+			return false;
 		}
-		return varDeclaration;
+		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
+		return !varDeclaration.getOutputConnections().isEmpty()
+				|| (typeIE != null && !typeIE.getOutputConnections().isEmpty());
 	}
 
 	private VarDeclarationAnnotations() {

@@ -565,6 +565,8 @@
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//IInterfaceElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/findInTypeInterface"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Import">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Import/importedNamespace"/>
@@ -949,6 +951,8 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/findInTypeInterface"
+          body="return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>
