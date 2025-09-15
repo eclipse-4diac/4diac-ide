@@ -38,6 +38,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
@@ -72,6 +73,13 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private String token;
 
 	private boolean active;
+
+	/**
+	 * constructor to be used for Archive Downloader Extension
+	 */
+	public GitLabDownloader() {
+		this(PreferenceConstants.getURL(), PreferenceConstants.getToken());
+	}
 
 	public GitLabDownloader(final String token, final String baseUrl) {
 		init(token, baseUrl);
