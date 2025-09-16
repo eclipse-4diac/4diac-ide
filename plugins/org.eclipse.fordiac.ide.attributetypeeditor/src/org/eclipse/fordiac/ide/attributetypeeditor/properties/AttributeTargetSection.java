@@ -166,6 +166,9 @@ public class AttributeTargetSection extends AbstractSection {
 	}
 
 	private void updateInheritButtons() {
+		if (getType() == null) {
+			return;
+		}
 		final Attribute inheritAttribute = getType().getAttribute(InternalAttributeDeclarations.INHERIT.getName());
 		final AttributeInheritMode mode = inheritAttribute != null
 				? AttributeInheritMode.valueOf(inheritAttribute.getValue())
