@@ -81,7 +81,7 @@ public class AttributeTargetSection extends AbstractSection {
 	public void createCheckBoxes(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(7, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		final Composite ungroupedComposite = getWidgetFactory().createComposite(composite);
 		ungroupedComposite.setData(TARGET_CATEGORY, AttributeTarget.EMPTY_GROUP);
@@ -124,11 +124,12 @@ public class AttributeTargetSection extends AbstractSection {
 	public void createInheritButtons(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 		getWidgetFactory().createLabel(composite, Messages.AttributeInherit_SectionTitle);
 
-		inheritButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_InheritAttribute, SWT.CHECK);
+		inheritButton = getWidgetFactory().createButton(composite, Messages.AttributeInherit_InheritAttribute,
+				SWT.CHECK);
 		inheritButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -136,7 +137,7 @@ public class AttributeTargetSection extends AbstractSection {
 			}
 		});
 
-		copyButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
+		copyButton = getWidgetFactory().createButton(composite, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
 		copyButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
