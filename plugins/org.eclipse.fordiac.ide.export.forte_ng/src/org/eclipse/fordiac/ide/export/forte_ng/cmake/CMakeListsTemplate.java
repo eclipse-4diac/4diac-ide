@@ -135,13 +135,13 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static CharSequence generateTargetLinkLibrariesWholeArchive(final CharSequence name, final Access access,
 			final List<? extends CharSequence> libs) {
+		final String libNames = libs.stream().map(CMakeListsTemplate::generateTargetName)
+				.collect(Collectors.joining(",")); //$NON-NLS-1$
 		return "get_target_property(" + name + "_IMPORTED " + name + " IMPORTED)" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ "if (NOT " + name + "_IMPORTED)" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
 				+ ("target_link_libraries(" + name + " " + access.name() //$NON-NLS-1$//$NON-NLS-2$
-						+ " $<LINK_LIBRARY:WHOLE_ARCHIVE," //$NON-NLS-1$
-						+ libs.stream().map(CMakeListsTemplate::generateTargetName).collect(Collectors.joining(",")) //$NON-NLS-1$
-						+ ">)" //$NON-NLS-1$
-						+ System.lineSeparator()).indent(INDENT) //
+						+ " $<IF:$<BOOL:${BUILD_SHARED_LIBS}>," + libNames + ",$<LINK_LIBRARY:WHOLE_ARCHIVE," + libNames //$NON-NLS-1$ //$NON-NLS-2$
+						+ ">>)" + System.lineSeparator()).indent(INDENT) // //$NON-NLS-1$
 				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
 	}
 
@@ -157,8 +157,8 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 		return "configure_package_config_file(" + System.lineSeparator() //$NON-NLS-1$
 				+ (name.toString().toLowerCase() + "-config.cmake.in" + System.lineSeparator() //$NON-NLS-1$
 						+ "${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() + "-config.cmake" //$NON-NLS-1$ //$NON-NLS-2$
-						+ System.lineSeparator() + "INSTALL_DESTINATION ${ConfigPackageLocation}" + System.lineSeparator() //$NON-NLS-1$
-				).indent(INDENT) //
+						+ System.lineSeparator() + "INSTALL_DESTINATION ${ConfigPackageLocation}" //$NON-NLS-1$
+						+ System.lineSeparator()).indent(INDENT) //
 				+ ")" + System.lineSeparator(); //$NON-NLS-1$
 	}
 
