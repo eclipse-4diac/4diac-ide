@@ -64,7 +64,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private ResultListLabelProvider resultListLabelProvider;
 
 	public NewInstanceCellEditor() {
-		super();
 	}
 
 	public NewInstanceCellEditor(final Composite parent) {
@@ -79,7 +78,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		super(parent, style | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
 		this.insideCell = insideCell;
 	}
-
 
 	public Button getMenuButton() {
 		return menuButton;
@@ -107,10 +105,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	public void focusLost() {
-
 		if (!insideAnyEditorArea()) {
-			// when we loose focus we want to fire cancel so that have entered text is not
-			// applied
+			// when we loose focus we fire cancel, so that the entered text is not applied
 			fireCancelEditor();
 		}
 	}
@@ -123,7 +119,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	@Override
 	public void deactivate() {
-		if ((null != popupShell) && !popupShell.isDisposed()) {
+		if (null != popupShell && !popupShell.isDisposed()) {
 			popupShell.setVisible(false);
 		}
 		super.deactivate();
@@ -153,13 +149,12 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	protected Composite createContainer(final Composite parent) {
 		final Composite newContainer = new Composite(parent, SWT.NONE) {
-
 			@Override
 			public void setBounds(final int x, final int y, final int width, final int height) {
 				super.setBounds(x, y, width, height);
 
 				final Point screenPos;
-				if(insideCell) {
+				if (insideCell) {
 					screenPos = new Point(x, y);
 				} else {
 					screenPos = getParent().toDisplay(getLocation());
@@ -196,6 +191,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			if (!entries.isEmpty()) {
 				selectItemAtIndex(0);
 			}
+			markDirty();
 		} else {
 			tableViewer.setInput(null);
 		}
@@ -206,7 +202,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		switch (event.keyCode) {
 		case SWT.ARROW_DOWN:
 			if (tableViewer.getTable().getItemCount() > 0) {
-				final int index = (tableViewer.getTable().getSelectionIndex() + 1) % tableViewer.getTable().getItemCount();
+				final int index = (tableViewer.getTable().getSelectionIndex() + 1)
+						% tableViewer.getTable().getItemCount();
 				selectItemAtIndex(index);
 			}
 			event.doit = false;
@@ -276,5 +273,4 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		menuButton = new Button(container, SWT.FLAT);
 		menuButton.setImage(FordiacImage.ICON_TYPE_NAVIGATOR.getImage());
 	}
-
 }
