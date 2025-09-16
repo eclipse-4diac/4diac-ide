@@ -78,7 +78,7 @@ public class GitLabDownloader implements IArchiveDownloader {
 	 * constructor to be used for Archive Downloader Extension
 	 */
 	public GitLabDownloader() {
-		this(PreferenceConstants.getURL(), PreferenceConstants.getToken());
+		this(PreferenceConstants.getToken(), PreferenceConstants.getURL());
 	}
 
 	public GitLabDownloader(final String token, final String baseUrl) {
