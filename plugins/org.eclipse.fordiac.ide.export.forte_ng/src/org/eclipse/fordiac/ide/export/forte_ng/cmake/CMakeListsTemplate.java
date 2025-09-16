@@ -15,13 +15,16 @@ package org.eclipse.fordiac.ide.export.forte_ng.cmake;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate;
+import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -93,7 +96,8 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 				+ ")" + System.lineSeparator(); //$NON-NLS-1$
 	}
 
-	protected static CharSequence generateFindPackage(final String name, final String version, final boolean required) {
+	protected static CharSequence generateFindPackage(final CharSequence name, final CharSequence version,
+			final boolean required) {
 		return "find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
@@ -221,6 +225,19 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 				.concat(IMPLICIT_DEPENDENCIES.stream(),
 						manifest.getDependencies().getRequired().stream().map(Required::getSymbolicName).sorted())
 				.distinct().toList();
+	}
+
+	protected List<Required> getExternalDependencies() {
+		if (manifest == null) {
+			return List.of();
+		}
+		return manifest.getDependencies().getRequired().stream()
+				.filter(Predicate.not(CMakeListsTemplate::isStandardLibrary))
+				.sorted(Comparator.comparing(Required::getSymbolicName)).toList();
+	}
+
+	protected static boolean isStandardLibrary(final Required required) {
+		return LibraryManager.INSTANCE.getStandardLibraries().containsKey(required.getSymbolicName());
 	}
 
 	protected List<String> getSubdirectories() {

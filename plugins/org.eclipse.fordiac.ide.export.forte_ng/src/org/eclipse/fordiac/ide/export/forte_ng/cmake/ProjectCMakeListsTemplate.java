@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.export.ExportException;
+import org.eclipse.fordiac.ide.library.model.library.Required;
 
 public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 
@@ -34,6 +35,9 @@ public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 		builder.append(generateProject(generateTargetName(), getProjectVersion(), getProjectVersion()));
 		builder.append(System.lineSeparator());
 		builder.append(generateFindPackage(FORTE, FORTE_VERSION, true));
+		for (final Required dep : getExternalDependencies()) {
+			builder.append(generateFindPackage(generateTargetName(dep.getSymbolicName()), dep.getVersion(), true));
+		}
 		builder.append(System.lineSeparator());
 		builder.append(generateAddLibrary(generateTargetName()));
 		builder.append(generateTargetLinkLibraries(generateTargetName(), Access.PUBLIC, getDependencies()));
