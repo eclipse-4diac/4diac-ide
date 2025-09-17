@@ -73,7 +73,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	private final CompoundCommand updateTypeCmds = new CompoundCommand();
-	private final List<AddNewImportCommand> importCmds = new ArrayList<>();
+	private final CompoundCommand importCmds = new CompoundCommand();
 
 	private double xDelta;
 	private double yDelta;
@@ -138,9 +138,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		updateTypeCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
-		for (final var cmd : importCmds) {
-			cmd.undo();
-		}
+		importCmds.undo();
 	}
 
 	@Override
@@ -149,9 +147,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		connCreateCmds.redo();
 		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
-		for (final var cmd : importCmds) {
-			cmd.redo();
-		}
+		importCmds.redo();
 	}
 
 	private void checkAndAddMissingImports() {
