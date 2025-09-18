@@ -218,7 +218,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	private ConfigurableObject getTypeElement(final ConfigurableObject copy) {
-		if (copy instanceof final TypedConfigureableObject typedConfigObject) {
+		if (copy instanceof final TypedConfigureableObject typedConfigObject
+				&& typedConfigObject.getTypeEntry() != null) {
 			return typedConfigObject.getTypeEntry().getType();
 		}
 		if (copy instanceof final IInterfaceElement interfaceElement

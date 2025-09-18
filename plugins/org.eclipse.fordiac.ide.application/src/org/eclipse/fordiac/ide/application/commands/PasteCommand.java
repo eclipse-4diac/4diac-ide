@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -72,6 +73,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	private final CompoundCommand updateTypeCmds = new CompoundCommand();
+	private final CompoundCommand importCmds = new CompoundCommand();
 
 	private double xDelta;
 	private double yDelta;
@@ -136,6 +138,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		updateTypeCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
+		importCmds.undo();
 	}
 
 	@Override
@@ -144,6 +147,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		connCreateCmds.redo();
 		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
+		importCmds.redo();
 	}
 
 	private void checkAndAddMissingImports() {
@@ -157,15 +161,21 @@ public class PasteCommand extends Command implements ScopedCommand {
 			}
 		}
 		final EObject destContainer = EcoreUtil.getRootContainer(dstFBNetwork);
-		if (destContainer instanceof final LibraryElement le && le.getCompilerInfo() != null) {
+		if (destContainer instanceof final LibraryElement le) {
+			if (le.getCompilerInfo() == null) {
+				le.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+			}
+
 			final List<String> importNames = le.getCompilerInfo().getImports().stream()
 					.map(Import::getImportedNamespace).toList();
 
 			for (final String importName : neededImports) {
 				if (!importNames.contains(importName)) {
-					final Import newImp = LibraryElementFactory.eINSTANCE.createImport();
-					newImp.setImportedNamespace(importName);
-					le.getCompilerInfo().getImports().add(newImp);
+					final AddNewImportCommand importCmd = new AddNewImportCommand(le, importName);
+					if (importCmd.canExecute()) {
+						importCmd.execute();
+					}
+					importCmds.add(importCmd);
 				}
 			}
 		}

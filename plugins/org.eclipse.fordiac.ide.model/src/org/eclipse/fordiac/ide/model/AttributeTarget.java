@@ -15,6 +15,15 @@ package org.eclipse.fordiac.ide.model;
 @SuppressWarnings("squid:S115") // Constant names are used as values here
 public enum AttributeTarget {
 	//	 @formatter:off
+	AutomationSystem(Messages.AttributeTarget_Systems_display, Messages.AttributeTarget_Systems_tooltip),
+	Application(Messages.AttributeTarget_Applications_display, Messages.AttributeTarget_Applications_tooltip),
+	GlobalConstant(Messages.AttributeTarget_GlobalConstants_display, Messages.AttributeTarget_GlobalConstants_tooltip),
+	Connection(Messages.AttributeTarget_Connections_display, Messages.AttributeTarget_Connections_tooltip),
+	Comment(Messages.AttributeTarget_Comments_display, Messages.AttributeTarget_Comments_tooltip),
+	Group(Messages.AttributeTarget_Groups_display, Messages.AttributeTarget_Groups_tooltip),
+	Link(Messages.AttributeTarget_Link_display, Messages.AttributeTarget_Links_tooltip),
+	ServiceSequence(Messages.AttributeTarget_ServiceSequence_display, Messages.AttributeTarget_ServiceSequences_tooltip),
+
 	FBType(Messages.AttributeTarget_Types_group, Messages.AttributeTarget_FunctionBlock_display, Messages.AttributeTarget_FBTypes_tooltip),
 	SubAppType(Messages.AttributeTarget_Types_group, Messages.AttributeTarget_SubApp_display, Messages.AttributeTarget_SubAppTypes_tooltip),
 	DeviceType(Messages.AttributeTarget_Types_group, Messages.AttributeTarget_Device_display, Messages.AttributeTarget_DeviceType_tooltip),
@@ -45,26 +54,15 @@ public enum AttributeTarget {
 	// IInterface Untyped SubApp
 	Untyped_SubAppEvent(Messages.AttributeTarget_UntypedSubAppPins_group, Messages.AttributeTarget_Event_display, Messages.AttributeTarget_UntypedSubAppEvent_tooltip),
 	Untyped_SubAppVarDecl(Messages.AttributeTarget_UntypedSubAppPins_group, Messages.AttributeTarget_Data_display, Messages.AttributeTarget_UntypedSubAppData_tooltip),
-	Untyped_SubAppAdapter(Messages.AttributeTarget_UntypedSubAppPins_group, Messages.AttributeTarget_Adapter_display, Messages.AttributeTarget_UntypedSubAppAdapter_tooltip),
-
-	AutomationSystem(Messages.AttributeTarget_Systems_display, Messages.AttributeTarget_Systems_tooltip),
-	Application(Messages.AttributeTarget_Applications_display, Messages.AttributeTarget_Applications_tooltip),
-	GlobalConstant(Messages.AttributeTarget_GlobalConstants_display, Messages.AttributeTarget_GlobalConstants_tooltip),
-	Connection(Messages.AttributeTarget_Connections_display, Messages.AttributeTarget_Connections_tooltip),
-	Comment(Messages.AttributeTarget_Comments_display, Messages.AttributeTarget_Comments_tooltip),
-	Group(Messages.AttributeTarget_Groups_display, Messages.AttributeTarget_Groups_tooltip),
-	Link(Messages.AttributeTarget_Link_display, Messages.AttributeTarget_Links_tooltip),
-	ServiceSequence(Messages.AttributeTarget_ServiceSequence_display, Messages.AttributeTarget_ServiceSequences_tooltip);
+	Untyped_SubAppAdapter(Messages.AttributeTarget_UntypedSubAppPins_group, Messages.AttributeTarget_Adapter_display, Messages.AttributeTarget_UntypedSubAppAdapter_tooltip);
 //	 @formatter:on
-
-	public static final String EMPTY_GROUP = ""; //$NON-NLS-1$
 
 	private final String category;
 	private final String displayName;
 	private final String tooltip;
 
 	AttributeTarget(final String displayName, final String tooltip) {
-		this.category = EMPTY_GROUP;
+		this.category = Messages.AttributeTarget_General_group;
 		this.displayName = displayName;
 		this.tooltip = tooltip;
 	}

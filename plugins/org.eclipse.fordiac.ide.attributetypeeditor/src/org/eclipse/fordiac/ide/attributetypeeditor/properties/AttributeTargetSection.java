@@ -44,6 +44,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -74,44 +75,28 @@ public class AttributeTargetSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createCheckBoxes(parent);
-		createInheritButtons(parent);
-	}
 
-	public void createCheckBoxes(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(7, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		final Composite ungroupedComposite = getWidgetFactory().createComposite(composite);
-		ungroupedComposite.setData(TARGET_CATEGORY, AttributeTarget.EMPTY_GROUP);
-		ungroupedComposite.setLayout(new GridLayout(1, false));
-		ungroupedComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		final Map<String, Composite> groups = new HashMap<>();
+		final Map<String, Group> groups = new HashMap<>();
 		final StructuredType targetType = (StructuredType) InternalAttributeDeclarations.TARGET.getType();
 
 		targetType.getMemberVariables().stream().map(member -> AttributeTarget.fromName(member.getName()))
 				.filter(Objects::nonNull).forEach(target -> {
-					final String category = target.getCategory();
-					Composite container = composite;
+					final Group container = groups.computeIfAbsent(target.getCategory(), cat -> {
+						final Group group = getWidgetFactory().createGroup(composite, cat);
+						group.setLayout(new GridLayout(1, false));
+						group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+						group.setData(TARGET_CATEGORY, cat);
+						return group;
+					});
 
-					if (category.equals(AttributeTarget.EMPTY_GROUP)) {
-						container = ungroupedComposite;
-					} else {
-						container = groups.computeIfAbsent(category, cat -> {
-							final Composite group = getWidgetFactory().createComposite(composite);
-							group.setLayout(new GridLayout(1, false));
-							group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-							getWidgetFactory().createLabel(group, cat);
-							group.setData(TARGET_CATEGORY, cat);
-							return group;
-						});
-					}
 					createButton(container, target);
 				});
 
+		createInheritButtons(composite);
 	}
 
 	private void createButton(final Composite parent, final AttributeTarget target) {
@@ -122,13 +107,11 @@ public class AttributeTargetSection extends AbstractSection {
 	}
 
 	public void createInheritButtons(final Composite parent) {
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		final Group group = getWidgetFactory().createGroup(parent, Messages.AttributeInherit_SectionTitle);
+		group.setLayout(new GridLayout(1, false));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		getWidgetFactory().createLabel(composite, Messages.AttributeInherit_SectionTitle);
-
-		inheritButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_InheritAttribute, SWT.CHECK);
+		inheritButton = getWidgetFactory().createButton(group, Messages.AttributeInherit_InheritAttribute, SWT.CHECK);
 		inheritButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -136,7 +119,7 @@ public class AttributeTargetSection extends AbstractSection {
 			}
 		});
 
-		copyButton = getWidgetFactory().createButton(parent, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
+		copyButton = getWidgetFactory().createButton(group, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
 		copyButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -165,6 +148,9 @@ public class AttributeTargetSection extends AbstractSection {
 	}
 
 	private void updateInheritButtons() {
+		if (getType() == null) {
+			return;
+		}
 		final Attribute inheritAttribute = getType().getAttribute(InternalAttributeDeclarations.INHERIT.getName());
 		final AttributeInheritMode mode = inheritAttribute != null
 				? AttributeInheritMode.valueOf(inheritAttribute.getValue())

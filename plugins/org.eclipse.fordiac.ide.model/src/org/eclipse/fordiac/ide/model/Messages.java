@@ -159,6 +159,7 @@ public final class Messages extends NLS {
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
 
 	// === AttributeTarget Groups ===
+	public static String AttributeTarget_General_group;
 	public static String AttributeTarget_Types_group;
 	public static String AttributeTarget_Instances_group;
 	public static String AttributeTarget_InstancePins_group;
