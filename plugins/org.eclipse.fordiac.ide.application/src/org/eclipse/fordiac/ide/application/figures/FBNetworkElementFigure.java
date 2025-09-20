@@ -41,7 +41,7 @@ public class FBNetworkElementFigure extends FBShape {
 	 * @param model the model
 	 */
 	public FBNetworkElementFigure(final FBNetworkElement model, final int maxTypeLabelSize) {
-		super(model.getType(), maxTypeLabelSize);
+		super(model.getTypeEntry(), maxTypeLabelSize);
 		this.model = model;
 		refreshToolTips();
 	}
