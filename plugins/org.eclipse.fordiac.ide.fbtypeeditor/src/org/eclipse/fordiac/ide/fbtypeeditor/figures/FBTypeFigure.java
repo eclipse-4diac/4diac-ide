@@ -30,7 +30,7 @@ public class FBTypeFigure extends FBShape {
 	private final FBType type;
 
 	public FBTypeFigure(final FBType type) {
-		super(type, Integer.MAX_VALUE);
+		super(type.getTypeEntry(), Integer.MAX_VALUE);
 		this.type = type;
 
 		versionInfoLabel = new Label();
