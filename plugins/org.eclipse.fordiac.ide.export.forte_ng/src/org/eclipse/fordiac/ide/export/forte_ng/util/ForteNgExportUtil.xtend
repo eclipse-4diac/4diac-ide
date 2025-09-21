@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
 import java.nio.file.Path
+import java.util.Set
 import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
@@ -54,6 +55,107 @@ final class ForteNgExportUtil {
 	public static final CharSequence VARIABLE_EXPORT_PREFIX = "var_"
 	public static final CharSequence EVENT_EXPORT_PREFIX = "evt_"
 	public static final CharSequence FB_EXPORT_PREFIX = "fb_"
+
+	public static final Set<String> RESERVED_KEYWORDS = Set.of(
+		"alignas",
+		"alignof",
+		"and",
+		"and_eq",
+		"asm",
+		"atomic_cancel",
+		"atomic_commit",
+		"atomic_noexcept",
+		"auto",
+		"bitand",
+		"bitor",
+		"bool",
+		"break",
+		"case",
+		"catch",
+		"char",
+		"char8_t",
+		"char16_t",
+		"char32_t",
+		"class",
+		"compl",
+		"concept",
+		"const",
+		"consteval",
+		"constexpr",
+		"constinit",
+		"const_cast",
+		"continue",
+		"contract_assert",
+		"co_await",
+		"co_return",
+		"co_yield",
+		"decltype",
+		"default",
+		"delete",
+		"do",
+		"double",
+		"dynamic_cast",
+		"else",
+		"enum",
+		"explicit",
+		"export",
+		"extern",
+		"false",
+		"float",
+		"for",
+		"friend",
+		"goto",
+		"if",
+		"inline",
+		"int",
+		"long",
+		"mutable",
+		"namespace",
+		"new",
+		"noexcept",
+		"not",
+		"not_eq",
+		"nullptr",
+		"operator",
+		"or",
+		"or_eq",
+		"private",
+		"protected",
+		"public",
+		"reflexpr",
+		"register",
+		"reinterpret_cast",
+		"requires",
+		"return",
+		"short",
+		"signed",
+		"sizeof",
+		"static",
+		"static_assert",
+		"static_cast",
+		"struct",
+		"switch",
+		"synchronized",
+		"template",
+		"this",
+		"thread_local",
+		"throw",
+		"true",
+		"try",
+		"typedef",
+		"typeid",
+		"typename",
+		"union",
+		"unsigned",
+		"using",
+		"virtual",
+		"void",
+		"volatile",
+		"wchar_t",
+		"while",
+		"xor",
+		"xor_eq"
+	)
 
 	def static boolean needsGenericAccess(IInterfaceElement element) {
 		switch (element) {
@@ -232,9 +334,20 @@ final class ForteNgExportUtil {
 	def static String generateTypeNamespace(LibraryElement type) {
 		val packageName = PackageNameHelper.getPackageName(type)
 		if (packageName.nullOrEmpty)
-			"forte"
+			return "forte"
+		"forte::" + escapePackageName(packageName)
+	}
+
+	def static String escapePackageName(String packageName) {
+		packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER).map[escapeKeyword].join(
+			PackageNameHelper.PACKAGE_NAME_DELIMITER)
+	}
+
+	def static String escapeKeyword(String name) {
+		if (RESERVED_KEYWORDS.contains(name))
+			name + "_"
 		else
-			'''forte::«packageName»'''
+			name
 	}
 
 	def static String generateTypeNamePlain(LibraryElement type) {
