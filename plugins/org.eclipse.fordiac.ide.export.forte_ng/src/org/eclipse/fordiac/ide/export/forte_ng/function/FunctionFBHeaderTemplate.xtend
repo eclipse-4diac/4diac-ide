@@ -47,9 +47,9 @@ class FunctionFBHeaderTemplate extends FunctionFBTemplate {
 		
 		      «generateInterfaceDeclarations»
 		  };
-		}
 		
-		«generateBody»
+		  «generateBody»
+		}
 		
 		«generateIncludeGuardEnd»
 		
