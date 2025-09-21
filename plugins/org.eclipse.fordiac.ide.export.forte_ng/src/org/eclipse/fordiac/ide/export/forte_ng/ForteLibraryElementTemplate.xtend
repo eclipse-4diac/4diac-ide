@@ -23,6 +23,7 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -79,8 +80,11 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		«type.compilerInfo?.header»
 		
 		using namespace std::literals;
-		using namespace forte::core::literals;
-		using namespace «type.generateTypeNamespace»;
+		using namespace forte;
+		using namespace forte::literals;
+		«IF !PackageNameHelper.getPackageName(type).empty»
+			using namespace «type.generateTypeNamespace»;
+		«ENDIF»
 	'''
 	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''

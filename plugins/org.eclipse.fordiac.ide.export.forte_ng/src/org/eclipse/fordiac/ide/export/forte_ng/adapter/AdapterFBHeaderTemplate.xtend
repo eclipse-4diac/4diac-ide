@@ -55,9 +55,9 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		      ~«FBClassName»() override = default;
 		      
 		    protected:
-		      «FBClassName»(forte::core::CFBContainer &paContainer,
+		      «FBClassName»(CFBContainer &paContainer,
 		                    const SFBInterfaceSpec &paInterfaceSpec,
-		                    const forte::core::StringId paInstanceNameId,
+		                    const StringId paInstanceNameId,
 		                    TForteUInt8 paParentAdapterlistID);
 		  };
 		
@@ -128,8 +128,8 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 	def generatePlugSocketClassStart(String kind) '''
 	  class «FBClassName»«kind» final : public «FBClassName» {
 	    public:
-	      «FBClassName»«kind»(forte::core::StringId paInstanceNameId,
-	                          forte::core::CFBContainer &paContainer,
+	      «FBClassName»«kind»(StringId paInstanceNameId,
+	                          CFBContainer &paContainer,
 	                          TForteUInt8 paParentAdapterlistID);
 	      ~«FBClassName»«kind»() override = default;
 	'''

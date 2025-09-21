@@ -39,7 +39,7 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		
 		«generateFBDefinition»
 		
-		«FBClassName»::«FBClassName»(const forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
+		«FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
 		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«//no newline
 			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
 			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline

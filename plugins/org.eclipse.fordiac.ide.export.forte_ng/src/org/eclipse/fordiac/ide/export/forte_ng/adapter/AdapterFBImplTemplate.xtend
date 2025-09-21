@@ -54,9 +54,9 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		«generateFBDefinition»
 		
 		
-		«FBClassName»::«FBClassName»(forte::core::CFBContainer &paContainer,
+		«FBClassName»::«FBClassName»(CFBContainer &paContainer,
 		                             const SFBInterfaceSpec &paInterfaceSpec,
-		                             const forte::core::StringId paInstanceNameId,
+		                             const StringId paInstanceNameId,
 		                             TForteUInt8 paParentAdapterlistID) :
 		    CAdapter(paContainer, paInterfaceSpec, paInstanceNameId, paParentAdapterlistID)«// no newline
 		    »«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer» {
@@ -146,8 +146,8 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 	
 	def generatePlugConstructorImpl() '''
-		«plugClassName»::«plugClassName»(forte::core::StringId paInstanceNameId,
-		                                         forte::core::CFBContainer &paContainer,
+		«plugClassName»::«plugClassName»(StringId paInstanceNameId,
+		                                         CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
 		    «FBClassName»(paContainer, cFBInterfaceSpecPlug, paInstanceNameId, paParentAdapterlistID)«//no newline
 		    »«type.interfaceList.eventInputs.generateEventConnectionInitializer»«//no newline
@@ -157,8 +157,8 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 	'''
 	
 	def generateSocketConstructorImpl() '''
-		«socketClassName»::«socketClassName»(forte::core::StringId paInstanceNameId,
-		                                         forte::core::CFBContainer &paContainer,
+		«socketClassName»::«socketClassName»(StringId paInstanceNameId,
+		                                         CFBContainer &paContainer,
 		                                         TForteUInt8 paParentAdapterlistID) :
 		    «FBClassName»(paContainer, cFBInterfaceSpecSocket, paInstanceNameId, paParentAdapterlistID)«//no newline
 		    »«type.interfaceList.eventOutputs.generateEventConnectionInitializer»«//no newline

@@ -57,7 +57,7 @@ class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 		      «generateSetFBNetworkInitialValuesDeclaration»
 		
 		    public:
-		      «FBClassName»(forte::core::StringId paInstanceNameId, forte::core::CFBContainer &paContainer);
+		      «FBClassName»(StringId paInstanceNameId, CFBContainer &paContainer);
 		
 		      «generateInterfaceDeclarations»
 		  };
