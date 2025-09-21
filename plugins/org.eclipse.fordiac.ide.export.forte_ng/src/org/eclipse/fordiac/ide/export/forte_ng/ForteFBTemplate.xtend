@@ -454,7 +454,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 
 	def generateInternalFBDeclarations(List<FB> internalFbs) '''
 		«FOR fb : internalFbs»
-			forte::core::CInternalFB<«fb.type.generateTypeName»> «fb.generateName»;
+			CInternalFB<«fb.type.generateTypeName»> «fb.generateName»;
 		«ENDFOR»		
 	'''
 

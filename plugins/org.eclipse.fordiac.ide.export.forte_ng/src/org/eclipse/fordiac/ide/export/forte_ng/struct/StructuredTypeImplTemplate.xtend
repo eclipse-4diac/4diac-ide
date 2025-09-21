@@ -39,7 +39,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
 		
-		const forte::core::StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		const StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
 		
 		«className»::«className»() :
 		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
@@ -51,7 +51,7 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		}
 		«ENDIF»
 		
-		forte::core::StringId «className»::getStructTypeNameID() const {
+		StringId «className»::getStructTypeNameID() const {
 		  return «type.generateTypeSpec»;
 		}
 		
