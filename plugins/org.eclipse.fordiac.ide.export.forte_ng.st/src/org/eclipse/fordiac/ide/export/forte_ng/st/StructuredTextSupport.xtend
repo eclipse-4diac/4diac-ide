@@ -466,7 +466,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) '''func_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) //
+	'''«feature.generateTypeNamespace»::func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»'''
 
