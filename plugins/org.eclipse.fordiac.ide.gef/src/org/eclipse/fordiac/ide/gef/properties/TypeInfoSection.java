@@ -97,7 +97,7 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	@Override
 	protected void addContentAdapter() {
 		super.addContentAdapter();
-		if (getType() != null) {
+		if (getType() != null && getType().getIdentification() != null) {
 			getType().getIdentification().eAdapters().add(typeInfoAdapter);
 		}
 	}
@@ -105,7 +105,7 @@ public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 	@Override
 	protected void removeContentAdapter() {
 		super.removeContentAdapter();
-		if (getType() != null) {
+		if (getType() != null && getType().getIdentification() != null) {
 			getType().getIdentification().eAdapters().remove(typeInfoAdapter);
 		}
 	}
