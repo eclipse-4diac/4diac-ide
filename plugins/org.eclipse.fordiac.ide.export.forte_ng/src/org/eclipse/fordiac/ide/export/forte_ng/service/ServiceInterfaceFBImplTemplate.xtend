@@ -19,6 +19,8 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBType> {
 
 	new(ServiceInterfaceFBType type, String name, Path prefix, Map<?,?> options) {
@@ -30,26 +32,28 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBT
 		
 		«generateImplIncludes»
 		
-		namespace {
-		  «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		  «generateFBInterfaceDefinition»
-		  «generateFBInterfaceSpecDefinition»
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«//no newline
+		  	»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		  	»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		  	»«generateConnectionInitializer» {
+		  };
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateExecuteEvent»
+		
+		  «generateInterfaceDefinitions»
 		}
-		
-		«generateFBDefinition»
-		
-		«FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«//no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
-			»«generateConnectionInitializer» {
-		};
-		
-		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateExecuteEvent»
-		
-		«generateInterfaceDefinitions»
 	'''
 
 	def protected generateExecuteEvent() '''

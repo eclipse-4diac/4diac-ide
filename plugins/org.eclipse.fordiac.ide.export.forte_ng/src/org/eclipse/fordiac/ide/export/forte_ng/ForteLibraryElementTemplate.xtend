@@ -80,11 +80,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		«type.compilerInfo?.header»
 		
 		using namespace std::literals;
-		using namespace forte;
 		using namespace forte::literals;
-		«IF !PackageNameHelper.getPackageName(type).empty»
-			using namespace «type.generateTypeNamespace»;
-		«ENDIF»
 	'''
 	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''

@@ -53,29 +53,31 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		
 		«generateImplIncludes»
 		
-		namespace {
-		  «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		  «generateFBInterfaceDefinition»
+		    «generateFBInterfaceDefinition»
 		
-		  «generateFBInterfaceSpecDefinition»
+		    «generateFBInterfaceSpecDefinition»
 		
-		  «generateFBNetwork»
+		    «generateFBNetwork»
+		  }
+		
+		  «generateFBDefinition»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, cFBNData)«//no newline
+		      »«fbs.generateInternalFBInitializer»«// no newline
+		      »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
+		      »«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		      »«generateConnectionInitializer» {
+		  };
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateSetFBNetworkInitialValuesDefinition»
+		  «generateInterfaceDefinitions»
 		}
-		
-		«generateFBDefinition»
-		
-		«FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, cFBNData)«//no newline
-		    »«fbs.generateInternalFBInitializer»«// no newline
-		    »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
-		    »«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
-			»«generateConnectionInitializer» {
-		};
-		
-		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateSetFBNetworkInitialValuesDefinition»
-		«generateInterfaceDefinitions»
 	'''
 
 	override protected generateInterfaceDefinitions() '''

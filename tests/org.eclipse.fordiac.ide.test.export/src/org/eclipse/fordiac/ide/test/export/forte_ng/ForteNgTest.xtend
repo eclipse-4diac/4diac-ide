@@ -74,8 +74,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
@@ -147,8 +148,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
@@ -159,8 +161,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
@@ -171,8 +174,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
@@ -183,10 +187,11 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
-	
+
 	@Test
 	def mulTimeRealExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
@@ -195,10 +200,11 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
-	
+
 	@Test
 	def mulTimeLintExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
@@ -207,8 +213,9 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
-		generatedCode.toString())
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
@@ -285,110 +292,111 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 					cppfileFound = true
 
 					assertEquals('''
-						/*************************************************************************
-						 *** FORTE Library Element
-						 ***
-						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-						 ***
-						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description:
-						 *** Version:
-						 *************************************************************************/
-						
-						#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
-						
-						#include "forte/iec61131_functions.h"
-						#include "forte/datatypes/forte_array_common.h"
-						#include "forte/datatypes/forte_array.h"
-						#include "forte/datatypes/forte_array_fixed.h"
-						#include "forte/datatypes/forte_array_variable.h"
-						
-						using namespace std::literals;
-						using namespace forte;
-						using namespace forte::literals;
-						
-						namespace {
-						  constexpr std::string_view TypeHash ="1234"sv;
-						
-						  const SFBInterfaceSpec cFBInterfaceSpec = {
-						      .mEINames = {},
-						      .mEITypeNames = {},
-						      .mEONames = {},
-						      .mEOTypeNames = {},
-						      .mDINames = {},
-						      .mDONames = {},
-						      .mDIONames = {},
-						      .mSocketNames = {},
-						      .mPlugNames = {},
-						  };
-						}
-						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», "functionblock"_STRID, TypeHash)
-						
-						FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const StringId paInstanceNameId, CFBContainer &paContainer) :
-						    CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
-						}
-						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {
-						  CBasicFB::setInitialValues();
-						}
-						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
-						  do {
-						    switch(mECCState) {
-						      case scmStateINIT:
-						        return; //no transition cleared
-						      default:
-						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
-						        mECCState = 0; // 0 is always the initial state
-						        return;
-						    }
-						    paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
-						  } while(true);
-						}
-						
-						void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const) {
-						  mECCState = scmStateINIT;
-						}
-						
-						void FORTE_functionblock::readInputData(TEventID) {
-						  // nothing to do
-						}
-						
-						void FORTE_functionblock::writeOutputData(TEventID) {
-						  // nothing to do
-						}
-						
-						CIEC_ANY *FORTE_functionblock::getDI(size_t) {
-						  return nullptr;
-						}
-						
-						CIEC_ANY *FORTE_functionblock::getDO(size_t) {
-						  return nullptr;
-						}
-						
-						CEventConnection *FORTE_functionblock::getEOConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CDataConnection **FORTE_functionblock::getDIConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CDataConnection *FORTE_functionblock::getDOConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CIEC_ANY *FORTE_functionblock::getVarInternal(size_t) {
-						  return nullptr;
-						}
-						
-						void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-						  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-						  «ALGORITHM_TEXT»
-						}
-					'''.toString(), export.data.toString())
+					/*************************************************************************
+					 *** FORTE Library Element
+					 ***
+					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+					 ***
+					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+					 *** Description:
+					 *** Version:
+					 *************************************************************************/
+					
+					#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
+					
+					#include "forte/iec61131_functions.h"
+					#include "forte/datatypes/forte_array_common.h"
+					#include "forte/datatypes/forte_array.h"
+					#include "forte/datatypes/forte_array_fixed.h"
+					#include "forte/datatypes/forte_array_variable.h"
+					
+					using namespace std::literals;
+					using namespace forte::literals;
+					
+					namespace forte {
+					  namespace {
+					    constexpr std::string_view TypeHash ="1234"sv;
+					
+					    const SFBInterfaceSpec cFBInterfaceSpec = {
+					        .mEINames = {},
+					        .mEITypeNames = {},
+					        .mEONames = {},
+					        .mEOTypeNames = {},
+					        .mDINames = {},
+					        .mDONames = {},
+					        .mDIONames = {},
+					        .mSocketNames = {},
+					        .mPlugNames = {},
+					    };
+					  }
+					
+					  DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», "functionblock"_STRID, TypeHash)
+					
+					  FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+					      CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
+					  }
+					
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {
+					    CBasicFB::setInitialValues();
+					  }
+					
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
+					    do {
+					      switch(mECCState) {
+					        case scmStateINIT:
+					          return; //no transition cleared
+					        default:
+					          DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
+					          mECCState = 0; // 0 is always the initial state
+					          return;
+					      }
+					      paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+					    } while(true);
+					  }
+					
+					  void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const) {
+					    mECCState = scmStateINIT;
+					  }
+					
+					  void FORTE_functionblock::readInputData(TEventID) {
+					    // nothing to do
+					  }
+					
+					  void FORTE_functionblock::writeOutputData(TEventID) {
+					    // nothing to do
+					  }
+					
+					  CIEC_ANY *FORTE_functionblock::getDI(size_t) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *FORTE_functionblock::getDO(size_t) {
+					    return nullptr;
+					  }
+					
+					  CEventConnection *FORTE_functionblock::getEOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection **FORTE_functionblock::getDIConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection *FORTE_functionblock::getDOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *FORTE_functionblock::getVarInternal(size_t) {
+					    return nullptr;
+					  }
+					
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+					    #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+					    #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+					    «ALGORITHM_TEXT»
+					  }
+					
+					}'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 				}
 				default:

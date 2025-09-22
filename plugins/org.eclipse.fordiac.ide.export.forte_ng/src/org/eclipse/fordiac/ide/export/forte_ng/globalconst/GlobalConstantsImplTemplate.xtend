@@ -30,13 +30,15 @@ class GlobalConstantsImplTemplate extends ForteLibraryElementTemplate<GlobalCons
 		
 		«generateImplIncludes»
 		
-		namespace {
-		    «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		      «generateTypeHash»
+		  }
+		
+		  «generateGlobalConstDefinition»
+		
+		  «type.constants.generateVariableDefinitions(true)»
 		}
-		
-		«generateGlobalConstDefinition»
-		
-		«type.constants.generateVariableDefinitions(true)»
 	'''
 	
 	def protected generateGlobalConstDefinition() '''

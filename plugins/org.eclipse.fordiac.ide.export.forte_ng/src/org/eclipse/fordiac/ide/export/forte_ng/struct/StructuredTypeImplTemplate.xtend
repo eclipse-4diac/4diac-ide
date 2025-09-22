@@ -33,32 +33,34 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«generateImplIncludes»
 		
-		namespace {
-			«generateTypeHash»
-		}
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
+		  }
 		
-		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
+		  DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
 		
-		const StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		  const StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
 		
-		«className»::«className»() :
-		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
-		}
+		  «className»::«className»() :
+		      CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
+		  }
 		«IF !type.memberVariables.empty»
 		
-		«className»::«className»(«generateConstructorParameters») :
-		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
-		}
+		  «className»::«className»(«generateConstructorParameters») :
+		      CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
+		  }
 		«ENDIF»
 		
-		StringId «className»::getStructTypeNameID() const {
-		  return «type.generateTypeSpec»;
+		  StringId «className»::getStructTypeNameID() const {
+		    return «type.generateTypeSpec»;
+		  }
+		
+		  «generateSetValue»
+		
+		  «type.memberVariables.generateAccessorDefinition("getMember", false)»
+		  «type.memberVariables.generateAccessorDefinition("getMember", true)»
 		}
-		
-		«generateSetValue»
-		
-		«type.memberVariables.generateAccessorDefinition("getMember", false)»
-		«type.memberVariables.generateAccessorDefinition("getMember", true)»
 	'''
 	
 	def protected generateSetValue() '''
