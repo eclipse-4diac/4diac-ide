@@ -43,30 +43,32 @@ class AdapterFBImplTemplate extends ForteFBTemplate<AdapterType> {
 		
 		«generateImplIncludes»
 		
-		namespace {
-		  «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		  «generateFBInterfaceDefinition»
+		    «generateFBInterfaceDefinition»
 		
-		  «generateFBInterfaceSpecDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		
+		
+		  «FBClassName»::«FBClassName»(CFBContainer &paContainer,
+		                               const SFBInterfaceSpec &paInterfaceSpec,
+		                               const StringId paInstanceNameId,
+		                               TForteUInt8 paParentAdapterlistID) :
+		      CAdapter(paContainer, paInterfaceSpec, paInstanceNameId, paParentAdapterlistID)«// no newline
+		      »«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer» {
+		  }
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		
+		  «generatePlugImpl»
+		
+		  «generateSocketImpl»
 		}
-		
-		«generateFBDefinition»
-		
-		
-		«FBClassName»::«FBClassName»(CFBContainer &paContainer,
-		                             const SFBInterfaceSpec &paInterfaceSpec,
-		                             const StringId paInstanceNameId,
-		                             TForteUInt8 paParentAdapterlistID) :
-		    CAdapter(paContainer, paInterfaceSpec, paInstanceNameId, paParentAdapterlistID)«// no newline
-		    »«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateVariableInitializer» {
-		}
-		
-		«(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		
-		«generatePlugImpl»
-		
-		«generateSocketImpl»
 	'''
 
 	override protected generateFBDefinition() '''

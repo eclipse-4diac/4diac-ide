@@ -30,27 +30,29 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 		
 		«generateImplIncludes»
 		
-		namespace {
-		  «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		  «generateFBInterfaceDefinition»
-		  «generateFBInterfaceSpecDefinition»
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«// no newline
+		  	»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		  	»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		  	»«generateConnectionInitializer» {
+		  }
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateInterfaceDefinitions»
+		  «generateExecuteEvent»
+		
+		  «generateBody»
 		}
-		
-		«generateFBDefinition»
-		
-		«FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«// no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
-			»«generateConnectionInitializer» {
-		}
-		
-		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateInterfaceDefinitions»
-		«generateExecuteEvent»
-		
-		«generateBody»
 	'''
 
 	def protected CharSequence generateExecuteEvent() '''

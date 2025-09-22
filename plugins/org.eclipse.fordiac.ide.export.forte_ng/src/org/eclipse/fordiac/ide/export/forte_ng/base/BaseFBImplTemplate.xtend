@@ -48,33 +48,35 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateImplIncludes»
 		
-		namespace {
-		  «generateTypeHash»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		  «generateFBInterfaceDefinition»
-		  «generateFBInterfaceSpecDefinition»
-		  «generateInternalVarDefinition»
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		    «generateInternalVarDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		  «IF !type.internalConstVars.isEmpty»
+		  	«type.internalConstVars.generateVariableDefinitions(true)»			
+		  «ENDIF»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
+		      			»«type.internalFbs.generateInternalFBInitializer»«// no newline
+		      			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		      			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		      			»«generateConnectionInitializer» {
+		  }
+		
+		  «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateExecuteEvent»
+		  «generateInterfaceDefinitions»
+		  «type.internalVars.generateAccessorDefinition("getVarInternal", false)»
+		  «generateAlgorithms»
+		  «generateMethods»
 		}
-		
-		«generateFBDefinition»
-		«IF !type.internalConstVars.isEmpty»
-			«type.internalConstVars.generateVariableDefinitions(true)»			
-		«ENDIF»
-		
-		«FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
-		    «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
-		    			»«type.internalFbs.generateInternalFBInitializer»«// no newline
-		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
-		    			»«generateConnectionInitializer» {
-		}
-		
-		«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateExecuteEvent»
-		«generateInterfaceDefinitions»
-		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
-		«generateAlgorithms»
-		«generateMethods»
 	'''
 
 	def generateInternalVarDefinition() '''
