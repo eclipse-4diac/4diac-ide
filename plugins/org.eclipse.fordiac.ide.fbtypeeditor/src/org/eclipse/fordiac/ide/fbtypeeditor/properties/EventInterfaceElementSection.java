@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2014-2025 fortiss GmbH,
+ *                         Johannes Kepler University Linz,
+ *                         Monika Wenger
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +18,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
@@ -30,7 +33,10 @@ import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvide
 import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutorForList;
+import org.eclipse.fordiac.ide.ui.widget.DeSelectAllWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -40,15 +46,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class EventInterfaceElementSection extends AdapterInterfaceElementSection {
+public class EventInterfaceElementSection extends AdapterInterfaceElementSection
+		implements CommandExecutorForList<TableItem> {
 
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
+	private DeSelectAllWidget deSelectAllWidget;
+	private Listener listener;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -58,15 +68,23 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 
 	private void createEventSection(final Composite parent) {
 		eventComposite = getWidgetFactory().createGroup(parent, FordiacMessages.With);
-		eventComposite.setLayout(new GridLayout(1, false));
+		eventComposite.setLayout(new GridLayout(2, false));
 		eventComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		deSelectAllWidget = new DeSelectAllWidget();
+		deSelectAllWidget.createControls(eventComposite, getWidgetFactory());
 		withEventsViewer = TableWidgetFactory.createPropertyTableViewer(eventComposite, SWT.CHECK);
 		withEventsViewer.setContentProvider(new VarContentProvider());
 		withEventsViewer.setLabelProvider(new VarDeclarationLabelProvider());
+		deSelectAllWidget.bindToTableViewer(withEventsViewer, this);
 
 		final Table tableWith = withEventsViewer.getTable();
 		configureTableLayout(tableWith);
-		tableWith.addListener(SWT.Selection, event -> {
+		listener = getListener();
+		tableWith.addListener(SWT.Selection, listener);
+	}
+
+	private Listener getListener() {
+		return event -> {
 			if (event.detail == SWT.CHECK) {
 				final TableItem checkedItem = (TableItem) event.item;
 				final VarDeclaration variable = (VarDeclaration) checkedItem.getData();
@@ -76,11 +94,14 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 					if (null == with) {
 						executeCommand(new WithCreateCommand(getType(), variable));
 					}
+					deSelectAllWidget.setSelection(
+							Arrays.stream(((Table) event.widget).getItems()).allMatch(TableItem::getChecked));
 				} else if (null != with) {
 					executeCommand(new DeleteWithCommand(with));
+					deSelectAllWidget.setSelection(false);
 				}
 			}
-		});
+		};
 	}
 
 	private void configureTableLayout(final Table tableWith) {
@@ -100,6 +121,7 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected void setInputInit() {
 		super.setInputInit();
+		deSelectAllWidget.setEnabled(true);
 		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
@@ -118,6 +140,8 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 			getType().getWith().stream().filter(with -> (with.getVariables() != null))
 					.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
 					.forEach(item -> ((TableItem) item).setChecked(true));
+			deSelectAllWidget.setSelection(
+					Arrays.stream(withEventsViewer.getTable().getItems()).allMatch(TableItem::getChecked));
 		} else {
 			eventComposite.setVisible(false);
 		}
@@ -136,5 +160,22 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
 		return EventTypeSelectionTreeContentProvider.INSTANCE;
+	}
+
+	@Override
+	public void executeCommand(final List<TableItem> items, final boolean isCreate) {
+		final CompoundCommand ccmd = new CompoundCommand();
+		withEventsViewer.getTable().removeListener(SWT.Selection, listener);
+		if (isCreate) {
+			for (final TableItem item : items) {
+				ccmd.add(new WithCreateCommand(getType(), (VarDeclaration) item.getData()));
+				item.setChecked(true);
+			}
+		} else {
+			getType().getWith().stream().map(DeleteWithCommand::new).forEach(ccmd::add);
+			items.stream().forEach(item -> item.setChecked(false));
+		}
+		executeCommand(ccmd);
+		withEventsViewer.getTable().addListener(SWT.Selection, listener);
 	}
 }
