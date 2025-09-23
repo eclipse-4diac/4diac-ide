@@ -123,7 +123,7 @@ public class PackageInfoWidget extends TypeInfoWidget {
 		buttons = new AddDeleteWidget();
 		buttons.createControls(compositeBottom, getWidgetFactory());
 
-		organizeImportsButton = getWidgetFactory().createButton(buttons.getControl(), "", SWT.PUSH);
+		organizeImportsButton = getWidgetFactory().createButton(buttons.getControl(), null, SWT.PUSH);
 		organizeImportsButton.setToolTipText(FordiacMessages.PackageInfoWidget_OrganizeImports);
 		organizeImportsButton
 				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_SYNCED));
