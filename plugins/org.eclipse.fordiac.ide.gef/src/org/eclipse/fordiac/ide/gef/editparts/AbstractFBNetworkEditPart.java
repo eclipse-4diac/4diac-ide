@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -72,7 +73,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 		final GraphicalAnnotationModel annotationModel = FordiacAnnotationUtil.getAnnotationModel(this);
 		if (annotationModel != null) {
-			children.addAll(annotationModel.getAnnotations(getModel()));
+			annotationModel.getAnnotations(getModel()).stream().filter(GraphicalAnnotationStyles::hasAnnotationEditPart)
+					.forEachOrdered(children::add);
 		}
 
 		return children;

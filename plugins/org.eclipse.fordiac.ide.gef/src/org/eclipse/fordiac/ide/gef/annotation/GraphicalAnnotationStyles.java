@@ -75,12 +75,21 @@ public final class GraphicalAnnotationStyles {
 		return null;
 	}
 
-	public static EditPart getAnnotationEditPart(final GraphicalAnnotation annotation) {
+	public static boolean hasAnnotationEditPart(final GraphicalAnnotation annotation) {
+		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
+		if (style != null) {
+			return style.styler().hasEditPart(annotation);
+		}
+		return false;
+	}
+
+	public static EditPart getAnnotationEditPart(final GraphicalAnnotation annotation)
+			throws UnsupportedOperationException {
 		final GraphicalAnnotationStyle style = getAnnotationStyle(annotation);
 		if (style != null) {
 			return style.styler().getEditPart(annotation);
 		}
-		return null;
+		throw new UnsupportedOperationException("No style for annotation " + annotation); //$NON-NLS-1$
 	}
 
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
