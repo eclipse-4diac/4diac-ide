@@ -65,7 +65,7 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 	}
 
 	@Override
-	protected IInterfaceElement getType() {
+	public IInterfaceElement getType() {
 		return (IInterfaceElement) type;
 	}
 

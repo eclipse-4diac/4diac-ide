@@ -20,7 +20,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
@@ -37,10 +36,7 @@ import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.CommandExecutorForList;
-import org.eclipse.fordiac.ide.ui.widget.DeSelectAllWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -56,13 +52,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class DataInterfaceElementSection extends AdapterInterfaceElementSection
-		implements CommandExecutorForList<TableItem> {
+public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
 
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
 	private DeSelectAllWidget deSelectAllWidget;
-	private Listener listener;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -88,11 +82,10 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection
 
 		final Table tableWith = withEventsViewer.getTable();
 		configureTableLayout(tableWith);
-		listener = getListener();
-		tableWith.addListener(SWT.Selection, listener);
+		tableWith.addListener(SWT.Selection, createListener());
 	}
 
-	private Listener getListener() {
+	private Listener createListener() {
 		return event -> {
 			if (event.detail == SWT.CHECK) {
 				final TableItem checkedItem = (TableItem) event.item;
@@ -128,7 +121,7 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	@Override
-	protected VarDeclaration getType() {
+	public VarDeclaration getType() {
 		return (VarDeclaration) super.getType();
 	}
 
@@ -164,6 +157,8 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection
 		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
+		} else {
+			deSelectAllWidget.setCommandStack(getCurrentCommandStack());
 		}
 	}
 
@@ -175,22 +170,5 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
 		return DataTypeSelectionTreeContentProvider.INSTANCE;
-	}
-
-	@Override
-	public void executeCommand(final List<TableItem> items, final boolean isCreate) {
-		final CompoundCommand ccmd = new CompoundCommand();
-		withEventsViewer.getTable().removeListener(SWT.Selection, listener);
-		if (isCreate) {
-			for (final TableItem item : items) {
-				ccmd.add(new WithCreateCommand((Event) item.getData(), getType()));
-				item.setChecked(true);
-			}
-		} else {
-			getType().getWiths().stream().map(DeleteWithCommand::new).forEach(ccmd::add);
-			items.stream().forEach(item -> item.setChecked(false));
-		}
-		executeCommand(ccmd);
-		withEventsViewer.getTable().addListener(SWT.Selection, listener);
 	}
 }

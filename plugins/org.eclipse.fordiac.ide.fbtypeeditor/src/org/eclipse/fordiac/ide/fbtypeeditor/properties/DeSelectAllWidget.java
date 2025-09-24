@@ -8,10 +8,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.stream.Stream;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.TableViewer;
@@ -27,7 +34,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public class DeSelectAllWidget {
 	private Button deSelectAllButton;
 	protected Composite container;
-	private Listener listener = null;
+	private CommandStack commandStack;
 
 	public void createControls(final Composite parent, final FormToolkit widgetFactory) {
 		createControls(parent, widgetFactory, false);
@@ -67,24 +74,37 @@ public class DeSelectAllWidget {
 		return container;
 	}
 
-	public void bindToTableViewer(final TableViewer viewer, final CommandExecutorForList<TableItem> executor) {
-		if (null == listener) {
-			listener = getDeSelectAllListener(deSelectAllButton, viewer, executor);
-			deSelectAllButton.addListener(SWT.Selection, listener);
-		}
+	public void bindToTableViewer(final TableViewer withEventsViewer, final AdapterInterfaceElementSection executor) {
+		deSelectAllButton.addListener(SWT.Selection,
+				createDeSelectAllListener(deSelectAllButton, withEventsViewer, executor));
 	}
 
-	private static Listener getDeSelectAllListener(final Button checkbox, final TableViewer viewer,
-			final CommandExecutorForList<TableItem> executor) {
+	private Listener createDeSelectAllListener(final Button checkbox, final TableViewer withEventsViewer,
+			final AdapterInterfaceElementSection executor) {
 		return ev -> {
-			final TableItem[] items = viewer.getTable().getItems();
-			final boolean isCreate = checkbox.getSelection();
-			if (isCreate) {
-				executor.executeCommand(Stream.of(items).filter(item -> !item.getChecked()).toList(), isCreate);
+			final CompoundCommand ccmd = new CompoundCommand();
+			final EObject type = executor.getType();
+			if (checkbox.getSelection()) {
+				final Stream<TableItem> unchecktItems = Stream.of(withEventsViewer.getTable().getItems())
+						.filter(item -> !item.getChecked());
+				if (type instanceof final Event event) {
+					unchecktItems
+							.forEach(item -> ccmd.add(new WithCreateCommand(event, (VarDeclaration) item.getData())));
+				} else {
+					unchecktItems.forEach(
+							item -> ccmd.add(new WithCreateCommand((Event) item.getData(), (VarDeclaration) type)));
+				}
+			} else if (type instanceof final Event event) {
+				event.getWith().stream().map(DeleteWithCommand::new).forEach(ccmd::add);
 			} else {
-				executor.executeCommand(Stream.of(items).filter(TableItem::getChecked).toList(), isCreate);
+				((VarDeclaration) type).getWiths().stream().map(DeleteWithCommand::new).forEach(ccmd::add);
 			}
+			commandStack.execute(ccmd);
 		};
+	}
+
+	public void setCommandStack(final CommandStack commandStack) {
+		this.commandStack = commandStack;
 	}
 
 	public Composite getControl() {
@@ -100,8 +120,6 @@ public class DeSelectAllWidget {
 	}
 
 	public void setSelection(final boolean selected) {
-		deSelectAllButton.removeListener(SWT.Selection, listener);
 		deSelectAllButton.setSelection(selected);
-		deSelectAllButton.addListener(SWT.Selection, listener);
 	}
 }
