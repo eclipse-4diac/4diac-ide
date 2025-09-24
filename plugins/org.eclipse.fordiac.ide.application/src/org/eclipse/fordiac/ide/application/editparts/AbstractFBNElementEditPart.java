@@ -126,10 +126,13 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				super.notifyChanged(notification);
 				if (!notification.isTouch()) {
 					Display.getDefault().execute(() -> {
-						refreshChildren();
-						// this ensure that parameters are correctly updated when pins are added or
-						// removed (e.g., errormarkerpins are deleted)
-						getParent().refresh();
+						// check if editpart has not been removed in the meantime
+						if (isActive()) {
+							refreshChildren();
+							// this ensure that parameters are correctly updated when pins are added or
+							// removed (e.g., errormarkerpins are deleted)
+							getParent().refresh();
+						}
 					});
 				}
 			}
