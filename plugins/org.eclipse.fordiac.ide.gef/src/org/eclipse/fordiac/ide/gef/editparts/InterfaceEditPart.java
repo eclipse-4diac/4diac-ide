@@ -406,7 +406,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					Display.getDefault().execute(() -> refresh());
+					Display.getDefault().execute(() -> {
+						// check if editpart has not been removed in the meantime
+						if (isActive()) {
+							refresh();
+						}
+					});
 				}
 				super.notifyChanged(notification);
 			}
@@ -428,14 +433,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
-			((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
-					.removePropertyChangeListener(preferenceListener);
-			getModel().eAdapters().remove(getContentAdapter());
-			removeSourcePinAdapter();
-		}
+		super.deactivate();
+		getModel().eAdapters().remove(getContentAdapter());
+		((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+				.removePropertyChangeListener(preferenceListener);
+		getModel().eAdapters().remove(getContentAdapter());
+		removeSourcePinAdapter();
 	}
 
 	private ConnectionAnchor sourceConAnchor = null;
