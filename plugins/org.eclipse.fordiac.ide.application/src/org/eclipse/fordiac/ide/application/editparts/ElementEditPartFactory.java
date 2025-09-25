@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023  Profactor GmbH, fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2008, 2025  Profactor GmbH, fortiss GmbH, Johannes Kepler University,
  * 							 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -66,7 +66,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return getPartForFBNetwork(network);
 		}
 		if (modelElement instanceof final FBNetworkElement fbnel) {
-			return getPartForFBNetworkElement(fbnel);
+			return getPartForFBNetworkElement(context, fbnel);
 		}
 		if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
@@ -100,11 +100,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new TargetInterfaceElementEditPart();
 		}
 
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 
 	}
 
-	private static EditPart getPartForFBNetworkElement(final FBNetworkElement element) {
+	private static EditPart getPartForFBNetworkElement(final EditPart context, final FBNetworkElement element) {
 		if (element instanceof ErrorMarkerFBNElement) {
 			return new ErrorMarkerFBNEditPart();
 		}
@@ -135,7 +135,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new CommentEditPart();
 		}
 
-		throw createEditpartCreationException(element);
+		throw createEditpartCreationException(context, element);
 	}
 
 	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements
