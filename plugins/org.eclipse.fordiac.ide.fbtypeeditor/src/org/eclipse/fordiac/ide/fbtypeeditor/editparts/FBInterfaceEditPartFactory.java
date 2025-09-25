@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -68,7 +69,7 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof TypeField) {
 			return new TypeEditPart(typeLib);
 		}
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 	}
 
 	// make it protected none static so that subclasses can override it and provide

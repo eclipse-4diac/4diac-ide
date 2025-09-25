@@ -66,7 +66,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return getPartForFBNetwork(network);
 		}
 		if (modelElement instanceof final FBNetworkElement fbnel) {
-			return getPartForFBNetworkElement(fbnel);
+			return getPartForFBNetworkElement(context, fbnel);
 		}
 		if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
@@ -100,11 +100,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new TargetInterfaceElementEditPart();
 		}
 
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 
 	}
 
-	private static EditPart getPartForFBNetworkElement(final FBNetworkElement element) {
+	private static EditPart getPartForFBNetworkElement(final EditPart context, final FBNetworkElement element) {
 		if (element instanceof ErrorMarkerFBNElement) {
 			return new ErrorMarkerFBNEditPart();
 		}
@@ -127,7 +127,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new CommentEditPart();
 		}
 
-		throw createEditpartCreationException(element);
+		throw createEditpartCreationException(context, element);
 	}
 
 	protected static EditPart getPartForFBInstances(final FB fb) {

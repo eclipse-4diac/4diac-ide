@@ -28,8 +28,6 @@ public final class Messages extends NLS {
 	public static String AbstractAttributeSection_DeleteSelectedAttribute;
 	public static String AdjustConnectionCommand_WrongConnectionSegmentIndex;
 	public static String AbstractViewEditPart_ERROR_createFigure;
-	public static String Abstract4diacEditPartFactory_ERROR_CantCreatePartForModelElement;
-	public static String Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement;
 	public static String AppearancePropertySection_ChangeBackgroundColor;
 	public static String AppearancePropertySection_LABEL_BackgroundColor;
 	public static String AppearancePropertySection_LABEL_ChooseColor;

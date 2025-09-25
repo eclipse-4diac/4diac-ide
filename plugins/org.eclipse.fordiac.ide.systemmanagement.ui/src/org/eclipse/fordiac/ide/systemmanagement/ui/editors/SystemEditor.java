@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemElementItemProviderAdapterFactory;
@@ -121,7 +122,13 @@ public class SystemEditor extends EditorPart
 					appTableViewer.refresh();
 				}
 			});
+			if (notification.getNewValue() instanceof final CompilerInfo compInfo) {
+				compInfo.eAdapters().add(compilerInfoListener);
 
+				if (notification.getOldValue() instanceof final CompilerInfo oldCompInfo) {
+					oldCompInfo.eAdapters().remove(compilerInfoListener);
+				}
+			}
 		}
 	};
 
@@ -131,6 +138,13 @@ public class SystemEditor extends EditorPart
 			if ((null != sysConfTreeViewer) && (!sysConfTreeViewer.getControl().isDisposed())) {
 				sysConfTreeViewer.refresh();
 			}
+		}
+	};
+
+	private final Adapter compilerInfoListener = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			typeInfo.refresh();
 		}
 	};
 
@@ -151,6 +165,9 @@ public class SystemEditor extends EditorPart
 			getCommandStack().removeCommandStackEventListener(this);
 			system.eAdapters().remove(appListener);
 			system.getSystemConfiguration().eAdapters().remove(sysConfListener);
+			if (system.getCompilerInfo() != null) {
+				system.getCompilerInfo().eAdapters().remove(compilerInfoListener);
+			}
 		}
 		removeAnnotationModelListener();
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -197,6 +214,9 @@ public class SystemEditor extends EditorPart
 				setPartName(system.getName());
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
+				if (system.getCompilerInfo() != null) {
+					system.getCompilerInfo().eAdapters().add(compilerInfoListener);
+				}
 			}
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {

@@ -85,7 +85,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		@Override
 		public void notifyChanged(final Notification notification) {
 			if (!notification.isTouch()) {
-				Display.getDefault().execute(() -> handleRefresh(notification));
+				Display.getDefault().execute(() -> {
+					// check if editpart has not been removed in the meantime
+					if (isActive()) {
+						handleRefresh(notification);
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
