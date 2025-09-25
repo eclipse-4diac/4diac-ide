@@ -161,7 +161,11 @@ public final class FBShapeHelper {
 	private static double getMaxEventPinWidth(final Stream<Event> pins, final int minPinLabelSize,
 			final int maxPinLabelSize) {
 		int topInputLabelSize = pins.filter(IInterfaceElement::isVisible).map(IInterfaceElement::getName)
-				.mapToInt(String::length).max().orElse(0);
+				.mapToInt(String::length).max().orElse(-1);
+		if (topInputLabelSize < 0) {
+			return 0.0;
+		}
+
 		topInputLabelSize = Math.clamp(topInputLabelSize, minPinLabelSize, maxPinLabelSize);
 
 		return topInputLabelSize * AVARAGE_CHAR_WIDTH + WIDTH_ADJUST_INTERFACE;
