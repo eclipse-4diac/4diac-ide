@@ -37,7 +37,7 @@ public final class CommentHelper {
 
 	public static String getTypeComment(final IInterfaceElement interfaceElement) {
 		if (interfaceElement != null) {
-			final FBNetworkElement fbn = interfaceElement.getFBNetworkElement();
+			final FBNetworkElement fbn = interfaceElement.getBlockFBNetworkElement();
 			if (fbn instanceof final StructManipulator structManipulator
 					&& structManipulator.getDataType() instanceof final StructuredType struct) {
 				final VarDeclaration structMember = struct.getMemberVariables().stream()

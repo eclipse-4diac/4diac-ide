@@ -80,12 +80,4 @@ public interface Comment extends FBNetworkElement {
 	 */
 	void setHeight(double value);
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	InterfaceList getInterface();
-
 } // Comment

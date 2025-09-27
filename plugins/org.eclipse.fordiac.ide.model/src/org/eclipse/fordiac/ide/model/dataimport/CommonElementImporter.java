@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
@@ -514,7 +515,7 @@ public abstract class CommonElementImporter {
 				&& pinNameAndVisibility.contains(":"); //$NON-NLS-1$
 	}
 
-	protected void parsePinVisibilityAttribute(final FBNetworkElement block) {
+	protected void parsePinVisibilityAttribute(final BlockFBNetworkElement block) {
 		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
 		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
@@ -530,7 +531,7 @@ public abstract class CommonElementImporter {
 				&& pinNameAndVarConfig.contains(":"); //$NON-NLS-1$
 	}
 
-	protected void parsePinVarConfigAttribute(final FBNetworkElement block) {
+	protected void parsePinVarConfigAttribute(final BlockFBNetworkElement block) {
 		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
 		final VarDeclaration inVar = block.getInterface().getVariable(temp[0]);
@@ -630,7 +631,7 @@ public abstract class CommonElementImporter {
 		compilerInfo.getImports().add(imp);
 	}
 
-	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
+	protected void parseFBChildren(final BlockFBNetworkElement block, final String parentNodeName)
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> (switch (name) {
 		case LibraryElementTags.PARAMETER_ELEMENT -> {
@@ -645,7 +646,8 @@ public abstract class CommonElementImporter {
 		}));
 	}
 
-	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException, TypeImportException {
+	public void handleFBAttributeChild(final BlockFBNetworkElement block)
+			throws XMLStreamException, TypeImportException {
 		if (isPinCommentAttribute()) {
 			parsePinComment(block);
 		} else if (isPinVisibilityAttribute()) {
@@ -665,7 +667,7 @@ public abstract class CommonElementImporter {
 		return LibraryElementTags.PIN_COMMENT.equals(name);
 	}
 
-	private void parsePinComment(final FBNetworkElement block) {
+	private void parsePinComment(final BlockFBNetworkElement block) {
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
 			final int splitPos = value.indexOf(':');
@@ -694,7 +696,7 @@ public abstract class CommonElementImporter {
 		addDependency(block.getDataType());
 	}
 
-	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
+	protected void parseParameter(final BlockFBNetworkElement block) throws TypeImportException, XMLStreamException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null == name) {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
@@ -850,7 +852,7 @@ public abstract class CommonElementImporter {
 		return null;
 	}
 
-	public static IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name,
+	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
 		IInterfaceElement ie = block.getInterfaceElement(name);
 		if (null == ie) {
@@ -859,8 +861,8 @@ public abstract class CommonElementImporter {
 		return ie;
 	}
 
-	protected static ErrorMarkerInterface createParameterErrorMarker(final FBNetworkElement block, final String name,
-			final Value value) {
+	protected static ErrorMarkerInterface createParameterErrorMarker(final BlockFBNetworkElement block,
+			final String name, final Value value) {
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
 				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, name, true, block.getInterface());
 		errorMarkerInterface.setValue(value);

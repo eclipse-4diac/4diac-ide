@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Johannes Keppler University, Linz,
  *                          Primetals Technologies Austria GmbH
  *
@@ -215,8 +215,8 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	}
 
 	private static String getActionOutputEventName(final Event event) {
-		if (event.getFBNetworkElement() instanceof AdapterFB) {
-			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
 		return event.getName();
 	}

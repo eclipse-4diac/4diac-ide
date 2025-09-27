@@ -41,7 +41,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getSockets <em>Sockets</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getErrorMarker <em>Error Marker</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBType <em>FB Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getFBNetworkElement <em>FB Network Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.InterfaceList#getBlockFBNetworkElement <em>Block FB Network Element</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList()
@@ -166,17 +166,17 @@ public interface InterfaceList extends EObject {
 	FBType getFBType();
 
 	/**
-	 * Returns the value of the '<em><b>FB Network Element</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface <em>Interface</em>}'.
+	 * Returns the value of the '<em><b>Block FB Network Element</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement#getInterface <em>Interface</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>FB Network Element</em>' container reference.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_FBNetworkElement()
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement#getInterface
+	 * @return the value of the '<em>Block FB Network Element</em>' container reference.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getInterfaceList_BlockFBNetworkElement()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement#getInterface
 	 * @model opposite="interface" transient="false" changeable="false"
 	 * @generated
 	 */
-	FBNetworkElement getFBNetworkElement();
+	BlockFBNetworkElement getBlockFBNetworkElement();
 
 	/**
 	 * <!-- begin-user-doc -->

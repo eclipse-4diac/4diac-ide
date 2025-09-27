@@ -120,7 +120,7 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	FBNetworkElement getFBNetworkElement();
+	BlockFBNetworkElement getBlockFBNetworkElement();
 
 	/**
 	 * <!-- begin-user-doc -->

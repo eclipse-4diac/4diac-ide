@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
  *
  * @generated
  */
-public class SubAppItemProvider extends FBNetworkElementItemProvider {
+public class SubAppItemProvider extends BlockFBNetworkElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->

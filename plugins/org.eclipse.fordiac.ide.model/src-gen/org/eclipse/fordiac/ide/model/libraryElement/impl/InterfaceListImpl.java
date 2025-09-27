@@ -27,9 +27,9 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -53,7 +53,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getSockets <em>Sockets</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getErrorMarker <em>Error Marker</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getFBType <em>FB Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getFBNetworkElement <em>FB Network Element</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceListImpl#getBlockFBNetworkElement <em>Block FB Network Element</em>}</li>
  * </ul>
  *
  * @generated
@@ -282,9 +282,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getFBNetworkElement() {
-		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT) return null;
-		return (FBNetworkElement)eContainer();
+	public BlockFBNetworkElement getBlockFBNetworkElement() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT) return null;
+		return (BlockFBNetworkElement)eContainer();
 	}
 
 	/**
@@ -292,9 +292,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FBNetworkElement basicGetFBNetworkElement() {
-		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT) return null;
-		return (FBNetworkElement)eInternalContainer();
+	public BlockFBNetworkElement basicGetBlockFBNetworkElement() {
+		if (eContainerFeatureID() != LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT) return null;
+		return (BlockFBNetworkElement)eInternalContainer();
 	}
 
 	/**
@@ -421,10 +421,10 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
 				return eBasicSetContainer(otherEnd, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
+			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
 				if (eInternalContainer() != null)
 					msgs = eBasicRemoveFromContainer(msgs);
-				return eBasicSetContainer(otherEnd, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, msgs);
+				return eBasicSetContainer(otherEnd, LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT, msgs);
 			default:
 				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
@@ -471,8 +471,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return ((InternalEList<?>)getErrorMarker()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
 				return eBasicSetContainer(null, LibraryElementPackage.INTERFACE_LIST__FB_TYPE, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
-				return eBasicSetContainer(null, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
+				return eBasicSetContainer(null, LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -488,8 +488,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 		switch (eContainerFeatureID()) {
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
 				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.FB_TYPE__INTERFACE_LIST, FBType.class, msgs);
-			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
-				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, FBNetworkElement.class, msgs);
+			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
+				return eInternalContainer().eInverseRemove(this, LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE, BlockFBNetworkElement.class, msgs);
 			default:
 				return super.eBasicRemoveFromContainerFeature(msgs);
 		}
@@ -523,9 +523,9 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
 				if (resolve) return getFBType();
 				return basicGetFBType();
-			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
-				if (resolve) return getFBNetworkElement();
-				return basicGetFBNetworkElement();
+			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
+				if (resolve) return getBlockFBNetworkElement();
+				return basicGetBlockFBNetworkElement();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -648,8 +648,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 				return errorMarker != null && !errorMarker.isEmpty();
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:
 				return basicGetFBType() != null;
-			case LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT:
-				return basicGetFBNetworkElement() != null;
+			case LibraryElementPackage.INTERFACE_LIST__BLOCK_FB_NETWORK_ELEMENT:
+				return basicGetBlockFBNetworkElement() != null;
 			default:
 				return super.eIsSet(featureID);
 		}

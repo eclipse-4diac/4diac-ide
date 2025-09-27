@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -70,7 +71,7 @@ public final class FBShapeHelper {
 	 * @param element The element
 	 * @return The width in X coordinates
 	 */
-	public static double getWidth(final FBNetworkElement element) {
+	public static double getWidth(final BlockFBNetworkElement element) {
 		final IProject project = ModelHelper.getProjectFromContext(element);
 		final int minPinLabelSize = PreferenceProvider.getInt(ModelPreferenceConstants.MODEL_PREFERENCES_ID,
 				ModelPreferenceConstants.MIN_PIN_LABEL_SIZE, 0, project);
@@ -102,7 +103,7 @@ public final class FBShapeHelper {
 	 * @param element The element
 	 * @return The height in Y coordinates
 	 */
-	public static double getHeight(final FBNetworkElement element) {
+	public static double getHeight(final BlockFBNetworkElement element) {
 		final int fbLines = element instanceof StructManipulator ? 3 : 2;
 
 		final InterfaceList interfaceList = element.getInterface();
@@ -171,7 +172,7 @@ public final class FBShapeHelper {
 		return topInputLabelSize * AVARAGE_CHAR_WIDTH + WIDTH_ADJUST_INTERFACE;
 	}
 
-	private static double getMaxPinWidth(final FBNetworkElement element, final int minPinLabelSize,
+	private static double getMaxPinWidth(final BlockFBNetworkElement element, final int minPinLabelSize,
 			final int maxPinLabelSize, final boolean isInput) {
 		final Predicate<IInterfaceElement> inputFilter = isInput ? IInterfaceElement::isIsInput
 				: Predicate.not(IInterfaceElement::isIsInput);
@@ -201,7 +202,7 @@ public final class FBShapeHelper {
 		return largestInterface;
 	}
 
-	protected static double getHiddenWidthAdjust(final FBNetworkElement element, final boolean isInput) {
+	protected static double getHiddenWidthAdjust(final BlockFBNetworkElement element, final boolean isInput) {
 		final Predicate<IInterfaceElement> inputFilter = isInput ? IInterfaceElement::isIsInput
 				: Predicate.not(IInterfaceElement::isIsInput);
 
@@ -212,7 +213,7 @@ public final class FBShapeHelper {
 		return 0.0;
 	}
 
-	protected static double getHiddenHeightAdjust(final FBNetworkElement element) {
+	protected static double getHiddenHeightAdjust(final BlockFBNetworkElement element) {
 		if (element.getInterface().getAllInterfaceElements().stream()
 				.anyMatch(Predicate.not(IInterfaceElement::isVisible)) || checkHiddenDemuxPin(element)) {
 			return HEIGHT_ADJUST_HIDDEN;

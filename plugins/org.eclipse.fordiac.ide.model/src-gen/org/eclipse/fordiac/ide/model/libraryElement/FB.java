@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model
  * @generated
  */
-public interface FB extends FBNetworkElement, ICallable {
+public interface FB extends BlockFBNetworkElement, ICallable {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

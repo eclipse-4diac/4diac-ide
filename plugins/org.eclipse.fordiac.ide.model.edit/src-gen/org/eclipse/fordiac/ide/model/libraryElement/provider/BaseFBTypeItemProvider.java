@@ -170,6 +170,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
@@ -182,6 +187,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
 				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
 
 		newChildDescriptors.add
 			(createChildParameter
