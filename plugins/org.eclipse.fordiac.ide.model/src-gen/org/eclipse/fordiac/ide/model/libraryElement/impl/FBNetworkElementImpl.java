@@ -31,8 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -48,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getPosition <em>Position</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getInterface <em>Interface</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementImpl#getGroup <em>Group</em>}</li>
  * </ul>
@@ -65,16 +62,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @ordered
 	 */
 	protected Position position;
-
-	/**
-	 * The cached value of the '{@link #getInterface() <em>Interface</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInterface()
-	 * @generated
-	 * @ordered
-	 */
-	protected InterfaceList interface_;
 
 	/**
 	 * The cached value of the '{@link #getMapping() <em>Mapping</em>}' reference.
@@ -189,74 +176,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public InterfaceList getInterface() {
-		if (interface_ != null && interface_.eIsProxy()) {
-			InternalEObject oldInterface = (InternalEObject)interface_;
-			interface_ = (InterfaceList)eResolveProxy(oldInterface);
-			if (interface_ != oldInterface) {
-				InternalEObject newInterface = (InternalEObject)interface_;
-				NotificationChain msgs =  oldInterface.eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, null);
-				if (newInterface.eInternalContainer() == null) {
-					msgs =  newInterface.eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, oldInterface, interface_));
-			}
-		}
-		return interface_;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public InterfaceList basicGetInterface() {
-		return interface_;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetInterface(InterfaceList newInterface, NotificationChain msgs) {
-		InterfaceList oldInterface = interface_;
-		interface_ = newInterface;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, oldInterface, newInterface);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setInterface(InterfaceList newInterface) {
-		if (newInterface != interface_) {
-			NotificationChain msgs = null;
-			if (interface_ != null)
-				msgs = ((InternalEObject)interface_).eInverseRemove(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
-			if (newInterface != null)
-				msgs = ((InternalEObject)newInterface).eInverseAdd(this, LibraryElementPackage.INTERFACE_LIST__FB_NETWORK_ELEMENT, InterfaceList.class, msgs);
-			msgs = basicSetInterface(newInterface, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, newInterface, newInterface));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Mapping getMapping() {
 		if (mapping != null && mapping.eIsProxy()) {
 			InternalEObject oldMapping = (InternalEObject)mapping;
@@ -281,20 +200,10 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated not 
-	 */
-	@Override
-	public void setMapping(final Mapping newMapping) {
-		setMappingGen(newMapping);
-		checkConnections();
-	}
-
-	/**
-	 * <!-- begin-user-doc --> 
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMappingGen(Mapping newMapping) {
+	@Override
+	public void setMapping(Mapping newMapping) {
 		Mapping oldMapping = mapping;
 		mapping = newMapping;
 		if (eNotificationRequired())
@@ -379,16 +288,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInterfaceElement(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public FBNetworkElement getOpposite() {
 		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOpposite(this);
 	}
@@ -401,16 +300,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	@Override
 	public FBNetwork getFbNetwork() {
 		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getFbNetwork(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void checkConnections() {
-		org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.checkConnections(this);
 	}
 
 	/**
@@ -554,39 +443,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInput(final String name) {
-		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getInput(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IInterfaceElement getOutput(final String name) {
-		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.getOutput(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public InterfaceList getTypeInterface() {
-		if(getTypeEntry() instanceof final org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry ifTypeEntry){
-			return ifTypeEntry.getInterface();
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public void updatePositionFromScreenCoordinates(final int x, final int y) {
 		PositionAnnotation.updatePositionFromScreenCoordinates(this, x,y);
 	}
@@ -609,10 +465,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				if (interface_ != null)
-					msgs = ((InternalEObject)interface_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
-				return basicSetInterface((InterfaceList)otherEnd, msgs);
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP:
 				if (group != null)
 					msgs = ((InternalEObject)group).eInverseRemove(this, LibraryElementPackage.GROUP__GROUP_ELEMENTS, Group.class, msgs);
@@ -632,8 +484,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				return basicSetPosition(null, msgs);
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				return basicSetInterface(null, msgs);
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP:
 				return basicSetGroup(null, msgs);
 			default:
@@ -652,9 +502,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				if (resolve) return getPosition();
 				return basicGetPosition();
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				if (resolve) return getInterface();
-				return basicGetInterface();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				if (resolve) return getMapping();
 				return basicGetMapping();
@@ -676,9 +523,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				setPosition((Position)newValue);
-				return;
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				setInterface((InterfaceList)newValue);
 				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				setMapping((Mapping)newValue);
@@ -703,9 +547,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				setPosition((Position)null);
 				return;
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				setInterface((InterfaceList)null);
-				return;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				setMapping((Mapping)null);
 				return;
@@ -728,8 +569,6 @@ public abstract class FBNetworkElementImpl extends TypedConfigureableObjectImpl 
 		switch (featureID) {
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__POSITION:
 				return position != null;
-			case LibraryElementPackage.FB_NETWORK_ELEMENT__INTERFACE:
-				return interface_ != null;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__MAPPING:
 				return mapping != null;
 			case LibraryElementPackage.FB_NETWORK_ELEMENT__GROUP:

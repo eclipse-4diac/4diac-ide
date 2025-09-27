@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -299,7 +300,7 @@ public final class ConnectionHelper {
 		}
 
 		private void handleMissingConnectionSource() {
-			final FBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(getSourceFbName());
+			final BlockFBNetworkElement sourceFB = FordiacMarkerHelper.createErrorMarkerFB(getSourceFbName());
 			srcInterfaceList = sourceFB.getInterface();
 			importer.getFbNetwork().getNetworkElements().add(sourceFB);
 			sourceFB.setName(NameRepository.createUniqueName(sourceFB, sourceFB.getName()));
@@ -308,7 +309,7 @@ public final class ConnectionHelper {
 
 		private void handleMissingConnectionDestination() {
 			// check if there is already one
-			final FBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(getDestFbName());
+			final BlockFBNetworkElement destinationFb = FordiacMarkerHelper.createErrorMarkerFB(getDestFbName());
 			destInterfaceList = destinationFb.getInterface();
 			importer.getFbNetwork().getNetworkElements().add(destinationFb);
 			destinationFb.setName(NameRepository.createUniqueName(destinationFb, destinationFb.getName()));
@@ -401,8 +402,8 @@ public final class ConnectionHelper {
 				element = importer.findFBNetworkElement(elementName);
 			}
 
-			if (null != element) {
-				final InterfaceList ieList = element.getInterface();
+			if (element instanceof final BlockFBNetworkElement blockFbnElem) {
+				final InterfaceList ieList = blockFbnElem.getInterface();
 				if (isInput) {
 					destInterfaceList = ieList;
 				} else {

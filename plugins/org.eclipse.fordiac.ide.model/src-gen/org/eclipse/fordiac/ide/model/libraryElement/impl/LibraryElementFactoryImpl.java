@@ -127,6 +127,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -182,9 +183,9 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ARRAY_SIZE: return createArraySize();
 			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
 			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
 			case LibraryElementPackage.BASIC_FB_TYPE: return createBasicFBType();
-			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
 			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
 			case LibraryElementPackage.COLOR: return createColor();
 			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
@@ -295,6 +296,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createTypeLibraryFromString(eDataType, initialValue);
 			case LibraryElementPackage.VAR_DECL_LIST:
 				return createVarDeclListFromString(eDataType, initialValue);
+			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
+				return createInterfaceTypeEntryFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -326,6 +329,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertTypeLibraryToString(eDataType, instanceValue);
 			case LibraryElementPackage.VAR_DECL_LIST:
 				return convertVarDeclListToString(eDataType, instanceValue);
+			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
+				return convertInterfaceTypeEntryToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1486,6 +1491,24 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertVarDeclListToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public InterfaceTypeEntry createInterfaceTypeEntryFromString(EDataType eDataType, String initialValue) {
+		return (InterfaceTypeEntry)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertInterfaceTypeEntryToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

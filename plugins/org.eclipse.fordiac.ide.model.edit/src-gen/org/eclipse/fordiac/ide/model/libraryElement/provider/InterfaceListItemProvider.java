@@ -233,6 +233,11 @@ public class InterfaceListItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
@@ -248,6 +253,11 @@ public class InterfaceListItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
@@ -260,6 +270,11 @@ public class InterfaceListItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
 
 		newChildDescriptors.add
 			(createChildParameter

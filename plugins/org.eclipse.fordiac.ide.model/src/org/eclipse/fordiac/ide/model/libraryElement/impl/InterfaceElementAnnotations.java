@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -65,10 +66,10 @@ public final class InterfaceElementAnnotations {
 						.equals(varDecl.eContainingFeature());
 	}
 
-	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement element) {
+	public static BlockFBNetworkElement getBlockFBNetworkElement(final IInterfaceElement element) {
 		return switch (element.eContainer()) {
-		case final FBNetworkElement fbNetworkElement -> fbNetworkElement;
-		case final InterfaceList interfaceList -> interfaceList.getFBNetworkElement();
+		case final BlockFBNetworkElement blockFbNetworkElement -> blockFbNetworkElement;
+		case final InterfaceList interfaceList -> interfaceList.getBlockFBNetworkElement();
 		case null, default -> null;
 		};
 	}
@@ -117,7 +118,7 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static boolean isInTypedInstance(final IInterfaceElement element) {
-		final FBNetworkElement fbNetworkElement = element.getFBNetworkElement();
+		final FBNetworkElement fbNetworkElement = element.getBlockFBNetworkElement();
 		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 
@@ -139,12 +140,12 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static IInterfaceElement findInTypeInterface(final IInterfaceElement element) {
-		final FBNetworkElement fbnEl = element.getFBNetworkElement();
-		if (fbnEl == null) {
+		final BlockFBNetworkElement blockFbnEl = element.getBlockFBNetworkElement();
+		if (blockFbnEl == null) {
 			return null;
 		}
 
-		final InterfaceList typeInterface = fbnEl.getTypeInterface();
+		final InterfaceList typeInterface = blockFbnEl.getTypeInterface();
 		if (typeInterface == null) {
 			return null;
 		}

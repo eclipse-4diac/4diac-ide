@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
@@ -25,18 +25,12 @@ package org.eclipse.fordiac.ide.model.annotations;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class FBNetworkElementAnnotations {
-
-	public static final InterfaceList EMPTY_INTERFACE_LIST = LibraryElementFactory.eINSTANCE.createInterfaceList();
 
 	public static Resource getResource(final FBNetworkElement fbne) {
 		if (fbne instanceof CommunicationChannel) {
@@ -62,27 +56,6 @@ public final class FBNetworkElementAnnotations {
 		return null;
 	}
 
-	public static IInterfaceElement getInterfaceElement(final FBNetworkElement fbne, final String name) {
-		if (fbne.getInterface() != null) {
-			return fbne.getInterface().getInterfaceElement(name);
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getInput(final FBNetworkElement fbne, final String name) {
-		if (fbne.getInterface() != null) {
-			return fbne.getInterface().getInput(name);
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getOutput(final FBNetworkElement fbne, final String name) {
-		if (fbne.getInterface() != null) {
-			return fbne.getInterface().getOutput(name);
-		}
-		return null;
-	}
-
 	public static FBNetworkElement getOpposite(final FBNetworkElement fbne) {
 		// try to find the other corresponding mapped entity if this FBNetworkElement is
 		// mapped
@@ -96,13 +69,6 @@ public final class FBNetworkElementAnnotations {
 		// an FB should always be put in an fbNetwork this is at the same time also a
 		// null check
 		return (fbne.eContainer() instanceof final FBNetwork fbn) ? fbn : null;
-	}
-
-	public static void checkConnections(final FBNetworkElement fbne) {
-		fbne.getInterface().getAllInterfaceElements().forEach(element -> {
-			element.getInputConnections().forEach(Connection::checkIfConnectionBroken);
-			element.getOutputConnections().forEach(Connection::checkIfConnectionBroken);
-		});
 	}
 
 	public static boolean isMapped(final FBNetworkElement fbne) {

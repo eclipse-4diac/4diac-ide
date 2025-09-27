@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -143,6 +144,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -525,12 +527,14 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateAttribute((Attribute)value, diagnostics, context);
 			case LibraryElementPackage.ATTRIBUTE_DECLARATION:
 				return validateAttributeDeclaration((AttributeDeclaration)value, diagnostics, context);
+			case LibraryElementPackage.AUTOMATION_SYSTEM:
+				return validateAutomationSystem((AutomationSystem)value, diagnostics, context);
 			case LibraryElementPackage.BASE_FB_TYPE:
 				return validateBaseFBType((BaseFBType)value, diagnostics, context);
 			case LibraryElementPackage.BASIC_FB_TYPE:
 				return validateBasicFBType((BasicFBType)value, diagnostics, context);
-			case LibraryElementPackage.AUTOMATION_SYSTEM:
-				return validateAutomationSystem((AutomationSystem)value, diagnostics, context);
+			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT:
+				return validateBlockFBNetworkElement((BlockFBNetworkElement)value, diagnostics, context);
 			case LibraryElementPackage.CFB_INSTANCE:
 				return validateCFBInstance((CFBInstance)value, diagnostics, context);
 			case LibraryElementPackage.COLOR:
@@ -741,6 +745,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateTypeLibrary((TypeLibrary)value, diagnostics, context);
 			case LibraryElementPackage.VAR_DECL_LIST:
 				return validateVarDeclList((List<VarDeclaration>)value, diagnostics, context);
+			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
+				return validateInterfaceTypeEntry((InterfaceTypeEntry)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -978,6 +984,26 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(basicFBType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBlockFBNetworkElement(BlockFBNetworkElement blockFBNetworkElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(blockFBNetworkElement, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(blockFBNetworkElement, diagnostics, context);
 		return result;
 	}
 
@@ -3031,6 +3057,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateVarDeclList(List<VarDeclaration> varDeclList, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateInterfaceTypeEntry(InterfaceTypeEntry interfaceTypeEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

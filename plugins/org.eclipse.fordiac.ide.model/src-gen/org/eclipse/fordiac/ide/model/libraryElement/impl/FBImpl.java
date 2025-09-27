@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated
  */
-public class FBImpl extends FBNetworkElementImpl implements FB {
+public class FBImpl extends BlockFBNetworkElementImpl implements FB {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

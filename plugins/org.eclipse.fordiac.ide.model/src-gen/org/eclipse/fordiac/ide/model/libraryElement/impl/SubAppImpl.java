@@ -42,7 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
  *
  * @generated
  */
-public abstract class SubAppImpl extends FBNetworkElementImpl implements SubApp {
+public abstract class SubAppImpl extends BlockFBNetworkElementImpl implements SubApp {
 	/**
 	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute.
 	 * <!-- begin-user-doc -->

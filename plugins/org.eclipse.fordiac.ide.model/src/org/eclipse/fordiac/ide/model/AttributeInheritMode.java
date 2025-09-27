@@ -19,10 +19,10 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -42,7 +42,7 @@ public enum AttributeInheritMode {
 		}
 		AttributeInheritMode.copyAttributes(newElement, typeElement.getAttributes());
 
-		if (newElement instanceof final FBNetworkElement fbne && typeElement instanceof final FBType fbType) {
+		if (newElement instanceof final BlockFBNetworkElement fbne && typeElement instanceof final FBType fbType) {
 			fbType.getInterfaceList().getAllInterfaceElements().forEach(typeInterfaceElement -> {
 				final var newInterface = fbne.getInterfaceElement(typeInterfaceElement.getName());
 				AttributeInheritMode.copyAttributes(newInterface, typeInterfaceElement.getAttributes());

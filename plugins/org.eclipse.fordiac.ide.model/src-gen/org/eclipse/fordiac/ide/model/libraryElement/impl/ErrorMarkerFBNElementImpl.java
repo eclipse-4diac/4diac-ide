@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *
  * @generated
  */
-public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
+public class ErrorMarkerFBNElementImpl extends BlockFBNetworkElementImpl implements ErrorMarkerFBNElement {
 	/**
 	 * The cached value of the '{@link #getRepairedElement() <em>Repaired Element</em>}' reference.
 	 * <!-- begin-user-doc -->

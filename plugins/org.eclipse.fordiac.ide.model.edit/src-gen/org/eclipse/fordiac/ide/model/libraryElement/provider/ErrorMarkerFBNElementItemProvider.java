@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
-public class ErrorMarkerFBNElementItemProvider extends FBNetworkElementItemProvider {
+public class ErrorMarkerFBNElementItemProvider extends BlockFBNetworkElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz
  *                          Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -136,10 +137,11 @@ public final class FBNetworkHelper {
 
 	private static void createResourceTypeFBs(final EList<FBNetworkElement> networkElements,
 			final FBNetwork dstNetwork) {
-		networkElements.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
+		networkElements.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
+				.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
 	}
 
-	private static void createResourceTypeFB(final FBNetworkElement srcFb, final FBNetwork dstNetwork) {
+	private static void createResourceTypeFB(final BlockFBNetworkElement srcFb, final FBNetwork dstNetwork) {
 		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 		dstNetwork.getNetworkElements().add(copy);
 		copy.setTypeEntry(srcFb.getTypeEntry());
@@ -184,14 +186,14 @@ public final class FBNetworkHelper {
 	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie, final InterfaceList destInterface,
 			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
 		final IInterfaceElement interfaceElement;
-		if (ie.getFBNetworkElement() == null || srcNetwork != ie.getFBNetworkElement().getFbNetwork()) {
+		if (ie.getBlockFBNetworkElement() == null || srcNetwork != ie.getBlockFBNetworkElement().getFbNetwork()) {
 			interfaceElement = destInterface.getInterfaceElement(ie.getName());
 		} else {
-			final FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
-			if (null == element) {
+			final FBNetworkElement element = dstNetwork.getElementNamed(ie.getBlockFBNetworkElement().getName());
+			if (!(element instanceof final BlockFBNetworkElement blockFbnel)) {
 				return null;
 			}
-			interfaceElement = element.getInterfaceElement(ie.getName());
+			interfaceElement = blockFbnel.getInterfaceElement(ie.getName());
 		}
 		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 				&& varDeclaration.isIsInput() != ie.isIsInput()) {
