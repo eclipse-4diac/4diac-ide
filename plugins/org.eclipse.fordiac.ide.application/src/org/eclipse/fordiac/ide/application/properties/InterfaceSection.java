@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,15 +20,14 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class InterfaceSection extends AbstractInterfaceSection {
 
-
 	@Override
-	protected FBNetworkElement getInputType(final Object input) {
+	protected BlockFBNetworkElement getInputType(final Object input) {
 		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
@@ -42,8 +40,8 @@ public class InterfaceSection extends AbstractInterfaceSection {
 	}
 
 	@Override
-	protected FBNetworkElement getType() {
-		return (FBNetworkElement) super.getType();
+	protected BlockFBNetworkElement getType() {
+		return (BlockFBNetworkElement) super.getType();
 	}
 
 	private final Adapter interfaceAdapter = new EContentAdapter() {

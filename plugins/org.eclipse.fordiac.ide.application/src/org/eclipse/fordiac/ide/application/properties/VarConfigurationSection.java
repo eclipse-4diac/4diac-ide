@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -70,7 +71,7 @@ public class VarConfigurationSection extends AbstractSection {
 	private static String separationPoint = "."; //$NON-NLS-1$
 	private TypedSubApp rootTSA;
 	private final Map<String, VarDeclaration> displayMap = new LinkedHashMap<>();
-	private final static Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
+	private static final Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -194,7 +195,9 @@ public class VarConfigurationSection extends AbstractSection {
 		for (final FBNetworkElement fbne : elements) {
 			final String prefix = currentPrefix + fbne.getName() + separationPoint;
 			final boolean shouldCopy = !isPartOfEditedStructure(getType(), fbne);
-			addPossibleVarConfigs(fbne, result, prefix, shouldCopy);
+			if (fbne instanceof final BlockFBNetworkElement bfbne) {
+				addPossibleVarConfigs(bfbne, result, prefix, shouldCopy);
+			}
 
 			if (fbne instanceof final TypedSubApp tsa) {
 				collectVarConfigsRecursive(tsa, result, visited, prefix);
@@ -219,7 +222,7 @@ public class VarConfigurationSection extends AbstractSection {
 		return false;
 	}
 
-	private void addPossibleVarConfigs(final FBNetworkElement fbne, final Map<String, VarDeclaration> result,
+	private void addPossibleVarConfigs(final BlockFBNetworkElement fbne, final Map<String, VarDeclaration> result,
 			final String prefix, final boolean shouldCopy) {
 		for (final IInterfaceElement elem : fbne.getInterface().getAllInterfaceElements()) {
 			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
@@ -294,7 +297,7 @@ public class VarConfigurationSection extends AbstractSection {
 		final int lastDot = qualifiedName.lastIndexOf('.');
 		final String path = (lastDot > 0) ? qualifiedName.substring(0, lastDot) : qualifiedName;
 		Iterable<FBNetworkElement> current = roots;
-		for (final String seg : path.split("\\.")) {
+		for (final String seg : path.split("\\.")) { //$NON-NLS-1$
 			if (seg.isEmpty()) {
 				continue;
 			}
@@ -327,11 +330,11 @@ public class VarConfigurationSection extends AbstractSection {
 		for (int i = 0; i < parts.length; i++) {
 			if (rootName.equals(parts[i])) {
 				if (i + 1 >= parts.length) {
-					return "";
+					return ""; //$NON-NLS-1$
 				}
 				final StringBuilder sb = new StringBuilder();
 				for (int j = i + 1; j < parts.length; j++) {
-					if (sb.length() > 0) {
+					if (!sb.isEmpty()) {
 						sb.append(separationPoint);
 					}
 					sb.append(parts[j]);
