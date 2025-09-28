@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,7 +28,7 @@ public class FilterProperties {
 
 	public static boolean isSubappPin(final Object o) {
 		if (o instanceof final IInterfaceElement pin) {
-			final FBNetworkElement fbEl = pin.getFBNetworkElement();
+			final FBNetworkElement fbEl = pin.getBlockFBNetworkElement();
 			return isSubapp(fbEl);
 		}
 		return false;
@@ -51,7 +51,7 @@ public class FilterProperties {
 
 	public static boolean isTypedSubappPin(final Object o) {
 		if (isSubappPin(o)) {
-			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getFBNetworkElement();
+			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getBlockFBNetworkElement();
 			return isTyped(fbNetworkElement);
 		}
 		return false;
@@ -63,7 +63,7 @@ public class FilterProperties {
 
 	public static boolean isUntypedSubappPin(final Object o) {
 		if (isSubappPin(o)) {
-			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getFBNetworkElement();
+			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getBlockFBNetworkElement();
 			return !isTyped(fbNetworkElement);
 
 		}

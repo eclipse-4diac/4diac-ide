@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -31,6 +32,8 @@ import org.eclipse.gef.commands.Command;
  * Port. This Command does not reroute EventConnections.
  */
 public class InsertStructManipulatorCommand extends Command {
+	private static final String STRUCT_DEMUX_TYPE_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
+	private static final String STRUCT_MUX_TYPE_NAME = "STRUCT_MUX"; //$NON-NLS-1$
 	private final StructuredType structType;
 	private final boolean isMUX;
 	private final IInterfaceElement port;
@@ -51,18 +54,19 @@ public class InsertStructManipulatorCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return port.getType() instanceof StructuredType && port.getFBNetworkElement().getTypeLibrary()
-				.getFBTypeEntry(isMUX ? "STRUCT_MUX" : "STRUCT_DEMUX") != null;
+		return port.getType() instanceof StructuredType && port.getBlockFBNetworkElement().getTypeLibrary()
+				.getFBTypeEntry(isMUX ? STRUCT_MUX_TYPE_NAME : STRUCT_DEMUX_TYPE_NAME) != null;
 	}
 
 	@Override
 	public void execute() {
-		final FBNetworkElement element = port.getFBNetworkElement();
+		final FBNetworkElement element = port.getBlockFBNetworkElement();
 
 		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX((int) element.getPosition().getX() + (isMUX ? (-1000.0) : 1000.0));
 		pos.setY((int) element.getPosition().getY());
-		muxcreate = new FBCreateCommand(element.getTypeLibrary().getFBTypeEntry(isMUX ? "STRUCT_MUX" : "STRUCT_DEMUX"),
+		muxcreate = new FBCreateCommand(
+				element.getTypeLibrary().getFBTypeEntry(isMUX ? STRUCT_MUX_TYPE_NAME : STRUCT_DEMUX_TYPE_NAME),
 				element.getFbNetwork(), pos);
 		muxcreate.execute();
 
@@ -78,7 +82,7 @@ public class InsertStructManipulatorCommand extends Command {
 		createCon.execute();
 	}
 
-	public FBNetworkElement getNewElement() {
+	public BlockFBNetworkElement getNewElement() {
 		return changeStruct.getNewElement();
 	}
 

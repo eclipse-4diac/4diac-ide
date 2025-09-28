@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,7 +34,7 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof final IInterfaceElement element) {
-			if (element.getFBNetworkElement() instanceof UntypedSubApp) {
+			if (element.getBlockFBNetworkElement() instanceof UntypedSubApp) {
 				return new UntypedSubAppInterfaceElementEditPartForResource();
 			}
 			return new InterfaceEditPartForResourceFBs();

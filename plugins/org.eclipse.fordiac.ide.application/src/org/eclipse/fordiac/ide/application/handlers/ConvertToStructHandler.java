@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -112,7 +112,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	private static FBNetworkElement getNetworkElementFromSelectedPins(final IStructuredSelection selectedPins) {
 		for (final Object pin : selectedPins) {
 			if (pin instanceof final SubAppInternalInterfaceEditPart ep && ep.getModel() instanceof VarDeclaration) {
-				return ep.getModel().getFBNetworkElement();
+				return ep.getModel().getBlockFBNetworkElement();
 			}
 			if (pin instanceof final InterfaceEditPartForFBNetwork ep && ep.getModel() instanceof VarDeclaration) {
 				return (FBNetworkElement) ep.getParent().getModel();

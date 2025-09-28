@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *                          Martin Erich Jobst
  *
@@ -72,7 +72,7 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 
 	public static ChangeDataTypeCommand forDataType(final IInterfaceElement interfaceElement, final DataType dataType) {
 		final ChangeDataTypeCommand result = new ChangeDataTypeCommand(interfaceElement, dataType);
-		if (interfaceElement != null && interfaceElement.getFBNetworkElement() instanceof final SubApp subApp
+		if (interfaceElement != null && interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp
 				&& subApp.isMapped()) {
 			result.getAdditionalCommands().add(new ChangeDataTypeCommand(
 					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));

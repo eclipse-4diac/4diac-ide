@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -129,7 +129,7 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 	}
 
 	private static Stream<FBNetwork> getTargetFBNetworks(final IInterfaceElement target) {
-		final FBNetworkElement networkElement = target.getFBNetworkElement();
+		final FBNetworkElement networkElement = target.getBlockFBNetworkElement();
 		return switch (networkElement) {
 		case null -> Stream.empty();
 		case final AdapterFB adapterFB -> Stream.concat(Stream.ofNullable(networkElement.getFbNetwork()),

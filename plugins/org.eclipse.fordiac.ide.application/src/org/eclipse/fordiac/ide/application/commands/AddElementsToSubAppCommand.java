@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Johannes Kepler University,
+ * Copyright (c) 2018, 2025 Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -215,9 +215,10 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 
 	private void checkConnection(final Connection con, final IInterfaceElement opposite,
 			final IInterfaceElement ownIE) {
-		if ((opposite.getFBNetworkElement() != null) && isPartOfMove(opposite.getFBNetworkElement())) {
+		if ((opposite.getBlockFBNetworkElement() != null) && isPartOfMove(opposite.getBlockFBNetworkElement())) {
 			moveConIntoSubApp(con);
-		} else if ((opposite.getFBNetworkElement() != null) && targetSubApp.equals(opposite.getFBNetworkElement())) {
+		} else if ((opposite.getBlockFBNetworkElement() != null)
+				&& targetSubApp.equals(opposite.getBlockFBNetworkElement())) {
 			// the connection's opposite target is within the subapp
 			moveInterfaceCrossingConIntoSubApp(con, opposite, ownIE);
 		} else {

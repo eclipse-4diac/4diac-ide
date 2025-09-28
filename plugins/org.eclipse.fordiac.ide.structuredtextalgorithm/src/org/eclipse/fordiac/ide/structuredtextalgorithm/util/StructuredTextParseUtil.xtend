@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -112,7 +112,7 @@ class StructuredTextParseUtil {
 	def static STTypeDeclaration validateType(VarDeclaration decl, List<Issue> issues) {
 		val parser = SERVICE_PROVIDER_FBT.get(IParser) as STAlgorithmParser
 		// use context from FB type since the type declaration is in the context of the FB type (and not an instance)
-		val typeVariable = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
+		val typeVariable = decl.blockFBNetworkElement?.type?.interfaceList?.getVariable(decl.name) ?: decl
 		decl.fullTypeName.parse(parser.grammarAccess.STTypeDeclarationRule, typeVariable?.eResource?.URI, null,
 			typeVariable.getContainerOfType(LibraryElement), null, issues).rootASTElement as STTypeDeclaration
 	}

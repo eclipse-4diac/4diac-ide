@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,7 +33,7 @@ public class RootNodeChange extends CompositeChange {
 
 	private static String getFileEnding(final EObject node) {
 		if (node instanceof final LibraryElement le && le.getTypeEntry() != null) {
-			return "." + le.getTypeEntry().getFile().getFileExtension();
+			return "." + le.getTypeEntry().getFile().getFileExtension(); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -41,12 +41,12 @@ public class RootNodeChange extends CompositeChange {
 	private static String getName(final EObject eObj) {
 		INamedElement node = null;
 		if (!(eObj instanceof final INamedElement n)) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		node = n;
 
-		if (node instanceof final IInterfaceElement iel && iel.getFBNetworkElement() != null) {
-			return iel.getFBNetworkElement().getQualifiedName() + iel.getQualifiedName();
+		if (node instanceof final IInterfaceElement iel && iel.getBlockFBNetworkElement() != null) {
+			return iel.getBlockFBNetworkElement().getQualifiedName() + iel.getQualifiedName();
 		}
 		if (node instanceof VarDeclaration && node.eContainer() instanceof final StructuredType struct) {
 			return struct.getName() + "." + node.getName(); //$NON-NLS-1$

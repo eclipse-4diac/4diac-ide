@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
@@ -75,7 +75,7 @@ public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 		qualNameChange.stream().filter(change -> change.newQualName() == null).map(QualNameChange::notifier)
 				.filter(MarkPredecessorHandler::hasPredecessorMarker).forEach(t -> {
 					if (t instanceof final FBNetworkElement fbe) {
-						final AbstractFBNElementEditPart ep = getEP(fbe);
+						final AbstractBlockFBNElementEditPart ep = getEP(fbe);
 						if (ep.getRoot() instanceof final FBNetworkRootEditPart root) {
 							MarkPredecessorHandler.removePredecessor(root);
 						}
@@ -86,7 +86,7 @@ public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 		qualNameChange.stream().map(QualNameChange::notifier).filter(MarkPredecessorHandler::hasPredecessorMarker)
 				.forEach(t -> {
 					if (t instanceof final FBNetworkElement fbe) {
-						final AbstractFBNElementEditPart ep = getEP(fbe);
+						final AbstractBlockFBNElementEditPart ep = getEP(fbe);
 						if (ep.getRoot() instanceof final FBNetworkRootEditPart root) {
 							MarkPredecessorHandler.setPredecessor(root, ep);
 						}
@@ -94,11 +94,11 @@ public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 				});
 	}
 
-	private static AbstractFBNElementEditPart getEP(final FBNetworkElement elem) {
+	private static AbstractBlockFBNElementEditPart getEP(final FBNetworkElement elem) {
 		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
 		if (currentActiveEditor != null) {
 			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
-			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractFBNElementEditPart ep) {
+			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractBlockFBNElementEditPart ep) {
 				return ep;
 			}
 		}

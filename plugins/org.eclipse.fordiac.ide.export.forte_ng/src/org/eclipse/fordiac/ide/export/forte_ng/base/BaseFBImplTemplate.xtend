@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst,
  *                          Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -94,14 +94,14 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 	'''
 
 	def protected generateSendEvent(Event event) {
-		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(*«(event.FBNetworkElement as AdapterFB).generateName», FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
+		if (event.blockFBNetworkElement instanceof AdapterFB) {
+			return '''sendAdapterEvent(*«(event.blockFBNetworkElement as AdapterFB).generateName», FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
 		}
 		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
 
 	def private getAdapterDeclaration(Event event) {
-		(event.FBNetworkElement as AdapterFB).adapterDecl;
+		(event.blockFBNetworkElement as AdapterFB).adapterDecl;
 	}
 
 	def protected generateAlgorithms() '''

@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -159,23 +160,23 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
 		final IInterfaceElement element = (IInterfaceElement) modelElement;
 
-		if ((element.getFBNetworkElement() instanceof StructManipulator)
+		if ((element.getBlockFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType) && (isMuxOutput(element) || isDemuxInput(element))) {
 			return new StructInterfaceEditPart();
 		}
 
-		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
+		if (element.getBlockFBNetworkElement() instanceof UntypedSubApp) {
 			return new UntypedSubAppInterfaceElementEditPart();
 		}
 		return new InterfaceEditPartForFBNetwork();
 	}
 
 	public static boolean isDemuxInput(final IInterfaceElement element) {
-		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
+		return (element.getBlockFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
 	}
 
 	public static boolean isMuxOutput(final IInterfaceElement element) {
-		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
+		return (element.getBlockFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -124,8 +124,8 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static String getEventName(final Event event) {
-		if (event.getFBNetworkElement() instanceof AdapterFB) {
-			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
 		return event.getName();
 	}

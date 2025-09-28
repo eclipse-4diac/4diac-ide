@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022, 2023 Johannes Kepler University Linz and others
+ * Copyright (c) 2021, 2025 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -574,14 +574,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final FBNetworkRuntime fBNetworkRuntime) {
 		final FBNetworkRuntime copiedRt = EcoreUtil.copy(fBNetworkRuntime);
 		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest, copiedRt);
-		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
+		destinationEventOccurence.setParentFB(dest.getBlockFBNetworkElement());
 		return TransactionFactory.createFrom(destinationEventOccurence);
 	}
 
 	private static FBTransaction createNewTransaction(final IInterfaceElement dest,
 			final EventOccurrence sourceEventOccurrence) {
 		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest, null);
-		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
+		destinationEventOccurence.setParentFB(dest.getBlockFBNetworkElement());
 		final FBTransaction transaction = TransactionFactory.createFrom(destinationEventOccurence);
 		sourceEventOccurrence.getCreatedTransactions().add(transaction);
 		return transaction;

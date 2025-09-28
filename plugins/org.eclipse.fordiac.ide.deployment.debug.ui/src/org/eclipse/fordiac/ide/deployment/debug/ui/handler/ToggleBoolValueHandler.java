@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -66,7 +66,7 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 				ErrorDialog.openError(null, null, null, Status.error(e.getLocalizedMessage(), e));
 			}
 			if (stack != null && monitoringValueWriteThrough
-					&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getFBNetworkElement())) {
+					&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getBlockFBNetworkElement())) {
 				stack.execute(new ChangeValueCommand(varDeclaration, newValue));
 			}
 		}

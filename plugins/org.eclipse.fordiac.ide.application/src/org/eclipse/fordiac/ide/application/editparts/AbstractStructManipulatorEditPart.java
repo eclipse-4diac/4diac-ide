@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2023 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,7 +32,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-public abstract class AbstractStructManipulatorEditPart extends AbstractFBNElementEditPart {
+public abstract class AbstractStructManipulatorEditPart extends AbstractBlockFBNElementEditPart {
 	protected AbstractStructManipulatorEditPart() {
 	}
 

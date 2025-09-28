@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
+ * Copyright (c) 2017, 2025 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -79,8 +79,8 @@ class CompositeFBFilter {
 	  «var allCons = type.FBNetwork.eventConnections»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e)))»
 	  «FOR con : connections SEPARATOR ','»  	
-	  «var sne = con.source.FBNetworkElement»
-	  «var dne = con.destination.FBNetworkElement»
+	  «var sne = con.source.blockFBNetworkElement»
+	  «var dne = con.destination.blockFBNetworkElement»
 	  «IF null !== dne && null !== sne»
 	  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ELSEIF null === dne»
@@ -114,7 +114,7 @@ class CompositeFBFilter {
 	  «var conList = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).toList»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e))»
 	  «FOR con : connections SEPARATOR ','»
-	  «var dne = con.destination.FBNetworkElement»
+	  «var dne = con.destination.blockFBNetworkElement»
 	  «IF null !== dne»
 	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ELSE»
@@ -133,8 +133,8 @@ class CompositeFBFilter {
 	  «var allCons = type.FBNetwork.dataConnections»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e)))»
 	  «FOR con : connections SEPARATOR ','»  	
-	  «var sne = con.source.FBNetworkElement»
-	  «var dne = con.destination.FBNetworkElement»
+	  «var sne = con.source.blockFBNetworkElement»
+	  «var dne = con.destination.blockFBNetworkElement»
 	  «IF null !== dne && null !== sne»
 	  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ELSEIF null === dne»
@@ -151,8 +151,8 @@ class CompositeFBFilter {
 	adapterConnections = {
 	  «val connections = type.FBNetwork.adapterConnections»
 	  «FOR con : connections SEPARATOR ','»  	
-		  «val sne = con.source.FBNetworkElement»
-		  «val dne = con.destination.FBNetworkElement»
+		  «val sne = con.source.blockFBNetworkElement»
+		  «val dne = con.destination.blockFBNetworkElement»
 		  {«sne.luaConnectionString(con.source, type, "src")», «dne.luaConnectionString(con.destination, type, "dst")»}
 	  «ENDFOR»
 	}'''
@@ -163,7 +163,7 @@ class CompositeFBFilter {
 	  «var conList = allCons.filter(e| e.source.outputConnections.size == 1 || (e.source.outputConnections.size > 1 && e.source.outputConnections.get(0).equals(e))).toList»
 	  «var connections = allCons.filter(e| e.source.outputConnections.size > 1 && !e.source.outputConnections.get(0).equals(e))»
 	  «FOR con : connections SEPARATOR ','»
-  	  «var dne = con.destination.FBNetworkElement»
+  	  «var dne = con.destination.blockFBNetworkElement»
 	  «IF null !== dne»
 	  {connectionNum = «org.eclipse.fordiac.ide.export.forte_lua.filter.CompositeFBFilter.getConnectionNumber(conList, con)», «dne.luaConnectionString(con.destination, type, "dst")»}
   	  «ELSE»

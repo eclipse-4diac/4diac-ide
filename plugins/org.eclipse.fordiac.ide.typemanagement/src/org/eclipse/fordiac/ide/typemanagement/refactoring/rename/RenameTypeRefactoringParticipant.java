@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -177,9 +177,9 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
 			final Set<EObject> rootElements) {
-		if (varDecl.getFBNetworkElement() != null) {
-			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				return new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry);
+		if (varDecl.getBlockFBNetworkElement() != null) {
+			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
+				return new UpdateFBInstanceChange(varDecl.getBlockFBNetworkElement(), dataTypeEntry);
 			}
 		} else {
 			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);

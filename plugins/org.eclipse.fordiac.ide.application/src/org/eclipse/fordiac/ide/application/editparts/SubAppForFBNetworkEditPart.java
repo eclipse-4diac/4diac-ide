@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH
@@ -71,7 +71,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
+public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart implements IContainerEditPart {
 
 	private final ExpandedInterfacePositionMap positionMap = new ExpandedInterfacePositionMap(this);
 	private InstanceContract instanceContract;

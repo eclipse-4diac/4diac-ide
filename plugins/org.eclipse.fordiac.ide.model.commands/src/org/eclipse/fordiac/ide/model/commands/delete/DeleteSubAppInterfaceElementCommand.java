@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Johannes Kepler University
+ * Copyright (c) 2018, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand {
@@ -21,8 +21,8 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 
 	public DeleteSubAppInterfaceElementCommand(final IInterfaceElement interfaceElement) {
 		super(interfaceElement);
-		if (interfaceElement.getFBNetworkElement().isMapped()) {
-			final FBNetworkElement fbE = interfaceElement.getFBNetworkElement().getOpposite();
+		if (interfaceElement.getBlockFBNetworkElement().isMapped()) {
+			final BlockFBNetworkElement fbE = interfaceElement.getBlockFBNetworkElement().getOpposite();
 			final IInterfaceElement element = fbE.getInterfaceElement(interfaceElement.getName());
 			if (null != element) {
 				opposite = new DeleteInterfaceCommand(element);

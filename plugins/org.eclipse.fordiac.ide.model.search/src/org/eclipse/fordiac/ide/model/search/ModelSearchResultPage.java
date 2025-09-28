@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -299,7 +299,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
-			parent = ie.getFBNetworkElement();
+			parent = ie.getBlockFBNetworkElement();
 			if (parent != null) {
 				parent = parent.eContainer().eContainer();
 			} else {
@@ -354,7 +354,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	public static void showResult(final EObject obj) {
 		EObject toOpen = obj;
 		if (obj instanceof final IInterfaceElement ie) {
-			toOpen = ie.getFBNetworkElement();
+			toOpen = ie.getBlockFBNetworkElement();
 		}
 		if (obj instanceof SubApp) {
 			toOpen = ((SubApp) toOpen).getOuterFBNetworkElement();

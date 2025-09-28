@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 Profactor GbmH, fortiss GmbH,
+ * Copyright (c) 2014, 2025 Profactor GbmH, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -74,7 +74,7 @@ public class FBNetworkConnection extends HideableConnection {
 	}
 
 	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
+		if (ie.getBlockFBNetworkElement() instanceof final SubApp subapp) {
 			return (subapp.getSubAppNetwork() != null) && subapp.getSubAppNetwork().equals(getModel().getFBNetwork());
 		}
 		return false;
@@ -285,7 +285,7 @@ public class FBNetworkConnection extends HideableConnection {
 			hiddenConnections.forEach(con -> {
 				if (con.getSource() != null) {
 					final IInterfaceElement ie = con.getSource();
-					final FBNetworkElement sourceElement = ie.getFBNetworkElement();
+					final FBNetworkElement sourceElement = ie.getBlockFBNetworkElement();
 					if (sourceElement != null && !isInterfaceBarElement(ie)) {
 						builder.append(sourceElement.getName());
 						builder.append('.');
@@ -313,8 +313,8 @@ public class FBNetworkConnection extends HideableConnection {
 		if (pinLabelStyle.equals(GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT) && CommentHelper.hasComment(ie)) {
 			builder.append(ie.getComment());
 		} else {
-			if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
-				builder.append(ie.getFBNetworkElement().getName());
+			if (ie.getBlockFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
+				builder.append(ie.getBlockFBNetworkElement().getName());
 				builder.append('.');
 			}
 			builder.append(ie.getName());

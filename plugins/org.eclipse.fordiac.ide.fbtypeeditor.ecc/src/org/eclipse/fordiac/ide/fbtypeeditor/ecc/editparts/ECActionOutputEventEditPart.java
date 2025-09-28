@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2023 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- * 								Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2011, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -109,7 +109,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 	public static boolean isAdapterNotification(final Object change, final Event ev) {
 		if (ev != null) {
-			final FBNetworkElement fbNetworkElement = ev.getFBNetworkElement();
+			final FBNetworkElement fbNetworkElement = ev.getBlockFBNetworkElement();
 			return (fbNetworkElement instanceof final AdapterFB adapterFB)
 					&& ((adapterFB.getAdapterDecl() == change) || (fbNetworkElement.getName().equals(change)));
 		}
@@ -256,8 +256,8 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			return ""; //$NON-NLS-1$
 		}
 
-		if (event.getFBNetworkElement() instanceof AdapterFB) {
-			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
 		return event.getName();
 	}

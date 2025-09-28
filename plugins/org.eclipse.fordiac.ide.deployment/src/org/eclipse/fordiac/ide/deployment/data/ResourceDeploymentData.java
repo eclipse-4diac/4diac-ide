@@ -143,7 +143,8 @@ public class ResourceDeploymentData {
 			final VarDeclaration input) throws DeploymentException {
 		final String value = findInitialValue(subAppHierarchy, input);
 		if (value != null) {
-			params.add(new ParameterDeploymentData(ensurePrefix(prefix, input.getFBNetworkElement()), input, value));
+			params.add(
+					new ParameterDeploymentData(ensurePrefix(prefix, input.getBlockFBNetworkElement()), input, value));
 		}
 	}
 
@@ -166,7 +167,7 @@ public class ResourceDeploymentData {
 
 	private void addInputConnections(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
 			final IInterfaceElement input) {
-		final String inputPrefix = ensurePrefix(prefix, input.getFBNetworkElement());
+		final String inputPrefix = ensurePrefix(prefix, input.getBlockFBNetworkElement());
 		for (final ConnectionDeploymentSource sourceData : findSourceEndPoints(subAppHierarchy, prefix,
 				new StringBuilder(), input, new ArrayList<>())) {
 			connections.add(sourceData.toConnectionData(inputPrefix, input));
@@ -193,7 +194,7 @@ public class ResourceDeploymentData {
 				findSourceEndPoints(subAppHierarchy, prefix, suffix, externalElement, result);
 			}
 			enterSubApp(subAppHierarchy, prefix, subApp);
-		} else if (source.getFBNetworkElement() instanceof final SubApp subApp) { // source is a subapp output
+		} else if (source.getBlockFBNetworkElement() instanceof final SubApp subApp) { // source is a subapp output
 			enterSubApp(subAppHierarchy, prefix, subApp);
 			final IInterfaceElement internalElement = getSubAppInternalElement(source, subApp);
 			if (internalElement != null) {
@@ -201,7 +202,7 @@ public class ResourceDeploymentData {
 			}
 			leaveSubApp(subAppHierarchy, prefix);
 		} else { // source is a regular FB output
-			result.add(new ConnectionDeploymentSource(ensurePrefix(prefix, source.getFBNetworkElement()),
+			result.add(new ConnectionDeploymentSource(ensurePrefix(prefix, source.getBlockFBNetworkElement()),
 					suffix.toString(), source));
 		}
 	}

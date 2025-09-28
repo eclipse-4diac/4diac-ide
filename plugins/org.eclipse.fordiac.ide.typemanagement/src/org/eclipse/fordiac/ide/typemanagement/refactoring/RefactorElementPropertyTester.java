@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,9 +41,9 @@ public class RefactorElementPropertyTester extends PropertyTester {
 		}
 
 		if (element instanceof final IInterfaceElement ie && !(ie instanceof ErrorMarkerInterface)) {
-			if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getTypeEntry() != null
-					&& ie.getFBNetworkElement().getTypeEntry().getFile() != null) {
-				return !ie.getFBNetworkElement().getTypeEntry().getFile().isReadOnly();
+			if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement().getTypeEntry() != null
+					&& ie.getBlockFBNetworkElement().getTypeEntry().getFile() != null) {
+				return !ie.getBlockFBNetworkElement().getTypeEntry().getFile().isReadOnly();
 			}
 			return true;
 		}

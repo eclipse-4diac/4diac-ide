@@ -73,7 +73,7 @@ public abstract class ContractCheckHandler extends AbstractHandler {
 				Object obj = selectedEP.getModel();
 
 				if (obj instanceof final Event eventPin) {
-					obj = eventPin.getFBNetworkElement(); // selecting pin of SubApp selects SubApp
+					obj = eventPin.getBlockFBNetworkElement(); // selecting pin of SubApp selects SubApp
 				} else if (obj instanceof final FBNetworkElement fb && !(obj instanceof final SubApp)
 						&& fb.isNestedInSubApp()) {
 					obj = fb.eContainer().eContainer(); // selecting FB selects containing SubApp

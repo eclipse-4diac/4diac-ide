@@ -84,7 +84,8 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		}
 		for (final ParameterDeploymentData param : deploymentData.getParams()) {
 			deviceManagementInteractor.writeFBParameter(deploymentData.getRes(), param.value(),
-					new FBDeploymentData(param.prefix(), param.variable().getFBNetworkElement()), param.variable());
+					new FBDeploymentData(param.prefix(), param.variable().getBlockFBNetworkElement()),
+					param.variable());
 		}
 		for (final ConnectionDeploymentData connection : deploymentData.getConnections()) {
 			deviceManagementInteractor.createConnection(deploymentData.getRes(), connection);

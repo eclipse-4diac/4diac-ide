@@ -139,7 +139,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private String getAlternativePinLabelText() {
 		switch (pinLabelStyle) {
 		case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT:
-			if (getModel().getFBNetworkElement() != null) {
+			if (getModel().getBlockFBNetworkElement() != null) {
 				// only return the comment for instances and not for type editors
 				return getModel().getComment();
 			}
@@ -168,7 +168,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private String getSourcePinInstanceName() {
 		final IInterfaceElement refPin = getSourcePin();
 		if (refPin != null) {
-			final FBNetworkElement source = refPin.getFBNetworkElement();
+			final FBNetworkElement source = refPin.getBlockFBNetworkElement();
 			final String pinName = getPinName(refPin);
 			if (source != null && !isSubAppPin(source)) {
 				final String elementName = source.getName();
@@ -195,8 +195,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private boolean isSubAppPin(final FBNetworkElement connSource) {
-		if (connSource instanceof final SubApp subapp && getModel().getFBNetworkElement() != null) {
-			return subapp.getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		if (connSource instanceof final SubApp subapp && getModel().getBlockFBNetworkElement() != null) {
+			return subapp.getSubAppNetwork() == getModel().getBlockFBNetworkElement().getFbNetwork();
 		}
 		return false;
 	}
@@ -543,7 +543,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			sourcePin = getSourcePin();
 			if (sourcePin != null) {
 				sourcePin.eAdapters().add(getSourcePinAdapter());
-				final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+				final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 				if (sourceElement != null) {
 					sourceElement.eAdapters().add(getSourcePinAdapter());
 				}
@@ -554,7 +554,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private void removeSourcePinAdapter() {
 		if (sourcePin != null) {
 			sourcePin.eAdapters().remove(getSourcePinAdapter());
-			final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+			final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 			if (sourceElement != null) {
 				sourceElement.eAdapters().remove(getSourcePinAdapter());
 			}

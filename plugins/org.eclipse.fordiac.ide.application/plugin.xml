@@ -686,7 +686,7 @@
             <or>
               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
               </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
               </instanceof>
             </or>
           </iterate>
@@ -713,7 +713,7 @@
             <or>
               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
               </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
               </instanceof>
             </or>
           </iterate>
@@ -729,7 +729,7 @@
             <or>
               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
               </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
               </instanceof>
             </or>
           </iterate>
@@ -817,7 +817,7 @@
             <and>
             	<or>
               		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
-              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart"/>
+              		<instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart"/>
               		<instanceof value="org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork"/>
             	</or>
             	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
@@ -1317,7 +1317,7 @@
             <with variable="selection">
               <iterate ifEmpty="true">
                 <or>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
@@ -1379,7 +1379,7 @@
             <with variable="selection">
               <iterate ifEmpty="true">
                 <or>
-                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart" />
                   <and>
                   	<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   	<not>
@@ -1787,7 +1787,7 @@
       <with variable="selection">
         <iterate>
           <or>
-            <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+            <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
             </instanceof>
             <instanceof value="org.eclipse.gef.editparts.AbstractConnectionEditPart">
             </instanceof>
@@ -1800,7 +1800,7 @@
         <count value="1" />
         <iterate operator="and"
                  ifEmpty="false">
-          <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+          <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
           </instanceof>
         </iterate>
       </with>
@@ -1809,7 +1809,7 @@
       <with variable="selection">
         <iterate operator="or"
                  ifEmpty="false">
-          <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+          <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
           </instanceof>
         </iterate>
       </with>

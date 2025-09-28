@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2023 Martin Erich Jobst
+/*******************************************************************************
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- */
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st;
 
 import java.util.ArrayList;
@@ -184,7 +184,7 @@ public class VarDeclarationEvaluator extends StructuredTextEvaluator implements 
 	}
 
 	protected Set<String> getTypeDependencies() {
-		if (varDeclaration.getFBNetworkElement() == null) {
+		if (varDeclaration.getBlockFBNetworkElement() == null) {
 			prepareResultType();
 			if (parseResultType != null) {
 				return StructuredTextParseUtil.collectUsedTypes(parseResultType);

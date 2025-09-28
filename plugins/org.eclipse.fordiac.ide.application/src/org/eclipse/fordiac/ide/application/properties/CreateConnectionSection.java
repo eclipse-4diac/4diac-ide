@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -127,15 +127,15 @@ public class CreateConnectionSection extends AbstractSection {
 		if (source.eContainer().eContainer() instanceof final CompositeFBType cfbt) {
 			return cfbt.getFBNetwork();
 		}
-		if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
-				&& (source.getFBNetworkElement() instanceof final SubApp subApp)) {
+		if ((source.getBlockFBNetworkElement().getFbNetwork() != dest.getBlockFBNetworkElement().getFbNetwork())
+				&& (source.getBlockFBNetworkElement() instanceof final SubApp subApp)) {
 			// one of the both is a untyped subapp interface element
-			if (subApp.getSubAppNetwork() == dest.getFBNetworkElement().getFbNetwork()) {
-				return dest.getFBNetworkElement().getFbNetwork();
+			if (subApp.getSubAppNetwork() == dest.getBlockFBNetworkElement().getFbNetwork()) {
+				return dest.getBlockFBNetworkElement().getFbNetwork();
 			}
-			return source.getFBNetworkElement().getFbNetwork();
+			return source.getBlockFBNetworkElement().getFbNetwork();
 		}
-		return source.getFBNetworkElement().getFbNetwork();
+		return source.getBlockFBNetworkElement().getFbNetwork();
 	}
 
 	@Override

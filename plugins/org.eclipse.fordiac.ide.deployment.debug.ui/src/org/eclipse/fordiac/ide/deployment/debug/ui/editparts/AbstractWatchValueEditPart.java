@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2012, 2025 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
@@ -123,8 +123,8 @@ public abstract class AbstractWatchValueEditPart extends AbstractGraphicalEditPa
 		// if the interface element has a fbnetworkelement and this fbnetworkelement a
 		// network a grandparent was deleted
 		// or an expanded subapp folded
-		return (getInterfaceElement().getFBNetworkElement() != null
-				&& getInterfaceElement().getFBNetworkElement().getFbNetwork() != null);
+		return (getInterfaceElement().getBlockFBNetworkElement() != null
+				&& getInterfaceElement().getBlockFBNetworkElement().getFbNetwork() != null);
 	}
 
 	protected Point calculatePos() {

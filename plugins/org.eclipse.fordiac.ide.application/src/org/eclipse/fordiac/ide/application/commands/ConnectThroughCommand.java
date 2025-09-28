@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -43,7 +43,7 @@ public class ConnectThroughCommand extends Command implements ScopedCommand {
 	public ConnectThroughCommand(final IInterfaceElement input, final IInterfaceElement output) {
 		this.input = Objects.requireNonNull(input);
 		this.output = Objects.requireNonNull(output);
-		parent = Objects.requireNonNull(input.getFBNetworkElement().getFbNetwork());
+		parent = Objects.requireNonNull(input.getBlockFBNetworkElement().getFbNetwork());
 	}
 
 	@Override

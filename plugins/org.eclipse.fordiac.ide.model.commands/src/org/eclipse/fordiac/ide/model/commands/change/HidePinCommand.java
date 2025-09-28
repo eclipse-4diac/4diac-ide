@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -66,7 +66,7 @@ public class HidePinCommand extends Command implements ScopedCommand {
 	}
 
 	protected static boolean isExpandedSubAppPinAndConnected(final IInterfaceElement interfaceElement) {
-		return interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
+		return interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
 				&& !interfaceElement.getInputConnections().isEmpty()
 				&& !interfaceElement.getOutputConnections().isEmpty();
 	}

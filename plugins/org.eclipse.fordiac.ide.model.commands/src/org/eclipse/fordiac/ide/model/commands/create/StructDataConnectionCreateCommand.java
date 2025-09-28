@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Keppler University Linz
+ * Copyright (c) 2023, 2025 Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -52,22 +52,22 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 		if (shouldChangeStruct(source, target)) {
 			if (isUnconfiguredStructManipulatorDefPin(source)
 					&& target.getType() instanceof final StructuredType targetVar) {
-				changeStructCommand = (source.getFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
+				changeStructCommand = (source.getBlockFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
 						? new ChangeStructCommand(cmfb, targetVar)
-						: new ChangeStructCommand((StructManipulator) source.getFBNetworkElement(), targetVar);
+						: new ChangeStructCommand((StructManipulator) source.getBlockFBNetworkElement(), targetVar);
 				changeStructCommand.execute();
-				if (source.getFBNetworkElement() instanceof ConfigurableMoveFB) {
+				if (source.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
 					setSource(changeStructCommand.getNewElement().getInterfaceElement(getSource().getName()));
 				} else {
 					setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
 				}
 			} else if (isUnconfiguredStructManipulatorDefPin(target)
 					&& source.getType() instanceof final StructuredType sourceVar) {
-				changeStructCommand = (target.getFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
+				changeStructCommand = (target.getBlockFBNetworkElement() instanceof final ConfigurableMoveFB cmfb)
 						? new ChangeStructCommand(cmfb, sourceVar)
-						: new ChangeStructCommand((StructManipulator) target.getFBNetworkElement(), sourceVar);
+						: new ChangeStructCommand((StructManipulator) target.getBlockFBNetworkElement(), sourceVar);
 				changeStructCommand.execute();
-				if (target.getFBNetworkElement() instanceof ConfigurableMoveFB) {
+				if (target.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
 					setDestination(changeStructCommand.getNewElement().getInterfaceElement(getDestination().getName()));
 				} else {
 					setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));

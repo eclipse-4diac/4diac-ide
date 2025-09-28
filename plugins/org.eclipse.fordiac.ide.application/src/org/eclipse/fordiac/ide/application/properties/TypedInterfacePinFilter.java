@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -43,7 +43,7 @@ public class TypedInterfacePinFilter implements IFilter {
 
 	private static boolean isPinOfTypedElement(final Object element) {
 		if (element instanceof final IInterfaceElement ie) {
-			final FBNetworkElement fbEl = ie.getFBNetworkElement();
+			final FBNetworkElement fbEl = ie.getBlockFBNetworkElement();
 			return ((fbEl != null) && ((fbEl.getTypeEntry() != null) || isIndirectlyTyped(fbEl)));
 		}
 		return false;
