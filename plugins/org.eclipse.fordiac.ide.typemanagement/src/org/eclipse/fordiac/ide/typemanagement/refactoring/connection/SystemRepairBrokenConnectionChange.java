@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,9 +25,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
@@ -95,7 +95,7 @@ public class SystemRepairBrokenConnectionChange extends AbstractCommandChange<Au
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI)
 				.getType() instanceof final StructuredType structType) {
 			list.forEach(uri -> {
-				if (element.eResource().getEObject(uri.fragment()) instanceof final FBNetworkElement fbnelem) {
+				if (element.eResource().getEObject(uri.fragment()) instanceof final BlockFBNetworkElement fbnelem) {
 					final Stream<ErrorMarkerInterface> errormarkers = fbnelem.getInterface().getErrorMarker().stream();
 					final Stream<Connection> connections;
 					final Function<Connection, String> connectToVar;

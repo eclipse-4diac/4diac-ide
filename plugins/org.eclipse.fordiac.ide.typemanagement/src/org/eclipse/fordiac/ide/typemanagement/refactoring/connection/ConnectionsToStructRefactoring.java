@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -304,7 +305,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		final List<? extends EObject> destinationSearch = new BlockTypeInstanceSearch(destinationType.getTypeEntry())
 				.performSearch();
 
-		destinationSearch.stream().map(FBNetworkElement.class::cast).forEach(instance -> {
+		destinationSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
 
 			// Collect all correct connections
 			final List<Connection> cons = instance.getInterface().getInputs()
@@ -336,7 +337,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			final Map<FBNetworkElement, FBNetworkElement> correctConnectionMap) {
 		final Map<AutomationSystem, List<URI>> repairSourceMap = new HashMap<>();
 		final Map<AutomationSystem, List<URI>> repairDestinationMap = new HashMap<>();
-		destinationSearch.stream().map(FBNetworkElement.class::cast)
+		destinationSearch.stream().map(BlockFBNetworkElement.class::cast)
 				.filter(instance -> !correctConnectionMap.containsKey(instance)).forEach(instance -> {
 					if (instance.getInterface().getInputs()
 							.filter(input -> replaceableConMap.containsValue(input.getName()))
@@ -344,7 +345,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 						addToMap(repairDestinationMap, instance);
 					}
 				});
-		sourceSearch.stream().map(FBNetworkElement.class::cast).forEach(instance -> {
+		sourceSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
 			if (instance.getInterface().getOutputs().filter(output -> replaceableConMap.containsKey(output.getName()))
 					.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
 					.anyMatch(con -> !correctConnectionMap.containsKey(con.getDestinationElement()))) {
