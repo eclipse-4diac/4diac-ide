@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
@@ -102,7 +103,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			case final FBType fbType -> SearchChildrenProviderHelper.getFBTypeChildren(fbType);
 			case final UntypedSubApp untypedSubapp ->
 				SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);
-			case final FBNetworkElement fbnElement ->
+			case final BlockFBNetworkElement fbnElement ->
 				SearchChildrenProviderHelper.getInterfaceListChildren(fbnElement.getInterface());
 			case final StructuredType structType -> SearchChildrenProviderHelper.getStructChildren(structType);
 			case final AttributeDeclaration attrdecl -> SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);

@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -186,10 +187,9 @@ public class ModelSearchQuery implements ISearchQuery {
 					&& subApp.getSubAppNetwork() != null) {
 				searchFBNetwork(subApp.getSubAppNetwork(), path, monitor);
 			}
-			if (fbnetworkElement.getInterface() != null) {
+			if (fbnetworkElement instanceof final BlockFBNetworkElement bfbne && bfbne.getInterface() != null) {
 				if (modelQuerySpec.checkPinName()) {
-					final List<IInterfaceElement> matchingPins = fbnetworkElement.getInterface()
-							.getAllInterfaceElements().stream()
+					final List<IInterfaceElement> matchingPins = bfbne.getInterface().getAllInterfaceElements().stream()
 							.filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
 					if (!matchingPins.isEmpty()) {
 						if (!path.isEmpty()) {
@@ -199,7 +199,7 @@ public class ModelSearchQuery implements ISearchQuery {
 					}
 				}
 				if (modelQuerySpec.checkType()) {
-					searchInterface(fbnetworkElement.getInterface(), monitor);
+					searchInterface(bfbne.getInterface(), monitor);
 				}
 			}
 		}
