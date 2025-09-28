@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,9 +27,9 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugElement;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -37,20 +37,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class FBNetworkElementValue extends DeploymentDebugElement implements IValue {
+public class BlockFBNetworkElementValue extends DeploymentDebugElement implements IValue {
 	private static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
-	private final FBNetworkElement element;
+	private final BlockFBNetworkElement element;
 	private final Resource resource;
 	private final String resourceRelativeName;
 	private final List<IWatch> watches;
 
-	public FBNetworkElementValue(final FBNetworkElement element, final DeploymentDebugDevice target) {
+	public BlockFBNetworkElementValue(final BlockFBNetworkElement element, final DeploymentDebugDevice target) {
 		this(element, element.getResource(),
 				DeploymentDebugWatchUtils.getResourceRelativeName(element, element.getResource()), target);
 	}
 
-	public FBNetworkElementValue(final FBNetworkElement element, final Resource resource,
+	public BlockFBNetworkElementValue(final BlockFBNetworkElement element, final Resource resource,
 			final String resourceRelativeName, final DeploymentDebugDevice target) {
 		super(target);
 		this.element = element;
@@ -96,7 +96,7 @@ public class FBNetworkElementValue extends DeploymentDebugElement implements IVa
 		return IWatch.watchFor(element.getName(), element, getDebugTarget());
 	}
 
-	public FBNetworkElement getElement() {
+	public BlockFBNetworkElement getElement() {
 		return element;
 	}
 

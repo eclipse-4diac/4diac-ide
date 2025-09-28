@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -68,7 +67,7 @@ public class Utils {
 		if (network == null) {
 			return; // no network, nothing to collect
 		}
-		for (final FBNetworkElement networkElement : network.getNetworkElements()) {
+		network.getBlockFBNetworkElements().forEach(networkElement -> {
 			collectAllPorts(networkElement.getInterface(), result);
 			if (networkElement instanceof final CFBInstanceImpl composite) {
 				collectAllPorts(composite.loadCFBNetwork(), result); // recursive call to collect ports from nested
@@ -77,7 +76,7 @@ public class Utils {
 				collectAllPorts(subApp.loadSubAppNetwork(), result); // recursive call to collect ports from sub-app
 																		// networks
 			}
-		}
+		});
 	}
 
 	private static void collectAllPorts(final InterfaceList interfaceList, final Map<String, Set<String>> result) {

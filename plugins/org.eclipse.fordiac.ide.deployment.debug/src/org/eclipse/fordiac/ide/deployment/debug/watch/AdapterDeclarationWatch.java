@@ -21,22 +21,22 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public class AdapterDeclarationWatch extends AbstractContainerWatch implements IAdapterDeclarationWatch {
 
-	private final FBNetworkElementValue value;
+	private final BlockFBNetworkElementValue value;
 
 	public AdapterDeclarationWatch(final String name, final AdapterDeclaration element,
 			final DeploymentDebugDevice target) {
 		super(name, element, target);
-		value = new FBNetworkElementValue(element.getAdapterFB(), target);
+		value = new BlockFBNetworkElementValue(element.getAdapterFB(), target);
 	}
 
 	public AdapterDeclarationWatch(final String name, final AdapterDeclaration element, final Resource resource,
 			final String resourceRelativeName, final DeploymentDebugDevice target) {
 		super(name, element, target);
-		value = new FBNetworkElementValue(element.getAdapterFB(), resource, resourceRelativeName, target);
+		value = new BlockFBNetworkElementValue(element.getAdapterFB(), resource, resourceRelativeName, target);
 	}
 
 	@Override
-	public FBNetworkElementValue getValue() {
+	public BlockFBNetworkElementValue getValue() {
 		return value;
 	}
 
