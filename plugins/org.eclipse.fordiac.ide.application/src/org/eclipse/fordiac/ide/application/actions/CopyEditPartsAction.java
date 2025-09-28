@@ -25,6 +25,8 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -79,11 +81,14 @@ public class CopyEditPartsAction extends SelectionAction {
 		for (final Object obj : getSelectedObjects()) {
 			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbne)) {
 				copyPasteData.elements().add(fbne);
-				copyPasteData.conns().addAll(getAllFBNElementConnections(fbne, connectionSet));
+				if (fbne instanceof final BlockFBNetworkElement bfbne) {
+					copyPasteData.conns().addAll(getAllFBNElementConnections(bfbne, connectionSet));
+				}
 				if (fbne instanceof final Group group) {
-					for (final FBNetworkElement groupElement : group.getGroupElements()) {
-						copyPasteData.conns().addAll(getAllFBNElementConnections(groupElement, connectionSet));
-					}
+
+					FBNetworkHelper.getBlockFBNetworkElementsFromList(group.getGroupElements())
+							.forEach(groupElement -> copyPasteData.conns()
+									.addAll(getAllFBNElementConnections(groupElement, connectionSet)));
 				}
 			}
 		}
@@ -105,7 +110,7 @@ public class CopyEditPartsAction extends SelectionAction {
 				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
 	}
 
-	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,
+	private static Collection<ConnectionReference> getAllFBNElementConnections(final BlockFBNetworkElement model,
 			final Set<Connection> connectionSet) {
 		final List<ConnectionReference> connections = new ArrayList<>();
 		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
