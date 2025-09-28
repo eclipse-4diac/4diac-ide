@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University
- *					  Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,9 +28,9 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateUntypedSubAppInterfac
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -39,23 +39,23 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class UpdateFBInstanceModelEdit extends ModelEdit<FBNetworkElement> {
+public class UpdateFBInstanceModelEdit extends ModelEdit<BlockFBNetworkElement> {
 
 	protected final TypeEntry typeEntry;
 
-	public UpdateFBInstanceModelEdit(final FBNetworkElement instance, final TypeEntry typeEntry) {
+	public UpdateFBInstanceModelEdit(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
 		super(MessageFormat.format(Messages.UpdateFBInstances, FBNetworkHelper.getFullHierarchicalName(instance)),
-				EcoreUtil.getURI(instance), FBNetworkElement.class);
+				EcoreUtil.getURI(instance), BlockFBNetworkElement.class);
 		this.typeEntry = typeEntry;
 	}
 
 	@Override
-	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
+	public void initializeValidationData(final BlockFBNetworkElement element, final IProgressMonitor pm) {
 		// no additional ValidationData needed
 	}
 
 	@Override
-	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
+	public RefactoringStatus isValid(final BlockFBNetworkElement element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 
 		final RefactoringStatus status = new RefactoringStatus();
@@ -66,7 +66,7 @@ public class UpdateFBInstanceModelEdit extends ModelEdit<FBNetworkElement> {
 	}
 
 	@Override
-	protected Command createCommand(final FBNetworkElement element) {
+	protected Command createCommand(final BlockFBNetworkElement element) {
 		if (element instanceof final SubApp subApp && !subApp.isTyped()
 				&& typeEntry instanceof final DataTypeEntry dtEntry) {
 			return new UpdateUntypedSubAppInterfaceCommand(element, dtEntry);

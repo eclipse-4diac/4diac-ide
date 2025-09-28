@@ -13,13 +13,13 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
-public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
+public class UntypeSubAppCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	public UntypeSubAppCommand(final SubApp subapp) {
 		super(subapp);
@@ -40,7 +40,7 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
 		return LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 	}
 

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1444,36 +1444,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ATTRIBUTE_DECLARATION_FEATURE_COUNT = ITYPED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
-	 * @generated
-	 */
-	int FB_TYPE = 44;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
-	 * @generated
-	 */
-	int BASE_FB_TYPE = 10;
-
-	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
-	 * @generated
-	 */
-	int BASIC_FB_TYPE = 11;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl <em>Automation System</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1583,6 +1553,16 @@ public interface LibraryElementPackage extends EPackage {
 	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getFBType()
+	 * @generated
+	 */
+	int FB_TYPE = 44;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1671,6 +1651,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_TYPE_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBaseFBType()
+	 * @generated
+	 */
+	int BASE_FB_TYPE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1815,6 +1805,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBasicFBType()
+	 * @generated
+	 */
+	int BASIC_FB_TYPE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -8345,7 +8345,6 @@ public interface LibraryElementPackage extends EPackage {
 	 */
 	int VAR_DECL_LIST = 117;
 
-
 	/**
 	 * The meta object id for the '<em>Interface Type Entry</em>' data type.
 	 * <!-- begin-user-doc -->
@@ -8355,6 +8354,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int INTERFACE_TYPE_ENTRY = 118;
+
+	/**
+	 * The meta object id for the '<em>Block FBNW Element Stream</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.util.stream.Stream
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBlockFBNWElementStream()
+	 * @generated
+	 */
+	int BLOCK_FBNW_ELEMENT_STREAM = 119;
 
 
 	/**
@@ -8580,6 +8589,49 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAttributeDeclaration_Type();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem <em>Automation System</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Automation System</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
+	 * @generated
+	 */
+	EClass getAutomationSystem();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication <em>Application</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Application</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication()
+	 * @see #getAutomationSystem()
+	 * @generated
+	 */
+	EReference getAutomationSystem_Application();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping <em>Mapping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Mapping</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping()
+	 * @see #getAutomationSystem()
+	 * @generated
+	 */
+	EReference getAutomationSystem_Mapping();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>System Configuration</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration()
+	 * @see #getAutomationSystem()
+	 * @generated
+	 */
+	EReference getAutomationSystem_SystemConfiguration();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType <em>Base FB Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8696,49 +8748,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBlockFBNetworkElement_Interface();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem <em>Automation System</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Automation System</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem
-	 * @generated
-	 */
-	EClass getAutomationSystem();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication <em>Application</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Application</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication()
-	 * @see #getAutomationSystem()
-	 * @generated
-	 */
-	EReference getAutomationSystem_Application();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping <em>Mapping</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Mapping</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping()
-	 * @see #getAutomationSystem()
-	 * @generated
-	 */
-	EReference getAutomationSystem_Mapping();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>System Configuration</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration()
-	 * @see #getAutomationSystem()
-	 * @generated
-	 */
-	EReference getAutomationSystem_SystemConfiguration();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance <em>CFB Instance</em>}'.
@@ -11845,6 +11854,17 @@ public interface LibraryElementPackage extends EPackage {
 	EDataType getInterfaceTypeEntry();
 
 	/**
+	 * Returns the meta object for data type '{@link java.util.stream.Stream <em>Block FBNW Element Stream</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Block FBNW Element Stream</em>'.
+	 * @see java.util.stream.Stream
+	 * @model instanceClass="java.util.stream.Stream&lt;org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement&gt;"
+	 * @generated
+	 */
+	EDataType getBlockFBNWElementStream();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12053,6 +12073,40 @@ public interface LibraryElementPackage extends EPackage {
 		EReference ATTRIBUTE_DECLARATION__TYPE = eINSTANCE.getAttributeDeclaration_Type();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl <em>Automation System</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
+		 * @generated
+		 */
+		EClass AUTOMATION_SYSTEM = eINSTANCE.getAutomationSystem();
+
+		/**
+		 * The meta object literal for the '<em><b>Application</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AUTOMATION_SYSTEM__APPLICATION = eINSTANCE.getAutomationSystem_Application();
+
+		/**
+		 * The meta object literal for the '<em><b>Mapping</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AUTOMATION_SYSTEM__MAPPING = eINSTANCE.getAutomationSystem_Mapping();
+
+		/**
+		 * The meta object literal for the '<em><b>System Configuration</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = eINSTANCE.getAutomationSystem_SystemConfiguration();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl <em>Base FB Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12145,40 +12199,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BLOCK_FB_NETWORK_ELEMENT__INTERFACE = eINSTANCE.getBlockFBNetworkElement_Interface();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl <em>Automation System</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getAutomationSystem()
-		 * @generated
-		 */
-		EClass AUTOMATION_SYSTEM = eINSTANCE.getAutomationSystem();
-
-		/**
-		 * The meta object literal for the '<em><b>Application</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference AUTOMATION_SYSTEM__APPLICATION = eINSTANCE.getAutomationSystem_Application();
-
-		/**
-		 * The meta object literal for the '<em><b>Mapping</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference AUTOMATION_SYSTEM__MAPPING = eINSTANCE.getAutomationSystem_Mapping();
-
-		/**
-		 * The meta object literal for the '<em><b>System Configuration</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION = eINSTANCE.getAutomationSystem_SystemConfiguration();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
@@ -14719,6 +14739,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType INTERFACE_TYPE_ENTRY = eINSTANCE.getInterfaceTypeEntry();
+
+		/**
+		 * The meta object literal for the '<em>Block FBNW Element Stream</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.util.stream.Stream
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getBlockFBNWElementStream()
+		 * @generated
+		 */
+		EDataType BLOCK_FBNW_ELEMENT_STREAM = eINSTANCE.getBlockFBNWElementStream();
 
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *                          Primetals Technologies Austria GmbH
  *
@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -372,7 +373,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 	}
 
 	private void createUpdateTypeCommands() {
-		copiedElements.values().forEach(fbnEl -> {
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(copiedElements.values()).forEach(fbnEl -> {
 			if (fbnEl.getTypeEntry() != null && !(fbnEl instanceof ErrorMarkerFBNElement)) {
 				// we only need to update the type if we have a type entry
 				updateTypeCmds.add(new UpdateFBTypeCommand(fbnEl));

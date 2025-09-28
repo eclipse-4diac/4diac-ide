@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2021 Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,9 +23,9 @@ import java.text.MessageFormat;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
@@ -35,13 +35,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
+public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	private final TypeEntry newStructTypeEntry;
 	private final String newVisibleChildren;
 	private boolean reloadDatatype = true;
 
-	public ChangeStructCommand(final FBNetworkElement fb, final DataType newStruct) {
+	public ChangeStructCommand(final BlockFBNetworkElement fb, final DataType newStruct) {
 		super(fb);
 		this.newStructTypeEntry = (newStruct != null) ? newStruct.getTypeEntry() : null;
 		this.entry = fb.getTypeEntry();
@@ -90,8 +90,8 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
-		FBNetworkElement copy = null;
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
+		BlockFBNetworkElement copy = null;
 
 		if (srcElement instanceof Multiplexer) {
 			copy = LibraryElementFactory.eINSTANCE.createMultiplexer();

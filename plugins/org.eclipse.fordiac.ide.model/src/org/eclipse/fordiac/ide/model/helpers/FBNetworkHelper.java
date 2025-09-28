@@ -135,10 +135,15 @@ public final class FBNetworkHelper {
 		return dstNetwork;
 	}
 
+	public static Stream<BlockFBNetworkElement> getBlockFBNetworkElementsFromList(
+			final Collection<FBNetworkElement> nwElements) {
+		return nwElements.stream().filter(BlockFBNetworkElement.class::isInstance)
+				.map(BlockFBNetworkElement.class::cast);
+	}
+
 	private static void createResourceTypeFBs(final EList<FBNetworkElement> networkElements,
 			final FBNetwork dstNetwork) {
-		networkElements.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
-				.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
+		getBlockFBNetworkElementsFromList(networkElements).forEach(fb -> createResourceTypeFB(fb, dstNetwork));
 	}
 
 	private static void createResourceTypeFB(final BlockFBNetworkElement srcFb, final FBNetwork dstNetwork) {
