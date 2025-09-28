@@ -11,7 +11,7 @@
         eType="#//FBRuntimeAbstract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="createdTransactions" upperBound="-1"
         eType="#//Transaction" eOpposite="#//Transaction/parentEO"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parentFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//BlockFBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resultFBRuntime" eType="#//FBRuntimeAbstract"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Long"/>

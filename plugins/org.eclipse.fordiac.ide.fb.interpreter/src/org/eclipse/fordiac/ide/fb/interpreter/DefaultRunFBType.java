@@ -64,6 +64,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -83,7 +84,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl;
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
 
@@ -413,7 +413,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static List<SimpleECAction> getActions(final SimpleFBType simpleFBType, final String inEvent) {
 		// if we don't have ECStates, use first output/algorithm as fallback
 		if (simpleFBType.getSimpleECStates() == null || simpleFBType.getSimpleECStates().isEmpty()) {
-			final SimpleECAction action = LibraryElementFactoryImpl.eINSTANCE.createSimpleECAction();
+			final SimpleECAction action = LibraryElementFactory.eINSTANCE.createSimpleECAction();
 			action.setAlgorithm(simpleFBType.getAlgorithm().get(0).getName());
 			action.setOutput(simpleFBType.getInterfaceList().getEventOutputs().get(0));
 			return List.of(action);
@@ -551,7 +551,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private static Event getEquivalentEventTypePin(final EventOccurrence sourceEventOcurrence) {
-		final FBNetworkElement fbElem = sourceEventOcurrence.getParentFB();
+		final BlockFBNetworkElement fbElem = sourceEventOcurrence.getParentFB();
 		return (Event) fbElem.getInterface().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
 	}
 

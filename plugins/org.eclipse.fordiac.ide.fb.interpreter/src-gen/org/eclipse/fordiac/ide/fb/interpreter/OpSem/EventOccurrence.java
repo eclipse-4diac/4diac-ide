@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
@@ -169,7 +170,7 @@ public interface EventOccurrence extends EObject {
 	 * @model
 	 * @generated
 	 */
-	FBNetworkElement getParentFB();
+	BlockFBNetworkElement getParentFB();
 
 	/**
 	 * Sets the value of the
@@ -180,7 +181,7 @@ public interface EventOccurrence extends EObject {
 	 * @see #getParentFB()
 	 * @generated
 	 */
-	void setParentFB(FBNetworkElement value);
+	void setParentFB(BlockFBNetworkElement value);
 
 	/**
 	 * Returns the value of the '<em><b>Result FB Runtime</b></em>' containment

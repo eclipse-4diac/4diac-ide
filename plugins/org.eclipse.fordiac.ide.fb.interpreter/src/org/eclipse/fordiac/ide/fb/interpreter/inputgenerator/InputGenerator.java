@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2022, 2025 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,8 +21,8 @@ import java.util.Random;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -34,14 +34,17 @@ public final class InputGenerator {
 	private static Random random = new SecureRandom();
 	private static ValueRandom randomV = new ValueRandom();
 
-	/** This method generates a sequence of input events for a given FB. All input events from the interface are
-	 * considered as potential events. It is not guaranteed that each possible input event is present in the input event
+	/**
+	 * This method generates a sequence of input events for a given FB. All input
+	 * events from the interface are considered as potential events. It is not
+	 * guaranteed that each possible input event is present in the input event
 	 * sequence. The events are selected randomly.
 	 *
 	 * @param fb    The FB for which the input sequence is generated
 	 * @param count The number of generated input events
-	 * @return A list of events of length count */
-	public static List<Event> getRandomEventsSequence(final FBNetworkElement fb, final int count) {
+	 * @return A list of events of length count
+	 */
+	public static List<Event> getRandomEventsSequence(final BlockFBNetworkElement fb, final int count) {
 		if (fb == null || count == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -69,15 +72,19 @@ public final class InputGenerator {
 		return randomEvents;
 	}
 
-	/** This method generates a sequence of input events for a given FB. All input events from the interface are
-	 * considered as potential events. It is not guaranteed that each possible input event is present in the input event
+	/**
+	 * This method generates a sequence of input events for a given FB. All input
+	 * events from the interface are considered as potential events. It is not
+	 * guaranteed that each possible input event is present in the input event
 	 * sequence. The events are selected randomly on the bases of the seed.
 	 *
 	 * @param fb    The FB for which the input sequence is generated
 	 * @param count The number of generated input events
 	 * @param seed  The seed used for random number generation
-	 * @return A list of events of length count */
-	public static List<Event> getRandomEventsSequence(final FBNetworkElement fb, final int count, final long seed) {
+	 * @return A list of events of length count
+	 */
+	public static List<Event> getRandomEventsSequence(final BlockFBNetworkElement fb, final int count,
+			final long seed) {
 		random.setSeed(seed);
 		return getRandomEventsSequence(fb, count);
 	}

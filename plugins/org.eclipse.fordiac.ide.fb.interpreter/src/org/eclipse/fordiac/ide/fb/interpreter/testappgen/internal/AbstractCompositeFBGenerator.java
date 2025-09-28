@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Melanie Winter - initial API and implementation and/or initial documentation
+ *   Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen.internal;
@@ -17,13 +17,13 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -74,8 +74,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 	}
 
 	protected static FB addFBToNetwork(final FBNetwork net, final FBType blockToAdd, final int x, final int y) {
-
-		final FBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
+		final BlockFBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
 		el.setTypeEntry(blockToAdd.getTypeEntry());
 		addPosition(el, x, y);
 		el.setInterface(blockToAdd.getInterfaceList().copy());
@@ -84,15 +83,12 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		final String name = NameRepository.createUniqueName(el, "TESTAPPFB1"); //$NON-NLS-1$
 		el.setName(name);
 		return net.getFBNamed(name);
-
 	}
 
 	// some values might be null, so to be sure every value gets set again
 	protected void setValuesForFBs() {
-		compositeFB.getFBNetwork().getNetworkElements().stream()
-				.forEach(n -> setValue(n.getInterface().getInputVars()));
-		compositeFB.getFBNetwork().getNetworkElements().stream()
-				.forEach(n -> setValue(n.getInterface().getOutputVars()));
+		compositeFB.getFBNetwork().getBlockFBNetworkElements().forEach(n -> setValue(n.getInterface().getInputVars()));
+		compositeFB.getFBNetwork().getBlockFBNetworkElements().forEach(n -> setValue(n.getInterface().getOutputVars()));
 	}
 
 	protected static AdapterConnection createAdapterConnection(final AdapterDeclaration source,
