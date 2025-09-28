@@ -63,7 +63,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractUpdateFBNElementCommand extends Command implements ConnectionLayoutTagger, ScopedCommand {
+public abstract class AbstractUpdateBlockFBNElementCommand extends Command
+		implements ConnectionLayoutTagger, ScopedCommand {
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
 	protected static class ConnData {
@@ -82,10 +83,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	protected UnmapCommand unmapCmd = null;
 
 	/** The updated version of the FBNetworkElement */
-	protected FBNetworkElement newElement;
+	protected BlockFBNetworkElement newElement;
 
 	/** The FBNetworkElement which should be updated */
-	protected FBNetworkElement oldElement;
+	protected BlockFBNetworkElement oldElement;
 	/** The index where the fbNetwork element should be added */
 	protected int oldIndex;
 
@@ -93,7 +94,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected TypeEntry entry;
 
-	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
+	protected AbstractUpdateBlockFBNElementCommand(final BlockFBNetworkElement oldElement) {
 		this.oldElement = Objects.requireNonNull(oldElement);
 		this.network = Objects.requireNonNull(this.oldElement.getFbNetwork(), "Element not in a network"); //$NON-NLS-1$
 	}
@@ -249,8 +250,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	private void recreateResourceConns(final List<ConnData> resourceConns) {
-		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
-		final FBNetworkElement copiedMappedElement = newElement.getOpposite();
+		final BlockFBNetworkElement orgMappedElement = (BlockFBNetworkElement) unmapCmd.getMappedFBNetworkElement();
+		final BlockFBNetworkElement copiedMappedElement = newElement.getOpposite();
 		for (final ConnData connData : resourceConns) {
 			final IInterfaceElement source = findUpdatedInterfaceElement(copiedMappedElement, orgMappedElement,
 					connData.source);
@@ -271,8 +272,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 	}
 
-	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
-			final FBNetworkElement oldElement, final IInterfaceElement oldInterface) {
+	private static IInterfaceElement findUpdatedInterfaceElement(final BlockFBNetworkElement newElement,
+			final BlockFBNetworkElement oldElement, final IInterfaceElement oldInterface) {
 		if ((oldInterface != null) && (oldInterface.getBlockFBNetworkElement() == oldElement)) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
@@ -281,7 +282,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		return oldInterface;
 	}
 
-	private static Stream<Connection> getAllConnections(final FBNetworkElement element) {
+	private static Stream<Connection> getAllConnections(final BlockFBNetworkElement element) {
 		return element.getInterface().getAllInterfaceElements().stream().map((final IInterfaceElement ifEle) -> {
 			if (ifEle.isIsInput()) {
 				return ifEle.getInputConnections();
@@ -317,7 +318,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	protected List<ConnData> getResourceCons() {
 		final List<ConnData> retVal = new ArrayList<>();
-		final FBNetworkElement resElement = oldElement.getOpposite();
+		final BlockFBNetworkElement resElement = oldElement.getOpposite();
 
 		getAllConnections(resElement).forEach(conn -> {
 			final IInterfaceElement source = conn.getSource();
@@ -428,7 +429,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	private static ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
-			final FBNetworkElement element) {
+			final BlockFBNetworkElement element) {
 		final ErrorMarkerInterface interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(
 				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), element.getInterface());
 
@@ -452,7 +453,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	private static IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
-			final FBNetworkElement newElement) {
+			final BlockFBNetworkElement newElement) {
 		IInterfaceElement updatedSelected = oldInterface.isIsInput() ? newElement.getInput(oldInterface.getName())
 				: newElement.getOutput(oldInterface.getName());
 		if ((updatedSelected == null) || (updatedSelected.isIsInput() != oldInterface.isIsInput())) {
@@ -535,9 +536,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				});
 	}
 
-	protected abstract FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement);
+	protected abstract BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement);
 
-	public FBNetworkElement getOldElement() {
+	public BlockFBNetworkElement getOldElement() {
 		return oldElement;
 	}
 

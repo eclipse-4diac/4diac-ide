@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -173,8 +174,8 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 		checkEditorLocation();
 
-		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
-				.map(fbnEl -> {
+		search.performSearch().stream().filter(BlockFBNetworkElement.class::isInstance)
+				.map(BlockFBNetworkElement.class::cast).map(fbnEl -> {
 					if (fbnEl instanceof final FB fb && fbnEl.eContainer() == editedElement) {
 						return new UpdateInternalFBCommand(fb, typeEntry);
 					}

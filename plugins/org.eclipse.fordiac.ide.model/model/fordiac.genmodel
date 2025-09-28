@@ -28,6 +28,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genDataTypes ecoreDataType="lib.ecore#//InterfaceTypeEntry"/>
+    <genDataTypes ecoreDataType="lib.ecore#//BlockFBNWElementStream"/>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
@@ -486,6 +487,8 @@
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/validateCollisions/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getBlockFBNetworkElements"
+          body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/mapping"/>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.commands.Command;
@@ -60,7 +61,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	protected static InterfaceList getInstanceInterfaceList(final State s) {
-		return s.getFbNetwork().getNetworkElements().get(0).getInterface();
+		return ((BlockFBNetworkElement) s.getFbNetwork().getNetworkElements().get(0)).getInterface();
 	}
 
 	private static State executeNOP(final State state) {
@@ -125,8 +126,8 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	private static State executeUpdate(final State state) {
-		state.setCommand(
-				new UpdateFBTypeCommand(state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
+		state.setCommand(new UpdateFBTypeCommand(
+				(BlockFBNetworkElement) state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
 		return commandExecution(state);
 	}
 

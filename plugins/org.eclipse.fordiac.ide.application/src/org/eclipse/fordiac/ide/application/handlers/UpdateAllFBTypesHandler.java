@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -22,7 +22,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -42,14 +41,14 @@ public class UpdateAllFBTypesHandler extends AbstractHandler {
 		final FBNetwork fbnetwork = editor.getAdapter(FBNetwork.class);
 		final CommandStack stack = editor.getAdapter(CommandStack.class);
 
-		for (final FBNetworkElement element : fbnetwork.getNetworkElements()) {
+		fbnetwork.getBlockFBNetworkElements().forEach(element -> {
 			if (element.getType() != null) {
 				final Command updateFBTypeCmd = UpdateFBTypeHandler.getUpdateCommand(element);
 				if (updateFBTypeCmd.canExecute()) {
 					command.add(updateFBTypeCmd);
 				}
 			}
-		}
+		});
 		if (stack != null) {
 			stack.execute(command);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2023 AIT, fortiss GmbH, Profactor GmbH
+ * Copyright (c) 2012, 2025 AIT, fortiss GmbH, Profactor GmbH
  * 				            Johannes Kepler University
  *                          Primetals Technologies Austria GmbH
  *
@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -34,9 +35,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
-public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
+public class UpdateFBTypeCommand extends AbstractUpdateBlockFBNElementCommand {
 
-	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final TypeEntry entry) {
+	public UpdateFBTypeCommand(final BlockFBNetworkElement fbnElement, final TypeEntry entry) {
 		super(fbnElement);
 		if ((entry instanceof FBTypeEntry) || (entry instanceof SubAppTypeEntry)) {
 			this.entry = entry;
@@ -45,7 +46,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		}
 	}
 
-	public UpdateFBTypeCommand(final FBNetworkElement fbnElement) {
+	public UpdateFBTypeCommand(final BlockFBNetworkElement fbnElement) {
 		this(fbnElement, null);
 	}
 
@@ -66,10 +67,10 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
 		entry = reloadTypeEntry(entry, srcElement);
 
-		final FBNetworkElement copy = BlockInstanceFactory.createBlockInstanceForTypeEntry(entry);
+		final BlockFBNetworkElement copy = BlockInstanceFactory.createBlockInstanceForTypeEntry(entry);
 		if (srcElement instanceof final AdapterFB adp) {
 			((AdapterFB) copy).setAdapterDecl(adp.getAdapterDecl());
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *                          Martin Erich Jobst
  *
@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
@@ -29,7 +29,7 @@ public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
 		final AdapterFB copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 		if (null == getEntry()) {
 			copy.setTypeEntry(srcElement.getTypeEntry());

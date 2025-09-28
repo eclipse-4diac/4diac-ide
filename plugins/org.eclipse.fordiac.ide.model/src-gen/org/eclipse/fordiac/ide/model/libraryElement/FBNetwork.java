@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.Map;
+import java.util.stream.Stream;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
@@ -202,6 +203,14 @@ public interface FBNetwork extends EObject {
 	 * @generated
 	 */
 	boolean validateCollisions(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.BlockFBNWElementStream"
+	 * @generated
+	 */
+	Stream<BlockFBNetworkElement> getBlockFBNetworkElements();
 
 	/**
 	 * <!-- begin-user-doc -->

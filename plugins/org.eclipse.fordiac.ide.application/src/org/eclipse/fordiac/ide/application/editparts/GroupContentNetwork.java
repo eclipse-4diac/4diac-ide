@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -28,9 +29,11 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -155,6 +158,11 @@ public class GroupContentNetwork implements FBNetwork {
 	@Override
 	public EList<FBNetworkElement> getNetworkElements() {
 		return group.getGroupElements();
+	}
+
+	@Override
+	public Stream<BlockFBNetworkElement> getBlockFBNetworkElements() {
+		return FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements());
 	}
 
 	@SuppressWarnings("unchecked")

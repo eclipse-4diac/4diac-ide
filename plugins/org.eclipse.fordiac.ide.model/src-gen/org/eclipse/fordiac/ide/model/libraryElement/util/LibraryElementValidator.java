@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -747,6 +747,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateVarDeclList((List<VarDeclaration>)value, diagnostics, context);
 			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
 				return validateInterfaceTypeEntry((InterfaceTypeEntry)value, diagnostics, context);
+			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
+				return validateBlockFBNWElementStream((Stream<BlockFBNetworkElement>)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -954,6 +956,25 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateAutomationSystem(AutomationSystem automationSystem, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(automationSystem, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validateINamedElement_validateName(automationSystem, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateBaseFBType(BaseFBType baseFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(baseFBType, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(baseFBType, diagnostics, context);
@@ -1004,25 +1025,6 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(blockFBNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(blockFBNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(blockFBNetworkElement, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateAutomationSystem(AutomationSystem automationSystem, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(automationSystem, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(automationSystem, diagnostics, context);
 		return result;
 	}
 
@@ -3066,6 +3068,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateInterfaceTypeEntry(InterfaceTypeEntry interfaceTypeEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBlockFBNWElementStream(Stream<BlockFBNetworkElement> blockFBNWElementStream, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,7 +17,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.List;
+
 import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -43,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -298,6 +301,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createVarDeclListFromString(eDataType, initialValue);
 			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
 				return createInterfaceTypeEntryFromString(eDataType, initialValue);
+			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
+				return createBlockFBNWElementStreamFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -331,6 +336,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertVarDeclListToString(eDataType, instanceValue);
 			case LibraryElementPackage.INTERFACE_TYPE_ENTRY:
 				return convertInterfaceTypeEntryToString(eDataType, instanceValue);
+			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
+				return convertBlockFBNWElementStreamToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -430,6 +437,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public AutomationSystem createAutomationSystem() {
+		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
+		return automationSystem;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BaseFBType createBaseFBType() {
 		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
 		return baseFBType;
@@ -444,17 +462,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public BasicFBType createBasicFBType() {
 		BasicFBTypeImpl basicFBType = new BasicFBTypeImpl();
 		return basicFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AutomationSystem createAutomationSystem() {
-		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
-		return automationSystem;
 	}
 
 	/**
@@ -914,6 +921,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public MemberVarDeclaration createMemberVarDeclaration() {
+		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
+		return memberVarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Multiplexer createMultiplexer() {
 		MultiplexerImpl multiplexer = new MultiplexerImpl();
 		return multiplexer;
@@ -1320,17 +1338,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public MemberVarDeclaration createMemberVarDeclaration() {
-		MemberVarDeclarationImpl memberVarDeclaration = new MemberVarDeclarationImpl();
-		return memberVarDeclaration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Language createLanguageFromString(EDataType eDataType, String initialValue) {
 		Language result = Language.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -1509,6 +1516,25 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertInterfaceTypeEntryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public Stream<BlockFBNetworkElement> createBlockFBNWElementStreamFromString(EDataType eDataType, String initialValue) {
+		return (Stream<BlockFBNetworkElement>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertBlockFBNWElementStreamToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
 	}
 
 	/**
