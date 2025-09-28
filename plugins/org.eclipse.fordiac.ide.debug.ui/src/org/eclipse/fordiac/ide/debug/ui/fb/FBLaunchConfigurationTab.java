@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -141,10 +141,9 @@ public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 					.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
 			clockWidget.setSelectedClockMode(FBLaunchConfigurationAttributes.getClockMode(configuration));
 			clockWidget.setClockIntervalText(FBLaunchConfigurationAttributes.getClockIntervalText(configuration));
+			clockWidget.setRealtimeClockText(FBLaunchConfigurationAttributes.getClockRealtimeOffsetText(configuration));
 			clockWidget
-					.setRealtimeClockText(FBLaunchConfigurationAttributes.getClockRealtimeOffsetText(configuration));
-			clockWidget.setMonotonicClockText(
-					FBLaunchConfigurationAttributes.getClockMonotonicOffsetText(configuration));
+					.setMonotonicClockText(FBLaunchConfigurationAttributes.getClockMonotonicOffsetText(configuration));
 		} catch (final CoreException e) {
 			// ignore
 		}
@@ -167,7 +166,8 @@ public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 		final FBDebugClockMode clockMode = clockWidget.getSelectedClockMode();
 		configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_MODE, clockMode.toString());
 		if (clockMode == FBDebugClockMode.INTERVAL) {
-			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_INTERVAL, clockWidget.getClockIntervalText());
+			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_INTERVAL,
+					clockWidget.getClockIntervalText());
 		}
 		if (clockMode == FBDebugClockMode.INTERVAL || clockMode == FBDebugClockMode.FIXED) {
 			configuration.setAttribute(FBLaunchConfigurationAttributes.CLOCK_REALTIME_OFFSET,
@@ -261,8 +261,8 @@ public class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 	}
 
 	protected static String getEventName(final Event event) {
-		if (event.getFBNetworkElement() instanceof AdapterFB) {
-			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
 		return event.getName();
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Johannes Kepler University Linz
+ * Copyright (c) 2022, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,7 +33,7 @@ public class UntypedSubappConnectorBorder extends ConnectorBorder {
 	}
 
 	private SubApp getSubapp() {
-		return (SubApp) getEditPartModelOject().getFBNetworkElement();
+		return (SubApp) getEditPartModelOject().getBlockFBNetworkElement();
 	}
 
 	@Override

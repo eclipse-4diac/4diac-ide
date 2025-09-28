@@ -47,7 +47,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 			@Override
 			protected Command createDeleteCommand(final GroupRequest request) {
 				if (getHost().getModel() instanceof IInterfaceElement) {
-					return new DeleteErrorMarkerCommand(getModel(), getModel().getFBNetworkElement());
+					return new DeleteErrorMarkerCommand(getModel(), getModel().getBlockFBNetworkElement());
 				}
 				return null;
 			}

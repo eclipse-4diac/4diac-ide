@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH
+ * Copyright (c) 2017, 2025 fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,7 +50,7 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 	@Override
 	public void execute() {
 		super.execute();
-		if (getInterfaceList().getFBNetworkElement().isMapped()) {
+		if (getInterfaceList().getBlockFBNetworkElement().isMapped()) {
 			// the subapp is mapped so we need to created the interface element also in the
 			// opposite entry
 			mirroredElement = createMirroredInterfaceElement();
@@ -97,8 +97,8 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 		// if the subapp is mapped we need to created the interface element also in the
 		// opposite entry
 		final CreateInterfaceElementCommand mirroredCreateCmd = new CreateInterfaceElementCommand(getCreatedElement(),
-				getCreatedElement().isIsInput(), getCreatedElement().getFBNetworkElement().getOpposite().getInterface(),
-				getIndex());
+				getCreatedElement().isIsInput(),
+				getCreatedElement().getBlockFBNetworkElement().getOpposite().getInterface(), getIndex());
 		mirroredCreateCmd.execute();
 		// Set the same name as the one we have also on the mirrored
 		mirroredCreateCmd.getCreatedElement().setName(getCreatedElement().getName());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -167,8 +167,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	private boolean isTypeEditable() {
 		final ConfigurableObject type = getType();
 		return !(type instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance()
-				|| (type instanceof final IInterfaceElement ie && ie.getFBNetworkElement() != null
-						&& ie.getFBNetworkElement().isContainedInTypedInstance())
+				|| (type instanceof final IInterfaceElement ie && ie.getBlockFBNetworkElement() != null
+						&& ie.getBlockFBNetworkElement().isContainedInTypedInstance())
 				|| (type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn)));
 	}
 
@@ -223,7 +223,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			return typedConfigObject.getTypeEntry().getType();
 		}
 		if (copy instanceof final IInterfaceElement interfaceElement
-				&& getTypeElement(interfaceElement.getFBNetworkElement()) instanceof final FBType fbType) {
+				&& getTypeElement(interfaceElement.getBlockFBNetworkElement()) instanceof final FBType fbType) {
 			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
 		}
 

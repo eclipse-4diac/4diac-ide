@@ -27,7 +27,7 @@ import org.eclipse.elk.graph.ElkLabel;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.elk.graph.util.ElkGraphUtil;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
@@ -124,7 +124,7 @@ public final class FordiacGraphBuilder {
 			// TODO
 		}
 		case final CommentEditPart commentEp -> processComment(commentEp);
-		case final AbstractFBNElementEditPart fbnEl -> processFB(fbnEl);
+		case final AbstractBlockFBNElementEditPart fbnEl -> processFB(fbnEl);
 		case final ValueEditPart value -> processValue(value);
 		default -> {// nothing to be done in the default case
 		}
@@ -135,7 +135,7 @@ public final class FordiacGraphBuilder {
 		createNode(commentEp);
 	}
 
-	private void processFB(final AbstractFBNElementEditPart ep) {
+	private void processFB(final AbstractBlockFBNElementEditPart ep) {
 		createFBNode(ep);
 		for (final Object child : ep.getChildren()) {
 			if (child instanceof final InterfaceEditPart ie) {
@@ -220,7 +220,7 @@ public final class FordiacGraphBuilder {
 		return node;
 	}
 
-	private void createFBNode(final AbstractFBNElementEditPart editPart) {
+	private void createFBNode(final AbstractBlockFBNElementEditPart editPart) {
 		final ElkNode node = createNode(editPart);
 		node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
 

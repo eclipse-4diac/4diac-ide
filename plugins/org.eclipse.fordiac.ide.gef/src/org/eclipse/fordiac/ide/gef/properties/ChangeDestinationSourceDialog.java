@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -178,7 +178,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 
 	private List<InterfaceList> getPossibleInterfaceLists(final List<FBNetworkElement> fbs, final SubApp subapp) {
 		final List<InterfaceList> possibleInterfaceLists = new ArrayList<>(
-				fbs.stream().filter(currentFb -> !currentFb.getName().equals(ie.getFBNetworkElement().getName()))
+				fbs.stream().filter(currentFb -> !currentFb.getName().equals(ie.getBlockFBNetworkElement().getName()))
 						.toList().stream().map(FBNetworkElement::getInterface).toList());
 
 		if (subapp != null && !((ie.eContainer().eContainer() instanceof final SubApp subappContainer)
@@ -191,20 +191,21 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 	// Returns the input or output swapped if needed for interfaceElements of
 	// Subapps
 	private boolean inputSwap(final boolean input, final InterfaceList ieList) {
-		if (ie.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
-			if (subapp.getSubAppNetwork().getNetworkElements().contains(ieList.getFBNetworkElement())) {
+		if (ie.getBlockFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
+			if (subapp.getSubAppNetwork().getNetworkElements().contains(ieList.getBlockFBNetworkElement())) {
 				return !input;
 			}
 
 			if (subapp.getOuterFBNetworkElement() instanceof final SubApp outsideSubApp && !outsideSubApp.isTyped()
-					&& !outsideSubApp.getSubAppNetwork().getNetworkElements().contains(ieList.getFBNetworkElement())) {
+					&& !outsideSubApp.getSubAppNetwork().getNetworkElements()
+							.contains(ieList.getBlockFBNetworkElement())) {
 				return !input;
 			}
 			return input;
 		}
 
-		if (ieList.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
-			if (subapp.getSubAppNetwork().getNetworkElements().contains(ie.getFBNetworkElement())) {
+		if (ieList.getBlockFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
+			if (subapp.getSubAppNetwork().getNetworkElements().contains(ie.getBlockFBNetworkElement())) {
 				return !input;
 			}
 			return input;
@@ -323,7 +324,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final IInterfaceElement ieElement) {
-					return ieElement.getFBNetworkElement().getName();
+					return ieElement.getBlockFBNetworkElement().getName();
 				}
 				return super.getText(element);
 			}
@@ -332,7 +333,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			public Image getImage(final Object element) {
 
 				if (element instanceof final IInterfaceElement ieElement) {
-					return labelProvider.getImage(ieElement.getFBNetworkElement());
+					return labelProvider.getImage(ieElement.getBlockFBNetworkElement());
 				}
 				return super.getImage(element);
 			}
@@ -411,17 +412,17 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 
 		if (pinSelection instanceof final VarDeclaration varDec) {
 			cmdCommand = new ReconnectDataConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					varDec, ie.getFBNetworkElement().getFbNetwork());
+					varDec, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (pinSelection instanceof final Event eventPin) {
 			cmdCommand = new ReconnectEventConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					eventPin, ie.getFBNetworkElement().getFbNetwork());
+					eventPin, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (pinSelection instanceof final AdapterDeclaration adapter) {
 			cmdCommand = new ReconnectAdapterConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					adapter, ie.getFBNetworkElement().getFbNetwork());
+					adapter, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (cmdCommand != null && cmdCommand.canExecute() && commandStack != null) {

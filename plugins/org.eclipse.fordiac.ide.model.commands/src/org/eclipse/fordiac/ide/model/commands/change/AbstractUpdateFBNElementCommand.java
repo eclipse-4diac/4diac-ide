@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -272,7 +273,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private static IInterfaceElement findUpdatedInterfaceElement(final FBNetworkElement newElement,
 			final FBNetworkElement oldElement, final IInterfaceElement oldInterface) {
-		if ((oldInterface != null) && (oldInterface.getFBNetworkElement() == oldElement)) {
+		if ((oldInterface != null) && (oldInterface.getBlockFBNetworkElement() == oldElement)) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
 			return updateSelectedInterface(oldInterface, newElement);
@@ -321,14 +322,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		getAllConnections(resElement).forEach(conn -> {
 			final IInterfaceElement source = conn.getSource();
 			final IInterfaceElement dest = conn.getDestination();
-			if (!source.getFBNetworkElement().isMapped() || !dest.getFBNetworkElement().isMapped()) {
+			if (!source.getBlockFBNetworkElement().isMapped() || !dest.getBlockFBNetworkElement().isMapped()) {
 				// one of both ends is a resourceFB therefore the connection needs to be
 				// restored
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
-			} else if (((source.getFBNetworkElement() == resElement)
-					&& (dest.getFBNetworkElement().getOpposite().getFbNetwork() != oldElement.getFbNetwork()))
-					|| ((dest.getFBNetworkElement() == resElement) && (source.getFBNetworkElement().getOpposite()
-							.getFbNetwork() != oldElement.getFbNetwork()))) {
+			} else if (((source.getBlockFBNetworkElement() == resElement)
+					&& (dest.getBlockFBNetworkElement().getOpposite().getFbNetwork() != oldElement.getFbNetwork()))
+					|| ((dest.getBlockFBNetworkElement() == resElement) && (source.getBlockFBNetworkElement()
+							.getOpposite().getFbNetwork() != oldElement.getFbNetwork()))) {
 				// one of both ends is a FB coming from a different fb network and therefore
 				// this is also a resource specific connection
 				retVal.add(new ConnData(conn.getSource(), conn.getDestination()));
@@ -540,7 +541,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		return oldElement;
 	}
 
-	public FBNetworkElement getNewElement() {
+	public BlockFBNetworkElement getNewElement() {
 		return newElement;
 	}
 

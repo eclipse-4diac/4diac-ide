@@ -205,12 +205,12 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			throws DeploymentException {
 		final IInterfaceElement source = connData.source();
 		final IInterfaceElement destination = connData.destination();
-		if ((null == source) || (null == destination) || (null == source.getFBNetworkElement())
-				|| (null == destination.getFBNetworkElement())) {
+		if ((null == source) || (null == destination) || (null == source.getBlockFBNetworkElement())
+				|| (null == destination.getBlockFBNetworkElement())) {
 			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
 		}
-		final FBNetworkElement sourceFB = source.getFBNetworkElement();
-		final FBNetworkElement destFB = destination.getFBNetworkElement();
+		final FBNetworkElement sourceFB = source.getBlockFBNetworkElement();
+		final FBNetworkElement destFB = destination.getBlockFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
 				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName() + connData.sourceSuffix(), //$NON-NLS-1$
 				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$

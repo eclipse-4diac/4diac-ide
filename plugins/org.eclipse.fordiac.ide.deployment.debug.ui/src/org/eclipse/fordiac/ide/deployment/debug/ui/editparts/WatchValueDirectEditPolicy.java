@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2012, 2025 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH,
  *                		    Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
@@ -65,7 +65,7 @@ public class WatchValueDirectEditPolicy extends DirectEditPolicy {
 				.getBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH)
 				&& editPart.getInterfaceElement() instanceof final VarDeclaration varDeclaration
 				&& varDeclaration.isIsInput()
-				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getFBNetworkElement())
+				&& !FBNetworkElementHelper.isContainedInTypedInstance(varDeclaration.getBlockFBNetworkElement())
 				&& !isConnectedWithSubAppInput(varDeclaration) && commandStack != null) {
 			commandStack.execute(new ChangeValueCommand(varDeclaration, value));
 		}

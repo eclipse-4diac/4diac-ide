@@ -81,8 +81,8 @@ public class Utils {
 	}
 
 	private static void collectAllPorts(final InterfaceList interfaceList, final Map<String, Set<String>> result) {
-		final String deviceName = interfaceList.getFBNetworkElement().getResource().getDevice().getName();
-		final String resourceName = interfaceList.getFBNetworkElement().getResource().getName();
+		final String deviceName = interfaceList.getBlockFBNetworkElement().getResource().getDevice().getName();
+		final String resourceName = interfaceList.getBlockFBNetworkElement().getResource().getName();
 		final String prefix = deviceName + "." + resourceName + ".";
 		for (final Event event : interfaceList.getEventInputs()) {
 			addElementToResult(event, result.get(resourceName), prefix);

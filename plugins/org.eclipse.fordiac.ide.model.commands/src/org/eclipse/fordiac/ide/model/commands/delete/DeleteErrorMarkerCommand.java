@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -69,7 +70,7 @@ public class DeleteErrorMarkerCommand extends Command implements ScopedCommand {
 
 	private static DeleteFBNetworkElementCommand createDeleteFBNCommand(final ErrorMarkerInterface errorIe,
 			final FBNetworkElement errorFb) {
-		final FBNetworkElement fbNetworkElement = errorIe.getFBNetworkElement();
+		final BlockFBNetworkElement fbNetworkElement = errorIe.getBlockFBNetworkElement();
 		// only delete the fbnetworkelement if this delete error marker command was not
 		// called becuase of an fb delete
 		// and if the fbelement is an error maker fb and we are the last errormarker at
@@ -83,8 +84,8 @@ public class DeleteErrorMarkerCommand extends Command implements ScopedCommand {
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		if (errorIe.getFBNetworkElement() != null) {
-			return Set.of(errorIe.getFBNetworkElement());
+		if (errorIe.getBlockFBNetworkElement() != null) {
+			return Set.of(errorIe.getBlockFBNetworkElement());
 		}
 		return Set.of(errorIe);
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -126,7 +126,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	@Override
 	protected void refreshSourceConnections() {
 		getContentEP().getChildren().forEach(ep -> {
-			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
+			if (ep instanceof final AbstractBlockFBNElementEditPart fbEp) {
 				fbEp.getChildren().forEach(pinEp -> {
 					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
 						pinEp.getSourceConnections().forEach(ConnectionEditPart::refresh);
@@ -139,7 +139,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	@Override
 	protected void refreshTargetConnections() {
 		getContentEP().getChildren().forEach(ep -> {
-			if (ep instanceof final AbstractFBNElementEditPart fbEp) {
+			if (ep instanceof final AbstractBlockFBNElementEditPart fbEp) {
 				fbEp.getChildren().forEach(pinEp -> {
 					if (pinEp instanceof InterfaceEditPartForFBNetwork) {
 						pinEp.getTargetConnections().forEach(ConnectionEditPart::refresh);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -137,8 +137,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		private void handleConditionEventUpdate(final Notification notification) {
 			if (notification.getNewValue() instanceof final String newValue) {
 				final Event ce = getModel().getConditionEvent();
-				if ((ce.getName().equals(newValue)) || ((ce.getFBNetworkElement() instanceof final AdapterFB adapterFB)
-						&& (adapterFB.getName().equals(newValue)))) {
+				if ((ce.getName().equals(newValue))
+						|| ((ce.getBlockFBNetworkElement() instanceof final AdapterFB adapterFB)
+								&& (adapterFB.getName().equals(newValue)))) {
 					refresh();
 				}
 			}

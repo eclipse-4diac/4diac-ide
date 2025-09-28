@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -45,10 +45,9 @@ public class InternalConnectionsViewer extends ConnectionDisplayWidget {
 	private static class InternalConnectionContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof IInterfaceElement) {
-				final IInterfaceElement element = ((IInterfaceElement) inputElement);
-				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
-						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
+			if (inputElement instanceof final IInterfaceElement element) {
+				if ((element.isIsInput() && (null != element.getBlockFBNetworkElement()))
+						|| (!element.isIsInput() && (null == element.getBlockFBNetworkElement()))) {
 					return element.getOutputConnections().toArray();
 				}
 				return element.getInputConnections().toArray();

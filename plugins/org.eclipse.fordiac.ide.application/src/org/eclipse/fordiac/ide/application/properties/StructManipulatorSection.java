@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University Linz,
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
@@ -102,7 +102,7 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 			return structMan;
 		}
 		if (input instanceof final StructInterfaceEditPart structIEEP) {
-			return structIEEP.getModel().getFBNetworkElement();
+			return structIEEP.getModel().getBlockFBNetworkElement();
 		}
 		return null;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GbmH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -406,7 +406,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		final FBNetworkElement fb = getModel().getParentIE().getFBNetworkElement();
+		final FBNetworkElement fb = getModel().getParentIE().getBlockFBNetworkElement();
 
 		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
 

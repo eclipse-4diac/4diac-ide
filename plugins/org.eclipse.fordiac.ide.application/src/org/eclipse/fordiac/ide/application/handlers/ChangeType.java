@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -24,8 +24,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class ChangeType extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		final AbstractFBNElementEditPart element = getSelectedFBElementEditPart(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final AbstractBlockFBNElementEditPart element = getSelectedFBElementEditPart(event);
 		if (null != element) {
 			element.performDirectEdit();
 			return Status.OK_STATUS;
@@ -33,12 +33,12 @@ public class ChangeType extends AbstractHandler {
 		return Status.CANCEL_STATUS;
 	}
 
-	private static AbstractFBNElementEditPart getSelectedFBElementEditPart(ExecutionEvent event) {
+	private static AbstractBlockFBNElementEditPart getSelectedFBElementEditPart(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			final Object selObj = ((StructuredSelection) selection).getFirstElement();
-			if (selObj instanceof AbstractFBNElementEditPart) {
-				return (AbstractFBNElementEditPart) selObj;
+			if (selObj instanceof AbstractBlockFBNElementEditPart) {
+				return (AbstractBlockFBNElementEditPart) selObj;
 			}
 		}
 		return null;

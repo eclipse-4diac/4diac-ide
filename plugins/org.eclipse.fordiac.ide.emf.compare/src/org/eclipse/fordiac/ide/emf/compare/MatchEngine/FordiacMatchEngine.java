@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -74,30 +74,31 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 		}
 
 		if (input instanceof final Value val) {
-			if (val.getParentIE().getFBNetworkElement() != null) {
-				return val.getParentIE().getFBNetworkElement().getName() + "." + val.getParentIE().getName() //$NON-NLS-1$
+			if (val.getParentIE().getBlockFBNetworkElement() != null) {
+				return val.getParentIE().getBlockFBNetworkElement().getName() + "." + val.getParentIE().getName() //$NON-NLS-1$
 						+ ".Value"; //$NON-NLS-1$
 			}
 			return val.getParentIE().getName() + ".Value"; //$NON-NLS-1$
 		}
 
 		if ((input instanceof final With with) && (with.eContainer() instanceof final IInterfaceElement ie)) {
-			if (ie.getFBNetworkElement() != null) {
-				return ie.getFBNetworkElement().getName() + "." + ie.getName() + ".WITH." //$NON-NLS-1$ //$NON-NLS-2$
+			if (ie.getBlockFBNetworkElement() != null) {
+				return ie.getBlockFBNetworkElement().getName() + "." + ie.getName() + ".WITH." //$NON-NLS-1$ //$NON-NLS-2$
 						+ with.getVariables().getName();
 			}
 			return ie.getName() + ".WITH." + with.getVariables().getName(); //$NON-NLS-1$
 		}
 
 		if ((input instanceof Event || input instanceof VarDeclaration || input instanceof AdapterDeclaration)
-				&& (((IInterfaceElement) input).getFBNetworkElement() != null)) {
-			return ((IInterfaceElement) input).getFBNetworkElement().getName() + ".InterfaceList." //$NON-NLS-1$
+				&& (((IInterfaceElement) input).getBlockFBNetworkElement() != null)) {
+			return ((IInterfaceElement) input).getBlockFBNetworkElement().getName() + ".InterfaceList." //$NON-NLS-1$
 					+ ((IInterfaceElement) input).getName();
 		}
 
 		if (input instanceof final InterfaceList interfaceList) {
-			if (interfaceList.getFBNetworkElement() != null && interfaceList.getFBNetworkElement().getName() != null) {
-				return interfaceList.getFBNetworkElement().getName() + ".InterfaceList"; //$NON-NLS-1$
+			if (interfaceList.getBlockFBNetworkElement() != null
+					&& interfaceList.getBlockFBNetworkElement().getName() != null) {
+				return interfaceList.getBlockFBNetworkElement().getName() + ".InterfaceList"; //$NON-NLS-1$
 			}
 			if (interfaceList.eContainer() instanceof final FBType fb) {
 				return fb.getName() + ".InterfaceList"; //$NON-NLS-1$

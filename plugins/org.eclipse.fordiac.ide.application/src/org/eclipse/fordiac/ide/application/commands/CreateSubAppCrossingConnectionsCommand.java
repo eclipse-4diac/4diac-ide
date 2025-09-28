@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -159,7 +159,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 	}
 
 	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList) {
-		if (iel.getFBNetworkElement() instanceof final SubApp subapp) {
+		if (iel.getBlockFBNetworkElement() instanceof final SubApp subapp) {
 			final FBNetwork search = subapp.getSubAppNetwork();
 			if (networkList.get(0) == search) {
 				return !iel.isIsInput();
@@ -192,7 +192,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	private static FBNetwork addSubAppNetworkToList(final IInterfaceElement ie, final List<FBNetwork> networkList) {
 		FBNetwork subAppNetwork = null;
-		if (ie.getFBNetworkElement() instanceof final SubApp subApp && !subApp.isTyped()) {
+		if (ie.getBlockFBNetworkElement() instanceof final SubApp subApp && !subApp.isTyped()) {
 			subAppNetwork = subApp.getSubAppNetwork();
 			networkList.add(0, subAppNetwork);
 		}
@@ -282,46 +282,49 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		final Optional<IInterfaceElement> subappPin;
 		if (isRightPath) {
 
-			if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getOuterFBNetworkElement() != null) {
+			if (ie.getBlockFBNetworkElement() != null
+					&& ie.getBlockFBNetworkElement().getOuterFBNetworkElement() != null) {
 
 				if (ie instanceof Event) {
-					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventInputs()
+					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventInputs()
 							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getInOutVars()
+					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getInOutVars()
 							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				} else {
-					subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getInputVars()
+					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getInputVars()
 							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				}
 
 				if (subappPin.isPresent()) {
-					createConnection(ie.getFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
+					createConnection(ie.getBlockFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
 					return subappPin.get();
 				}
 			}
 
-		} else if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getOuterFBNetworkElement() != null) {
+		} else if (ie.getBlockFBNetworkElement() != null
+				&& ie.getBlockFBNetworkElement().getOuterFBNetworkElement() != null) {
 
 			if (ie instanceof Event) {
-				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventOutputs()
+				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventOutputs()
 						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutMappedInOutVars()
-						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface()
+						.getOutMappedInOutVars().stream()
+						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			} else {
-				subappPin = ie.getFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutputVars().stream()
-						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutputVars()
+						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			}
 
 			if (subappPin.isPresent()) {
-				createConnection(ie.getFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
+				createConnection(ie.getBlockFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
 				return subappPin.get();
 			}
 		}
@@ -488,9 +491,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	private static boolean connShouldBeVisible(final FBNetwork parentNW, final IInterfaceElement src,
 			final IInterfaceElement dst) {
-		final boolean srcHidden = (src.getFBNetworkElement() instanceof final SubApp srcSubapp)
+		final boolean srcHidden = (src.getBlockFBNetworkElement() instanceof final SubApp srcSubapp)
 				&& srcSubapp.isUnfolded() && parentNW == srcSubapp.getFbNetwork();
-		final boolean dstHidden = (dst.getFBNetworkElement() instanceof final SubApp dstSubapp)
+		final boolean dstHidden = (dst.getBlockFBNetworkElement() instanceof final SubApp dstSubapp)
 				&& dstSubapp.isUnfolded() && parentNW == dstSubapp.getFbNetwork();
 		return !srcHidden && !dstHidden;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -40,7 +40,7 @@ public final class DeploymentDebugWatchUtils {
 
 	public static Resource getResource(final INamedElement element) {
 		return switch (element) {
-		case final IInterfaceElement interfaceElement -> getResource(interfaceElement.getFBNetworkElement());
+		case final IInterfaceElement interfaceElement -> getResource(interfaceElement.getBlockFBNetworkElement());
 		case final AdapterFB adapterFB when adapterFB
 				.eContainer() instanceof final AdapterDeclaration adapterDeclaration ->
 			getResource(adapterDeclaration);
@@ -69,7 +69,7 @@ public final class DeploymentDebugWatchUtils {
 	}
 
 	public static boolean isSubAppInterfaceElement(final IInterfaceElement interfaceElement) {
-		final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
+		final FBNetworkElement fbNetworkElement = interfaceElement.getBlockFBNetworkElement();
 		return fbNetworkElement instanceof SubApp || fbNetworkElement instanceof final AdapterFB adapterFB
 				&& isSubAppInterfaceElement(adapterFB.getAdapterDecl());
 	}
@@ -79,7 +79,7 @@ public final class DeploymentDebugWatchUtils {
 		if (element == null) {
 			return Stream.empty();
 		}
-		return switch (element.getFBNetworkElement()) {
+		return switch (element.getBlockFBNetworkElement()) {
 		case null -> Stream.empty();
 		case final SubApp subapp -> {
 			subapp.loadSubAppNetwork(); // ensure network is loaded
@@ -110,7 +110,7 @@ public final class DeploymentDebugWatchUtils {
 		if (element == null) {
 			return Stream.empty();
 		}
-		return switch (element.getFBNetworkElement()) {
+		return switch (element.getBlockFBNetworkElement()) {
 		case null -> Stream.empty();
 		case final SubApp subapp -> {
 			subapp.loadSubAppNetwork(); // ensure network is loaded

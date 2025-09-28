@@ -357,14 +357,14 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final IInterfaceElement sourceData = connData.source();
 		final IInterfaceElement destinationData = connData.destination();
 
-		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
-				|| destinationData.getFBNetworkElement() == null) {
+		if (sourceData == null || sourceData.getBlockFBNetworkElement() == null || destinationData == null
+				|| destinationData.getBlockFBNetworkElement() == null) {
 			throw new DeploymentException(MessageFormat
 					.format(Messages.OPCUADeploymentExecutor_CreateConnectionFailedNoDataFound, res.getName()));
 		}
 
-		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
-		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
+		final FBNetworkElement sourceFB = sourceData.getBlockFBNetworkElement();
+		final FBNetworkElement destinationFB = destinationData.getBlockFBNetworkElement();
 		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
 				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
@@ -504,13 +504,13 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final IInterfaceElement sourceData = connData.source();
 		final IInterfaceElement destinationData = connData.destination();
 
-		if (sourceData == null || sourceData.getFBNetworkElement() == null || destinationData == null
-				|| destinationData.getFBNetworkElement() == null) {
+		if (sourceData == null || sourceData.getBlockFBNetworkElement() == null || destinationData == null
+				|| destinationData.getBlockFBNetworkElement() == null) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CreateConnectionFailedNoDataFound);
 		}
 
-		final FBNetworkElement sourceFB = sourceData.getFBNetworkElement();
-		final FBNetworkElement destinationFB = destinationData.getFBNetworkElement();
+		final FBNetworkElement sourceFB = sourceData.getBlockFBNetworkElement();
+		final FBNetworkElement destinationFB = destinationData.getBlockFBNetworkElement();
 		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
 				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),

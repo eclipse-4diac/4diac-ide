@@ -226,7 +226,7 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 	}
 
 	protected Optional<Port> findPort(final Watches watches, final IInterfaceElement element) {
-		return findFB(watches, element.getFBNetworkElement())
+		return findFB(watches, element.getBlockFBNetworkElement())
 				.map(org.eclipse.fordiac.ide.deployment.devResponse.FB::getPorts).stream().flatMap(Collection::stream)
 				.filter(port -> element.getName().equals(port.getName())).findAny();
 	}

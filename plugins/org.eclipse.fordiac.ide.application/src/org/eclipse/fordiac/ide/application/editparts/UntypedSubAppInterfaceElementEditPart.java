@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -250,7 +250,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 	}
 
 	private boolean isInExpandedSubapp() {
-		return (getModel().getFBNetworkElement() instanceof final SubApp subApp) && subApp.isUnfolded();
+		return (getModel().getBlockFBNetworkElement() instanceof final SubApp subApp) && subApp.isUnfolded();
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2017 AIT, fortiss GmbH
- * 				 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2013, 2025 AIT, fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -90,9 +89,9 @@ public final class ElementSelector {
 				}
 			}
 
-			if (selElement != null && selElement.getFBNetworkElement() != null) {
+			if (selElement != null && selElement.getBlockFBNetworkElement() != null) {
 				final IEditorPart editor = OpenListenerManager
-						.openEditor(selElement.getFBNetworkElement().eContainer().eContainer());
+						.openEditor(selElement.getBlockFBNetworkElement().eContainer().eContainer());
 				HandlerHelper.selectElement(selElement, HandlerHelper.getViewer(editor));
 			}
 		}

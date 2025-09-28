@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -87,8 +87,8 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 	private static void checkInputConns(final Set<EObject> currTargets, final Connection con) {
 		currTargets.add(con);
 		final IInterfaceElement source = con.getSource();
-		if (source != null && currTargets.add(con.getSource())
-				&& TargetPinManager.followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
+		if (source != null && currTargets.add(con.getSource()) && TargetPinManager
+				.followConnections(source.getBlockFBNetworkElement(), source.getInputConnections())) {
 			source.getInputConnections().forEach(srcCon -> checkInputConns(currTargets, srcCon));
 		}
 	}
@@ -97,7 +97,7 @@ public final class TargetInterfaceAdapter extends AdapterImpl {
 		currTargets.add(con);
 		final IInterfaceElement dest = con.getDestination();
 		if (dest != null && currTargets.add(dest)) {
-			if (TargetPinManager.followConnections(dest.getFBNetworkElement(), dest.getOutputConnections())) {
+			if (TargetPinManager.followConnections(dest.getBlockFBNetworkElement(), dest.getOutputConnections())) {
 				dest.getOutputConnections().forEach(dstCon -> checkoutOutputConns(currTargets, dstCon));
 			} else {
 				currTargets.addAll(dest.getOutputConnections()); // needed for correctly handling undo

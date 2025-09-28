@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
- * 				 			Primetals Technologies Germany GmbH
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -200,7 +200,7 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 	private class VirtualIOTooltipFigure extends Figure {
 		public VirtualIOTooltipFigure() {
 
-			if (!getIInterfaceElement().getFBNetworkElement().isMapped()) {
+			if (!getIInterfaceElement().getBlockFBNetworkElement().isMapped()) {
 				return;
 			}
 
@@ -221,10 +221,10 @@ public class VirtualInOutputEditPart extends AbstractViewEditPart implements Nod
 				final IInterfaceElement oppositeIE = ConnectionsHelper
 						.getOppositeInterfaceElement(getIInterfaceElement(), conn);
 
-				if ((oppositeIE != null) && (oppositeIE.getFBNetworkElement() != null)
-						&& (oppositeIE.getFBNetworkElement().getResource() != null)
-						&& (oppositeIE.getFBNetworkElement().getResource().getDevice() != null)) {
-					oppositefbNetElement = oppositeIE.getFBNetworkElement();
+				if ((oppositeIE != null) && (oppositeIE.getBlockFBNetworkElement() != null)
+						&& (oppositeIE.getBlockFBNetworkElement().getResource() != null)
+						&& (oppositeIE.getBlockFBNetworkElement().getResource().getDevice() != null)) {
+					oppositefbNetElement = oppositeIE.getBlockFBNetworkElement();
 					final Resource res = oppositefbNetElement.getResource();
 					final Device dev = res.getDevice();
 

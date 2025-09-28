@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2024 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
  *                          Primetals Technology Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -106,7 +107,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	protected abstract EList<Connection> getConnectionList(final IInterfaceElement ie);
 
 	protected static boolean isInsideSubappOrViewer(final IInterfaceElement ie, final FBNetwork fbNetwork) {
-		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
+		final FBNetworkElement fbnElement = ie.getBlockFBNetworkElement();
 		return ((fbnElement instanceof SubApp) || (fbnElement instanceof CFBInstance))
 				&& (!fbNetwork.equals(fbnElement.eContainer()));
 	}
@@ -184,7 +185,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static boolean isEditorBorderPin(final IInterfaceElement ie, final FBNetwork fbNetwork) {
-		final FBNetworkElement fbnElement = ie.getFBNetworkElement();
+		final FBNetworkElement fbnElement = ie.getBlockFBNetworkElement();
 		FBNetwork containedNetwork = null;
 		if (fbnElement instanceof final SubApp subapp) {
 			containedNetwork = subapp.getSubAppNetwork();
@@ -196,7 +197,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 	}
 
 	protected static boolean isExpandedSubappPin(final IInterfaceElement pin) {
-		return pin.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
+		return pin.getBlockFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	public static void selectInterfaceElement(final IInterfaceElement element, final IEditorPart editor) {
@@ -261,7 +262,7 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 		if (startPin instanceof MemberVarDeclaration) {
 			return false; // jump over struct
 		}
-		if (startPin.getFBNetworkElement() instanceof UntypedSubApp) {
+		if (startPin.getBlockFBNetworkElement() instanceof UntypedSubApp) {
 			return false; // don't stop at UntypedSubApp (exception in followConnections())
 		}
 		return startPin.isIsInput() == goRight;

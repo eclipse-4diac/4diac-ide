@@ -272,7 +272,8 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 			throws DeploymentException {
 		for (final ParameterDeploymentData param : resDepData.getParams()) {
 			executor.writeFBParameter(resDepData.getRes(), param.value(),
-					new FBDeploymentData(param.prefix(), param.variable().getFBNetworkElement()), param.variable());
+					new FBDeploymentData(param.prefix(), param.variable().getBlockFBNetworkElement()),
+					param.variable());
 			curMonitor.worked(1);
 		}
 	}

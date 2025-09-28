@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 		 2019 Johannes Kepler University Linz
- *               2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,6 +48,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -78,7 +80,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 /** This class implements an EditPart for a FunctionBlock. */
-public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart
+public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionableElementEditPart
 		implements AnnotableGraphicalEditPart {
 
 	protected static final class TypeDirectEditPolicy extends DirectEditPolicy {
@@ -97,8 +99,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 
 		@Override
-		public AbstractFBNElementEditPart getHost() {
-			return (AbstractFBNElementEditPart) super.getHost();
+		public AbstractBlockFBNElementEditPart getHost() {
+			return (AbstractBlockFBNElementEditPart) super.getHost();
 		}
 	}
 
@@ -106,7 +108,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private DiagramFontChangeListener fontChangeListener;
 
-	protected AbstractFBNElementEditPart() {
+	protected AbstractBlockFBNElementEditPart() {
 	}
 
 	private Adapter interfaceAdapter;
@@ -246,8 +248,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	@Override
-	public FBNetworkElement getModel() {
-		return (FBNetworkElement) super.getModel();
+	public BlockFBNetworkElement getModel() {
+		return (BlockFBNetworkElement) super.getModel();
 	}
 
 	@Override
@@ -322,12 +324,12 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
+		switch (childEditPart) {
+		case final InterfaceEditPart interfaceEditPart ->
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
-		} else if (childEditPart instanceof final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart) {
+		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
-		} else {
-			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		default -> getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
 	}
 
@@ -451,16 +453,17 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
+		switch (childEditPart) {
+		case final InterfaceEditPart interfaceEditPart -> {
 			if (getTargetFigure(interfaceEditPart).getChildren().contains(child)) {
 				getTargetFigure(interfaceEditPart).remove(child);
 			} else {
 				child.getParent().remove(child);
 			}
-		} else if (childEditPart instanceof final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart) {
+		}
+		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
-		} else {
-			super.removeChildVisual(childEditPart);
+		default -> super.removeChildVisual(childEditPart);
 		}
 	}
 

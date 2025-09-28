@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,11 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *    - initial API and implementation and/or initial documentation
- *  Paul Pavlicek
- *    - - initial API and implementation and/or initial documentation
- *  Felix Schmid
- *    - redesign to only use a general purpose dialog
+ *  Paul Pavlicek - initial API and implementation and/or initial documentation
+ *  Felix Schmid  - redesign to only use a general purpose dialog
  *******************************************************************************/
 package org.eclipse.fordiac.ide.contracts.handlers;
 
@@ -124,7 +121,7 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 
 		final DefineContractDecisionDialog dialog = new DefineContractDecisionDialog(shell, names, templates);
 		if (dialog.open() != CANCEL) {
-			final FBNetworkElement fbElem = pins.get(0).getFBNetworkElement();
+			final FBNetworkElement fbElem = pins.get(0).getBlockFBNetworkElement();
 			final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			final CommandStack cmdStack = editor.getAdapter(CommandStack.class);
 			cmdStack.execute(new PrepareContractCommand(fbElem, iPins, oPins, dialog.getTemplate()));
@@ -145,8 +142,8 @@ public class DefineFbInterfaceConstraintHandler extends AbstractHandler {
 				pins.add(eventPin);
 			}
 		}
-		final boolean sameFb = pins.stream().filter(ev -> ev.getFBNetworkElement() != null)
-				.allMatch(ev -> ev.getFBNetworkElement().equals(pins.get(0).getFBNetworkElement()));
+		final boolean sameFb = pins.stream().filter(ev -> ev.getBlockFBNetworkElement() != null)
+				.allMatch(ev -> ev.getBlockFBNetworkElement().equals(pins.get(0).getBlockFBNetworkElement()));
 		if (sameFb) {
 			return pins;
 		}
