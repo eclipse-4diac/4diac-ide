@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
 import org.eclipse.fordiac.ide.contractSpec.Port;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.scoping.ContractSpecScopeProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
@@ -36,11 +36,11 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 	private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE
 			.getResourceServiceProvider(SYNTHETIC_URI);
 
-	private final FBNetworkElement fbElem;
+	private final BlockFBNetworkElement fbElem;
 	private final List<String> inPorts;
 	private final List<String> outPorts;
 
-	public ContractspecResourceProvider(final FBNetworkElement fbElem) {
+	public ContractspecResourceProvider(final BlockFBNetworkElement fbElem) {
 		this.fbElem = fbElem;
 		inPorts = null;
 		outPorts = null;
@@ -69,18 +69,14 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 		return resource;
 	}
 
-	public static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final FBNetworkElement fbElem) {
+	public static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final BlockFBNetworkElement fbElem) {
 		final IEditedResourceProvider resourceProvider = new ContractspecResourceProvider(fbElem);
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory.class).newEditor(resourceProvider);
 	}
 
-	private static void addFBInterface(final Resource res, final FBNetworkElement fbElem) {
-		fbElem.getInterface().getInputs().forEach(ie -> {
-			createPort(res, ie.getName(), true);
-		});
-		fbElem.getInterface().getOutputs().forEach(oe -> {
-			createPort(res, oe.getName(), false);
-		});
+	private static void addFBInterface(final Resource res, final BlockFBNetworkElement fbElem) {
+		fbElem.getInterface().getInputs().forEach(ie -> createPort(res, ie.getName(), true));
+		fbElem.getInterface().getOutputs().forEach(oe -> createPort(res, oe.getName(), false));
 	}
 
 	private static void addFBInterface(final Resource res, final List<String> inputs, final List<String> outputs) {
