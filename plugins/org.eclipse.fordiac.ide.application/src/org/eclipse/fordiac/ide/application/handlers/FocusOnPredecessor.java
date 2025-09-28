@@ -25,9 +25,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -61,7 +61,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 		return null;
 	}
 
-	private static void getPredecessorFBNetworkElements(final FBNetworkElement element,
+	private static void getPredecessorFBNetworkElements(final BlockFBNetworkElement element,
 			final Set<ConfigurableObject> elementToHighlight) {
 		if (null == element) {
 			return;
@@ -71,7 +71,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 			for (final Connection con : inVar.getInputConnections()) {
 				final IInterfaceElement source = con.getSource();
 				if (source != null && source.getBlockFBNetworkElement() != null) {
-					final FBNetworkElement sourceElement = source.getBlockFBNetworkElement();
+					final BlockFBNetworkElement sourceElement = source.getBlockFBNetworkElement();
 					elementToHighlight.add(con);
 					if (!elementToHighlight.contains(sourceElement)) {
 						getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
@@ -81,14 +81,14 @@ public class FocusOnPredecessor extends AbstractHandler {
 		}
 	}
 
-	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
+	private static BlockFBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof final StructuredSelection structSel) {
 			Object selObj = structSel.getFirstElement();
 			if (selObj instanceof final EditPart ep) {
 				selObj = ep.getModel();
 			}
-			if (selObj instanceof final FBNetworkElement fbne) {
+			if (selObj instanceof final BlockFBNetworkElement fbne) {
 				return fbne;
 			}
 		}

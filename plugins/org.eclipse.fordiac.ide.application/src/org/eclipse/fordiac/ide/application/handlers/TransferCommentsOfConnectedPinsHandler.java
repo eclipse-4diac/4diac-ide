@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,8 +21,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.model.commands.change.TransferCommentsOfConnectedPinsCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
@@ -37,7 +37,7 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 		final Object element = ((EditPart) sel.getFirstElement()).getModel();
 
 		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = new HashMap<>();
-		if (element instanceof final FBNetworkElement fbnElement) {
+		if (element instanceof final BlockFBNetworkElement fbnElement) {
 			commentsToCopy.putAll(findConnectedPins(fbnElement));
 		} else if (element instanceof final IInterfaceElement interfaceElement) {
 			if (interfaceElement.isIsInput()) {
@@ -56,7 +56,7 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static Map<IInterfaceElement, List<IInterfaceElement>> findConnectedPins(final FBNetworkElement src) {
+	private static Map<IInterfaceElement, List<IInterfaceElement>> findConnectedPins(final BlockFBNetworkElement src) {
 		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = new HashMap<>();
 
 		for (final IInterfaceElement outVar : src.getInterface().getOutputVars()) {
