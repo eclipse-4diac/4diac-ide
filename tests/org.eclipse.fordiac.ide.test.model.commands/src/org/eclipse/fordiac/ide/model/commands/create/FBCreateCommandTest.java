@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -37,28 +38,23 @@ public class FBCreateCommandTest extends FBNetworkTestBase {
 		t.test(!state.getFbNetwork().isSubApplicationNetwork());
 		t.test(!state.getFbNetwork().getNetworkElements().isEmpty());
 		t.test(state.getFbNetwork().getElementNamed(FBNetworkTestBase.State.FUNCTIONBLOCK_NAME));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets());
-		t.test(null == state.getFbNetwork().getNetworkElements().get(0).getOpposite());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getName());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).eContainer());
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventInputs()
-				.equals(state.getFunctionblock().getInterface().getEventInputs()));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getEventOutputs()
-				.equals(state.getFunctionblock().getInterface().getEventOutputs()));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getInputVars()
-				.equals(state.getFunctionblock().getInterface().getInputVars()));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getOutputVars()
-				.equals(state.getFunctionblock().getInterface().getOutputVars()));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getPlugs()
-				.equals(state.getFunctionblock().getInterface().getPlugs()));
-		t.test(state.getFbNetwork().getNetworkElements().get(0).getInterface().getSockets()
-				.equals(state.getFunctionblock().getInterface().getSockets()));
+		final BlockFBNetworkElement fb = (BlockFBNetworkElement) state.getFbNetwork().getNetworkElements().get(0);
+		t.test(fb.getInterface());
+		t.test(fb.getInterface().getEventInputs());
+		t.test(fb.getInterface().getEventOutputs());
+		t.test(fb.getInterface().getInputVars());
+		t.test(fb.getInterface().getOutputVars());
+		t.test(fb.getInterface().getPlugs());
+		t.test(fb.getInterface().getSockets());
+		t.test(null == fb.getOpposite());
+		t.test(fb.getName());
+		t.test(fb.eContainer());
+		t.test(fb.getInterface().getEventInputs().equals(state.getFunctionblock().getInterface().getEventInputs()));
+		t.test(fb.getInterface().getEventOutputs().equals(state.getFunctionblock().getInterface().getEventOutputs()));
+		t.test(fb.getInterface().getInputVars().equals(state.getFunctionblock().getInterface().getInputVars()));
+		t.test(fb.getInterface().getOutputVars().equals(state.getFunctionblock().getInterface().getOutputVars()));
+		t.test(fb.getInterface().getPlugs().equals(state.getFunctionblock().getInterface().getPlugs()));
+		t.test(fb.getInterface().getSockets().equals(state.getFunctionblock().getInterface().getSockets()));
 	}
 
 	// parameter creation function

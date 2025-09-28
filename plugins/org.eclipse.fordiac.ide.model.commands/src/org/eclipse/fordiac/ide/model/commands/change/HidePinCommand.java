@@ -19,8 +19,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -74,15 +72,11 @@ public class HidePinCommand extends Command implements ScopedCommand {
 	private static boolean isConnectedInsideSubApp(final IInterfaceElement element) {
 		if (element instanceof final VarDeclaration varDecl && element.isIsInput()
 				&& element.eContainer().eContainer() instanceof final SubAppType sat) {
-
 			final String name = varDecl.getName();
-			final FBNetwork subNet = sat.getFBNetwork();
-			for (final FBNetworkElement fb : subNet.getNetworkElements()) {
+			return sat.getFBNetwork().getBlockFBNetworkElements().anyMatch(fb -> {
 				final IInterfaceElement internal = fb.getInterfaceElement(name);
-				if (internal != null && !internal.getInputConnections().isEmpty()) {
-					return true;
-				}
-			}
+				return (internal != null && !internal.getInputConnections().isEmpty());
+			});
 		}
 		return false;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -39,9 +40,11 @@ public class FBNetworkElementSetPositionCommand extends SetPositionCommand imple
 	@Override
 	protected void setPosition(final Position pos) {
 		super.setPosition(pos);
-		final InterfaceList interfaceList = getPositionableElement().getInterface();
-		invalidateInputConnections(interfaceList);
-		invalidateOutputConnections(interfaceList);
+		if (getPositionableElement() instanceof final BlockFBNetworkElement bfbel) {
+			final InterfaceList interfaceList = bfbel.getInterface();
+			invalidateInputConnections(interfaceList);
+			invalidateOutputConnections(interfaceList);
+		}
 	}
 
 	private static void invalidateInputConnections(final InterfaceList il) {

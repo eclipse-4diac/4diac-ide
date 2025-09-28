@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -31,7 +30,7 @@ public final class MappingTargetCreator {
 		throw new UnsupportedOperationException("Utility class shall not be instantated!"); //$NON-NLS-1$
 	}
 
-	public static FBNetworkElement createMappingTarget(final Resource res, final BlockFBNetworkElement srcElement,
+	public static BlockFBNetworkElement createMappingTarget(final Resource res, final BlockFBNetworkElement srcElement,
 			final String targetFBName) {
 		final BlockFBNetworkElement created = createFBNetworkElement(srcElement);
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,16 +14,17 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class MapCommunicationCommand extends MapToCommand {
 	private final CommunicationMappingTarget target;
 
-	public MapCommunicationCommand(final FBNetworkElement srcElement, final CommunicationMappingTarget segmentPart) {
+	public MapCommunicationCommand(final BlockFBNetworkElement srcElement,
+			final CommunicationMappingTarget segmentPart) {
 		super(srcElement, segmentPart);
 		this.target = segmentPart;
 	}
@@ -39,7 +40,7 @@ public class MapCommunicationCommand extends MapToCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createTargetElement() {
+	protected BlockFBNetworkElement createTargetElement() {
 		final CommunicationChannel comm = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		comm.setName(srcElement.getName());
 		comm.setPosition(EcoreUtil.copy(srcElement.getPosition()));

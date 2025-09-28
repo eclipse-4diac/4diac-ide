@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -227,7 +228,7 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 		elements.forEach(this::undoRemoveElementFromSubapp);
 		unmappingCmds.undo();
 		// check for connections being displayed right (broken or not)
-		elements.forEach(FBNetworkElement::checkConnections);
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(elements).forEach(BlockFBNetworkElement::checkConnections);
 	}
 
 	private void undoRemoveElementFromSubapp(final FBNetworkElement element) {
@@ -262,21 +263,21 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 
 	private static CompoundCommand createReconnectCommand(final List<FBNetworkElement> fbElements) {
 		final CompoundCommand cmd = new CompoundCommand();
-		for (final FBNetworkElement fbElement : fbElements) {
-			fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
-				if (ie.isIsInput()) {
-					ie.getInputConnections().stream()
-							// filter connections between selected fbElements (handled in OutputConnections)
-							.filter(conn -> !fbElements.contains(conn.getSource().eContainer().eContainer()))
-							// add reconnection command to same Interface
-							.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
-									conn.getDestination(), conn, false)));
-				} else {
-					ie.getOutputConnections().stream().forEach(conn -> cmd
-							.add(new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
-				}
-			});
-		}
+
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(fbElements)
+				.forEach(fbElement -> fbElement.getInterface().getAllInterfaceElements().forEach(ie -> {
+					if (ie.isIsInput()) {
+						ie.getInputConnections().stream()
+								// filter connections between selected fbElements (handled in OutputConnections)
+								.filter(conn -> !fbElements.contains(conn.getSource().eContainer().eContainer()))
+								// add reconnection command to same Interface
+								.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
+										conn.getDestination(), conn, false)));
+					} else {
+						ie.getOutputConnections().stream().forEach(conn -> cmd.add(
+								new BorderCrossingReconnectCommand(conn.getSource(), conn.getSource(), conn, true)));
+					}
+				}));
 
 		return cmd;
 	}

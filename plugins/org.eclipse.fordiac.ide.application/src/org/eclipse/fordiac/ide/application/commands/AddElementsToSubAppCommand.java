@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElemen
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -120,7 +121,8 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
-		elementsToAdd.forEach(FBNetworkElement::checkConnections);
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(elementsToAdd)
+				.forEach(BlockFBNetworkElement::checkConnections);
 	}
 
 	private void processElementsToAdd() {
@@ -197,7 +199,16 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	}
 
 	private void checkElementConnections(final FBNetworkElement element) {
-		for (final IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
+		switch (element) {
+		case final BlockFBNetworkElement bfbEl -> checkBlockElementConnecitons(bfbEl);
+		case final Group group -> group.getGroupElements().forEach(this::checkElementConnections);
+		default -> {
+			/* nothing to do */ }
+		}
+	}
+
+	private void checkBlockElementConnecitons(final BlockFBNetworkElement bfbEl) {
+		for (final IInterfaceElement ie : bfbEl.getInterface().getAllInterfaceElements()) {
 			if (ie.isIsInput()) {
 				for (final Connection con : ie.getInputConnections()) {
 					checkConnection(con, con.getSource(), ie);
@@ -207,9 +218,6 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 					checkConnection(con, con.getDestination(), ie);
 				}
 			}
-		}
-		if (element instanceof final Group group) {
-			group.getGroupElements().forEach(this::checkElementConnections);
 		}
 	}
 
