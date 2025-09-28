@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2024 fortiss GmbH, Martin Erich Jobst
+ * Copyright (c) 2015, 2025 fortiss GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
@@ -59,7 +59,7 @@ public class AdapterWatchValueEditPart extends AbstractWatchValueEditPart {
 		return super.createChild(model);
 	}
 
-	private FBNetworkElement getFB() {
+	private BlockFBNetworkElement getFB() {
 		return getInterfaceElement().getAdapterFB();
 	}
 

@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -45,7 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I extends FBNetworkElement>
+public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I extends BlockFBNetworkElement>
 		extends FBEvaluator<T> {
 
 	private static final String FAKE_TIME_DEV_PARAM_NAME = "FakeTime"; //$NON-NLS-1$

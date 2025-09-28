@@ -22,8 +22,8 @@ import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.gef.ConnectionEditPart;
 
@@ -60,7 +60,7 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 		if (conn.getFBNetwork().eContainer() instanceof Resource) {
 			return conn;
 		}
-		final FBNetworkElement oppositeSource = conn.getSourceElement().getOpposite();
+		final BlockFBNetworkElement oppositeSource = conn.getSourceElement().getOpposite();
 		if (null != oppositeSource) {
 			final List<Connection> conns = oppositeSource.getInterfaceElement(conn.getSource().getName())
 					.getOutputConnections();

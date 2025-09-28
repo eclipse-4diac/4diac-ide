@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,27 +15,28 @@ package org.eclipse.fordiac.ide.deployment.debug.watch;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-public class FBNetworkElementWatch extends AbstractContainerWatch {
+public class BlockFBNetworkElementWatch extends AbstractContainerWatch {
 
-	final FBNetworkElementValue value;
+	final BlockFBNetworkElementValue value;
 
-	public FBNetworkElementWatch(final String name, final FBNetworkElement element,
+	public BlockFBNetworkElementWatch(final String name, final BlockFBNetworkElement element,
 			final DeploymentDebugDevice target) {
 		super(name, element, target);
-		value = new FBNetworkElementValue(element, target);
+		value = new BlockFBNetworkElementValue(element, target);
 	}
 
-	public FBNetworkElementWatch(final String name, final FBNetworkElement element, final Resource resource,
+	public BlockFBNetworkElementWatch(final String name, final BlockFBNetworkElement element, final Resource resource,
 			final String resourceRelativeName, final DeploymentDebugDevice target) {
 		super(name, element, target);
-		value = new FBNetworkElementValue(element, resource, resourceRelativeName, target);
+		value = new BlockFBNetworkElementValue(element, resource, resourceRelativeName, target);
 	}
 
 	@Override
-	public FBNetworkElementValue getValue() {
+	public BlockFBNetworkElementValue getValue() {
 		return value;
 	}
 

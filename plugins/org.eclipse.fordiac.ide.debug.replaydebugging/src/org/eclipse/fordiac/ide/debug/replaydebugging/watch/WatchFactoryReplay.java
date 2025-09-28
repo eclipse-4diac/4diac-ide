@@ -26,9 +26,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.watch.AbstractContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.AdapterDeclarationWatch;
+import org.eclipse.fordiac.ide.deployment.debug.watch.BlockFBNetworkElementValue;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.deployment.debug.watch.EventWatch;
-import org.eclipse.fordiac.ide.deployment.debug.watch.FBNetworkElementValue;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppEventWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppVarDeclarationWatch;
@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -77,7 +78,7 @@ public class WatchFactoryReplay {
 		case final VarDeclaration varDeclaration -> new VarDeclarationWatchReplay(name, varDeclaration, debugTarget);
 		case final AdapterDeclaration adapterDeclaration ->
 			new AdapterDeclarationWatch(name, adapterDeclaration, debugTarget);
-		case final FBNetworkElement networkElement ->
+		case final BlockFBNetworkElement networkElement ->
 			new FBNetworkElementWatchReplay(name, networkElement, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName());
 		};
@@ -95,7 +96,7 @@ public class WatchFactoryReplay {
 			new VarDeclarationWatchReplay(name, varDeclaration, resource, resourceRelativeName, debugTarget);
 		case final AdapterDeclaration adapterDeclaration ->
 			new AdapterDeclarationWatch(name, adapterDeclaration, resource, resourceRelativeName, debugTarget);
-		case final FBNetworkElement networkElement ->
+		case final BlockFBNetworkElement networkElement ->
 			new FBNetworkElementWatchReplay(name, networkElement, resource, resourceRelativeName, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
@@ -180,23 +181,21 @@ public class WatchFactoryReplay {
 
 	// FBNetwork Classes
 
-	public static class FBNetworkElementValueReplay extends FBNetworkElementValue implements IValue {
+	public static class FBNetworkElementValueReplay extends BlockFBNetworkElementValue implements IValue {
 		private static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
-		private final FBNetworkElement element;
 		private final Resource resource;
 		private final String resourceRelativeName;
 		private final List<IWatch> watches;
 
-		public FBNetworkElementValueReplay(final FBNetworkElement element, final DeploymentDebugDevice target) {
+		public FBNetworkElementValueReplay(final BlockFBNetworkElement element, final DeploymentDebugDevice target) {
 			this(element, element.getResource(),
 					DeploymentDebugWatchUtils.getResourceRelativeName(element, element.getResource()), target);
 		}
 
-		public FBNetworkElementValueReplay(final FBNetworkElement element, final Resource resource,
+		public FBNetworkElementValueReplay(final BlockFBNetworkElement element, final Resource resource,
 				final String resourceRelativeName, final DeploymentDebugDevice target) {
 			super(element, resource, resourceRelativeName, target);
-			this.element = element;
 			this.resource = resource;
 			this.resourceRelativeName = resourceRelativeName;
 			watches = getSubElementsReplay().map(this::createSubWatchReplay).toList();
@@ -208,7 +207,7 @@ public class WatchFactoryReplay {
 		}
 
 		private Stream<INamedElement> getInterfaceSubElementsReplay() throws UnsupportedOperationException {
-			final InterfaceList interfaceList = element.getInterface();
+			final InterfaceList interfaceList = getElement().getInterface();
 			return Stream.of(
 					// include events
 					interfaceList.getEventInputs(), interfaceList.getEventOutputs(),
@@ -219,7 +218,7 @@ public class WatchFactoryReplay {
 		}
 
 		private Stream<? extends INamedElement> getAdditionalSubElementsReplay() throws UnsupportedOperationException {
-			return switch (element) {
+			return switch (getElement()) {
 			case final FB fb when fb.getType() instanceof final BaseFBType baseFBType ->
 				Stream.concat(baseFBType.getInternalVars().stream(), baseFBType.getInternalFbs().stream());
 			case final Group group -> group.getGroupElements().stream();
@@ -240,18 +239,13 @@ public class WatchFactoryReplay {
 		}
 
 		@Override
-		public FBNetworkElement getElement() {
-			return element;
-		}
-
-		@Override
 		public List<IWatch> getWatches() {
 			return watches;
 		}
 
 		@Override
 		public String getReferenceTypeName() throws DebugException {
-			return element.getTypeName();
+			return getElement().getTypeName();
 		}
 
 		@Override
@@ -279,20 +273,20 @@ public class WatchFactoryReplay {
 
 		final FBNetworkElementValueReplay value;
 
-		public FBNetworkElementWatchReplay(final String name, final FBNetworkElement element,
+		public FBNetworkElementWatchReplay(final String name, final BlockFBNetworkElement element,
 				final DeploymentDebugDevice target) {
 			super(name, element, target);
 			value = new FBNetworkElementValueReplay(element, target);
 		}
 
-		public FBNetworkElementWatchReplay(final String name, final FBNetworkElement element, final Resource resource,
-				final String resourceRelativeName, final DeploymentDebugDevice target) {
+		public FBNetworkElementWatchReplay(final String name, final BlockFBNetworkElement element,
+				final Resource resource, final String resourceRelativeName, final DeploymentDebugDevice target) {
 			super(name, element, target);
 			value = new FBNetworkElementValueReplay(element, resource, resourceRelativeName, target);
 		}
 
 		@Override
-		public FBNetworkElementValue getValue() {
+		public BlockFBNetworkElementValue getValue() {
 			return value;
 		}
 
