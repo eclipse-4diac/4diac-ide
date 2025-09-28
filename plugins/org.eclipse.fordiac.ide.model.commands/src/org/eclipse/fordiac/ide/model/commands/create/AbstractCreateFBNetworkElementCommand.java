@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -63,7 +64,9 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 
 	@Override
 	public void execute() {
-		element.setInterface(createInterfaceList());
+		if (element instanceof final BlockFBNetworkElement bfbEl) {
+			bfbEl.setInterface(createInterfaceList());
+		}
 		if (element.getTypeEntry() != null) {
 			AttributeInheritMode.copyAttributeValuesFromType(element);
 		}

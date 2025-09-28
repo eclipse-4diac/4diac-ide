@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -282,20 +283,20 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		final Optional<IInterfaceElement> subappPin;
 		if (isRightPath) {
 
-			if (ie.getBlockFBNetworkElement() != null
-					&& ie.getBlockFBNetworkElement().getOuterFBNetworkElement() != null) {
+			if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement()
+					.getOuterFBNetworkElement() instanceof final BlockFBNetworkElement outerFB) {
 
 				if (ie instanceof Event) {
-					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventInputs()
-							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+					subappPin = outerFB.getInterface().getEventInputs().stream()
+							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getInOutVars()
-							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+					subappPin = outerFB.getInterface().getInOutVars().stream()
+							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				} else {
-					subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getInputVars()
-							.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+					subappPin = outerFB.getInterface().getInputVars().stream()
+							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 							.map(IInterfaceElement.class::cast);
 				}
 
@@ -305,21 +306,20 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 				}
 			}
 
-		} else if (ie.getBlockFBNetworkElement() != null
-				&& ie.getBlockFBNetworkElement().getOuterFBNetworkElement() != null) {
+		} else if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement()
+				.getOuterFBNetworkElement() instanceof final BlockFBNetworkElement outerFB) {
 
 			if (ie instanceof Event) {
-				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getEventOutputs()
-						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+				subappPin = outerFB.getInterface().getEventOutputs().stream()
+						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface()
-						.getOutMappedInOutVars().stream()
+				subappPin = outerFB.getInterface().getOutMappedInOutVars().stream()
 						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			} else {
-				subappPin = ie.getBlockFBNetworkElement().getOuterFBNetworkElement().getInterface().getOutputVars()
-						.stream().filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
+				subappPin = outerFB.getInterface().getOutputVars().stream()
+						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
 						.map(IInterfaceElement.class::cast);
 			}
 

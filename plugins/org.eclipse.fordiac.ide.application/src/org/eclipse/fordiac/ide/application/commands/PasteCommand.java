@@ -41,8 +41,8 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -66,7 +66,7 @@ import org.eclipse.swt.graphics.Point;
 /** The Class PasteCommand. */
 public class PasteCommand extends Command implements ScopedCommand {
 
-	private static final double DEFAULT_DELTA = 20 * 100 / 18;
+	private static final double DEFAULT_DELTA = 20 * 100.0 / 18;
 	private final CopyPasteData copyPasteData;
 	private final FBNetwork dstFBNetwork;
 
@@ -232,9 +232,9 @@ public class PasteCommand extends Command implements ScopedCommand {
 		}
 		copiedElement.setMapping(null);
 
-		if (copiedElement instanceof StructManipulator) {
+		if (copiedElement instanceof final StructManipulator copiedStructMan) {
 			// structmanipulators may destroy the param values during copy
-			checkDataValues(element, copiedElement);
+			checkDataValues((StructManipulator) element, copiedStructMan);
 		}
 
 		// copy content of Groups
@@ -258,11 +258,13 @@ public class PasteCommand extends Command implements ScopedCommand {
 			} else {
 				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
 						element.getTypeEntry().getTypeEClass());
-				copiedElement.setInterface(InterfaceListCopier.copy(element.getInterface()));
+				if (element instanceof final BlockFBNetworkElement bfbElement) {
+					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
+				}
 			}
-		} else {
+		} else if (copiedElement instanceof final BlockFBNetworkElement copiedBlockElement) {
 			// clear the connection references
-			for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
+			for (final IInterfaceElement ie : copiedBlockElement.getInterface().getAllInterfaceElements()) {
 				if (ie.isIsInput()) {
 					ie.getInputConnections().clear();
 				} else {
@@ -273,7 +275,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		return copiedElement;
 	}
 
-	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
+	private static void checkDataValues(final StructManipulator src, final StructManipulator copy) {
 		final EList<VarDeclaration> srcList = src.getInterface().getInputVars();
 		final EList<VarDeclaration> copyList = copy.getInterface().getInputVars();
 
@@ -291,8 +293,9 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private void copyConnections() {
 		for (final ConnectionReference connRef : copyPasteData.conns()) {
-			final FBNetworkElement copiedSrc = copiedElements.get(connRef.sourceElement());
-			final FBNetworkElement copiedDest = copiedElements.get(connRef.destinationElement());
+			final BlockFBNetworkElement copiedSrc = (BlockFBNetworkElement) copiedElements.get(connRef.sourceElement());
+			final BlockFBNetworkElement copiedDest = (BlockFBNetworkElement) copiedElements
+					.get(connRef.destinationElement());
 
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
@@ -322,8 +325,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 		return cmd;
 	}
 
-	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
-			final FBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
+	private void copyConnection(final ConnectionReference connRef, final BlockFBNetworkElement copiedSrc,
+			final BlockFBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
 		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
 		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
@@ -333,7 +336,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 		cmd.setVisible(connRef.visible());
 	}
 
-	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {
+	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig,
+			final BlockFBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
