@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2024 fortiss GmbH, Profactor GmbH,
+ * Copyright (c) 2015, 2025 fortiss GmbH, Profactor GmbH,
  *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -69,7 +69,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 
 	@Override
 	protected INamedElement getType() {
-		if (type instanceof final FBNetworkElement fbnEl) {
+		if (type instanceof final BlockFBNetworkElement fbnEl) {
 			return fbnEl;
 		}
 		if (type instanceof final Device dev) {
@@ -224,7 +224,7 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 	public static class InputContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof final FBNetworkElement fbnEl) {
+			if (inputElement instanceof final BlockFBNetworkElement fbnEl) {
 				return fbnEl.getInterface().getInputVars().toArray();
 			}
 			if (inputElement instanceof final Device dev) {
