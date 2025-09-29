@@ -31,7 +31,7 @@
  *
  */
 
-package org.eclipse.fordiac.ide.emf.compare.MatchEngine;
+package org.eclipse.fordiac.ide.emf.compare.matchengine;
 
 import static org.eclipse.emf.compare.EMFCompare.DIAGNOSTIC_SOURCE;
 

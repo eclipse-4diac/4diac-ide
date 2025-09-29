@@ -10,7 +10,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.emf.compare.MatchEngine;
+package org.eclipse.fordiac.ide.emf.compare.matchengine;
 
 import org.eclipse.emf.compare.match.IMatchEngine;
 import org.eclipse.emf.compare.scope.IComparisonScope;

@@ -11,7 +11,7 @@
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *   Fabio Gandolfi - improvement for comparisons
  *******************************************************************************/
-package org.eclipse.fordiac.ide.emf.compare.MatchEngine;
+package org.eclipse.fordiac.ide.emf.compare.matchengine;
 
 import java.util.function.Function;
 
