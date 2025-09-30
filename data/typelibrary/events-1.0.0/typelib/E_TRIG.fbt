@@ -8,12 +8,12 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ" Type="Event" Comment="Request trigger of unconnected event pins of type EVENTTYPE" >
+			<Event Name="REQ" Type="Event" Comment="Request trigger of unconnected event pins of type EVENTTYPE">
 				<With Var="EVENTTYPE"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service" >
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
 			</Event>
 		</EventOutputs>
 		<InputVars>

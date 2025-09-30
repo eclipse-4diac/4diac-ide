@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="RT_E_DELAY" Comment="Delayed propagation of an event-Cancellable" >
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Name="RT_E_DELAY" Comment="Delayed propagation of an event-Cancellable">
   <Identification Description="Copyright (c) 2008, 2014 ACIN, Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2011-06-04" Organization="Profactor GmbH" Version="1.1"/>
@@ -10,23 +10,23 @@
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
-      <Event Name="INIT" >
+      <Event Name="INIT">
         <With Var="QI" />
         <With Var="Tmin" />
         <With Var="Deadline" />
         <With Var="WCET" />
       </Event>
-      <Event Name="START" Comment="Begin Delay" >
+      <Event Name="START" Comment="Begin Delay">
         <With Var="DT" />
       </Event>
-      <Event Name="STOP" Comment="Cancel Delay" >
+      <Event Name="STOP" Comment="Cancel Delay">
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="INITO" >
+      <Event Name="INITO">
         <With Var="QO" />
       </Event>
-      <Event Name="EO" Comment="Delayed Event" >
+      <Event Name="EO" Comment="Delayed Event">
       </Event>
     </EventOutputs>
     <InputVars>

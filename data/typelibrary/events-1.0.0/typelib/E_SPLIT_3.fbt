@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_SPLIT_3" Comment="Split an event" >
-	<Identification Standard="61499-1 Annex A" Classification="event function block" Function="Split one event into two events" Description="Copyright (c) 2017, 2025 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+<FBType Name="E_SPLIT_3" Comment="Split an event">
+	<Identification Standard="61499-1 Annex A" Classification="event function block" Function="Split one event into two events" Description="Copyright (c) 2017, 2025 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
@@ -8,13 +8,13 @@
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="EI" Type="Event" Comment="Input event" >
+			<Event Name="EI" Type="Event" Comment="Input event">
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="EO1" Type="Event" Comment="First output event" >
+			<Event Name="EO1" Type="Event" Comment="First output event">
 			</Event>
-			<Event Name="EO2" Type="Event" Comment="Second output event" >
+			<Event Name="EO2" Type="Event" Comment="Second output event">
 			</Event>
 			<Event Name="EO3" Type="Event">
 			</Event>

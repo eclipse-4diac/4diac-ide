@@ -91,7 +91,7 @@
 			<ST><![CDATA[CV := PV;]]></ST>
 		</Algorithm>
 		<Algorithm Name="UpdateQUQD" Comment="ALG">
-			<ST><![CDATA[QU := (CV >= PV);
+			<ST><![CDATA[QU := (CV>= PV);
 QD := (CV = 0);]]></ST>
 		</Algorithm>
 		<Algorithm Name="CountDown" Comment="ALG">
