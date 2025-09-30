@@ -97,7 +97,7 @@
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CompositeFBType"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbElement" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//BlockFBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="networkRuntime" lowerBound="1"
         eType="#//FBNetworkRuntime"/>
   </eClassifiers>

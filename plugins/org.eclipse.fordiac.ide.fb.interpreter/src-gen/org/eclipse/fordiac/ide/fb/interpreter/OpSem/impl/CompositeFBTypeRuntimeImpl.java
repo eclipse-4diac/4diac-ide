@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object
@@ -61,7 +61,7 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 	 * @generated
 	 * @ordered
 	 */
-	protected FBNetworkElement fbElement;
+	protected BlockFBNetworkElement fbElement;
 
 	/**
 	 * The cached value of the '{@link #getNetworkRuntime() <em>Network
@@ -189,10 +189,10 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getFbElement() {
+	public BlockFBNetworkElement getFbElement() {
 		if (fbElement != null && fbElement.eIsProxy()) {
 			InternalEObject oldFbElement = (InternalEObject) fbElement;
-			fbElement = (FBNetworkElement) eResolveProxy(oldFbElement);
+			fbElement = (BlockFBNetworkElement) eResolveProxy(oldFbElement);
 			if (fbElement != oldFbElement) {
 				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -209,7 +209,7 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 	 *
 	 * @generated
 	 */
-	public FBNetworkElement basicGetFbElement() {
+	public BlockFBNetworkElement basicGetFbElement() {
 		return fbElement;
 	}
 
@@ -219,8 +219,8 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 	 * @generated
 	 */
 	@Override
-	public void setFbElement(FBNetworkElement newFbElement) {
-		FBNetworkElement oldFbElement = fbElement;
+	public void setFbElement(BlockFBNetworkElement newFbElement) {
+		BlockFBNetworkElement oldFbElement = fbElement;
 		fbElement = newFbElement;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -339,7 +339,7 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 			setCompositeFBType((CompositeFBType) newValue);
 			return;
 		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME__FB_ELEMENT:
-			setFbElement((FBNetworkElement) newValue);
+			setFbElement((BlockFBNetworkElement) newValue);
 			return;
 		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME__NETWORK_RUNTIME:
 			setNetworkRuntime((FBNetworkRuntime) newValue);
@@ -362,7 +362,7 @@ public class CompositeFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements
 			setCompositeFBType((CompositeFBType) null);
 			return;
 		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME__FB_ELEMENT:
-			setFbElement((FBNetworkElement) null);
+			setFbElement((BlockFBNetworkElement) null);
 			return;
 		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME__NETWORK_RUNTIME:
 			setNetworkRuntime((FBNetworkRuntime) null);
