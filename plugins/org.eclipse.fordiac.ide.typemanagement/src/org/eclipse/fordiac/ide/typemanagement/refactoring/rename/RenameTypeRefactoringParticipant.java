@@ -138,7 +138,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
-		final CompositeChange structUsageChanges = new CompositeChange("Refactoring struct users:"); //$NON-NLS-1$
+		final CompositeChange structUsageChanges = new CompositeChange(Messages.Refactoring_StructUsers);
 		parentChange.add(structUsageChanges);
 
 		createStructChanges(dataTypeEntry, structUsageChanges);
