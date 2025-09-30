@@ -5,7 +5,7 @@
     Function="This resource is based on the basic resource for executing FB networks with the additional functionality of configuration data inputs. It already contains an instance of the E_RESTART FB providing events for starting up and shutting down an application.&#13;&#10;&#13;&#10;This resource is based on examples found in the different parts of IEC 61499 and the documentation at http://www.holobloc.com/doc/fb/rt/EMB_RES.htm"/>
   <VersionInfo Author="Markus Meingast" Date="2024-04-02" Organization="Primetals Technologies Austria GmbH" Version="1.0"/>
   <VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package"/>
-  <CompilerInfo packageName="iec61499::hardware"/>
+  <CompilerInfo packageName="iec61499::system"/>
   <VarDeclaration Name="OPCUA_Namespace" Type="WSTRING" InitialValue="" Comment="OPC UA Namespace" />
   <FBNetwork>
     <FB Comment="" Name="START" Type="iec61499::events::E_RESTART" x="100.0" y="0.0"/>

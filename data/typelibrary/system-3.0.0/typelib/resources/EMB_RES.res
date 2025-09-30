@@ -5,7 +5,7 @@
     Function="This resource provides the most basic functionality of an IEC 61499 resource, namely executing FB networks. For convenience it already contains an instance of the E_RESTART FB providing events for starting up and shutting down an application.&#13;&#10;&#13;&#10;This resource is based on examples found in the different parts of IEC 61499 and the documentation at http://www.holobloc.com/doc/fb/rt/EMB_RES.htm"/>
   <VersionInfo Author="Alois Zoitl" Date="2017-12-02" Organization="fortiss GmbH" Version="1.0"/>
   <VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package"/>
-  <CompilerInfo packageName="iec61499::hardware"/>
+  <CompilerInfo packageName="iec61499::system"/>
   <FBNetwork>
     <FB Comment="" Name="START" Type="iec61499::events::E_RESTART" x="100.0" y="0.0"/>
   </FBNetwork>
