@@ -648,6 +648,10 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//LibraryElement/getDocumentation"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.getDocumentation(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//LibraryElement/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//LibraryElement/validateName/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
