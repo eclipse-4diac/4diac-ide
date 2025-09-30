@@ -1013,7 +1013,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getCompositeFBTypeRuntime_CompositeFBType(), theLibraryElementPackage.getCompositeFBType(), null,
 				"compositeFBType", null, 1, 1, CompositeFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCompositeFBTypeRuntime_FbElement(), theLibraryElementPackage.getFBNetworkElement(), null,
+		initEReference(getCompositeFBTypeRuntime_FbElement(), theLibraryElementPackage.getBlockFBNetworkElement(), null,
 				"fbElement", null, 1, 1, CompositeFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeFBTypeRuntime_NetworkRuntime(), this.getFBNetworkRuntime(), null, "networkRuntime", //$NON-NLS-1$

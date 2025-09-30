@@ -13,6 +13,7 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
@@ -72,7 +73,7 @@ public interface CompositeFBTypeRuntime extends FBRuntimeAbstract {
 	 * @model required="true"
 	 * @generated
 	 */
-	FBNetworkElement getFbElement();
+	BlockFBNetworkElement getFbElement();
 
 	/**
 	 * Sets the value of the
@@ -84,7 +85,7 @@ public interface CompositeFBTypeRuntime extends FBRuntimeAbstract {
 	 * @see #getFbElement()
 	 * @generated
 	 */
-	void setFbElement(FBNetworkElement value);
+	void setFbElement(BlockFBNetworkElement value);
 
 	/**
 	 * Returns the value of the '<em><b>Network Runtime</b></em>' reference. <!--
