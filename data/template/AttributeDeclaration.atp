@@ -33,7 +33,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<AttributeDeclaration Name="Attribute" Comment="A Template for an Attribute Type" >
+<AttributeDeclaration Name="Attribute" Comment="A Template for an Attribute Type">
   <Identification>
   </Identification>
   <VersionInfo Version="0.0" Author="4DIAC-IDE" Date="2023-11-21">

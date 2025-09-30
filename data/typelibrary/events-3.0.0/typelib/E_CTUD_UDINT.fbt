@@ -104,7 +104,7 @@ END_ALGORITHM]]></ST>
 			<ST><![CDATA[
 
 ALGORITHM UpdateQUQD
-QU := (CV >= PV);
+QU := (CV>= PV);
 QD := (CV = 0);
 END_ALGORITHM]]></ST>
 		</Algorithm>
