@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Map;
+
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -26,6 +29,11 @@ final class LibraryElementAnnotations {
 	static String getDocumentation(final LibraryElement type) {
 		final Attribute attribute = type.getAttribute(LibraryElementTags.DOCUMENTATION);
 		return attribute != null ? attribute.getValue() : ""; //$NON-NLS-1$
+	}
+
+	public static boolean validateName(final LibraryElement element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return NamedElementAnnotations.validateName(element, diagnostics, context);
 	}
 
 	private LibraryElementAnnotations() {
