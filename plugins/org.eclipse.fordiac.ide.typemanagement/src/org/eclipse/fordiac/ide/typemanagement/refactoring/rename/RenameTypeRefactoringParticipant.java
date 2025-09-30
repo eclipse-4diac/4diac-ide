@@ -138,7 +138,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
-		final CompositeChange structUsageChanges = new CompositeChange("Refactoring struct users:");
+		final CompositeChange structUsageChanges = new CompositeChange("Refactoring struct users:"); //$NON-NLS-1$
 		parentChange.add(structUsageChanges);
 
 		createStructChanges(dataTypeEntry, structUsageChanges);
@@ -187,12 +187,12 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				if (rootContainer instanceof final StructuredType stElement) {
 					final CompositeChange change = new CompositeChange(MessageFormat.format(
 							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl));
+					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl, dataTypeEntry));
 					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
 					return change;
 				}
 				if (rootContainer instanceof AttributeDeclaration) {
-					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl);
+					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl, dataTypeEntry);
 				}
 				if (rootContainer instanceof final FBType fbType && dataTypeEntry.getType() instanceof StructuredType) {
 					return new RenameUpdateFBTypeInterfaceChange(fbType, oldName, newName, packageName);

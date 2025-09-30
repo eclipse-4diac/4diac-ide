@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
@@ -30,11 +31,15 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class RenameUpdateStructDataTypeMemberVariableChange extends AbstractCommandChange<VarDeclaration> {
 
-	public RenameUpdateStructDataTypeMemberVariableChange(final VarDeclaration varDeclaration) {
+	private final DataTypeEntry newTypeEntry;
+
+	public RenameUpdateStructDataTypeMemberVariableChange(final VarDeclaration varDeclaration,
+			final DataTypeEntry newTypeEntry) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
 				varDeclaration.getName(), varDeclaration.getTypeName(),
 				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
 				VarDeclaration.class);
+		this.newTypeEntry = newTypeEntry;
 	}
 
 	@Override
@@ -48,7 +53,7 @@ public class RenameUpdateStructDataTypeMemberVariableChange extends AbstractComm
 		final RefactoringStatus status = new RefactoringStatus();
 
 		if (!(element.getType() instanceof StructuredType)) {
-			status.addError("This should not happen");
+			status.addError("This should not happen"); //$NON-NLS-1$
 		}
 
 		return status;
@@ -56,7 +61,7 @@ public class RenameUpdateStructDataTypeMemberVariableChange extends AbstractComm
 
 	@Override
 	protected Command createCommand(final VarDeclaration varDeclaration) {
-		return ChangeDataTypeCommand.forDataType(varDeclaration, varDeclaration.getType());
+		return ChangeDataTypeCommand.forDataType(varDeclaration, newTypeEntry.getType());
 	}
 
 }
