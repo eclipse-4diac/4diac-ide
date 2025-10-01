@@ -33,7 +33,6 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<!DOCTYPE Function SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
 <GlobalConstants Name="GlobalConstants" Comment="Global constants">
 	<Identification Standard="61499-1">
 	</Identification>

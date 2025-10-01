@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+
 <FBType Comment="Fetch value from array at given index. Array data type has to match with output data type." Name="GET_AT_INDEX">
   <Identification Description="Copyright (c) 2014 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Matthias Plasch" Date="2014-07-11" Organization="Profactor GmbH" Version="1.0"/>

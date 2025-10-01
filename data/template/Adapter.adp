@@ -33,7 +33,6 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<!DOCTYPE AdapterType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
 <AdapterType Name="Adapter" Comment="Adapter Interface">
   <Identification Standard="61499-1" />
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="GE" Date="2008-04-22" />

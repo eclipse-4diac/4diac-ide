@@ -33,7 +33,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+
 <FBType Name="Composite" Comment="Composite FB wrapping other FBs">
   <Identification Standard="61499-2" />
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="4DIAC-IDE" Date="2008-07-10" />
