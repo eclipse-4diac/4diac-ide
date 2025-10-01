@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.deployment.debug.breakpoint;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -161,7 +163,9 @@ public class DeploymentWatchpoint extends Breakpoint {
 	public boolean isForceSupported() {
 		final IMarker m = getMarker();
 		if (m != null) {
-			return FordiacErrorMarker.getTargetType(m) == LibraryElementPackage.Literals.VAR_DECLARATION;
+			return FordiacErrorMarker.getTargetType(m) == LibraryElementPackage.Literals.VAR_DECLARATION
+					&& getTarget().filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+							.filter(Predicate.not(VarDeclaration::isInOutVar)).isPresent();
 		}
 		return false;
 	}

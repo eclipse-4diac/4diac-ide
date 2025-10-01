@@ -528,6 +528,12 @@
 							<instanceof
 								value="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
 							</instanceof>
+							<not>
+								<test
+									forcePluginActivation="true"
+									property="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration.inOutVar">
+								</test>
+							</not>
 						</adapt>
 					</iterate>
 				</with>
@@ -1186,22 +1192,32 @@
 			modelId="org.eclipse.fordiac.ide.deployment.debug.model">
 		</variableValueEditor>
 	</extension>
- <extension
-       point="org.eclipse.ui.propertyPages">
-    <page
-		category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
-		class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
-		id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
-		name="%properties.name">
-		<enabledWhen>
-	        <adapt
-	              type="org.eclipse.core.resources.IProject">
-	           <test
-	                 property="org.eclipse.core.resources.projectNature"
-	                 value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
-	           </test>
-	        </adapt>
-	    </enabledWhen>
-	</page>
- </extension>
+	<extension
+		point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
+			name="%properties.name">
+			<enabledWhen>
+				<adapt
+					type="org.eclipse.core.resources.IProject">
+					<test
+						property="org.eclipse.core.resources.projectNature"
+						value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+					</test>
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.core.expressions.propertyTesters">
+		<propertyTester
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.propertytester.VarDeclarationPropertyTester"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration"
+			namespace="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration"
+			properties="inOutVar"
+			type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+		</propertyTester>
+	</extension>
 </plugin>
