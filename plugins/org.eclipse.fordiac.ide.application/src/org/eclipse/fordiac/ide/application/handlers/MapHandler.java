@@ -195,7 +195,7 @@ public class MapHandler extends AbstractHandler {
 	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {
 		for (final FBNetworkElement fb : fbs) {
 			if (fb.getOuterFBNetworkElement() instanceof SubApp
-					|| (fb instanceof final BlockFBNetworkElement bfb && bfb.getInterface().getErrorMarker().isEmpty())
+					|| !(fb instanceof final BlockFBNetworkElement bfb && bfb.getInterface().getErrorMarker().isEmpty())
 					|| fb.getTypeEntry() instanceof ErrorTypeEntry) {
 				return false;
 			}
