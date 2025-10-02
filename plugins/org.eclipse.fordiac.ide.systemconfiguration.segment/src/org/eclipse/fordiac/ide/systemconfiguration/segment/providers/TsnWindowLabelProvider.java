@@ -26,7 +26,7 @@ public class TsnWindowLabelProvider extends LabelProvider implements ITableLabel
 			case 1:
 				return MessageFormat.format("TIME#{0}ms", String.valueOf(window.getDuration())); //$NON-NLS-1$
 			case 2:
-				return "TIME"; ////$NON-NLS-1$
+				return "TIME"; //$NON-NLS-1$
 			case 3:
 				return ((TsnWindow) element).getComment() != null ? ((TsnWindow) element).getComment() : "empty"; //$NON-NLS-1$
 			default:

@@ -44,9 +44,8 @@ class ResolveNode {
 		this(lib.symbolicName(), lib.version(), lib.uri(), null);
 		final Manifest manifest = ManifestHelper.getFolderManifest(lib.path());
 		if (manifest != null && manifest.getDependencies() != null) {
-			manifest.getDependencies().getRequired().forEach(req -> {
-				dependencies.put(req.getSymbolicName(), VersionComparator.parseVersionRange(req.getVersion()));
-			});
+			manifest.getDependencies().getRequired().forEach(req -> dependencies.put(req.getSymbolicName(),
+					VersionComparator.parseVersionRange(req.getVersion())));
 		}
 	}
 

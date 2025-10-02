@@ -59,12 +59,9 @@ public class SafeResourceRefactoringChange extends Change {
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		for (final Leaf leaf : leaves) {
-			Display.getDefault().asyncExec(() -> {
-				AbstractHierarchyHandler
-						.executeOperation((new UpdateLeafContainerFileNameOperation(leaf, oldPath, newPath)));
-			});
+			Display.getDefault().asyncExec(() -> AbstractHierarchyHandler
+					.executeOperation((new UpdateLeafContainerFileNameOperation(leaf, oldPath, newPath))));
 		}
-
 		return null;
 	}
 

@@ -50,7 +50,7 @@ public class InfoPropertySection extends AbstractSection {
 	private ConfigurableObject obj;
 	private boolean checked = false;
 
-	private final static int horizontalIndent = 10;
+	private static final int HORIZONTAL_INDENT = 10;
 
 	private Composite parent;
 
@@ -121,7 +121,7 @@ public class InfoPropertySection extends AbstractSection {
 		final Button check = new Button(g, SWT.CHECK);
 
 		final GridData checkGridData = new GridData(SWT.LEFT, SWT.TOP, false, false);
-		checkGridData.horizontalIndent = horizontalIndent;
+		checkGridData.horizontalIndent = HORIZONTAL_INDENT;
 		check.setLayoutData(checkGridData);
 
 		check.addSelectionListener(new SelectionAdapter() {
@@ -152,7 +152,7 @@ public class InfoPropertySection extends AbstractSection {
 		final Label label = new Label(parent, SWT.NONE);
 		final GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		label.setLayoutData(gridData);
-		gridData.horizontalIndent = horizontalIndent;
+		gridData.horizontalIndent = HORIZONTAL_INDENT;
 		label.setBackground(c);
 		return label;
 	}

@@ -53,4 +53,8 @@ public class Utils {
 		}
 		return Unit.NS;
 	}
+
+	private Utils() {
+		throw new UnsupportedOperationException();
+	}
 }

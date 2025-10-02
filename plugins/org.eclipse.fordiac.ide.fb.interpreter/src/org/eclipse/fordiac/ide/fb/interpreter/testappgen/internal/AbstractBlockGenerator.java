@@ -135,7 +135,7 @@ public abstract class AbstractBlockGenerator {
 		final StringBuilder sb = new StringBuilder();
 		for (final ECTransition t : state.getInTransitions()) {
 			if (t.getConditionEvent() != null) {
-				sb.append(t.getConditionEvent().getName() + " := false;\n"); //$NON-NLS-1$
+				sb.append(t.getConditionEvent().getName()).append(" := false;\n"); //$NON-NLS-1$
 			}
 		}
 		final Algorithm alg = TestEccGenerator.createSchneiderComplicitAlgorithm(fb, "compAlg_" + state.getName(), //$NON-NLS-1$

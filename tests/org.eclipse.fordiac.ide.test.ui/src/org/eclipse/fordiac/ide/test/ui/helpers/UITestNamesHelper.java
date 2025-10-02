@@ -83,7 +83,7 @@ public final class UITestNamesHelper {
 	public static final String FINISH = "Finish"; //$NON-NLS-1$
 	public static final String FORBIDDEN_TYPE_NAME = "00_fbtype"; //$NON-NLS-1$
 	public static final String FORDIAC_IDE_PROJECT = "4diac IDE Project..."; //$NON-NLS-1$
-	public static final String FUNCTIONAL__BLOCKS = "Function Blocks"; //$NON-NLS-1$
+	public static final String FUNCTION_BLOCKS = "Function Blocks"; //$NON-NLS-1$
 	public static final String F_SUB = "F_SUB"; //$NON-NLS-1$
 	public static final String GO_TO_CHILD = "Go To Child"; //$NON-NLS-1$
 	public static final String GO_TO_PARENT = "Go To Parent"; //$NON-NLS-1$
@@ -164,5 +164,9 @@ public final class UITestNamesHelper {
 	public static final String VAR_INTERNALS = "Var Internals"; //$NON-NLS-1$
 	public static final String VAR_IN_AND_OUTPUTS = "Var In- & Outputs"; //$NON-NLS-1$
 	public static final String WITH = "With"; //$NON-NLS-1$
+
+	private UITestNamesHelper() {
+		throw new UnsupportedOperationException();
+	}
 
 }

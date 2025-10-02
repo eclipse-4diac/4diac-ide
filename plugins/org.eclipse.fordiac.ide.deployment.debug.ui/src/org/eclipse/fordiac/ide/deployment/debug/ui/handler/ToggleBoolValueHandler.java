@@ -94,12 +94,9 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 		final IEditorInput input = editor.getEditorInput();
 		switch (input) {
 		case final IContentEditorInput contentInput when EcoreUtil
-				.getRootContainer(contentInput.getContent()) instanceof final LibraryElement libElement -> {
+				.getRootContainer(contentInput.getContent()) instanceof final LibraryElement libElement ->
 			project = libElement.getTypeEntry().getFile().getProject();
-		}
-		case final IFileEditorInput fileInput -> {
-			project = fileInput.getFile().getProject();
-		}
+		case final IFileEditorInput fileInput -> project = fileInput.getFile().getProject();
 		default -> {
 			return false;
 		}

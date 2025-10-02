@@ -305,7 +305,7 @@ public class MatchFBGenerator extends AbstractBasicFBGenerator {
 			if (i > 1) {
 				algText.append(" AND ");//$NON-NLS-1$
 			}
-			algText.append(dataPins.get(i).getName() + " = ");//$NON-NLS-1$
+			algText.append(dataPins.get(i).getName()).append(" = ");//$NON-NLS-1$
 			algText.append(dataPins.get(i + 1).getName());
 		}
 		algText.append("\nTHEN\n");//$NON-NLS-1$

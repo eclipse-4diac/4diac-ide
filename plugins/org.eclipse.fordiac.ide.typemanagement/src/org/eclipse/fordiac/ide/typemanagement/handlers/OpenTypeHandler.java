@@ -243,8 +243,8 @@ public class OpenTypeHandler extends AbstractHandler {
 
 			@Override
 			public boolean equalsFilter(final ItemsFilter filter) {
-				if (filter instanceof final TypeEntryFilter typeEntryFilter
-						&& typeEntryFilter.selectedProject != selectedProject) {
+				if (filter instanceof final TypeEntryFilter typeEntryFilter && typeEntryFilter.selectedProject != null
+						&& !typeEntryFilter.selectedProject.equals(selectedProject)) {
 					return false;
 				}
 				return super.equalsFilter(filter);
@@ -252,8 +252,8 @@ public class OpenTypeHandler extends AbstractHandler {
 
 			@Override
 			public boolean isSubFilter(final ItemsFilter filter) {
-				if (filter instanceof final TypeEntryFilter typeEntryFilter
-						&& typeEntryFilter.selectedProject != selectedProject) {
+				if (filter instanceof final TypeEntryFilter typeEntryFilter && typeEntryFilter.selectedProject != null
+						&& !typeEntryFilter.selectedProject.equals(selectedProject)) {
 					return false;
 				}
 				return super.isSubFilter(filter);

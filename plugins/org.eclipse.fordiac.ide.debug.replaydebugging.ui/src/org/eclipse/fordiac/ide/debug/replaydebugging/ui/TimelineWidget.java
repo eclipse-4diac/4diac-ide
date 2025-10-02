@@ -59,10 +59,10 @@ public class TimelineWidget extends Composite {
 	private Button jumpForwardButton;
 	private Button nextButton;
 
-	private final String previousButtonText = "<";
-	private final String jumpBackButtonText = "|<";
-	private final String jumpForwardButtonText = ">|";
-	private final String nextButtonText = ">";
+	private static final String PREVIOUS_BUTTON_TEXT = "<"; //$NON-NLS-1$
+	private static final String JUMP_BACK_BUTTON_TEXT = "|<"; //$NON-NLS-1$
+	private static final String JUMP_FORWARD_BUTTON_TEXT = ">|"; //$NON-NLS-1$
+	private static final String NEXT_BUTTON_TEXT = ">"; //$NON-NLS-1$
 
 	private Label positionLabel;
 
@@ -217,11 +217,11 @@ public class TimelineWidget extends Composite {
 		buttonComposite.setLayout(new GridLayout(4, false));
 		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
 
-		jumpBackButton = createNavButton(buttonComposite, jumpBackButtonText,
+		jumpBackButton = createNavButton(buttonComposite, JUMP_BACK_BUTTON_TEXT,
 				() -> replayNavigator.moveToEvent(getBackwardsJump()));
-		previousButton = createNavButton(buttonComposite, previousButtonText, replayNavigator::moveOneEventBackwards);
-		nextButton = createNavButton(buttonComposite, nextButtonText, replayNavigator::moveOneEventForward);
-		jumpForwardButton = createNavButton(buttonComposite, jumpForwardButtonText,
+		previousButton = createNavButton(buttonComposite, PREVIOUS_BUTTON_TEXT, replayNavigator::moveOneEventBackwards);
+		nextButton = createNavButton(buttonComposite, NEXT_BUTTON_TEXT, replayNavigator::moveOneEventForward);
+		jumpForwardButton = createNavButton(buttonComposite, JUMP_FORWARD_BUTTON_TEXT,
 				() -> replayNavigator.moveToEvent(getForwardJump()));
 
 		final Composite highlightComposite = new Composite(contentsParent, SWT.NONE);
@@ -277,8 +277,8 @@ public class TimelineWidget extends Composite {
 
 			paintEvent.gc.setForeground(getDisplay().getSystemColor(HIGHTLIGHT_COLOR));
 			for (final Integer pos : highlightPositions) {
-				if (pos >= 0 && pos <= maxEvent) {
-					final int x = pos * singleEventStepInPixels;
+				if (pos.intValue() >= 0 && pos.intValue() <= maxEvent) {
+					final int x = pos.intValue() * singleEventStepInPixels;
 					paintEvent.gc.drawLine(x, 0, x, height);
 					final String label = String.valueOf(pos);
 					paintEvent.gc.drawString(label, x + TEXT_X_OFFSET_IN_CANVAS, TEXT_Y_OFFSET_IN_CANVAS, true);
@@ -339,7 +339,7 @@ public class TimelineWidget extends Composite {
 		int result = -1;
 		while (left <= right) {
 			final int mid = left + (right - left) / 2;
-			final int value = highlightPositions.get(mid);
+			final int value = highlightPositions.get(mid).intValue();
 			if (value > current) {
 				result = value;
 				right = mid - 1;
@@ -365,7 +365,7 @@ public class TimelineWidget extends Composite {
 		int result = -1;
 		while (left <= right) {
 			final int mid = left + (right - left) / 2;
-			final int value = highlightPositions.get(mid);
+			final int value = highlightPositions.get(mid).intValue();
 			if (value < current) {
 				result = value;
 				left = mid + 1;
@@ -383,7 +383,7 @@ public class TimelineWidget extends Composite {
 	private void updateCurrentPositionInfo() {
 		final int current = timelineSlider.getSelection();
 		final int total = timelineSlider.getMaximum() - timelineSlider.getThumb();
-		positionLabel.setText(current + " / " + total);
+		positionLabel.setText(current + " / " + total); //$NON-NLS-1$
 		lineCanvas.redraw();
 		if (current == total) {
 			nextButton.setEnabled(false);

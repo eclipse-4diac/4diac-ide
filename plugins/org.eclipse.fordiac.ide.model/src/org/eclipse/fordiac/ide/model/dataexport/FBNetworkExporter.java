@@ -283,7 +283,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		if ((null != interfaceElement.getBlockFBNetworkElement())
 				&& (interfaceElement.getBlockFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; ////$NON-NLS-1$
+			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
 		}
 
 		retVal += interfaceElement.getName();
