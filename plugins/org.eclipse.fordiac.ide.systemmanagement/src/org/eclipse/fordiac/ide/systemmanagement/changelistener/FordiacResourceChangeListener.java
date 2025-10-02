@@ -266,9 +266,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					return;
 				}
 				if (ENABLE_COPY_DIALOG && fileExists(file, delta)) {
-					Display.getDefault().syncExec(() -> {
-						openRenameDialog(file, entry);
-					});
+					Display.getDefault().syncExec(() -> openRenameDialog(file, entry));
 					return;
 				}
 			} else if (!file.equals(typeEntryForFile.getFile())) {

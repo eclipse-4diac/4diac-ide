@@ -88,9 +88,8 @@ class ResourceDeploymentTest {
 
 	private Stream<DynamicTest> generateDynamicTests(final String testNamePrefix,
 			final BiConsumer<TestNetwork, ResourceDeploymentData> assertion) {
-		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(), () -> {
-			assertion.accept(netw, generateDeploymentData(netw.name()));
-		}));
+		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(),
+				() -> assertion.accept(netw, generateDeploymentData(netw.name()))));
 	}
 
 	private static boolean hasDuplicateEntry(final List<ParameterDeploymentData> parameters) {

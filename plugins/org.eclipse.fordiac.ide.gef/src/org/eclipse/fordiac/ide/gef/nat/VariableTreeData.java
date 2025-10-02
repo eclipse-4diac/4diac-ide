@@ -27,7 +27,7 @@ import org.eclipse.nebula.widgets.nattable.tree.ITreeData;
 
 public class VariableTreeData extends ListDataProvider<Variable<?>> implements ITreeData<Variable<?>> {
 
-	private final Integer ZERO = Integer.valueOf(0);
+	private static final Integer ZERO = Integer.valueOf(0);
 
 	private Map<Variable<?>, Integer> depthMap;
 	private Map<Variable<?>, Integer> indexMap;

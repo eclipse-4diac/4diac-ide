@@ -45,8 +45,6 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	private static final String NAME = "name"; //$NON-NLS-1$
 
-	private static final String SORT_INDEX = "sortIndex"; //$NON-NLS-1$
-
 	/** The dcc. */
 	private Combo destinationNameField;
 

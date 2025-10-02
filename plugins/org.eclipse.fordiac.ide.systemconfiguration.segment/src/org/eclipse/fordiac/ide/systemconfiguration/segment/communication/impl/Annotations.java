@@ -44,6 +44,6 @@ public final class Annotations {
 	}
 
 	private Annotations() {
-		throw new UnsupportedOperationException("do not instantiate this class"); ////$NON-NLS-1$
+		throw new UnsupportedOperationException("do not instantiate this class"); //$NON-NLS-1$
 	}
 }

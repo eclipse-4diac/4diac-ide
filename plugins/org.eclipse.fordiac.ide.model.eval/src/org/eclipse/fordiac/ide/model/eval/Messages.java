@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.eval.messages"; //$NON-NLS-1$
 	public static String EvaluatorInitializerException_DefaultMessage;

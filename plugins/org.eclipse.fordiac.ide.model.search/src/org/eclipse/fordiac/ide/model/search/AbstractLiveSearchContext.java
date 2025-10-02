@@ -15,8 +15,6 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -24,8 +22,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -115,29 +111,6 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 
 			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
 		});
-	}
-
-	private static void execute(final Command cmd, final IEditorPart editor) {
-		if (editor != null) {
-			// when an editor is open execute in display thread to protect any ui updates
-			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).execute(cmd));
-		} else if (cmd.canExecute()) {
-			cmd.execute();
-		}
-	}
-
-	private static void save(final TypeEntry typeEntry, final LibraryElement libraryElement, final IEditorPart editor,
-			final IProgressMonitor pm) {
-		try {
-			typeEntry.save(libraryElement, pm);
-			if (editor != null) {
-				// if we have an editor mark the save location in the command stack to tell the
-				// editor that it is not dirty anymore
-				Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Saving TypeEntry " + typeEntry.getFullTypeName() + " failed", e); //$NON-NLS-1$//$NON-NLS-2$
-		}
 	}
 
 }

@@ -51,4 +51,8 @@ public class EventManagerSaveAndLoadHelper {
 			FordiacLogHelper.logError(e.getMessage());
 		}
 	}
+
+	private EventManagerSaveAndLoadHelper() {
+		throw new UnsupportedOperationException();
+	}
 }

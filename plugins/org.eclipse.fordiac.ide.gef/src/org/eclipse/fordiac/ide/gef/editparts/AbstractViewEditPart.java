@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -41,8 +40,6 @@ import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
-
-	private PreferenceStoreProvider storeProvider;
 
 	private Adapter adapter;
 

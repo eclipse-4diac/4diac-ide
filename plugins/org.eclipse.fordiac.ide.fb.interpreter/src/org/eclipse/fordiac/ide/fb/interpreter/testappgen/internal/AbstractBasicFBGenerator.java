@@ -125,10 +125,10 @@ public abstract class AbstractBasicFBGenerator extends AbstractBlockGenerator {
 			final StringBuilder sbName = new StringBuilder();
 			final StringBuilder sbComment = new StringBuilder();
 			for (final TestState testState : testC.getTestStates()) {
-				sbComment.append(testState.getTestOutputs().size() + "."); //$NON-NLS-1$
+				sbComment.append(testState.getTestOutputs().size()).append("."); //$NON-NLS-1$
 				for (final OutputPrimitive prim : testState.getTestOutputs()) {
-					sbName.append(prim.getEvent() + "_"); //$NON-NLS-1$
-					sbComment.append(prim.getEvent() + "."); //$NON-NLS-1$
+					sbName.append(prim.getEvent()).append("_"); //$NON-NLS-1$
+					sbComment.append(prim.getEvent()).append("."); //$NON-NLS-1$
 				}
 			}
 			sbName.append("expected"); //$NON-NLS-1$

@@ -70,4 +70,8 @@ public final class UITestPinHelper {
 	public static final String VAR3 = "VAR3"; //$NON-NLS-1$
 	public static final String TRUE = "TRUE"; //$NON-NLS-1$
 
+	private UITestPinHelper() {
+		throw new UnsupportedOperationException();
+	}
+
 }

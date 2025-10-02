@@ -55,9 +55,7 @@ public class SafePlantElementDeletionChange extends Change {
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 
 		for (final Leaf l : leaves) {
-			Display.getDefault().asyncExec(() -> {
-				AbstractHierarchyHandler.executeOperation(new DeleteNodeOperation(l));
-			});
+			Display.getDefault().asyncExec(() -> AbstractHierarchyHandler.executeOperation(new DeleteNodeOperation(l)));
 		}
 
 		return null;

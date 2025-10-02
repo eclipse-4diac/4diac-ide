@@ -118,7 +118,7 @@ public class TestsignalFBGenerator extends AbstractBasicFBGenerator {
 
 		for (final TestState testState : testCase.getTestStates()) {
 			for (final OutputPrimitive outP : testState.getTestOutputs()) {
-				sb.append(outP.getEvent() + "_"); //$NON-NLS-1$
+				sb.append(outP.getEvent()).append("_"); //$NON-NLS-1$
 			}
 		}
 		sb.append("expected"); //$NON-NLS-1$

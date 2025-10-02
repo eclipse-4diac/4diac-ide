@@ -43,7 +43,7 @@ public final class CompareEditorOpenerUtil {
 	 * @return the compare editor openers
 	 */
 	public static Map<String, ICompareEditorOpener> getCompareEditorOpeners() {
-		final HashMap<String, ICompareEditorOpener> openers = new HashMap<>(2);
+		final HashMap<String, ICompareEditorOpener> openers = HashMap.newHashMap(2);
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IConfigurationElement[] elems = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.openCompareEditor"); //$NON-NLS-1$

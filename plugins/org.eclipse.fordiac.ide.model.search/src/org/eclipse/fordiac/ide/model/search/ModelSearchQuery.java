@@ -128,7 +128,7 @@ public class ModelSearchQuery implements ISearchQuery {
 						searchResult.addResult(libraryElement);
 					}
 				} else {
-					FordiacLogHelper.logWarning("Could not load model for: " + libraryElementURI.toString()); ////$NON-NLS-1$
+					FordiacLogHelper.logWarning("Could not load model for: " + libraryElementURI.toString()); //$NON-NLS-1$
 				}
 			});
 		}

@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.util;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.swt.graphics.Color;
@@ -26,15 +25,14 @@ import org.eclipse.swt.graphics.RGB;
 public final class ColorManager {
 
 	/** The color table. */
-	private static final Map<RGB, Color> fColorTable = new HashMap<>(10);
+	private static final Map<RGB, Color> fColorTable = HashMap.newHashMap(10);
 
 	/**
 	 * Dispose.
 	 */
 	public static void dispose() {
-		final Iterator<Color> e = fColorTable.values().iterator();
-		while (e.hasNext()) {
-			(e.next()).dispose();
+		for (Color element : fColorTable.values()) {
+			(element).dispose();
 		}
 	}
 
