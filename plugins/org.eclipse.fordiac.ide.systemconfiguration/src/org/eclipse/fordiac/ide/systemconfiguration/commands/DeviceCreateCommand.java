@@ -43,7 +43,7 @@ import org.eclipse.swt.graphics.RGB;
 public class DeviceCreateCommand extends Command {
 
 	private static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
-	private static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::hardware::EMB_RES"; //$NON-NLS-1$
+	private static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::system::EMB_RES"; //$NON-NLS-1$
 
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
 	private final DeviceTypeEntry entry;
