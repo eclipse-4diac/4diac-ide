@@ -178,6 +178,7 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
 
+	public static String Refactoring_StructUsers;
 	public static String Refactoring_RenameFromTo;
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
