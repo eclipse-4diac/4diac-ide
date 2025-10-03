@@ -24,11 +24,11 @@ public final class DeploymentEvaluatorConfiguration {
 
 	public static final String DEVICE_TYPE = PREFIX + ".DEVICE_TYPE"; //$NON-NLS-1$
 	public static final String DEFAULT_DEVICE_TYPE = "FORTE_PC"; //$NON-NLS-1$
-	public static final String DEFAULT_DEVICE_FULL_TYPE = "iec61499::hardware::FORTE_PC"; //$NON-NLS-1$
+	public static final String DEFAULT_DEVICE_FULL_TYPE = "iec61499::system::FORTE_PC"; //$NON-NLS-1$
 
 	public static final String RESOURCE_TYPE = PREFIX + "RESOURCE_TYPE"; //$NON-NLS-1$
 	public static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
-	public static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::hardware::EMB_RES"; //$NON-NLS-1$
+	public static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::system::EMB_RES"; //$NON-NLS-1$
 
 	public static final String DEVICE_PROFILE = PREFIX + ".DEVICE_PROFILE"; //$NON-NLS-1$
 	public static final String DEFAULT_DEVICE_PROFILE = "HOLOBLOC"; //$NON-NLS-1$
