@@ -38,14 +38,17 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
-public abstract class AbstractTypeEditorPage extends EditorPart
-		implements ITypeEditorPage, CommandStackEventListener {
+public abstract class AbstractTypeEditorPage extends EditorPart implements ITypeEditorPage, CommandStackEventListener {
 
 	private CommandStack commandStack;
 	private ActionRegistry actionRegistry;
@@ -69,9 +72,25 @@ public abstract class AbstractTypeEditorPage extends EditorPart
 	@Override
 	public void dispose() {
 		getCommandStack().removeCommandStackEventListener(this);
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
+		removeSelectionListener();
 		getActionRegistry().dispose();
 		super.dispose();
+	}
+
+	private void removeSelectionListener() {
+		final IWorkbenchPartSite site = getSite();
+		if (site == null) {
+			return;
+		}
+		final IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
+		if (workbenchWindow == null) {
+			return;
+		}
+		final ISelectionService selectionService = workbenchWindow.getSelectionService();
+		if (selectionService == null) {
+			return;
+		}
+		selectionService.removeSelectionListener(this);
 	}
 
 	private ActionRegistry getActionRegistry() {
@@ -124,9 +143,19 @@ public abstract class AbstractTypeEditorPage extends EditorPart
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (this.equals(getSite().getPage().getActiveEditor())) {
+		if (!(getSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			return;
+		}
+		final IWorkbenchPage page = multiPageEditorSite.getPage();
+		if (page == null) {
+			removeSelectionListener();
+			return;
+		}
+
+		if (multiPageEditorSite.getMultiPageEditor().equals(page.getActiveEditor())) {
 			updateActions(selectionActions);
 		}
+
 	}
 
 	private void setActionHandlers(final IEditorSite site) {
