@@ -14,49 +14,38 @@
  *      - initial API and implementation and/or initial documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.model.data;
+package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Structured Type</b></em>'.
+ * A representation of the model object '<em><b>Container Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables <em>Member Variables</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration#getCachedMembers <em>Cached Members</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType()
+ * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getContainerVarDeclaration()
  * @model
  * @generated
  */
-public interface StructuredType extends AnyDerivedType {
+public interface ContainerVarDeclaration extends VarDeclaration {
 	/**
-	 * Returns the value of the '<em><b>Member Variables</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Cached Members</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Member Variables</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getStructuredType_MemberVariables()
-	 * @model containment="true"
-	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='http://www.fordiac.org/61499/lib'"
+	 * @return the value of the '<em>Cached Members</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getContainerVarDeclaration_CachedMembers()
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<VarDeclaration> getMemberVariables();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	boolean isAssignableFrom(DataType other);
+	EList<VarDeclaration> getCachedMembers();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -64,6 +53,14 @@ public interface StructuredType extends AnyDerivedType {
 	 * @model
 	 * @generated
 	 */
-	VarDeclaration getMemberVar(String name);
+	VarDeclaration getCachedMember(String name);
 
-} // StructuredType
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringArray" demandCreateDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	VarDeclaration getCachedMember(String[] path, boolean demandCreate);
+
+} // ContainerVarDeclaration

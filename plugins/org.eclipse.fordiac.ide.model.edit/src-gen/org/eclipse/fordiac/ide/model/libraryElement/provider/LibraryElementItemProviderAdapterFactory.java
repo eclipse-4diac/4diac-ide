@@ -624,6 +624,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContainerVarDeclarationItemProvider containerVarDeclarationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContainerVarDeclarationAdapter() {
+		if (containerVarDeclarationItemProvider == null) {
+			containerVarDeclarationItemProvider = new ContainerVarDeclarationItemProvider(this);
+		}
+
+		return containerVarDeclarationItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

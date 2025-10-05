@@ -14,7 +14,7 @@
  *      - initial API and implementation and/or initial documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.model.data.impl;
+package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
@@ -27,43 +27,39 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.eclipse.fordiac.ide.model.data.DataPackage;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Structured Type</b></em>'.
+ * An implementation of the model object '<em><b>Container Var Declaration</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl#getMemberVariables <em>Member Variables</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationImpl#getCachedMembers <em>Cached Members</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StructuredTypeImpl extends AnyDerivedTypeImpl implements StructuredType {
+public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements ContainerVarDeclaration {
 	/**
-	 * The cached value of the '{@link #getMemberVariables() <em>Member Variables</em>}' containment reference list.
+	 * The cached value of the '{@link #getCachedMembers() <em>Cached Members</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMemberVariables()
+	 * @see #getCachedMembers()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<VarDeclaration> memberVariables;
-
+	protected EList<VarDeclaration> cachedMembers;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected StructuredTypeImpl() {
+	protected ContainerVarDeclarationImpl() {
 		super();
 	}
 
@@ -74,7 +70,7 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return DataPackage.Literals.STRUCTURED_TYPE;
+		return LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION;
 	}
 
 	/**
@@ -83,11 +79,11 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 * @generated
 	 */
 	@Override
-	public EList<VarDeclaration> getMemberVariables() {
-		if (memberVariables == null) {
-			memberVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES);
+	public EList<VarDeclaration> getCachedMembers() {
+		if (cachedMembers == null) {
+			cachedMembers = new EObjectContainmentEList.Resolving<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS);
 		}
-		return memberVariables;
+		return cachedMembers;
 	}
 
 	/**
@@ -96,8 +92,8 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 * @generated
 	 */
 	@Override
-	public boolean isAssignableFrom(final DataType other) {
-		return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);
+	public VarDeclaration getCachedMember(final String name) {
+		return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);
 	}
 
 	/**
@@ -106,8 +102,8 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	 * @generated
 	 */
 	@Override
-	public VarDeclaration getMemberVar(final String name) {
-		return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);
+	public VarDeclaration getCachedMember(final String[] path, final boolean demandCreate) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getCachedMember(this, path, demandCreate);
 	}
 
 	/**
@@ -118,8 +114,8 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return ((InternalEList<?>)getMemberVariables()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
+				return ((InternalEList<?>)getCachedMembers()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -133,8 +129,8 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return getMemberVariables();
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
+				return getCachedMembers();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -149,9 +145,9 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				getMemberVariables().clear();
-				getMemberVariables().addAll((Collection<? extends VarDeclaration>)newValue);
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
+				getCachedMembers().clear();
+				getCachedMembers().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -167,8 +163,8 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				getMemberVariables().clear();
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
+				getCachedMembers().clear();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -184,11 +180,11 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DataPackage.STRUCTURED_TYPE__MEMBER_VARIABLES:
-				return memberVariables != null && !memberVariables.isEmpty();
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
+				return cachedMembers != null && !cachedMembers.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
 	}
 
-} //StructuredTypeImpl
+} //ContainerVarDeclarationImpl

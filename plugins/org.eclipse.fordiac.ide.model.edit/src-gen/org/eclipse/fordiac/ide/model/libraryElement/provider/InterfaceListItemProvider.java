@@ -224,6 +224,11 @@ public class InterfaceListItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createContainerVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__INPUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add
@@ -240,6 +245,11 @@ public class InterfaceListItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__OUTPUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createContainerVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -260,6 +270,11 @@ public class InterfaceListItemProvider
 			(createChildParameter
 				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.INTERFACE_LIST__IN_OUT_VARS,
+				 LibraryElementFactory.eINSTANCE.createContainerVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter

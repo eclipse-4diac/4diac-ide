@@ -243,6 +243,15 @@ public interface LibraryElementFactory extends EFactory {
 	ConnectionRoutingData createConnectionRoutingData();
 
 	/**
+	 * Returns a new object of class '<em>Container Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Container Var Declaration</em>'.
+	 * @generated
+	 */
+	ContainerVarDeclaration createContainerVarDeclaration();
+
+	/**
 	 * Returns a new object of class '<em>Data Connection</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,24 +28,24 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
+public class ContainerVarDeclarationItemProvider extends VarDeclarationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public GlobalConstantsItemProvider(AdapterFactory adapterFactory) {
+	public ContainerVarDeclarationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -76,8 +76,7 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS);
-			childrenFeatures.add(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__SOURCE);
+			childrenFeatures.add(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS);
 		}
 		return childrenFeatures;
 	}
@@ -96,14 +95,14 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	}
 
 	/**
-	 * This returns GlobalConstants.gif.
+	 * This returns ContainerVarDeclaration.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/GlobalConstants")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContainerVarDeclaration")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,10 +113,10 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((GlobalConstants)object).getName();
+		String label = ((ContainerVarDeclaration)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_GlobalConstants_type") : //$NON-NLS-1$
-			getString("_UI_GlobalConstants_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_ContainerVarDeclaration_type") : //$NON-NLS-1$
+			getString("_UI_ContainerVarDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -132,9 +131,8 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(GlobalConstants.class)) {
-			case LibraryElementPackage.GLOBAL_CONSTANTS__CONSTANTS:
-			case LibraryElementPackage.GLOBAL_CONSTANTS__SOURCE:
+		switch (notification.getFeatureID(ContainerVarDeclaration.class)) {
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
@@ -156,33 +154,28 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createContainerVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createMemberVarDeclaration()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				(LibraryElementPackage.Literals.CONTAINER_VAR_DECLARATION__CACHED_MEMBERS,
 				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__SOURCE,
-				 LibraryElementFactory.eINSTANCE.createOriginalSource()));
 	}
 
 }
