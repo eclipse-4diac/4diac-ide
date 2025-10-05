@@ -57,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -201,6 +202,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
 			case LibraryElementPackage.CONFIGURABLE_MOVE_FB: return createConfigurableMoveFB();
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA: return createConnectionRoutingData();
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION: return createContainerVarDeclaration();
 			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
 			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
 			case LibraryElementPackage.DEVICE: return createDevice();
@@ -264,10 +266,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.TYPED_SUB_APP: return createTypedSubApp();
 			case LibraryElementPackage.UNTYPED_SUB_APP: return createUntypedSubApp();
 			case LibraryElementPackage.VALUE: return createValue();
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE: return createVarConfigInstance();
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
-			case LibraryElementPackage.VAR_CONFIG_INSTANCE: return createVarConfigInstance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -303,6 +305,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createInterfaceTypeEntryFromString(eDataType, initialValue);
 			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
 				return createBlockFBNWElementStreamFromString(eDataType, initialValue);
+			case LibraryElementPackage.STRING_ARRAY:
+				return createStringArrayFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -338,6 +342,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertInterfaceTypeEntryToString(eDataType, instanceValue);
 			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
 				return convertBlockFBNWElementStreamToString(eDataType, instanceValue);
+			case LibraryElementPackage.STRING_ARRAY:
+				return convertStringArrayToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -594,6 +600,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ConnectionRoutingData createConnectionRoutingData() {
 		ConnectionRoutingDataImpl connectionRoutingData = new ConnectionRoutingDataImpl();
 		return connectionRoutingData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ContainerVarDeclaration createContainerVarDeclaration() {
+		ContainerVarDeclarationImpl containerVarDeclaration = new ContainerVarDeclarationImpl();
+		return containerVarDeclaration;
 	}
 
 	/**
@@ -1534,6 +1551,24 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertBlockFBNWElementStreamToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String[] createStringArrayFromString(EDataType eDataType, String initialValue) {
+		return (String[])super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertStringArrayToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

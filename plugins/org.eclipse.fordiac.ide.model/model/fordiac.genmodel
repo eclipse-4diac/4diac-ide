@@ -29,6 +29,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genDataTypes ecoreDataType="lib.ecore#//InterfaceTypeEntry"/>
     <genDataTypes ecoreDataType="lib.ecore#//BlockFBNWElementStream"/>
+    <genDataTypes ecoreDataType="lib.ecore#//StringArray"/>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
@@ -346,6 +347,18 @@
           body="return !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) &amp;&amp; ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());"/>
       <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is5SegementData"
           body="return  !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDx1()) &amp;&amp; !ConnectionRoutingDataAnnotations.connectionRoutingDataValueIsNull(getDy());"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ContainerVarDeclaration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ContainerVarDeclaration/cachedMembers"/>
+      <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/getCachedMember"
+          body="return getCachedMembers().stream().filter(vm -> vm.getName().equals(name)).findAny().orElse(null);">
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/getCachedMember/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/getCachedMember.1"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getCachedMember(this, path, demandCreate);">
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/getCachedMember.1/path"/>
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/getCachedMember.1/demandCreate"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//DataConnection/fBNetwork"/>
@@ -815,6 +828,10 @@
     <genClasses ecoreClass="lib.ecore#//STFunction"/>
     <genClasses ecoreClass="lib.ecore#//STFunctionBody"/>
     <genClasses ecoreClass="lib.ecore#//STMethod"/>
+    <genClasses ecoreClass="lib.ecore#//StructManipulator">
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//SubApp">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/height"/>
@@ -826,10 +843,6 @@
       <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleWidth" body="return isUnfolded() ? getWidth() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getWidth(this);"/>
       <genOperations ecoreOperation="lib.ecore#//SubApp/getVisibleHeight" body="return isUnfolded() ? getHeight() : org.eclipse.fordiac.ide.model.helpers.FBShapeHelper.getHeight(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//StructManipulator">
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/updateConfiguration"/>
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/getMemberVars"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubAppType"/>
     <genClasses ecoreClass="lib.ecore#//SystemConfiguration">
@@ -908,6 +921,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>
       <genOperations ecoreOperation="lib.ecore#//Value/getParentIE" body="return (IInterfaceElement) eContainer();"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//VarConfigInstance">
+      <genOperations ecoreOperation="lib.ecore#//VarConfigInstance/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarConfigInstanceAnnotations.validateName(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/context"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//VarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/arraySize"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/withs"/>
@@ -984,12 +1003,6 @@
     <genClasses ecoreClass="lib.ecore#//With">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//With/variables"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//VarConfigInstance">
-      <genOperations ecoreOperation="lib.ecore#//VarConfigInstance/validateName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarConfigInstanceAnnotations.validateName(this, diagnostics, context);">
-        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/diagnostics"/>
-        <genParameters ecoreParameter="lib.ecore#//VarConfigInstance/validateName/context"/>
-      </genOperations>
-    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">
@@ -1059,6 +1072,9 @@
       <genOperations ecoreOperation="data.ecore#//StructuredType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//StructuredType/isAssignableFrom/other"/>
+      </genOperations>
+      <genOperations ecoreOperation="data.ecore#//StructuredType/getMemberVar" body="return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);">
+        <genParameters ecoreParameter="data.ecore#//StructuredType/getMemberVar/name"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">

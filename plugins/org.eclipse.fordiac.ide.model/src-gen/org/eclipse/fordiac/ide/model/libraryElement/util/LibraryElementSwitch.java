@@ -354,6 +354,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION: {
+				ContainerVarDeclaration containerVarDeclaration = (ContainerVarDeclaration)theEObject;
+				T result = caseContainerVarDeclaration(containerVarDeclaration);
+				if (result == null) result = caseVarDeclaration(containerVarDeclaration);
+				if (result == null) result = caseIInterfaceElement(containerVarDeclaration);
+				if (result == null) result = caseITypedElement(containerVarDeclaration);
+				if (result == null) result = caseHiddenElement(containerVarDeclaration);
+				if (result == null) result = caseINamedElement(containerVarDeclaration);
+				if (result == null) result = caseConfigurableObject(containerVarDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.DATA_CONNECTION: {
 				DataConnection dataConnection = (DataConnection)theEObject;
 				T result = caseDataConnection(dataConnection);
@@ -933,19 +945,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.SUB_APP: {
-				SubApp subApp = (SubApp)theEObject;
-				T result = caseSubApp(subApp);
-				if (result == null) result = caseBlockFBNetworkElement(subApp);
-				if (result == null) result = caseFBNetworkElement(subApp);
-				if (result == null) result = caseTypedConfigureableObject(subApp);
-				if (result == null) result = casePositionableElement(subApp);
-				if (result == null) result = caseITypedElement(subApp);
-				if (result == null) result = caseConfigurableObject(subApp);
-				if (result == null) result = caseINamedElement(subApp);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case LibraryElementPackage.STRUCT_MANIPULATOR: {
 				StructManipulator structManipulator = (StructManipulator)theEObject;
 				T result = caseStructManipulator(structManipulator);
@@ -959,6 +958,19 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseITypedElement(structManipulator);
 				if (result == null) result = caseConfigurableObject(structManipulator);
 				if (result == null) result = caseINamedElement(structManipulator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SUB_APP: {
+				SubApp subApp = (SubApp)theEObject;
+				T result = caseSubApp(subApp);
+				if (result == null) result = caseBlockFBNetworkElement(subApp);
+				if (result == null) result = caseFBNetworkElement(subApp);
+				if (result == null) result = caseTypedConfigureableObject(subApp);
+				if (result == null) result = casePositionableElement(subApp);
+				if (result == null) result = caseITypedElement(subApp);
+				if (result == null) result = caseConfigurableObject(subApp);
+				if (result == null) result = caseINamedElement(subApp);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1057,6 +1069,18 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE: {
+				VarConfigInstance varConfigInstance = (VarConfigInstance)theEObject;
+				T result = caseVarConfigInstance(varConfigInstance);
+				if (result == null) result = caseVarDeclaration(varConfigInstance);
+				if (result == null) result = caseIInterfaceElement(varConfigInstance);
+				if (result == null) result = caseITypedElement(varConfigInstance);
+				if (result == null) result = caseHiddenElement(varConfigInstance);
+				if (result == null) result = caseINamedElement(varConfigInstance);
+				if (result == null) result = caseConfigurableObject(varConfigInstance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.VAR_DECLARATION: {
 				VarDeclaration varDeclaration = (VarDeclaration)theEObject;
 				T result = caseVarDeclaration(varDeclaration);
@@ -1077,18 +1101,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.WITH: {
 				With with = (With)theEObject;
 				T result = caseWith(with);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.VAR_CONFIG_INSTANCE: {
-				VarConfigInstance varConfigInstance = (VarConfigInstance)theEObject;
-				T result = caseVarConfigInstance(varConfigInstance);
-				if (result == null) result = caseVarDeclaration(varConfigInstance);
-				if (result == null) result = caseIInterfaceElement(varConfigInstance);
-				if (result == null) result = caseITypedElement(varConfigInstance);
-				if (result == null) result = caseHiddenElement(varConfigInstance);
-				if (result == null) result = caseINamedElement(varConfigInstance);
-				if (result == null) result = caseConfigurableObject(varConfigInstance);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1513,6 +1525,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConnectionRoutingData(ConnectionRoutingData object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Container Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Container Var Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseContainerVarDeclaration(ContainerVarDeclaration object) {
 		return null;
 	}
 
