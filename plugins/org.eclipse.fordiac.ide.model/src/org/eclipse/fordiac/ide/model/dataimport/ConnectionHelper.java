@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -408,9 +410,25 @@ public final class ConnectionHelper {
 					srcInterfaceList = ieList;
 					fullSrcPinName = pinName;
 				}
-				return FBNetworkImporter.getInterfaceElement(ieList, pinName, connection.eClass(), isInput);
+				return (pinName.contains(".")) ? //$NON-NLS-1$
+						getMemberAccessPin(ieList, pinName, isInput)
+						: FBNetworkImporter.getInterfaceElement(ieList, pinName, connection.eClass(), isInput);
 			}
 			return null;
+		}
+
+		private IInterfaceElement getMemberAccessPin(final InterfaceList ieList, final String pinName,
+				final boolean isInput) {
+			final String[] nameList = pinName.split("\\."); //$NON-NLS-1$
+
+			final IInterfaceElement ie = FBNetworkImporter.getInterfaceElement(ieList, nameList[0], connection.eClass(),
+					isInput);
+
+			if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
+				return null;
+			}
+
+			return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), false);
 		}
 	}
 
