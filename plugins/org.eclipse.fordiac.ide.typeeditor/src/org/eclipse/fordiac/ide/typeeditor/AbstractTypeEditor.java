@@ -68,6 +68,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -498,8 +499,11 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	}
 
 	public void showLoadErrorMessage(final Composite parent) {
+		final boolean fileExists = getTypeEntry() != null && getTypeEntry().getFile() != null
+				&& getTypeEntry().getFile().exists();
+
 		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(fileExists ? 3 : 2).applyTo(composite);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
 
 		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
@@ -510,7 +514,13 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 		final Label messageLabel = new Label(composite, SWT.NONE);
 		messageLabel.setText(MessageFormat.format(Messages.TypeEditor_CouldNotLoadType, getEditorInput().getName()));
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(false, false).applyTo(messageLabel);
+
+		if (fileExists) {
+			final Button textEditorButton = new Button(composite, SWT.NONE);
+			textEditorButton.setText(Messages.TypeEditor_OpenTextEditor);
+			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
+		}
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {

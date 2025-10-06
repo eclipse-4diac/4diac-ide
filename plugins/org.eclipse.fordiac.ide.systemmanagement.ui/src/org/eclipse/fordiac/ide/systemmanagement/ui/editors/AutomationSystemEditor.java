@@ -84,6 +84,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -102,7 +103,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements ITypeEntryEditor {
 
 	private AutomationSystem system;
-	private OperationHistoryCommandStack commandStack;
+	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 	private GraphicalAnnotationModel annotationModel;
@@ -131,8 +132,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	public void showLoadErrorMessage(final Composite parent) {
+		final TypeEntry entry = getTypeEntry();
+		final boolean fileExists = entry != null && entry.getFile() != null && entry.getFile().exists();
+
 		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(fileExists ? 3 : 2).applyTo(composite);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
 
 		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
@@ -144,7 +148,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		final Label messageLabel = new Label(composite, SWT.NONE);
 		messageLabel.setText(
 				MessageFormat.format(Messages.AutomationSystemEditor_CouldNotLoadSystem, getEditorInput().getName()));
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(false, false).applyTo(messageLabel);
+
+		if (fileExists) {
+			final Button textEditorButton = new Button(composite, SWT.NONE);
+			textEditorButton.setText(Messages.AutomationSystemEditor_OpenTextEditor);
+			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
+		}
 	}
 
 	@Override
@@ -413,6 +423,18 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		typeEntryAdapter.dispose();
 	}
 
+	private SystemEntry getTypeEntry() {
+		if (system != null) {
+			return (SystemEntry) system.getTypeEntry();
+		}
+
+		if (getEditorInput() instanceof final FileEditorInput fileInput) {
+			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileInput.getFile());
+		}
+
+		return null;
+	}
+
 	@Override
 	public void reloadType() {
 		final String path = getBreadcrumb().serializePath();
@@ -472,7 +494,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void setupCommandStack() {
-		commandStack = new OperationHistoryCommandStack(new ObjectUndoContext(system));
+		commandStack.setUndoContext(new ObjectUndoContext(system));
 		getCommandStack().addCommandStackEventListener(this);
 		getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
 		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());

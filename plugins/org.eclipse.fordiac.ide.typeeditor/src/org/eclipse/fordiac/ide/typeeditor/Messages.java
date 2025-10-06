@@ -19,6 +19,7 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String TypeEditor_CouldNotLoadType;
+	public static String TypeEditor_OpenTextEditor;
 
 	public static String TypeEditor_ReadOnly;
 
