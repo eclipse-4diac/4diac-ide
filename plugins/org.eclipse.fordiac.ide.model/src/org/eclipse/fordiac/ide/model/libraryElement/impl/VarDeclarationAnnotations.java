@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -70,7 +71,8 @@ public class VarDeclarationAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isArray() && !varDeclaration.isInOutVar()
 				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())
-				&& !(varDeclaration.getFBType() instanceof FunctionFBType)) {
+				&& !(varDeclaration.getFBType() instanceof FunctionFBType)
+				&& !(varDeclaration.eContainer() instanceof Method)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE,
