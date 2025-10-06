@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
+import java.util.List;
+
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.scoping.impl.ImportNormalizer;
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider;
@@ -22,5 +25,11 @@ public class STCoreImportedNamespaceAwareLocalScopeProvider extends ImportedName
 	protected ImportNormalizer doCreateImportNormalizer(final QualifiedName importedNamespace, final boolean wildcard,
 			final boolean ignoreCase) {
 		return new STCoreImportNormalizer(importedNamespace, wildcard, ignoreCase);
+	}
+
+	@Override
+	protected List<ImportNormalizer> getImplicitImports(final boolean ignoreCase) {
+		return ImportHelper.IMPLICIT_IMPORTS.stream().map(getQualifiedNameConverter()::toQualifiedName)
+				.map(imp -> doCreateImportNormalizer(imp, true, ignoreCase)).toList();
 	}
 }

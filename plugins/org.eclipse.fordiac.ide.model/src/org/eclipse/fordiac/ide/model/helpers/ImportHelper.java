@@ -36,6 +36,32 @@ public final class ImportHelper {
 	public static final String WILDCARD_IMPORT = "*"; //$NON-NLS-1$
 	public static final String WILDCARD_IMPORT_SUFFIX = PACKAGE_NAME_DELIMITER + WILDCARD_IMPORT;
 
+	public static final Set<String> IMPLICIT_IMPORTS = Set.of(//
+			"eclipse4diac::convert", //
+			"eclipse4diac::core", //
+			"eclipse4diac::io", //
+			"eclipse4diac::reconfiguration", //
+			"eclipse4diac::rtevents", //
+			"eclipse4diac::utils", //
+			"eclipse4diac::utils::signals", //
+			"eclipse4diac::utils::timing", //
+			"iec61131::arithmetic", //
+			"iec61131::bistableElements", //
+			"iec61131::bitwiseOperators", //
+			"iec61131::charString", //
+			"iec61131::comparison", //
+			"iec61131::conversion", //
+			"iec61131::counters", //
+			"iec61131::edgeDetection", //
+			"iec61131::numerical", //
+			"iec61131::selection", //
+			"iec61131::timers", //
+			"iec61499::events", //
+			"iec61499::events::timers", //
+			"iec61499::net", //
+			"iec61499::system" //
+	);
+
 	public static List<Import> getImports(final LibraryElement libraryElement) {
 		if (libraryElement != null) {
 			final CompilerInfo compilerInfo = libraryElement.getCompilerInfo();
@@ -95,6 +121,20 @@ public final class ImportHelper {
 				continue; // otherwise, continue
 			}
 			final T imported = typeResolver.apply(importedNamespace);
+			if (imported != null) {
+				if (result != null && result != imported) { // check ambiguous import
+					return null;
+				}
+				result = imported;
+			}
+		}
+		if (result != null) {
+			return result;
+		}
+
+		// resolve implicit imports
+		for (final String importedNamespace : IMPLICIT_IMPORTS) {
+			final T imported = typeResolver.apply(importedNamespace + PACKAGE_NAME_DELIMITER + name);
 			if (imported != null) {
 				if (result != null && result != imported) { // check ambiguous import
 					return null;
