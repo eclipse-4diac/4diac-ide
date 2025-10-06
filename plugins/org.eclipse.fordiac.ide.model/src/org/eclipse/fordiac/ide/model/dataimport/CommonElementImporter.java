@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -848,11 +850,27 @@ public abstract class CommonElementImporter {
 
 	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
-		IInterfaceElement ie = block.getInterfaceElement(name);
+
+		IInterfaceElement ie = (name.contains(".")) ? //$NON-NLS-1$
+				getMemberAccessIE(block, name, true) : block.getInterfaceElement(name);
+
 		if (null == ie) {
 			ie = createParameterErrorMarker(block, name, val);
 		}
 		return ie;
+	}
+
+	public static IInterfaceElement getMemberAccessIE(final BlockFBNetworkElement block, final String name,
+			final boolean demandCreate) {
+		final String[] nameList = name.split("\\."); //$NON-NLS-1$
+
+		final IInterfaceElement ie = block.getInterfaceElement(nameList[0]);
+
+		if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
+			return null;
+		}
+
+		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), demandCreate);
 	}
 
 	protected static ErrorMarkerInterface createParameterErrorMarker(final BlockFBNetworkElement block,
