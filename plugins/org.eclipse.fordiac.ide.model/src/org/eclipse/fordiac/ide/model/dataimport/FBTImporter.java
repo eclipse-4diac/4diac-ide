@@ -401,7 +401,7 @@ public class FBTImporter extends BlockTypeImporter {
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName && !typeName.isEmpty()) {
-			type = addDependency(getDataTypeLibrary().getType(typeName));
+			type = getType(typeName, getDataTypeLibrary()::getType);
 		}
 
 		Method retVal = null;
@@ -773,7 +773,7 @@ public class FBTImporter extends BlockTypeImporter {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		readNameCommentAttributes(fb);
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBTypeEntry entry = getTypeEntry(typeFbElement);
+		final FBTypeEntry entry = getTypeEntry(typeFbElement, getTypeLibrary()::getFBTypeEntry);
 		if (entry == null) {
 			fb.setTypeEntry(addDependency(
 					getTypeLibrary().createErrorTypeEntry(typeFbElement, LibraryElementPackage.eINSTANCE.getFBType())));

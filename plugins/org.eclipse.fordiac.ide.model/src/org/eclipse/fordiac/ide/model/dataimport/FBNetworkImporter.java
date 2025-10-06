@@ -219,7 +219,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	private BlockFBNetworkElement createFBInstance(final String typeName) {
-		final FBTypeEntry entry = getTypeEntry(typeName);
+		final FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
 		if (null == entry) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getFBType()));

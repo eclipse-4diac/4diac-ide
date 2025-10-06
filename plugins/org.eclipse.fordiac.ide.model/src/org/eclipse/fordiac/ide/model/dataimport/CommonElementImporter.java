@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -94,7 +95,6 @@ import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -138,13 +138,6 @@ public abstract class CommonElementImporter {
 
 	TypeLibrary getTypeLibrary() {
 		return typeLibrary;
-	}
-
-	protected FBTypeEntry getTypeEntry(final String typeFbElement) {
-		if (null != typeFbElement) {
-			return addDependency(getTypeLibrary().getFBTypeEntry(typeFbElement));
-		}
-		return null;
 	}
 
 	protected DataTypeLibrary getDataTypeLibrary() {
@@ -445,15 +438,14 @@ public abstract class CommonElementImporter {
 			if (typeName.equals(HelperTypes.CDATA.getName())) {
 				attribute.setType(HelperTypes.CDATA);
 			} else {
-				attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
+				attribute.setType(getType(typeName, getDataTypeLibrary()::getType));
 			}
 		} else {
 			// AttributeDeclarations
 			// use element for resolving import since confObject may not have been added to
 			// enclosing type yet
-			final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), getElement(),
-					name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
-			final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
+			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
+					getTypeLibrary()::getAttributeTypeEntry);
 			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
 				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
 				attribute.setType(attributeTypeEntry.getType().getType());
@@ -929,7 +921,7 @@ public abstract class CommonElementImporter {
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final ResourceTypeEntry entry = addDependency(getTypeLibrary().getResourceTypeEntry(typeName));
+			final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry);
 			if (null != entry) {
 				resource.setTypeEntry(entry);
 				createParameters(resource);
@@ -1044,5 +1036,19 @@ public abstract class CommonElementImporter {
 			addDependency(libraryElement.getTypeEntry());
 		}
 		return libraryElement;
+	}
+
+	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver) {
+		if (name == null) {
+			return null;
+		}
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+	}
+
+	protected <T extends LibraryElement> T getType(final String name, final Function<String, T> typeResolver) {
+		if (name == null) {
+			return null;
+		}
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
 	}
 }
