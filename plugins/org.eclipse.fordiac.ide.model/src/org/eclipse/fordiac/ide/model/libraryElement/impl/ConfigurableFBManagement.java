@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,9 +27,11 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -56,13 +59,42 @@ public final class ConfigurableFBManagement {
 	private static void updateMoveFbConfiguration(final ConfigurableFB fb) {
 		// if data type exists, set it as the data type of the input/output data pin
 		if (fb.getDataType() != null && fb.getInterface() != null) {
-			for (final VarDeclaration input : fb.getInterface().getInputVars()) {
-				input.setType(fb.getDataType());
+			if ((fb.getDataType() instanceof StructuredType
+					&& !(fb.getInterface().getInputVars().get(0) instanceof ContainerVarDeclaration))
+					|| (!(fb.getDataType() instanceof StructuredType)
+							&& fb.getInterface().getInputVars().get(0) instanceof ContainerVarDeclaration)) {
+				// the pin type is not matching convert it
+				convertMoveFBPinTypes(fb);
+			} else {
+				// just update the types
+				fb.getInterface().getInputVars().forEach(pin -> pin.setType(fb.getDataType()));
+				fb.getInterface().getOutputVars().forEach(pin -> pin.setType(fb.getDataType()));
+				// FB_MOVE has no varinouts
 			}
-			for (final VarDeclaration output : fb.getInterface().getOutputVars()) {
-				output.setType(fb.getDataType());
-			} // FB_MOVE has no varinouts
 		}
+	}
+
+	private static void convertMoveFBPinTypes(final ConfigurableFB fb) {
+		final DataType newDataType = fb.getDataType();
+		fb.getInterface().getInputVars().replaceAll(pin -> createNewMovePin(newDataType, pin));
+		fb.getInterface().getOutputVars().replaceAll(pin -> createNewMovePin(newDataType, pin));
+	}
+
+	private static VarDeclaration createNewMovePin(final DataType dataType, final VarDeclaration srcPin) {
+		final VarDeclaration newPin = VarDeclarationFactory.createVarDecl(dataType);
+		newPin.setName(srcPin.getName());
+		newPin.setType(dataType);
+		newPin.setIsInput(srcPin.isIsInput());
+
+		// transfer withs to new pin
+		if (srcPin.getWiths() != null) {
+			// we need to copy the list as setVariables changes the list because it updates
+			// opposites
+			for (final With with : new ArrayList<>(srcPin.getWiths())) {
+				with.setVariables(newPin);
+			}
+		}
+		return newPin;
 	}
 
 	static void loadFbConfiguration(final ConfigurableFB fb, final String attributeName, final String typeName) {
