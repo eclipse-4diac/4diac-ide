@@ -98,7 +98,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	}
 
 	public BlockFBNetworkElement createTypedSubapp(final String typeName) {
-		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(typeName));
+		final SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry);
 		if (subEntry == null) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getSubAppType()));
