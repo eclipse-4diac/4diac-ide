@@ -70,6 +70,7 @@ public final class InterfaceElementAnnotations {
 		return switch (element.eContainer()) {
 		case final BlockFBNetworkElement blockFbNetworkElement -> blockFbNetworkElement;
 		case final InterfaceList interfaceList -> interfaceList.getBlockFBNetworkElement();
+		case final IInterfaceElement varDecl -> varDecl.getBlockFBNetworkElement();
 		case null, default -> null;
 		};
 	}
@@ -78,6 +79,7 @@ public final class InterfaceElementAnnotations {
 		return switch (element.eContainer()) {
 		case final FBType fbType -> fbType;
 		case final InterfaceList interfaceList -> interfaceList.getFBType();
+		case final IInterfaceElement varDecl -> varDecl.getFBType();
 		case null, default -> null;
 		};
 	}

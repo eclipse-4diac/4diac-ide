@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
@@ -284,7 +285,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && (endPoint.eContainer() instanceof InterfaceList);
+		return (endPoint != null)
+				&& (endPoint.eContainer() instanceof InterfaceList || endPoint.eContainer() instanceof VarDeclaration);
 	}
 
 	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
@@ -300,7 +302,8 @@ class FBNetworkExporter extends CommonElementExporter {
 			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
 		}
 
-		retVal += interfaceElement.getName();
+		retVal += (interfaceElement instanceof final VarDeclaration varDecl) ? getMemberVarName(varDecl)
+				: interfaceElement.getName();
 		return retVal;
 	}
 
