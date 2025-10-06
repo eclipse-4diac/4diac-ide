@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
@@ -454,8 +455,7 @@ public class CommonElementExporter {
 
 	protected void addParam(final IInterfaceElement ie) throws XMLStreamException {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
-		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
-				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+		final boolean hasInitalValue = hasInitialValue(ie);
 		final boolean hasComment = ie.getComment() != null && !ie.getComment().isBlank();
 
 		if (hasAttributes) {
@@ -463,6 +463,9 @@ public class CommonElementExporter {
 		} else if (hasInitalValue || hasComment || ie instanceof VarConfigInstance) {
 			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 		} else {
+			if (ie instanceof final ContainerVarDeclaration structVar) {
+				addVisibleChildrenOfStructVar(structVar);
+			}
 			return;
 		}
 
@@ -478,6 +481,54 @@ public class CommonElementExporter {
 			addAttributes(ie.getAttributes());
 			addEndElement();
 		}
+
+		if (ie instanceof final ContainerVarDeclaration structVar) {
+			addVisibleChildrenOfStructVar(structVar);
+		}
+	}
+
+	private static boolean hasInitialValue(final IInterfaceElement ie) {
+		return (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
+				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+	}
+
+	private void addVisibleChildrenOfStructVar(final ContainerVarDeclaration structVar) throws XMLStreamException {
+		for (final VarDeclaration varDecl : structVar.getCachedMembers()) {
+			if (varDecl.isVisible()) {
+				addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+				addNameAttribute(getMemberVarName(varDecl));
+				String value = ""; //$NON-NLS-1$
+				if (hasInitialValue(varDecl)) {
+					value = varDecl.getValue().getValue();
+				}
+				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+				addCommentAttribute(varDecl.getComment());
+
+				if (varDecl.getAttribute(InternalAttributeDeclarations.VISIBLE.getName()) == null) {
+					// if the visible attribute is not in the attribute list add it
+					addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+					addTypeAttribute(InternalAttributeDeclarations.VISIBLE);
+					getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, Boolean.TRUE.toString());
+				}
+
+				if (hasNonTrivialAttributes(varDecl)) {
+					addAttributes(varDecl.getAttributes());
+				}
+
+				addEndElement();
+			}
+			if (varDecl instanceof final ContainerVarDeclaration structMemVar) {
+				addVisibleChildrenOfStructVar(structMemVar);
+			}
+		}
+
+	}
+
+	protected static String getMemberVarName(final VarDeclaration varDecl) {
+		if (varDecl.eContainer() instanceof final VarDeclaration parent) {
+			return getMemberVarName(parent) + '.' + varDecl.getName();
+		}
+		return varDecl.getName();
 	}
 
 	private static boolean hasNonTrivialAttributes(final IInterfaceElement ie) {
@@ -534,6 +585,6 @@ public class CommonElementExporter {
 
 	protected static String formatPosOrSizeVal(final double val) {
 		final String stringVal = Double.toString(Math.round(val * 100.0) / 100.0);
-		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal;
+		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal; //$NON-NLS-1$
 	}
 }
