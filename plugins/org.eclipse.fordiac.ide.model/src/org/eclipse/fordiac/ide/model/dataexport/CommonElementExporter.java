@@ -496,7 +496,7 @@ public class CommonElementExporter {
 		for (final VarDeclaration varDecl : structVar.getCachedMembers()) {
 			if (varDecl.isVisible()) {
 				addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-				addNameAttribute(getMemberVarName(varDecl));
+				addNameAttribute(varDecl.getRelativeName(varDecl.getBlockFBNetworkElement()));
 				String value = ""; //$NON-NLS-1$
 				if (hasInitialValue(varDecl)) {
 					value = varDecl.getValue().getValue();
@@ -522,13 +522,6 @@ public class CommonElementExporter {
 			}
 		}
 
-	}
-
-	protected static String getMemberVarName(final VarDeclaration varDecl) {
-		if (varDecl.eContainer() instanceof final VarDeclaration parent) {
-			return getMemberVarName(parent) + '.' + varDecl.getName();
-		}
-		return varDecl.getName();
 	}
 
 	private static boolean hasNonTrivialAttributes(final IInterfaceElement ie) {
