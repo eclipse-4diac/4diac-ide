@@ -86,6 +86,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
@@ -109,6 +110,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
 	private boolean wasDirtyBeforeExecute = false;
+	private Composite mainComposite;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -124,11 +126,27 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		mainComposite = parent;
+		createEditorContent();
+	}
+
+	private void createEditorContent() {
 		if (system != null) {
-			super.createPartControl(parent);
+			super.createPartControl(mainComposite);
 		} else {
-			showLoadErrorMessage(parent);
+			showLoadErrorMessage(mainComposite);
 		}
+	}
+
+	private void clearEditorContent() {
+		for (int i = getPageCount() - 1; i >= 0; i--) {
+			removePage(i);
+		}
+		pages.clear();
+		for (final Control child : mainComposite.getChildren()) {
+			child.dispose();
+		}
+		mainComposite.layout(true, true);
 	}
 
 	public void showLoadErrorMessage(final Composite parent) {
@@ -437,21 +455,35 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void reloadType() {
-		final String path = getBreadcrumb().serializePath();
-
-		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
-
-		if (typeEntry.eAdapters().contains(typeEntryAdapter)) {
-			typeEntry.eAdapters().remove(typeEntryAdapter);
+		final var typeEntry = getTypeEntry();
+		if (typeEntry == null) {
+			return;
 		}
 
+		final var entrySystem = typeEntry.getSystem();
+		final boolean hasChanged = system == null && entrySystem != null || system != null && entrySystem == null;
+
+		typeEntry.eAdapters().remove(typeEntryAdapter);
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
-		getCommandStack().setUndoContext(new ObjectUndoContext(system));
 		typeEntry.eAdapters().add(typeEntryAdapter);
+
+		if (hasChanged) {
+			clearEditorContent();
+			createEditorContent();
+		}
+
+		if (system == null) {
+			return;
+		}
+
+		getCommandStack().setUndoContext(new ObjectUndoContext(system));
 		setPartName(system.getName());
 
-		if (!getBreadcrumb().openPath(path, system)) {
+		final String path = getBreadcrumb().serializePath();
+		final boolean opened = getBreadcrumb().openPath(path, system);
+
+		if (!opened) {
 			if (!system.getApplication().isEmpty()) {
 				OpenListenerManager.openEditor(system.getApplication().get(0));
 				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingFirstApplication);
@@ -479,7 +511,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
 				if (system != null) {
 					setupCommandStack();
-					system.getTypeEntry().eAdapters().add(typeEntryAdapter);
+				}
+
+				final var entry = system == null ? TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile())
+						: system.getTypeEntry();
+				if (entry != null) {
+					entry.eAdapters().add(typeEntryAdapter);
 				}
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
