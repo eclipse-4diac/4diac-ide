@@ -266,7 +266,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateExpression(STArrayAccessExpression expr) //
-	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
+	'''«expr.receiver.generateExpression»«FOR index : expr.index».at(«index.generateExpression»)«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) //
 	'''«expr.feature.generateFeatureName»«expr.generateTemplateArguments»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
