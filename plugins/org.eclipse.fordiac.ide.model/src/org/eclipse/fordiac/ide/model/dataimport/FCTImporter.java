@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
 import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public class FCTImporter extends FBTImporter {
+public class FCTImporter extends BlockTypeImporter {
 
 	public FCTImporter(final IFile file) {
 		super(file);
@@ -64,7 +64,8 @@ public class FCTImporter extends FBTImporter {
 				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.INTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+				getElement().setInterfaceList(
+						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.FUNCTION_BODY_ELEMENT:
 				parseFunctionBody(getElement());

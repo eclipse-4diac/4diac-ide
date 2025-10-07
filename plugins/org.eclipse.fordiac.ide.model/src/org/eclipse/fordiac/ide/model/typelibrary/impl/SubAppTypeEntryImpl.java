@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -32,7 +32,7 @@ public class SubAppTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<SubAppTy
 	}
 
 	@Override
-	protected CommonElementImporter getImporter() {
+	protected BlockTypeImporter getImporter() {
 		return new SubAppTImporter(getFile());
 	}
 
