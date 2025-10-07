@@ -30,7 +30,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -163,7 +163,7 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 		}
 
 		try {
-			final FBTImporter importer = (FBTImporter) getImporter();
+			final BlockTypeImporter importer = getImporter();
 			final FBType interfaceType = importer.loadInterface();
 			updateInterfaceDependencies(importer.getDependencies());
 			return interfaceType;
@@ -172,6 +172,9 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 			return null;
 		}
 	}
+
+	@Override
+	protected abstract BlockTypeImporter getImporter();
 
 	@Override
 	public void notifyChanged(final Notification notification) {

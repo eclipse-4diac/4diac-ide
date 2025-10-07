@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *
  * @author Martijn Rooker (martijn.rooker@profactor.at)
  */
-public class SubAppTImporter extends FBTImporter {
+public class SubAppTImporter extends BlockTypeImporter {
 
 	public SubAppTImporter(final IFile typeFile) {
 		super(typeFile);
@@ -75,7 +75,8 @@ public class SubAppTImporter extends FBTImporter {
 				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+				getElement().setInterfaceList(
+						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.SERVICE_ELEMENT:
 				parseService(getElement());
@@ -98,23 +99,8 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	protected String getEventOutputElement() {
-		return LibraryElementTags.SUBAPP_EVENTOUTPUTS_ELEMENT;
-	}
-
-	@Override
-	protected String getEventInputElement() {
-		return LibraryElementTags.SUBAPP_EVENTINPUTS_ELEMENT;
-	}
-
-	@Override
 	protected String getEventElement() {
 		return LibraryElementTags.SUBAPP_EVENT_ELEMENT;
-	}
-
-	@Override
-	protected void processWiths() {
-		// supapps may not have a with construct. Therefore we are doing nothing here
 	}
 
 	@Override
@@ -122,4 +108,8 @@ public class SubAppTImporter extends FBTImporter {
 		return LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT;
 	}
 
+	@Override
+	protected InterfaceListImporter createInterfaceListImporter() {
+		return new SubAppInterfaceListImporter(this);
+	}
 }

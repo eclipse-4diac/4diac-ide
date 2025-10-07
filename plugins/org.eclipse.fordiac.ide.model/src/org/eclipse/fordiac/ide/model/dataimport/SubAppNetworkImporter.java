@@ -118,7 +118,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 	private void parseUntypedSubapp(final UntypedSubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> (switch (name) {
 		case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
-			final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
+			final SubAppInterfaceListImporter interfaceImporter = new SubAppInterfaceListImporter(this);
 			subApp.setInterface(interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 			yield true;
 		}
