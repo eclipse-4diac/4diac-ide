@@ -272,8 +272,8 @@ public abstract class FollowConnectionHandler extends AbstractHandler {
 			final List<Connection> connections) {
 		for (final Connection conn : connections) {
 			final IInterfaceElement next = goRight ? conn.getDestination() : conn.getSource();
-			if (conn.isVisible() && next.isIsInput() == goRight && !(next instanceof MemberVarDeclaration)) {
-				// visible connection with correct pin (exception Struct) (Endpoint)
+			if (conn.isVisible() && next.isIsInput() == goRight) {
+				// visible connection with correct pin (Endpoint)
 				destinations.add(next);
 			} else {
 				jumpOverConnections(next, destinations, goRight);

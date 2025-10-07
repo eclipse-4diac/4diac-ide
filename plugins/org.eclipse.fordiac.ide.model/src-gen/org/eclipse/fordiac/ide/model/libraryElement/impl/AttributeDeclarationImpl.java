@@ -464,7 +464,7 @@ public class AttributeDeclarationImpl extends EObjectImpl implements AttributeDe
 	 */
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.validateName(this, diagnostics, context);
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.validateName(this, diagnostics, context);
 	}
 
 	/**

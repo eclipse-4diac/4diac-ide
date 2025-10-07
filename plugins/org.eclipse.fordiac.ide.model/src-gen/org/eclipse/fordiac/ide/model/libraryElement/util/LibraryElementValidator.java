@@ -367,12 +367,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 24;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Library Element'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int LIBRARY_ELEMENT__VALIDATE_NAME = 25;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'Typed Configureable Object'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 25;
+	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 26;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Multiple Input Connections' of 'Var Declaration'.
@@ -380,7 +388,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 26;
+	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 27;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Generic Type Variable' of 'Var Declaration'.
@@ -388,7 +396,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = 27;
+	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = 28;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Illegal Variable Length Array Variable' of 'Var Declaration'.
@@ -396,7 +404,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE = 28;
+	public static final int VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE = 29;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Variable Length Array Variable' of 'Var Declaration'.
@@ -404,7 +412,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE = 29;
+	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE = 30;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value For Generic Instance Variable' of 'Var Declaration'.
@@ -412,7 +420,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 30;
+	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 31;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value Overridden By Sub App Input' of 'Var Declaration'.
@@ -420,7 +428,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT = 31;
+	public static final int VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT = 32;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
@@ -428,7 +436,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 32;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 33;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
@@ -436,7 +444,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 33;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 34;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Interface' of 'Var Declaration'.
@@ -444,7 +452,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 34;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 35;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Network' of 'Var Declaration'.
@@ -452,7 +460,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 35;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 36;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Var Config Instance'.
@@ -460,7 +468,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 36;
+	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 37;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -468,7 +476,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 36;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 37;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -839,7 +847,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(adapterType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(adapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(adapterType, diagnostics, context);
 		return result;
 	}
 
@@ -966,7 +974,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(automationSystem, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(automationSystem, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(automationSystem, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(automationSystem, diagnostics, context);
 		return result;
 	}
 
@@ -985,7 +993,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(baseFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(baseFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(baseFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(baseFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(baseFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1004,7 +1012,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(basicFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(basicFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(basicFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1187,7 +1195,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(compositeFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(compositeFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(compositeFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(compositeFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(compositeFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1497,7 +1505,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(deviceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(deviceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(deviceType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(deviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(deviceType, diagnostics, context);
 		return result;
 	}
 
@@ -1562,7 +1570,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(errorMarkerDataType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorMarkerDataType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(errorMarkerDataType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorMarkerDataType, diagnostics, context);
 		return result;
 	}
 
@@ -1772,7 +1780,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(fbType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(fbType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(fbType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(fbType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(fbType, diagnostics, context);
 		return result;
 	}
 
@@ -1819,7 +1827,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(functionFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(functionFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(functionFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(functionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(functionFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1838,7 +1846,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(globalConstants, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(globalConstants, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(globalConstants, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(globalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(globalConstants, diagnostics, context);
 		return result;
 	}
 
@@ -2050,8 +2058,18 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(libraryElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(libraryElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(libraryElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(libraryElement, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the validateName constraint of '<em>Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateLibraryElement_validateName(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return libraryElement.validateName(diagnostics, context);
 	}
 
 	/**
@@ -2328,7 +2346,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(resourceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(resourceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(resourceType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(resourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(resourceType, diagnostics, context);
 		return result;
 	}
 
@@ -2387,7 +2405,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(segmentType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(segmentType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(segmentType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(segmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(segmentType, diagnostics, context);
 		return result;
 	}
 
@@ -2462,7 +2480,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(serviceInterfaceFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(serviceInterfaceFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(serviceInterfaceFBType, diagnostics, context);
 		return result;
 	}
 
@@ -2509,7 +2527,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(simpleFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(simpleFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(simpleFBType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(simpleFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(simpleFBType, diagnostics, context);
 		return result;
 	}
 
@@ -2635,7 +2653,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(subAppType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(subAppType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(subAppType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateINamedElement_validateName(subAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(subAppType, diagnostics, context);
 		return result;
 	}
 

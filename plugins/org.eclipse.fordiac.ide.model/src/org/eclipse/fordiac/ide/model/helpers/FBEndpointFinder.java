@@ -386,9 +386,13 @@ public class FBEndpointFinder {
 		final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
 				: state.ifElem.getOutputConnections();
 		for (final Connection subInt : subCons) {
-			trace(new RecursionState(state.plexStack, state.inputSide,
-					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections,
-					state.traceMember));
+			final IInterfaceElement nextInterface = state.inputSide ? subInt.getSource() : subInt.getDestination();
+			if (state.traceMember && subInt.isVisible()) {
+				state.connections.add(nextInterface);
+			} else {
+				trace(new RecursionState(state.plexStack, state.inputSide, nextInterface, state.connections,
+						state.traceMember));
+			}
 		}
 	}
 
@@ -421,9 +425,14 @@ public class FBEndpointFinder {
 		// next item to skip through the only in/output of the plexer
 		if (state.traceMember) {
 			for (final var con : varCons) {
-				trace(new RecursionState(state.plexStack, state.inputSide,
-						state.inputSide ? con.getSource() : con.getDestination(), state.connections,
-						state.traceMember));
+				final IInterfaceElement nextInterface = state.inputSide ? con.getSource() : con.getDestination();
+
+				if (con.isVisible()) {
+					state.connections.add(nextInterface);
+				} else {
+					trace(new RecursionState(state.plexStack, state.inputSide, nextInterface, state.connections,
+							state.traceMember));
+				}
 			}
 		} else {
 			trace(new RecursionState(state.plexStack, state.inputSide,
@@ -474,11 +483,16 @@ public class FBEndpointFinder {
 
 			// find destinations (skip plexers between) from the interface of the plexer
 			// according to the previously updated interface-stack
-			for (final Connection next : (state.inputSide) ? realInt.getInputConnections()
+			for (final Connection next : state.inputSide ? realInt.getInputConnections()
 					: realInt.getOutputConnections()) {
-				trace(new RecursionState(subStack, state.inputSide,
-						state.inputSide ? next.getSource() : next.getDestination(), state.connections,
-						state.traceMember));
+				final IInterfaceElement nextInterface = state.inputSide ? next.getSource() : next.getDestination();
+
+				if (state.traceMember && next.isVisible()) {
+					state.connections.add(nextInterface);
+				} else {
+					trace(new RecursionState(subStack, state.inputSide, nextInterface, state.connections,
+							state.traceMember));
+				}
 			}
 		}
 	}
