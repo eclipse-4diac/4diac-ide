@@ -51,8 +51,10 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -395,7 +397,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			return getInterfaceInputElementIndex(interfaceEditPart, interfaceList);
 		}
 		return getInterfaceOutputElementIndex(interfaceEditPart, interfaceList);
-
 	}
 
 	private static int getInterfaceInputElementIndex(final InterfaceEditPart interfaceEditPart,
@@ -412,7 +413,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				return interfaceList.getInOutVars().stream().filter(VarDeclaration::isVisible).toList()
 						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleInputVars().indexOf(varDecl);
+			return expandAllVisibleMemberAccessIEs(interfaceList.getInputVars()).indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -435,7 +436,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				return interfaceList.getOutMappedInOutVars().stream().filter(VarDeclaration::isVisible).toList()
 						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleOutputVars().indexOf(varDecl);
+			return expandAllVisibleMemberAccessIEs(interfaceList.getOutputVars()).indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -479,38 +480,24 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
-
-		addBasicElements(elements);
-		removeInvisibleInOutVars(elements);
-		removeInvisibleInputOutputVars(elements);
+		elements.add(getInstanceName());
+		elements.addAll(expandAllVisibleMemberAccessIEs(getModel().getInterface().getAllInterfaceElements()));
 		addPinIndicators(elements);
-
 		return elements;
 	}
 
-	private void addBasicElements(final List<Object> elements) {
-		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface().getAllInterfaceElements());
-	}
-
-	private void removeInvisibleInOutVars(final List<Object> elements) {
-		final List<VarDeclaration> inoutInRemovalList = getModel().getInterface().getInOutVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-		final List<VarDeclaration> inoutOutRemovalList = getModel().getInterface().getOutMappedInOutVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-
-		elements.removeAll(inoutInRemovalList);
-		elements.removeAll(inoutOutRemovalList);
-	}
-
-	private void removeInvisibleInputOutputVars(final List<Object> elements) {
-		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-
-		elements.removeAll(inputRemovalList);
-		elements.removeAll(outputRemovalList);
+	private static List<IInterfaceElement> expandAllVisibleMemberAccessIEs(
+			final List<? extends IInterfaceElement> elements) {
+		final List<IInterfaceElement> result = new ArrayList<>(elements.size());
+		for (final IInterfaceElement ie : elements) {
+			if (ie.isVisible()) {
+				result.add(ie);
+			}
+			if (ie instanceof final ContainerVarDeclaration structVarDecl) {
+				result.addAll(expandAllVisibleMemberAccessIEs(structVarDecl.getCachedMembers()));
+			}
+		}
+		return result;
 	}
 
 	private void addPinIndicators(final List<Object> elements) {

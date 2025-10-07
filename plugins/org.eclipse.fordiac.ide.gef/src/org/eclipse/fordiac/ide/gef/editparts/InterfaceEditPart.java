@@ -183,7 +183,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
 			return memberVarDecl.getDisplayName();
 		}
-		return pin.getName();
+		return pin.getRelativeName(pin.getBlockFBNetworkElement());
 	}
 
 	private IInterfaceElement getSourcePin() {
@@ -253,14 +253,26 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 		@Override
 		public String getSubStringText() {
-			if (getLabelText().length() < getMinWidth()) {
-				final int diff = getMinWidth() - getLabelText().length();
-				return isInput() ? getLabelText() + " ".repeat(diff) : " ".repeat(diff) + getLabelText(); //$NON-NLS-1$ //$NON-NLS-2$
+			final String labelText = getText();
+			final int minWidth = getMinWidth();
+			if (labelText.length() < minWidth) {
+				final int diff = minWidth - labelText.length();
+				return isInput() ? labelText + " ".repeat(diff) : " ".repeat(diff) + labelText; //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			if (getLabelText().length() > getMaxWidth()) {
-				return getLabelText().substring(0, getMaxWidth() - 1) + getTruncationString();
+
+			final int maxWidth = getMaxWidth();
+			if (maxWidth == 0) {
+				return getTruncationString();
 			}
-			return getLabelText();
+
+			if (labelText.length() > maxWidth) {
+				if (getModel().eContainer() instanceof VarDeclaration) {
+					// is member access label truncate on front
+					return getTruncationString() + labelText.substring(1, maxWidth);
+				}
+				return labelText.substring(0, maxWidth - 1) + getTruncationString();
+			}
+			return labelText;
 		}
 
 		@Override

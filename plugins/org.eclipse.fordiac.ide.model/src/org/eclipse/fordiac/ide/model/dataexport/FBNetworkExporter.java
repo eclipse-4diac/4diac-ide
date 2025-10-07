@@ -296,14 +296,13 @@ class FBNetworkExporter extends CommonElementExporter {
 	private String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
 			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if ((null != interfaceElement.getBlockFBNetworkElement())
-				&& (interfaceElement.getBlockFBNetworkElement().getFbNetwork() == fbNetwork)) {
+		final BlockFBNetworkElement blockFBNetworkElement = interfaceElement.getBlockFBNetworkElement();
+		if ((blockFBNetworkElement != null) && (blockFBNetworkElement.getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
+			retVal = getFBNElementName(blockFBNetworkElement) + "."; //$NON-NLS-1$
 		}
 
-		retVal += (interfaceElement instanceof final VarDeclaration varDecl) ? getMemberVarName(varDecl)
-				: interfaceElement.getName();
+		retVal += interfaceElement.getRelativeName(blockFBNetworkElement);
 		return retVal;
 	}
 
