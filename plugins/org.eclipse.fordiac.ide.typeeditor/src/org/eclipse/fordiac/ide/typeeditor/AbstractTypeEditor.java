@@ -70,6 +70,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
@@ -104,6 +105,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private ValidationJob validationJob;
 	private boolean readOnly = false;
 	private boolean wasDirtyBeforeExecute = false;
+	private Composite mainComposite;
 
 	@Override
 	protected void addPages() {
@@ -151,11 +153,16 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		mainComposite = parent;
+		createEditorContent();
+	}
+
+	private void createEditorContent() {
 		if (getType() != null) {
 			if (getTypeEntry() != null && getTypeEntry().getFile() != null && getTypeEntry().getFile().isReadOnly()) {
 				readOnly = true;
 				// create read only banner
-				final Composite composite = new Composite(parent, SWT.NONE);
+				final Composite composite = new Composite(mainComposite, SWT.NONE);
 				GridLayoutFactory.fillDefaults().applyTo(composite);
 				GridDataFactory.fillDefaults().applyTo(composite);
 
@@ -170,10 +177,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 				super.createPartControl(newParent);
 			} else {
-				super.createPartControl(parent);
+				super.createPartControl(mainComposite);
 			}
 		} else {
-			showLoadErrorMessage(parent);
+			showLoadErrorMessage(mainComposite);
 		}
 	}
 
@@ -415,12 +422,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return false;
 	}
 
-	@SuppressWarnings("static-method") // allow subclasses to perform additional checks
-	private boolean isValidTypeEditorInput(final TypeEditorInput typeEditorInput) {
-		return typeEditorInput != null && typeEditorInput.getContent() != null
-				&& typeEditorInput.getTypeEntry() != null;
-	}
-
 	@Override
 	protected void pageChange(final int newPageIndex) {
 		super.pageChange(newPageIndex);
@@ -429,25 +430,43 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void reloadType() {
-		final LibraryElement newFBType = getTypeEntry().copyType();
-		final LibraryElement curType = getType();
-		if (newFBType != curType) {
-			if ((curType != null) && getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
-				getTypeEntry().eAdapters().remove(typeEntryAdapter);
+		final var entry = getTypeEntry();
+		final var entryType = entry.getType();
+		final var currentType = getType();
+
+		if (entryType == null && currentType != null || entryType != null && currentType == null) {
+			// type appeared or vanished
+			final var typeInput = getTypeEditorInput();
+			if (typeInput != null) {
+				typeInput.setType(entryType == null ? null : entry.copyType());
 			}
-			final TypeEditorInput typeEI = getTypeEditorInput();
-			if (typeEI != null) {
-				typeEI.setType(newFBType);
+
+			clearEditorContent();
+			createEditorContent();
+			return;
+		}
+
+		if (entryType != currentType) {
+			// type of typeEntry changed
+			entry.eAdapters().remove(typeEntryAdapter);
+
+			final var newType = entry.copyType();
+			final var typeInput = getTypeEditorInput();
+			if (typeInput != null) {
+				typeInput.setType(newType);
 			}
-			commandStack.setUndoContext(new ObjectUndoContext(newFBType));
-			getEditorPages().stream().forEach(ITypeEditorPage::reloadType);
-			final IEditorPart activeEditor = getActiveEditor();
-			if (activeEditor instanceof final ITypeEditorPage editorPage) {
+
+			commandStack.setUndoContext(new ObjectUndoContext(newType));
+			getEditorPages().forEach(ITypeEditorPage::reloadType);
+
+			final var active = getActiveEditor();
+			if (active instanceof final ITypeEditorPage page) {
 				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
+						active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
 			}
-			getTypeEntry().eAdapters().add(typeEntryAdapter);
-			setPartName(getTypeEntry().getTypeName());
+
+			entry.eAdapters().add(typeEntryAdapter);
+			setPartName(entry.getTypeName());
 		}
 	}
 
@@ -483,19 +502,34 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
-		if (isValidTypeEditorInput(typeEditorInput)) {
-			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
-					typeEditorInput::getContent);
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-			if (getEditorPages() != null) {
-				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
+		if (typeEditorInput != null && typeEditorInput.getTypeEntry() != null) {
+			if (typeEditorInput.getContent() != null) {
+				// we have a type
+				annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
+						typeEditorInput::getContent);
+				validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+				if (getEditorPages() != null) {
+					getEditorPages().forEach(e -> e.setInput(typeEditorInput));
+				}
+				commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
 			}
+			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setInputWithNotify(typeEditorInput);
-			commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
 		} else {
 			setInputWithNotify(input);
 		}
+	}
+
+	private void clearEditorContent() {
+		for (int i = getPageCount() - 1; i >= 0; i--) {
+			removePage(i);
+		}
+		pages.clear();
+		editorPages = null;
+		for (final Control child : mainComposite.getChildren()) {
+			child.dispose();
+		}
+		mainComposite.layout(true, true);
 	}
 
 	public void showLoadErrorMessage(final Composite parent) {
