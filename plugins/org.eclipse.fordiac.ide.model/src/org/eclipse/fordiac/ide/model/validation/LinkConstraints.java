@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -130,6 +131,12 @@ public final class LinkConstraints {
 			// data in or outputs which are not connect by withs are not allowed to be
 			// connected
 			if (null != varDecl.eContainer()) {
+				if (varDecl.eContainer() instanceof final VarDeclaration parent) {
+					// member access pins are not in any with, connections should only be allowed if
+					// the root parent has a with
+					return isWithConstraintOK(getRootIE(parent));
+				}
+
 				final var obj = varDecl.eContainer().eContainer();
 				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)
 						|| (obj instanceof ErrorMarkerFBNElement)) {
@@ -145,6 +152,13 @@ public final class LinkConstraints {
 			return false;
 		}
 		return true;
+	}
+
+	private static IInterfaceElement getRootIE(IInterfaceElement varDecl) {
+		while (varDecl.eContainer() instanceof final VarDeclaration parent) {
+			varDecl = parent;
+		}
+		return varDecl;
 	}
 
 	public static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
@@ -246,27 +260,27 @@ public final class LinkConstraints {
 	}
 
 	public static boolean isValidConnSource(final IInterfaceElement source, final FBNetwork parent) {
-		final EObject sourceCont = source.eContainer().eContainer();
+		final BlockFBNetworkElement sourceFBNElement = source.getBlockFBNetworkElement();
 		if (!source.isIsInput()) {
-			// an output can only be a connection source if its container is part of the
-			// parent
-			return sourceCont != null && parent == sourceCont.eContainer();
+			// an output can only be a connection source if its BlockFBNetworkElement is
+			// part of the parent
+			return sourceFBNElement != null && parent == sourceFBNElement.eContainer();
 		}
 		// an input can only be a connection source if its a type input or the parent is
 		// the inside of the subapp
-		return isTypeContainer(sourceCont) || isInsideSubapp(sourceCont, parent);
+		return isTypeContainer(source.getFBType()) || isInsideSubapp(sourceFBNElement, parent);
 	}
 
 	public static boolean isValidConnDestination(final IInterfaceElement dst, final FBNetwork parent) {
-		final EObject dstCont = dst.eContainer().eContainer();
+		final BlockFBNetworkElement dstFBNElement = dst.getBlockFBNetworkElement();
 		if (dst.isIsInput()) {
-			// an input can only be a connection source if its container is part of the
-			// parent
-			return dstCont != null && parent == dstCont.eContainer();
+			// an input can only be a connection source if its BlockFBNetworkElement is part
+			// of the parent
+			return dstFBNElement != null && parent == dstFBNElement.eContainer();
 		}
 		// an output can only be a connection source if its a type input or the parent
 		// is the inside of the subapp
-		return isTypeContainer(dstCont) || isInsideSubapp(dstCont, parent);
+		return isTypeContainer(dst.getFBType()) || isInsideSubapp(dstFBNElement, parent);
 	}
 
 	private static boolean isTypeContainer(final EObject cont) {
