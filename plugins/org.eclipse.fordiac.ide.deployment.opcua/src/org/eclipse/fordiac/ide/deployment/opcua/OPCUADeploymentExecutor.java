@@ -366,9 +366,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = sourceData.getBlockFBNetworkElement();
 		final FBNetworkElement destinationFB = destinationData.getBlockFBNetworkElement();
 		final String source = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.sourcePrefix(),
-				sourceFB.getName(), sourceData.getName(), connData.sourceSuffix());
+				sourceFB.getName(), sourceData.getRelativeName(sourceFB), connData.sourceSuffix());
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, connData.destinationPrefix(),
-				destinationFB.getName(), destinationData.getName(), ""); //$NON-NLS-1$
+				destinationFB.getName(), destinationData.getRelativeName(destinationFB), ""); //$NON-NLS-1$
 		final CallMethodRequest request = new CallMethodRequest(resourceNode, Constants.CREATE_CONNECTION_NODE,
 				new Variant[] { new Variant(source), new Variant(destination) });
 		final String message = MessageFormat.format(Constants.CREATE_CONNECTION, destination, source);
