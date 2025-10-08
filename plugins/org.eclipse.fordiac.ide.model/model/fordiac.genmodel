@@ -615,6 +615,9 @@
         <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//INamedElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/getRelativeName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);">
+        <genParameters ecoreParameter="lib.ecore#//INamedElement/getRelativeName/to"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//InputPrimitive"/>
     <genClasses provider="Stateful" ecoreClass="lib.ecore#//InterfaceList">
