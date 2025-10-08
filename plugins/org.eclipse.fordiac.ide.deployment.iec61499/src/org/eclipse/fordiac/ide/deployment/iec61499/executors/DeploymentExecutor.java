@@ -212,8 +212,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = source.getBlockFBNetworkElement();
 		final FBNetworkElement destFB = destination.getBlockFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName() + connData.sourceSuffix(), //$NON-NLS-1$
-				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+				connData.sourcePrefix() + sourceFB.getName() + "." + source.getRelativeName(sourceFB) //$NON-NLS-1$
+						+ connData.sourceSuffix(), connData.destinationPrefix() + destFB.getName() + "." + destination.getRelativeName(destFB)); //$NON-NLS-1$
 
 		try {
 			sendREQ(resource.getName(), request);
