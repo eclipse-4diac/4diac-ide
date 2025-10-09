@@ -109,7 +109,7 @@ public abstract class AbstractGoToPinHandler extends AbstractHandler {
 	}
 
 	private IInterfaceElement getFollowingPin(final IInterfaceElement ie, final List<IInterfaceElement> interfaceList) {
-		if (interfaceList.size() == 1) {
+		if (interfaceList.size() <= 1) {
 			return null;
 		}
 		int newIndex = interfaceList.indexOf(ie) + direction;
