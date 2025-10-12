@@ -179,8 +179,14 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 					if (fbnEl instanceof final FB fb && fbnEl.eContainer() == editedElement) {
 						return new UpdateInternalFBCommand(fb, typeEntry);
 					}
+
+					if (fbnEl.isMapped() && fbnEl.getMapping().getTo() == fbnEl) {
+						// the resource side will be update by its opposite so we do not need to do it
+						// here
+						return null;
+					}
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
-				}).forEach(Command::execute);
+				}).filter(Objects::nonNull).filter(Command::canExecute).forEach(Command::execute);
 
 		if (isActiveEditor()) {
 			performLocationRestore();
@@ -214,7 +220,7 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 				return new ConfigureFBCommand(configFB, dataType);
 			}
 			return null;
-		}).filter(Objects::nonNull).forEach(Command::execute);
+		}).filter(Objects::nonNull).filter(Command::canExecute).forEach(Command::execute);
 	}
 
 	private void performLocationRestore() {

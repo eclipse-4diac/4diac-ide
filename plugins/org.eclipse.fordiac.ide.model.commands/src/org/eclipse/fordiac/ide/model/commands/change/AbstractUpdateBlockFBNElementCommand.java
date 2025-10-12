@@ -86,17 +86,25 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	protected BlockFBNetworkElement newElement;
 
 	/** The FBNetworkElement which should be updated */
-	protected BlockFBNetworkElement oldElement;
+	protected final BlockFBNetworkElement oldElement;
 	/** The index where the fbNetwork element should be added */
 	protected int oldIndex;
 
-	protected FBNetwork network;
+	protected final FBNetwork network;
 
 	protected TypeEntry entry;
 
 	protected AbstractUpdateBlockFBNElementCommand(final BlockFBNetworkElement oldElement) {
-		this.oldElement = Objects.requireNonNull(oldElement);
+		this.oldElement = selectOldElement(oldElement);
 		this.network = Objects.requireNonNull(this.oldElement.getFbNetwork(), "Element not in a network"); //$NON-NLS-1$
+	}
+
+	private static BlockFBNetworkElement selectOldElement(final BlockFBNetworkElement oldElement) {
+		final BlockFBNetworkElement selectedElement = Objects.requireNonNull(oldElement);
+		if (selectedElement.isMapped() && selectedElement.getMapping().getTo().equals(selectedElement)) {
+			return selectedElement.getOpposite();
+		}
+		return selectedElement;
 	}
 
 	@Override
@@ -105,10 +113,6 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		List<ConnData> resourceConns = null;
 
 		if (oldElement.isMapped()) {
-			if (network.equals(oldElement.getResource().getFBNetwork())) {
-				oldElement = oldElement.getOpposite();
-				network = oldElement.getFbNetwork();
-			}
 			resource = oldElement.getResource();
 			resourceConns = getResourceCons();
 			unmapCmd = new UnmapCommand(oldElement);
@@ -119,10 +123,8 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
-		if (network != null) {
-			oldIndex = network.getNetworkElements().indexOf(oldElement);
-			network.getNetworkElements().add(oldIndex, newElement);
-		}
+		oldIndex = network.getNetworkElements().indexOf(oldElement);
+		network.getNetworkElements().add(oldIndex, newElement);
 
 		handleErrorMarker();
 		// Find connectionless pins which should be saved
@@ -146,9 +148,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getOutputVars());
 		transferVisibleAndVarConfigAttributes(oldElement.getInterface().getInOutVars());
 
-		if (network != null) {
-			network.getNetworkElements().remove(oldElement);
-		}
+		network.getNetworkElements().remove(oldElement);
 
 		newElement.setName(oldElement.getName());
 

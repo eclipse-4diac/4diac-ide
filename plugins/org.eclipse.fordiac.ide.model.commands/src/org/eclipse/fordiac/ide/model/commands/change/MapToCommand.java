@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -160,7 +161,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 	}
 
 	private AutomationSystem getAutomationSystem() {
-		return srcElement.getFbNetwork().getApplication().getAutomationSystem();
+		return (AutomationSystem) EcoreUtil.getRootContainer(srcElement);
 	}
 
 	protected void checkConnections() {
