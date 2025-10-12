@@ -34,6 +34,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.commands.UnexecutableCommand;
+import org.eclipse.swt.widgets.Display;
 
 public class OperationHistoryCommandStack extends CommandStack {
 
@@ -319,7 +320,7 @@ public class OperationHistoryCommandStack extends CommandStack {
 
 			final int state = getCommandStackState(event);
 			if (state != 0) {
-				notifyListeners(getCommand(event.getOperation()), state);
+				Display.getDefault().execute(() -> notifyListeners(getCommand(event.getOperation()), state));
 			}
 			prevState = event.getEventType();
 			prevOperation = event.getOperation();
