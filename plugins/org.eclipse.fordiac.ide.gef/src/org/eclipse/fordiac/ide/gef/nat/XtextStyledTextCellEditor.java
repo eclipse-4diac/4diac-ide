@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
 import org.eclipse.jface.text.contentassist.ICompletionListener;
@@ -26,9 +28,10 @@ import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 	private EmbeddedEditor embeddedEditor;
 	private boolean proposalPopupOpen;
+	private final LibraryElementXtextDocumentUpdater updater = STAlgorithmEmbeddedEditorUtil
+			.getLibraryElementXtextDocumentUpdater();
 
 	protected XtextStyledTextCellEditor() {
-		super();
 	}
 
 	protected XtextStyledTextCellEditor(final boolean moveSelectionOnEnter) {
@@ -64,6 +67,10 @@ public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 				}
 			}
 		});
+		if (embeddedEditor.getDocument() instanceof final LibraryElementXtextDocument libDocument) {
+			updater.install(libDocument);
+			embeddedEditor.getViewer().getControl().addDisposeListener(event -> updater.uninstall());
+		}
 		return (StyledText) embeddedEditor.getViewer().getControl();
 	}
 

@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
@@ -38,6 +39,10 @@ final class STAlgorithmEmbeddedEditorUtil {
 
 	def static EmbeddedEditorFactory getEmbeddedEditorFactory() {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory)
+	}
+
+	def static LibraryElementXtextDocumentUpdater getLibraryElementXtextDocumentUpdater() {
+		return SERVICE_PROVIDER.get(LibraryElementXtextDocumentUpdater)
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, INamedElement element) {
