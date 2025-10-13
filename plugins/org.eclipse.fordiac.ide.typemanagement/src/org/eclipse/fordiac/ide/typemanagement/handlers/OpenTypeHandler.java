@@ -99,7 +99,7 @@ public class OpenTypeHandler extends AbstractHandler {
 	private static class TypeSearchDialog extends FilteredItemsSelectionDialog {
 
 		private final List<IProject> projects;
-		private final ResultListLabelProvider listLabelProvider = new ResultListLabelProvider();
+		private final ResultListLabelProvider listLabelProvider = new ResultListLabelProvider(true);
 		private String selectedProject = null;
 
 		public TypeSearchDialog(final Shell shell) {
@@ -265,7 +265,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			@Override
 			public StyledString getStyledText(final Object element) {
 				if (element instanceof final TypeEntry entry) {
-					return ResultListLabelProvider.getTypeEntryStyledText(entry);
+					return ResultListLabelProvider.getTypeEntryStyledText(entry, true);
 				}
 				if (element != null) {
 					return new StyledString(element.toString());
