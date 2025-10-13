@@ -142,6 +142,8 @@ public final class Messages extends NLS {
 	public static String MoveTypeToPackage_UpdateInstances;
 	public static String MoveTypeToPackage_NameChanged;
 	public static String MoveTypeToPackage_UpdateTypeEntryFile;
+	public static String CopyTypeToPackage_CompositeChangeName;
+	public static String FordiacCopyProcessor_Name;
 
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
