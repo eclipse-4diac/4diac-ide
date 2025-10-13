@@ -218,7 +218,7 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<String> getDependencies() {
-		if (manifest == null) {
+		if (manifest == null || manifest.getDependencies() == null) {
 			return IMPLICIT_DEPENDENCIES;
 		}
 		return Stream
@@ -228,7 +228,7 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<Required> getExternalDependencies() {
-		if (manifest == null) {
+		if (manifest == null || manifest.getDependencies() == null) {
 			return List.of();
 		}
 		return manifest.getDependencies().getRequired().stream()
