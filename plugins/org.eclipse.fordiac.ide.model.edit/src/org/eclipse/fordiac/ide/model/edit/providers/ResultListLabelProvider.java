@@ -15,6 +15,9 @@
 
 package org.eclipse.fordiac.ide.model.edit.providers;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -24,19 +27,21 @@ import org.eclipse.swt.graphics.Image;
 public class ResultListLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
 	private String[] searchString;
-
-	public ResultListLabelProvider(final String searchString) {
-		setSearchString(searchString);
-	}
+	private final boolean showFilePath;
 
 	public ResultListLabelProvider() {
+		this(false);
+	}
+
+	public ResultListLabelProvider(final boolean showFilePath) {
 		setSearchString(""); //$NON-NLS-1$
+		this.showFilePath = showFilePath;
 	}
 
 	@Override
 	public StyledString getStyledText(final Object element) {
 		if (element instanceof final TypeEntry entry) {
-			final StyledString styledString = getTypeEntryStyledText(entry);
+			final StyledString styledString = getTypeEntryStyledText(entry, showFilePath);
 
 			int lastIndex = 0;
 			for (final String searchStringElement : searchString) {
@@ -55,15 +60,33 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 		return new StyledString();
 	}
 
-	public static StyledString getTypeEntryStyledText(final TypeEntry entry) {
+	public static StyledString getTypeEntryStyledText(final TypeEntry entry, final boolean showFilePath) {
 		final StyledString styledString = new StyledString(entry.getTypeName());
 
 		final String packageName = entry.getPackageName();
 		if (!packageName.isEmpty()) {
 			styledString.append(" - " + packageName, StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
 		}
-		styledString.append(" - " + entry.getComment(), StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
+
+		if (showFilePath) {
+			addFilePath(styledString, entry.getFile(), packageName);
+		}
+
+		styledString.append(" - " + entry.getComment(), //$NON-NLS-1$
+				showFilePath ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
 		return styledString;
+	}
+
+	private static void addFilePath(final StyledString styledString, final IFile file, final String packageName) {
+		final String pathString;
+		final IPath filePath = file.getFullPath();
+		if (!packageName.isEmpty() && packageName.equalsIgnoreCase(PackageNameHelper.getPackageNameFromFile(file))) {
+			final int stripCount = packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER).length + 1;
+			pathString = filePath.removeLastSegments(stripCount).addTrailingSeparator().toOSString() + "..."; //$NON-NLS-1$
+		} else {
+			pathString = filePath.removeLastSegments(1).toOSString();
+		}
+		styledString.append(" - " + pathString, StyledString.QUALIFIER_STYLER); //$NON-NLS-1$
 	}
 
 	@Override
