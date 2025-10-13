@@ -31,7 +31,7 @@ public class GlobalConstantsEditor extends XtextTypeEditorPage implements STCore
 	protected void doSetInput(final IEditorInput input) throws CoreException {
 		super.doSetInput(input);
 		setPartName(Messages.GlobalConstantsEditor);
-		setTitleImage(FordiacImage.ICON_DATA_TYPE.getImage());
+		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
 	}
 
 	@Override

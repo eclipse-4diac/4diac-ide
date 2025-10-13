@@ -17,6 +17,7 @@
 			default="true"
 			extensions="gcf"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
+			icon="fordiacimage://ICON_GLOBAL_CONST"
 			name="%GlobalConstantsEditor">
 		</editor>
 		<editor
