@@ -124,12 +124,10 @@ public enum SystemManager {
 
 		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
 
-		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 		project.refreshLocal(IResource.DEPTH_ONE, monitor);
 		return project;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name,
 			final IProgressMonitor monitor) throws CoreException {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
@@ -156,7 +154,6 @@ public enum SystemManager {
 		return null;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
 		SystemEntry sysEntry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
@@ -166,7 +163,6 @@ public enum SystemManager {
 		return sysEntry != null ? sysEntry.getSystem() : null;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().stream().map(SystemEntry::getSystem)
 				.toList();

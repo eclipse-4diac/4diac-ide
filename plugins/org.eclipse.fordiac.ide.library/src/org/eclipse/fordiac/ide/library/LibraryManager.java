@@ -755,6 +755,8 @@ public enum LibraryManager {
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
+
+		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
 	}
 
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
