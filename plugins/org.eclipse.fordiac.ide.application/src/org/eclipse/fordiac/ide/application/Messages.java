@@ -101,8 +101,6 @@ public final class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
-	public static String FBMarker_ActivePredecessor;
-
 	public static String FBMarker_MarkAs;
 
 	public static String FBMarker_RemoveMarker;

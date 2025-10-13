@@ -46,8 +46,6 @@ import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.model.ui.widgets.GoIntoSubappSelectionEvent;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
-import org.eclipse.fordiac.util.marker.MarkerStore;
-import org.eclipse.fordiac.util.marker.MarkerStoreProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -78,9 +76,8 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 
-public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor
-		implements CommandStackEventListener, ITabbedPropertySheetPageContributor, IGotoMarker,
-		INavigationLocationProvider, IPersistableEditor, MarkerStoreProvider {
+public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEditor implements CommandStackEventListener,
+		ITabbedPropertySheetPageContributor, IGotoMarker, INavigationLocationProvider, IPersistableEditor {
 
 	private static final String TAG_BREADCRUMB_HIERACHY = "FORDIAC_BREADCRUMB_HIERACHY"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_ZOOM = "FORDIAC_GRAPHICAL_VIEWER_ZOOM"; //$NON-NLS-1$
@@ -94,16 +91,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	private IMemento memento;
 	// the last used (automatically triggered) connection layout command
 	private Command layoutCommand;
-
-	private MarkerStore store;
-
-	@Override
-	public MarkerStore getMarkerStore() {
-		if (store == null) {
-			store = new MarkerStore();
-		}
-		return store;
-	}
 
 	public BreadcrumbWidget getBreadcrumb() {
 		return breadcrumb;

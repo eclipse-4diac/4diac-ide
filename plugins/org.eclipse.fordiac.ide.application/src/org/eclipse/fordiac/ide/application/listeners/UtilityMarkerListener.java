@@ -14,32 +14,37 @@
 package org.eclipse.fordiac.ide.application.listeners;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
-import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.util.marker.MarkerStore;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.util.marker.MarkerDescriptor;
+import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
 
-public class PredecessorQualifiedNameListener extends QualNameChangeListener {
+public class UtilityMarkerListener extends QualNameChangeListener {
 
 	@Override
 	public void onCommandExecuted(final List<QualNameChange> qualNameChange) {
-		removeMarkerEntries(qualNameChange);
+		removeInvalidMarkers(qualNameChange);
 		super.onCommandExecuted(qualNameChange);
 	}
 
 	@Override
 	public void onCommandUndoExecuted(final List<QualNameChange> qualNameChange) {
-		removeMarkerEntries(qualNameChange);
+		removeInvalidMarkers(qualNameChange);
 		super.onCommandUndoExecuted(qualNameChange);
 	}
 
 	@Override
 	public void onCommandRedoExecuted(final List<QualNameChange> qualNameChange) {
-		removeMarkerEntries(qualNameChange);
+		removeInvalidMarkers(qualNameChange);
 		super.onCommandRedoExecuted(qualNameChange);
 	}
 
@@ -65,13 +70,35 @@ public class PredecessorQualifiedNameListener extends QualNameChangeListener {
 		// do nothing
 	}
 
-	private static void removeMarkerEntries(final List<QualNameChange> qualNameChange) {
-		// here the element already has a new URI
-		final MarkerStore store = MarkerStore.getStoreFromEditor().orElse(null);
-		if (store != null) {
-			qualNameChange.stream().map(QualNameChange::notifier)
-					.filter(s -> store.isMarkedElement(s.getQualifiedName()))
-					.forEach(s -> MarkPredecessorHandler.removePredecessor());
-		}
+	private static void removeInvalidMarkers(final List<QualNameChange> qualNameChange) {
+		final Set<String> oldQualNames = new HashSet<>();
+		qualNameChange.stream().map(QualNameChange::oldQualName).forEach(oldQualNames::add);
+		UtilityMarkerHelper.getAllUtilityMarkers().filter(m -> oldQualNames.contains(getLocation(m))).forEach(m -> {
+			try {
+				m.delete();
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		});
+
 	}
+
+	public static String getLocation(final IMarker m) {
+		if (m != null) {
+			try {
+				if (m.getType().equals(MarkerDescriptor.CONNECTION_SOURCE.ID())) {
+					final String containerLocation = m.getAttribute(IMarker.LOCATION, "");
+					final int lastDot = containerLocation.lastIndexOf('.');
+					if (lastDot != -1) {
+						return containerLocation.substring(0, lastDot);
+					}
+				}
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+			return m.getAttribute(IMarker.LOCATION, ""); //$NON-NLS-1$
+		}
+		return ""; //$NON-NLS-1$
+	}
+
 }

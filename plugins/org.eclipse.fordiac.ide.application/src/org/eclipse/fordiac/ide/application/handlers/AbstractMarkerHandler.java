@@ -15,17 +15,19 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.Optional;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.MarkerStore;
+import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -50,7 +52,7 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 			} else {
 				if (getDescriptor().isUnique()) {
 					// remove old element
-					getCurrentMarkedElement().ifPresent(this::removeElementMarker);
+					removeElementMarker(selectedElement);
 				}
 				markElement(selectedElement);
 			}
@@ -62,38 +64,36 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 
 	protected abstract GraphicalEditPart getValidSelectedElement(final ISelection selection);
 
-	protected Optional<GraphicalEditPart> getCurrentMarkedElement() {
-		final Optional<MarkerStore> store = getStore();
-		if (store.isPresent() && store.get().hasMarkerEntry(getDescriptor().ID())) {
-			return Optional.ofNullable(store.get().getMarkedEditPart(getDescriptor().ID()));
-		}
-		return Optional.empty();
-	}
-
-	protected static Optional<MarkerStore> getStore() {
-		return MarkerStore.getStoreFromEditor();
-	}
-
 	protected void markElement(final GraphicalEditPart ep) {
-		getStore().ifPresent(s -> {
-			s.storeEditPart(getDescriptor().ID(), ep);
-			GraphicalAnnotationStyles.setAnnotationFeedbackBorder(ep.getFigure(), getDescriptor().color());
-		});
+		if (ep.getModel() instanceof final EObject target) {
+			UtilityMarkerHelper.addElementMarker(getDescriptor(), getRootResource(ep), target);
+		}
 	}
 
 	protected void removeElementMarker(final GraphicalEditPart ep) {
-		getStore().ifPresent(s -> {
-			s.removeElementByID(getDescriptor().ID());
-			GraphicalAnnotationStyles.removeAnnotationBorders(ep.getFigure());
-		});
+		UtilityMarkerHelper.deleteElementMarker(getDescriptor(), getRootResource(ep));
+	}
+
+	protected static IResource getRootResource(final GraphicalEditPart ep) {
+		if ((ep.getModel() instanceof final FBNetworkElement fbne) && (fbne.getFbNetwork().getAutomationSystem()
+				.getTypeEntry().getFile() instanceof final IResource res)) {
+			return res;
+		}
+		if (ep.getModel() instanceof final IInterfaceElement elem && elem.getBlockFBNetworkElement() != null
+				&& elem.getBlockFBNetworkElement().getFbNetwork().getAutomationSystem().getTypeEntry()
+						.getFile() instanceof final IResource res) {
+			return res;
+		}
+		return null;
 	}
 
 	protected boolean isMarked(final GraphicalEditPart ep) {
-		final Optional<MarkerStore> store = getStore();
-		if ((ep.getModel() instanceof final EObject elem) && store.isPresent()) {
-			return store.get().isMarkedElement(getDescriptor().ID(), elem);
+		final IResource resource = getRootResource(ep);
+		if (resource == null) {
+			return false;
 		}
-		return false;
+		final EObject markedElement = UtilityMarkerHelper.getMarkedElement(getDescriptor(), resource);
+		return markedElement != null && EcoreUtil.equals(markedElement, (EObject) ep.getModel());
 	}
 
 	@Override
@@ -129,4 +129,5 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 			setBaseEnabled(false);
 		}
 	}
+
 }
