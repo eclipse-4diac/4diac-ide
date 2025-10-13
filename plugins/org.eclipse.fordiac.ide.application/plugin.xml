@@ -1957,8 +1957,8 @@
             type="java.lang.Object">
       </propertyTester>
   </extension>
-    <extension
-          point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
-          <listener class = "org.eclipse.fordiac.ide.application.listeners.PredecessorQualifiedNameListener"/>
-    </extension>
+  <extension
+  		point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
+   		<listener class = "org.eclipse.fordiac.ide.application.listeners.UtilityMarkerListener"/>
+  </extension>
 </plugin>

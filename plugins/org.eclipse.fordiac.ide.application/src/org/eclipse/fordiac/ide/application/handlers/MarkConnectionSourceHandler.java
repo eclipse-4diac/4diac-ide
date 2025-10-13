@@ -14,8 +14,6 @@
 
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.Optional;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
@@ -23,7 +21,7 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.MarkerStore;
+import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -49,19 +47,10 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 			return null;
 		}
 
-		final IInterfaceElement connectionSource = getMarkedElement();
-		if (connectionSource != null) {
+		if (UtilityMarkerHelper.getMarkedElement(getDescriptor(),
+				getRootResource(connectionTarget)) instanceof final IInterfaceElement connectionSource) {
 			HandlerHelper.getCommandStack(editor).execute(CreateSubAppCrossingConnectionsCommand
 					.createProcessBorderCrossingConnection(connectionSource, connectionTarget.getModel()));
-		}
-		return null;
-	}
-
-	private IInterfaceElement getMarkedElement() {
-		final Optional<MarkerStore> store = getStore();
-		if ((store.isPresent())
-				&& (store.get().getMarkedElement(getDescriptor().ID())) instanceof final IInterfaceElement ie) {
-			return ie;
 		}
 		return null;
 	}

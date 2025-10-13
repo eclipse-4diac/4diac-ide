@@ -96,6 +96,8 @@ public final class Messages extends NLS {
 	public static String PrintPreview_LABEL_Tile;
 	public static String SetProfileCommand_LABEL_SetProfile;
 
+	public static String UtilityMarker_ActiveMarker;
+
 	public static String ValidationJob_RefreshJobName;
 
 	public static String ValidationJob_ReloadJobName;
@@ -126,6 +128,7 @@ public final class Messages extends NLS {
 	public static String GraphicalViewerAnnotationModelEventDispatcher_Name;
 
 	public static String NatTable_Update_Failed;
+	
 
 	static {
 		// initialize resource bundle

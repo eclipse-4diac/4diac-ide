@@ -286,5 +286,15 @@
           layer="30"
           styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
     </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"
+          layer="5"
+          styler="org.eclipse.fordiac.ide.gef.annotation.UtilityMarkerAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"
+          layer="5"
+          styler="org.eclipse.fordiac.ide.gef.annotation.UtilityMarkerAnnotationStyler">
+    </style>
  </extension>
 </plugin>

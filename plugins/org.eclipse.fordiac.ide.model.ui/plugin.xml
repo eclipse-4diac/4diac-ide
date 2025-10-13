@@ -39,6 +39,18 @@
             name="org.eclipse.fordiac.ide.model.ui.annotation.info"
             super="org.eclipse.ui.workbench.texteditor.info">
       </type>
+      <type
+            markerSeverity="0"
+            markerType="org.eclipse.fordiac.ide.model.predecessor"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"
+            super="org.eclipse.ui.workbench.texteditor.info">
+      </type>
+      <type
+            markerSeverity="0"
+            markerType="org.eclipse.fordiac.ide.model.connectionSource"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"
+            super="org.eclipse.ui.workbench.texteditor.info">
+      </type>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

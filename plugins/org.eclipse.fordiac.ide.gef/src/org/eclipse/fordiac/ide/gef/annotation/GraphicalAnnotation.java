@@ -21,6 +21,9 @@ public abstract class GraphicalAnnotation {
 	public static final String TYPE_WARNING = "org.eclipse.fordiac.ide.model.ui.annotation.warning"; //$NON-NLS-1$
 	public static final String TYPE_INFO = "org.eclipse.fordiac.ide.model.ui.annotation.info"; //$NON-NLS-1$
 
+	public static final String TYPE_UTIL_PREDECESSOR = "org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"; //$NON-NLS-1$
+	public static final String TYPE_UTIL_CONNECTION_SRC = "org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"; //$NON-NLS-1$
+
 	private final String type;
 	private final Object target;
 
