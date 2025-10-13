@@ -498,6 +498,14 @@
          </enablement>
       </renameParticipant>
    </extension>
+   <extension point="org.eclipse.ltk.core.refactoring.copyParticipants">
+       <copyParticipant
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.CopyTypeParticipant"
+           id="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.copyTypeParticipant"
+           name="Copy Type Participant">
+           <enablement></enablement>
+       </copyParticipant>
+   </extension>
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
