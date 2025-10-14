@@ -322,10 +322,31 @@ public class OperationHistoryCommandStack extends CommandStack {
 			if (state != 0) {
 				Display.getDefault().execute(() -> notifyListeners(getCommand(event.getOperation()), state));
 			}
-			prevState = event.getEventType();
-			prevOperation = event.getOperation();
+			// do not update prevState and prevOperation for events about added, changed, or
+			// removed operations, in order to avoid false updates due to intermittent
+			// events, for example, when operations are removed during execute due to the
+			// history being full
+			if (!isOperationEvent(event)) {
+				prevState = event.getEventType();
+				prevOperation = event.getOperation();
+			}
 		}
 
+		/**
+		 * Check if the event is adding, changing, or removing an operation
+		 *
+		 * @param event The event
+		 * @return true if event is adding, changing, or removing an operation, false
+		 *         otherwise
+		 */
+		private boolean isOperationEvent(final OperationHistoryEvent event) {
+			return switch (event.getEventType()) {
+			case OperationHistoryEvent.OPERATION_ADDED, OperationHistoryEvent.OPERATION_CHANGED,
+					OperationHistoryEvent.OPERATION_REMOVED ->
+				true;
+			default -> false;
+			};
+		}
 	}
 
 }
