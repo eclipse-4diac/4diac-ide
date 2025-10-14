@@ -632,6 +632,13 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			// update the last modification stamp _after_ setting the type to ensure other
 			// readers see the new stamp only together with the new type
 			lastModificationTimestamp.set(modificationStamp);
+
+			// send out file content notifications to update editors
+			if (eNotificationRequired()) {
+				notifications = chainNotification(notifications,
+						new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
+								TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE_ID, null, null));
+			}
 		}
 		// dispatch notifications
 		if (notifications != null) {
