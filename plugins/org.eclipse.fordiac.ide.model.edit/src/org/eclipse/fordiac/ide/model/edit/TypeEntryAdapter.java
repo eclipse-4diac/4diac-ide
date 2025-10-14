@@ -95,18 +95,11 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 			return;
 		}
 
-		String feature = ""; //$NON-NLS-1$
-		if (notification.getFeature() instanceof final String string) {
-			feature = string;
+		if (!(notification.getFeature() instanceof final String feature)) {
+			return;
 		}
 
 		switch (feature) {
-		case TypeEntry.TYPE_ENTRY_TYPE_FEATURE:
-			// make sure type was reloaded and not just loaded
-			if (notification.getOldValue() != null) {
-				handleFileContentChange();
-			}
-			break;
 		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
 			handleFileContentChange();
 			break;

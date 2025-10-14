@@ -34,13 +34,12 @@ public class BulkEditorTypeEntryAdapter extends AbstractTypeEntryAdapter {
 	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 
-		String feature = ""; //$NON-NLS-1$
-		if (notification.getFeature() instanceof final String string) {
-			feature = string;
+		if (!(notification.getFeature() instanceof final String feature)) {
+			return;
 		}
 
 		// make sure type was reloaded and not just loaded
-		if (feature.equals(TypeEntry.TYPE_ENTRY_TYPE_FEATURE) && (notification.getOldValue() != null)) {
+		if (feature.equals(TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE)) {
 			if (notification.getNotifier() instanceof final TypeEntry tEntry) {
 				changedFiles.add(tEntry.getFile().getFullPath().toOSString());
 			}
