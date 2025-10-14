@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
@@ -92,19 +92,15 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
 
 		if (eChild instanceof final IInterfaceElement interfaceElement) {
-			for (final EObject eObject : result) {
-				if (eObject instanceof final FBNetworkElement element) {
-					createRenameInterfaceChanges(change, element, interfaceElement);
-				}
-			}
+			result.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
+					.forEach(element -> createRenameInterfaceChanges(change, element, interfaceElement));
 		}
-
 	}
 
-	private void createRenameInterfaceChanges(final CompositeChange change, final FBNetworkElement element,
+	private void createRenameInterfaceChanges(final CompositeChange change, final BlockFBNetworkElement element,
 			final IInterfaceElement interfaceElement) {
 		final String oldName = interfaceElement.getName();
-		change.add(new ReconnectPinChange(EcoreUtil.getURI(element), FBNetworkElement.class, newName, oldName));
+		change.add(new ReconnectPinChange(EcoreUtil.getURI(element), BlockFBNetworkElement.class, newName, oldName));
 	}
 
 	public static EObject getChildByURI(final EObject parent, final URI uri) {

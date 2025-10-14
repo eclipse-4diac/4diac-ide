@@ -34,6 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -72,11 +74,11 @@ final package class ExpressionAnnotations {
 	private new() {
 	}
 
-	def package static INamedElement getResultType(STBinaryExpression expr) { getResultType(expr, false) }
+	def package static LibraryElement getResultType(STBinaryExpression expr) { getResultType(expr, false) }
 
-	def package static INamedElement getDeclaredResultType(STBinaryExpression expr) { getResultType(expr, true) }
+	def package static LibraryElement getDeclaredResultType(STBinaryExpression expr) { getResultType(expr, true) }
 
-	def package static INamedElement getResultType(STBinaryExpression expr, boolean declared) {
+	def package static LibraryElement getResultType(STBinaryExpression expr, boolean declared) {
 		if (expr.op.comparison)
 			ElementaryTypes.BOOL // always return BOOL for comparison
 		else {
@@ -117,23 +119,23 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STUnaryExpression expr) { expr.expression?.resultType }
+	def package static LibraryElement getResultType(STUnaryExpression expr) { expr.expression?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STUnaryExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STUnaryExpression expr) {
 		expr.expression?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STMemberAccessExpression expr) { expr.member?.resultType }
+	def package static LibraryElement getResultType(STMemberAccessExpression expr) { expr.member?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STMemberAccessExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STMemberAccessExpression expr) {
 		expr.member?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STArrayAccessExpression expr) { getResultType(expr, false) }
+	def package static LibraryElement getResultType(STArrayAccessExpression expr) { getResultType(expr, false) }
 
-	def package static INamedElement getDeclaredResultType(STArrayAccessExpression expr) { getResultType(expr, true) }
+	def package static LibraryElement getDeclaredResultType(STArrayAccessExpression expr) { getResultType(expr, true) }
 
-	def package static INamedElement getResultType(STArrayAccessExpression expr, boolean declared) {
+	def package static LibraryElement getResultType(STArrayAccessExpression expr, boolean declared) {
 		val receiverType = declared ? expr.receiver?.declaredResultType : expr.receiver?.resultType
 		switch (receiverType) {
 			ArrayType:
@@ -148,7 +150,7 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STFeatureExpression expr) {
+	def package static LibraryElement getResultType(STFeatureExpression expr) {
 		switch (feature : expr.feature) {
 			STStandardFunction:
 				feature.javaMethod.inferReturnTypeFromDataTypes([switch (type: expr.expectedType) { DataType: type }], [
@@ -159,7 +161,7 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getDeclaredResultType(STFeatureExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STFeatureExpression expr) {
 		// mirror changes here in callaSTCoreScopeProvider.isApplicableForFeatureReference(IEObjectDescription)
 		switch (feature : expr.feature) {
 			VarDeclaration,
@@ -180,18 +182,18 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STBuiltinFeatureExpression expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STBuiltinFeatureExpression expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STBuiltinFeatureExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				if(expr.call) null else expr.eResource?.contents?.filter(FBType)?.head
 		}
 	}
 
-	def package static INamedElement getResultType(STMultibitPartialExpression expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STMultibitPartialExpression expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STMultibitPartialExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STMultibitPartialExpression expr) {
 		switch (expr.specifier) {
 			case null,
 			case X: ElementaryTypes.BOOL
@@ -202,7 +204,7 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STNumericLiteral expr) {
+	def package static LibraryElement getResultType(STNumericLiteral expr) {
 		expr.type ?: switch (result : expr.expectedType) {
 			DataType case result.isNumericValueValid(expr.value):
 				result
@@ -227,9 +229,9 @@ final package class ExpressionAnnotations {
 		} ?: getValueType(expr)
 	}
 
-	def package static INamedElement getDeclaredResultType(STNumericLiteral expr) { expr.type ?: getValueType(expr) }
+	def package static LibraryElement getDeclaredResultType(STNumericLiteral expr) { expr.type ?: getValueType(expr) }
 
-	def package static INamedElement getValueType(STNumericLiteral expr) {
+	def package static LibraryElement getValueType(STNumericLiteral expr) {
 		switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
@@ -242,32 +244,32 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STDateLiteral expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STDateLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STDateLiteral expr) { expr.type }
+	def package static LibraryElement getDeclaredResultType(STDateLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STTimeLiteral expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STTimeLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STTimeLiteral expr) { expr.type }
+	def package static LibraryElement getDeclaredResultType(STTimeLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STTimeOfDayLiteral expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STTimeOfDayLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STTimeOfDayLiteral expr) { expr.type }
+	def package static LibraryElement getDeclaredResultType(STTimeOfDayLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STDateAndTimeLiteral expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STDateAndTimeLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STDateAndTimeLiteral expr) { expr.type }
+	def package static LibraryElement getDeclaredResultType(STDateAndTimeLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STStringLiteral expr) {
+	def package static LibraryElement getResultType(STStringLiteral expr) {
 		expr.type ?: switch (result : expr.expectedType) {
 			DataType case result.isStringValueValid(expr.value): result
 			default: null
 		} ?: getValueType(expr)
 	}
 
-	def package static INamedElement getDeclaredResultType(STStringLiteral expr) { expr.type ?: getValueType(expr) }
+	def package static LibraryElement getDeclaredResultType(STStringLiteral expr) { expr.type ?: getValueType(expr) }
 
-	def package static INamedElement getValueType(STStringLiteral expr) {
+	def package static LibraryElement getValueType(STStringLiteral expr) {
 		if (expr.value.length == 1) {
 			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR
 		} else {
@@ -275,104 +277,104 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement getResultType(STEnumLiteral expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STEnumLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STEnumLiteral expr) { expr.value?.type }
+	def package static LibraryElement getDeclaredResultType(STEnumLiteral expr) { expr.value?.type }
 
-	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.argument?.resultType }
+	def package static LibraryElement getResultType(STCallUnnamedArgument arg) { arg.argument?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STCallUnnamedArgument arg) {
+	def package static LibraryElement getDeclaredResultType(STCallUnnamedArgument arg) {
 		arg.argument?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STCallNamedInputArgument arg) { arg.argument?.resultType }
+	def package static LibraryElement getResultType(STCallNamedInputArgument arg) { arg.argument?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STCallNamedInputArgument arg) {
+	def package static LibraryElement getDeclaredResultType(STCallNamedInputArgument arg) {
 		arg.argument?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STCallNamedOutputArgument arg) { arg.argument?.resultType }
+	def package static LibraryElement getResultType(STCallNamedOutputArgument arg) { arg.argument?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STCallNamedOutputArgument arg) {
+	def package static LibraryElement getDeclaredResultType(STCallNamedOutputArgument arg) {
 		arg.argument?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STElementaryInitializerExpression expr) { expr.value?.resultType }
+	def package static LibraryElement getResultType(STElementaryInitializerExpression expr) { expr.value?.resultType }
 
-	def package static INamedElement getDeclaredResultType(STElementaryInitializerExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STElementaryInitializerExpression expr) {
 		expr.value?.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STArrayInitializerExpression expr) {
+	def package static LibraryElement getResultType(STArrayInitializerExpression expr) {
 		expr.expectedType ?:
 			expr.values.map[resultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
 	}
 
-	def package static INamedElement getDeclaredResultType(STArrayInitializerExpression expr) {
+	def package static LibraryElement getDeclaredResultType(STArrayInitializerExpression expr) {
 		expr.expectedType ?:
 			expr.values.map[declaredResultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
 	}
 
-	def package static INamedElement getResultType(STSingleArrayInitElement expr) {
+	def package static LibraryElement getResultType(STSingleArrayInitElement expr) {
 		expr.initExpression.resultType
 	}
 
-	def package static INamedElement getDeclaredResultType(STSingleArrayInitElement expr) {
+	def package static LibraryElement getDeclaredResultType(STSingleArrayInitElement expr) {
 		expr.initExpression.declaredResultType
 	}
 
-	def package static INamedElement getResultType(STRepeatArrayInitElement expr) {
+	def package static LibraryElement getResultType(STRepeatArrayInitElement expr) {
 		expr.initExpressions.map[resultType].reduce[first, second|first.commonSupertype(second)]
 	}
 
-	def package static INamedElement getDeclaredResultType(STRepeatArrayInitElement expr) {
+	def package static LibraryElement getDeclaredResultType(STRepeatArrayInitElement expr) {
 		expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
 	}
 
-	def package static INamedElement getResultType(STStructInitializerExpression expr) {
+	def package static LibraryElement getResultType(STStructInitializerExpression expr) {
 		getDeclaredResultType(expr) ?: expr.expectedType
 	}
 
-	def package static INamedElement getDeclaredResultType(STStructInitializerExpression expr) { expr.type }
+	def package static LibraryElement getDeclaredResultType(STStructInitializerExpression expr) { expr.type }
 
-	def package static INamedElement getResultType(STStructInitElement expr) { getDeclaredResultType(expr) }
+	def package static LibraryElement getResultType(STStructInitElement expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getDeclaredResultType(STStructInitElement expr) { expr.variable.featureType }
+	def package static LibraryElement getDeclaredResultType(STStructInitElement expr) { expr.variable.featureType }
 
-	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedOutputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInOutArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInOutArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedOutputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<ITypedElement, STCallArgument> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInOutArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeInputParameters(arguments)
@@ -391,7 +393,7 @@ final package class ExpressionAnnotations {
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeOutputParameters(arguments)
@@ -412,7 +414,7 @@ final package class ExpressionAnnotations {
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
+	def package static Map<ITypedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.computeInOutParameters(arguments)
@@ -444,7 +446,7 @@ final package class ExpressionAnnotations {
 			emptyMap
 	}
 
-	def package static INamedElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
+	def package static LibraryElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
 		try {
 			val size = expr.values.map [
 				switch (it) {
@@ -461,7 +463,7 @@ final package class ExpressionAnnotations {
 		}
 	}
 
-	def package static INamedElement commonSupertype(INamedElement first, INamedElement second) {
+	def package static LibraryElement commonSupertype(LibraryElement first, LibraryElement second) {
 		if (first == second)
 			first
 		else if (first instanceof DataType) {

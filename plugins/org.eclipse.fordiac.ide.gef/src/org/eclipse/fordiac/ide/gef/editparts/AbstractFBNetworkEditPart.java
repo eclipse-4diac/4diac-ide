@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
+ * Copyright (c) 2016, 2025 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -28,9 +28,12 @@ import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -72,7 +75,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 		final GraphicalAnnotationModel annotationModel = FordiacAnnotationUtil.getAnnotationModel(this);
 		if (annotationModel != null) {
-			children.addAll(annotationModel.getAnnotations(getModel()));
+			annotationModel.getAnnotations(getModel()).stream().filter(GraphicalAnnotationStyles::hasAnnotationEditPart)
+					.forEachOrdered(children::add);
 		}
 
 		return children;
@@ -133,14 +137,15 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	 */
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
-		for (final FBNetworkElement element : getNetworkElements()) {
-			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements()).forEach(element -> {
+			final InterfaceList fbIinterface = element.getInterface();
+			fbIinterface.getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
-			element.getInterface().getInOutVars().stream().filter(di -> (di.isVisible() && di.getValue() != null))
+			fbIinterface.getInOutVars().stream().filter(di -> (di.isVisible() && di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
-			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
+			fbIinterface.getErrorMarker().stream().filter(er -> (er.getValue() != null))
 					.forEach(er -> valueElements.add(er.getValue()));
-		}
+		});
 		return valueElements;
 	}
 

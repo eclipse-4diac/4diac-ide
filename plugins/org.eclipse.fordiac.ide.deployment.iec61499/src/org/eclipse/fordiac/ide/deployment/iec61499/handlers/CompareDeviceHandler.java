@@ -102,15 +102,14 @@ public class CompareDeviceHandler extends AbstractHandler {
 					compareParameters(resOnlineData, resOfflineData);
 
 				} else {
-					System.out.println(
-							"No Resource: " + resOfflineData.getRes().getName() + " not found online to compare!");
+					FordiacLogHelper.logInfo(
+							"No Resource: " + resOfflineData.getRes().getName() + " not found online to compare!"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}
 	}
 
-	private void compareFBs(final ResourceDeploymentData offlineResource,
-			final ResourceDeploymentData onlineResource) {
+	private void compareFBs(final ResourceDeploymentData offlineResource, final ResourceDeploymentData onlineResource) {
 
 		onlineResource.getFbs().forEach(onlineFB -> {
 			if (offlineResource.getFbs().stream()
@@ -118,7 +117,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 							&& offlineFB.getPrefix().equals(onlineFB.getPrefix())
 							&& offlineFB.getFb().getType().equals(onlineFB.getFb().getType()))) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
-				.addFbs(onlineFB);
+						.addFbs(onlineFB);
 			}
 		});
 
@@ -128,7 +127,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 							&& onlineFB.getPrefix().equals(offlineFB.getPrefix())
 							&& onlineFB.getFb().getType().equals(offlineFB.getFb().getType()))) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
-				.addFbs(offlineFB);
+						.addFbs(offlineFB);
 			}
 		});
 	}
@@ -137,26 +136,24 @@ public class CompareDeviceHandler extends AbstractHandler {
 			final ResourceDeploymentData onlineResource) {
 
 		onlineResource.getConnections().forEach(onlineCon -> {
-			if (offlineResource.getConnections().stream()
-					.noneMatch(offlineCon -> offlineCon.getDestination().getName()
-							.equals(onlineCon.getDestination().getName())
-							&& offlineCon.getDestinationPrefix().equals(onlineCon.getDestinationPrefix())
-							&& offlineCon.getSource().getName().equals(onlineCon.getSource().getName())
-							&& offlineCon.getSourcePrefix().equals(onlineCon.getSourcePrefix()))) {
+			if (offlineResource.getConnections().stream().noneMatch(
+					offlineCon -> offlineCon.destination().getName().equals(onlineCon.destination().getName())
+							&& offlineCon.destinationPrefix().equals(onlineCon.destinationPrefix())
+							&& offlineCon.source().getName().equals(onlineCon.source().getName())
+							&& offlineCon.sourcePrefix().equals(onlineCon.sourcePrefix()))) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
-				.addConnections(onlineCon);
+						.addConnections(onlineCon);
 			}
 		});
 
 		offlineResource.getConnections().forEach(offlineCon -> {
 			if (onlineResource.getConnections().stream()
-					.noneMatch(onlineCon -> onlineCon.getDestination().getName()
-							.equals(offlineCon.getDestination().getName())
-							&& onlineCon.getDestinationPrefix().equals(offlineCon.getDestinationPrefix())
-							&& onlineCon.getSource().getName().equals(offlineCon.getSource().getName())
-							&& onlineCon.getSourcePrefix().equals(offlineCon.getSourcePrefix()))) {
+					.noneMatch(onlineCon -> onlineCon.destination().getName().equals(offlineCon.destination().getName())
+							&& onlineCon.destinationPrefix().equals(offlineCon.destinationPrefix())
+							&& onlineCon.source().getName().equals(offlineCon.source().getName())
+							&& onlineCon.sourcePrefix().equals(offlineCon.sourcePrefix()))) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
-				.addConnections(offlineCon);
+						.addConnections(offlineCon);
 			}
 		});
 	}
@@ -166,19 +163,19 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 		onlineResource.getParams().forEach(onlineParam -> {
 			if (offlineResource.getParams().stream()
-					.noneMatch(offlineParam -> offlineParam.getVar().equals(onlineParam.getVar())
-							&& offlineParam.getPrefix().equals(onlineParam.getPrefix()))) {
+					.noneMatch(offlineParam -> offlineParam.variable().equals(onlineParam.variable())
+							&& offlineParam.prefix().equals(onlineParam.prefix()))) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
-				.addParameter(onlineParam);
+						.addParameter(onlineParam);
 			}
 		});
 
 		offlineResource.getParams().forEach(offlineParam -> {
 			if (onlineResource.getParams().stream()
-					.noneMatch(onlineParam -> onlineParam.getVar().equals(offlineParam.getVar())
-							&& onlineParam.getPrefix().equals(offlineParam.getPrefix()))) {
+					.noneMatch(onlineParam -> onlineParam.variable().equals(offlineParam.variable())
+							&& onlineParam.prefix().equals(offlineParam.prefix()))) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
-				.addParameter(offlineParam);
+						.addParameter(offlineParam);
 			}
 		});
 	}
@@ -186,12 +183,12 @@ public class CompareDeviceHandler extends AbstractHandler {
 	private static Device getSelectedDevice(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof final StructuredSelection structuredSelection
-				&& !structuredSelection.toList().isEmpty()
-				&& ((StructuredSelection) selection).toList().size() == 1) {
+				&& !structuredSelection.toList().isEmpty() && ((StructuredSelection) selection).toList().size() == 1) {
 
 			if (((StructuredSelection) selection).toList().get(0) instanceof EditPart) {
 				return (Device) (((EditPart) ((StructuredSelection) selection).toList().get(0)).getModel());
-			} else if (((StructuredSelection) selection).toList() instanceof Device) {
+			}
+			if (((StructuredSelection) selection).toList() instanceof Device) {
 				return (Device) (((StructuredSelection) selection).toList().get(0));
 			}
 		}
@@ -235,21 +232,21 @@ public class CompareDeviceHandler extends AbstractHandler {
 
 	private void printDiffInConsole() {
 		differenceDataDeltaPlus.getResData().forEach(res -> {
-			System.out.println("== Resource: " + res.getRes().getName() + " (online)");
-			res.getFbs().forEach(fb -> System.out.println("++ fb: " + fb.getPrefix() + fb.getFb().getName()));
-			res.getConnections().forEach(con -> System.out
-					.println("++ con: " + con.getSourcePrefix() + con.getSource().getName() + " -> "
-							+ con.getDestinationPrefix() + con.getDestination().getName()));
-			res.getParams().forEach(con -> System.out.println("++ param: " + con.getPrefix() + con.getVar().getName()));
+			FordiacLogHelper.logInfo("== Resource: " + res.getRes().getName() + " (online)"); //$NON-NLS-1$ //$NON-NLS-2$
+			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("++ fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
+			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("++ con: " + con.sourcePrefix() //$NON-NLS-1$
+					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
+			res.getParams()
+					.forEach(con -> FordiacLogHelper.logInfo("++ param: " + con.prefix() + con.variable().getName())); //$NON-NLS-1$
 		});
 
 		differenceDataDeltaMinus.getResData().forEach(res -> {
-			System.out.println("== Resource: " + res.getRes().getName() + "(local)");
-			res.getFbs().forEach(fb -> System.out.println("-- fb: " + fb.getPrefix() + fb.getFb().getName()));
-			res.getConnections().forEach(con ->
-			System.out.println("-- con: " + con.getSourcePrefix() + con.getSource().getName() + " -> "
-					+ con.getDestinationPrefix() + con.getDestination().getName()));
-			res.getParams().forEach(con -> System.out.println("-- param: " + con.getPrefix() + con.getVar().getName()));
+			FordiacLogHelper.logInfo("== Resource: " + res.getRes().getName() + "(local)"); //$NON-NLS-1$ //$NON-NLS-2$
+			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("-- fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
+			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("-- con: " + con.sourcePrefix() //$NON-NLS-1$
+					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
+			res.getParams()
+					.forEach(con -> FordiacLogHelper.logInfo("-- param: " + con.prefix() + con.variable().getName())); //$NON-NLS-1$
 		});
 	}
 }

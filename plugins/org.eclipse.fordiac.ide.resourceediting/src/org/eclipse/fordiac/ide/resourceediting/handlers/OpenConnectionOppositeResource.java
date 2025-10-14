@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Primetals Technologies Germany GmbH
+ * Copyright (c) 2017, 2025 fortiss GmbH, Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -80,7 +80,7 @@ public class OpenConnectionOppositeResource extends AbstractHandler {
 	}
 
 	private static void openResource(final IInterfaceElement oppositeMappedIE) {
-		final Resource res = oppositeMappedIE.getFBNetworkElement().getResource();
+		final Resource res = oppositeMappedIE.getBlockFBNetworkElement().getResource();
 
 		if (null != res) {
 			final IEditorPart editor = OpenListenerManager.openEditor(res);

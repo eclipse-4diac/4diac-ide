@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -108,6 +108,15 @@ public interface LibraryElementFactory extends EFactory {
 	AttributeDeclaration createAttributeDeclaration();
 
 	/**
+	 * Returns a new object of class '<em>Automation System</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Automation System</em>'.
+	 * @generated
+	 */
+	AutomationSystem createAutomationSystem();
+
+	/**
 	 * Returns a new object of class '<em>Base FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -124,15 +133,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	BasicFBType createBasicFBType();
-
-	/**
-	 * Returns a new object of class '<em>Automation System</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Automation System</em>'.
-	 * @generated
-	 */
-	AutomationSystem createAutomationSystem();
 
 	/**
 	 * Returns a new object of class '<em>CFB Instance</em>'.
@@ -504,6 +504,15 @@ public interface LibraryElementFactory extends EFactory {
 	MappingTarget createMappingTarget();
 
 	/**
+	 * Returns a new object of class '<em>Member Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Member Var Declaration</em>'.
+	 * @generated
+	 */
+	MemberVarDeclaration createMemberVarDeclaration();
+
+	/**
 	 * Returns a new object of class '<em>Multiplexer</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -835,15 +844,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	VarConfigInstance createVarConfigInstance();
-
-	/**
-	 * Returns a new object of class '<em>Member Var Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Member Var Declaration</em>'.
-	 * @generated
-	 */
-	MemberVarDeclaration createMemberVarDeclaration();
 
 	/**
 	 * Returns the package supported by this factory.

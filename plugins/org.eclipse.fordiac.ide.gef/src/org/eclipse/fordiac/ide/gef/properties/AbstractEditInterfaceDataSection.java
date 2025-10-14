@@ -59,8 +59,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
-			return getInsertingIndex(interfaceElement, getDataList(interfaceList, isInput));
+			return getInsertingIndex(interfaceElement, getDataList(interfaceElement.getInterfaceList(), isInput));
 		}
 		return -1;
 	}

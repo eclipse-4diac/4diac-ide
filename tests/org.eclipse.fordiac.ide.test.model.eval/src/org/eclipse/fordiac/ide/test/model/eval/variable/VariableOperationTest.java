@@ -53,7 +53,7 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.model.eval.AbstractEvaluatorTest;
@@ -138,7 +138,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 				assertThrows(EvaluatorInitializerException.class,
 						() -> VariableOperations.newVariable("Test", directlyDerivedType4)).getMessage());
 		assertVariableEquals("Test", new FBValue(type), VariableOperations.newVariable("Test", type));
-		assertThrows(NullPointerException.class, () -> VariableOperations.newVariable("Test", (INamedElement) null));
+		assertThrows(NullPointerException.class, () -> VariableOperations.newVariable("Test", (LibraryElement) null));
 		assertThrows(UnsupportedOperationException.class,
 				() -> VariableOperations.newVariable("Test", HelperTypes.CDATA));
 	}
@@ -158,7 +158,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 		assertVariableEquals("Test", toDIntValue(42),
 				VariableOperations.newVariable("Test", directlyDerivedType1, "42"));
 		assertThrows(NullPointerException.class,
-				() -> VariableOperations.newVariable("Test", (INamedElement) null, ""));
+				() -> VariableOperations.newVariable("Test", (LibraryElement) null, ""));
 		assertThrows(UnsupportedOperationException.class,
 				() -> VariableOperations.newVariable("Test", HelperTypes.CDATA, ""));
 	}
@@ -184,7 +184,7 @@ class VariableOperationTest extends AbstractEvaluatorTest {
 				VariableOperations.newVariable("Test", type, new FBValue(type,
 						Map.of("DI1", toDIntValue(17), "DI2", toDIntValue(4), "DI3", toDIntValue(21)))));
 		assertThrows(NullPointerException.class,
-				() -> VariableOperations.newVariable("Test", (INamedElement) null, toDIntValue(0)));
+				() -> VariableOperations.newVariable("Test", (LibraryElement) null, toDIntValue(0)));
 		assertThrows(UnsupportedOperationException.class,
 				() -> VariableOperations.newVariable("Test", HelperTypes.CDATA, toDIntValue(0)));
 	}

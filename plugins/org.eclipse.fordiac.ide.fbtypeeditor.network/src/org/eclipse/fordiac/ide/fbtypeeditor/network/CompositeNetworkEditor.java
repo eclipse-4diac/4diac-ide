@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -27,12 +27,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -44,9 +42,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
@@ -57,7 +53,6 @@ import org.eclipse.ui.IEditorInput;
 
 public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEditorPart {
 
-	private CommandStack commandStack;
 	private TypeLibrary typeLib;
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
@@ -75,11 +70,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 		}
 	};
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
-	}
 
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
@@ -140,11 +130,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	public AutomationSystem getSystem() {
-		return null;
-	}
-
-	@Override
 	public void setInput(final IEditorInput input) {
 		checkEditorInput(input);
 		final boolean firstTime = getEditorInput() == null;
@@ -154,11 +139,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 			getModel().eAdapters().add(adapter);
 			configurePalette(getEditorInput());
 		}
-	}
-
-	@Override
-	protected DefaultEditDomain createEditDomain() {
-		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override

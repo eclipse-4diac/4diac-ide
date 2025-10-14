@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *  						Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -161,10 +162,10 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		addAttributes(fbnElement.getAttributes());
 
-		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
+		if (!isUntypedSubapp(fbnElement) && fbnElement instanceof final BlockFBNetworkElement blockFbnEl) {
 			// for untyped subapp initial values are stored in the vardeclarations
-			addParamsConfig(fbnElement.getInterface());
-			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
+			addParamsConfig(blockFbnEl.getInterface());
+			addErrorMarkerParamsConfig(blockFbnEl.getInterface().getErrorMarker());
 		}
 
 		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
@@ -268,7 +269,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && isExportableErrorMarker(endPoint.getFBNetworkElement())
+		return (endPoint != null) && isExportableErrorMarker(endPoint.getBlockFBNetworkElement())
 				&& (endPoint.eContainer() instanceof InterfaceList);
 	}
 
@@ -279,10 +280,10 @@ class FBNetworkExporter extends CommonElementExporter {
 	private String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
 			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if ((null != interfaceElement.getFBNetworkElement())
-				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
+		if ((null != interfaceElement.getBlockFBNetworkElement())
+				&& (interfaceElement.getBlockFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = getFBNElementName(interfaceElement.getFBNetworkElement()) + "."; ////$NON-NLS-1$
+			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
 		}
 
 		retVal += interfaceElement.getName();

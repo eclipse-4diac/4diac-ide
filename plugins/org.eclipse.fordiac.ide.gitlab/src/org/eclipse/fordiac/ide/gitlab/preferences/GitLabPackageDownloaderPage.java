@@ -14,19 +14,19 @@ package org.eclipse.fordiac.ide.gitlab.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gitlab.Messages;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class GitLabPackageDownloaderPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public GitLabPackageDownloaderPage() {
 		super(GRID);
 		setPreferenceStore(
-				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.P_GITLAB_PREFERENCE_ID));
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.P_GITLAB_PREFERENCE_ID));
 	}
 
 	/**

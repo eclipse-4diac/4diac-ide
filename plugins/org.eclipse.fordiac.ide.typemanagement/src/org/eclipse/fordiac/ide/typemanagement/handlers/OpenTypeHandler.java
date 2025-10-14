@@ -99,7 +99,7 @@ public class OpenTypeHandler extends AbstractHandler {
 	private static class TypeSearchDialog extends FilteredItemsSelectionDialog {
 
 		private final List<IProject> projects;
-		private final ResultListLabelProvider listLabelProvider = new ResultListLabelProvider();
+		private final ResultListLabelProvider listLabelProvider = new ResultListLabelProvider(true);
 		private String selectedProject = null;
 
 		public TypeSearchDialog(final Shell shell) {
@@ -243,8 +243,8 @@ public class OpenTypeHandler extends AbstractHandler {
 
 			@Override
 			public boolean equalsFilter(final ItemsFilter filter) {
-				if (filter instanceof final TypeEntryFilter typeEntryFilter
-						&& typeEntryFilter.selectedProject != selectedProject) {
+				if (filter instanceof final TypeEntryFilter typeEntryFilter && typeEntryFilter.selectedProject != null
+						&& !typeEntryFilter.selectedProject.equals(selectedProject)) {
 					return false;
 				}
 				return super.equalsFilter(filter);
@@ -252,8 +252,8 @@ public class OpenTypeHandler extends AbstractHandler {
 
 			@Override
 			public boolean isSubFilter(final ItemsFilter filter) {
-				if (filter instanceof final TypeEntryFilter typeEntryFilter
-						&& typeEntryFilter.selectedProject != selectedProject) {
+				if (filter instanceof final TypeEntryFilter typeEntryFilter && typeEntryFilter.selectedProject != null
+						&& !typeEntryFilter.selectedProject.equals(selectedProject)) {
 					return false;
 				}
 				return super.isSubFilter(filter);
@@ -265,7 +265,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			@Override
 			public StyledString getStyledText(final Object element) {
 				if (element instanceof final TypeEntry entry) {
-					return ResultListLabelProvider.getTypeEntryStyledText(entry);
+					return ResultListLabelProvider.getTypeEntryStyledText(entry, true);
 				}
 				if (element != null) {
 					return new StyledString(element.toString());

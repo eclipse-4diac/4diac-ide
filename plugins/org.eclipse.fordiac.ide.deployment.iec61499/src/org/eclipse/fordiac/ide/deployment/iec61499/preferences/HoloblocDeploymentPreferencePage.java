@@ -15,11 +15,11 @@ package org.eclipse.fordiac.ide.deployment.iec61499.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.deployment.iec61499.Messages;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class HoloblocDeploymentPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -28,7 +28,7 @@ public class HoloblocDeploymentPreferencePage extends FieldEditorPreferencePage 
 	 */
 	public HoloblocDeploymentPreferencePage() {
 		super(GRID);
-		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				IEC61499PreferenceConstants.DEPLOYMENT_IEC61499_PREFERENCES_ID));
 		setDescription(Messages.HoloblocDeploymentPreferences_PreferencePageDescription);
 	}

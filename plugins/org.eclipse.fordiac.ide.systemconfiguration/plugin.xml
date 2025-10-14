@@ -69,6 +69,7 @@
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
+               enablesFor="1"
                id="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
                tab="org.eclipse.fordiac.ide.device.propertyAppearanceTab">
             <input

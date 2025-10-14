@@ -68,10 +68,7 @@ public class ECCRootEditPart extends AbstractDiagramEditPart {
 				public void notifyChanged(final Notification notification) {
 					final int type = notification.getEventType();
 					switch (type) {
-					case Notification.ADD:
-					case Notification.ADD_MANY:
-					case Notification.REMOVE:
-					case Notification.REMOVE_MANY:
+					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
 						refreshChildren();
 						break;
 					default:

@@ -194,10 +194,6 @@ public final class Messages extends NLS {
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
 
-	public static String DeleteLibraryParticipant_Name;
-	public static String DeleteLibraryParticipant_Change_Title;
-	public static String AddLibraryDependency_Change_Title;
-
 	public static String SafeStructDeletionChange_RootNodeChangeText;
 
 	public static String UpdateUntypedSubappPinChange_0;

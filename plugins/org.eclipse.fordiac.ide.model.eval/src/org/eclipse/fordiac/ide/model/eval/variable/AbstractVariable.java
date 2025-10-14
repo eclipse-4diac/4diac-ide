@@ -19,16 +19,16 @@ import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.value.TypedValue;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	private final String name;
-	private final INamedElement type;
+	private final LibraryElement type;
 
-	protected AbstractVariable(final String name, final INamedElement type) {
+	protected AbstractVariable(final String name, final LibraryElement type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -54,7 +54,7 @@ public abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	}
 
 	@Override
-	public INamedElement getType() {
+	public LibraryElement getType() {
 		return type;
 	}
 

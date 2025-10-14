@@ -42,6 +42,7 @@ public class FordiacNature implements IProjectNature {
 
 	public static final int MISSING_XTEXT_NATURE = 1;
 	public static final int MISSING_EXPORT_BUILDER = 2;
+	public static final int MISSING_LIBRARY_BUILDER = 3;
 
 	/** The project. */
 	private IProject project;
@@ -54,6 +55,7 @@ public class FordiacNature implements IProjectNature {
 		final IProjectDescription description = project.getDescription();
 		boolean changed = false;
 		changed |= configureXtextNature(description);
+		changed |= configureLibraryBuilder(description);
 		changed |= configureExportBuilder(description);
 		if (changed) {
 			project.setDescription(description, null);
@@ -66,7 +68,7 @@ public class FordiacNature implements IProjectNature {
 	@Override
 	public void deconfigure() throws CoreException {
 		final IProjectDescription description = project.getDescription();
-		if (deconfigureExportBuilder(description)) {
+		if (deconfigureLibraryBuilder(description) || deconfigureExportBuilder(description)) {
 			project.setDescription(description, null);
 		}
 		project.deleteMarkers(FordiacErrorMarker.PROBLEM_MARKER, true, IResource.DEPTH_INFINITE);
@@ -107,6 +109,30 @@ public class FordiacNature implements IProjectNature {
 		return false;
 	}
 
+	public static boolean configureLibraryBuilder(final IProjectDescription description) {
+		final ICommand[] commands = description.getBuildSpec();
+		if (Stream.of(commands).noneMatch(FordiacNature::isLibraryBuilderCommand)) {
+			final ICommand[] newCommands = Arrays.copyOf(commands, commands.length + 1);
+			final ICommand command = description.newCommand();
+			command.setBuilderName(SystemManager.FORDIAC_LIBRARY_BUILDER_ID);
+			newCommands[commands.length] = command;
+			description.setBuildSpec(newCommands);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean deconfigureLibraryBuilder(final IProjectDescription description) {
+		final ICommand[] commands = description.getBuildSpec();
+		final ICommand[] newCommands = Stream.of(commands).filter(Predicate.not(FordiacNature::isLibraryBuilderCommand))
+				.toArray(ICommand[]::new);
+		if (newCommands.length != commands.length) {
+			description.setBuildSpec(newCommands);
+			return true;
+		}
+		return false;
+	}
+
 	public void validate() throws CoreException {
 		final List<ErrorMarkerBuilder> builders = new ArrayList<>();
 		if (!project.hasNature(XtextProjectHelper.NATURE_ID)) {
@@ -117,6 +143,16 @@ public class FordiacNature implements IProjectNature {
 					.setLocation(Messages.FordiacNature_Location).setSource(getClass().getName())
 					.setCode(MISSING_XTEXT_NATURE));
 		}
+
+		if (!hasProjectBuilderCommands()) {
+			builders.add(ErrorMarkerBuilder
+					.createErrorMarkerBuilder(
+							MessageFormat.format(Messages.FordiacNature_MissingLibraryBuilder, project.getName()))
+					.setType(FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER)
+					.setLocation(Messages.FordiacNature_Location).setSource(getClass().getName())
+					.setCode(MISSING_LIBRARY_BUILDER));
+		}
+
 		if (!hasExportBuilderCommand()) {
 			builders.add(ErrorMarkerBuilder
 					.createErrorMarkerBuilder(
@@ -125,6 +161,7 @@ public class FordiacNature implements IProjectNature {
 					.setLocation(Messages.FordiacNature_Location).setSource(getClass().getName())
 					.setCode(MISSING_EXPORT_BUILDER));
 		}
+
 		FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER, builders, true);
 	}
 
@@ -134,6 +171,14 @@ public class FordiacNature implements IProjectNature {
 
 	protected static boolean isExportBuilderCommand(final ICommand command) {
 		return SystemManager.FORDIAC_EXPORT_BUILDER_ID.equals(command.getBuilderName());
+	}
+
+	public boolean hasProjectBuilderCommands() throws CoreException {
+		return Stream.of(project.getDescription().getBuildSpec()).anyMatch(FordiacNature::isLibraryBuilderCommand);
+	}
+
+	protected static boolean isLibraryBuilderCommand(final ICommand command) {
+		return SystemManager.FORDIAC_LIBRARY_BUILDER_ID.equals(command.getBuilderName());
 	}
 
 	/**

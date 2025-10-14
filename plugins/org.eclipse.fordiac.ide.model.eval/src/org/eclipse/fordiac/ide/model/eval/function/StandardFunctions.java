@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2022, 2025 Martin Erich Jobst,
  *                          Primetals Technologies Austria GmbH
+ *                          Monika Wenger
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *   Martin Melik Merkumians - added some functions, fixes CONCAT_DATE_LTOD to
  *   	CONCAT_LDATE_LTOD
  *   Hesam Rezaee - add Hovering features
+ *   Monika Wenger - add ANY_AS_STRING
  *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.function;
@@ -2493,6 +2495,11 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* string conversions */
+	@Comment("Converts ANY to STRING value.")
+	static <T extends AnyValue> StringValue AS_STRING(final T value) {
+		return StringValue.toStringValue(value.toString());
+	}
+
 	@Comment("Converts Real to STRING value.")
 	static StringValue REAL_AS_STRING(final RealValue value) {
 		return StringValue.toStringValue(value.toString());

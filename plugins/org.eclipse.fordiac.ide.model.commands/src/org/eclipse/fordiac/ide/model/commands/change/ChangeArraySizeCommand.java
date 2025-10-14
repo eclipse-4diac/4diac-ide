@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 TU Wien ACIN, fortiss GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2012, 2025 TU Wien ACIN, fortiss GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,7 +33,8 @@ public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementComman
 
 	public static ChangeArraySizeCommand forArraySize(final VarDeclaration variable, final String newArraySize) {
 		final ChangeArraySizeCommand result = new ChangeArraySizeCommand(variable, newArraySize);
-		if (variable != null && variable.getFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
+		if (variable != null && variable.getBlockFBNetworkElement() instanceof final SubApp subApp
+				&& subApp.isMapped()) {
 			result.getAdditionalCommands().add(new ChangeArraySizeCommand(
 					subApp.getOpposite().getInterface().getVariable(variable.getName()), newArraySize));
 		}

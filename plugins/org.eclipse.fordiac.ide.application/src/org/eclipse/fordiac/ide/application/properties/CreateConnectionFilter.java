@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,14 +20,14 @@ public class CreateConnectionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if (toTest instanceof EditPart) {
-			toTest = ((EditPart) toTest).getModel();
+		if (toTest instanceof final EditPart ep) {
+			toTest = ep.getModel();
 		}
-		if (toTest instanceof IInterfaceElement) {
-			final IInterfaceElement ie = (IInterfaceElement) toTest;
-			if (ie.getFBNetworkElement() != null) {
-				// if the interface element is part of typed instance we can not create a connection to it.
-				return !ie.getFBNetworkElement().isContainedInTypedInstance();
+		if (toTest instanceof final IInterfaceElement ie) {
+			if (ie.getBlockFBNetworkElement() != null) {
+				// if the interface element is part of typed instance we can not create a
+				// connection to it.
+				return !ie.getBlockFBNetworkElement().isContainedInTypedInstance();
 			}
 			return true;
 		}

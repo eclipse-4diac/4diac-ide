@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,7 +50,7 @@ public class RepairBrokenConnectionHandler extends AbstractHandler {
 		if (sel instanceof final IStructuredSelection ssel && ssel.getFirstElement() instanceof final EditPart part
 				&& part.getModel() instanceof final ErrorMarkerInterface errormarker) {
 			final RepairBrokenConnectionWizardPage repairPage = new RepairBrokenConnectionWizardPage(
-					errormarker.getFBNetworkElement().getTypeLibrary(), errormarker.getType());
+					errormarker.getBlockFBNetworkElement().getTypeLibrary(), errormarker.getType());
 			final Wizard wiz = new Wizard() {
 
 				@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Patrick Aigner
- *    - initial API and implementation and/or initial documentation
+ *   Patrick Aigner - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
@@ -23,8 +22,8 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -33,12 +32,12 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Image;
 
-public class BestFitFBMarkerResolution extends AbstractCommandMarkerResolution<FBNetworkElement> {
+public class BestFitFBMarkerResolution extends AbstractCommandMarkerResolution<BlockFBNetworkElement> {
 
 	private final TypeEntry selectedEntry;
 
 	public BestFitFBMarkerResolution(final IMarker marker, final TypeEntry entry) {
-		super(marker, FBNetworkElement.class);
+		super(marker, BlockFBNetworkElement.class);
 		selectedEntry = entry;
 	}
 
@@ -48,7 +47,7 @@ public class BestFitFBMarkerResolution extends AbstractCommandMarkerResolution<F
 	}
 
 	@Override
-	protected Command createCommand(final FBNetworkElement element, final IProgressMonitor monitor)
+	protected Command createCommand(final BlockFBNetworkElement element, final IProgressMonitor monitor)
 			throws CoreException {
 		return switch (element) {
 		case final FB fb when fb.eContainer() instanceof final BaseFBType base && base.getInternalFbs().contains(fb) ->

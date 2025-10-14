@@ -70,7 +70,6 @@ import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.DragTracker;
@@ -90,6 +89,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class ConnectionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 	private IPreferenceStore store;
@@ -360,8 +360,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
-					UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID);
+			store = new ScopedPreferenceStore(InstanceScope.INSTANCE, UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID);
 			store.addPropertyChangeListener(propertyChangeListener);
 			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 			getModel().eAdapters().add(getContentAdapter());

@@ -44272,13 +44272,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
             // InternalGlobalConstantsParser.g:13493:3: ( ruleSTAnyType )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0()); 
+               before(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0()); 
             }
             // InternalGlobalConstantsParser.g:13494:3: ( ruleSTAnyType )
             // InternalGlobalConstantsParser.g:13495:4: ruleSTAnyType
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_5_0_1()); 
+               before(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_5_0_1()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTAnyType();
@@ -44286,13 +44286,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_5_0_1()); 
+               after(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_5_0_1()); 
             }
 
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0()); 
+               after(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0()); 
             }
 
             }
@@ -44713,13 +44713,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
             // InternalGlobalConstantsParser.g:13644:3: ( ruleSTAnyType )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0()); 
+               before(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0()); 
             }
             // InternalGlobalConstantsParser.g:13645:3: ( ruleSTAnyType )
             // InternalGlobalConstantsParser.g:13646:4: ruleSTAnyType
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_2_0_1()); 
+               before(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_2_0_1()); 
             }
             pushFollow(FOLLOW_2);
             ruleSTAnyType();
@@ -44727,13 +44727,13 @@ public class InternalGlobalConstantsParser extends AbstractInternalContentAssist
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementSTAnyTypeParserRuleCall_2_0_1()); 
+               after(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeSTAnyTypeParserRuleCall_2_0_1()); 
             }
 
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0()); 
+               after(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0()); 
             }
 
             }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+      		id="org.eclipse.fordiac.ide.debug.replaydebugging.tabgroup"
+            type="org.eclipse.fordiac.ide.debug.replaydebugging.launchConfigurationType"
+            class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.LaunchConfigurationTabGroup">
+      </launchConfigurationTabGroup>
+   </extension>
+
+   <extension point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"
+            icon="icons/replay_debugging.png"
+            id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"
+            name="%view.name">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.debug.replaydebugging.launchConfigurationType"
+            icon="icons/replay_debugging.png"
+            id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.launchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+</plugin>

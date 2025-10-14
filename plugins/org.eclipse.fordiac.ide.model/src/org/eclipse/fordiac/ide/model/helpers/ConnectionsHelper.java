@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2017, 2025 fortiss GmbH, Primetals Technologies Germany GmbH,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,14 +16,14 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public final class ConnectionsHelper {
 
 	public static EList<Connection> getConnections(final IInterfaceElement oppositeIE) {
-		final IInterfaceElement fbOppostiteIE = oppositeIE.getFBNetworkElement().getOpposite()
+		final IInterfaceElement fbOppostiteIE = oppositeIE.getBlockFBNetworkElement().getOpposite()
 				.getInterfaceElement(oppositeIE.getName());
 
 		if (null != fbOppostiteIE) {
@@ -35,15 +35,16 @@ public final class ConnectionsHelper {
 
 	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie,
 			final Connection connection) {
-		final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite()
+		final IInterfaceElement fbOppostiteIE = ie.getBlockFBNetworkElement().getOpposite()
 				.getInterfaceElement(ie.getName());
 
 		if (null != fbOppostiteIE) {
 			final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
 					: connection.getDestination();
 
-			if ((null != connectionOpposite) && connectionOpposite.getFBNetworkElement().isMapped()) {
-				final FBNetworkElement mappedOppositeElement = connectionOpposite.getFBNetworkElement().getOpposite();
+			if ((null != connectionOpposite) && connectionOpposite.getBlockFBNetworkElement().isMapped()) {
+				final BlockFBNetworkElement mappedOppositeElement = connectionOpposite.getBlockFBNetworkElement()
+						.getOpposite();
 				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
 			}
 
@@ -56,10 +57,10 @@ public final class ConnectionsHelper {
 			final IInterfaceElement source = connection.getSource();
 			final IInterfaceElement dest = connection.getDestination();
 
-			if (null != source && null != source.getFBNetworkElement() && null != dest
-					&& null != dest.getFBNetworkElement()) {
-				final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
-				final FBNetworkElement opDestination = dest.getFBNetworkElement().getOpposite();
+			if (null != source && null != source.getBlockFBNetworkElement() && null != dest
+					&& null != dest.getBlockFBNetworkElement()) {
+				final BlockFBNetworkElement opSource = source.getBlockFBNetworkElement().getOpposite();
+				final BlockFBNetworkElement opDestination = dest.getBlockFBNetworkElement().getOpposite();
 				if (null != opSource && null != opDestination
 						&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
 					final IInterfaceElement opSourceIE = opSource.getInterfaceElement(source.getName());

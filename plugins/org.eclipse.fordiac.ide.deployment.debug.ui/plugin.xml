@@ -43,6 +43,18 @@
 				perspective="org.eclipse.debug.ui.DebugPerspective">
 			</launchMode>
 		</launchConfigurationTabGroup>
+		<launchConfigurationTabGroup
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentFBLaunchConfigurationTabGroup"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploySubAppLaunchConfigurationTabGroup"
+			type="org.eclipse.fordiac.ide.deployment.debug.deploySubAppLaunch">
+			<launchMode
+				mode="run">
+			</launchMode>
+			<launchMode
+				mode="debug"
+				perspective="org.eclipse.debug.ui.DebugPerspective">
+			</launchMode>
+		</launchConfigurationTabGroup>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchShortcuts">
@@ -143,6 +155,39 @@
 				</enablement>
 			</contextualLaunch>
 		</shortcut>
+		<shortcut
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.fb.DeploymentSubAppLaunchShortcut"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_subapplication_typed_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.deploySubAppLaunchShortcut"
+			label="%deploySubAppLaunchShortcut.label"
+			modes="run, debug">
+			<contextualLaunch>
+				<contextLabel
+					label="%deploySubAppLaunchShortcut.run.label"
+					mode="run">
+				</contextLabel>
+				<contextLabel
+					label="%deploySubAppLaunchShortcut.debug.label"
+					mode="debug">
+				</contextLabel>
+				<enablement>
+					<with
+						variable="selection">
+						<count
+							value="1">
+						</count>
+						<iterate>
+							<adapt
+								type="org.eclipse.core.resources.IResource">
+								<test property="org.eclipse.core.resources.extension"
+									value="sub">
+								</test>
+							</adapt>
+						</iterate>
+					</with>
+				</enablement>
+			</contextualLaunch>
+		</shortcut>
 	</extension>
 	<extension
 		point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -155,6 +200,11 @@
 			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
 			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_type_run.png"
 			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeployFB">
+		</launchConfigurationTypeImage>
+		<launchConfigurationTypeImage
+			configTypeID="org.eclipse.fordiac.ide.deployment.debug.deploySubAppLaunch"
+			icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_subapplication_typed_run.png"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.launchConfigurationTypeImageDeploySubApp">
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension
@@ -478,6 +528,12 @@
 							<instanceof
 								value="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
 							</instanceof>
+							<not>
+								<test
+									forcePluginActivation="true"
+									property="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration.inOutVar">
+								</test>
+							</not>
 						</adapt>
 					</iterate>
 				</with>
@@ -1136,22 +1192,32 @@
 			modelId="org.eclipse.fordiac.ide.deployment.debug.model">
 		</variableValueEditor>
 	</extension>
- <extension
-       point="org.eclipse.ui.propertyPages">
-    <page
-		category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
-		class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
-		id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
-		name="%properties.name">
-		<enabledWhen>
-	        <adapt
-	              type="org.eclipse.core.resources.IProject">
-	           <test
-	                 property="org.eclipse.core.resources.projectNature"
-	                 value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
-	           </test>
-	        </adapt>
-	    </enabledWhen>
-	</page>
- </extension>
+	<extension
+		point="org.eclipse.ui.propertyPages">
+		<page
+			category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.preferences.DeploymentDebugPreferencePage"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.properties"
+			name="%properties.name">
+			<enabledWhen>
+				<adapt
+					type="org.eclipse.core.resources.IProject">
+					<test
+						property="org.eclipse.core.resources.projectNature"
+						value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+					</test>
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.core.expressions.propertyTesters">
+		<propertyTester
+			class="org.eclipse.fordiac.ide.deployment.debug.ui.propertytester.VarDeclarationPropertyTester"
+			id="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration"
+			namespace="org.eclipse.fordiac.ide.deployment.debug.ui.varDeclaration"
+			properties="inOutVar"
+			type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+		</propertyTester>
+	</extension>
 </plugin>

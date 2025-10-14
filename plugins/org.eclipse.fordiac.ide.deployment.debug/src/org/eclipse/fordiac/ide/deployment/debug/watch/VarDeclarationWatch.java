@@ -35,13 +35,13 @@ public class VarDeclarationWatch extends AbstractRuntimeWatch implements IVarDec
 
 	public VarDeclarationWatch(final String name, final VarDeclaration varDeclaration,
 			final DeploymentDebugDevice debugTarget) throws EvaluatorException {
-		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
+		super(VariableOperations.newVariable(name, DeploymentDebugWatchUtils.evaluateWatchType(varDeclaration)),
 				varDeclaration, debugTarget);
 	}
 
 	public VarDeclarationWatch(final String name, final VarDeclaration varDeclaration, final Resource resource,
 			final String resourceRelativeName, final DeploymentDebugDevice debugTarget) throws EvaluatorException {
-		super(VariableOperations.newVariable(name, VariableOperations.evaluateResultType(varDeclaration)),
+		super(VariableOperations.newVariable(name, DeploymentDebugWatchUtils.evaluateWatchType(varDeclaration)),
 				varDeclaration, resource, resourceRelativeName, debugTarget);
 	}
 

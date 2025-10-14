@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,14 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 public class ErrorFBTypeEntryImpl extends FBTypeEntryImpl implements ErrorTypeEntry {
-	// marker class
+
+	@Override
+	public InterfaceList getInterface() {
+		return LibraryElementFactory.eINSTANCE.createInterfaceList();
+	}
 }

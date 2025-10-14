@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,7 +54,7 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command impl
 	}
 
 	protected boolean isSubAppPinAndConnected() {
-		return interfaceElement.getFBNetworkElement() instanceof SubApp
+		return interfaceElement.getBlockFBNetworkElement() instanceof SubApp
 				&& (!interfaceElement.getInputConnections().isEmpty()
 						|| !interfaceElement.getOutputConnections().isEmpty());
 	}

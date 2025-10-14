@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
 public interface TypeEntry extends Notifier {
 
@@ -35,6 +36,7 @@ public interface TypeEntry extends Notifier {
 	String TYPE_ENTRY_TYPE_EDITABLE_FEATURE = "TYPE_ENTRY_TYPE_EDITABLE_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_LIBRARY_FEATURE = "TYPE_ENTRY_TYPE_LIBRARY"; //$NON-NLS-1$
 	String TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE = "TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_INTERFACE_FEATURE = "TYPE_ENTRY_INTERFACE_FEATURE"; //$NON-NLS-1$
 
 	int TYPE_ENTRY_FILE_FEATURE_ID = 1;
 	int TYPE_ENTRY_FILE_CONTENT_FEATURE_ID = 2;
@@ -42,14 +44,11 @@ public interface TypeEntry extends Notifier {
 	int TYPE_ENTRY_TYPE_EDITABLE_FEATURE_ID = 4;
 	int TYPE_ENTRY_TYPE_LIBRARY_FEATURE_ID = 5;
 	int TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID = 6;
+	int TYPE_ENTRY_INTERFACE_FEATURE_ID = 7;
 
 	IFile getFile();
 
 	void setFile(IFile value);
-
-	long getLastModificationTimestamp();
-
-	void setLastModificationTimestamp(long value);
 
 	LibraryElement getType();
 
@@ -105,6 +104,8 @@ public interface TypeEntry extends Notifier {
 	}
 
 	Set<TypeEntry> getDependencies();
+
+	String getTypeHash() throws LibraryElementHashException;
 
 	void refresh();
 

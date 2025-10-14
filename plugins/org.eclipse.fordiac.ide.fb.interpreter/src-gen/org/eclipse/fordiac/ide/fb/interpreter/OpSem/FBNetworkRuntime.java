@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  * <em>Transfer Data</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTypeRuntimes
  * <em>Type Runtimes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getOuterNetworkRuntime
+ * <em>Outer Network Runtime</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBNetworkRuntime()
@@ -93,12 +95,27 @@ public interface FBNetworkRuntime extends FBRuntimeAbstract {
 	EMap<FBNetworkElement, FBRuntimeAbstract> getTypeRuntimes();
 
 	/**
+	 * Returns the value of the '<em><b>Outer Network Runtime</b></em>' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @model kind="operation" required="true"
+	 * @return the value of the '<em>Outer Network Runtime</em>' reference.
+	 * @see #setOuterNetworkRuntime(FBNetworkRuntime)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBNetworkRuntime_OuterNetworkRuntime()
+	 * @model
 	 * @generated
 	 */
-	@Override
-	FBNetwork getModel();
+	FBNetworkRuntime getOuterNetworkRuntime();
+
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getOuterNetworkRuntime
+	 * <em>Outer Network Runtime</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @param value the new value of the '<em>Outer Network Runtime</em>' reference.
+	 * @see #getOuterNetworkRuntime()
+	 * @generated
+	 */
+	void setOuterNetworkRuntime(FBNetworkRuntime value);
 
 } // FBNetworkRuntime

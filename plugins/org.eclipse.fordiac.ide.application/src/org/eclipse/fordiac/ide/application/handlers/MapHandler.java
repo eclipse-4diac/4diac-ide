@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -72,9 +73,9 @@ public class MapHandler extends AbstractHandler {
 		final ElementTreeSelectionDialog dialog = createDialog(shell, system, containsCommunicationMapping(fbelements));
 		if (Window.OK == dialog.open()) {
 			final Object firstResult = dialog.getFirstResult();
-			if (firstResult instanceof MappingTarget) {
+			if (firstResult instanceof final MappingTarget mapTarget) {
 				fbelements.forEach(fb -> {
-					final Command cmd = MapToCommand.createMapToCommand(fb, (MappingTarget) firstResult);
+					final Command cmd = MapToCommand.createMapToCommand(fb, mapTarget);
 					if (cmd.canExecute()) {
 						mapCommands.add(cmd);
 					}
@@ -114,8 +115,8 @@ public class MapHandler extends AbstractHandler {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof MappingTarget) {
-					return MappingAnnotations.getHierarchicalName((MappingTarget) element);
+				if (element instanceof final MappingTarget mapTarget) {
+					return MappingAnnotations.getHierarchicalName(mapTarget);
 				}
 				return super.getText(element);
 			}
@@ -138,8 +139,8 @@ public class MapHandler extends AbstractHandler {
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof EObject) {
-					return ((EObject) element).eContainer();
+				if (element instanceof final EObject eObj) {
+					return eObj.eContainer();
 				}
 				return null;
 			}
@@ -151,10 +152,9 @@ public class MapHandler extends AbstractHandler {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof EObject) {
+				if (parentElement instanceof final EObject eObj) {
 					if (mapCommunication) {
-						return MappingAnnotations.getContainedCommunicationMappingTargets((EObject) parentElement)
-								.toArray();
+						return MappingAnnotations.getContainedCommunicationMappingTargets(eObj).toArray();
 					}
 					return MappingAnnotations.getContainedMappingTargets((EObject) parentElement).toArray();
 				}
@@ -194,7 +194,8 @@ public class MapHandler extends AbstractHandler {
 
 	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {
 		for (final FBNetworkElement fb : fbs) {
-			if (fb.getOuterFBNetworkElement() instanceof SubApp || !fb.getInterface().getErrorMarker().isEmpty()
+			if (fb.getOuterFBNetworkElement() instanceof SubApp
+					|| !(fb instanceof final BlockFBNetworkElement bfb && bfb.getInterface().getErrorMarker().isEmpty())
 					|| fb.getTypeEntry() instanceof ErrorTypeEntry) {
 				return false;
 			}

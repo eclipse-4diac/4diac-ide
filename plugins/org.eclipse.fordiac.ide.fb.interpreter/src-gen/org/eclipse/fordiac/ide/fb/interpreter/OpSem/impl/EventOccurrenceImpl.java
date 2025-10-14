@@ -28,8 +28,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
@@ -138,7 +138,7 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 * @ordered
 	 */
-	protected FBNetworkElement parentFB;
+	protected BlockFBNetworkElement parentFB;
 
 	/**
 	 * The cached value of the '{@link #getResultFBRuntime() <em>Result FB
@@ -392,10 +392,10 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getParentFB() {
+	public BlockFBNetworkElement getParentFB() {
 		if (parentFB != null && parentFB.eIsProxy()) {
 			InternalEObject oldParentFB = (InternalEObject) parentFB;
-			parentFB = (FBNetworkElement) eResolveProxy(oldParentFB);
+			parentFB = (BlockFBNetworkElement) eResolveProxy(oldParentFB);
 			if (parentFB != oldParentFB) {
 				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -411,7 +411,7 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 *
 	 * @generated
 	 */
-	public FBNetworkElement basicGetParentFB() {
+	public BlockFBNetworkElement basicGetParentFB() {
 		return parentFB;
 	}
 
@@ -421,8 +421,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
-	public void setParentFB(FBNetworkElement newParentFB) {
-		FBNetworkElement oldParentFB = parentFB;
+	public void setParentFB(BlockFBNetworkElement newParentFB) {
+		BlockFBNetworkElement oldParentFB = parentFB;
 		parentFB = newParentFB;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -651,7 +651,7 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			getCreatedTransactions().addAll((Collection<? extends Transaction>) newValue);
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
-			setParentFB((FBNetworkElement) newValue);
+			setParentFB((BlockFBNetworkElement) newValue);
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
 			setResultFBRuntime((FBRuntimeAbstract) newValue);
@@ -689,7 +689,7 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			getCreatedTransactions().clear();
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
-			setParentFB((FBNetworkElement) null);
+			setParentFB((BlockFBNetworkElement) null);
 			return;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
 			setResultFBRuntime((FBRuntimeAbstract) null);

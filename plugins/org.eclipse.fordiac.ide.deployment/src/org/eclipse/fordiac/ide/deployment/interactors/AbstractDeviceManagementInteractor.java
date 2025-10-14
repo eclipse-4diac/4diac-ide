@@ -61,7 +61,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		for (final IDeploymentListener listener : listeners) {
 			listener.postCommandSent(info, destination, request); // do something with info
 		}
-		if (0 != response.length()) {
+		if (!response.isEmpty()) {
 			for (final IDeploymentListener listener : listeners) {
 				if (listener instanceof final IDeploymentListener2 listener2) {
 					listener2.postResponseReceived(info, request, response, destination);

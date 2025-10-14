@@ -25,7 +25,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -48,13 +48,13 @@ import org.eclipse.ui.menus.UIElement;
 public class MarkPredecessorHandler extends AbstractHandler implements IElementUpdater {
 
 	private static final String MARKER_COLOR = "org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"; //$NON-NLS-1$
-	private static Map<URI, AbstractFBNElementEditPart> predecessorMap = new HashMap<>();
+	private static Map<URI, AbstractBlockFBNElementEditPart> predecessorMap = new HashMap<>();
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 
-		final AbstractFBNElementEditPart ep = getValidSelectedFBNElement(selection);
+		final AbstractBlockFBNElementEditPart ep = getValidSelectedFBNElement(selection);
 
 		if (ep != null) {
 			// we don't need to check root here anymore as it is checked in the getter above
@@ -99,9 +99,9 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 		}
 	}
 
-	private static AbstractFBNElementEditPart getValidSelectedFBNElement(final ISelection selection) {
+	private static AbstractBlockFBNElementEditPart getValidSelectedFBNElement(final ISelection selection) {
 		if (selection instanceof final IStructuredSelection structSel
-				&& structSel.getFirstElement() instanceof final AbstractFBNElementEditPart ep
+				&& structSel.getFirstElement() instanceof final AbstractBlockFBNElementEditPart ep
 				&& ep.getRoot() instanceof FBNetworkRootEditPart) {
 			return ep;
 		}
@@ -109,8 +109,8 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 	}
 
 	public static void setPredecessor(final FBNetworkRootEditPart root,
-			final AbstractFBNElementEditPart predecessorEP) {
-		final AbstractFBNElementEditPart previousEntry = predecessorMap
+			final AbstractBlockFBNElementEditPart predecessorEP) {
+		final AbstractBlockFBNElementEditPart previousEntry = predecessorMap
 				.put(EcoreUtil.getURI(root.getAdapter(FBNetwork.class)), predecessorEP);
 		if (previousEntry != null) {
 			GraphicalAnnotationStyles.removeAnnotationBorders(previousEntry.getFigure());
@@ -128,13 +128,13 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 		setStatusLineMessage(""); //$NON-NLS-1$
 	}
 
-	public static AbstractFBNElementEditPart getPredecessor(final FBNetworkRootEditPart root) {
+	public static AbstractBlockFBNElementEditPart getPredecessor(final FBNetworkRootEditPart root) {
 		return predecessorMap.get(EcoreUtil.getURI(root.getAdapter(FBNetwork.class)));
 	}
 
 	public static boolean hasPredecessorMarker(final INamedElement element) {
 		if (element instanceof final FBNetworkElement fb) {
-			for (final Entry<URI, AbstractFBNElementEditPart> entry : predecessorMap.entrySet()) {
+			for (final Entry<URI, AbstractBlockFBNElementEditPart> entry : predecessorMap.entrySet()) {
 				if (entry.getValue() != null && entry.getValue().getModel().equals(fb)) {
 					return true;
 				}
@@ -143,7 +143,7 @@ public class MarkPredecessorHandler extends AbstractHandler implements IElementU
 		return false;
 	}
 
-	private static boolean isActivePredecessor(final AbstractFBNElementEditPart ep) {
+	private static boolean isActivePredecessor(final AbstractBlockFBNElementEditPart ep) {
 		if (ep.getRoot() instanceof final FBNetworkRootEditPart root) {
 			return getPredecessor(root) != null && getPredecessor(root).equals(ep);
 		}

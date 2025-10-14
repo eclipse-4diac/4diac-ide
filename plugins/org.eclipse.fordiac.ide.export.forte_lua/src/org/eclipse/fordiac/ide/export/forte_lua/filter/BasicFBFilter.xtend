@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2024 fortiss GmbH
+ * Copyright (c) 2015, 2025 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -151,7 +151,7 @@ class BasicFBFilter {
 		  «luaFBStateVariable» = «state.luaStateName»
 		  «FOR action : state.ECAction»
 		  	«IF null !== action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
-		  	«IF action.output.FBNetworkElement instanceof AdapterFB»
+		  	«IF action.output.blockFBNetworkElement instanceof AdapterFB»
 		  		«action.output?.luaSendAdapterOutputEvent»
 		  	«ELSE»	
 		  		«action.output?.luaSendOutputEvent»

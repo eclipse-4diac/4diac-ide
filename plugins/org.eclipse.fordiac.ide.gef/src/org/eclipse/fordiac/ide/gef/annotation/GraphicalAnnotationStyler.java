@@ -29,7 +29,11 @@ public interface GraphicalAnnotationStyler {
 
 	Image getOverlayImage(GraphicalAnnotation annotation);
 
+	default boolean hasEditPart(final GraphicalAnnotation annotation) {
+		return false;
+	}
+
 	default EditPart getEditPart(final GraphicalAnnotation annotation) {
-		return null;
+		throw new UnsupportedOperationException("No EditPart for annotation " + annotation); //$NON-NLS-1$
 	}
 }

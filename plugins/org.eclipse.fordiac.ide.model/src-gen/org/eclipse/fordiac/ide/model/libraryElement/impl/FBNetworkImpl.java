@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Collection;
 
 import java.util.Map;
+import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
@@ -31,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
@@ -296,6 +298,16 @@ public class FBNetworkImpl extends EObjectImpl implements FBNetwork {
 	@Override
 	public boolean validateCollisions(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkAnnotations.validateCollisions(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Stream<BlockFBNetworkElement> getBlockFBNetworkElements() {
+		return org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements());
 	}
 
 	/**

@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo
+ *   Alois Zoitl      - initial API and implementation and/or initial documentation
+ *                    - removed editor check from canUndo
  *   Daniel Lindhuber - added recursive type handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
@@ -27,6 +26,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -64,8 +64,10 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command
 
 	@Override
 	public void execute() {
-		element.setInterface(createInterfaceList());
-		if (element.getType() != null) {
+		if (element instanceof final BlockFBNetworkElement bfbEl) {
+			bfbEl.setInterface(createInterfaceList());
+		}
+		if (element.getTypeEntry() != null) {
 			AttributeInheritMode.copyAttributeValuesFromType(element);
 		}
 		element.setPosition(position);

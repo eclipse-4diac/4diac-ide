@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,13 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.eval.fb;
 
-import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public class DeploymentFunctionFBEvaluator extends DeploymentFBEvaluator<FunctionFBType> {
 
@@ -39,14 +37,5 @@ public class DeploymentFunctionFBEvaluator extends DeploymentFBEvaluator<Functio
 			return returnVariable != null ? returnVariable.getValue() : null;
 		}
 		return super.evaluate();
-	}
-
-	@Override
-	protected void updateWatch(final Port port) {
-		final IInterfaceElement element = getType().getInterfaceList().getInterfaceElement(port.getName());
-		if (element != null && element.isIsInput()) {
-			return; // ignore inputs
-		}
-		super.updateWatch(port);
 	}
 }

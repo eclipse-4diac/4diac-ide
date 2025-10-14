@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH,
+ * 							Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -59,14 +59,15 @@ public final class InitialValueHelper {
 	}
 
 	private static boolean hasDataTypeInitialValue(final VarDeclaration varDec) {
-		if (varDec.getFBNetworkElement() instanceof StructManipulator) {
+		if (varDec.getBlockFBNetworkElement() instanceof StructManipulator) {
 			return !getMemberVarValue(varDec).isBlank();
 		}
 		return false;
 	}
 
 	private static String getMemberVarValue(final VarDeclaration v) {
-		if ((v != null) && (v.getName() != null) && (v.getFBNetworkElement() instanceof final StructManipulator muxer)
+		if ((v != null) && (v.getName() != null)
+				&& (v.getBlockFBNetworkElement() instanceof final StructManipulator muxer)
 				&& (muxer.getDataType() instanceof final StructuredType structType)) {
 			final VarDeclaration matchingMember = structType.getMemberVariables().stream()
 					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);

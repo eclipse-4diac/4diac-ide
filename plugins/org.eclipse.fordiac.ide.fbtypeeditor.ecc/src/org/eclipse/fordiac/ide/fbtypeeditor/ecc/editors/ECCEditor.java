@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -54,7 +53,6 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -249,21 +247,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		}
 	}
 
-	private CommandStack commandStack;
-
 	@Override
 	protected DefaultEditDomain createEditDomain() {
-		return new ECCEditorEditDomain(this, commandStack);
+		return new ECCEditorEditDomain(this);
 	}
 
 	@Override
 	protected AdvancedPanningSelectionTool createDefaultTool() {
 		return new ECCEditorEditDomain.ECCPanningSelectionTool();
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override
@@ -285,11 +276,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		// we don't need an additional transferdroptarget listener
 		return null;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null; // this is currently needed as the base class is targeted for system editors
 	}
 
 	@Override

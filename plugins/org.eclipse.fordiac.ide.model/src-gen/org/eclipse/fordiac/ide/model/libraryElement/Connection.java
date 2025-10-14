@@ -162,7 +162,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	FBNetworkElement getSourceElement();
+	BlockFBNetworkElement getSourceElement();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,7 +170,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	FBNetworkElement getDestinationElement();
+	BlockFBNetworkElement getDestinationElement();
 
 	/**
 	 * <!-- begin-user-doc -->

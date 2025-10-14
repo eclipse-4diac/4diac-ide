@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- * Melanie Winter - initial API and implementation and/or initial documentation
+ *   Melanie Winter - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fb.interpreter.testappgen;
@@ -29,13 +29,13 @@ import org.eclipse.fordiac.ide.fb.interpreter.testcasemodel.TestSuite;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -116,7 +116,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	}
 
 	private void addTimeOutFB(final FBNetwork net, final FB fb, final int x, final int y) {
-		final FBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
+		final BlockFBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry(TestGenBlockNames.TIMEOUT_COMPOSITE_NAME);
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + (double) 200, y + (double) 150);

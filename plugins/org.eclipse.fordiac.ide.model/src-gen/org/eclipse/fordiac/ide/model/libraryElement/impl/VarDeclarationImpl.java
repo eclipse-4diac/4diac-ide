@@ -39,11 +39,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -615,6 +617,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
+	public boolean validateIllegalVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateIllegalVariableLengthArrayVariable(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateNoValueForVariableLengthArrayVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateNoValueForVariableLengthArrayVariable(this, diagnostics, context);
 	}
@@ -627,6 +639,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public boolean validateValueForGenericInstanceVariable(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueForGenericInstanceVariable(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateValueOverriddenBySubAppInput(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateValueOverriddenBySubAppInput(this, diagnostics, context);
 	}
 
 	/**
@@ -665,8 +687,18 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
+	public FBType getFBType() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InterfaceList getInterfaceList() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);
 	}
 
 	/**
@@ -676,7 +708,7 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 */
 	@Override
 	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
 		if(type != null){
 			return type.getName();
 		}
@@ -691,6 +723,26 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VarDeclaration findInTypeInterface() {
+		return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BlockFBNetworkElement getBlockFBNetworkElement() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockFBNetworkElement(this);
 	}
 
 	/**

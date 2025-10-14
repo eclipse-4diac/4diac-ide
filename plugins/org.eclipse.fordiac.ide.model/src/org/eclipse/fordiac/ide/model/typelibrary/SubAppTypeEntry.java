@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-public interface SubAppTypeEntry extends TypeEntry {
+public interface SubAppTypeEntry extends InterfaceTypeEntry {
 
 	@Override
 	SubAppType getType();

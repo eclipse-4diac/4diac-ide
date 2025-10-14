@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2024 Primemetals Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,7 +47,8 @@ public class SubappViewerEditPartFactory extends CompositeViewerEditPartFactory 
 
 	@Override
 	protected EditPart getPartForInterfaceElement(final EditPart context, final IInterfaceElement ie) {
-		if ((ie.getFBNetworkElement() instanceof UntypedSubApp) && (context instanceof SubAppForFBNetworkEditPart)) {
+		if ((ie.getBlockFBNetworkElement() instanceof UntypedSubApp)
+				&& (context instanceof SubAppForFBNetworkEditPart)) {
 			return new UntypedSubAppInterfaceElementEditPartRO();
 		}
 		return super.getPartForInterfaceElement(context, ie);

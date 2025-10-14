@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.RangeModel;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
@@ -37,17 +36,14 @@ import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -71,8 +67,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
-
-	private CommandStack commandStack;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
@@ -117,11 +111,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	}
 
 	@Override
-	protected DefaultEditDomain createEditDomain() {
-		return new FBTypeEditDomain(this, commandStack);
-	}
-
-	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		super.selectionChanged(part, selection);
 		// If not in FBTypeEditor ignore selection changed
@@ -163,11 +152,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override
@@ -237,12 +221,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	}
 
 	@Override
-	public AutomationSystem getSystem() {
-		// this is not needed for type editor
-		return null;
-	}
-
-	@Override
 	public void doSaveAs() {
 		// nothing to do here
 	}
@@ -259,9 +237,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			return null; // use outline page from FBTypeEditor
-		}
-		if (adapter == CommandStack.class) {
-			return adapter.cast(commandStack);
 		}
 		if (adapter == Service.class) {
 			return adapter.cast(getType().getService());

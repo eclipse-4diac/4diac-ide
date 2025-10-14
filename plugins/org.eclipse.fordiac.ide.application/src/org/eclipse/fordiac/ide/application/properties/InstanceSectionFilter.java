@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
 import org.eclipse.fordiac.ide.application.editparts.InstanceName;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -30,7 +31,7 @@ public class InstanceSectionFilter implements IFilter {
 		return getFBNetworkElementFromSelectedElement(toTest) != null;
 	}
 
-	static FBNetworkElement getFBNetworkElementFromSelectedElement(final Object element) {
+	static BlockFBNetworkElement getFBNetworkElementFromSelectedElement(final Object element) {
 		Object candidate = null;
 		if (element instanceof final EditPart editPart) {
 			candidate = editPart.getModel();
@@ -52,7 +53,7 @@ public class InstanceSectionFilter implements IFilter {
 			return null;
 		}
 
-		if (candidate instanceof final FBNetworkElement fbNetworkElement
+		if (candidate instanceof final BlockFBNetworkElement fbNetworkElement
 				&& isEditableFBNetworkElement(fbNetworkElement)) {
 			return fbNetworkElement;
 		}

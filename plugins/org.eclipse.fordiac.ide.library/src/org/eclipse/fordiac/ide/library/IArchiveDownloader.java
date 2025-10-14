@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.library;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -29,18 +31,21 @@ public interface IArchiveDownloader {
 	/**
 	 * Lists the available libraries
 	 *
+	 * @param monitor progress monitor, can be {@code null}
 	 * @return symbolic names of the available libraries
 	 */
-	DownloadResult<List<String>> availableLibraries();
+	DownloadResult<List<String>> availableLibraries(IProgressMonitor monitor) throws OperationCanceledException;
 
 	/**
 	 * Lists the available versions of a specific library
 	 *
 	 * @param symbolicName symbolic name of library
+	 * @param monitor      progress monitor, can be {@code null}
 	 * @return the available versions of the specified library, or an empty list if
 	 *         library is not available
 	 */
-	DownloadResult<List<String>> availableVersions(String symbolicName);
+	DownloadResult<List<String>> availableVersions(String symbolicName, IProgressMonitor monitor)
+			throws OperationCanceledException;
 
 	/**
 	 * Download latest available version of the specified library included in the
@@ -53,10 +58,24 @@ public interface IArchiveDownloader {
 	 * @param range            version range of the specified library
 	 * @param preferredVersion preferred version to be downloaded, ignored if
 	 *                         {@code null} or not contained in version range
-	 * @return {@code Path} of the downloaded library archive, or {@code null} if
-	 *         archive couldn't be downloaded
+	 * @param monitor          progress monitor, can be {@code null}
+	 * @return {@code DownloadResult} of the downloaded library archive
+	 * @throws OperationCanceledException
 	 */
-	DownloadResult<Path> downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion);
+	DownloadResult<Path> downloadLibrary(String symbolicName, VersionRange range, Version preferredVersion,
+			IProgressMonitor monitor) throws OperationCanceledException;
+
+	/**
+	 * Download manifest of the specified library with the given version
+	 *
+	 * @param symbolicName symbolic name of library
+	 * @param version      specific version
+	 * @param monitor      progress monitor, can be {@code null}
+	 * @return {@code DownloadResult} of the downloaded library manifest
+	 * @throws OperationCanceledException
+	 */
+	DownloadResult<Path> downloadManifest(String symbolicName, Version version, IProgressMonitor monitor)
+			throws OperationCanceledException;
 
 	/**
 	 * Returns if downloader is active (standard value is {@code true})

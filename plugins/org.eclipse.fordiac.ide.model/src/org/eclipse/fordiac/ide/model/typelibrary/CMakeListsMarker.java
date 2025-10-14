@@ -14,9 +14,11 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -31,6 +33,22 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class CMakeListsMarker implements INamedElement {
+
+	private final IProject project;
+	private final Path output;
+
+	public CMakeListsMarker(final IProject project, final Path output) {
+		this.project = project;
+		this.output = output;
+	}
+
+	public IProject getProject() {
+		return project;
+	}
+
+	public Path getOutput() {
+		return output;
+	}
 
 	@Override
 	public String getName() {

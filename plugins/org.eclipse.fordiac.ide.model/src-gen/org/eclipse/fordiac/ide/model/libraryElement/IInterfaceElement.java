@@ -120,7 +120,23 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	FBNetworkElement getFBNetworkElement();
+	BlockFBNetworkElement getBlockFBNetworkElement();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	FBType getFBType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	InterfaceList getInterfaceList();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -129,5 +145,13 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @generated
 	 */
 	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	IInterfaceElement findInTypeInterface();
 
 } // IInterfaceElement

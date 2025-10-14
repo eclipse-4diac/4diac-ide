@@ -12,6 +12,7 @@
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
  *    Alois Zoitl  - turned the Palette model into POJOs
+ *                 - added library element hash
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
@@ -45,16 +46,22 @@ import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl implements TypeEntry, Adapter.Internal {
 
-	private static class TypeEntryNotificationImpl extends NotificationImpl {
+	protected static class TypeEntryNotificationImpl extends NotificationImpl {
 		protected final TypeEntry notifier;
 		protected final String feature;
 		protected final int featureID;
@@ -96,12 +103,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private final AtomicLong lastModificationTimestampEditable = new AtomicLong(IResource.NULL_STAMP);
 
 	private SoftReference<LibraryElement> typeRef;
+	private SoftReference<String> typeHashRef;
 	private SoftReference<LibraryElement> typeEditableRef;
 	private final AtomicReference<Set<TypeEntry>> dependencies = new AtomicReference<>(Collections.emptySet());
 
 	private TypeLibrary typeLibrary;
-
-	private boolean updateTypeOnSave = true;
 
 	@Override
 	public IFile getFile() {
@@ -173,21 +179,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
-	public final long getLastModificationTimestamp() {
-		return lastModificationTimestamp.get();
-	}
-
-	@Override
-	public final void setLastModificationTimestamp(final long newLastModificationTimestamp) {
-		lastModificationTimestamp.set(newLastModificationTimestamp);
-		lastModificationTimestampEditable.set(newLastModificationTimestamp);
-	}
-
-	@Override
 	public LibraryElement getType() {
 		// check if type is present and current
 		LibraryElement type = basicGetType();
-		if (type != null && !isFileContentChanged()) {
+		if (type != null) {
 			return type; // simple, non-contended case
 		}
 
@@ -196,7 +191,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		synchronized (this) {
 			// check again
 			type = basicGetType();
-			if (type != null && !isFileContentChanged()) {
+			if (type != null) {
 				return type; // concurrent update
 			}
 
@@ -235,7 +230,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return typeRefCached != null ? typeRefCached.get() : null;
 	}
 
-	private boolean isFileContentChanged() {
+	private final boolean isFileContentChanged() {
 		final IFile fileCached = getFile();
 		if (fileCached != null) {
 			final long modificationStamp = fileCached.getModificationStamp();
@@ -255,6 +250,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
 			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
+		typeHashRef = null; // our type is invalidated clear the hash
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
 			encloseInResource(newType);
@@ -419,6 +415,42 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return Collections.emptySet();
 	}
 
+	@Override
+	public String getTypeHash() throws LibraryElementHashException {
+		final SoftReference<String> typeHashRefCached = typeHashRef;
+
+		if (!isFileContentChanged() && typeHashRefCached != null) {
+			final String typeHash = typeHashRefCached.get();
+			if (typeHash != null) {
+				return typeHash;
+			}
+		}
+
+		final String newTypeHash = basicGetTypeHash();
+		typeHashRef = new SoftReference<>(newTypeHash);
+		return newTypeHash;
+	}
+
+	private String basicGetTypeHash() throws LibraryElementHashException {
+		final LibraryElement type = getType();
+		if (type == null) {
+			return ""; //$NON-NLS-1$
+		}
+		final Attribute typeHashAttribute = getTypeHashAttribute(type);
+		if (typeHashAttribute != null) {
+			return StringValueConverter.INSTANCE.toValue(typeHashAttribute.getValue());
+		}
+		return LibraryElementHasher.hash(type);
+	}
+
+	private static Attribute getTypeHashAttribute(final LibraryElement type) {
+		final Attribute typeHashAttribute = type.getAttribute(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_FULL_NAME);
+		if (typeHashAttribute != null) {
+			return typeHashAttribute;
+		}
+		return type.getAttribute(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_NAME);
+	}
+
 	private void updateDependencies(final Set<TypeEntry> dependencies) {
 		final Set<TypeEntry> oldDependencies = this.dependencies.getAndSet(Set.copyOf(dependencies));
 		oldDependencies.stream().filter(Predicate.not(dependencies::contains))
@@ -429,7 +461,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if ((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+		if (((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
+				&& !(notification.getNotifier() instanceof InterfaceTypeEntry))
+				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_INTERFACE_FEATURE
 				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE)
 				&& dependencies.get().contains(notification.getNotifier())) {
 
@@ -521,25 +555,29 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	public void refresh() {
 		NotificationChain notifications = null;
 		synchronized (this) {
-			// check content changed
-			if (isFileContentChanged()) {
-				// load type name
-				loadTypeNameFromFile();
-				// clear cached type
-				notifications = basicSetType(null, notifications);
-				// also notify changed contents
-				if (eNotificationRequired()) {
-					notifications = chainNotification(notifications,
-							new TypeEntryNotificationImpl(this, Notification.SET,
-									TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
-									TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE_ID, null, null));
-				}
-			}
+			notifications = performTypeRefresh(notifications);
 		}
 		// dispatch notifications
 		if (notifications != null) {
 			notifications.dispatch();
 		}
+	}
+
+	protected NotificationChain performTypeRefresh(NotificationChain notifications) {
+		// check content changed
+		if (isFileContentChanged()) {
+			// load type name
+			loadTypeNameFromFile();
+			// clear cached type
+			notifications = basicSetType(null, notifications);
+			// also notify changed contents
+			if (eNotificationRequired()) {
+				notifications = chainNotification(notifications,
+						new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
+								TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE_ID, null, null));
+			}
+		}
+		return notifications;
 	}
 
 	@Override
@@ -555,10 +593,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		result.append(lastModificationTimestampEditable);
 		result.append(')');
 		return result.toString();
-	}
-
-	protected final void setUpdateTypeOnSave(final boolean updateTypeOnSave) {
-		this.updateTypeOnSave = updateTypeOnSave;
 	}
 
 	private void writeToFile(final InputStream fileContent, final AbstractTypeExporter exporter,
@@ -593,20 +627,29 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			// to ensure readers see the new stamp only together with the new type editable
 			lastModificationTimestampEditable.set(modificationStamp);
 
-			// set type (if requested)
-			if (updateTypeOnSave) {
-				// make the edit result available for the reading entities
-				notifications = basicSetType(EcoreUtil.copy(exporter.getType()), notifications);
-			}
+			notifications = updateTypeOnSave(exporter.getType(), notifications);
 
 			// update the last modification stamp _after_ setting the type to ensure other
 			// readers see the new stamp only together with the new type
 			lastModificationTimestamp.set(modificationStamp);
+
+			// send out file content notifications to update editors
+			if (eNotificationRequired()) {
+				notifications = chainNotification(notifications,
+						new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE,
+								TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE_ID, null, null));
+			}
 		}
 		// dispatch notifications
 		if (notifications != null) {
 			notifications.dispatch();
 		}
+	}
+
+	protected NotificationChain updateTypeOnSave(final LibraryElement savedType,
+			final NotificationChain notifications) {
+		// make the edit result available for the reading entities
+		return basicSetType(EcoreUtil.copy(savedType), notifications);
 	}
 
 	/**
@@ -667,7 +710,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		return ""; //$NON-NLS-1$
 	}
 
-	private static NotificationChain chainNotification(final NotificationChain notifications,
+	protected static NotificationChain chainNotification(final NotificationChain notifications,
 			final TypeEntryNotificationImpl notification) {
 		if (notifications == null) {
 			return notification;

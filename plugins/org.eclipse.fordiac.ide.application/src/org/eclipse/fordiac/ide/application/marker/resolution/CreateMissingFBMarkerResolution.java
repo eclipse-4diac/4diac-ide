@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
- *                    Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,8 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.wizards.RestrictedNewTypeWizard;
@@ -36,13 +36,13 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 
-public class CreateMissingFBMarkerResolution extends AbstractCommandMarkerResolution<FBNetworkElement> {
+public class CreateMissingFBMarkerResolution extends AbstractCommandMarkerResolution<BlockFBNetworkElement> {
 
 	private TypeEntry newEntry;
 	List<EObject> targets = new ArrayList<>();
 
 	public CreateMissingFBMarkerResolution(final IMarker marker) {
-		super(marker, FBNetworkElement.class);
+		super(marker, BlockFBNetworkElement.class);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class CreateMissingFBMarkerResolution extends AbstractCommandMarkerResolu
 	}
 
 	@Override
-	protected Command createCommand(final FBNetworkElement element, final IProgressMonitor monitor)
+	protected Command createCommand(final BlockFBNetworkElement element, final IProgressMonitor monitor)
 			throws CoreException {
 		return switch (element) {
 		case final FB fb when fb.eContainmentFeature() == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ->

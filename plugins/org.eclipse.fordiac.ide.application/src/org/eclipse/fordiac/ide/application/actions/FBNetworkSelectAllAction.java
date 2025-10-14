@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2013, 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012, 2025 TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -47,7 +47,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		final List<?> children = viewer.getContents().getChildren();
 
 		for (final Object child : children) {
-			if ((child instanceof AbstractFBNElementEditPart) || (child instanceof GroupEditPart)) {
+			if ((child instanceof AbstractBlockFBNElementEditPart) || (child instanceof GroupEditPart)) {
 				final GraphicalEditPart childPart = (GraphicalEditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);

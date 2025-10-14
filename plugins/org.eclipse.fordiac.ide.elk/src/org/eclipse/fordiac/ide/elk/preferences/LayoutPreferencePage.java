@@ -14,19 +14,18 @@ package org.eclipse.fordiac.ide.elk.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.elk.Messages;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class LayoutPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public LayoutPreferencePage() {
 		super(GRID);
-		setPreferenceStore(
-				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, ElkPreferences.ELK_PREFERENCES_ID));
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, ElkPreferences.ELK_PREFERENCES_ID));
 	}
 
 	@Override
@@ -34,8 +33,7 @@ public class LayoutPreferencePage extends FieldEditorPreferencePage implements I
 		final Composite parent = getFieldEditorParent();
 
 		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
-				ElkPreferences.CONNECTION_LAYOUT_TIMEOUT, Messages.LayoutPreferences_ConnectionLayoutTimeout,
-				parent);
+				ElkPreferences.CONNECTION_LAYOUT_TIMEOUT, Messages.LayoutPreferences_ConnectionLayoutTimeout, parent);
 		integerFieldEditorValue.setValidRange(100, 1000000);
 		addField(integerFieldEditorValue);
 	}

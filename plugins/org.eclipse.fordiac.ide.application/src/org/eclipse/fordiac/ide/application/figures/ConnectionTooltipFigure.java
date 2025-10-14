@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2013, 2016 TU Wien ACIN, Profactor GmbH, fortiss GmbH
- *               2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2011, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -57,7 +58,7 @@ public class ConnectionTooltipFigure extends Figure {
 
 		final FlowPage fp = new FlowPage();
 		fp.add(content);
-		if (connection != null && connection.getComment() != null && connection.getComment().length() > 0) {
+		if (connection != null && connection.getComment() != null && !connection.getComment().isEmpty()) {
 			add(fp);
 			setConstraint(fp, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
 		}
@@ -72,8 +73,8 @@ public class ConnectionTooltipFigure extends Figure {
 
 	private static void getEndpointLabel(final StringBuilder label, final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
-			if (null != interfaceElement.getFBNetworkElement()) {
-				label.append(interfaceElement.getFBNetworkElement().getName());
+			if (null != interfaceElement.getBlockFBNetworkElement()) {
+				label.append(interfaceElement.getBlockFBNetworkElement().getName());
 				label.append("."); //$NON-NLS-1$
 			}
 			label.append(interfaceElement.getName());

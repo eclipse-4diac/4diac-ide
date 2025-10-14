@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2023, 205 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -64,7 +64,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		newElement.setInterface(newElement.getTypeInterface().copy());
 		newElement.setName(oldElement.getName());
 		createValues();
 		transferInstanceComments();

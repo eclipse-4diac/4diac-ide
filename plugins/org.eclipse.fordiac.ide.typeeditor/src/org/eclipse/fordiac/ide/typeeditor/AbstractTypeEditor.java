@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
@@ -59,13 +61,16 @@ import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
@@ -93,12 +98,14 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
-	private final CommandStack commandStack = new CommandStack();
+	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
 	private Collection<ITypeEditorPage> editorPages;
 	private TypeEntryAdapter typeEntryAdapter;
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private boolean readOnly = false;
 	private boolean wasDirtyBeforeExecute = false;
+	private Composite mainComposite;
 
 	@Override
 	protected void addPages() {
@@ -106,8 +113,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		editorPages = typeEditorPageFactory.getEditors(getType());
 		for (final ITypeEditorPage typeEditorPage : editorPages) {
 			try {
-				// set command stack has to be done before the page is added
-				typeEditorPage.setCommonCommandStack(getCommandStack());
 				final int index = addPage(typeEditorPage, ei);
 				setPageText(index, typeEditorPage.getTitle());
 				setPageImage(index, typeEditorPage.getTitleImage());
@@ -148,10 +153,34 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		mainComposite = parent;
+		createEditorContent();
+	}
+
+	private void createEditorContent() {
 		if (getType() != null) {
-			super.createPartControl(parent);
+			if (getTypeEntry() != null && getTypeEntry().getFile() != null && getTypeEntry().getFile().isReadOnly()) {
+				readOnly = true;
+				// create read only banner
+				final Composite composite = new Composite(mainComposite, SWT.NONE);
+				GridLayoutFactory.fillDefaults().applyTo(composite);
+				GridDataFactory.fillDefaults().applyTo(composite);
+
+				final Label label = new Label(composite, SWT.NONE);
+				label.setText(Messages.TypeEditor_ReadOnly);
+				label.setBackground(JFaceResources.getColorRegistry().get("org.eclipse.fordiac.ide.gef.warningColor")); //$NON-NLS-1$
+				label.setFont(JFaceResources.getFont(JFaceResources.HEADER_FONT));
+				GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(label);
+
+				final Composite newParent = new Composite(composite, SWT.NONE);
+				GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(newParent);
+
+				super.createPartControl(newParent);
+			} else {
+				super.createPartControl(mainComposite);
+			}
 		} else {
-			showLoadErrorMessage(parent);
+			showLoadErrorMessage(mainComposite);
 		}
 	}
 
@@ -202,12 +231,17 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
+		getCommandStack().dispose();
 		typeEntryAdapter.dispose();
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		if (null != getTypeEntry()) {
+			if (readOnly) {
+				doSaveAs();
+				return;
+			}
 			int result = DEFAULT_BUTTON_INDEX;
 			try {
 				if (dependencyAffectingTypeChange()) {
@@ -388,12 +422,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return false;
 	}
 
-	@SuppressWarnings("static-method") // allow subclasses to perform additional checks
-	private boolean isValidTypeEditorInput(final TypeEditorInput typeEditorInput) {
-		return typeEditorInput != null && typeEditorInput.getContent() != null
-				&& typeEditorInput.getTypeEntry() != null;
-	}
-
 	@Override
 	protected void pageChange(final int newPageIndex) {
 		super.pageChange(newPageIndex);
@@ -402,25 +430,43 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void reloadType() {
-		final LibraryElement newFBType = getTypeEntry().copyType();
-		final LibraryElement curType = getType();
-		if (newFBType != curType) {
-			if ((curType != null) && getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
-				getTypeEntry().eAdapters().remove(typeEntryAdapter);
+		final var entry = getTypeEntry();
+		final var entryType = entry.getType();
+		final var currentType = getType();
+
+		if (entryType == null && currentType != null || entryType != null && currentType == null) {
+			// type appeared or vanished
+			final var typeInput = getTypeEditorInput();
+			if (typeInput != null) {
+				typeInput.setType(entryType == null ? null : entry.copyType());
 			}
-			final TypeEditorInput typeEI = getTypeEditorInput();
-			if (typeEI != null) {
-				typeEI.setType(newFBType);
+
+			clearEditorContent();
+			createEditorContent();
+			return;
+		}
+
+		if (entryType != currentType) {
+			// type of typeEntry changed
+			entry.eAdapters().remove(typeEntryAdapter);
+
+			final var newType = entry.copyType();
+			final var typeInput = getTypeEditorInput();
+			if (typeInput != null) {
+				typeInput.setType(newType);
 			}
-			getEditorPages().stream().forEach(ITypeEditorPage::reloadType);
-			final IEditorPart activeEditor = getActiveEditor();
-			if (activeEditor instanceof final ITypeEditorPage editorPage) {
+
+			commandStack.setUndoContext(new ObjectUndoContext(newType));
+			getEditorPages().forEach(ITypeEditorPage::reloadType);
+
+			final var active = getActiveEditor();
+			if (active instanceof final ITypeEditorPage page) {
 				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						activeEditor.getAdapter(GraphicalViewer.class), editorPage.getSelectableObject()));
+						active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
 			}
-			getCommandStack().flush();
-			getTypeEntry().eAdapters().add(typeEntryAdapter);
-			setPartName(getTypeEntry().getTypeName());
+
+			entry.eAdapters().add(typeEntryAdapter);
+			setPartName(entry.getTypeName());
 		}
 	}
 
@@ -456,23 +502,42 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		final TypeEditorInput typeEditorInput = checkEditorInput(input);
-		if (isValidTypeEditorInput(typeEditorInput)) {
-			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
-					typeEditorInput::getContent);
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-			if (getEditorPages() != null) {
-				getEditorPages().forEach(e -> e.setInput(typeEditorInput));
+		if (typeEditorInput != null && typeEditorInput.getTypeEntry() != null) {
+			if (typeEditorInput.getContent() != null) {
+				// we have a type
+				annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
+						typeEditorInput::getContent);
+				validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+				if (getEditorPages() != null) {
+					getEditorPages().forEach(e -> e.setInput(typeEditorInput));
+				}
+				commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
 			}
+			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
 			setInputWithNotify(typeEditorInput);
 		} else {
 			setInputWithNotify(input);
 		}
 	}
 
+	private void clearEditorContent() {
+		for (int i = getPageCount() - 1; i >= 0; i--) {
+			removePage(i);
+		}
+		pages.clear();
+		editorPages = null;
+		for (final Control child : mainComposite.getChildren()) {
+			child.dispose();
+		}
+		mainComposite.layout(true, true);
+	}
+
 	public void showLoadErrorMessage(final Composite parent) {
+		final boolean fileExists = getTypeEntry() != null && getTypeEntry().getFile() != null
+				&& getTypeEntry().getFile().exists();
+
 		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(fileExists ? 3 : 2).applyTo(composite);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
 
 		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
@@ -483,7 +548,13 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 		final Label messageLabel = new Label(composite, SWT.NONE);
 		messageLabel.setText(MessageFormat.format(Messages.TypeEditor_CouldNotLoadType, getEditorInput().getName()));
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(false, false).applyTo(messageLabel);
+
+		if (fileExists) {
+			final Button textEditorButton = new Button(composite, SWT.NONE);
+			textEditorButton.setText(Messages.TypeEditor_OpenTextEditor);
+			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
+		}
 	}
 
 	private static <T> boolean shouldCheckAllEditors(final Class<T> adapter) {
@@ -492,9 +563,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		final var commandStack = getCommandStack();
 		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = commandStack.isDirty();
+			wasDirtyBeforeExecute = getCommandStack().isDirty();
 		}
 		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
 				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
@@ -504,11 +574,12 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 					new String[] { Messages.Continue, Messages.Cancel }, 0);
 			if (dialog.open() == 1) {
 				// Cancel
-				commandStack.undo();
-				commandStack.flush();
+				getCommandStack().undo();
+				getCommandStack().flush();
 			}
 		}
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		if (event.isPostChangeEvent()) {
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
-
 }

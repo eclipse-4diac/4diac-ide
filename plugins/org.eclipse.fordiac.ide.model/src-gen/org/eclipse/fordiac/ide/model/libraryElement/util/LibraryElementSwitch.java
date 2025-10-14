@@ -105,8 +105,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AdapterFB adapterFB = (AdapterFB)theEObject;
 				T result = caseAdapterFB(adapterFB);
 				if (result == null) result = caseFB(adapterFB);
-				if (result == null) result = caseFBNetworkElement(adapterFB);
+				if (result == null) result = caseBlockFBNetworkElement(adapterFB);
 				if (result == null) result = caseICallable(adapterFB);
+				if (result == null) result = caseFBNetworkElement(adapterFB);
 				if (result == null) result = caseTypedConfigureableObject(adapterFB);
 				if (result == null) result = casePositionableElement(adapterFB);
 				if (result == null) result = caseITypedElement(adapterFB);
@@ -167,6 +168,15 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.AUTOMATION_SYSTEM: {
+				AutomationSystem automationSystem = (AutomationSystem)theEObject;
+				T result = caseAutomationSystem(automationSystem);
+				if (result == null) result = caseLibraryElement(automationSystem);
+				if (result == null) result = caseINamedElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.BASE_FB_TYPE: {
 				BaseFBType baseFBType = (BaseFBType)theEObject;
 				T result = caseBaseFBType(baseFBType);
@@ -190,12 +200,15 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.AUTOMATION_SYSTEM: {
-				AutomationSystem automationSystem = (AutomationSystem)theEObject;
-				T result = caseAutomationSystem(automationSystem);
-				if (result == null) result = caseLibraryElement(automationSystem);
-				if (result == null) result = caseINamedElement(automationSystem);
-				if (result == null) result = caseConfigurableObject(automationSystem);
+			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT: {
+				BlockFBNetworkElement blockFBNetworkElement = (BlockFBNetworkElement)theEObject;
+				T result = caseBlockFBNetworkElement(blockFBNetworkElement);
+				if (result == null) result = caseFBNetworkElement(blockFBNetworkElement);
+				if (result == null) result = caseTypedConfigureableObject(blockFBNetworkElement);
+				if (result == null) result = casePositionableElement(blockFBNetworkElement);
+				if (result == null) result = caseITypedElement(blockFBNetworkElement);
+				if (result == null) result = caseConfigurableObject(blockFBNetworkElement);
+				if (result == null) result = caseINamedElement(blockFBNetworkElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -203,8 +216,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				CFBInstance cfbInstance = (CFBInstance)theEObject;
 				T result = caseCFBInstance(cfbInstance);
 				if (result == null) result = caseFB(cfbInstance);
-				if (result == null) result = caseFBNetworkElement(cfbInstance);
+				if (result == null) result = caseBlockFBNetworkElement(cfbInstance);
 				if (result == null) result = caseICallable(cfbInstance);
+				if (result == null) result = caseFBNetworkElement(cfbInstance);
 				if (result == null) result = caseTypedConfigureableObject(cfbInstance);
 				if (result == null) result = casePositionableElement(cfbInstance);
 				if (result == null) result = caseITypedElement(cfbInstance);
@@ -241,8 +255,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				CommunicationChannel communicationChannel = (CommunicationChannel)theEObject;
 				T result = caseCommunicationChannel(communicationChannel);
 				if (result == null) result = caseFB(communicationChannel);
-				if (result == null) result = caseFBNetworkElement(communicationChannel);
+				if (result == null) result = caseBlockFBNetworkElement(communicationChannel);
 				if (result == null) result = caseICallable(communicationChannel);
+				if (result == null) result = caseFBNetworkElement(communicationChannel);
 				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
 				if (result == null) result = casePositionableElement(communicationChannel);
 				if (result == null) result = caseITypedElement(communicationChannel);
@@ -298,8 +313,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				ConfigurableFB configurableFB = (ConfigurableFB)theEObject;
 				T result = caseConfigurableFB(configurableFB);
 				if (result == null) result = caseFB(configurableFB);
-				if (result == null) result = caseFBNetworkElement(configurableFB);
+				if (result == null) result = caseBlockFBNetworkElement(configurableFB);
 				if (result == null) result = caseICallable(configurableFB);
+				if (result == null) result = caseFBNetworkElement(configurableFB);
 				if (result == null) result = caseTypedConfigureableObject(configurableFB);
 				if (result == null) result = casePositionableElement(configurableFB);
 				if (result == null) result = caseITypedElement(configurableFB);
@@ -313,8 +329,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseConfigurableMoveFB(configurableMoveFB);
 				if (result == null) result = caseConfigurableFB(configurableMoveFB);
 				if (result == null) result = caseFB(configurableMoveFB);
-				if (result == null) result = caseFBNetworkElement(configurableMoveFB);
+				if (result == null) result = caseBlockFBNetworkElement(configurableMoveFB);
 				if (result == null) result = caseICallable(configurableMoveFB);
+				if (result == null) result = caseFBNetworkElement(configurableMoveFB);
 				if (result == null) result = caseTypedConfigureableObject(configurableMoveFB);
 				if (result == null) result = casePositionableElement(configurableMoveFB);
 				if (result == null) result = caseITypedElement(configurableMoveFB);
@@ -352,8 +369,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseStructManipulator(demultiplexer);
 				if (result == null) result = caseConfigurableFB(demultiplexer);
 				if (result == null) result = caseFB(demultiplexer);
-				if (result == null) result = caseFBNetworkElement(demultiplexer);
+				if (result == null) result = caseBlockFBNetworkElement(demultiplexer);
 				if (result == null) result = caseICallable(demultiplexer);
+				if (result == null) result = caseFBNetworkElement(demultiplexer);
 				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
 				if (result == null) result = casePositionableElement(demultiplexer);
 				if (result == null) result = caseITypedElement(demultiplexer);
@@ -424,6 +442,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: {
 				ErrorMarkerFBNElement errorMarkerFBNElement = (ErrorMarkerFBNElement)theEObject;
 				T result = caseErrorMarkerFBNElement(errorMarkerFBNElement);
+				if (result == null) result = caseBlockFBNetworkElement(errorMarkerFBNElement);
 				if (result == null) result = caseFBNetworkElement(errorMarkerFBNElement);
 				if (result == null) result = caseTypedConfigureableObject(errorMarkerFBNElement);
 				if (result == null) result = casePositionableElement(errorMarkerFBNElement);
@@ -468,8 +487,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.FB: {
 				FB fb = (FB)theEObject;
 				T result = caseFB(fb);
-				if (result == null) result = caseFBNetworkElement(fb);
+				if (result == null) result = caseBlockFBNetworkElement(fb);
 				if (result == null) result = caseICallable(fb);
+				if (result == null) result = caseFBNetworkElement(fb);
 				if (result == null) result = caseTypedConfigureableObject(fb);
 				if (result == null) result = casePositionableElement(fb);
 				if (result == null) result = caseITypedElement(fb);
@@ -686,8 +706,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseStructManipulator(multiplexer);
 				if (result == null) result = caseConfigurableFB(multiplexer);
 				if (result == null) result = caseFB(multiplexer);
-				if (result == null) result = caseFBNetworkElement(multiplexer);
+				if (result == null) result = caseBlockFBNetworkElement(multiplexer);
 				if (result == null) result = caseICallable(multiplexer);
+				if (result == null) result = caseFBNetworkElement(multiplexer);
 				if (result == null) result = caseTypedConfigureableObject(multiplexer);
 				if (result == null) result = casePositionableElement(multiplexer);
 				if (result == null) result = caseITypedElement(multiplexer);
@@ -778,8 +799,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				ResourceTypeFB resourceTypeFB = (ResourceTypeFB)theEObject;
 				T result = caseResourceTypeFB(resourceTypeFB);
 				if (result == null) result = caseFB(resourceTypeFB);
-				if (result == null) result = caseFBNetworkElement(resourceTypeFB);
+				if (result == null) result = caseBlockFBNetworkElement(resourceTypeFB);
 				if (result == null) result = caseICallable(resourceTypeFB);
+				if (result == null) result = caseFBNetworkElement(resourceTypeFB);
 				if (result == null) result = caseTypedConfigureableObject(resourceTypeFB);
 				if (result == null) result = casePositionableElement(resourceTypeFB);
 				if (result == null) result = caseITypedElement(resourceTypeFB);
@@ -914,6 +936,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.SUB_APP: {
 				SubApp subApp = (SubApp)theEObject;
 				T result = caseSubApp(subApp);
+				if (result == null) result = caseBlockFBNetworkElement(subApp);
 				if (result == null) result = caseFBNetworkElement(subApp);
 				if (result == null) result = caseTypedConfigureableObject(subApp);
 				if (result == null) result = casePositionableElement(subApp);
@@ -928,8 +951,9 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseStructManipulator(structManipulator);
 				if (result == null) result = caseConfigurableFB(structManipulator);
 				if (result == null) result = caseFB(structManipulator);
-				if (result == null) result = caseFBNetworkElement(structManipulator);
+				if (result == null) result = caseBlockFBNetworkElement(structManipulator);
 				if (result == null) result = caseICallable(structManipulator);
+				if (result == null) result = caseFBNetworkElement(structManipulator);
 				if (result == null) result = caseTypedConfigureableObject(structManipulator);
 				if (result == null) result = casePositionableElement(structManipulator);
 				if (result == null) result = caseITypedElement(structManipulator);
@@ -1003,6 +1027,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				TypedSubApp typedSubApp = (TypedSubApp)theEObject;
 				T result = caseTypedSubApp(typedSubApp);
 				if (result == null) result = caseSubApp(typedSubApp);
+				if (result == null) result = caseBlockFBNetworkElement(typedSubApp);
 				if (result == null) result = caseFBNetworkElement(typedSubApp);
 				if (result == null) result = caseTypedConfigureableObject(typedSubApp);
 				if (result == null) result = casePositionableElement(typedSubApp);
@@ -1016,6 +1041,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				UntypedSubApp untypedSubApp = (UntypedSubApp)theEObject;
 				T result = caseUntypedSubApp(untypedSubApp);
 				if (result == null) result = caseSubApp(untypedSubApp);
+				if (result == null) result = caseBlockFBNetworkElement(untypedSubApp);
 				if (result == null) result = caseFBNetworkElement(untypedSubApp);
 				if (result == null) result = caseTypedConfigureableObject(untypedSubApp);
 				if (result == null) result = casePositionableElement(untypedSubApp);
@@ -1232,6 +1258,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBasicFBType(BasicFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Block FB Network Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Block FB Network Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBlockFBNetworkElement(BlockFBNetworkElement object) {
 		return null;
 	}
 

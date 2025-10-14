@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,11 +25,11 @@ import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -55,11 +55,28 @@ public class VarDeclarationAnnotations {
 	public static boolean validateNoValueForGenericTypeVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (GenericTypes.isAnyType(varDeclaration.getType()) && hasValue(varDeclaration)
-				&& varDeclaration.getFBNetworkElement() == null) {
+				&& varDeclaration.getBlockFBNetworkElement() == null) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE,
 						Messages.VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateIllegalVariableLengthArrayVariable(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isArray() && !varDeclaration.isInOutVar()
+				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())
+				&& !(varDeclaration.getFBType() instanceof FunctionFBType)
+				&& !(varDeclaration.eContainer() instanceof Method)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE,
+						Messages.VarDeclarationAnnotations_IllegalVariableLengthArray,
 						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
 			}
 			return false;
@@ -86,7 +103,7 @@ public class VarDeclarationAnnotations {
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
 				&& GenericTypes.isAnyType(varDeclaration.getType()) && !hasValue(varDeclaration)
-				&& varDeclaration.getFBNetworkElement() != null && varDeclaration.getFBNetworkElement()
+				&& varDeclaration.getBlockFBNetworkElement() != null && varDeclaration.getBlockFBNetworkElement()
 						.eContainingFeature() != LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -99,10 +116,26 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
+	public static boolean validateValueOverriddenBySubAppInput(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (varDeclaration.isIsInput() && hasValue(varDeclaration) && !varDeclaration.getInputConnections().isEmpty()
+				&& varDeclaration.getInputConnections().getFirst().getSourceElement() instanceof SubApp
+				&& varDeclaration.getInputConnections().getFirst().getSource().isIsInput()) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT,
+						Messages.VarDeclarationAnnotations_ValueOverriddenBySubAppInput,
+						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean validateVarInOutSourceTypeIsWellDefined(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput() && varDeclaration.getFBNetworkElement() != null
-				&& varDeclaration.getInputConnections().isEmpty()
+		if (varDeclaration.isInOutVar() && varDeclaration.isIsInput()
+				&& varDeclaration.getBlockFBNetworkElement() != null && varDeclaration.getInputConnections().isEmpty()
 				&& ((varDeclaration.isArray()
 						&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue()))
 						|| GenericTypes.isAnyType(varDeclaration.getType()))) {
@@ -123,7 +156,7 @@ public class VarDeclarationAnnotations {
 	public static boolean validateVarInOutIsWithed(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isInOutVar() && varDeclaration.getWiths().isEmpty()
-				&& varDeclaration.getFBNetworkElement() == null && !isSubappTypeInterface(varDeclaration)) {
+				&& varDeclaration.getBlockFBNetworkElement() == null && !isSubappTypeInterface(varDeclaration)) {
 			if (diagnostics != null) {
 				final String typeName = varDeclaration.eContainer().eContainer() instanceof final FB fb ? fb.getName()
 						: ((INamedElement) varDeclaration.eContainer().eContainer()).getName();
@@ -142,7 +175,7 @@ public class VarDeclarationAnnotations {
 
 	public static boolean validateVarInOutSubappInterface(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.isInOutVar() && varDeclaration.getFBNetworkElement() instanceof SubApp
+		if (varDeclaration.isInOutVar() && varDeclaration.getBlockFBNetworkElement() instanceof SubApp
 				&& hasAnyOutputConnections(varDeclaration) && !hasAnyInputConnections(varDeclaration)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -202,33 +235,25 @@ public class VarDeclarationAnnotations {
 	}
 
 	static boolean isUntypedSubappInterface(final VarDeclaration varDeclaration) {
-		return varDeclaration.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped();
+		return varDeclaration.getBlockFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped();
 	}
 
 	static boolean hasAnyInputConnections(final VarDeclaration varDeclaration) {
-		return varDeclaration != null && (!varDeclaration.getInputConnections().isEmpty()
-				|| !getTypeVariable(varDeclaration).getInputConnections().isEmpty());
+		if (varDeclaration == null) {
+			return false;
+		}
+		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
+		return !varDeclaration.getInputConnections().isEmpty()
+				|| (typeIE != null && !typeIE.getInputConnections().isEmpty());
 	}
 
 	static boolean hasAnyOutputConnections(final VarDeclaration varDeclaration) {
-		return varDeclaration != null && (!varDeclaration.getOutputConnections().isEmpty()
-				|| !getTypeVariable(varDeclaration).getOutputConnections().isEmpty());
-	}
-
-	public static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
-		if (varDeclaration != null) {
-			final FBNetworkElement fbne = varDeclaration.getFBNetworkElement();
-			if (fbne != null) {
-				final FBType type = fbne.getType();
-				if (type != null) {
-					final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
-					return typeVariable.isInOutVar() && typeVariable.isIsInput() != varDeclaration.isIsInput()
-							? typeVariable.getInOutVarOpposite()
-							: typeVariable;
-				}
-			}
+		if (varDeclaration == null) {
+			return false;
 		}
-		return varDeclaration;
+		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
+		return !varDeclaration.getOutputConnections().isEmpty()
+				|| (typeIE != null && !typeIE.getOutputConnections().isEmpty());
 	}
 
 	private VarDeclarationAnnotations() {

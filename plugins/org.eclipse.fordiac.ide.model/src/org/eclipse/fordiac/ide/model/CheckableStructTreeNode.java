@@ -166,7 +166,7 @@ public class CheckableStructTreeNode extends AbstractStructTreeNode {
 		final StringBuilder stringBuilder = new StringBuilder();
 		serializeTreeToString(this, stringBuilder);
 
-		if (stringBuilder.length() > 0) {
+		if (!stringBuilder.isEmpty()) {
 			return stringBuilder.substring(0, stringBuilder.length() - 1);
 		}
 

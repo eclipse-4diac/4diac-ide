@@ -277,7 +277,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkArrayAccessExpression(final STArrayAccessExpression accessExpression) {
-		final INamedElement receiverType = accessExpression.getReceiver().getResultType();
+		final LibraryElement receiverType = accessExpression.getReceiver().getResultType();
 		switch (receiverType) {
 		case final ArrayType arrayType -> checkArrayAccessIndices(accessExpression, arrayType);
 		case final AnyStringType stringType -> checkStringAccessIndices(accessExpression, stringType);
@@ -290,7 +290,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final ArrayType receiverType) {
 		IntStream.range(0, accessExpression.getIndex().size()).forEachOrdered(index -> {
 			final STExpression indexExpression = accessExpression.getIndex().get(index);
-			final INamedElement resultType = indexExpression.getResultType();
+			final LibraryElement resultType = indexExpression.getResultType();
 			checkTypeCompatibility(GenericTypes.ANY_INT, resultType,
 					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index);
 			if (index < receiverType.getSubranges().size()) {
@@ -325,7 +325,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final AnyStringType receiverType) {
 		IntStream.range(0, accessExpression.getIndex().size()).forEachOrdered(index -> {
 			final STExpression indexExpression = accessExpression.getIndex().get(index);
-			final INamedElement resultType = indexExpression.getResultType();
+			final LibraryElement resultType = indexExpression.getResultType();
 			checkTypeCompatibility(GenericTypes.ANY_INT, resultType,
 					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, index);
 			if (index < 1) {
@@ -425,10 +425,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				&& CONVERSION_FUNCTION_PATTERN.matcher(feature.getName()).matches()
 				&& standardFunction.getInputParameters().size() == 1 && featureExpression.getParameters().size() == 1) {
 			final STCallArgument argument = featureExpression.getParameters().get(0);
-			final INamedElement argumentType = argument.getResultType();
-			final INamedElement expectedArgumentType = STCoreUtil.getExpectedType(argument.getArgument());
-			final INamedElement returnType = featureExpression.getResultType();
-			final INamedElement expectedReturnType = STCoreUtil.getExpectedType(featureExpression);
+			final LibraryElement argumentType = argument.getResultType();
+			final LibraryElement expectedArgumentType = STCoreUtil.getExpectedType(argument.getArgument());
+			final LibraryElement returnType = featureExpression.getResultType();
+			final LibraryElement expectedReturnType = STCoreUtil.getExpectedType(featureExpression);
 
 			if (argumentType instanceof final DataType argumentDataType
 					&& expectedArgumentType instanceof final DataType expectedArgumentDataType
@@ -672,7 +672,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final var type = stmt.getStatement().getSelector().getResultType();
 		IntStream.range(0, stmt.getConditions().size()).forEachOrdered(index -> {
 			final STExpression condition = stmt.getConditions().get(index);
-			final INamedElement resultType = condition.getResultType();
+			final LibraryElement resultType = condition.getResultType();
 			if (!STCoreUtil.hasCommonSupertype(type, resultType)) {
 				error(MessageFormat.format(Messages.STCoreValidator_NonComparableTypes, resultType.getName(),
 						type.getName()), STCorePackage.Literals.ST_CASE_CASES__CONDITIONS, index, NON_COMPARABLE_TYPES,
@@ -980,23 +980,23 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+	protected void checkTypeCompatibility(final LibraryElement destination, final LibraryElement source,
 			final EStructuralFeature feature) {
 		checkTypeCompatibility(destination, source, feature, false);
 	}
 
-	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+	protected void checkTypeCompatibility(final LibraryElement destination, final LibraryElement source,
 			final EStructuralFeature feature, final int index) {
 		checkTypeCompatibility(destination, source, feature, index, false);
 	}
 
-	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+	protected void checkTypeCompatibility(final LibraryElement destination, final LibraryElement source,
 			final EStructuralFeature feature, final boolean allowAnyAssignment) {
 		checkTypeCompatibility(destination, source, feature, ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
 				allowAnyAssignment);
 	}
 
-	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
+	protected void checkTypeCompatibility(final LibraryElement destination, final LibraryElement source,
 			final EStructuralFeature feature, final int index, final boolean allowAnyAssignment) {
 		if (destination instanceof final DataType destinationDataType
 				&& source instanceof final DataType sourceDataType) {
@@ -1018,7 +1018,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	protected void checkTypeStrictCompatibility(final INamedElement destination, final INamedElement source,
+	protected void checkTypeStrictCompatibility(final LibraryElement destination, final LibraryElement source,
 			final EStructuralFeature feature, final int index) {
 		if (destination instanceof final DataType destinationDataType
 				&& source instanceof final DataType sourceDataType) {

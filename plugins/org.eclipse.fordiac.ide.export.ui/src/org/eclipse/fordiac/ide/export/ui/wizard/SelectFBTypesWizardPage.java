@@ -21,10 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -46,8 +44,6 @@ import org.eclipse.ui.dialogs.WizardExportResourcesPage;
 public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 
 	private static final String NAME = "name"; //$NON-NLS-1$
-
-	private static final String SORT_INDEX = "sortIndex"; //$NON-NLS-1$
 
 	/** The dcc. */
 	private Combo destinationNameField;
@@ -78,19 +74,7 @@ public class SelectFBTypesWizardPage extends WizardExportResourcesPage {
 	private Combo filters;
 
 	private void addAvailableExportFilter(final Group group) {
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry
-				.getConfigurationElementsFor("org.eclipse.fordiac.ide.export.exportFilter"); //$NON-NLS-1$
-		Arrays.sort(elems, (o1, o2) -> {
-			try {
-				final int sortIndex1 = Integer.parseInt(o1.getAttribute(SORT_INDEX));
-				final int sortIndex2 = Integer.parseInt(o2.getAttribute(SORT_INDEX));
-				return sortIndex1 - sortIndex2;
-			} catch (final NumberFormatException e2) {
-				FordiacLogHelper.logError(e2.getMessage(), e2);
-			}
-			return 0;
-		});
+		final IConfigurationElement[] elems = ExportFilterUtil.getExportFilters();
 		exportFilters.clear();
 		exportFilters.addAll(Arrays.asList(elems));
 

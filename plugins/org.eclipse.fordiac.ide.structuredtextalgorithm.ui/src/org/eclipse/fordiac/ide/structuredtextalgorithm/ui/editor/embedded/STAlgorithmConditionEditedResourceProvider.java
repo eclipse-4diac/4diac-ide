@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource;
@@ -23,11 +22,11 @@ import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmConditionEditedResourceProvider extends STAlgorithmEditedResourceProvider {
 
-	private final INamedElement expectedType;
+	private final LibraryElement expectedType;
 	private final Collection<? extends EObject> additionalContent;
 
 	public STAlgorithmConditionEditedResourceProvider(final LibraryElement libraryElement,
-			final Collection<? extends EObject> additionalContent, final INamedElement expectedType) {
+			final Collection<? extends EObject> additionalContent, final LibraryElement expectedType) {
 		super(libraryElement);
 		this.expectedType = expectedType;
 		this.additionalContent = additionalContent;

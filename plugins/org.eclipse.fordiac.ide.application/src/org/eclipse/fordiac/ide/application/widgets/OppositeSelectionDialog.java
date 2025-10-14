@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2024 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
  *                          Primetals Technology Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -113,9 +114,9 @@ public class OppositeSelectionDialog extends PopupDialog {
 			return sb.toString();
 		}
 		if (isInSameNetwork(originPin, iElem)) {
-			sb.append(iElem.getFBNetworkElement().getName());
+			sb.append(iElem.getBlockFBNetworkElement().getName());
 		} else {
-			sb.append(iElem.getFBNetworkElement().getQualifiedName());
+			sb.append(iElem.getBlockFBNetworkElement().getQualifiedName());
 			sb.delete(0, sb.indexOf(".") + 1); //$NON-NLS-1$
 		}
 		sb.append('.');
@@ -125,7 +126,7 @@ public class OppositeSelectionDialog extends PopupDialog {
 
 	private static boolean isInSameNetwork(final IInterfaceElement src, final IInterfaceElement dest) {
 		return src != null && dest != null
-				&& src.getFBNetworkElement().getFbNetwork().equals(dest.getFBNetworkElement().getFbNetwork());
+				&& src.getBlockFBNetworkElement().getFbNetwork().equals(dest.getBlockFBNetworkElement().getFbNetwork());
 	}
 
 	@Override

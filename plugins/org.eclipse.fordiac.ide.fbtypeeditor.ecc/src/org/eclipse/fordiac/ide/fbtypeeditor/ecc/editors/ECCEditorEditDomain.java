@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz, fortiss GmbH
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
@@ -24,9 +23,9 @@ import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProx
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SharedCursors;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
@@ -36,7 +35,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.IEditorPart;
 
-final class ECCEditorEditDomain extends FBTypeEditDomain {
+final class ECCEditorEditDomain extends DefaultEditDomain {
 	private static class StateCreationTool extends CreationTool {
 
 		private final StateCreationFactory stateFactory = new StateCreationFactory();
@@ -131,8 +130,8 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	private boolean transition = false;
 	private boolean createTransitionAndState = false;
 
-	ECCEditorEditDomain(final IEditorPart editorPart, final CommandStack commandStack) {
-		super(editorPart, commandStack);
+	ECCEditorEditDomain(final IEditorPart editorPart) {
+		super(editorPart);
 	}
 
 	@Override

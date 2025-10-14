@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025  Profactor GmbH, fortiss GmbH, Johannes Kepler University,
- * 							 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH, Johannes Kepler University,
+ * 							Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -115,15 +116,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ConfigurableMoveFBEditPart();
 		}
 		if (element instanceof final FB fb) {
-			if (null != fb.getType() && null != fb.getType().getName()) {
-				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_MUX)) {
-					return new MultiplexerEditPart();
-				}
-				if (fb.getType().getName().contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
-					return new DemultiplexerEditPart();
-				}
-			}
-			return new FBEditPart();
+			return getPartForFBInstances(fb);
 		}
 		if (element instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart();
@@ -136,6 +129,19 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 
 		throw createEditpartCreationException(context, element);
+	}
+
+	protected static EditPart getPartForFBInstances(final FB fb) {
+		if (fb.getTypeEntry() != null && fb.getTypeEntry().getTypeName() != null) {
+			final String typeName = fb.getTypeEntry().getTypeName();
+			if (typeName.contentEquals(LibraryElementTags.TYPENAME_MUX)) {
+				return new MultiplexerEditPart();
+			}
+			if (typeName.contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
+				return new DemultiplexerEditPart();
+			}
+		}
+		return new FBEditPart();
 	}
 
 	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements
@@ -154,23 +160,23 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
 		final IInterfaceElement element = (IInterfaceElement) modelElement;
 
-		if ((element.getFBNetworkElement() instanceof StructManipulator)
+		if ((element.getBlockFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType) && (isMuxOutput(element) || isDemuxInput(element))) {
 			return new StructInterfaceEditPart();
 		}
 
-		if ((element.getFBNetworkElement() instanceof SubApp) && (null == element.getFBNetworkElement().getType())) {
+		if (element.getBlockFBNetworkElement() instanceof UntypedSubApp) {
 			return new UntypedSubAppInterfaceElementEditPart();
 		}
 		return new InterfaceEditPartForFBNetwork();
 	}
 
 	public static boolean isDemuxInput(final IInterfaceElement element) {
-		return (element.getFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
+		return (element.getBlockFBNetworkElement() instanceof Demultiplexer) && (element.isIsInput());
 	}
 
 	public static boolean isMuxOutput(final IInterfaceElement element) {
-		return (element.getFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
+		return (element.getBlockFBNetworkElement() instanceof Multiplexer) && (!element.isIsInput());
 	}
 
 }

@@ -327,6 +327,54 @@ public interface OperationalSemanticsPackage extends EPackage {
 
 	/**
 	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.CompositeFBTypeRuntimeImpl
+	 * <em>Composite FB Type Runtime</em>}' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.CompositeFBTypeRuntimeImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getCompositeFBTypeRuntime()
+	 * @generated
+	 */
+	int COMPOSITE_FB_TYPE_RUNTIME = 6;
+
+	/**
+	 * The feature id for the '<em><b>Composite FB Type</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Fb Element</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_FB_TYPE_RUNTIME__FB_ELEMENT = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Network Runtime</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_FB_TYPE_RUNTIME__NETWORK_RUNTIME = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Composite FB Type Runtime</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_FB_TYPE_RUNTIME_FEATURE_COUNT = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl
 	 * <em>Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -334,7 +382,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransaction()
 	 * @generated
 	 */
-	int TRANSACTION = 6;
+	int TRANSACTION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Input Event Occurrence</b></em>' containment
@@ -391,7 +439,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFBNetworkRuntime()
 	 * @generated
 	 */
-	int FB_NETWORK_RUNTIME = 7;
+	int FB_NETWORK_RUNTIME = 8;
 
 	/**
 	 * The feature id for the '<em><b>Fbnetwork</b></em>' reference. <!--
@@ -421,13 +469,22 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int FB_NETWORK_RUNTIME__TYPE_RUNTIMES = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Outer Network Runtime</b></em>' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>FB Network Runtime</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_RUNTIME_FEATURE_COUNT = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 3;
+	int FB_NETWORK_RUNTIME_FEATURE_COUNT = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the
@@ -439,7 +496,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFBTransaction()
 	 * @generated
 	 */
-	int FB_TRANSACTION = 8;
+	int FB_TRANSACTION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Input Event Occurrence</b></em>' containment
@@ -523,7 +580,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getConnectionToValueMap()
 	 * @generated
 	 */
-	int CONNECTION_TO_VALUE_MAP = 9;
+	int CONNECTION_TO_VALUE_MAP = 10;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
@@ -561,7 +618,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getRuntimeMap()
 	 * @generated
 	 */
-	int RUNTIME_MAP = 10;
+	int RUNTIME_MAP = 11;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
@@ -599,7 +656,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTrace()
 	 * @generated
 	 */
-	int TRACE = 11;
+	int TRACE = 12;
 
 	/**
 	 * The number of structural features of the '<em>Trace</em>' class. <!--
@@ -619,7 +676,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getEccTrace()
 	 * @generated
 	 */
-	int ECC_TRACE = 12;
+	int ECC_TRACE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Transition Traces</b></em>' containment
@@ -649,7 +706,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransitionTrace()
 	 * @generated
 	 */
-	int TRANSITION_TRACE = 13;
+	int TRANSITION_TRACE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Source State</b></em>' attribute. <!--
@@ -704,7 +761,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getException()
 	 * @generated
 	 */
-	int EXCEPTION = 14;
+	int EXCEPTION = 15;
 
 	/**
 	 * Returns the meta object for class
@@ -963,6 +1020,55 @@ public interface OperationalSemanticsPackage extends EPackage {
 
 	/**
 	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime
+	 * <em>Composite FB Type Runtime</em>}'. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Composite FB Type Runtime</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime
+	 * @generated
+	 */
+	EClass getCompositeFBTypeRuntime();
+
+	/**
+	 * Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getCompositeFBType
+	 * <em>Composite FB Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Composite FB
+	 *         Type</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getCompositeFBType()
+	 * @see #getCompositeFBTypeRuntime()
+	 * @generated
+	 */
+	EReference getCompositeFBTypeRuntime_CompositeFBType();
+
+	/**
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getFbElement
+	 * <em>Fb Element</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Fb Element</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getFbElement()
+	 * @see #getCompositeFBTypeRuntime()
+	 * @generated
+	 */
+	EReference getCompositeFBTypeRuntime_FbElement();
+
+	/**
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getNetworkRuntime
+	 * <em>Network Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Network Runtime</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime#getNetworkRuntime()
+	 * @see #getCompositeFBTypeRuntime()
+	 * @generated
+	 */
+	EReference getCompositeFBTypeRuntime_NetworkRuntime();
+
+	/**
+	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction
 	 * <em>Transaction</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -1068,6 +1174,19 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFBNetworkRuntime_TypeRuntimes();
+
+	/**
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getOuterNetworkRuntime
+	 * <em>Outer Network Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @return the meta object for the reference '<em>Outer Network Runtime</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getOuterNetworkRuntime()
+	 * @see #getFBNetworkRuntime()
+	 * @generated
+	 */
+	EReference getFBNetworkRuntime_OuterNetworkRuntime();
 
 	/**
 	 * Returns the meta object for class
@@ -1511,6 +1630,42 @@ public interface OperationalSemanticsPackage extends EPackage {
 
 		/**
 		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.CompositeFBTypeRuntimeImpl
+		 * <em>Composite FB Type Runtime</em>}' class. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.CompositeFBTypeRuntimeImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getCompositeFBTypeRuntime()
+		 * @generated
+		 */
+		EClass COMPOSITE_FB_TYPE_RUNTIME = eINSTANCE.getCompositeFBTypeRuntime();
+
+		/**
+		 * The meta object literal for the '<em><b>Composite FB Type</b></em>'
+		 * containment reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference COMPOSITE_FB_TYPE_RUNTIME__COMPOSITE_FB_TYPE = eINSTANCE.getCompositeFBTypeRuntime_CompositeFBType();
+
+		/**
+		 * The meta object literal for the '<em><b>Fb Element</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference COMPOSITE_FB_TYPE_RUNTIME__FB_ELEMENT = eINSTANCE.getCompositeFBTypeRuntime_FbElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Network Runtime</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference COMPOSITE_FB_TYPE_RUNTIME__NETWORK_RUNTIME = eINSTANCE.getCompositeFBTypeRuntime_NetworkRuntime();
+
+		/**
+		 * The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl
 		 * <em>Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
@@ -1587,6 +1742,14 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB_NETWORK_RUNTIME__TYPE_RUNTIMES = eINSTANCE.getFBNetworkRuntime_TypeRuntimes();
+
+		/**
+		 * The meta object literal for the '<em><b>Outer Network Runtime</b></em>'
+		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME = eINSTANCE.getFBNetworkRuntime_OuterNetworkRuntime();
 
 		/**
 		 * The meta object literal for the

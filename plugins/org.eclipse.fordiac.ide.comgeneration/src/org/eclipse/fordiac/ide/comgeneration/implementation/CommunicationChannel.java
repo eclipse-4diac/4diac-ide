@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ * Copyright (c) 2014, 2025 Luka Lednicki, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -30,11 +30,11 @@ class CommunicationChannel {
 		local = true;
 	}
 
-	public CommunicationChannelDestination getDestination(Resource resource) {
+	public CommunicationChannelDestination getDestination(final Resource resource) {
 		if (destinations.containsKey(resource)) {
 			return destinations.get(resource);
 		}
-		CommunicationChannelDestination newDestination = new CommunicationChannelDestination(this);
+		final CommunicationChannelDestination newDestination = new CommunicationChannelDestination(this);
 		newDestination.setDestinationResource(resource);
 		destinations.put(resource, newDestination);
 		return newDestination;
@@ -45,14 +45,14 @@ class CommunicationChannel {
 	}
 
 	public Resource getSourceResource() {
-		return sourceEvent.getFBNetworkElement().getResource();
+		return sourceEvent.getBlockFBNetworkElement().getResource();
 	}
 
 	public Event getSourceEvent() {
 		return sourceEvent;
 	}
 
-	public void setSourceEvent(Event sourceEvent) {
+	public void setSourceEvent(final Event sourceEvent) {
 		this.sourceEvent = sourceEvent;
 	}
 
@@ -60,7 +60,7 @@ class CommunicationChannel {
 		return local;
 	}
 
-	public void setLocal(boolean local) {
+	public void setLocal(final boolean local) {
 		this.local = local;
 	}
 

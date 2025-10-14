@@ -33,8 +33,8 @@ public class SubAppEventWatch extends AbstractSubAppInterfaceWatch implements IE
 
 	@Override
 	public void triggerEvent() throws DebugException {
-		for (final IVariableWatch watch : getWatches()) {
-			((IEventWatch) watch).triggerEvent();
+		for (final SubWatch watch : getWatches()) {
+			((IEventWatch) watch.watch()).triggerEvent();
 		}
 	}
 

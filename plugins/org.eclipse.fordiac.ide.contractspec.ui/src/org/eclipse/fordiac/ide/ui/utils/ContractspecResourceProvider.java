@@ -13,12 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.utils;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecFactory;
 import org.eclipse.fordiac.ide.contractSpec.Port;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.scoping.ContractSpecScopeProvider;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
@@ -34,10 +36,20 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 	private static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE
 			.getResourceServiceProvider(SYNTHETIC_URI);
 
-	private final FBNetworkElement fbElem;
+	private final BlockFBNetworkElement fbElem;
+	private final List<String> inPorts;
+	private final List<String> outPorts;
 
-	public ContractspecResourceProvider(final FBNetworkElement fbElem) {
+	public ContractspecResourceProvider(final BlockFBNetworkElement fbElem) {
 		this.fbElem = fbElem;
+		inPorts = null;
+		outPorts = null;
+	}
+
+	public ContractspecResourceProvider(final List<String> inPorts, final List<String> outPorts) {
+		this.fbElem = null;
+		this.inPorts = inPorts;
+		this.outPorts = outPorts;
 	}
 
 	@Override
@@ -46,30 +58,44 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 		final XtextResource resource = SERVICE_PROVIDER.get(XtextResource.class);
 		resource.setURI(SYNTHETIC_URI);
 		resourceSet.getResources().add(resource);
-		addFBInterface(resourceSet, fbElem);
+
+		final Resource resInter = resourceSet.createResource(SYNTHETIC_URI_INTERFACE);
+		ContractSpecScopeProvider.setInterfaceURI(SYNTHETIC_URI_INTERFACE);
+		if (fbElem != null) {
+			addFBInterface(resInter, fbElem);
+		} else {
+			addFBInterface(resInter, inPorts, outPorts);
+		}
 		return resource;
 	}
 
-	public static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final FBNetworkElement fbElem) {
+	public static EmbeddedEditorFactory.Builder getEmbeddedEditorBuilder(final BlockFBNetworkElement fbElem) {
 		final IEditedResourceProvider resourceProvider = new ContractspecResourceProvider(fbElem);
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory.class).newEditor(resourceProvider);
 	}
 
-	private static void addFBInterface(final ResourceSet set, final FBNetworkElement fbElem) {
-		final Resource r = set.createResource(SYNTHETIC_URI_INTERFACE);
-		ContractSpecScopeProvider.interfaceURI = SYNTHETIC_URI_INTERFACE;
+	private static void addFBInterface(final Resource res, final BlockFBNetworkElement fbElem) {
+		fbElem.getInterface().getInputs().forEach(ie -> createPort(res, ie.getName(), true));
+		fbElem.getInterface().getOutputs().forEach(oe -> createPort(res, oe.getName(), false));
+	}
 
-		fbElem.getInterface().getInputs().forEach(ie -> {
-			final Port p = ContractSpecFactory.eINSTANCE.createPort();
-			p.setName(ie.getName());
-			p.setIsInput(1);
-			r.getContents().add(p);
-		});
-		fbElem.getInterface().getOutputs().forEach(ie -> {
-			final Port p = ContractSpecFactory.eINSTANCE.createPort();
-			p.setName(ie.getName());
-			p.setIsInput(0);
-			r.getContents().add(p);
-		});
+	private static void addFBInterface(final Resource res, final List<String> inputs, final List<String> outputs) {
+		if (inputs != null) {
+			for (final String ie : inputs) {
+				createPort(res, ie, true);
+			}
+		}
+		if (outputs != null) {
+			for (final String oe : outputs) {
+				createPort(res, oe, false);
+			}
+		}
+	}
+
+	private static void createPort(final Resource res, final String name, final boolean isInput) {
+		final Port p = ContractSpecFactory.eINSTANCE.createPort();
+		p.setName(name);
+		p.setIsInput(isInput ? 1 : 0);
+		res.getContents().add(p);
 	}
 }

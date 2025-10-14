@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.elk.FordiacLayout;
 import org.eclipse.fordiac.ide.elk.Messages;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -89,12 +90,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 			if (obj instanceof final Application app) {
 				files.add(app.getAutomationSystem().getTypeEntry().getFile());
 			} else if (obj instanceof final SubApp subapp) {
-				final EObject root = EcoreUtil.getRootContainer(subapp);
-				if (root instanceof final AutomationSystem sys) {
-					files.add(sys.getTypeEntry().getFile());
-				} else if (root instanceof final CompositeFBType type) {
-					files.add(type.getTypeEntry().getFile());
-				}
+				files.add(ModelHelper.getFileFromContextChecked(subapp));
 			} else if (obj instanceof final IFile file) {
 				files.add(file);
 			} else if (obj instanceof final IProject project) {
@@ -352,7 +348,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 
 	private static EObject getBreadCrumbRefElement(final EObject sel) {
 		EObject refElement = sel;
-		if ((sel instanceof final FBNetworkElement fbnEl && fbnEl.getType() != null) || (sel instanceof Group)) {
+		if ((sel instanceof final FBNetworkElement fbnEl && fbnEl.getTypeEntry() != null) || (sel instanceof Group)) {
 			refElement = sel.eContainer().eContainer();
 		}
 		// For unfolded subapps find the next parent that is not expanded as refElement

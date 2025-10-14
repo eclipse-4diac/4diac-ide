@@ -35,9 +35,10 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getTrigger <em>Trigger</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getReaction <em>Reaction</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getInput <em>Input</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getInterval <em>Interval</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#isOnce <em>Once</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getN <em>N</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getOutOf <em>Out Of</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.AgeImpl#getClock <em>Clock</em>}</li>
@@ -48,24 +49,24 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
 public class AgeImpl extends TimeSpecImpl implements Age
 {
   /**
-   * The cached value of the '{@link #getTrigger() <em>Trigger</em>}' containment reference.
+   * The cached value of the '{@link #getOutput() <em>Output</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getTrigger()
+   * @see #getOutput()
    * @generated
    * @ordered
    */
-  protected EventExpr trigger;
+  protected EventExpr output;
 
   /**
-   * The cached value of the '{@link #getReaction() <em>Reaction</em>}' containment reference.
+   * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getReaction()
+   * @see #getInput()
    * @generated
    * @ordered
    */
-  protected EventExpr reaction;
+  protected EventExpr input;
 
   /**
    * The cached value of the '{@link #getInterval() <em>Interval</em>}' containment reference.
@@ -76,6 +77,26 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * @ordered
    */
   protected Interval interval;
+
+  /**
+   * The default value of the '{@link #isOnce() <em>Once</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOnce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean ONCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isOnce() <em>Once</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOnce()
+   * @generated
+   * @ordered
+   */
+  protected boolean once = ONCE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getN() <em>N</em>}' attribute.
@@ -154,9 +175,9 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * @generated
    */
   @Override
-  public EventExpr getTrigger()
+  public EventExpr getOutput()
   {
-    return trigger;
+    return output;
   }
 
   /**
@@ -164,13 +185,13 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetTrigger(EventExpr newTrigger, NotificationChain msgs)
+  public NotificationChain basicSetOutput(EventExpr newOutput, NotificationChain msgs)
   {
-    EventExpr oldTrigger = trigger;
-    trigger = newTrigger;
+    EventExpr oldOutput = output;
+    output = newOutput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__TRIGGER, oldTrigger, newTrigger);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__OUTPUT, oldOutput, newOutput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -182,20 +203,20 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * @generated
    */
   @Override
-  public void setTrigger(EventExpr newTrigger)
+  public void setOutput(EventExpr newOutput)
   {
-    if (newTrigger != trigger)
+    if (newOutput != output)
     {
       NotificationChain msgs = null;
-      if (trigger != null)
-        msgs = ((InternalEObject)trigger).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__TRIGGER, null, msgs);
-      if (newTrigger != null)
-        msgs = ((InternalEObject)newTrigger).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__TRIGGER, null, msgs);
-      msgs = basicSetTrigger(newTrigger, msgs);
+      if (output != null)
+        msgs = ((InternalEObject)output).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__OUTPUT, null, msgs);
+      if (newOutput != null)
+        msgs = ((InternalEObject)newOutput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__OUTPUT, null, msgs);
+      msgs = basicSetOutput(newOutput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__TRIGGER, newTrigger, newTrigger));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__OUTPUT, newOutput, newOutput));
   }
 
   /**
@@ -204,9 +225,9 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * @generated
    */
   @Override
-  public EventExpr getReaction()
+  public EventExpr getInput()
   {
-    return reaction;
+    return input;
   }
 
   /**
@@ -214,13 +235,13 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetReaction(EventExpr newReaction, NotificationChain msgs)
+  public NotificationChain basicSetInput(EventExpr newInput, NotificationChain msgs)
   {
-    EventExpr oldReaction = reaction;
-    reaction = newReaction;
+    EventExpr oldInput = input;
+    input = newInput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__REACTION, oldReaction, newReaction);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__INPUT, oldInput, newInput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -232,20 +253,20 @@ public class AgeImpl extends TimeSpecImpl implements Age
    * @generated
    */
   @Override
-  public void setReaction(EventExpr newReaction)
+  public void setInput(EventExpr newInput)
   {
-    if (newReaction != reaction)
+    if (newInput != input)
     {
       NotificationChain msgs = null;
-      if (reaction != null)
-        msgs = ((InternalEObject)reaction).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__REACTION, null, msgs);
-      if (newReaction != null)
-        msgs = ((InternalEObject)newReaction).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__REACTION, null, msgs);
-      msgs = basicSetReaction(newReaction, msgs);
+      if (input != null)
+        msgs = ((InternalEObject)input).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__INPUT, null, msgs);
+      if (newInput != null)
+        msgs = ((InternalEObject)newInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.AGE__INPUT, null, msgs);
+      msgs = basicSetInput(newInput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__REACTION, newReaction, newReaction));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__INPUT, newInput, newInput));
   }
 
   /**
@@ -296,6 +317,31 @@ public class AgeImpl extends TimeSpecImpl implements Age
     }
     else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__INTERVAL, newInterval, newInterval));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean isOnce()
+  {
+    return once;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setOnce(boolean newOnce)
+  {
+    boolean oldOnce = once;
+    once = newOnce;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.AGE__ONCE, oldOnce, once));
   }
 
   /**
@@ -403,10 +449,10 @@ public class AgeImpl extends TimeSpecImpl implements Age
   {
     switch (featureID)
     {
-      case ContractSpecPackage.AGE__TRIGGER:
-        return basicSetTrigger(null, msgs);
-      case ContractSpecPackage.AGE__REACTION:
-        return basicSetReaction(null, msgs);
+      case ContractSpecPackage.AGE__OUTPUT:
+        return basicSetOutput(null, msgs);
+      case ContractSpecPackage.AGE__INPUT:
+        return basicSetInput(null, msgs);
       case ContractSpecPackage.AGE__INTERVAL:
         return basicSetInterval(null, msgs);
     }
@@ -423,12 +469,14 @@ public class AgeImpl extends TimeSpecImpl implements Age
   {
     switch (featureID)
     {
-      case ContractSpecPackage.AGE__TRIGGER:
-        return getTrigger();
-      case ContractSpecPackage.AGE__REACTION:
-        return getReaction();
+      case ContractSpecPackage.AGE__OUTPUT:
+        return getOutput();
+      case ContractSpecPackage.AGE__INPUT:
+        return getInput();
       case ContractSpecPackage.AGE__INTERVAL:
         return getInterval();
+      case ContractSpecPackage.AGE__ONCE:
+        return isOnce();
       case ContractSpecPackage.AGE__N:
         return getN();
       case ContractSpecPackage.AGE__OUT_OF:
@@ -450,14 +498,17 @@ public class AgeImpl extends TimeSpecImpl implements Age
   {
     switch (featureID)
     {
-      case ContractSpecPackage.AGE__TRIGGER:
-        setTrigger((EventExpr)newValue);
+      case ContractSpecPackage.AGE__OUTPUT:
+        setOutput((EventExpr)newValue);
         return;
-      case ContractSpecPackage.AGE__REACTION:
-        setReaction((EventExpr)newValue);
+      case ContractSpecPackage.AGE__INPUT:
+        setInput((EventExpr)newValue);
         return;
       case ContractSpecPackage.AGE__INTERVAL:
         setInterval((Interval)newValue);
+        return;
+      case ContractSpecPackage.AGE__ONCE:
+        setOnce((Boolean)newValue);
         return;
       case ContractSpecPackage.AGE__N:
         setN((Integer)newValue);
@@ -482,14 +533,17 @@ public class AgeImpl extends TimeSpecImpl implements Age
   {
     switch (featureID)
     {
-      case ContractSpecPackage.AGE__TRIGGER:
-        setTrigger((EventExpr)null);
+      case ContractSpecPackage.AGE__OUTPUT:
+        setOutput((EventExpr)null);
         return;
-      case ContractSpecPackage.AGE__REACTION:
-        setReaction((EventExpr)null);
+      case ContractSpecPackage.AGE__INPUT:
+        setInput((EventExpr)null);
         return;
       case ContractSpecPackage.AGE__INTERVAL:
         setInterval((Interval)null);
+        return;
+      case ContractSpecPackage.AGE__ONCE:
+        setOnce(ONCE_EDEFAULT);
         return;
       case ContractSpecPackage.AGE__N:
         setN(N_EDEFAULT);
@@ -514,12 +568,14 @@ public class AgeImpl extends TimeSpecImpl implements Age
   {
     switch (featureID)
     {
-      case ContractSpecPackage.AGE__TRIGGER:
-        return trigger != null;
-      case ContractSpecPackage.AGE__REACTION:
-        return reaction != null;
+      case ContractSpecPackage.AGE__OUTPUT:
+        return output != null;
+      case ContractSpecPackage.AGE__INPUT:
+        return input != null;
       case ContractSpecPackage.AGE__INTERVAL:
         return interval != null;
+      case ContractSpecPackage.AGE__ONCE:
+        return once != ONCE_EDEFAULT;
       case ContractSpecPackage.AGE__N:
         return n != N_EDEFAULT;
       case ContractSpecPackage.AGE__OUT_OF:
@@ -541,7 +597,9 @@ public class AgeImpl extends TimeSpecImpl implements Age
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (n: ");
+    result.append(" (once: ");
+    result.append(once);
+    result.append(", n: ");
     result.append(n);
     result.append(", outOf: ");
     result.append(outOf);

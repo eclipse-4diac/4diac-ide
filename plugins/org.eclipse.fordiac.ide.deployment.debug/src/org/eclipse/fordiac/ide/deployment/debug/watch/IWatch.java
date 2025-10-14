@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,8 +18,8 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.IDeploymentDebugElement;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
@@ -149,7 +149,8 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 		case final VarDeclaration varDeclaration -> new VarDeclarationWatch(name, varDeclaration, debugTarget);
 		case final AdapterDeclaration adapterDeclaration ->
 			new AdapterDeclarationWatch(name, adapterDeclaration, debugTarget);
-		case final FBNetworkElement networkElement -> new FBNetworkElementWatch(name, networkElement, debugTarget);
+		case final BlockFBNetworkElement networkElement ->
+			new BlockFBNetworkElementWatch(name, networkElement, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
 	}
@@ -179,8 +180,8 @@ public interface IWatch extends IVariable, IDeploymentDebugElement {
 			new VarDeclarationWatch(name, varDeclaration, resource, resourceRelativeName, debugTarget);
 		case final AdapterDeclaration adapterDeclaration ->
 			new AdapterDeclarationWatch(name, adapterDeclaration, resource, resourceRelativeName, debugTarget);
-		case final FBNetworkElement networkElement ->
-			new FBNetworkElementWatch(name, networkElement, resource, resourceRelativeName, debugTarget);
+		case final BlockFBNetworkElement networkElement ->
+			new BlockFBNetworkElementWatch(name, networkElement, resource, resourceRelativeName, debugTarget);
 		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
 	}

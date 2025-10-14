@@ -17,35 +17,22 @@ package org.eclipse.fordiac.ide.ant.ant;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.export.ExportFilter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
 
 public abstract class AbstractExportLibElements extends AbstractFBTask {
 	private static final String ANT_CONVERT_TASK_DIRECTORY_NAME = "converted_FBs"; //$NON-NLS-1$
-
-	private static final String SIMPLEFB_XML_ATTRIBUTE = "SimpleFB"; //$NON-NLS-1$
-	private static final String BASICFB_XML_ATTRIBUTE = "BasicFB"; //$NON-NLS-1$
-	private static final String COMPOSITEFB_XML_ATTRIBUTE = "FBNetwork"; //$NON-NLS-1$
-	private static final String FUNCTIONBODY_XML_ATTRIBUTE = "FunctionBody"; //$NON-NLS-1$
-
-	private final DocumentBuilder builder = getDocumentBuilder();
-	private final Transformer transformer = getTransformer();
 
 	@Override
 	protected String getExportDirectoryDefault() {
@@ -61,72 +48,38 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 	protected void exportFile(final File folder, final IFile file) throws BuildException {
 		log(file.toString());
 
-		Document document;
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		LibraryElement element = entry.getType();
+		String hash;
+
 		try {
-			document = builder.parse(file.getLocation().toFile());
-		} catch (IOException | SAXException e) {
+			hash = LibraryElementHasher.hash(element);
+		} catch (final LibraryElementHashException e) {
 			throw new BuildException(e);
 		}
-		removeAllAlgorithms(document);
+		final ExportCopier copier = new ExportCopier();
+		element = (LibraryElement) copier.copy(element);
+		copier.copyReferences();
 
-		final DOMSource src = new DOMSource(document);
-		final StreamResult res = new StreamResult(new File(folder + File.separator + file.getName()));
+		AttributeTypeEntry hashDecl = entry.getTypeLibrary()
+				.getAttributeTypeEntry(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_FULL_NAME);
+		if (hashDecl == null) {
+			hashDecl = entry.getTypeLibrary().getAttributeTypeEntry(TypeLibraryTags.TYPE_HASH_ATTRIBUTE_NAME);
+		}
+		if (hashDecl == null) {
+			throw new BuildException("Type hash attribute is missing from type library"); //$NON-NLS-1$
+		}
+
+		element.setAttribute(hashDecl.getType(), hash, null);
+
+		final Resource resource = FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(new File(folder, file.getName()).getAbsolutePath()));
+		resource.getContents().add(element);
 		try {
-			transformer.transform(src, res);
-		} catch (final TransformerException e) {
+			resource.save(null);
+		} catch (final IOException e) {
 			throw new BuildException(e);
 		}
-	}
 
-	private static void removeAllAlgorithms(final Document doc) {
-		NodeList algo = doc.getElementsByTagName(SIMPLEFB_XML_ATTRIBUTE);
-		for (int i = 0; i < algo.getLength(); i++) {
-			final Node parent = algo.item(i).getParentNode();
-			parent.removeChild(algo.item(i));
-		}
-
-		algo = doc.getElementsByTagName(BASICFB_XML_ATTRIBUTE);
-		for (int i = 0; i < algo.getLength(); i++) {
-			final Node parent = algo.item(i).getParentNode();
-			parent.removeChild(algo.item(i));
-		}
-
-		algo = doc.getElementsByTagName(COMPOSITEFB_XML_ATTRIBUTE);
-		for (int i = 0; i < algo.getLength(); i++) {
-			final Node parent = algo.item(i).getParentNode();
-			parent.removeChild(algo.item(i));
-		}
-
-		algo = doc.getElementsByTagName(FUNCTIONBODY_XML_ATTRIBUTE);
-		for (int i = 0; i < algo.getLength(); i++) {
-			final Node parent = algo.item(i).getParentNode();
-			parent.removeChild(algo.item(i));
-		}
-
-	}
-
-	private static DocumentBuilder getDocumentBuilder() throws BuildException {
-		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		// set all dtd and validation stuff to false
-		try {
-			factory.setFeature("http://xml.org/sax/features/namespaces", false); //$NON-NLS-1$
-			factory.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
-			factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false); //$NON-NLS-1$
-			factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); //$NON-NLS-1$
-			return factory.newDocumentBuilder();
-		} catch (final ParserConfigurationException e) {
-			throw new BuildException(e);
-		}
-	}
-
-	private static Transformer getTransformer() throws BuildException {
-		final TransformerFactory tf = TransformerFactory.newInstance();
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
-		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); //$NON-NLS-1$
-		try {
-			return tf.newTransformer();
-		} catch (final TransformerConfigurationException e) {
-			throw new BuildException(e);
-		}
 	}
 }

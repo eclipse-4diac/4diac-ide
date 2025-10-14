@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
@@ -108,7 +108,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 	private String callableName = "CALLABLE"; //$NON-NLS-1$
 	private AccessMode referencedReturnVariable = AccessMode.NONE;
 	private Map<STVarDeclaration, AccessMode> referencedLocalVariables = Collections.emptyMap();
-	private Optional<INamedElement> returnType = Optional.empty();
+	private Optional<LibraryElement> returnType = Optional.empty();
 	private List<STVarDeclaration> inputParameters = Collections.emptyList();
 	private List<STVarDeclaration> outputParameters = Collections.emptyList();
 	private List<STVarDeclaration> inoutParameters = Collections.emptyList();
@@ -459,7 +459,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 				&& EcoreUtil2.getContainerOfType(expression.getFeature(), ICallable.class) == callable.orElse(null);
 	}
 
-	protected Optional<INamedElement> calculateReturnType() {
+	protected Optional<LibraryElement> calculateReturnType() {
 		if (referencedReturnVariable != AccessMode.NONE) {
 			return callable.map(ICallable::getReturnType);
 		}
@@ -549,11 +549,11 @@ public class ExtractCallableRefactoring extends Refactoring {
 		return referencedLocalVariables;
 	}
 
-	public Optional<INamedElement> getReturnType() {
+	public Optional<LibraryElement> getReturnType() {
 		return returnType;
 	}
 
-	public void setReturnType(final Optional<INamedElement> returnType) {
+	public void setReturnType(final Optional<LibraryElement> returnType) {
 		this.returnType = returnType;
 	}
 

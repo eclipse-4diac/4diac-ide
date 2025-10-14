@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,7 +47,7 @@ public class TargetPinManager {
 		targetPinChildren.keySet().removeIf(key -> !pins.contains(key));
 
 		// add any missing entries
-		final FBNetwork parentNW = getModel().getFBNetworkElement().getFbNetwork();
+		final FBNetwork parentNW = getModel().getBlockFBNetworkElement().getFbNetwork();
 		pins.forEach(pin -> targetPinChildren.computeIfAbsent(pin,
 				newEntry -> TargetInterfaceElement.createFor(getModel(), newEntry, parentNW)));
 
@@ -92,7 +92,7 @@ public class TargetPinManager {
 	private static Stream<IInterfaceElement> getTargetPins(final Connection con) {
 		final IInterfaceElement destination = con.getDestination();
 		if (destination != null
-				&& followConnections(destination.getFBNetworkElement(), destination.getOutputConnections())) {
+				&& followConnections(destination.getBlockFBNetworkElement(), destination.getOutputConnections())) {
 			return destination.getOutputConnections().stream().flatMap(TargetPinManager::getTargetPins);
 		}
 		return Stream.of(destination);
@@ -105,7 +105,7 @@ public class TargetPinManager {
 
 	private static Stream<IInterfaceElement> getSourcePins(final Connection con) {
 		final IInterfaceElement source = con.getSource();
-		if (source != null && followConnections(source.getFBNetworkElement(), source.getInputConnections())) {
+		if (source != null && followConnections(source.getBlockFBNetworkElement(), source.getInputConnections())) {
 			return source.getInputConnections().stream().flatMap(TargetPinManager::getSourcePins);
 		}
 		return Stream.of(source);
@@ -121,7 +121,7 @@ public class TargetPinManager {
 	}
 
 	private static SubApp getContainer(final IInterfaceElement ie) {
-		if (ie.getFBNetworkElement() instanceof final FB fb) {
+		if (ie.getBlockFBNetworkElement() instanceof final FB fb) {
 			final SubApp container = FBNetworkElementHelper.getContainerSubappOfFB(fb);
 			if (container != null) {
 				return container.isUnfolded() ? container : null;
@@ -129,7 +129,7 @@ public class TargetPinManager {
 			return null;
 		}
 
-		if (ie.getFBNetworkElement() instanceof final SubApp subapp) {
+		if (ie.getBlockFBNetworkElement() instanceof final SubApp subapp) {
 			return subapp.isUnfolded() ? subapp : null;
 		}
 

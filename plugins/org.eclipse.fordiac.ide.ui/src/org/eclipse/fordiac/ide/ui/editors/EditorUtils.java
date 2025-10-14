@@ -35,6 +35,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 public final class EditorUtils {
+	public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor"; //$NON-NLS-1$
 
 	public static final EditorAction CloseEditor = (final IEditorPart part) -> PlatformUI.getWorkbench()
 			.getActiveWorkbenchWindow().getActivePage().closeEditor(part, false);
@@ -57,6 +58,10 @@ public final class EditorUtils {
 			return currentActiveEditor.getAdapter(GraphicalViewer.class);
 		}
 		return null;
+	}
+
+	public static IEditorPart openTextEditor(final IEditorInput input) {
+		return openEditor(input, TEXT_EDITOR_ID);
 	}
 
 	public static IEditorPart openEditor(final IEditorInput input, final String editorId) {

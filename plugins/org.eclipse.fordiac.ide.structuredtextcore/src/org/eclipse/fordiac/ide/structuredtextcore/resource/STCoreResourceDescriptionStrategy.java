@@ -175,7 +175,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		return ""; //$NON-NLS-1$
 	}
 
-	protected static String getCallableParameterTypeDefaultValue(final INamedElement type) {
+	protected static String getCallableParameterTypeDefaultValue(final LibraryElement type) {
 		if (type instanceof AnyDerivedType) {
 			return "VAR"; //$NON-NLS-1$
 		}
@@ -225,7 +225,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			builder.append(s);
 		}
 
-		public SignatureHashBuilder appendType(final INamedElement type) {
+		public SignatureHashBuilder appendType(final LibraryElement type) {
 			if (type != null) {
 				append(EcoreUtil.getURI(type).toString());
 			}

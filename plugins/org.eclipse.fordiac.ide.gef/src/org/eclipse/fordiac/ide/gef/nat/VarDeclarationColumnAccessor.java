@@ -77,7 +77,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 	}
 
 	private static boolean isFBinsideCompositeNetwork(final VarDeclaration rowObject) {
-		final var fbElement = rowObject.getFBNetworkElement();
+		final var fbElement = rowObject.getBlockFBNetworkElement();
 		if (fbElement == null) {
 			return false;
 		}

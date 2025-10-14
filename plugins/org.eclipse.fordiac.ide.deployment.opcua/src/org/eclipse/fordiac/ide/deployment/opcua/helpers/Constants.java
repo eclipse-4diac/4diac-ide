@@ -49,6 +49,12 @@ public class Constants {
 	public static final NodeId FORCE_VALUE_NODE = new NodeId(1, "forceValue"); //$NON-NLS-1$
 	public static final NodeId CLEAR_FORCE_NODE = new NodeId(1, "clearForce"); //$NON-NLS-1$
 	public static final NodeId QUERY_RESOURCES_NODE = new NodeId(1, "queryResources"); //$NON-NLS-1$
+	public static final NodeId QUERY_FB_TYPE_NODE = new NodeId(1, "queryFBType"); //$NON-NLS-1$
+	public static final NodeId QUERY_DATA_TYPE_NODE = new NodeId(1, "queryDataType"); //$NON-NLS-1$
+	public static final NodeId QUERY_GLOBAL_CONST_TYPE_NODE = new NodeId(1, "queryGlobalConstType"); //$NON-NLS-1$
+
+	public static final NodeId READ_TRACES_NODE = new NodeId(1, "Read Traces"); //$NON-NLS-1$
+	public static final NodeId REPLAY_NEXT_EVENT_NODE = new NodeId(1, "Replay Next Event"); //$NON-NLS-1$
 
 	/** Deployment Console Messages **/
 	public static final String CREATE_RESOURCE_INSTANCE = "<Request Action=\"CREATE RESOURCE\"><FB Name=\"{0}\" Type=\"{1}\" /></Request>"; //$NON-NLS-1$
@@ -72,15 +78,22 @@ public class Constants {
 	public static final String FORCE_VALUE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" Value=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String CLEAR_FORCE = "<Request Action=\"WRITE\"><Connection Destination=\"{0}\" /></Request>"; //$NON-NLS-1$
 	public static final String QUERY_RESOURCES = "<Request Action=\"QUERY\"></Request>"; //$NON-NLS-1$
+	public static final String QUERY_FB_TYPE = "<Request Action=\"QUERY\"><FBType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_DATA_TYPE = "<Request Action=\"QUERY\"><DataType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request Action=\"QUERY\"><GlobalConstType Name=\"{0}\" /></Request>"; //$NON-NLS-1$
+
+	public static final String READ_TRACES = "<Request Action=\"READ TRACES\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String REPLAY_NEXT_EVENT = "<Request Action=\"REPLAY NEXT EVENT\"><Connection Destination=\"{0}\"/></Request>"; //$NON-NLS-1$
 
 	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
 
 	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
 	public static final String QUERY_RESPONSE = "<Response>\n  <FBList>\n    {0}\n  </FBList>\n</Response>"; //$NON-NLS-1$
+	public static final String QUERY_TYPE_RESPONSE = "<Response>\n  {0}\n</Response>"; //$NON-NLS-1$
 	public static final Response EMPTY_RESPONSE;
 
 	public static final String FB_NAME_FORMAT = "{0}{1}"; //$NON-NLS-1$
-	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}"; //$NON-NLS-1$
+	public static final String FB_PORT_NAME_FORMAT = "{0}{1}.{2}{3}"; //$NON-NLS-1$
 
 	/* IEC61499 Status Codes */
 	public static final String MGM_RESPONSE_READY = "Ready"; //$NON-NLS-1$

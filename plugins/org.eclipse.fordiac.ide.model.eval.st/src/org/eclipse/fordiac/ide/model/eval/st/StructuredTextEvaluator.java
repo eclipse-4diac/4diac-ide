@@ -68,6 +68,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
@@ -214,13 +216,13 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		};
 	}
 
-	protected INamedElement evaluateType(final STVarDeclaration declaration)
+	protected LibraryElement evaluateType(final STVarDeclaration declaration)
 			throws EvaluatorException, InterruptedException {
 		final DataType type = switch (declaration.getType()) {
 		case final AnyStringType anyStringType when declaration.getMaxLength() != null -> STCoreUtil.newStringType(
 				anyStringType, ValueOperations.asInteger(evaluateExpression(declaration.getMaxLength())));
 		case final DataType dataType -> dataType;
-		case null, default -> null;
+		case null -> null;
 		};
 		if (declaration.isArray()) {
 			if (declaration.getRanges().isEmpty()) {
@@ -781,7 +783,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	private Value evaluateStandardFunctionCall(final STStandardFunction standardFunction,
-			final Map<INamedElement, STCallArgument> inputs, final Map<INamedElement, STCallArgument> outputs)
+			final Map<ITypedElement, STCallArgument> inputs, final Map<ITypedElement, STCallArgument> outputs)
 			throws EvaluatorException, InterruptedException {
 		final List<Object> arguments = new ArrayList<>(inputs.size() + outputs.size());
 		for (final var arg : inputs.entrySet()) {
@@ -799,8 +801,8 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	protected Value evaluateCall(final Variable<?> receiver, final ICallable feature,
-			final Map<INamedElement, STCallArgument> inputs, final Map<INamedElement, STCallArgument> outputs,
-			final Map<INamedElement, STCallArgument> inouts) throws EvaluatorException, InterruptedException {
+			final Map<ITypedElement, STCallArgument> inputs, final Map<ITypedElement, STCallArgument> outputs,
+			final Map<ITypedElement, STCallArgument> inouts) throws EvaluatorException, InterruptedException {
 		final List<Variable<?>> arguments = new ArrayList<>(inputs.size() + inouts.size());
 		createArguments(arguments, inputs);
 		createArguments(arguments, inouts);
@@ -817,8 +819,8 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	protected Value evaluateFBCall(final FBVariable receiver, final Event event,
-			final Map<INamedElement, STCallArgument> inputs, final Map<INamedElement, STCallArgument> outputs,
-			final Map<INamedElement, STCallArgument> inouts) throws EvaluatorException, InterruptedException {
+			final Map<ITypedElement, STCallArgument> inputs, final Map<ITypedElement, STCallArgument> outputs,
+			final Map<ITypedElement, STCallArgument> inouts) throws EvaluatorException, InterruptedException {
 		final Event typeEvent = receiver.getType().getInterfaceList().getEvent(event.getName());
 		if (typeEvent == null) {
 			throw new EvaluatorException(MessageFormat.format(
@@ -842,7 +844,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		return null;
 	}
 
-	protected void createArguments(final List<Variable<?>> result, final Map<INamedElement, STCallArgument> arguments)
+	protected void createArguments(final List<Variable<?>> result, final Map<ITypedElement, STCallArgument> arguments)
 			throws EvaluatorException, InterruptedException {
 		for (final var arg : arguments.entrySet()) {
 			if (arg.getValue() != null) {
@@ -851,7 +853,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	protected void writeArguments(final Evaluator eval, final Map<INamedElement, STCallArgument> arguments)
+	protected void writeArguments(final Evaluator eval, final Map<ITypedElement, STCallArgument> arguments)
 			throws EvaluatorException, InterruptedException {
 		for (final var arg : arguments.entrySet()) {
 			if (arg.getValue() != null) {
@@ -861,7 +863,7 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	protected void readArguments(final Evaluator eval, final Map<INamedElement, STCallArgument> arguments)
+	protected void readArguments(final Evaluator eval, final Map<ITypedElement, STCallArgument> arguments)
 			throws EvaluatorException, InterruptedException {
 		for (final var arg : arguments.entrySet()) {
 			switch (arg.getValue()) {

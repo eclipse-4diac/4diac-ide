@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPart;
@@ -249,7 +250,10 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 
 	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
 			final Map<Object, EditPart> editPartRegistry) {
-		fbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		if (!(fbe instanceof final BlockFBNetworkElement bfbe)) {
+			return;
+		}
+		bfbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
 				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
 				.forEach(ep -> {
 					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();

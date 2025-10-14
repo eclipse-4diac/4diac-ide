@@ -54,7 +54,7 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="%product.name">
+            name="4diac IDE">
          <property
                name="appName"
                value="4diac IDE">  <!-- This string shall not be exported! --> 

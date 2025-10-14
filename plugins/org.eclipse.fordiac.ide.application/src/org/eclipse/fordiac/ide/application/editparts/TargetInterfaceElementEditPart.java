@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -70,7 +70,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 			initializeMaxLabelLength();
 			super.activate();
 			getRefElement().eAdapters().add(nameChangeAdapter);
-			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			final FBNetworkElement parent = getRefElement().getBlockFBNetworkElement();
 			if (parent != null) {
 				parent.eAdapters().add(nameChangeAdapter);
 				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
@@ -85,7 +85,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			getRefElement().eAdapters().remove(nameChangeAdapter);
-			final FBNetworkElement parent = getRefElement().getFBNetworkElement();
+			final FBNetworkElement parent = getRefElement().getBlockFBNetworkElement();
 			if (parent != null && parent.eAdapters().contains(nameChangeAdapter)) {
 				parent.eAdapters().remove(nameChangeAdapter);
 				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
@@ -193,7 +193,7 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private static EObject getTargetEditorElement(final IInterfaceElement target) {
-		final FBNetworkElement fbnEl = target.getFBNetworkElement();
+		final FBNetworkElement fbnEl = target.getBlockFBNetworkElement();
 		if (fbnEl == null) {
 			// we have a typed subapp or CFB Type pin
 			return target.eContainer().eContainer();

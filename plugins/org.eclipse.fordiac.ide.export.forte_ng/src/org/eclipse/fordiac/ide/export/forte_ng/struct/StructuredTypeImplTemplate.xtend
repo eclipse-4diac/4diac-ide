@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
 import java.util.Map
+import java.util.Set
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
@@ -32,37 +33,34 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«generateImplIncludes»
 		
-		DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec»);
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
+		  }
 		
-		const CStringDictionary::TStringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		  DEFINE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain», «type.generateTypeSpec», TypeHash);
 		
-		«className»::«className»() :
-		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
-		}
+		  const StringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		
+		  «className»::«className»() :
+		      CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
+		  }
 		«IF !type.memberVariables.empty»
 		
-		«className»::«className»(«generateConstructorParameters») :
-		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
-		}
+		  «className»::«className»(«generateConstructorParameters») :
+		      CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
+		  }
 		«ENDIF»
 		
-		CStringDictionary::TStringId «className»::getStructTypeNameID() const {
-		  return «type.generateTypeSpec»;
+		  StringId «className»::getStructTypeNameID() const {
+		    return «type.generateTypeSpec»;
+		  }
+		
+		  «generateSetValue»
+		
+		  «type.memberVariables.generateAccessorDefinition("getMember", false)»
+		  «type.memberVariables.generateAccessorDefinition("getMember", true)»
 		}
-		
-		«generateSetValue»
-		
-		«type.memberVariables.generateAccessorDefinition("getMember", false)»
-		«type.memberVariables.generateAccessorDefinition("getMember", true)»
-	'''
-
-	def protected generateImplIncludes() '''
-		#include "«fileBasename».h"
-		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-		#include "«fileBasename»_gen.cpp"
-		#endif
-		
-		«getDependencies(emptyMap).generateDependencyIncludes»
 	'''
 	
 	def protected generateSetValue() '''
@@ -75,5 +73,4 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		  }
 		}
 	'''
-
 }

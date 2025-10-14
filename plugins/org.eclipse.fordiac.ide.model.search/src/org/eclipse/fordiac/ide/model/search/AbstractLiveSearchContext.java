@@ -15,19 +15,13 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.Objects;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -55,28 +49,6 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 	public EObject mapTypes(final URI uri) {
 		final TypeEntry typeEntry = Objects.requireNonNull(TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri));
 		return getLiveType(typeEntry);
-	}
-
-	public static void executeAndSave(final Command cmd, final EObject modelObj, final IProgressMonitor pm) {
-		final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(modelObj));
-		if (rootContainer instanceof final LibraryElement elem) {
-			final TypeEntry entry = elem.getTypeEntry();
-			final IEditorPart editor = getEditor(entry);
-			execute(cmd, editor);
-			save(entry, elem, editor, pm);
-		}
-	}
-
-	public static void execute(final Command cmd, final TypeEntry typeEntry) {
-		final IEditorPart editor = getEditor(typeEntry);
-		execute(cmd, editor);
-
-	}
-
-	public static void save(final TypeEntry typeEntry) {
-		final IEditorPart editor = getEditor(typeEntry);
-		save(typeEntry, getLiveType(typeEntry), editor, new NullProgressMonitor());
-
 	}
 
 	protected TypeLibrary getTypelib() {
@@ -139,29 +111,6 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 
 			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
 		});
-	}
-
-	private static void execute(final Command cmd, final IEditorPart editor) {
-		if (editor != null) {
-			// when an editor is open execute in display thread to protect any ui updates
-			Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).execute(cmd));
-		} else if (cmd.canExecute()) {
-			cmd.execute();
-		}
-	}
-
-	private static void save(final TypeEntry typeEntry, final LibraryElement libraryElement, final IEditorPart editor,
-			final IProgressMonitor pm) {
-		try {
-			typeEntry.save(libraryElement, pm);
-			if (editor != null) {
-				// if we have an editor mark the save location in the command stack to tell the
-				// editor that it is not dirty anymore
-				Display.getDefault().syncExec(() -> editor.getAdapter(CommandStack.class).markSaveLocation());
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Saving TypeEntry " + typeEntry.getFullTypeName() + " failed", e); //$NON-NLS-1$//$NON-NLS-2$
-		}
 	}
 
 }

@@ -46,7 +46,6 @@ public class TypeSelectionProposalProvider implements IContentProposalProvider {
 	@Override
 	public IContentProposal[] getProposals(final String contents, final int position) {
 		final TypeLibrary typeLibrary = supplier.get();
-		contentProvider.getTypeEntries(typeLibrary).forEach(TypeEntry::getType);
 		return Stream.concat(
 				contentProvider.getTypes(typeLibrary).stream().filter(proposal -> matches(proposal.getName(), contents))
 						.map(this::createProposal),

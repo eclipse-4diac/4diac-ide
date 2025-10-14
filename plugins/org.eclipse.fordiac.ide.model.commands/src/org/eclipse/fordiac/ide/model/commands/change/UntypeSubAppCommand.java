@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,13 +13,13 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
-public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
+public class UntypeSubAppCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	public UntypeSubAppCommand(final SubApp subapp) {
 		super(subapp);
@@ -27,7 +27,7 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 
 	@Override
 	public boolean canExecute() {
-		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getType() != null;
+		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getTypeEntry() != null;
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class UntypeSubAppCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	@Override
-	protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
 		return LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 	}
 
 	@Override
 	protected void setInterface() {
-		newElement.setInterface(oldElement.getType().getInterfaceList().copy());
+		newElement.setInterface(oldElement.getTypeInterface().copy());
 	}
 }

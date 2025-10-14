@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2013, 2025 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -51,7 +51,7 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 
 	@Override
 	public void performRequest(final Request request) {
-		if ((request.getType() == RequestConstants.REQ_OPEN) && (getModel().getFBNetworkElement() != null)) {
+		if ((request.getType() == RequestConstants.REQ_OPEN) && (getModel().getBlockFBNetworkElement() != null)) {
 			// REQ_OPEN -> doubleclick and we are inside of a viewer
 			goToParent();
 		} else {
@@ -60,7 +60,7 @@ public class CompositeInternalInterfaceEditPartRO extends InterfaceEditPart {
 	}
 
 	private void goToParent() {
-		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getFBNetworkElement());
+		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getBlockFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
 		HandlerHelper.selectElement(getModel(), viewer);
 	}

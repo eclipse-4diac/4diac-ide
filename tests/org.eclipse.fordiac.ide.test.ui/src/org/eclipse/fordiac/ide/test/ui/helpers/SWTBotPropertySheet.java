@@ -65,7 +65,7 @@ public class SWTBotPropertySheet {
 			}
 			return result1;
 		});
-		return result != null ? result.booleanValue() : false;
+		return result != null && result.booleanValue();
 	}
 
 	/**
@@ -93,5 +93,9 @@ public class SWTBotPropertySheet {
 		event.stateMask = stateMask;
 		event.count = count;
 		return event;
+	}
+
+	private SWTBotPropertySheet() {
+		throw new UnsupportedOperationException();
 	}
 }

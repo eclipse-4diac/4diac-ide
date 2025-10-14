@@ -23,11 +23,13 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.LibraryManager;
@@ -121,12 +123,21 @@ class LibraryImportTest {
 			}
 			return false;
 		});
+		waitForBuild();
+	}
+
+	static void waitForBuild() throws Exception {
+		final IJobManager manager = Job.getJobManager();
+		manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, null);
+		manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, null);
 	}
 
 	@Test
-	void testSimpleImport() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_0_0), //$NON-NLS-1$
+	void testSimpleImport() throws Exception {
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_0_0, 0,
@@ -134,13 +145,15 @@ class LibraryImportTest {
 	}
 
 	@Test
-	void testImportUpdateNoOverwrite() {
+	void testImportUpdateNoOverwrite() throws Exception {
 		var manifest = ManifestHelper.getContainerManifest(project);
 		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_1_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST01 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
+
+		waitForBuild();
 
 		manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_1_0, 0,
@@ -149,13 +162,15 @@ class LibraryImportTest {
 	}
 
 	@Test
-	void testImportUpdateOverwrite() {
+	void testImportUpdateOverwrite() throws Exception {
 		var manifest = ManifestHelper.getContainerManifest(project);
 		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
 
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST01 + "-2.0.0"), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST01 + "-2.0.0"), //$NON-NLS-1$
 				true, false);
+
+		waitForBuild();
 
 		manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V2_0_0, 0,
@@ -168,9 +183,9 @@ class LibraryImportTest {
 		var manifest = ManifestHelper.getContainerManifest(project);
 		ManifestHelper.addDependency(manifest, ManifestHelper.createRequired(TEST01, "[1.0.0-2.0.0)")); //$NON-NLS-1$
 		ManifestHelper.saveManifest(manifest);
+		project.build(IncrementalProjectBuilder.FULL_BUILD, null);
 
-		LibraryManager.INSTANCE.checkManifestFile(project);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+		waitForBuild();
 
 		manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST01, V1_5_0, 0,
@@ -178,9 +193,11 @@ class LibraryImportTest {
 	}
 
 	@Test
-	void testImportWithoutResolve() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
+	void testImportWithoutResolve() throws Exception {
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0,
@@ -188,10 +205,12 @@ class LibraryImportTest {
 	}
 
 	@Test
-	void testImportWithResolve() {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
+	void testImportWithResolve() throws Exception {
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.resolveDependencies(project, TypeLibraryManager.INSTANCE.getTypeLibrary(project));
+		LibraryManager.INSTANCE.resolveDependencies(project, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_0_0, 0,
@@ -202,9 +221,10 @@ class LibraryImportTest {
 
 	@Test
 	void testImportWithRangeResolve() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_1_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST02, V1_1_0, 0,
@@ -215,11 +235,12 @@ class LibraryImportTest {
 
 	@Test
 	void testRangeOverlap() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_0_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_0_0, 0,
@@ -232,11 +253,12 @@ class LibraryImportTest {
 
 	@Test
 	void testRangeOverlap2() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0,
@@ -249,11 +271,12 @@ class LibraryImportTest {
 
 	@Test
 	void testRangeOverlapError() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST03 + "-" + V1_1_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_1_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST04 + "-" + V1_1_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST03, V1_1_0, 0,
@@ -274,9 +297,10 @@ class LibraryImportTest {
 
 	@Test
 	void testDependencyChain() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST06 + "-" + V1_0_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST06 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST06, V1_0_0, 0,
@@ -290,9 +314,10 @@ class LibraryImportTest {
 
 	@Test
 	void testMissingStandardLibrary() throws Exception {
-		LibraryManager.INSTANCE.importLibrary(project, null, java.net.URI.create(LIB_LOC + TEST07 + "-" + V1_0_0), //$NON-NLS-1$
+		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST07 + "-" + V1_0_0), //$NON-NLS-1$
 				true, true);
-		Job.getJobManager().join(LibraryManager.FAMILY_FORDIAC_LIBRARY, null);
+
+		waitForBuild();
 
 		final var manifest = ManifestHelper.getContainerManifest(project);
 		LibraryAssert.assertDependencyLinked(project, manifest, TEST07, V1_0_0, 0,

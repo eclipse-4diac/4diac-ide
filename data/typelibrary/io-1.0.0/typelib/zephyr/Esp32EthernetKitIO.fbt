@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="Esp32EthernetKitIO" Comment="Template for Modular IO with Esp32EthernetKit board" >
-	<Identification Standard="61499-2" Description="Copyright (c) 2024 Dirk O. Kaar  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  " >
+<FBType Name="Esp32EthernetKitIO" Comment="Template for Modular IO with Esp32EthernetKit board">
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 Dirk O. Kaar  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  ">
 	</Identification>
 	<VersionInfo Version="1.0" Author="Dirk O. Kaar" Date="2024-01-13">
 	</VersionInfo>
@@ -8,7 +8,7 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
 				<With Var="QI"/>
 				<With Var="UpdateInterval"/>
 				<With Var="LED0"/>
@@ -18,7 +18,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
@@ -36,6 +36,7 @@
 			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status" />
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with Esp32EthernetKit board" >
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Template for Modular IO with Esp32EthernetKit board">
 	</Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -14,18 +14,18 @@ package org.eclipse.fordiac.ide.gef.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class GridPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public GridPreferencePage() {
 		super(GRID);
 		setPreferenceStore(
-				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, GefPreferenceConstants.GEF_PREFERENCES_ID));
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, GefPreferenceConstants.GEF_PREFERENCES_ID));
 	}
 
 	@Override

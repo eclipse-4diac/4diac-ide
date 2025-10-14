@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -28,6 +29,9 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public class DeviceManagementExecutorService extends AbstractDelegatingDeviceManagementInteractor
 		implements IDeviceManagementExecutorService {
@@ -141,6 +145,21 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
 		return unwrap(queryResourcesAsync());
+	}
+
+	@Override
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		return unwrap(queryFBTypeAsync(entry));
+	}
+
+	@Override
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		return unwrap(queryDataTypeAsync(entry));
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		return unwrap(queryGlobalConstTypeAsync(entry));
 	}
 
 	@Override
@@ -334,6 +353,21 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	}
 
 	@Override
+	public Future<Response> queryFBTypeAsync(final FBTypeEntry entry) {
+		return executorService.submit(() -> getDelegate().queryFBType(entry));
+	}
+
+	@Override
+	public Future<Response> queryDataTypeAsync(final DataTypeEntry entry) {
+		return executorService.submit(() -> getDelegate().queryDataType(entry));
+	}
+
+	@Override
+	public Future<Response> queryGlobalConstTypeAsync(final GlobalConstantsEntry entry) {
+		return executorService.submit(() -> getDelegate().queryGlobalConstType(entry));
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public ScheduledFuture<Void> queryResourcesPeriodically(
 			final Consumer<List<org.eclipse.fordiac.ide.deployment.devResponse.Resource>> consumer, final long period,
@@ -447,6 +481,19 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 		if (getDelegate().isConnected()) {
 			getDelegate().disconnect();
 		}
+	}
+
+	@Override
+	public Future<Void> readTracesAsync(final Device device, final String path) throws DeploymentException {
+		return executorService.submit(() -> {
+			getDelegate().readTraces(device, path);
+			return null;
+		});
+	}
+
+	@Override
+	public Future<Optional<String>> replayNextEventAsync(final Resource resource) throws DeploymentException {
+		return executorService.submit(() -> getDelegate().replayNextEvent(resource));
 	}
 
 	private static <T> T unwrap(final Future<T> future) throws DeploymentException {

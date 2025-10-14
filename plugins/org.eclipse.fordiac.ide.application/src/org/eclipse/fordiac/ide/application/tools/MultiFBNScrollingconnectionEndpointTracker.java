@@ -31,7 +31,7 @@ public class MultiFBNScrollingconnectionEndpointTracker extends FBNScrollingConn
 
 	@Override
 	protected void showSourceFeedback() {
-		final ReconnectRequest targetRequest = (ReconnectRequest) getTargetRequest();
+		final ReconnectRequest targetRequest = getTargetRequest();
 		coSelectedConnections.forEach(con -> {
 			targetRequest.setConnectionEditPart(con);
 			con.showSourceFeedback(targetRequest);
@@ -42,7 +42,7 @@ public class MultiFBNScrollingconnectionEndpointTracker extends FBNScrollingConn
 
 	@Override
 	protected void eraseSourceFeedback() {
-		final ReconnectRequest targetRequest = (ReconnectRequest) getTargetRequest();
+		final ReconnectRequest targetRequest = getTargetRequest();
 		coSelectedConnections.forEach(con -> {
 			targetRequest.setConnectionEditPart(con);
 			con.eraseSourceFeedback(getTargetRequest());
@@ -57,7 +57,7 @@ public class MultiFBNScrollingconnectionEndpointTracker extends FBNScrollingConn
 			return null;
 		}
 		final CompoundCommand cmd = new CompoundCommand();
-		final ReconnectRequest targetRequest = (ReconnectRequest) getTargetRequest();
+		final ReconnectRequest targetRequest = getTargetRequest();
 		coSelectedConnections.forEach(con -> {
 			targetRequest.setConnectionEditPart(con);
 			cmd.add(getTargetEditPart().getCommand(targetRequest));

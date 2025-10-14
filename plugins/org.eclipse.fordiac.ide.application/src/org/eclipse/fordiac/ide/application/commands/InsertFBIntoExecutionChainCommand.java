@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
@@ -101,7 +101,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 	private static Command getCreateConnectionCommand(final FBNetwork network, final IInterfaceElement source,
 			final IInterfaceElement target) {
-		if (source.getFBNetworkElement().getFbNetwork() != target.getFBNetworkElement().getFbNetwork()) {
+		if (source.getBlockFBNetworkElement().getFbNetwork() != target.getBlockFBNetworkElement().getFbNetwork()) {
 			return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, target);
 		}
 		final AbstractConnectionCreateCommand createConnectionCommand = AbstractConnectionCreateCommand
@@ -111,7 +111,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return createConnectionCommand;
 	}
 
-	private IInterfaceElement getPredecessorEventOutput(final AbstractFBNElementEditPart predecessor) {
+	private IInterfaceElement getPredecessorEventOutput(final AbstractBlockFBNElementEditPart predecessor) {
 		if (predecessor == null) {
 			return getExecutionChainEnd();
 		}
@@ -130,11 +130,11 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return null;
 	}
 
-	private static AbstractFBNElementEditPart getEP(final FBNetworkElement elem) {
+	private static AbstractBlockFBNElementEditPart getEP(final FBNetworkElement elem) {
 		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
 		if (currentActiveEditor != null) {
 			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
-			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractFBNElementEditPart ep) {
+			if (viewer.getEditPartRegistry().get(elem) instanceof final AbstractBlockFBNElementEditPart ep) {
 				return ep;
 			}
 		}
@@ -143,10 +143,10 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 	public class SetPredecessorCommand extends Command {
 
-		private AbstractFBNElementEditPart predecessor;
-		private AbstractFBNElementEditPart oldPredecessor;
+		private AbstractBlockFBNElementEditPart predecessor;
+		private AbstractBlockFBNElementEditPart oldPredecessor;
 
-		public SetPredecessorCommand(final AbstractFBNElementEditPart predecessor) {
+		public SetPredecessorCommand(final AbstractBlockFBNElementEditPart predecessor) {
 			this.predecessor = predecessor;
 		}
 

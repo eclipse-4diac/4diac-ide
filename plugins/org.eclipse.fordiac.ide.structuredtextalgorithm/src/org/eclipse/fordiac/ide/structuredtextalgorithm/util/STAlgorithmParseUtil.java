@@ -24,7 +24,6 @@ import java.util.function.UnaryOperator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
@@ -105,14 +104,14 @@ public final class STAlgorithmParseUtil {
 		};
 	}
 
-	public static IParseResult parseExpression(final String expression, final INamedElement expectedType,
+	public static IParseResult parseExpression(final String expression, final LibraryElement expectedType,
 			final EObject context) {
 		return parse(expression, getGrammarAccess().getSTExpressionSourceRule(),
 				context.eResource() != null ? context.eResource().getURI() : null, expectedType,
 				EcoreUtil2.getContainerOfType(context, LibraryElement.class), null, null);
 	}
 
-	public static IParseResult parseInitializerExpression(final String expression, final INamedElement expectedType,
+	public static IParseResult parseInitializerExpression(final String expression, final LibraryElement expectedType,
 			final EObject context) {
 		return parse(expression, getGrammarAccess().getSTInitializerExpressionSourceRule(),
 				context.eResource() != null ? context.eResource().getURI() : null, expectedType,
@@ -126,7 +125,7 @@ public final class STAlgorithmParseUtil {
 	}
 
 	public static IParseResult parse(final String text, final ParserRule entryPoint, final URI uri,
-			final INamedElement expectedType, final LibraryElement type,
+			final LibraryElement expectedType, final LibraryElement type,
 			final Collection<? extends EObject> additionalContent, final List<Issue> issues) {
 		final XtextResourceSet resourceSet = SERVICE_PROVIDER_FBT.get(XtextResourceSet.class);
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().putAll(EXTENSION_TO_FACTORY_MAP);
@@ -134,7 +133,7 @@ public final class STAlgorithmParseUtil {
 				issues, Objects.requireNonNullElse(uri, SYNTHETIC_URI_FBT), getLoadOptions(expectedType));
 	}
 
-	private static Map<String, Object> getLoadOptions(final INamedElement expectedType) {
+	private static Map<String, Object> getLoadOptions(final LibraryElement expectedType) {
 		if (expectedType != null) {
 			final Map<String, Object> loadOptions = new HashMap<>(DEFAULT_LOAD_OPTIONS);
 			loadOptions.put(STResource.OPTION_EXPECTED_TYPE, expectedType);

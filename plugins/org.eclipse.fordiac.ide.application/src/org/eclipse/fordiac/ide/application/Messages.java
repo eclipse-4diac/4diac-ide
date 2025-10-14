@@ -292,10 +292,6 @@ public final class Messages extends NLS {
 
 	public static String QuickFixDialog_Problems_List_Resource;
 
-	public static String ContractEditor_Title;
-
-	public static String ContractEditor_OK;
-
 	public static String Connection_Negate;
 
 	public static String Connection_Unnegate;

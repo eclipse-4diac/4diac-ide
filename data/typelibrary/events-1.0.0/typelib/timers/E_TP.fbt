@@ -53,4 +53,5 @@
 			<Connection Source="IN" Destination="E_PERMIT.PERMIT" Comment="" dx1="1066.6666666666667"/>
 		</DataConnections>
 	</FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

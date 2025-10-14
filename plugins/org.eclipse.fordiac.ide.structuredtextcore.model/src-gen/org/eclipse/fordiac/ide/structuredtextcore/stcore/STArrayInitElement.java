@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +39,7 @@ public interface STArrayInitElement extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getResultType();
+	LibraryElement getResultType();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -46,6 +47,6 @@ public interface STArrayInitElement extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getDeclaredResultType();
+	LibraryElement getDeclaredResultType();
 
 } // STArrayInitElement

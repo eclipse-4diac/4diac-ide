@@ -306,4 +306,12 @@ United States, other countries, or both.\n
          id="org.eclipse.fordiac.ide.library.ui"
          version="0.0.0"/>
 
+   <plugin
+         id="org.eclipse.fordiac.ide.debug.replaydebugging"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.debug.replaydebugging.ui"
+         version="0.0.0"/>
+
 </feature>

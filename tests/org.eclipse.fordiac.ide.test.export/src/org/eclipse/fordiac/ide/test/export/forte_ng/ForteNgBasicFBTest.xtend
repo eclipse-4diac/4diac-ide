@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.fail
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.getFORTEStringId;
+
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
@@ -55,42 +57,43 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						#pragma once
 						
-						#include "core/basicfb.h"
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
-						#include "core/datatypes/forte_array.h"
-						#include "core/datatypes/forte_array_fixed.h"
-						#include "core/datatypes/forte_array_variable.h"
+						#include "forte/basicfb.h"
+						#include "forte/iec61131_functions.h"
+						#include "forte/datatypes/forte_array_common.h"
+						#include "forte/datatypes/forte_array.h"
+						#include "forte/datatypes/forte_array_fixed.h"
+						#include "forte/datatypes/forte_array_variable.h"
 						
-						class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
-						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						namespace forte {
+						  class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
+						      DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
 						
-						  private:
+						    private:
 						
-						    static const SFBInterfaceSpec scmFBInterfaceSpec;
+						      CIEC_ANY *getVarInternal(size_t) override;
 						
-						    CIEC_ANY *getVarInternal(size_t) override;
+						      void «EXPORTED_ALGORITHM_NAME»(void);
 						
-						    void «EXPORTED_ALGORITHM_NAME»(void);
+						      static const TForteInt16 scmStateINIT = 0;
 						
-						    static const TForteInt16 scmStateINIT = 0;
+						      void enterStateINIT(CEventChainExecutionThread *const paECET);
 						
-						    void enterStateINIT(CEventChainExecutionThread *const paECET);
+						      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 						
-						    void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+						      void readInputData(TEventID paEIID) override;
+						      void writeOutputData(TEventID paEIID) override;
+						      void setInitialValues() override;
 						
-						    void readInputData(TEventID paEIID) override;
-						    void writeOutputData(TEventID paEIID) override;
+						    public:
+						      «EXPORTED_FUNCTIONBLOCK_NAME»(StringId paInstanceNameId, CFBContainer &paContainer);
 						
-						  public:
-						    «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer);
-						
-						    CIEC_ANY *getDI(size_t) override;
-						    CIEC_ANY *getDO(size_t) override;
-						    CEventConnection *getEOConUnchecked(TPortId) override;
-						    CDataConnection **getDIConUnchecked(TPortId) override;
-						    CDataConnection *getDOConUnchecked(TPortId) override;
-						};
+						      CIEC_ANY *getDI(size_t) override;
+						      CIEC_ANY *getDO(size_t) override;
+						      CEventConnection *getEOConUnchecked(TPortId) override;
+						      CDataConnection **getDIConUnchecked(TPortId) override;
+						      CDataConnection *getDOConUnchecked(TPortId) override;
+						  };
+						}
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
@@ -99,99 +102,112 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					cppfileFound = true
 
 					assertEquals('''
-						/*************************************************************************
-						 *** FORTE Library Element
-						 ***
-						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-						 ***
-						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-						 *** Description:
-						 *** Version:
-						 *************************************************************************/
-						
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
-						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt_gen.cpp"
-						#endif
-						
-						#include "core/datatypes/forte_dword.h"
-						#include "core/datatypes/forte_sint.h"
-						#include "core/iec61131_functions.h"
-						#include "core/datatypes/forte_array_common.h"
-						#include "core/datatypes/forte_array.h"
-						#include "core/datatypes/forte_array_fixed.h"
-						#include "core/datatypes/forte_array_variable.h"
-						
-						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
-						
-						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scmFBInterfaceSpec = {
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr, nullptr,
-						  0, nullptr,
-						  0, nullptr
-						};
-						
-						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-						    CBasicFB(paContainer, scmFBInterfaceSpec, paInstanceNameId, nullptr) {
-						}
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
-						  do {
-						    switch(mECCState) {
-						      case scmStateINIT:
-						        return; //no transition cleared
-						      default:
-						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
-						        mECCState = 0; // 0 is always the initial state
-						        return;
-						    }
-						    paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
-						  } while(true);
-						}
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread *const) {
-						  mECCState = scmStateINIT;
-						}
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID) {
-						  // nothing to do
-						}
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(TEventID) {
-						  // nothing to do
-						}
-						
-						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDI(size_t) {
-						  return nullptr;
-						}
-						
-						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDO(size_t) {
-						  return nullptr;
-						}
-						
-						CEventConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getEOConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CDataConnection **«EXPORTED_FUNCTIONBLOCK_NAME»::getDIConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CDataConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getDOConUnchecked(TPortId) {
-						  return nullptr;
-						}
-						
-						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getVarInternal(size_t) {
-						  return nullptr;
-						}
-						
-						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
-						
-						}
-					'''.toString(), export.data.toString())
+					/*************************************************************************
+					 *** FORTE Library Element
+					 ***
+					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+					 ***
+					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+					 *** Description:
+					 *** Version:
+					 *************************************************************************/
+					
+					#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
+					
+					#include "forte/datatypes/forte_dword.h"
+					#include "forte/datatypes/forte_sint.h"
+					#include "forte/iec61131_functions.h"
+					#include "forte/datatypes/forte_array_common.h"
+					#include "forte/datatypes/forte_array.h"
+					#include "forte/datatypes/forte_array_fixed.h"
+					#include "forte/datatypes/forte_array_variable.h"
+					
+					using namespace std::literals;
+					using namespace forte::literals;
+					
+					namespace forte {
+					  namespace {
+					    constexpr std::string_view TypeHash ="1234"sv;
+					
+					    const SFBInterfaceSpec cFBInterfaceSpec = {
+					        .mEINames = {},
+					        .mEITypeNames = {},
+					        .mEONames = {},
+					        .mEOTypeNames = {},
+					        .mDINames = {},
+					        .mDONames = {},
+					        .mDIONames = {},
+					        .mSocketNames = {},
+					        .mPlugNames = {},
+					    };
+					  }
+					
+					  DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», «ExporterTestBase.BASICFUNCTIONBLOCK_NAME.FORTEStringId», TypeHash)
+					
+					  «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+					      CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::setInitialValues() {
+					    CBasicFB::setInitialValues();
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
+					    do {
+					      switch(mECCState) {
+					        case scmStateINIT:
+					          return; //no transition cleared
+					        default:
+					          DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
+					          mECCState = 0; // 0 is always the initial state
+					          return;
+					      }
+					      paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+					    } while(true);
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(CEventChainExecutionThread *const) {
+					    mECCState = scmStateINIT;
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(TEventID) {
+					    // nothing to do
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(TEventID) {
+					    // nothing to do
+					  }
+					
+					  CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDI(size_t) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDO(size_t) {
+					    return nullptr;
+					  }
+					
+					  CEventConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getEOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection **«EXPORTED_FUNCTIONBLOCK_NAME»::getDIConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getDOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getVarInternal(size_t) {
+					    return nullptr;
+					  }
+					
+					  void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+					    CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
+					
+					  }
+					
+					}'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 				}
 				default:

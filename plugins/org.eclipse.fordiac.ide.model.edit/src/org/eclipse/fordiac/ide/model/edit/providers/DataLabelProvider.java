@@ -28,8 +28,4 @@ public class DataLabelProvider extends InitialValueLabelProvider {
 		return null;
 	}
 
-	@Override
-	public String getColumnText(final Object element, final int columnIndex) {
-		return super.getColumnText(element, columnIndex);
-	}
 }

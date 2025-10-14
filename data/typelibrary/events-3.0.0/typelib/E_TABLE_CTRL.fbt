@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TABLE_CTRL" Comment="Support function block for E_TABLE">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0 &#10;">
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="CLK" Type="Event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CLKO" Type="Event">
+				<With Var="DTO"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT" Comment="Actual number of time steps" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DTO" Type="TIME" Comment="Current delay interval" />
+			<VarDeclaration Name="CV" Type="UINT" Comment="Current event index, 0..N-1" />
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="400" y="700">
+			</ECState>
+			<ECState Name="INIT" x="736.84" y="84.21">
+				<ECAction Algorithm="INIT"/>
+			</ECState>
+			<ECState Name="INIT1" x="1284.21" y="457.89">
+				<ECAction Output="CLKO"/>
+			</ECState>
+			<ECState Name="NEXT_STEP" x="1000" y="1273.68">
+				<ECAction Algorithm="NEXT_STEP" Output="CLKO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="INIT" Condition="INIT" Comment="" x="684.21" y="431.58"/>
+			<ECTransition Source="INIT" Destination="START" Condition="[N = 0]" Comment="" x="400" y="342.11"/>
+			<ECTransition Source="INIT" Destination="INIT1" Condition="[N &gt; 0]" Comment="" x="1078.95" y="310.53"/>
+			<ECTransition Source="INIT1" Destination="START" Condition="1" Comment="" x="952.63" y="647.37"/>
+			<ECTransition Source="START" Destination="NEXT_STEP" Condition="CLK[CV &lt; MIN(3, N-1)]" Comment="" x="1078.95" y="936.84"/>
+			<ECTransition Source="NEXT_STEP" Destination="START" Condition="1" Comment="" x="473.68" y="1310.53"/>
+		</ECC>
+		<Algorithm Name="INIT">
+			<ST><![CDATA[ALGORITHM INIT
+CV := 0;
+DTO := DT[0];
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="NEXT_STEP">
+			<ST><![CDATA[
+
+ALGORITHM NEXT_STEP
+CV := CV +1;
+DTO := DT[CV];
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

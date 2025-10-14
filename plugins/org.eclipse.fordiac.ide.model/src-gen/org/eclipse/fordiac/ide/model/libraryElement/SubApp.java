@@ -35,7 +35,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model abstract="true"
  * @generated
  */
-public interface SubApp extends FBNetworkElement {
+public interface SubApp extends BlockFBNetworkElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

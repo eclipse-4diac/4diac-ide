@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Johannes Kepler University
+ * Copyright (c) 2022, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,14 +22,12 @@ import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class SegmentSection extends AbstractDoubleColumnSection {
@@ -38,15 +36,6 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 	private Text commentText;
 	private Group commConfigGroup;
 	private Composite commConfigContents;
-
-	@Override
-	protected CommandStack getCommandStack(final IWorkbenchPart part, final Object input) {
-		final Segment type = getInputType(input);
-		if (null != type) {
-			return type.getAutomationSystem().getCommandStack();
-		}
-		return null;
-	}
 
 	@Override
 	protected Segment getInputType(Object input) {

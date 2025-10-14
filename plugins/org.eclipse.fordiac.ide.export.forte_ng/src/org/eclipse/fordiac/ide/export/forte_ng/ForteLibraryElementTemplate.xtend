@@ -23,7 +23,9 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -47,7 +49,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		]
 	}
 
-	def protected getClassName() { type.generateTypeName }
+	def protected getClassName() '''FORTE_«type.generateTypeNamePlain»'''
 
 	def protected generateHeader() '''
 		/*************************************************************************
@@ -71,6 +73,16 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected generateIncludeGuardEnd() '''
 	'''
 
+	def protected generateImplIncludes() '''
+		#include "«type.generateTypeIncludePath»"
+
+		«getDependencies(emptyMap).generateDependencyIncludes»
+		«type.compilerInfo?.header»
+		
+		using namespace std::literals;
+		using namespace forte::literals;
+	'''
+	
 	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
 		«FOR variable : variables AFTER '\n'»
 			«IF const»static const «ENDIF»«variable.generateVariableTypeName» «variable.generateName»;
@@ -89,14 +101,20 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected generateVariableInitializerFromParameters(Iterable<VarDeclaration> variables) //
 	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateNameAsParameter»)«ENDFOR»'''
 
-	def protected generateAdapterDeclarations(List<AdapterDeclaration> adapters) '''
+	def protected generatePlugDeclarations(List<AdapterDeclaration> adapters) '''
 		«FOR adapter : adapters AFTER '\n'»
-			«adapter.type.generateTypeName» «adapter.generateName»;
+			forte::CPlugPin<«adapter.type.generateTypeName»_Plug> «adapter.generateName»;
 		«ENDFOR»
 	'''
 
-	def protected generateAdapterInitializer(Iterable<AdapterDeclaration> adapters) ///
-	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «!adapter.isIsInput»)«ENDFOR»'''
+	def protected generateSocketDeclarations(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters AFTER '\n'»
+			forte::CSocketPin<«adapter.type.generateTypeName»_Socket> «adapter.generateName»;
+		«ENDFOR»
+	'''
+
+	def protected generateAdapterInitializer(List<AdapterDeclaration> adapters) ///
+	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «IF type instanceof CompositeFBType»forte::cgCFBParentAdapterlistIDMarker«ELSE»«adapters.indexOf(adapter)»«ENDIF»)«ENDFOR»'''
 
 	def protected generateAccessorDeclaration(String function, boolean const) {
 		generateAccessorDeclaration(function, "CIEC_ANY *", const)
@@ -143,18 +161,10 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_PARAM -> Boolean.TRUE})
 	}
 
-	def CharSequence generateVariableTypeSpec(VarDeclaration decl) {
-		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_SPEC -> Boolean.TRUE})
-	}
-
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEStringId].join(", ")
 	}
 
-	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map[generateVariableTypeSpec].join(", ")
-	}
-	
 	def protected getFORTEEventTypeList(List<? extends Event> elements) {
 		elements.map[it.typeName.FORTEStringId].join(", ")
 	}
@@ -174,4 +184,8 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def Set<INamedElement> getDependencies(Map<?, ?> options) {
 		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
 	}
+	
+	def protected generateTypeHash() '''
+		constexpr std::string_view TypeHash ="«type.typeEntry.typeHash»"sv;
+	'''
 }

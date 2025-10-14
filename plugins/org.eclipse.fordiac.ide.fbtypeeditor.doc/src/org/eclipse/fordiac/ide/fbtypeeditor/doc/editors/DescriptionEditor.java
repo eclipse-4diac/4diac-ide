@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -53,6 +53,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.osgi.framework.Bundle;
 
 public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
@@ -96,6 +97,9 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 		setSite(site);
 		setPartName("Description"); //$NON-NLS-1$
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
+		if ((getSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
+		}
 	}
 
 	@Override
@@ -240,11 +244,6 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
 		return false;
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override

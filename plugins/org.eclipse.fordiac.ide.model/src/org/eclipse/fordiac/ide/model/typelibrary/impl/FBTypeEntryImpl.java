@@ -25,8 +25,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implements FBTypeEntry {
+public class FBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FBType> implements FBTypeEntry {
 
 	private static final Pattern TYPE_CLASS_PATTERN = Pattern.compile("<" + //$NON-NLS-1$
 			LibraryElementTags.BASIC_F_B_ELEMENT + ">|<" //$NON-NLS-1$
@@ -48,7 +48,7 @@ public class FBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FBType> implem
 	}
 
 	@Override
-	protected CommonElementImporter getImporter() {
+	protected BlockTypeImporter getImporter() {
 		return new FBTImporter(getFile());
 	}
 

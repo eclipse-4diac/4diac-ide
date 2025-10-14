@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
@@ -68,7 +68,7 @@ public abstract class FBRuntimeAbstractImpl extends MinimalEObjectImpl.Container
 	 * @generated
 	 */
 	@Override
-	public EObject getModel() {
+	public FBType getModel() {
 		return null;
 	}
 

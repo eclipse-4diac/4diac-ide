@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -60,12 +60,12 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// record the trace
 		final EventManager manager = EventManagerFactory.createFrom(triggerEvent,
-				triggerEvent.getFBNetworkElement().getFbNetwork());
+				triggerEvent.getBlockFBNetworkElement().getFbNetwork());
 		manager.processNetwork();
 
 		// serialize event manager
 		final ResourceSet reset = new ResourceSetImpl();
-		final AutomationSystem system = triggerEvent.getFBNetworkElement().getFbNetwork().getAutomationSystem();
+		final AutomationSystem system = triggerEvent.getBlockFBNetworkElement().getFbNetwork().getAutomationSystem();
 		final IProject project = system.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
 		if (!folder.exists()) {

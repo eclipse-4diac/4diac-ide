@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -33,11 +34,11 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -85,8 +86,6 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 	private final IInterfaceElement ieToChange;
 	private IInterfaceElement ie;
 
-	private static TreeViewer treeViewer;
-
 	private ColumnLabelProvider labelTarget;
 	private ColumnLabelProvider labelPin;
 	private ColumnLabelProvider labelComment;
@@ -132,7 +131,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(fbResultArea);
 			warningLabel.setText("No Interface Elements found"); //$NON-NLS-1$
 		} else {
-			treeViewer = createTreeViewer(fbResultArea);
+			final TreeViewer treeViewer = createTreeViewer(fbResultArea);
 			configureTableViewer(treeViewer);
 			treeViewer.setInput(result.toArray());
 			GridLayoutFactory.fillDefaults().generateLayout(fbResultArea);
@@ -154,11 +153,11 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 
 			if (connection.getFBNetwork().isSubApplicationNetwork()
 					&& connection.getFBNetwork().eContainer() instanceof final SubApp subapp) {
-				possibleInterfaceLists = getPossibleInterfaceLists(connection.getFBNetwork().getNetworkElements(),
-						subapp);
+				possibleInterfaceLists = getPossibleInterfaceLists(
+						connection.getFBNetwork().getBlockFBNetworkElements(), subapp);
 			} else {
-				possibleInterfaceLists = getPossibleInterfaceLists(connection.getFBNetwork().getNetworkElements(),
-						null);
+				possibleInterfaceLists = getPossibleInterfaceLists(
+						connection.getFBNetwork().getBlockFBNetworkElements(), null);
 			}
 
 			if (!possibleInterfaceLists.isEmpty()) {
@@ -176,10 +175,11 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		return Collections.emptyList();
 	}
 
-	private List<InterfaceList> getPossibleInterfaceLists(final List<FBNetworkElement> fbs, final SubApp subapp) {
+	private List<InterfaceList> getPossibleInterfaceLists(final Stream<BlockFBNetworkElement> fbs,
+			final SubApp subapp) {
 		final List<InterfaceList> possibleInterfaceLists = new ArrayList<>(
-				fbs.stream().filter(currentFb -> !currentFb.getName().equals(ie.getFBNetworkElement().getName()))
-						.toList().stream().map(FBNetworkElement::getInterface).toList());
+				fbs.filter(currentFb -> !currentFb.getName().equals(ie.getBlockFBNetworkElement().getName())).toList()
+						.stream().map(BlockFBNetworkElement::getInterface).toList());
 
 		if (subapp != null && !((ie.eContainer().eContainer() instanceof final SubApp subappContainer)
 				&& subappContainer.equals(subapp))) {
@@ -191,20 +191,21 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 	// Returns the input or output swapped if needed for interfaceElements of
 	// Subapps
 	private boolean inputSwap(final boolean input, final InterfaceList ieList) {
-		if (ie.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
-			if (subapp.getSubAppNetwork().getNetworkElements().contains(ieList.getFBNetworkElement())) {
+		if (ie.getBlockFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
+			if (subapp.getSubAppNetwork().getNetworkElements().contains(ieList.getBlockFBNetworkElement())) {
 				return !input;
 			}
 
 			if (subapp.getOuterFBNetworkElement() instanceof final SubApp outsideSubApp && !outsideSubApp.isTyped()
-					&& !outsideSubApp.getSubAppNetwork().getNetworkElements().contains(ieList.getFBNetworkElement())) {
+					&& !outsideSubApp.getSubAppNetwork().getNetworkElements()
+							.contains(ieList.getBlockFBNetworkElement())) {
 				return !input;
 			}
 			return input;
 		}
 
-		if (ieList.getFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
-			if (subapp.getSubAppNetwork().getNetworkElements().contains(ie.getFBNetworkElement())) {
+		if (ieList.getBlockFBNetworkElement() instanceof final SubApp subapp && !subapp.isTyped()) {
+			if (subapp.getSubAppNetwork().getNetworkElements().contains(ie.getBlockFBNetworkElement())) {
 				return !input;
 			}
 			return input;
@@ -311,7 +312,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 		colName.getColumn().setText(FordiacMessages.Comment);
 		colName.setLabelProvider(labelComment);
 
-		treeViewer.addDoubleClickListener(new DoubleClickListener());
+		viewer.addDoubleClickListener(new DoubleClickListener());
 
 	}
 
@@ -323,7 +324,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof final IInterfaceElement ieElement) {
-					return ieElement.getFBNetworkElement().getName();
+					return ieElement.getBlockFBNetworkElement().getName();
 				}
 				return super.getText(element);
 			}
@@ -332,7 +333,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 			public Image getImage(final Object element) {
 
 				if (element instanceof final IInterfaceElement ieElement) {
-					return labelProvider.getImage(ieElement.getFBNetworkElement());
+					return labelProvider.getImage(ieElement.getBlockFBNetworkElement());
 				}
 				return super.getImage(element);
 			}
@@ -411,17 +412,17 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 
 		if (pinSelection instanceof final VarDeclaration varDec) {
 			cmdCommand = new ReconnectDataConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					varDec, ie.getFBNetworkElement().getFbNetwork());
+					varDec, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (pinSelection instanceof final Event eventPin) {
 			cmdCommand = new ReconnectEventConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					eventPin, ie.getFBNetworkElement().getFbNetwork());
+					eventPin, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (pinSelection instanceof final AdapterDeclaration adapter) {
 			cmdCommand = new ReconnectAdapterConnectionCommand(connection, connection.getSource().equals(ieToChange),
-					adapter, ie.getFBNetworkElement().getFbNetwork());
+					adapter, ie.getBlockFBNetworkElement().getFbNetwork());
 		}
 
 		if (cmdCommand != null && cmdCommand.canExecute() && commandStack != null) {

@@ -41,6 +41,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
 
 public class DeviceCreateCommand extends Command {
+
+	private static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
+	private static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::system::EMB_RES"; //$NON-NLS-1$
+
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
 	private final DeviceTypeEntry entry;
 	private final SystemConfiguration parent;
@@ -118,7 +122,10 @@ public class DeviceCreateCommand extends Command {
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
 			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
 		} else {
-			type = getResourceType("EMB_RES"); //$NON-NLS-1$
+			type = getResourceType(DEFAULT_RESOURCE_FULL_TYPE);
+			if (type == null) {
+				type = getResourceType(DEFAULT_RESOURCE_TYPE);
+			}
 		}
 		if (null != type) {
 			final ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);

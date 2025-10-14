@@ -8,7 +8,10 @@
       <property name="plugin.destination" value="${basedir}"/>
       <property name="build.result.folder" value="${basedir}/ant_tasks"/>
       <property name="version.suffix" value="_3.1.0"/>
-      <property name="target.home" value="${basedir}/../../.metadata/.plugins/org.eclipse.pde.core/.bundle_pool"/>
+      <eclipse.convertPath resourcepath="/" property="workspace_loc"/>
+      <property name="target.home" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool"/>
+      <property name="ant.build.javac.source" value="21"/>
+      <property name="ant.build.javac.target" value="21"/>
    </target>
 
    <target name="properties" if="eclipse.running">

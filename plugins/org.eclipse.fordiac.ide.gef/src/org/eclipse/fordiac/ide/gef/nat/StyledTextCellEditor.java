@@ -307,7 +307,7 @@ public class StyledTextCellEditor extends AbstractCellEditor {
 
 	@Override
 	public void setEditorValue(final Object value) {
-		this.text.setText(value != null && value.toString().length() > 0 ? value.toString() : ""); //$NON-NLS-1$
+		this.text.setText(value != null && !value.toString().isEmpty() ? value.toString() : ""); //$NON-NLS-1$
 	}
 
 	@Override

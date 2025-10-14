@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -71,8 +71,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeEventPin(final InterfaceEditPart pin) {
-		final var eventOutputs = pin.getModel().getFBNetworkElement().getInterface().getEventOutputs();
-		final var eventInputs = pin.getModel().getFBNetworkElement().getInterface().getEventInputs();
+		final var eventOutputs = pin.getModel().getBlockFBNetworkElement().getInterface().getEventOutputs();
+		final var eventInputs = pin.getModel().getBlockFBNetworkElement().getInterface().getEventInputs();
 
 		if (eventInputs.isEmpty()) {
 			return getInternalOppositeVarPin(pin);
@@ -82,8 +82,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeVarPin(final InterfaceEditPart pin) {
-		final var varInputs = pin.getModel().getFBNetworkElement().getInterface().getInputVars();
-		final var varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutputVars();
+		final var varInputs = pin.getModel().getBlockFBNetworkElement().getInterface().getInputVars();
+		final var varOutputs = pin.getModel().getBlockFBNetworkElement().getInterface().getOutputVars();
 
 		if (varInputs.isEmpty()) {
 			return getInternalOppositeVarInOutPin(pin);
@@ -93,8 +93,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositeVarInOutPin(final InterfaceEditPart pin) {
-		final var varInputs = pin.getModel().getFBNetworkElement().getInterface().getInOutVars();
-		final var varOutputs = pin.getModel().getFBNetworkElement().getInterface().getOutMappedInOutVars();
+		final var varInputs = pin.getModel().getBlockFBNetworkElement().getInterface().getInOutVars();
+		final var varOutputs = pin.getModel().getBlockFBNetworkElement().getInterface().getOutMappedInOutVars();
 
 		if (varInputs.isEmpty()) {
 			return getInternalOppositePlugOrSocketPin(pin);
@@ -104,8 +104,8 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected IInterfaceElement getInternalOppositePlugOrSocketPin(final InterfaceEditPart pin) {
-		final var sockets = pin.getModel().getFBNetworkElement().getInterface().getSockets();
-		final var plugs = pin.getModel().getFBNetworkElement().getInterface().getPlugs();
+		final var sockets = pin.getModel().getBlockFBNetworkElement().getInterface().getSockets();
+		final var plugs = pin.getModel().getBlockFBNetworkElement().getInterface().getPlugs();
 
 		if (sockets.isEmpty()) {
 			return getInternalOppositeEventPin(pin);
@@ -115,7 +115,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 
 	@Override
 	protected boolean hasOpposites(final InterfaceEditPart pin) {
-		if (pin.getModel().getFBNetworkElement() == null) {
+		if (pin.getModel().getBlockFBNetworkElement() == null) {
 			// we are at a type interface border in the type editor
 			return false;
 		}

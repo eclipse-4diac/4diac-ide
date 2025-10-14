@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -59,6 +60,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -75,12 +77,14 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.data.validate.IDataValidator;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -143,6 +147,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
 						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+				configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR, attributeNameValidator,
+						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
 			}
 		});
 
@@ -161,8 +167,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	private boolean isTypeEditable() {
 		final ConfigurableObject type = getType();
 		return !(type instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance()
-				|| (type instanceof final IInterfaceElement ie && ie.getFBNetworkElement() != null
-						&& ie.getFBNetworkElement().isContainedInTypedInstance())
+				|| (type instanceof final IInterfaceElement ie && ie.getBlockFBNetworkElement() != null
+						&& ie.getBlockFBNetworkElement().isContainedInTypedInstance())
 				|| (type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn)));
 	}
 
@@ -217,7 +223,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			return typedConfigObject.getTypeEntry().getType();
 		}
 		if (copy instanceof final IInterfaceElement interfaceElement
-				&& getTypeElement(interfaceElement.getFBNetworkElement()) instanceof final FBType fbType) {
+				&& getTypeElement(interfaceElement.getBlockFBNetworkElement()) instanceof final FBType fbType) {
 			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
 		}
 
@@ -285,6 +291,31 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 	}
 
+	public static boolean isInternalAttribute(final String name) {
+		return InternalAttributeDeclarations.getInternalAttributeByName(name) != null;
+	}
+
+	private final IDataValidator attributeNameValidator = new IDataValidator() {
+		@Override
+		public boolean validate(final int columnIndex, final int rowIndex, final Object newValue) {
+			if (!(newValue instanceof final String name)) {
+				return true;
+			}
+
+			if (isInternalAttribute(name)) {
+				ErrorMessenger
+						.popUpErrorMessage(MessageFormat.format(Messages.AttributeSection_NameReservedKeyWord, name));
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean validate(final ILayerCell cell, final IConfigRegistry configRegistry, final Object newValue) {
+			return validate(cell.getColumnIndex(), cell.getRowIndex(), newValue);
+		}
+	};
+
 	@Override
 	protected ConfigurableObject getType() {
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
@@ -337,8 +368,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 
 		protected void proposalAccepted(final IContentProposal proposal) {
+			final LibraryElement libraryElement = ModelHelper.getLibraryElementFromContextChecked(getType());
 			if (proposal instanceof final ImportContentProposal importProposal
-					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement
 					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
 				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}

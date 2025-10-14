@@ -35,43 +35,45 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		
 		«generateHeaderIncludes»
 		
-		class «className» final : public CIEC_STRUCT {
-		  DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
+		namespace «type.generateTypeNamespace» {
+		  class «className» final : public CIEC_STRUCT {
+		    DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
 		
-		  public:
-		    «className»();
+		    public:
+		      «className»();
 		«IF !type.memberVariables.empty»
 		
-		    «className»(«generateConstructorParameters»);
+		      «className»(«generateConstructorParameters»);
 		
-		    «type.memberVariables.generateVariableDeclarations(false)»
+		      «type.memberVariables.generateVariableDeclarations(false)»
 		«ENDIF»
-		    size_t getStructSize() const override {
-		      return «type.memberVariables.size»;
-		    }
+		      size_t getStructSize() const override {
+		        return «type.memberVariables.size»;
+		      }
 		
-		    const CStringDictionary::TStringId* elementNames() const override {
-		      return scmElementNames;
-		    }
+		      const StringId* elementNames() const override {
+		        return scmElementNames;
+		      }
 		
-		    CStringDictionary::TStringId getStructTypeNameID() const override;
+		      StringId getStructTypeNameID() const override;
 		
-		    void setValue(const CIEC_ANY &paValue) override;
+		      void setValue(const CIEC_ANY &paValue) override;
 		
-		    «generateAccessorDeclaration("getMember", false)»
-		    «generateAccessorDeclaration("getMember", true)»
+		      «generateAccessorDeclaration("getMember", false)»
+		      «generateAccessorDeclaration("getMember", true)»
 		
-		  private:
-		    static const CStringDictionary::TStringId scmElementNames[];
+		    private:
+		      static const StringId scmElementNames[];
 		
-		};
+		  };
+		}
 		
 		«generateIncludeGuardEnd»
 		
 	'''
 
 	def protected generateHeaderIncludes() '''
-		«generateDependencyInclude("core/datatypes/forte_struct.h")»
+		«generateDependencyInclude("forte/datatypes/forte_struct.h")»
 		
 		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		

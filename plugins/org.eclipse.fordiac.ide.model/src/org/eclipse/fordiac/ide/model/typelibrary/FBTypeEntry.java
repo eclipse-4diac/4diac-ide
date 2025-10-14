@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
-public interface FBTypeEntry extends TypeEntry {
+public interface FBTypeEntry extends InterfaceTypeEntry {
 
 	@Override
 	FBType getType();

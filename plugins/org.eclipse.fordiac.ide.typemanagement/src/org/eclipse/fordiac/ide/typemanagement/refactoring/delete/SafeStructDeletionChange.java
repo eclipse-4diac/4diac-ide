@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -89,9 +89,9 @@ public class SafeStructDeletionChange extends CompositeChange {
 	private void handleTransitiveRefactoring(final VarDeclaration varDecl, final Set<EObject> rootElements) {
 		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
 		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
-		if (varDecl.getFBNetworkElement() != null) {
-			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				changes.add(new UpdateFBInstanceModelEdit(varDecl.getFBNetworkElement(), dataTypeEntry));
+		if (varDecl.getBlockFBNetworkElement() != null) {
+			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
+				changes.add(new UpdateFBInstanceModelEdit(varDecl.getBlockFBNetworkElement(), dataTypeEntry));
 			}
 		} else if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {

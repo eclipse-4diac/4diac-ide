@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                           Johannes Keppler University Linz,
- *                           Primetals Technologies Austria GmbH
- *                           Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Keppler University Linz,
+ *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -72,12 +72,12 @@ public class ChangeValueCommand extends AbstractChangeInterfaceElementCommand {
 
 	private VarDeclaration getMirroredVariable() {
 		final VarDeclaration variable = getInterfaceElement();
-		if ((null != variable.getFBNetworkElement()) && variable.getFBNetworkElement().isMapped()) {
-			final FBNetworkElement opposite = variable.getFBNetworkElement().getOpposite();
+		if ((null != variable.getBlockFBNetworkElement()) && variable.getBlockFBNetworkElement().isMapped()) {
+			final BlockFBNetworkElement opposite = variable.getBlockFBNetworkElement().getOpposite();
 			if (null != opposite) {
 				final IInterfaceElement element = opposite.getInterfaceElement(variable.getName());
-				if (element instanceof VarDeclaration) {
-					return (VarDeclaration) element;
+				if (element instanceof final VarDeclaration varDecl) {
+					return varDecl;
 				}
 			}
 		}

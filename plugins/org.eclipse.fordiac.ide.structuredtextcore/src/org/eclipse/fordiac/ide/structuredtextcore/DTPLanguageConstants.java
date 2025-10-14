@@ -13,6 +13,10 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore;
 
-public class DTPLanguageConstants {
+public final class DTPLanguageConstants {
 	public static final String ORG_ECLIPSE_FORDIAC_IDE_MODEL_DATATYPE_DTP = "org.eclipse.fordiac.ide.model.datatype.dtp"; //$NON-NLS-1$
+
+	private DTPLanguageConstants() {
+		throw new UnsupportedOperationException();
+	}
 }

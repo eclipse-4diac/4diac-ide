@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Permutations {
@@ -26,10 +27,7 @@ public class Permutations {
 
 	private static <T> void permuteHelper(final T[] nums, final int index, final List<List<T>> result) {
 		if (index == nums.length) {
-			final List<T> curr = new ArrayList<>();
-			for (final T num : nums) {
-				curr.add(num);
-			}
+			final List<T> curr = new ArrayList<>(Arrays.asList(nums));
 			result.add(curr);
 			return;
 		}
@@ -44,5 +42,9 @@ public class Permutations {
 		final T temp = nums[i];
 		nums[i] = nums[j];
 		nums[j] = temp;
+	}
+
+	private Permutations() {
+		throw new UnsupportedOperationException();
 	}
 }

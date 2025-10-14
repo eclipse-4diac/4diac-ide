@@ -43,6 +43,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  * <em>Transfer Data</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getTypeRuntimes
  * <em>Type Runtimes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getOuterNetworkRuntime
+ * <em>Outer Network Runtime</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +79,16 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	 * @ordered
 	 */
 	protected EMap<FBNetworkElement, FBRuntimeAbstract> typeRuntimes;
+
+	/**
+	 * The cached value of the '{@link #getOuterNetworkRuntime() <em>Outer Network
+	 * Runtime</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getOuterNetworkRuntime()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBNetworkRuntime outerNetworkRuntime;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -177,8 +189,44 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	 * @generated
 	 */
 	@Override
-	public FBNetwork getModel() {
-		return this.fbnetwork;
+	public FBNetworkRuntime getOuterNetworkRuntime() {
+		if (outerNetworkRuntime != null && outerNetworkRuntime.eIsProxy()) {
+			InternalEObject oldOuterNetworkRuntime = (InternalEObject) outerNetworkRuntime;
+			outerNetworkRuntime = (FBNetworkRuntime) eResolveProxy(oldOuterNetworkRuntime);
+			if (outerNetworkRuntime != oldOuterNetworkRuntime) {
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME,
+							oldOuterNetworkRuntime, outerNetworkRuntime));
+				}
+			}
+		}
+		return outerNetworkRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public FBNetworkRuntime basicGetOuterNetworkRuntime() {
+		return outerNetworkRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public void setOuterNetworkRuntime(FBNetworkRuntime newOuterNetworkRuntime) {
+		FBNetworkRuntime oldOuterNetworkRuntime = outerNetworkRuntime;
+		outerNetworkRuntime = newOuterNetworkRuntime;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME, oldOuterNetworkRuntime,
+					outerNetworkRuntime));
+		}
 	}
 
 	/**
@@ -223,6 +271,11 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			} else {
 				return getTypeRuntimes().map();
 			}
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME:
+			if (resolve) {
+				return getOuterNetworkRuntime();
+			}
+			return basicGetOuterNetworkRuntime();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -244,6 +297,9 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			return;
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TYPE_RUNTIMES:
 			((EStructuralFeature.Setting) getTypeRuntimes()).set(newValue);
+			return;
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME:
+			setOuterNetworkRuntime((FBNetworkRuntime) newValue);
 			return;
 		default:
 			super.eSet(featureID, newValue);
@@ -268,6 +324,9 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TYPE_RUNTIMES:
 			getTypeRuntimes().clear();
 			return;
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME:
+			setOuterNetworkRuntime((FBNetworkRuntime) null);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -288,6 +347,8 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			return transferData != null && !transferData.isEmpty();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TYPE_RUNTIMES:
 			return typeRuntimes != null && !typeRuntimes.isEmpty();
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__OUTER_NETWORK_RUNTIME:
+			return outerNetworkRuntime != null;
 		default:
 			return super.eIsSet(featureID);
 		}

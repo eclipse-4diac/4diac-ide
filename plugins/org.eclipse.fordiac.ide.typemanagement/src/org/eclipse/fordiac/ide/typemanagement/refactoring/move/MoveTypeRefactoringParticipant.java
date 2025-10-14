@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
@@ -131,7 +131,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
-			if (eObject instanceof final FBNetworkElement elem) {
+			if (eObject instanceof final BlockFBNetworkElement elem) {
 				change.add(new UpdateInstanceChange(elem, dtEntry));
 			}
 		}
@@ -144,7 +144,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
 
 		for (final EObject eObject : result) {
-			if (eObject instanceof final FBNetworkElement elem) {
+			if (eObject instanceof final BlockFBNetworkElement elem) {
 				change.add(new UpdateFBInstanceChange(elem, typeEntry));
 			}
 		}
@@ -166,7 +166,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	class UpdateInstanceChange extends UpdateFBInstanceChange {
 		final String visibleChildrenString;
 
-		public UpdateInstanceChange(final FBNetworkElement instance, final TypeEntry typeEntry) {
+		public UpdateInstanceChange(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
 			super(instance, typeEntry);
 			visibleChildrenString = (instance instanceof final StructManipulator structManipulator)
 					? ConfigurableFBManagement.buildVisibleChildrenString(structManipulator.getMemberVars())
@@ -174,7 +174,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		}
 
 		@Override
-		protected Command createCommand(final FBNetworkElement element) {
+		protected Command createCommand(final BlockFBNetworkElement element) {
 			if (element instanceof final StructManipulator demux
 					&& typeEntry.getType() instanceof final StructuredType structuredType) {
 				return new ChangeStructCommand(demux, structuredType, visibleChildrenString, true);

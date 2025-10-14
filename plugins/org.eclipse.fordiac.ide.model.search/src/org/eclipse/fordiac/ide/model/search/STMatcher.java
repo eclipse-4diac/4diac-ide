@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.search;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 
@@ -29,6 +30,9 @@ public class STMatcher implements IModelMatcher {
 	@Override
 	public boolean matches(final EObject object) {
 		if (object instanceof final STFeatureExpression featureExpression) {
+			if (featureExpression.getFeature() instanceof final FBType type) {
+				return predicate.test(type.getTypeEntry().getFullTypeName());
+			}
 			return predicate.test(featureExpression.getFeature().getName());
 		}
 		if (object instanceof final INamedElement element) {

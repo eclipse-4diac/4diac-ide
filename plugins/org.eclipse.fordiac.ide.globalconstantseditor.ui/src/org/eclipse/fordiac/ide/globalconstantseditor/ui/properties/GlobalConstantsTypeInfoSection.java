@@ -19,18 +19,17 @@ package org.eclipse.fordiac.ide.globalconstantseditor.ui.properties;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
-import org.eclipse.fordiac.ide.globalconstantseditor.ui.editor.GlobalConstantsEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class GlobalConstantsTypeInfoSection extends AbstractSection {
@@ -69,22 +68,11 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
 			}
 		});
-
 	}
 
 	private void createTypeInfoGroup(final Composite parent) {
 		typeInfoWidget = new PackageInfoWidget(getWidgetFactory(), this::getAnnotationModel);
 		typeInfoWidget.createControls(parent);
-	}
-
-	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		setCurrentCommandStack(part, null);
-		if (null == getCurrentCommandStack()) { // disable all fields
-			setInputCode();
-		}
-		setType(part);
-		setInputInit();
 	}
 
 	@Override
@@ -94,9 +82,11 @@ public class GlobalConstantsTypeInfoSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof final GlobalConstantsEditor editor
-				&& editor.getDocument() instanceof final GlobalConstantsDocument document) {
-			return document.getResourceLibraryElement();
+		if (input instanceof ITextSelection) {
+			final var editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			if (editor != null && editor.getAdapter(LibraryElement.class) instanceof final GlobalConstants gc) {
+				return gc;
+			}
 		}
 		return null;
 	}

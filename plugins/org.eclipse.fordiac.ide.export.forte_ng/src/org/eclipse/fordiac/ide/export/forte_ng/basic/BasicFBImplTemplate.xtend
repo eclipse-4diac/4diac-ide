@@ -1,8 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University
- *               2020 TU Wien/ACIN
- *               2022 - 2023 Martin Erich Jobst
+ * Copyright (c) 2019, 2025 fortiss GmbH, Johannes Kepler University, 
+ *                          TU Wien/ACIN, Martin Erich Jobst,
+ *                          Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -112,9 +111,9 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	}
 
 	def protected generateTransitionEvent(Event event) {
-		var fbNetworkElement = event.FBNetworkElement
+		var fbNetworkElement = event.blockFBNetworkElement
 		if (fbNetworkElement instanceof AdapterFB) {
-			return '''«fbNetworkElement.generateName».«event.generateName»()'''
+			return '''«fbNetworkElement.generateName»->«event.generateName»()'''
 		}
 		event.generateEventID
 	}

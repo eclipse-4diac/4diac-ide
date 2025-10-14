@@ -33,24 +33,23 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<!DOCTYPE AdapterType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<AdapterType Name="Adapter" Comment="Adapter Interface" >
+<AdapterType Name="Adapter" Comment="Adapter Interface">
   <Identification Standard="61499-1" />
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="GE" Date="2008-04-22" />
   <InterfaceList>
     <EventInputs>
-      <Event Name="REQ" Comment="Request from Socket" >
+      <Event Name="REQ" Comment="Request from Socket">
         <With Var="REQD" />
       </Event>
-      <Event Name="RSP" Comment="Response from Socket" >
+      <Event Name="RSP" Comment="Response from Socket">
         <With Var="RSPD" />
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="CNF" Comment="Confirmation from Plug" >
+      <Event Name="CNF" Comment="Confirmation from Plug">
         <With Var="CNFD" />
       </Event>
-      <Event Name="IND" Comment="Indication from Plug" >
+      <Event Name="IND" Comment="Indication from Plug">
         <With Var="INDD" />
       </Event>
     </EventOutputs>
@@ -63,23 +62,23 @@
       <VarDeclaration Name="INDD" Type="WSTRING" Comment="Indication Data from Plug" />
     </OutputVars>
   </InterfaceList>
-  <Service LeftInterface="PLUG" RightInterface="SOCKET" >
-    <ServiceSequence Name="request_confirm" >
-      <ServiceTransaction >
+  <Service LeftInterface="PLUG" RightInterface="SOCKET">
+    <ServiceSequence Name="request_confirm">
+      <ServiceTransaction>
         <InputPrimitive Interface="SOCKET" Event="REQ" Parameters="REQD" />
         <OutputPrimitive Interface="PLUG" Event="REQ" Parameters="REQD" />
       </ServiceTransaction>
-      <ServiceTransaction >
+      <ServiceTransaction>
         <InputPrimitive Interface="PLUG" Event="CNF" Parameters="CNFD" />
         <OutputPrimitive Interface="SOCKET" Event="CNF" Parameters="CNFD" />
       </ServiceTransaction>
     </ServiceSequence>
-    <ServiceSequence Name="indication_response" >
-      <ServiceTransaction >
+    <ServiceSequence Name="indication_response">
+      <ServiceTransaction>
         <InputPrimitive Interface="PLUG" Event="IND" Parameters="INDD" />
         <OutputPrimitive Interface="SOCKET" Event="IND" Parameters="INDD" />
       </ServiceTransaction>
-      <ServiceTransaction >
+      <ServiceTransaction>
         <InputPrimitive Interface="SOCKET" Event="RSP" Parameters="RSPD" />
         <OutputPrimitive Interface="PLUG" Event="RSP" Parameters="RSPD" />
       </ServiceTransaction>

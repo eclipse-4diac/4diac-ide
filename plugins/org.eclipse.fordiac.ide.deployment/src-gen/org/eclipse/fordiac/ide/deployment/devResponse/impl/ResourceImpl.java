@@ -33,25 +33,27 @@ import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Resource</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Resource</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getFbs <em>Fbs</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getName
+ * <em>Name</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getType
+ * <em>Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getFbs
+ * <em>Fbs</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ResourceImpl extends EObjectImpl implements Resource {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -59,9 +61,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -69,9 +71,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -79,9 +81,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	protected static final String TYPE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
@@ -89,9 +91,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	protected String type = TYPE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' containment
+	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getFbs()
 	 * @generated
 	 * @ordered
@@ -99,17 +101,16 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	protected EList<FB> fbs;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	protected ResourceImpl() {
-		super();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -118,8 +119,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -128,21 +129,22 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		String oldName = name;
+	public void setName(final String newName) {
+		final String oldName = name;
 		name = newName;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESOURCE__NAME, oldName, name));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -151,21 +153,22 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void setType(String newType) {
-		String oldType = type;
+	public void setType(final String newType) {
+		final String oldType = type;
 		type = newType;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESOURCE__TYPE, oldType, type));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
@@ -177,116 +180,107 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DevResponsePackage.RESOURCE__FBS:
-				return ((InternalEList<?>)getFbs()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
+	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
+			final NotificationChain msgs) {
+		return switch (featureID) {
+		case DevResponsePackage.RESOURCE__FBS -> ((InternalEList<?>) getFbs()).basicRemove(otherEnd, msgs);
+		default -> super.eInverseRemove(otherEnd, featureID, msgs);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DevResponsePackage.RESOURCE__NAME:
-				return getName();
-			case DevResponsePackage.RESOURCE__TYPE:
-				return getType();
-			case DevResponsePackage.RESOURCE__FBS:
-				return getFbs();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+		return switch (featureID) {
+		case DevResponsePackage.RESOURCE__NAME -> getName();
+		case DevResponsePackage.RESOURCE__TYPE -> getType();
+		case DevResponsePackage.RESOURCE__FBS -> getFbs();
+		default -> super.eGet(featureID, resolve, coreType);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
-			case DevResponsePackage.RESOURCE__NAME:
-				setName((String)newValue);
-				return;
-			case DevResponsePackage.RESOURCE__TYPE:
-				setType((String)newValue);
-				return;
-			case DevResponsePackage.RESOURCE__FBS:
-				getFbs().clear();
-				getFbs().addAll((Collection<? extends FB>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
+		case DevResponsePackage.RESOURCE__NAME:
+			setName((String) newValue);
+			return;
+		case DevResponsePackage.RESOURCE__TYPE:
+			setType((String) newValue);
+			return;
+		case DevResponsePackage.RESOURCE__FBS:
+			getFbs().clear();
+			getFbs().addAll((Collection<? extends FB>) newValue);
+			return;
+		default:
+			super.eSet(featureID, newValue);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
-			case DevResponsePackage.RESOURCE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case DevResponsePackage.RESOURCE__TYPE:
-				setType(TYPE_EDEFAULT);
-				return;
-			case DevResponsePackage.RESOURCE__FBS:
-				getFbs().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
+		case DevResponsePackage.RESOURCE__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case DevResponsePackage.RESOURCE__TYPE:
+			setType(TYPE_EDEFAULT);
+			return;
+		case DevResponsePackage.RESOURCE__FBS:
+			getFbs().clear();
+			return;
+		default:
+			super.eUnset(featureID);
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DevResponsePackage.RESOURCE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case DevResponsePackage.RESOURCE__TYPE:
-				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
-			case DevResponsePackage.RESOURCE__FBS:
-				return fbs != null && !fbs.isEmpty();
-			default:
-				return super.eIsSet(featureID);
-		}
+	public boolean eIsSet(final int featureID) {
+		return switch (featureID) {
+		case DevResponsePackage.RESOURCE__NAME -> NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case DevResponsePackage.RESOURCE__TYPE -> TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+		case DevResponsePackage.RESOURCE__FBS -> fbs != null && !fbs.isEmpty();
+		default -> super.eIsSet(featureID);
+		};
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
-		StringBuilder result = new StringBuilder(super.toString());
+		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", type: "); //$NON-NLS-1$
@@ -295,4 +289,4 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		return result.toString();
 	}
 
-} //ResourceImpl
+} // ResourceImpl

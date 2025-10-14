@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -246,10 +247,10 @@ public class SearchHelper {
 							structType.getAttributes().stream());
 				case final AttributeDeclaration attrdecl ->
 					SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
-				case final FBNetworkElement elem -> Stream.concat(elem.getAttributes().stream(),
+				case final BlockFBNetworkElement elem -> Stream.concat(elem.getAttributes().stream(),
 						SearchChildrenProviderHelper.getInterfaceListChildren(elem.getInterface()));
 				case final ConfigurableObject configurableObject -> configurableObject.getAttributes().stream();
-				default -> null;
+				default -> Stream.empty();
 				};
 			}
 

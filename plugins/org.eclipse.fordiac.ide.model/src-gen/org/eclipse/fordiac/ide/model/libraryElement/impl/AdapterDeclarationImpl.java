@@ -41,11 +41,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -480,8 +483,18 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getFBNetworkElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
+	public FBType getFBType() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getFBType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InterfaceList getInterfaceList() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getInterfaceList(this);
 	}
 
 	/**
@@ -491,7 +504,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 */
 	@Override
 	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
 		if(type != null){
 			return type.getName();
 		}
@@ -516,6 +529,16 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement findInTypeInterface() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);
 	}
 
 	/**
@@ -616,6 +639,16 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	@Override
 	public Stream<INamedElement> findBySimpleName(final String name) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationAnnotations.findBySimpleName(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BlockFBNetworkElement getBlockFBNetworkElement() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockFBNetworkElement(this);
 	}
 
 	/**

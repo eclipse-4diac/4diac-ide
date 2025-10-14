@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2013, 2025 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -29,7 +29,7 @@ public class CompositeNetworkViewerEditPart extends CompositeNetworkEditPart {
 
 	@Override
 	protected InterfaceList getInterfaceList() {
-		return ((FBNetworkElement) getModel().eContainer()).getInterface();
+		return ((BlockFBNetworkElement) getModel().eContainer()).getInterface();
 	}
 
 	@Override

@@ -167,7 +167,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	@Override
 	protected void performRefresh() {
 		refreshParameterVisibility();
-		final FBNetworkElement fb = getType().getFBNetworkElement();
+		final FBNetworkElement fb = getType().getBlockFBNetworkElement();
 		if (fb != null) {
 			infoSection.setText(
 					MessageFormat.format(Messages.InterfaceElementSection_Instance, fb.getName(), getPinName()));
@@ -244,12 +244,13 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 
 	protected void refreshTypeInitialValue() {
 		if (getType() instanceof final VarDeclaration varDeclaration && varDeclaration.isIsInput()
-				&& varDeclaration.getFBNetworkElement() != null
-				&& varDeclaration.getFBNetworkElement().getType() != null) {
-			parameterText.setText(FordiacMessages.ComputingPlaceholderValue);
-			refreshJob.setInterfaceElement(varDeclaration.getFBNetworkElement().getType().getInterfaceList()
-					.getInterfaceElement(varDeclaration.getName()));
-			refreshJob.refresh();
+				&& varDeclaration.getBlockFBNetworkElement() != null) {
+			final VarDeclaration typeVar = varDeclaration.findInTypeInterface();
+			if (typeVar != null) {
+				parameterText.setText(FordiacMessages.ComputingPlaceholderValue);
+				refreshJob.setInterfaceElement(typeVar);
+				refreshJob.refresh();
+			}
 		} else {
 			parameterText.setText("");//$NON-NLS-1$
 		}

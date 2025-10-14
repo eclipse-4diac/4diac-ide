@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -89,7 +90,7 @@ public interface STUnaryExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getResultType();
+	LibraryElement getResultType();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -97,6 +98,6 @@ public interface STUnaryExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getDeclaredResultType();
+	LibraryElement getDeclaredResultType();
 
 } // STUnaryExpression

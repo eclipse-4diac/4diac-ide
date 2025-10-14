@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,10 +18,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.figures.ErrorMarkerFBNeworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 
-public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
+public class ErrorMarkerFBNEditPart extends AbstractBlockFBNElementEditPart {
 
 	private ErrorMarkerFBNeworkElementFigure errorMarkerFBNeworkElementFigure;
 
@@ -42,13 +41,11 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 		final StringBuilder errorText = new StringBuilder();
 
 		if (getModel().getTypeEntry() != null) {
-			final FBType type = (FBType) getModel().getTypeEntry().getType();
-			if (type != null) {
-				errorText.append(MessageFormat.format(Messages.ErrorMarkerFBNEditPart_OldType, type.getName()));
-			}
+			errorText.append(MessageFormat.format(Messages.ErrorMarkerFBNEditPart_OldType,
+					getModel().getTypeEntry().getTypeName()));
 		}
 
-		if (errorText.length() == 0) {
+		if (errorText.isEmpty()) {
 			errorText.append(Messages.ErrorMarkerFBNEditPart_ErrorMarker);
 		}
 

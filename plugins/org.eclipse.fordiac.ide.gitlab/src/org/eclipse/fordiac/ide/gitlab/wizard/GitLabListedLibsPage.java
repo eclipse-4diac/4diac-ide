@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.GLTreeContentProvider;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryManager;
@@ -124,7 +125,8 @@ public class GitLabListedLibsPage extends WizardPage {
 			for (final Object o : treeViewer.getCheckedElements()) {
 				if (o instanceof final LeafNode leafNode) {
 					final Path path = ((GitLabImportWizardPage) getPreviousPage()).getDownloadManager()
-							.packageDownloader(leafNode.getProject(), leafNode.getPackage());
+							.packageDownloader(leafNode.getProject(), leafNode.getPackage(),
+									GitLabDownloader.FileFilter.ZIP);
 					if (path != null && selectedProject != null) {
 						LibraryManager.INSTANCE.extractLibrary(path, selectedProject, true, true);
 					}

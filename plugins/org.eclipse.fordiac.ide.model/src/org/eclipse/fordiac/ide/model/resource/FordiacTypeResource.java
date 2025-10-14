@@ -132,10 +132,6 @@ public class FordiacTypeResource extends ResourceImpl {
 
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
-		if (!uri.isPlatformResource()) {
-			throw new IOException(
-					MessageFormat.format(Messages.FordiacTypeResource_SaveToUnsupportedURI, uri.toString()));
-		}
 		final AbstractTypeExporter exporter = getTypeExporter(getContents().get(0));
 		try (InputStream inputStream = exporter.getFileContent()) {
 			inputStream.transferTo(outputStream);

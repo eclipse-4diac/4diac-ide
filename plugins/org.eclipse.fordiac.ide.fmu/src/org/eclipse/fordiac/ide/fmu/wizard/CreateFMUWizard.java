@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.fmu.preferences.FMUPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.providers.DialogSettingsProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -38,6 +37,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class CreateFMUWizard extends Wizard implements IExportWizard {
 
@@ -75,7 +75,7 @@ public class CreateFMUWizard extends Wizard implements IExportWizard {
 
 		// Store the selection in the preferences
 		if (page.getStoreSelectedLibaries().getSelection()) {
-			final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+			final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 					FMUPreferenceConstants.FMU_PREFERENCES_ID);
 			store.setValue(FMUPreferenceConstants.P_FMU_WIN32, page.getWin32Field().getSelection());
 			store.setValue(FMUPreferenceConstants.P_FMU_WIN64, page.getWin64Field().getSelection());

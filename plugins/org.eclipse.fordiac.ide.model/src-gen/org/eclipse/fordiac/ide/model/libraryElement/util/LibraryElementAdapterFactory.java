@@ -119,6 +119,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createAttributeDeclarationAdapter();
 			}
 			@Override
+			public Adapter caseAutomationSystem(AutomationSystem object) {
+				return createAutomationSystemAdapter();
+			}
+			@Override
 			public Adapter caseBaseFBType(BaseFBType object) {
 				return createBaseFBTypeAdapter();
 			}
@@ -127,8 +131,8 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createBasicFBTypeAdapter();
 			}
 			@Override
-			public Adapter caseAutomationSystem(AutomationSystem object) {
-				return createAutomationSystemAdapter();
+			public Adapter caseBlockFBNetworkElement(BlockFBNetworkElement object) {
+				return createBlockFBNetworkElementAdapter();
 			}
 			@Override
 			public Adapter caseCFBInstance(CFBInstance object) {
@@ -689,6 +693,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBasicFBTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement <em>Block FB Network Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement
+	 * @generated
+	 */
+	public Adapter createBlockFBNetworkElementAdapter() {
 		return null;
 	}
 

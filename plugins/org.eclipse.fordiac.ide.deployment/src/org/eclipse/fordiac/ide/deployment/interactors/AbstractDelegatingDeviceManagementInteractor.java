@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
@@ -22,6 +23,9 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 public abstract class AbstractDelegatingDeviceManagementInteractor implements IDeviceManagementInteractor {
 	private final IDeviceManagementInteractor delegate;
@@ -151,6 +155,21 @@ public abstract class AbstractDelegatingDeviceManagementInteractor implements ID
 	}
 
 	@Override
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		return delegate.queryFBType(entry);
+	}
+
+	@Override
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		return delegate.queryDataType(entry);
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		return delegate.queryGlobalConstType(entry);
+	}
+
+	@Override
 	public Response readWatches() throws DeploymentException {
 		return delegate.readWatches();
 	}
@@ -178,6 +197,16 @@ public abstract class AbstractDelegatingDeviceManagementInteractor implements ID
 	@Override
 	public void clearForce(final Resource resource, final String name) throws DeploymentException {
 		delegate.clearForce(resource, name);
+	}
+
+	@Override
+	public void readTraces(final Device device, final String path) throws DeploymentException {
+		delegate.readTraces(device, path);
+	}
+
+	@Override
+	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
+		return delegate.replayNextEvent(resource);
 	}
 
 	protected IDeviceManagementInteractor getDelegate() {

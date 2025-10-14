@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -13,8 +13,6 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
-
-import java.util.EventObject;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,6 +46,7 @@ import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -66,7 +65,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
@@ -116,18 +114,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@SuppressWarnings("static-method") // allow subclasses to provide refined context ids
 	protected String getContextId() {
 		return "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
-	 * .EventObject)
-	 */
-	@Override
-	public void commandStackChanged(final EventObject event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-		super.commandStackChanged(event);
 	}
 
 	/** refresh all child editparts when editor gets focus. */
@@ -343,14 +329,7 @@ public abstract class DiagramEditor extends GraphicalEditor
 		}
 
 		if (getEditorInput() == null) {
-			setEditDomain(createEditDomain());
-			getEditDomain().setDefaultTool(createDefaultTool());
-			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-			// use one "System - Wide" command stack to avoid inconsistencies due to undo
-			// redo
-			if (null != getSystem()) {
-				getEditDomain().setCommandStack(getSystem().getCommandStack());
-			}
+			setupEditDomain();
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			removeAnnotationModelDispatcher();
@@ -358,6 +337,17 @@ public abstract class DiagramEditor extends GraphicalEditor
 			addAnnotationModelDispatcher();
 		}
 		super.setInputWithNotify(input);
+	}
+
+	private void setupEditDomain() {
+		final CommandStack commandStack = (getSite() instanceof final MultiPageEditorSite multiPageEditorSite)
+				? multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class)
+				: new CommandStack();
+		final DefaultEditDomain editDomain = createEditDomain();
+		editDomain.setCommandStack(commandStack);
+		editDomain.setDefaultTool(createDefaultTool());
+		editDomain.setActiveTool(editDomain.getDefaultTool());
+		setEditDomain(editDomain);
 	}
 
 	protected DefaultEditDomain createEditDomain() {

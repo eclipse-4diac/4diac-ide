@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Fabio Gandolfi, Michael Oberlehner -
- *   	initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi, Michael Oberlehner
+ *      - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -166,7 +166,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
 		final List<? extends EObject> searchResults = search.performSearch();
-		searchResults.stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
+		searchResults.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
 				.map(fbn -> new UpdateFBInstanceChange(fbn, typeEntry)).forEach(change::add);
 
 		if (!searchResults.isEmpty()) {
@@ -177,9 +177,12 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
 			final Set<EObject> rootElements) {
-		if (varDecl.getFBNetworkElement() != null) {
-			if (rootElements.add(varDecl.getFBNetworkElement())) {
-				return new UpdateFBInstanceChange(varDecl.getFBNetworkElement(), dataTypeEntry);
+		if (varDecl.getBlockFBNetworkElement() != null) {
+			if (varDecl.getBlockFBNetworkElement() instanceof StructManipulator) {
+				return null; // StructManipulators handle varDecls differently...
+			}
+			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
+				return new UpdateFBInstanceChange(varDecl.getBlockFBNetworkElement(), dataTypeEntry);
 			}
 		} else {
 			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);

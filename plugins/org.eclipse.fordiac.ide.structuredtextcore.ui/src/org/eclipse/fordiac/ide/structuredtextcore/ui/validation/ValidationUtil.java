@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -146,7 +146,7 @@ public final class ValidationUtil {
 	}
 
 	public static boolean isContainedInTypedInstance(final IInterfaceElement element) {
-		final FBNetworkElement fbNetworkElement = element.getFBNetworkElement();
+		final FBNetworkElement fbNetworkElement = element.getBlockFBNetworkElement();
 		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 

@@ -2934,7 +2934,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             }
             if ( state.backtracking==0 ) {
 
-              					newCompositeNode(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0());
+              					newCompositeNode(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0());
               				
             }
             pushFollow(FOLLOW_21);
@@ -3564,7 +3564,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             }
             if ( state.backtracking==0 ) {
 
-              					newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0());
+              					newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0());
               				
             }
             pushFollow(FOLLOW_26);

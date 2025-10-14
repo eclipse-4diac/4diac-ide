@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.library.DownloadResult;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -39,7 +42,7 @@ public class MockDownloader implements IArchiveDownloader {
 			Map.entry("test02", List.of("1.0.0", "1.1.0")), Map.entry("test03", List.of("1.0.0", "1.1.0")),
 			Map.entry("test04", List.of("1.0.0", "1.1.0")), Map.entry("test05", List.of("1.0.0")),
 			Map.entry("test06", List.of("1.0.0")), Map.entry("test07", List.of("1.0.0")));
-	private final static String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
+	private static final String FORMAT_STRING = "data/%s-%s.zip"; //$NON-NLS-1$
 
 	@Override
 	public String getName() {
@@ -47,22 +50,25 @@ public class MockDownloader implements IArchiveDownloader {
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableLibraries() {
+	public DownloadResult<List<String>> availableLibraries(final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		return new DownloadResult<>(List.copyOf(archiveMap.keySet()));
 	}
 
 	@Override
-	public DownloadResult<List<String>> availableVersions(final String symbolicName) {
+	public DownloadResult<List<String>> availableVersions(final String symbolicName, final IProgressMonitor monitor)
+			throws OperationCanceledException {
 		return new DownloadResult<>(archiveMap.getOrDefault(symbolicName, Collections.emptyList()));
 	}
 
 	@Override
 	public DownloadResult<Path> downloadLibrary(final String symbolicName, final VersionRange range,
-			final Version preferredVersion) {
+			final Version preferredVersion, final IProgressMonitor monitor) throws OperationCanceledException {
+		final SubMonitor progress = SubMonitor.convert(monitor, "", 5); //$NON-NLS-1$
 		if (!archiveMap.containsKey(symbolicName)) {
 			return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
 		}
-		final var st = availableVersions(symbolicName).result().stream();
+		final var st = availableVersions(symbolicName, progress.split(1)).result().stream();
 		if (range != null) {
 			st.filter(v -> VersionComparator.contains(range, v));
 		}
@@ -98,6 +104,12 @@ public class MockDownloader implements IArchiveDownloader {
 	}
 
 	@Override
+	public DownloadResult<Path> downloadManifest(final String symbolicName, final Version version,
+			final IProgressMonitor monitor) throws OperationCanceledException {
+		return new DownloadResult<>(DownloadResult.Status.NOT_FOUND, Messages.Library_Not_Found);
+	}
+
+	@Override
 	public boolean isActive() {
 		return active;
 	}
@@ -106,5 +118,4 @@ public class MockDownloader implements IArchiveDownloader {
 	public void setActive(final boolean active) {
 		this.active = active;
 	}
-
 }

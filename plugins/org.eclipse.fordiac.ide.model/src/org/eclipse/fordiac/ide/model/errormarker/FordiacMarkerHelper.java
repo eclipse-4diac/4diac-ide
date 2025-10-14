@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University Linz, Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz, Primetals Technologies Austria GmbH
  *                          Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
@@ -40,8 +40,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -305,13 +305,13 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	public static FBNetworkElement createTypeErrorMarkerFB(final String typeName, final TypeLibrary typeLibrary,
+	public static BlockFBNetworkElement createTypeErrorMarkerFB(final String typeName, final TypeLibrary typeLibrary,
 			final EClass typeClass) {
 		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeName, typeClass);
 		return createErrorMarkerFB(typeName, entry);
 	}
 
-	public static FBNetworkElement createErrorMarkerFB(final String name, final TypeEntry entry) {
+	public static BlockFBNetworkElement createErrorMarkerFB(final String name, final TypeEntry entry) {
 		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(name);
 		errorFb.setTypeEntry(entry);
 		return errorFb;

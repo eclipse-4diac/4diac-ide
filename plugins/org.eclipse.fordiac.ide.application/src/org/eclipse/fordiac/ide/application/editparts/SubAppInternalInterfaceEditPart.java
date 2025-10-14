@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -114,7 +114,7 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 	}
 
 	private void goToParent() {
-		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getFBNetworkElement());
+		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getBlockFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
 		HandlerHelper.selectElement(getModel(), viewer);
 	}

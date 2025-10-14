@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="CSV_WRITER_9" Comment="Service Interface Function Block Type" >
-	<Identification Description="Copyright (c) 2012 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0 " >
+<FBType Name="CSV_WRITER_9" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2012 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0 ">
 	</Identification>
 	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2012-06-16">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
 				<With Var="QI"/>
 				<With Var="FILE_NAME"/>
 			</Event>
-			<Event Name="REQ" Type="Event" Comment="Service Request" >
+			<Event Name="REQ" Type="Event" Comment="Service Request">
 				<With Var="QI"/>
 				<With Var="SD_1"/>
 				<With Var="SD_2"/>
@@ -24,11 +24,11 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service" >
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
@@ -51,7 +51,7 @@
 			<VarDeclaration Name="STATUS" Type="STRING" Comment="File access status" />
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type" >
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
 		<ServiceSequence Name="normal_establishment">
 			<ServiceTransaction>
 				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="FILE_NAME"/>
@@ -90,4 +90,5 @@
 		</ServiceSequence>
 	</Service>
 	<Attribute Name="GenericClassName" Value="'GEN_CSV_WRITER'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

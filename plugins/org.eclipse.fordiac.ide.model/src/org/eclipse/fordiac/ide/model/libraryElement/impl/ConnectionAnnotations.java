@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -46,6 +47,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class ConnectionAnnotations {
+
+	public static BlockFBNetworkElement getSourceElement(final Connection c) {
+		return (null != c.getSource()) ? c.getSource().getBlockFBNetworkElement() : null;
+	}
+
+	public static BlockFBNetworkElement getDestinationElement(final Connection c) {
+		return (null != c.getDestination()) ? c.getDestination().getBlockFBNetworkElement() : null;
+	}
 
 	public static boolean validateMissingSource(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
@@ -227,8 +236,8 @@ public class ConnectionAnnotations {
 		final var source = connection.getSource();
 		final var destination = connection.getDestination();
 		if (isInOutVarOfMappedFB(source) && isInOutVarOfMappedFB(destination)) {
-			final var sourceResource = source.getFBNetworkElement().getResource();
-			final var destinationResource = destination.getFBNetworkElement().getResource();
+			final var sourceResource = source.getBlockFBNetworkElement().getResource();
+			final var destinationResource = destination.getBlockFBNetworkElement().getResource();
 			if (sourceResource != destinationResource) { // Error, VarInOut crosses boundaries
 				if (diagnostics != null) {
 					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -243,8 +252,8 @@ public class ConnectionAnnotations {
 	}
 
 	private static boolean isInOutVarOfMappedFB(final IInterfaceElement ie) {
-		return ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && ie.getFBNetworkElement() != null
-				&& ie.getFBNetworkElement().isMapped();
+		return ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()
+				&& ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement().isMapped();
 	}
 
 	public static boolean validateVarInOutArraySizesAreCompatible(final Connection connection,

@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -34,14 +34,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class AdapterTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
+public class AdapterTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<AdapterType> implements AdapterTypeEntry {
 
 	public AdapterTypeEntryImpl() {
 		super(AdapterType.class);
 	}
 
 	@Override
-	protected CommonElementImporter getImporter() {
+	protected BlockTypeImporter getImporter() {
 		return new ADPImporter(getFile());
 	}
 

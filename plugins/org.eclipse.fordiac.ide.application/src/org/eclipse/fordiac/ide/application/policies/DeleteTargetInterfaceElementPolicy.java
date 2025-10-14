@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,7 +41,7 @@ public class DeleteTargetInterfaceElementPolicy extends ComponentEditPolicy {
 
 		if (!host.getInputConnections().isEmpty()) {
 			final IInterfaceElement source = host.getInputConnections().get(0).getSource();
-			if (source.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()
+			if (source.getBlockFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()
 					&& source.getOutputConnections().size() == 1) {
 				// The other end of the connection is an interface element of an expanded subapp
 				// and there is only one connection left. So we also need to delete that pin.

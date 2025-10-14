@@ -76,7 +76,7 @@ public class SWTBot4diacFigureCanvas extends SWTBotGefFigureCanvas {
 
 	@Override
 	public void typeText(final Text textControl, final String text) {
-		UIThreadRunnable.syncExec(() -> textControl.setText(""));
+		UIThreadRunnable.syncExec(() -> textControl.setText("")); //$NON-NLS-1$
 		for (int x = 0; x < text.length(); ++x) {
 			final char c = text.charAt(x);
 			UIThreadRunnable.syncExec(() -> {

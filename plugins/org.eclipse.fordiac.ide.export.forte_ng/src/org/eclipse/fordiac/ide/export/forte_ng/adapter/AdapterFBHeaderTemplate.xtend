@@ -22,17 +22,15 @@ import java.nio.file.Path
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
 class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 
 	new(AdapterType type, String name, Path prefix, Map<?,?> options) {
-		super(type, name, prefix, "CAdapter", options)
+		super(type, name, prefix, "forte::CAdapter", options)
 	}
 
 	override generate() '''
@@ -43,46 +41,46 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		  private:
-		    «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		    «generateFBInterfaceSpecDeclaration»
+		      «(type.interfaceList.inputVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
+		    public:
+		      «type.interfaceList.inputVars.generateVariableDeclarations(false)»
+		      «type.interfaceList.outputVars.generateVariableDeclarations(false)»
+		      «type.interfaceList.eventInputs.generateEventAccessors»
+		      «type.interfaceList.eventOutputs.generateEventAccessors»
+		      ~«FBClassName»() override = default;
+		      
+		    protected:
+		      «FBClassName»(CFBContainer &paContainer,
+		                    const SFBInterfaceSpec &paInterfaceSpec,
+		                    const StringId paInstanceNameId,
+		                    TForteUInt8 paParentAdapterlistID);
+		  };
 		
-		    «generateReadInputDataDeclaration»
-		    «generateWriteOutputDataDeclaration»
-		  public:
-		    «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
-		    «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
-		    «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		    «type.interfaceList.eventInputs.generateEventAccessors»
-		    «type.interfaceList.eventOutputs.generateEventAccessors»
-		    «FBClassName»(CStringDictionary::TStringId paAdapterInstanceName, forte::core::CFBContainer &paContainer, bool paIsPlug) :
-		        «baseClass»(paContainer, scmFBInterfaceSpecSocket, paAdapterInstanceName, scmFBInterfaceSpecPlug, paIsPlug) {	
-		    };
+		  «generatePlugClass»
 		
-		    virtual ~«FBClassName»() = default;
-		};
+		  «generateSocketClass»
+		}
 		
-		«generateIncludeGuardEnd»
-		
+		«generateIncludeGuardEnd»		
 	'''
 
 	override protected generateHeaderIncludes() '''
-		«generateDependencyInclude("core/adapter.h")»
-		«generateDependencyInclude("core/typelib.h")»
+		«generateDependencyInclude("forte/adapter.h")»
 		«super.generateHeaderIncludes»
+	'''
+
+	override protected generateFBClassHeader() '''
+		namespace «type.generateTypeNamespace» {
+		  class «FBClassName» : public «baseClass» {
 	'''
 
 	override protected generateFBDeclaration() '''
 		DECLARE_ADAPTER_TYPE(«FBClassName»)
-	'''
-
-	override protected generateFBInterfaceSpecDeclaration() '''
-		static const SFBInterfaceSpec scmFBInterfaceSpecSocket;
-		
-		static const SFBInterfaceSpec scmFBInterfaceSpecPlug;
 	'''
 
 	override protected generateEventConstants(List<Event> events) '''
@@ -92,30 +90,48 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterType> {
 	private:
 	'''
 
-	def protected generateAccessors(List<VarDeclaration> vars, String socketFunction, String plugFunction) '''
-		«FOR v : vars»
-			«v.generateVariableTypeName» &«v.generateName» {
-			  return *static_cast<«v.generateVariableTypeName»*>((isSocket()) ? «socketFunction»(«vars.indexOf(v)») : «plugFunction»(«vars.indexOf(v)»));
-			}
-			
-		«ENDFOR»
-	'''
-
-	def protected generateEventAccessors(List<Event> events) '''
+	def private generateEventAccessors(List<Event> events) '''
 		«FOR event : events»
 			TEventID «event.generateName»() {
-			  return mParentAdapterListEventID + scmEvent«event.name»ID;
+			  return getParentAdapterListEventID() + scmEvent«event.name»ID;
 			}
 			
 		«ENDFOR»
 	'''
-
-	def protected generateAccessors(List<AdapterDeclaration> adapters) '''
-		«FOR adapter : adapters»
-			«adapter.type.generateTypeName» &«adapter.generateName» {
-			  return *static_cast<«adapter.type.generateTypeName»*>(mAdapters[«adapters.indexOf(adapter)»]);
-			};
-			
-		«ENDFOR»
+	
+	def generatePlugClass() '''
+		«generatePlugSocketClassStart("_Plug")»
+		
+		    «type.interfaceList.eventInputs.generateEventConnectionDeclarations»
+		    «type.interfaceList.outputVars.generateDataConnectionDeclarations(true)»
+		    «type.interfaceList.inputVars.generateDataConnectionDeclarations(false)»
+		  private:
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		    «generateAccessorDeclarations()»
+		};
 	'''
+
+	def generateSocketClass() '''
+		«generatePlugSocketClassStart("_Socket")»
+		
+		    «type.interfaceList.eventOutputs.generateEventConnectionDeclarations»
+		    «type.interfaceList.inputVars.generateDataConnectionDeclarations(true)»
+		    «type.interfaceList.outputVars.generateDataConnectionDeclarations(false)»
+		  private:
+		    «generateReadInputDataDeclaration»
+		    «generateWriteOutputDataDeclaration»
+		    «generateAccessorDeclarations()»
+		};
+	'''
+	
+	def generatePlugSocketClassStart(String kind) '''
+	  class «FBClassName»«kind» final : public «FBClassName» {
+	    public:
+	      «FBClassName»«kind»(StringId paInstanceNameId,
+	                          CFBContainer &paContainer,
+	                          TForteUInt8 paParentAdapterlistID);
+	      ~«FBClassName»«kind»() override = default;
+	'''
+	
 }

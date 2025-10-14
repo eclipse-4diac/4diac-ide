@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
@@ -73,7 +73,7 @@ public class SystemUpdateFBChange extends AbstractCommandChange<AutomationSystem
 	protected Command createCommand(final AutomationSystem element) {
 		final CompoundCommand cmds = new CompoundCommand();
 		updateURIs.forEach(uri -> {
-			if (element.eResource().getEObject(uri.fragment()) instanceof final FBNetworkElement fbnelem) {
+			if (element.eResource().getEObject(uri.fragment()) instanceof final BlockFBNetworkElement fbnelem) {
 				cmds.add(new UpdateFBTypeCommand(fbnelem));
 			}
 		});
