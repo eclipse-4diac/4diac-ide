@@ -52,7 +52,7 @@ public class MoveTypeChange extends AbstractCommandChange<LibraryElement> {
 		if (!Objects.equals(PackageNameHelper.getPackageName(element), oldPackageName)) {
 			status.addFatalError(Messages.MoveTypeToPackage_NameChanged);
 		}
-		if (oldPackageName.equals(newPackageName)) {
+		if (Objects.equals(oldPackageName, newPackageName)) {
 			status.addWarning(Messages.MoveTypeToPackage_PackageNameIsTheSame);
 		}
 		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(newPackageName);
