@@ -82,6 +82,13 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 
 	@Override
 	protected Command createCommand(final FBType type) {
+		if (affectedVarNames.isEmpty()) {
+			return new Command() {
+				// return empty Command, a CompoundCommand with zero entries is considered "not
+				// executable", causing issues in AbstractCommandChange.performCommand(...)
+			};
+		}
+
 		final CompoundCommand cmd = new CompoundCommand();
 
 		for (final String varName : affectedVarNames) {
