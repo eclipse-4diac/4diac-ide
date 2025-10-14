@@ -140,6 +140,10 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 			break;
 		case IResource.PROJECT:
+			if (testFlags(delta, IResourceDelta.DESCRIPTION)) {
+				// the .project file changed (metadata, natures, builders)
+				validateProjectNature(delta.getResource().getProject());
+			}
 			if (testFlags(delta, IResourceDelta.OPEN)) {
 				if (delta.getResource().isAccessible()) {
 					// refresh type library when opening project
