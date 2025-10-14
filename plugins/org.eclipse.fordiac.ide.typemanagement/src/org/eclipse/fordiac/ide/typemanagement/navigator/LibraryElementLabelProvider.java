@@ -56,6 +56,9 @@ public class LibraryElementLabelProvider extends AdapterFactoryLabelProvider {
 	 * which can not directly be used as this class is an Eclipse internal class.
 	 */
 	private static ImageDescriptor decorateImage(final IResource element, final ImageDescriptor imageDescriptor) {
+		if (!element.exists()) {
+			return imageDescriptor;
+		}
 		final ImageDescriptor overlay = getErrorOverlay(element);
 		if (overlay != null) {
 			return new DecorationOverlayIcon(imageDescriptor, overlay, IDecoration.BOTTOM_LEFT);
