@@ -33,32 +33,24 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.CopyParticipant;
 
 public class CopyTypeParticipant extends CopyParticipant {
 
-	private URI[] destinationURI;
+	private URI destinationURI;
 	private String newPackageName;
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IResource[] resources
+		if (element instanceof final IResource resource
 				&& getArguments().getDestination() instanceof final IContainer destination) {
-
-			destinationURI = new URI[resources.length];
-
-			for (int i = 0; i < resources.length; i++) {
-				destinationURI[i] = URI.createPlatformResourceURI(destination.getFullPath().toString(), true)
-						.appendSegment(resources[i].getName());
-			}
-			if (destinationURI.length > 0 && destinationURI[0].isPlatformResource()) {
-				final Path filePath = new Path(destinationURI[0].toPlatformString(true));
-				final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-				newPackageName = PackageNameHelper.getPackageNameFromFile(file);
-			}
+			destinationURI = URI.createPlatformResourceURI(destination.getFullPath().toString(), true)
+					.appendSegment(resource.getName());
+			final Path filePath = new Path(destinationURI.toPlatformString(true));
+			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+			newPackageName = PackageNameHelper.getPackageNameFromFile(file);
 			return true;
 		}
 		return false;
@@ -85,12 +77,9 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange compChange = new CompositeChange(Messages.CopyTypeToPackage_CompositeChangeName);
-		for (final URI uri : destinationURI) {
-			if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri) != null) {
-				compChange.add(new CopyTypeChange(newPackageName, getName(), uri));
-			}
+		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI) != null) {
+			return new CopyTypeChange(newPackageName, getName(), destinationURI);
 		}
-		return compChange;
+		return null;
 	}
 }

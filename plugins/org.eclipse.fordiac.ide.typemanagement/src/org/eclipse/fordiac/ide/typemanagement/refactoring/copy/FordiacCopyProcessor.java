@@ -12,7 +12,11 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -26,6 +30,7 @@ import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.CopyArguments;
+import org.eclipse.ltk.core.refactoring.participants.CopyParticipant;
 import org.eclipse.ltk.core.refactoring.participants.CopyProcessor;
 import org.eclipse.ltk.core.refactoring.participants.ParticipantManager;
 import org.eclipse.ltk.core.refactoring.participants.RefactoringParticipant;
@@ -66,8 +71,16 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 	@Override
 	public RefactoringParticipant[] loadParticipants(final RefactoringStatus status,
 			final SharableParticipants sharedParticipants) throws CoreException {
-		return ParticipantManager.loadCopyParticipants(status, this, files, new CopyArguments(destination, log),
-				new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID }, sharedParticipants);
+		final String[] affectedNatures = new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
+		final CopyArguments copyArgs = new CopyArguments(destination, log);
+		final List<CopyParticipant> result = new ArrayList<>();
+
+		for (final IResource file : files) {
+			final CopyParticipant[] participants = ParticipantManager.loadCopyParticipants(status, this, file, copyArgs,
+					affectedNatures, sharedParticipants);
+			result.addAll(Arrays.asList(participants));
+		}
+		return result.toArray(new RefactoringParticipant[result.size()]);
 	}
 
 	@Override
