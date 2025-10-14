@@ -71,7 +71,7 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 	@Override
 	public RefactoringParticipant[] loadParticipants(final RefactoringStatus status,
 			final SharableParticipants sharedParticipants) throws CoreException {
-		final String[] affectedNatures = new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID };
+		final String[] affectedNatures = SystemManager.getNatureIDs();
 		final CopyArguments copyArgs = new CopyArguments(destination, log);
 		final List<CopyParticipant> result = new ArrayList<>();
 
