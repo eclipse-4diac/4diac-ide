@@ -173,6 +173,9 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 	}
 
 	private void repopulateCombo() {
+		if (combo == null || combo.isDisposed() || zoomManager == null) {
+			return;
+		}
 		combo.setItems(getZoomManager().getZoomLevelsAsText());
 	}
 
