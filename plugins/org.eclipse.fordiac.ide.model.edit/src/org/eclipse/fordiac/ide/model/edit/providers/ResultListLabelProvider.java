@@ -72,7 +72,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 			addFilePath(styledString, entry.getFile(), packageName);
 		}
 
-		styledString.append(" - " + entry.getComment(), //$NON-NLS-1$
+		styledString.append(" [" + entry.getComment() + "]", //$NON-NLS-1$ //$NON-NLS-2$
 				showFilePath ? StyledString.DECORATIONS_STYLER : StyledString.QUALIFIER_STYLER);
 		return styledString;
 	}
