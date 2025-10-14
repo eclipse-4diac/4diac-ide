@@ -26,6 +26,9 @@
 				<version>${asciidoctor.maven.plugin.version}</version>				
 				<configuration>
 					<enableVerbose>true</enableVerbose>
+					<attributes>
+                        <doctype>book</doctype>
+                    </attributes>
 				</configuration>
 				<executions>
 					<execution>

@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.tests;x-internal=true
 Require-Bundle: org.eclipse.xtext.testing,
- org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.40.0",
  org.eclipse.xtext.xbase.testing,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
