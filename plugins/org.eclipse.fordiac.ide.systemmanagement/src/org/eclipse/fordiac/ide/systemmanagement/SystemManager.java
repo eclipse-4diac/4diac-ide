@@ -171,7 +171,7 @@ public enum SystemManager {
 				.toList();
 	}
 
-	private static String[] getNatureIDs() {
+	public static String[] getNatureIDs() {
 		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID, XtextProjectHelper.NATURE_ID };
 	}
 

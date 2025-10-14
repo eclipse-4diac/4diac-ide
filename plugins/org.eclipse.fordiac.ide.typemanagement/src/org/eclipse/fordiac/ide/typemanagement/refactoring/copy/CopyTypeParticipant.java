@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,13 +43,16 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IResource resource
+		if (element instanceof final IFile file
 				&& getArguments().getDestination() instanceof final IContainer destination) {
+			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) == null) {
+				return false;
+			}
 			destinationURI = URI.createPlatformResourceURI(destination.getFullPath().toString(), true)
-					.appendSegment(resource.getName());
+					.appendSegment(file.getName());
 			final Path filePath = new Path(destinationURI.toPlatformString(true));
-			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-			newPackageName = PackageNameHelper.getPackageNameFromFile(file);
+			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+			newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
 			return true;
 		}
 		return false;
@@ -77,9 +79,6 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI) != null) {
-			return new CopyTypeChange(newPackageName, getName(), destinationURI);
-		}
-		return null;
+		return new CopyTypeChange(newPackageName, getName(), destinationURI);
 	}
 }
