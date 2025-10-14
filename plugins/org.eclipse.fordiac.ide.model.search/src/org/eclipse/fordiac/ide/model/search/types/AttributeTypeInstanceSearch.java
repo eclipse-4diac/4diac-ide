@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -70,7 +69,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			return 	obj instanceof AutomationSystem ||
 					obj instanceof Application ||
 					obj instanceof FBType ||
-					obj instanceof FBNetworkElement ||
+					obj instanceof BlockFBNetworkElement ||
 					obj instanceof StructuredType ||
 					obj instanceof AttributeDeclaration ||
 					obj instanceof DeviceType ||
@@ -118,7 +117,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			case final Resource resource -> resource.getVarDeclarations().stream();
 			case final Segment segment -> segment.getVarDeclarations().stream();
 			case final GlobalConstants globalConstants -> globalConstants.getConstants().stream();
-			default -> null;
+			default -> Stream.empty();
 			};
 		}
 	}

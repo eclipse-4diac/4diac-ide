@@ -250,7 +250,7 @@ public class SearchHelper {
 				case final BlockFBNetworkElement elem -> Stream.concat(elem.getAttributes().stream(),
 						SearchChildrenProviderHelper.getInterfaceListChildren(elem.getInterface()));
 				case final ConfigurableObject configurableObject -> configurableObject.getAttributes().stream();
-				default -> null;
+				default -> Stream.empty();
 				};
 			}
 

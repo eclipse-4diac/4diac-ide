@@ -128,7 +128,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				return object.getAttributes().stream();
 			}
 
-			return null;
+			return Stream.empty();
 		}
 	}
 }

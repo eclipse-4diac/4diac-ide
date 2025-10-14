@@ -80,6 +80,6 @@ public final class ProjectInstanceSearchChildrenProvider implements ISearchChild
 			return object.getAttributes().stream();
 		}
 
-		return null;
+		return Stream.empty();
 	}
 }
