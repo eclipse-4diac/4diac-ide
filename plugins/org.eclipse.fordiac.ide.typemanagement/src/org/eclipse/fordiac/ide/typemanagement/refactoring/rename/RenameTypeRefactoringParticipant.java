@@ -178,6 +178,9 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
 			final Set<EObject> rootElements) {
 		if (varDecl.getBlockFBNetworkElement() != null) {
+			if (varDecl.getBlockFBNetworkElement() instanceof StructManipulator) {
+				return null; // StructManipulators handle varDecls differently...
+			}
 			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
 				return new UpdateFBInstanceChange(varDecl.getBlockFBNetworkElement(), dataTypeEntry);
 			}
