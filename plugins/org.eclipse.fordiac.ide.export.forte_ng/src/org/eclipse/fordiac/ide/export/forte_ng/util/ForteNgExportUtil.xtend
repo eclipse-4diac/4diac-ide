@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
 import java.nio.file.Path
+import java.util.List
 import java.util.Set
 import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
@@ -197,11 +199,7 @@ final class ForteNgExportUtil {
 	def static CharSequence generateTypeName(LibraryElement type) {
 		switch (type) {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
-					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
-					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
-				].toString
+			ArrayType: generateArrayTypeName(type.subranges, type.baseType)
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
 			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
@@ -210,21 +208,20 @@ final class ForteNgExportUtil {
 			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 		}
 	}
-
+	
 	def static CharSequence generateTypeNameAsParameter(LibraryElement type) {
-		switch (type) {
-			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
-					'''CIEC_ARRAY_COMMON<«result»>'''
-				].toString
-			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
-			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
-			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
-			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
-			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
-			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-		}
+		if (type instanceof ArrayType)
+			// use CIEC_ARRAY_COMMON for first dimension
+			'''CIEC_ARRAY_COMMON<«generateArrayTypeName(type.subranges.subList(1, type.subranges.size), type.baseType)»>'''
+		else
+			generateTypeName(type)
+	}
+
+	def static String generateArrayTypeName(List<Subrange> subranges, DataType baseType) {
+		subranges.reverseView.fold(baseType.generateTypeName) [ result, subrange |
+			val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+			'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+		].toString
 	}
 
 	def static CharSequence generateTypeSpec(LibraryElement type) {
