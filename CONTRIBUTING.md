@@ -169,3 +169,5 @@ Fixes https://github.com/eclipse-4diac/4diac-ide/issues/321
 Contact the project developers via the project's "dev" list.
 
 * https://dev.eclipse.org/mailman/listinfo/4diac-dev
+
+If you have any questions or comments regarding specific parts of the 4diac IDE codebase, you can also reach out to the respective maintainers in the `CODEOWNERS` file.
