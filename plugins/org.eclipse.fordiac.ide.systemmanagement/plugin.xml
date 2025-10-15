@@ -26,4 +26,10 @@
          </run>
       </runtime>
    </extension>
+   <extension
+      point="org.eclipse.ui.startup">
+   		<startup
+        	class="org.eclipse.fordiac.ide.systemmanagement.changelistener.StartupHandler">
+   		</startup>
+   </extension> 
 </plugin>
