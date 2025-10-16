@@ -30,5 +30,6 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="IN1 for K = 0, IN2 for K = 1"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_F_MUX'"/>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
