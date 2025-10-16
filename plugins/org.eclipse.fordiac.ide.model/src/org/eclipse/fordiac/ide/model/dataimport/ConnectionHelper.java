@@ -56,9 +56,11 @@ public final class ConnectionHelper {
 		final FBNetworkImporter importer;
 
 		private final String destinationString;
+		private String fullDstPinName;
 		private InterfaceList destInterfaceList;
 
 		private final String sourceString;
+		private String fullSrcPinName;
 		private InterfaceList srcInterfaceList;
 
 		public ConnectionBuilder(final String sourceString, final String destinationString, final T connection,
@@ -264,39 +266,31 @@ public final class ConnectionHelper {
 		}
 
 		public String getSourcePinName() {
-
-			if (sourceString == null) {
-				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, "«null»"); //$NON-NLS-1$
-			}
-
-			if (connection.getSource() != null) {
-				return connection.getSource().getName();
-			}
-
-			final String[] qualNames = sourceString.split("\\."); //$NON-NLS-1$
-			if (qualNames.length < 2) {
-				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, sourceString);
-			}
-
-			return qualNames[1];
+			return getPinName(sourceString, srcInterfaceList, fullSrcPinName);
 		}
 
 		public String getDestinationPinName() {
+			return getPinName(destinationString, destInterfaceList, fullDstPinName);
+		}
 
-			if (destinationString == null) {
-				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, "«null»"); //$NON-NLS-1$
+		private static String getPinName(final String pinIdentifier, final InterfaceList il, final String fullPinName) {
+			if (fullPinName != null) {
+				return fullPinName;
 			}
 
-			if (connection.getDestination() != null) {
-				return connection.getDestination().getName();
+			if (pinIdentifier != null && !pinIdentifier.isBlank()) {
+				if (il != null && il.eContainer() instanceof final BlockFBNetworkElement bfbNEl) {
+					// we have a missing FB pin
+					return pinIdentifier.substring(bfbNEl.getName().length() + 1); // plus 1 for the dot after the FB
+																					// name
+				}
+				// this is a pin to a parent CFB or SubAppInterface
+				return pinIdentifier;
 			}
 
-			final String[] qualNames = destinationString.split("\\."); //$NON-NLS-1$
-			if (qualNames.length < 2) {
-				return MessageFormat.format(Messages.ConnectionHelper_pin_not_found, destinationString);
-			}
-
-			return qualNames[1];
+			// we didn't have the pin identifier in the xml file keep it blank but at least
+			// preserve the connection
+			return ""; //$NON-NLS-1$
 		}
 
 		private void handleMissingConnectionSource() {
@@ -384,8 +378,10 @@ public final class ConnectionHelper {
 				// we have a connection to the containing interface
 				if (isInput) {
 					destInterfaceList = importer.getInterfaceList();
+					fullDstPinName = path;
 				} else {
 					srcInterfaceList = importer.getInterfaceList();
+					fullSrcPinName = path;
 				}
 				return importer.getContainingInterfaceElement(path, connection.eClass(), isInput);
 			}
@@ -403,13 +399,15 @@ public final class ConnectionHelper {
 			}
 
 			if (element instanceof final BlockFBNetworkElement blockFbnElem) {
+				final String pinName = path.substring(separatorPos + 1);
 				final InterfaceList ieList = blockFbnElem.getInterface();
 				if (isInput) {
 					destInterfaceList = ieList;
+					fullDstPinName = pinName;
 				} else {
 					srcInterfaceList = ieList;
+					fullSrcPinName = pinName;
 				}
-				final String pinName = path.substring(separatorPos + 1);
 				return FBNetworkImporter.getInterfaceElement(ieList, pinName, connection.eClass(), isInput);
 			}
 			return null;
