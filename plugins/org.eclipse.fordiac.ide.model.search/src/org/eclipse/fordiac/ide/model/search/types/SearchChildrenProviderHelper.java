@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -39,19 +40,24 @@ public class SearchChildrenProviderHelper {
 		}
 		if (fbType instanceof final SubAppType subappType) {
 			// we may have untyped subapps inside
-			retval = Stream.concat(retval, subappType.getFBNetwork().getNetworkElements().stream());
-			retval = Stream.concat(retval, subappType.getFBNetwork().getAdapterConnections().stream());
-			retval = Stream.concat(retval, subappType.getFBNetwork().getDataConnections().stream());
-			retval = Stream.concat(retval, subappType.getFBNetwork().getEventConnections().stream());
+			retval = Stream.concat(retval, getFBNetworkChildren(subappType.getFBNetwork()));
 		}
 
 		return retval;
 	}
 
+	public static Stream<? extends EObject> getFBNetworkChildren(final FBNetwork fbNetwork) {
+		Stream<? extends EObject> retval = fbNetwork.getNetworkElements().stream();
+		retval = Stream.concat(retval, fbNetwork.getAdapterConnections().stream());
+		retval = Stream.concat(retval, fbNetwork.getDataConnections().stream());
+		retval = Stream.concat(retval, fbNetwork.getEventConnections().stream());
+		return retval;
+	}
+
 	public static Stream<? extends EObject> getUntypedSubappChildren(final UntypedSubApp untypedSubapp) {
 		Stream<? extends EObject> retval = getInterfaceListChildren(untypedSubapp.getInterface());
-		retval = Stream.concat(retval, untypedSubapp.getSubAppNetwork().getNetworkElements().stream());
 		retval = Stream.concat(retval, untypedSubapp.getAttributes().stream());
+		retval = Stream.concat(retval, getFBNetworkChildren(untypedSubapp.getSubAppNetwork()));
 		return retval;
 	}
 
