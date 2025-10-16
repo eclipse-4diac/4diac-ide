@@ -12,14 +12,14 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="REQ0" Type="Event" Comment="">
-				<With Var="IN0"/>
-			</Event>
-			<Event Name="REQ1" Type="Event" Comment="">
+			<Event Name="REQ1" Type="Event">
 				<With Var="IN1"/>
 			</Event>
-			<Event Name="REQ2" Type="Event" Comment="">
+			<Event Name="REQ2" Type="Event">
 				<With Var="IN2"/>
+			</Event>
+			<Event Name="REQ3" Type="Event">
+				<With Var="IN3"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -28,9 +28,9 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN0" Type="ANY" Comment="Selectable input variable"/>
 			<VarDeclaration Name="IN1" Type="ANY" Comment="Selectable input variable"/>
 			<VarDeclaration Name="IN2" Type="ANY" Comment="Selectable input variable"/>
+			<VarDeclaration Name="IN3" Type="ANY" Comment="Selectable input variable"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
