@@ -32,11 +32,12 @@ public class Messages extends NLS {
 	public static String ImportExtractedFiles;
 
 	public static String LibraryPage_Comment;
-	public static String LibraryPage_DeselectAll;
 	public static String LibraryPage_Name;
-	public static String LibraryPage_SelectAll;
 	public static String LibraryPage_SymbolicName;
 	public static String LibraryPage_Version;
+	public static String LibraryPage_Sorting;
+	public static String LibraryPage_Path;
+	public static String LibraryPage_Columns;
 
 	static {
 		// initialize resource bundle
