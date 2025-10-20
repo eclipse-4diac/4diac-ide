@@ -24,6 +24,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.internal.core.refactoring.Changes;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.UndoEdit;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
@@ -31,12 +32,12 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 public class ProviderDocumentUndoChange extends Change {
 
 	private final String name;
-	private final IFileEditorInput editorInput;
+	private final IEditorInput editorInput;
 	private final IDocumentProvider documentProvider;
 	private final UndoEdit undoEdit;
 	private final boolean doSave;
 
-	public ProviderDocumentUndoChange(final String name, final IFileEditorInput editorInput,
+	public ProviderDocumentUndoChange(final String name, final IEditorInput editorInput,
 			final IDocumentProvider documentProvider, final UndoEdit undoEdit, final boolean doSave) {
 		this.name = name;
 		this.editorInput = editorInput;
@@ -52,12 +53,18 @@ public class ProviderDocumentUndoChange extends Change {
 
 	@Override
 	public Object getModifiedElement() {
-		return editorInput.getFile();
+		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
+			return fileEditorInput.getFile();
+		}
+		return null;
 	}
 
 	@Override
 	public Object[] getAffectedObjects() {
-		return new Object[] { editorInput.getFile() };
+		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
+			return new Object[] { fileEditorInput.getFile() };
+		}
+		return new Object[0];
 	}
 
 	@Override
@@ -124,7 +131,7 @@ public class ProviderDocumentUndoChange extends Change {
 		return new ProviderDocumentUndoChange(name, editorInput, documentProvider, edit, doSave);
 	}
 
-	public IFileEditorInput getEditorInput() {
+	public IEditorInput getEditorInput() {
 		return editorInput;
 	}
 
