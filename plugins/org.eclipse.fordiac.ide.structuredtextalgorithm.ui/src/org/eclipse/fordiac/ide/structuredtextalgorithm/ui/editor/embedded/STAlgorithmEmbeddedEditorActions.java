@@ -22,6 +22,7 @@ import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbench;
@@ -60,10 +61,14 @@ public class STAlgorithmEmbeddedEditorActions extends EmbeddedEditorActions {
 		final IContextActivation contextActivation = contextService.activateContext(EMBEDDED_TEXT_EDITOR_SCOPE,
 				expression);
 
-		for (final IAction action : allActions.values()) {
-			handlerActivations.add(handlerService.activateHandler(action.getActionDefinitionId(),
-					new ActionHandler(action), expression, true));
-		}
+		viewer.getTextWidget().addFocusListener(FocusListener.focusGainedAdapter(e -> {
+			if (handlerActivations.isEmpty()) {
+				for (final IAction action : allActions.values()) {
+					handlerActivations.add(handlerService.activateHandler(action.getActionDefinitionId(),
+							new ActionHandler(action), expression, true));
+				}
+			}
+		}));
 
 		viewer.getTextWidget().addDisposeListener(e -> {
 			handlerService.deactivateHandlers(handlerActivations);
