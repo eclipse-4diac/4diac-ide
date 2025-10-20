@@ -23,10 +23,10 @@ import java.util.Map
 import java.util.Set
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
@@ -147,8 +147,6 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		«ENDIF»
 	'''
 	
-	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
-
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
 		variableLanguageSupport.get(decl)?.generate(emptyMap)
 	}
@@ -157,9 +155,49 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE -> Boolean.TRUE})
 	}
 
-	def CharSequence generateVariableTypeNameAsParameter(VarDeclaration decl) {
-		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_PARAM -> Boolean.TRUE})
+	def CharSequence generateVariableTypeNameAsInputParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_IN_PARAM -> Boolean.TRUE})
 	}
+
+	def CharSequence generateVariableTypeNameAsInOutParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_IN_OUT_PARAM -> Boolean.TRUE})
+	}
+
+	def CharSequence generateVariableTypeNameAsOutputParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_OUT_PARAM -> Boolean.TRUE})
+	}
+
+	def protected CharSequence generateParameters(ICallable callable) //
+	'''«FOR param : callable.callableParameters SEPARATOR ", "»«param.generateParameter»«ENDFOR»'''
+		
+	def protected CharSequence generateForwardArguments(ICallable callable) //
+	'''«FOR param : callable.callableParameters SEPARATOR ", "»«param.generateForwardArgument»«ENDFOR»'''
+
+	def protected CharSequence generateParameter(VarDeclaration param) {
+		if (param.inOutVar)
+			'''«param.generateVariableTypeNameAsInOutParameter» &«param.generateNameAsParameter»'''
+		else if (param.isIsInput)
+			'''const «param.generateVariableTypeNameAsInputParameter» &«param.generateNameAsParameter»'''
+		else
+			'''«param.generateVariableTypeNameAsOutputParameter» «param.generateNameAsParameter»'''
+	}
+
+	def protected CharSequence generateForwardArgument(VarDeclaration param) {
+		if (param.inOutVar)
+			'''std::forward<«param.generateVariableTypeNameAsInOutParameter» &>(«param.generateNameAsParameter»)'''
+		else if (param.isIsInput)
+			'''std::forward<const «param.generateVariableTypeNameAsInputParameter» &>(«param.generateNameAsParameter»)'''
+		else
+			'''std::forward<«param.generateVariableTypeNameAsOutputParameter»>(«param.generateNameAsParameter»)'''
+	}
+
+	def protected getCallableParameters(ICallable callable) {
+		(callable.inputParameters + callable.inOutParameters + callable.outputParameters).filter(VarDeclaration)
+	}
+
+	def protected CharSequence generateOutputGuard(VarDeclaration variable) '''
+		COutputGuard guard_«variable.name»(«variable.generateNameAsParameter»);
+	'''
 
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEStringId].join(", ")

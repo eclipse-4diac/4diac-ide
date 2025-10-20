@@ -500,10 +500,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected CharSequence generateParameterTypeName(STVarDeclaration variable) {
 		val type = STVariableOperations.evaluateResultType(variable)
 		switch (variable.eContainer) {
-			STVarInputDeclarationBlock: '''«type.generateTypeName» '''
-			STVarInOutDeclarationBlock: '''«type.generateTypeNameAsParameter» &'''
-			STVarOutputDeclarationBlock case type instanceof AnyBitType: '''CAnyBitOutputParameter<«type.generateTypeName»> '''
-			STVarOutputDeclarationBlock: '''COutputParameter<«type.generateTypeName»> '''
+			STVarInputDeclarationBlock: '''const «type.generateTypeNameAsInputParameter» &'''
+			STVarInOutDeclarationBlock: '''«type.generateTypeNameAsInOutParameter» &'''
+			STVarOutputDeclarationBlock: '''«type.generateTypeNameAsOutputParameter» '''
 		}
 	}
 
