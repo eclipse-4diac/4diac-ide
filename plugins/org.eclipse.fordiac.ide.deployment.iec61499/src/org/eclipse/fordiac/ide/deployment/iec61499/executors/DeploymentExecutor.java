@@ -40,8 +40,11 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -50,6 +53,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -80,6 +84,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public static final String RESET_RESOURCE = "<Request ID=\"{0}\" Action=\"RESET\"><FB Name=\"{1}\" Type=\"\"/></Request>"; //$NON-NLS-1$
 
 	public static final Response EMPTY_RESPONSE;
+
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
 
 	static {
 		// ensure that all entries in the empty response return appropriate empty values
@@ -382,7 +388,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		try {
-			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(entry));
+			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getQueryFBTypeNameWithHash(entry));
 			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
 		} catch (final IOException | LibraryElementHashException e) {
 			throw new DeploymentException(
@@ -411,6 +417,30 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_QueryGlobalConstTypeFailed,
 					entry.getFullTypeName()), e);
 		}
+	}
+
+	private static String getQueryFBTypeNameWithHash(final FBTypeEntry fbEntry) throws LibraryElementHashException {
+		final String hash = fbEntry.getTypeHash();
+		if (hash.isEmpty()) {
+			return getQueryFBTypeName(fbEntry);
+		}
+		return getQueryFBTypeName(fbEntry) + '#' + hash;
+	}
+
+	private static String getQueryFBTypeName(final FBTypeEntry fbEntry) {
+		final FBType type = fbEntry.getType();
+		if (type != null) {
+			final Attribute attribute = type.getAttribute(GENERIC_CLASS_NAME_ATTRIBUTE);
+			if (attribute != null && attribute.getValue() != null && !attribute.getValue().isBlank()) {
+				final String packageName = fbEntry.getPackageName();
+				final String genName = StringValueConverter.INSTANCE.toValue(attribute.getValue());
+				if (packageName.isBlank()) {
+					return genName;
+				}
+				return packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + genName;
+			}
+		}
+		return ForteTypeNameCreator.getForteTypeName(fbEntry);
 	}
 
 	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {

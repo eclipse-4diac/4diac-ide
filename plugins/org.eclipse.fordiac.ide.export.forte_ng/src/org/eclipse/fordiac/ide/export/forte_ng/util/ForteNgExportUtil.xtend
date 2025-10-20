@@ -409,7 +409,7 @@ final class ForteNgExportUtil {
 		END_COMMENT_PATTERN.matcher(string).replaceAll("* /")
 	}
 
-	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "GenericClassName"
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "eclipse4diac::core::GenericClassName"
 
 	def static boolean isGenericType(LibraryElement type) {
 		type.attributes.exists[name == GENERIC_CLASS_NAME_ATTRIBUTE]
