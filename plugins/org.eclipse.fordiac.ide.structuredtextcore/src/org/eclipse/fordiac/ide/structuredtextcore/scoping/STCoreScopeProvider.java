@@ -120,13 +120,10 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE) {
+		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE
+				|| reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(globalScope);
-		}
-		if (reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
-			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(globalScope);
+			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForTypeReference));
 		}
 		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(LITERAL_TYPES_DESCRIPTIONS, true);
@@ -241,6 +238,20 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	protected static IScope filterScope(final IScope scope, final Predicate<IEObjectDescription> filter) {
 		return new FilteringScope(scope, filter);
+	}
+
+	protected boolean isApplicableForTypeReference(final IEObjectDescription description) {
+		// filter out adapters
+		final var clazz = description.getEClass();
+		if (LibraryElementPackage.eINSTANCE.getAdapterType().isSuperTypeOf(clazz)) {
+			return false;
+		}
+		// filter out nested elements
+		final String containerName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
+		if (containerName != null) {
+			return containerName.isEmpty();
+		}
+		return description.getEObjectOrProxy().eContainer() == null;
 	}
 
 	protected boolean isApplicableForVariableReference(final IEObjectDescription description) {
