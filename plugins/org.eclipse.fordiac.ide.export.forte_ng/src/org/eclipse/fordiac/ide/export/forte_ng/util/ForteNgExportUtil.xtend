@@ -19,6 +19,7 @@ import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyType
@@ -196,10 +197,13 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»'''
 
+	def static CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
+
 	def static CharSequence generateTypeName(LibraryElement type) {
 		switch (type) {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-			ArrayType: generateArrayTypeName(type.subranges, type.baseType)
+			ArrayType:
+				generateArrayTypeName(type.subranges, type.baseType)
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
 			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
@@ -208,13 +212,24 @@ final class ForteNgExportUtil {
 			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 		}
 	}
-	
-	def static CharSequence generateTypeNameAsParameter(LibraryElement type) {
+
+	def static CharSequence generateTypeNameAsInputParameter(LibraryElement type) {
+		generateTypeName(type)
+	}
+
+	def static CharSequence generateTypeNameAsInOutParameter(LibraryElement type) {
 		if (type instanceof ArrayType)
 			// use CIEC_ARRAY_COMMON for first dimension
 			'''CIEC_ARRAY_COMMON<«generateArrayTypeName(type.subranges.subList(1, type.subranges.size), type.baseType)»>'''
 		else
 			generateTypeName(type)
+	}
+
+	def static CharSequence generateTypeNameAsOutputParameter(LibraryElement type) {
+		if (type instanceof AnyBitType)
+			'''CAnyBitOutputParameter<«type.generateTypeName»>'''
+		else
+			'''COutputParameter<«type.generateTypeName»>'''
 	}
 
 	def static String generateArrayTypeName(List<Subrange> subranges, DataType baseType) {

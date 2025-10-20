@@ -23,12 +23,8 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory;
-import org.eclipse.fordiac.ide.model.data.AnyBitType;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType> {
 
@@ -52,45 +48,9 @@ public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType>
 		builder.append(" func_"); //$NON-NLS-1$
 		builder.append(getType().getName());
 		builder.append('(');
-		builder.append(generateFunctionParameters());
+		builder.append(generateParameters(getType()));
 		builder.append(')');
 		return builder;
-	}
-
-	protected CharSequence generateFunctionParameters() {
-		return getFunctionParameters().map(FunctionFBTemplate::generateFunctionParameter)
-				.collect(Collectors.joining(", ")); //$NON-NLS-1$
-	}
-
-	protected static CharSequence generateFunctionParameter(final VarDeclaration param) {
-		final LibraryElement type = VariableOperations.evaluateResultType(param);
-		final StringBuilder builder = new StringBuilder();
-		if (param.isInOutVar()) {
-			builder.append(ForteNgExportUtil.generateTypeNameAsParameter(type));
-			builder.append(' ');
-			builder.append('&');
-		} else if (param.isIsInput()) {
-			builder.append(ForteNgExportUtil.generateTypeName(type));
-			builder.append(' ');
-		} else { // output
-			if (type instanceof AnyBitType) {
-				builder.append("CAnyBitOutputParameter"); //$NON-NLS-1$
-			} else {
-				builder.append("COutputParameter"); //$NON-NLS-1$
-			}
-			builder.append('<');
-			builder.append(ForteNgExportUtil.generateTypeName(type));
-			builder.append('>');
-			builder.append(' ');
-		}
-		builder.append(ForteNgExportUtil.generateName(param));
-		return builder;
-	}
-
-	protected Stream<VarDeclaration> getFunctionParameters() {
-		return Stream
-				.of(getType().getInputParameters(), getType().getInOutParameters(), getType().getOutputParameters())
-				.flatMap(List::stream).filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast);
 	}
 
 	public ILanguageSupport getBodyLanguageSupport() {
