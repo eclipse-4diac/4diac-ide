@@ -30,7 +30,7 @@ public final class Messages extends NLS {
 	public static String FordiacResourceChangeListener_UpdateTypeLibForNewProject;
 	public static String FordiacResourceChangeListener_CopyConflictTitle;
 	public static String FordiacResourceChangeListener_CopyConflictBody;
-	public static String FordiacResourceChangeListener_ErrorLoadingProjectNature;
+	public static String FordiacSystemManagement_ErrorLoadingProjectNature;
 	public static String ValidateTypeLibrary;
 
 	static {
