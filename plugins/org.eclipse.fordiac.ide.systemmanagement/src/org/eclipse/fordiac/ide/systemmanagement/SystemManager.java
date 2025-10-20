@@ -25,6 +25,7 @@
 package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
+import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /**
@@ -182,6 +185,17 @@ public enum SystemManager {
 
 	public void addFordiacChangeListener() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(fordiacListener);
+	}
+
+	public static void validateProjectNature(final IProject project) {
+		try {
+			if (project.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) instanceof final FordiacNature nature) {
+				nature.validate();
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(MessageFormat
+					.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()), e);
+		}
 	}
 
 }
