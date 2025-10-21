@@ -16,6 +16,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
+import org.eclipse.debug.ui.PrototypeTab;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate;
 
 public class DeploymentLaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
@@ -23,9 +24,10 @@ public class DeploymentLaunchConfigurationTabGroup extends AbstractLaunchConfigu
 	@Override
 	public void createTabs(final ILaunchConfigurationDialog dialog, final String mode) {
 		if (ILaunchManager.DEBUG_MODE.equals(mode) || DeploymentLaunchConfigurationDelegate.MONITOR_MODE.equals(mode)) {
-			setTabs(new DeploymentLaunchConfigurationTab(), new DeploymentLaunchWatchesTab(), new CommonTab());
+			setTabs(new DeploymentLaunchConfigurationTab(), new DeploymentLaunchWatchesTab(), new CommonTab(),
+					new PrototypeTab());
 		} else {
-			setTabs(new DeploymentLaunchConfigurationTab(), new CommonTab());
+			setTabs(new DeploymentLaunchConfigurationTab(), new CommonTab(), new PrototypeTab());
 		}
 	}
 }

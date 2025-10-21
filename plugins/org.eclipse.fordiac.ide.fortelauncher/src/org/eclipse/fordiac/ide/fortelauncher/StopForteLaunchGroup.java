@@ -15,12 +15,13 @@ package org.eclipse.fordiac.ide.fortelauncher;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
+import org.eclipse.debug.ui.PrototypeTab;
 
 public class StopForteLaunchGroup extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(final ILaunchConfigurationDialog dialog, final String mode) {
-		setTabs(new StopForteTab(), new CommonTab());
+		setTabs(new StopForteTab(), new CommonTab(), new PrototypeTab());
 	}
 
 }

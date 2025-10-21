@@ -15,12 +15,14 @@ package org.eclipse.fordiac.ide.deployment.debug.ui.fb;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
+import org.eclipse.debug.ui.PrototypeTab;
 import org.eclipse.fordiac.ide.deployment.debug.ui.runtime.RuntimeLaunchConfigurationTab;
 
 public class DeploymentFBLaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(final ILaunchConfigurationDialog dialog, final String mode) {
-		setTabs(new DeploymentFBLaunchConfigurationTab(), new RuntimeLaunchConfigurationTab(), new CommonTab());
+		setTabs(new DeploymentFBLaunchConfigurationTab(), new RuntimeLaunchConfigurationTab(), new CommonTab(),
+				new PrototypeTab());
 	}
 }

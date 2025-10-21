@@ -4,6 +4,7 @@
 	<extension
 		point="org.eclipse.debug.core.launchConfigurationTypes">
 		<launchConfigurationType
+			allowPrototypes="true"
 			delegate="org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationDelegate"
 			delegateName="%deployLaunch.name"
 			id="org.eclipse.fordiac.ide.deployment.debug.deployLaunch"
@@ -11,6 +12,7 @@
 			name="%deployLaunch.name">
 		</launchConfigurationType>
 		<launchConfigurationType
+			allowPrototypes="true"
 			delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
 			delegateName="%deployFBLaunch.name"
 			id="org.eclipse.fordiac.ide.deployment.debug.deployFBLaunch"
@@ -19,6 +21,7 @@
 			sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
 		</launchConfigurationType>
 		<launchConfigurationType
+			allowPrototypes="true"
 			delegate="org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationDelegate"
 			delegateName="%deploySubAppLaunch.name"
 			id="org.eclipse.fordiac.ide.deployment.debug.deploySubAppLaunch"

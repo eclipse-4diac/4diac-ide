@@ -4,6 +4,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
+            allowPrototypes="true"
             delegate="org.eclipse.fordiac.ide.debug.st.STLaunchConfigurationDelegate"
             delegateName="%stFunctionLaunch.name"
             id="org.eclipse.fordiac.ide.debug.stFunctionLaunch"
