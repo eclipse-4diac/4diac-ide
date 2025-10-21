@@ -48,6 +48,7 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -750,10 +751,20 @@ public enum LibraryManager {
 			progress.worked(3);
 		}
 
+		final int maxSeverity = markerList.stream().mapToInt(ErrorMarkerBuilder::getSeverity).max().orElse(-1);
+		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
+			markerList.add(ErrorMarkerBuilder.createErrorMarkerBuilder(Messages.LibraryManager_UnresolvableDependencies)
+					.setType(FordiacErrorMarker.LIBRARY_MARKER));
+		}
+
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
 
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
+
+		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
+			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
+		}
 	}
 
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
