@@ -33,7 +33,7 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+
 <FBType Comment="Template for a Basic Function Block Type" Name="TemplateBasic">
   <Identification Standard="61499-2"/>
   <VersionInfo Author="4DIAC-IDE" Date="2016-05-26" Organization="4DIAC-Consortium" Version="0.0"/>

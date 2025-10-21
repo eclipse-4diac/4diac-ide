@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2025 Martin Erich Jobst,
  *                          Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
@@ -46,32 +48,42 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 		
 		«generateImplIncludes»
 		
-		«generateFBDefinition»
-		«generateFBInterfaceDefinition»
-		«generateFBInterfaceSpecDefinition»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		«IF !type.internalVars.isEmpty»
-			«type.generateInternalVarDefinition»
-			
-		«ENDIF»
-		«IF !type.internalConstVars.isEmpty»
-			«type.internalConstVars.generateVariableDefinitions(true)»
-			
-		«ENDIF»		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»&scmInternalVars«ELSE»nullptr«ENDIF»)«// no newline
-		    			»«type.internalFbs.generateInternalFBInitializer»«// no newline
-		    			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-		    			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		    «generateInternalVarDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		  «IF !type.internalConstVars.isEmpty»
+		  	«type.internalConstVars.generateVariableDefinitions(true)»			
+		  «ENDIF»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, «IF !type.internalVars.empty»cInternalsNames«ELSE»{}«ENDIF»)«// no newline
+		      			»«type.internalFbs.generateInternalFBInitializer»«// no newline
+		      			»«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		      			»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		      			»«generateConnectionInitializer» {
+		  }
+		
+		  «(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateExecuteEvent»
+		  «generateInterfaceDefinitions»
+		  «type.internalVars.generateAccessorDefinition("getVarInternal", false)»
+		  «generateAlgorithms»
+		  «generateMethods»
 		}
-		«generateInitializeDefinition»
-		
-		«(type.internalVars + type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateExecuteEvent»
-		«generateInterfaceDefinitions»
-		«type.internalVars.generateAccessorDefinition("getVarInternal", false)»
-		«generateAlgorithms»
-		«generateMethods»
+	'''
+
+	def generateInternalVarDefinition() '''
+		«IF !type.internalVars.isEmpty»
+			
+			const auto cInternalsNames = std::array{«type.internalVars.FORTENameList»};
+		«ENDIF»
 	'''
 
 	def generateChangeFBExecutionState() //
@@ -82,14 +94,14 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 	'''
 
 	def protected generateSendEvent(Event event) {
-		if (event.FBNetworkElement instanceof AdapterFB) {
-			return '''sendAdapterEvent(scm«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
+		if (event.blockFBNetworkElement instanceof AdapterFB) {
+			return '''sendAdapterEvent(*«(event.blockFBNetworkElement as AdapterFB).generateName», FORTE_«event.adapterDeclaration.typeName»::scmEvent«event.name»ID, paECET);'''
 		}
 		'''sendOutputEvent(scmEvent«event.name»ID, paECET);'''
 	}
 
 	def private getAdapterDeclaration(Event event) {
-		(event.FBNetworkElement as AdapterFB).adapterDecl;
+		(event.blockFBNetworkElement as AdapterFB).adapterDecl;
 	}
 
 	def protected generateAlgorithms() '''

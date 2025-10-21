@@ -67,9 +67,8 @@ public class SorterModel<T> implements ISortModel {
 
 	@Override
 	public Comparator<T> getColumnComparator(final int columnIndex) {
-		final var comp = Comparator.comparing((final T att) -> (String) accessor.getDataValue(att, columnIndex),
+		return Comparator.comparing((final T att) -> (String) accessor.getDataValue(att, columnIndex),
 				String.CASE_INSENSITIVE_ORDER);
-		return comp;
 	}
 
 	@Override

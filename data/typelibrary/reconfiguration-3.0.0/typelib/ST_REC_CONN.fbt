@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="ST_REC_CONN" Comment="Reconnects an event or data connection between two FB instances">
+	<Identification Standard="61499-1" Classification="Reconfiguration" Function="Reconnects Connection" Type="Structural Service" Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::reconfiguration">
+		<Compiler Language="Cpp" Vendor="GNU" Product="GCC" Version="&gt;3.0"/>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Event to require reconnection of a connection">
+				<With Var="OLD_SRC_FB"/>
+				<With Var="OLD_SRC_FB_OUT"/>
+				<With Var="OLD_DST_FB"/>
+				<With Var="OLD_DST_FB_IN"/>
+				<With Var="DST"/>
+				<With Var="NEW_SRC_FB"/>
+				<With Var="NEW_SRC_FB_OUT"/>
+				<With Var="NEW_DST_FB"/>
+				<With Var="NEW_DST_FB_IN"/>
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Event to confirm that the reconnection of the connection has been carried out">
+				<With Var="STATUS"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="OLD_SRC_FB" Type="WSTRING" Comment="Reference to old Source FB instance"/>
+			<VarDeclaration Name="OLD_SRC_FB_OUT" Type="WSTRING" Comment="Reference to old Source FB instance Event/Data-Output"/>
+			<VarDeclaration Name="OLD_DST_FB" Type="WSTRING" Comment="Reference to old Destination FB instance"/>
+			<VarDeclaration Name="OLD_DST_FB_IN" Type="WSTRING" Comment="Reference to old Destination FB instance Event/Data-Input"/>
+			<VarDeclaration Name="NEW_SRC_FB" Type="WSTRING" Comment="Reference to new Source FB instance"/>
+			<VarDeclaration Name="NEW_SRC_FB_OUT" Type="WSTRING" Comment="Reference to new Source FB instance Event/Data-Output"/>
+			<VarDeclaration Name="NEW_DST_FB" Type="WSTRING" Comment="Reference to new Destination FB instance"/>
+			<VarDeclaration Name="NEW_DST_FB_IN" Type="WSTRING" Comment="Reference to new Destination FB instance Event/Data-Input"/>
+			<VarDeclaration Name="DST" Type="WSTRING" Comment="Destination where the connection has to be reconnected (Syntax: ResourceName)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2023 fortiss GmbH, Johanees Kepler University Linz
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johanees Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,10 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Jose Cabral
- *     - initial API and implementation and/or initial documentation
- *   Prankur Agarwal
- *     - add handling for Internal Constant Variables
+ *   Jose Cabral     - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal - add handling for Internal Constant Variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
@@ -57,11 +55,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public final class FMUDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
 
@@ -328,7 +326,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			final Shell shell) {
 		try {
 			final String tempFolder = Files.createTempDirectory("temp").toString(); //$NON-NLS-1$
-			final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+			final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 					FMUPreferenceConstants.FMU_PREFERENCES_ID);
 			final File binariesDirectory = new File(store.getString(FMUPreferenceConstants.P_PATH));
 			if (binariesDirectory.exists() && binariesDirectory.isDirectory()) {
@@ -407,7 +405,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		if (!createNotBinaryFiles(root, shell)) {
 			return false;
 		}
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FMUPreferenceConstants.FMU_PREFERENCES_ID);
 		// copy libraries
 		for (final String name : librariesToAdd) {
@@ -547,7 +545,7 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 							.getTypeFromString(otherEndpoint.getType().getName());
 					if (FMUInputOutput.variableType.UNKNOWN != varType) {
 						inputsAndOutputs.add(new FMUInputOutput(
-								previousNames + fbName + "@" + otherEndpoint.getFBNetworkElement().getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
+								previousNames + fbName + "@" + otherEndpoint.getBlockFBNetworkElement().getName() + "." //$NON-NLS-1$ //$NON-NLS-2$
 										+ otherEndpoint.getName(),
 								!isInput, FMUInputOutput.variableScope.IO, varType, "")); // @ to avoid //$NON-NLS-1$
 						// problems if some part of
@@ -629,10 +627,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 
 		getAllVariablesFromInterface(fbName, fbNetwork, previousNames);
 		final FBType typeFB = fbNetwork.getFBNamed(fbName).getType();
-		if (typeFB instanceof BasicFBType) {
-			handleBasicFB((BasicFBType) typeFB, previousNames, fbName);
-		} else if (typeFB instanceof CompositeFBType) {
-			handleCompositeFB((CompositeFBType) typeFB, previousNames, fbName);
+		if (typeFB instanceof final BasicFBType basicFBType) {
+			handleBasicFB(basicFBType, previousNames, fbName);
+		} else if (typeFB instanceof final CompositeFBType cfb) {
+			handleCompositeFB(cfb, previousNames, fbName);
 		}
 	}
 
@@ -707,8 +705,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		for (final EList<? extends IInterfaceElement> list : interfaceLists) {
 			for (final IInterfaceElement variable : list) {
 				FMUInputOutput varInfo = new FMUInputOutput();
-				if (variable instanceof VarDeclaration) {
-					varInfo = getInfoFromVar(paFBNetwork, fbName, (VarDeclaration) variable);
+				if (variable instanceof final VarDeclaration varDecl) {
+					varInfo = getInfoFromVar(paFBNetwork, fbName, varDecl);
 					if (FMUInputOutput.variableType.UNKNOWN == varInfo.getVarType()) {
 						continue;
 					}
@@ -816,7 +814,9 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 			for (final FMUInputOutput element : inputsAndOutputs) {
 				outputIndex++;
 				if (!element.getInput() && (element.getScope() == FMUInputOutput.variableScope.IO)) {
-					modelDescription.append("    <Unknown index=\"" + outputIndex + "\" dependencies=\"\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					modelDescription.append("    <Unknown index=\""); //$NON-NLS-1$
+					modelDescription.append(outputIndex);
+					modelDescription.append("\" dependencies=\"\"/>\n"); //$NON-NLS-1$
 				}
 
 			}

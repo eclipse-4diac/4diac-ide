@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -32,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
@@ -250,9 +250,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		final IEditorPart editor = OpenListenerManager.openEditor(getParent(jumpingTo));
 		if (editor instanceof final ISelectionListener listener) {
 			// fb type editor
-			if ((jumpingTo instanceof Algorithm || jumpingTo instanceof Method || jumpingTo instanceof FunctionFBType)
-					&& EcoreUtil.getRootContainer(jumpingTo) instanceof final LibraryElement rootElement) {
-				final var file = rootElement.getTypeEntry().getFile();
+			if ((jumpingTo instanceof Algorithm || jumpingTo instanceof Method
+					|| jumpingTo instanceof FunctionFBType)) {
+				final var file = ModelHelper.getFileFromContextChecked(jumpingTo);
 
 				final var matches = contentProvider.getSearchResult().getFordiacMatches(EcoreUtil.getURI(jumpingTo));
 				final Optional<TextMatch> firstMatch = Arrays.stream(matches).filter(TextMatch.class::isInstance)
@@ -299,7 +299,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		EObject parent = null;
 		if (eobj instanceof final IInterfaceElement ie) {
-			parent = ie.getFBNetworkElement();
+			parent = ie.getBlockFBNetworkElement();
 			if (parent != null) {
 				parent = parent.eContainer().eContainer();
 			} else {
@@ -354,7 +354,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	public static void showResult(final EObject obj) {
 		EObject toOpen = obj;
 		if (obj instanceof final IInterfaceElement ie) {
-			toOpen = ie.getFBNetworkElement();
+			toOpen = ie.getBlockFBNetworkElement();
 		}
 		if (obj instanceof SubApp) {
 			toOpen = ((SubApp) toOpen).getOuterFBNetworkElement();

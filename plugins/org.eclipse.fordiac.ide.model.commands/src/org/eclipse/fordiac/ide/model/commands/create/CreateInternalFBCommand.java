@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,7 +32,7 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 	private final BaseFBType baseFbType;
 
 	/** Command information */
-	private FBTypeEntry fbType;
+	private FBTypeEntry fbTypeEntry;
 	private final String name;
 	private final int index;
 
@@ -46,11 +46,11 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 	}
 
 	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
-			final FBTypeEntry fbType) {
+			final FBTypeEntry fbTypeEntry) {
 		this.baseFbType = Objects.requireNonNull(baseFbType);
-		this.fbType = fbType;
-		if (null == fbType) {
-			this.fbType = baseFbType.getTypeLibrary().getFbTypes().iterator().next();
+		this.fbTypeEntry = fbTypeEntry;
+		if (null == fbTypeEntry) {
+			this.fbTypeEntry = baseFbType.getTypeLibrary().getFbTypes().iterator().next();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
 		this.index = index;
@@ -62,16 +62,15 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 	}
 
 	private EList<FB> getInteralFBList() {
-		final BaseFBType type = baseFbType;
-		return type.getInternalFbs();
+		return baseFbType.getInternalFbs();
 	}
 
 	@Override
 	public void execute() {
 		internalFB = LibraryElementFactory.eINSTANCE.createFB();
-		internalFB.setTypeEntry(fbType);
+		internalFB.setTypeEntry(fbTypeEntry);
 		internalFB.setComment(""); //$NON-NLS-1$
-		internalFB.setInterface(fbType.getType().getInterfaceList().copy());
+		internalFB.setInterface(fbTypeEntry.getInterface().copy());
 		getInteralFBList().add(index, internalFB);
 		internalFB.setName(NameRepository.createUniqueName(internalFB, name));
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017 - 2018 fortiss GmbH, Johannes Kepler University
- * 				 2019		Jan Holzweber
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
+ *                          Jan Holzweber, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -63,9 +64,11 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -93,6 +96,7 @@ import org.xml.sax.SAXException;
 
 public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
+	private static final Pattern STRUCT_MUX_NUMBER_PATTERN = Pattern.compile("[^0-9]*([0-9]+).*"); //$NON-NLS-1$
 	private static final String CREATE_FB_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><FBType Name=\"{1}\">{2}</FBType></Request>"; //$NON-NLS-1$
 	private static final String CREATE_ADAPTER_TYPE = "<Request ID=\"{0}\" Action=\"CREATE\"><AdapterType Name=\"{1}\">{2}</AdapterType></Request>"; //$NON-NLS-1$
 	private static final String QUERY_FB_TYPES = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"*\" /></Request>"; //$NON-NLS-1$
@@ -184,7 +188,11 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void createFBTypesOfCFB(final FBType fbType) throws DeploymentException {
-		for (final FBNetworkElement netelem : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
+		final List<BlockFBNetworkElement> blockFBs = FBNetworkHelper
+				.getBlockFBNetworkElementsFromList(((CompositeFBType) fbType).getFBNetwork().getNetworkElements())
+				.toList();
+
+		for (final BlockFBNetworkElement netelem : blockFBs) {
 			if (!getTypes().contains(netelem.getTypeName())) {
 				final Map<String, AdapterType> adapters = getAdapterTypes(netelem.getInterface());
 				if (!adapters.isEmpty()) {
@@ -274,13 +282,13 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private void queryParameters(final Resource res) {
-		for (final FBNetworkElement fb : res.getFBNetwork().getNetworkElements()) {
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(res.getFBNetwork().getNetworkElements()).forEach(fb -> {
 			for (final VarDeclaration inVar : fb.getInterface().getInputVars()) {
 				if (inVar.getInputConnections().isEmpty()) {
 					queryParameter(res, fb, inVar);
 				}
 			}
-		}
+		});
 	}
 
 	private void queryParameter(final Resource res, final FBNetworkElement fb, final VarDeclaration inVar) {
@@ -324,7 +332,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				final FB srcFB;
 				if (src.length > 2) {
 					final SubApp srcSubapp = findSubAppOfFB(
-							Arrays.asList(src).subList(0, src.length - 2).stream().collect(Collectors.joining(".")),
+							Arrays.asList(src).subList(0, src.length - 2).stream().collect(Collectors.joining(".")), //$NON-NLS-1$
 							res.getFBNetwork());
 					srcFB = srcSubapp.getSubAppNetwork().getFBNamed(src[src.length - 2]);
 				} else {
@@ -336,20 +344,19 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				final FB dstFB;
 				if (dst.length > 2) {
 					final SubApp dstFBSubApp = findSubAppOfFB(
-							Arrays.asList(dst).subList(0, dst.length - 2).stream().collect(Collectors.joining(".")),
+							Arrays.asList(dst).subList(0, dst.length - 2).stream().collect(Collectors.joining(".")), //$NON-NLS-1$
 							res.getFBNetwork());
 					dstFB = dstFBSubApp.getSubAppNetwork().getFBNamed(dst[dst.length - 2]);
 				} else {
 					dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
 				}
 				final IInterfaceElement dstIE = dstFB.getInterfaceElement(dst[dst.length - 1]);
-				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
+				createConnectionCommand(srcIE, dstIE);
 			}
 		}
 	}
 
-	private static void createConnectionCommand(final FBNetwork fbNet, final IInterfaceElement srcIE,
-			final IInterfaceElement dstIE) {
+	private static void createConnectionCommand(final IInterfaceElement srcIE, final IInterfaceElement dstIE) {
 		final Command cmd = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(srcIE, dstIE);
 		if (null != cmd && cmd.canExecute()) {
 			cmd.execute();
@@ -373,9 +380,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void createFBNetwork(final Resource res, final XMLResource xmlResource) {
 		for (final EObject object : xmlResource.getContents()) {
-			if (object instanceof Response) {
+			if (object instanceof final Response resp) {
 				createNotExistingAdapterTypes(res);
-				addFBNetworkElements(res, (Response) object);
+				addFBNetworkElements(res, resp);
 			}
 		}
 	}
@@ -401,26 +408,27 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				}
 
 				final FBCreateCommand fbcmd;
-				if (fbresult.getName().contains(".")) {
+				if (fbresult.getName().contains(".")) { //$NON-NLS-1$
 					final SubApp parent = findSubAppOfFB(
-							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork());
+							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork()); //$NON-NLS-1$
 					fbcmd = new FBCreateCommand(entry, parent.getSubAppNetwork(), 10, 10);
 				} else {
 					fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				}
 				if (fbcmd.canExecute()) {
 					fbcmd.execute();
-					if (fbresult.getName().contains(".")) {
-						fbcmd.getFB().setName(fbresult.getName().substring(fbresult.getName().lastIndexOf(".") + 1,
+					if (fbresult.getName().contains(".")) { //$NON-NLS-1$
+						fbcmd.getFB().setName(fbresult.getName().substring(fbresult.getName().lastIndexOf(".") + 1, //$NON-NLS-1$
 								fbresult.getName().length()));
 					} else {
 						fbcmd.getFB().setName(fbresult.getName());
 					}
 				}
 
-				if (fbcmd.getFB() instanceof StructManipulator && getStructFromMultiplexer(res, fbresult) != null) {
-					final ChangeStructCommand changeStructCmd = new ChangeStructCommand(
-							(StructManipulator) fbcmd.getFB(), getStructFromMultiplexer(res, fbresult));
+				if (fbcmd.getFB() instanceof final StructManipulator structMan
+						&& getStructFromMultiplexer(res, fbresult) != null) {
+					final ChangeStructCommand changeStructCmd = new ChangeStructCommand(structMan,
+							getStructFromMultiplexer(res, fbresult));
 					if (changeStructCmd.canExecute()) {
 						changeStructCmd.execute();
 					}
@@ -443,7 +451,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	private static StructuredType getStructFromMultiplexer(final Resource res,
 			final org.eclipse.fordiac.ide.deployment.devResponse.FB devFB) {
 		// find number in STRUCT_MUX_1_STRUCTNAME or STRUT_DEMUX_1_STRUCTNAME
-		final Matcher matcher = Pattern.compile("[^0-9]*([0-9]+).*").matcher(devFB.getType());
+		final Matcher matcher = STRUCT_MUX_NUMBER_PATTERN.matcher(devFB.getType());
 		if (matcher.matches()) {
 			final DataTypeLibrary library = res.getDevice().getAutomationSystem().getTypeLibrary().getDataTypeLibrary();
 			return library.getStructuredType(devFB.getType().substring(devFB.getType().indexOf(matcher.group(1)) + 1));

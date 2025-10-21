@@ -117,9 +117,9 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		«FOR out : object.outputParameters»
 			<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
 		«ENDFOR»
-		«IF !object.typeEntry.type.comment.isEmpty»		
+		«IF !object.typeEntry.comment.isEmpty»		
 			<p>DESCRIPTION: 
-				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+				<div style="text-indent:10px;"><b>«object.typeEntry.comment»</b></div>
 			</p>
 		«ENDIF»
 		
@@ -166,17 +166,17 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		«FOR event : object.interfaceList.eventOutputs»
 			<div style="text-indent:10px;"><b>«event.name»</b></div>
 		«ENDFOR»
-		«IF !object.typeEntry.type.comment.isEmpty»
+		«IF !object.typeEntry.comment.isEmpty»
 			<p>DESCRIPTION: 
-				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+				<div style="text-indent:10px;"><b>«object.typeEntry.comment»</b></div>
 			</p>
 		«ENDIF»	
 		
 	'''
 
 	private def isVarInternalConst(VarDeclaration object) {
-		if (object.eContainer instanceof BaseFBType) {
-			val fbType = object.eContainer as BaseFBType
+		val fbType = object.FBType
+		if (fbType instanceof BaseFBType) {
 			fbType.internalConstVars.contains(object);
 		}
 	}

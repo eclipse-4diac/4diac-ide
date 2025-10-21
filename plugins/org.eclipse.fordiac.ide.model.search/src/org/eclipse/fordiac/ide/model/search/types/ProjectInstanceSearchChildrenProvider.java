@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -62,7 +63,7 @@ public final class ProjectInstanceSearchChildrenProvider implements ISearchChild
 			return SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
 		}
 
-		if (obj instanceof final FBNetworkElement elem) {
+		if (obj instanceof final BlockFBNetworkElement elem) {
 			return Stream.concat(elem.getAttributes().stream(),
 					SearchChildrenProviderHelper.getInterfaceListChildren(elem.getInterface()));
 		}
@@ -79,6 +80,6 @@ public final class ProjectInstanceSearchChildrenProvider implements ISearchChild
 			return object.getAttributes().stream();
 		}
 
-		return null;
+		return Stream.empty();
 	}
 }

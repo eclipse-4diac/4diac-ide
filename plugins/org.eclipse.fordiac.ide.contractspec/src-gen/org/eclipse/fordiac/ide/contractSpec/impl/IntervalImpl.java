@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.Interval;
 import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
-import org.eclipse.fordiac.ide.contractSpec.Value;
+import org.eclipse.fordiac.ide.contractSpec.Unit;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,10 +36,10 @@ import org.eclipse.fordiac.ide.contractSpec.Value;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getTime <em>Time</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getB1 <em>B1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getV1 <em>V1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getV2 <em>V2</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getB2 <em>B2</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getLBound <em>LBound</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getLbValue <em>Lb Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getUbValue <em>Ub Value</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getUBound <em>UBound</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.IntervalImpl#getUnit <em>Unit</em>}</li>
  * </ul>
  *
@@ -58,64 +58,84 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
   protected TimeExpr time;
 
   /**
-   * The default value of the '{@link #getB1() <em>B1</em>}' attribute.
+   * The default value of the '{@link #getLBound() <em>LBound</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getB1()
+   * @see #getLBound()
    * @generated
    * @ordered
    */
-  protected static final String B1_EDEFAULT = null;
+  protected static final String LBOUND_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getB1() <em>B1</em>}' attribute.
+   * The cached value of the '{@link #getLBound() <em>LBound</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getB1()
+   * @see #getLBound()
    * @generated
    * @ordered
    */
-  protected String b1 = B1_EDEFAULT;
+  protected String lBound = LBOUND_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getV1() <em>V1</em>}' containment reference.
+   * The default value of the '{@link #getLbValue() <em>Lb Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getV1()
+   * @see #getLbValue()
    * @generated
    * @ordered
    */
-  protected Value v1;
+  protected static final double LB_VALUE_EDEFAULT = 0.0;
 
   /**
-   * The cached value of the '{@link #getV2() <em>V2</em>}' containment reference.
+   * The cached value of the '{@link #getLbValue() <em>Lb Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getV2()
+   * @see #getLbValue()
    * @generated
    * @ordered
    */
-  protected Value v2;
+  protected double lbValue = LB_VALUE_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getB2() <em>B2</em>}' attribute.
+   * The default value of the '{@link #getUbValue() <em>Ub Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getB2()
+   * @see #getUbValue()
    * @generated
    * @ordered
    */
-  protected static final String B2_EDEFAULT = null;
+  protected static final double UB_VALUE_EDEFAULT = 0.0;
 
   /**
-   * The cached value of the '{@link #getB2() <em>B2</em>}' attribute.
+   * The cached value of the '{@link #getUbValue() <em>Ub Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getB2()
+   * @see #getUbValue()
    * @generated
    * @ordered
    */
-  protected String b2 = B2_EDEFAULT;
+  protected double ubValue = UB_VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getUBound() <em>UBound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getUBound()
+   * @generated
+   * @ordered
+   */
+  protected static final String UBOUND_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getUBound() <em>UBound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getUBound()
+   * @generated
+   * @ordered
+   */
+  protected String uBound = UBOUND_EDEFAULT;
 
   /**
    * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
@@ -125,7 +145,7 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    * @ordered
    */
-  protected static final String UNIT_EDEFAULT = null;
+  protected static final Unit UNIT_EDEFAULT = Unit.S;
 
   /**
    * The cached value of the '{@link #getUnit() <em>Unit</em>}' attribute.
@@ -135,7 +155,7 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    * @ordered
    */
-  protected String unit = UNIT_EDEFAULT;
+  protected Unit unit = UNIT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -214,9 +234,9 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public String getB1()
+  public String getLBound()
   {
-    return b1;
+    return lBound;
   }
 
   /**
@@ -225,12 +245,12 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public void setB1(String newB1)
+  public void setLBound(String newLBound)
   {
-    String oldB1 = b1;
-    b1 = newB1;
+    String oldLBound = lBound;
+    lBound = newLBound;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__B1, oldB1, b1));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__LBOUND, oldLBound, lBound));
   }
 
   /**
@@ -239,9 +259,9 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public Value getV1()
+  public double getLbValue()
   {
-    return v1;
+    return lbValue;
   }
 
   /**
@@ -249,16 +269,13 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetV1(Value newV1, NotificationChain msgs)
+  @Override
+  public void setLbValue(double newLbValue)
   {
-    Value oldV1 = v1;
-    v1 = newV1;
+    double oldLbValue = lbValue;
+    lbValue = newLbValue;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__V1, oldV1, newV1);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__LB_VALUE, oldLbValue, lbValue));
   }
 
   /**
@@ -267,20 +284,9 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public void setV1(Value newV1)
+  public double getUbValue()
   {
-    if (newV1 != v1)
-    {
-      NotificationChain msgs = null;
-      if (v1 != null)
-        msgs = ((InternalEObject)v1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.INTERVAL__V1, null, msgs);
-      if (newV1 != null)
-        msgs = ((InternalEObject)newV1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.INTERVAL__V1, null, msgs);
-      msgs = basicSetV1(newV1, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__V1, newV1, newV1));
+    return ubValue;
   }
 
   /**
@@ -289,26 +295,12 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public Value getV2()
+  public void setUbValue(double newUbValue)
   {
-    return v2;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetV2(Value newV2, NotificationChain msgs)
-  {
-    Value oldV2 = v2;
-    v2 = newV2;
+    double oldUbValue = ubValue;
+    ubValue = newUbValue;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__V2, oldV2, newV2);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__UB_VALUE, oldUbValue, ubValue));
   }
 
   /**
@@ -317,20 +309,9 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public void setV2(Value newV2)
+  public String getUBound()
   {
-    if (newV2 != v2)
-    {
-      NotificationChain msgs = null;
-      if (v2 != null)
-        msgs = ((InternalEObject)v2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.INTERVAL__V2, null, msgs);
-      if (newV2 != null)
-        msgs = ((InternalEObject)newV2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.INTERVAL__V2, null, msgs);
-      msgs = basicSetV2(newV2, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__V2, newV2, newV2));
+    return uBound;
   }
 
   /**
@@ -339,23 +320,12 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public String getB2()
+  public void setUBound(String newUBound)
   {
-    return b2;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setB2(String newB2)
-  {
-    String oldB2 = b2;
-    b2 = newB2;
+    String oldUBound = uBound;
+    uBound = newUBound;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__B2, oldB2, b2));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__UBOUND, oldUBound, uBound));
   }
 
   /**
@@ -364,7 +334,7 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public String getUnit()
+  public Unit getUnit()
   {
     return unit;
   }
@@ -375,10 +345,10 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
    * @generated
    */
   @Override
-  public void setUnit(String newUnit)
+  public void setUnit(Unit newUnit)
   {
-    String oldUnit = unit;
-    unit = newUnit;
+    Unit oldUnit = unit;
+    unit = newUnit == null ? UNIT_EDEFAULT : newUnit;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.INTERVAL__UNIT, oldUnit, unit));
   }
@@ -395,10 +365,6 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
     {
       case ContractSpecPackage.INTERVAL__TIME:
         return basicSetTime(null, msgs);
-      case ContractSpecPackage.INTERVAL__V1:
-        return basicSetV1(null, msgs);
-      case ContractSpecPackage.INTERVAL__V2:
-        return basicSetV2(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -415,14 +381,14 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
     {
       case ContractSpecPackage.INTERVAL__TIME:
         return getTime();
-      case ContractSpecPackage.INTERVAL__B1:
-        return getB1();
-      case ContractSpecPackage.INTERVAL__V1:
-        return getV1();
-      case ContractSpecPackage.INTERVAL__V2:
-        return getV2();
-      case ContractSpecPackage.INTERVAL__B2:
-        return getB2();
+      case ContractSpecPackage.INTERVAL__LBOUND:
+        return getLBound();
+      case ContractSpecPackage.INTERVAL__LB_VALUE:
+        return getLbValue();
+      case ContractSpecPackage.INTERVAL__UB_VALUE:
+        return getUbValue();
+      case ContractSpecPackage.INTERVAL__UBOUND:
+        return getUBound();
       case ContractSpecPackage.INTERVAL__UNIT:
         return getUnit();
     }
@@ -442,20 +408,20 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
       case ContractSpecPackage.INTERVAL__TIME:
         setTime((TimeExpr)newValue);
         return;
-      case ContractSpecPackage.INTERVAL__B1:
-        setB1((String)newValue);
+      case ContractSpecPackage.INTERVAL__LBOUND:
+        setLBound((String)newValue);
         return;
-      case ContractSpecPackage.INTERVAL__V1:
-        setV1((Value)newValue);
+      case ContractSpecPackage.INTERVAL__LB_VALUE:
+        setLbValue((Double)newValue);
         return;
-      case ContractSpecPackage.INTERVAL__V2:
-        setV2((Value)newValue);
+      case ContractSpecPackage.INTERVAL__UB_VALUE:
+        setUbValue((Double)newValue);
         return;
-      case ContractSpecPackage.INTERVAL__B2:
-        setB2((String)newValue);
+      case ContractSpecPackage.INTERVAL__UBOUND:
+        setUBound((String)newValue);
         return;
       case ContractSpecPackage.INTERVAL__UNIT:
-        setUnit((String)newValue);
+        setUnit((Unit)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -474,17 +440,17 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
       case ContractSpecPackage.INTERVAL__TIME:
         setTime((TimeExpr)null);
         return;
-      case ContractSpecPackage.INTERVAL__B1:
-        setB1(B1_EDEFAULT);
+      case ContractSpecPackage.INTERVAL__LBOUND:
+        setLBound(LBOUND_EDEFAULT);
         return;
-      case ContractSpecPackage.INTERVAL__V1:
-        setV1((Value)null);
+      case ContractSpecPackage.INTERVAL__LB_VALUE:
+        setLbValue(LB_VALUE_EDEFAULT);
         return;
-      case ContractSpecPackage.INTERVAL__V2:
-        setV2((Value)null);
+      case ContractSpecPackage.INTERVAL__UB_VALUE:
+        setUbValue(UB_VALUE_EDEFAULT);
         return;
-      case ContractSpecPackage.INTERVAL__B2:
-        setB2(B2_EDEFAULT);
+      case ContractSpecPackage.INTERVAL__UBOUND:
+        setUBound(UBOUND_EDEFAULT);
         return;
       case ContractSpecPackage.INTERVAL__UNIT:
         setUnit(UNIT_EDEFAULT);
@@ -505,16 +471,16 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
     {
       case ContractSpecPackage.INTERVAL__TIME:
         return time != null;
-      case ContractSpecPackage.INTERVAL__B1:
-        return B1_EDEFAULT == null ? b1 != null : !B1_EDEFAULT.equals(b1);
-      case ContractSpecPackage.INTERVAL__V1:
-        return v1 != null;
-      case ContractSpecPackage.INTERVAL__V2:
-        return v2 != null;
-      case ContractSpecPackage.INTERVAL__B2:
-        return B2_EDEFAULT == null ? b2 != null : !B2_EDEFAULT.equals(b2);
+      case ContractSpecPackage.INTERVAL__LBOUND:
+        return LBOUND_EDEFAULT == null ? lBound != null : !LBOUND_EDEFAULT.equals(lBound);
+      case ContractSpecPackage.INTERVAL__LB_VALUE:
+        return lbValue != LB_VALUE_EDEFAULT;
+      case ContractSpecPackage.INTERVAL__UB_VALUE:
+        return ubValue != UB_VALUE_EDEFAULT;
+      case ContractSpecPackage.INTERVAL__UBOUND:
+        return UBOUND_EDEFAULT == null ? uBound != null : !UBOUND_EDEFAULT.equals(uBound);
       case ContractSpecPackage.INTERVAL__UNIT:
-        return UNIT_EDEFAULT == null ? unit != null : !UNIT_EDEFAULT.equals(unit);
+        return unit != UNIT_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -530,10 +496,14 @@ public class IntervalImpl extends MinimalEObjectImpl.Container implements Interv
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (b1: ");
-    result.append(b1);
-    result.append(", b2: ");
-    result.append(b2);
+    result.append(" (lBound: ");
+    result.append(lBound);
+    result.append(", lbValue: ");
+    result.append(lbValue);
+    result.append(", ubValue: ");
+    result.append(ubValue);
+    result.append(", uBound: ");
+    result.append(uBound);
     result.append(", unit: ");
     result.append(unit);
     result.append(')');

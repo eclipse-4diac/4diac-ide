@@ -178,8 +178,7 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
-			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
-			return getInsertingIndex(interfaceElement, getVarInOutList(interfaceList));
+			return getInsertingIndex(interfaceElement, getVarInOutList(interfaceElement.getInterfaceList()));
 		}
 		return -1;
 	}

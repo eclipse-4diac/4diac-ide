@@ -139,7 +139,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private String getAlternativePinLabelText() {
 		switch (pinLabelStyle) {
 		case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT:
-			if (getModel().getFBNetworkElement() != null) {
+			if (getModel().getBlockFBNetworkElement() != null) {
 				// only return the comment for instances and not for type editors
 				return getModel().getComment();
 			}
@@ -168,7 +168,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private String getSourcePinInstanceName() {
 		final IInterfaceElement refPin = getSourcePin();
 		if (refPin != null) {
-			final FBNetworkElement source = refPin.getFBNetworkElement();
+			final FBNetworkElement source = refPin.getBlockFBNetworkElement();
 			final String pinName = getPinName(refPin);
 			if (source != null && !isSubAppPin(source)) {
 				final String elementName = source.getName();
@@ -195,8 +195,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	private boolean isSubAppPin(final FBNetworkElement connSource) {
-		if (connSource instanceof final SubApp subapp && getModel().getFBNetworkElement() != null) {
-			return subapp.getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		if (connSource instanceof final SubApp subapp && getModel().getBlockFBNetworkElement() != null) {
+			return subapp.getSubAppNetwork() == getModel().getBlockFBNetworkElement().getFbNetwork();
 		}
 		return false;
 	}
@@ -406,7 +406,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
-					Display.getDefault().execute(() -> refresh());
+					Display.getDefault().execute(() -> {
+						// check if editpart has not been removed in the meantime
+						if (isActive()) {
+							refresh();
+						}
+					});
 				}
 				super.notifyChanged(notification);
 			}
@@ -428,14 +433,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
-			((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
-					.removePropertyChangeListener(preferenceListener);
-			getModel().eAdapters().remove(getContentAdapter());
-			removeSourcePinAdapter();
-		}
+		super.deactivate();
+		getModel().eAdapters().remove(getContentAdapter());
+		((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+				.removePropertyChangeListener(preferenceListener);
+		getModel().eAdapters().remove(getContentAdapter());
+		removeSourcePinAdapter();
 	}
 
 	private ConnectionAnchor sourceConAnchor = null;
@@ -540,7 +543,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			sourcePin = getSourcePin();
 			if (sourcePin != null) {
 				sourcePin.eAdapters().add(getSourcePinAdapter());
-				final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+				final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 				if (sourceElement != null) {
 					sourceElement.eAdapters().add(getSourcePinAdapter());
 				}
@@ -551,7 +554,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	private void removeSourcePinAdapter() {
 		if (sourcePin != null) {
 			sourcePin.eAdapters().remove(getSourcePinAdapter());
-			final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+			final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 			if (sourceElement != null) {
 				sourceElement.eAdapters().remove(getSourcePinAdapter());
 			}

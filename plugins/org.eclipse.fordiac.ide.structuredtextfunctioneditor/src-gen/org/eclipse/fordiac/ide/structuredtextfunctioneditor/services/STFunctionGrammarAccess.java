@@ -393,7 +393,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    {STVarDeclaration}
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	//    (type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 	public STCoreGrammarAccess.STVarDeclarationElements getSTVarDeclarationAccess() {
 		return gaSTCore.getSTVarDeclarationAccess();
@@ -407,7 +407,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    {STTypeDeclaration}
 	//    (array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
 	//    ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	//    (type=[libraryElement::INamedElement|STAnyType])
+	//    (type=[datatype::DataType|STAnyType])
 	//    ('[' maxLength=STExpression ']')?;
 	public STCoreGrammarAccess.STTypeDeclarationElements getSTTypeDeclarationAccess() {
 		return gaSTCore.getSTTypeDeclarationAccess();

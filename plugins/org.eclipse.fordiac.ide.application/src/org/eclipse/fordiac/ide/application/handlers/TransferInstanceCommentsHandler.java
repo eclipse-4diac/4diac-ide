@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,10 +25,9 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.AbstractStructManipulatorEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.TransferInstanceCommentsCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
@@ -65,13 +64,12 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 
 						final List<? extends EObject> result = search.performSearch();
 
-						result.removeIf(el -> el.equals(struct.getModel())
-								|| isTypedOrContainedInTypedInstance((INamedElement) el));
+						result.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
 						// output connected elements only searchFilter
 						if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed()
 								&& outputConnectedOnlyBtn.getSelection()) {
-							final List<FBNetworkElement> connectedFbs = FBEndpointFinder
+							final List<BlockFBNetworkElement> connectedFbs = FBEndpointFinder
 									.getConnectedFbs(new ArrayList<>(), selectedItem);
 							result.removeIf(res -> (res instanceof final StructManipulator structMan
 									&& (!structMan.getInterface().getEventInputs().isEmpty()
@@ -95,8 +93,8 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		return null;
 	}
 
-	public static List<FBNetworkElement> getConnectedFbs(final FBNetworkElement src) {
-		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+	public static List<BlockFBNetworkElement> getConnectedFbs(final BlockFBNetworkElement src) {
+		final List<BlockFBNetworkElement> connectedElements = new ArrayList<>();
 
 		final List<IInterfaceElement> pins = new ArrayList<>();
 		pins.addAll(src.getInterface().getEventOutputs());
@@ -109,8 +107,8 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		// search for connected elements of connected elements
 		if (!connectedElements.isEmpty() && ((connectedElements.size() == 1 && !connectedElements.get(0).equals(src))
 				|| (connectedElements.size() > 1))) {
-			final List<FBNetworkElement> connectedOfConnectedElements = new ArrayList<>();
-			for (final FBNetworkElement element : connectedElements) {
+			final List<BlockFBNetworkElement> connectedOfConnectedElements = new ArrayList<>();
+			for (final BlockFBNetworkElement element : connectedElements) {
 				if (!element.equals(src)) {
 					connectedOfConnectedElements.addAll(getConnectedFbs(element));
 				}
@@ -125,9 +123,9 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		return connectedElements.stream().distinct().toList();
 	}
 
-	private static List<FBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
+	private static List<BlockFBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
 
-		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+		final List<BlockFBNetworkElement> connectedElements = new ArrayList<>();
 		for (final Connection con : srcPin.getOutputConnections()) {
 			if (con.getDestinationElement() instanceof SubApp) {
 				connectedElements.addAll(getConnectedFbs(con.getDestination()));
@@ -140,7 +138,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 
 	}
 
-	private static boolean isTypedOrContainedInTypedInstance(final INamedElement element) {
+	private static boolean isTypedOrContainedInTypedInstance(final EObject element) {
 		return element.eContainer() != null && element.eContainer().eContainer() instanceof final SubApp subApp
 				&& (subApp.isContainedInTypedInstance() || subApp.isTyped());
 	}

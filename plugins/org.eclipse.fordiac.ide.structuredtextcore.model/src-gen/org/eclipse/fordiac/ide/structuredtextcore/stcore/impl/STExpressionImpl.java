@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 
@@ -58,7 +59,7 @@ public class STExpressionImpl extends STStatementImpl implements STExpression {
 	 * @generated
 	 */
 	@Override
-	public INamedElement getResultType() {
+	public LibraryElement getResultType() {
 		return null;
 	}
 
@@ -68,7 +69,7 @@ public class STExpressionImpl extends STStatementImpl implements STExpression {
 	 * @generated
 	 */
 	@Override
-	public INamedElement getDeclaredResultType() {
+	public LibraryElement getDeclaredResultType() {
 		return null;
 	}
 

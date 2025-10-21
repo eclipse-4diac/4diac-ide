@@ -19,6 +19,9 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String TypeEditor_CouldNotLoadType;
+	public static String TypeEditor_OpenTextEditor;
+
+	public static String TypeEditor_ReadOnly;
 
 	public static String TypeEditor_TypeUpdateDialog_Headline;
 	public static String TypeEditor_TypeUpdateDialog_Description;
@@ -26,6 +29,10 @@ public final class Messages extends NLS {
 
 	public static String TypeEditor_WarningDialog_Headline;
 	public static String TypeEditor_WarningDialog_NotSaved;
+
+	public static String XtextTypeEditorPage_PerformanceModeDialogMessage;
+	public static String XtextTypeEditorPage_PerformanceModeDialogTitle;
+	public static String XtextTypeEditorPage_PerformanceModeOutlineMessage;
 
 	public static String BulkEditorDirty;
 	public static String Continue;

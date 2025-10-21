@@ -42,11 +42,11 @@ public class FunctionBlocksTabTests extends NatTableWithoutEditorBehaviorTests {
 		fbTypeBot.createFBType(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2,
 				UITestNamesHelper.TEMPLATEBASIC);
 		fbTypeBot.openFBTypeInEditor(UITestNamesHelper.PROJECT_NAME, UITestNamesHelper.FBT_TEST_PROJECT2);
-		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.FUNCTIONAL__BLOCKS);
+		final SWTBot propertiesBot = selectTabFromInterfaceProperties(UITestNamesHelper.FUNCTION_BLOCKS);
 		assertNotNull(propertiesBot);
 		bot.viewByTitle(UITestNamesHelper.PROPERTIES_TITLE).setFocus();
 		bot.editorByTitle(UITestNamesHelper.FBT_TEST_PROJECT2).show();
-		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.FUNCTIONAL__BLOCKS, propertiesBot);
+		SWTBotPropertySheet.selectPropertyTabItem(UITestNamesHelper.FUNCTION_BLOCKS, propertiesBot);
 		natTable = propertiesBot.widget(WidgetMatcherFactory.widgetOfType(NatTable.class), 0);
 		swt4diacNatTable = new SWTBot4diacNatTable(natTable);
 		new SWTBotNatTable(bot, swt4diacNatTable).createNewVariableInDataTypeEditor();

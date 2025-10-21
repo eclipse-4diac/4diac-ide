@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Paul Pavlicek
+ * Copyright (c) 2022, 2025 Paul Pavlicek
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,7 +30,7 @@ public final class EventOccFactory {
 		createdEo.setActive(true);
 		createdEo.setIgnored(false);
 		if (null != event) {
-			createdEo.setParentFB(event.getFBNetworkElement());
+			createdEo.setParentFB(event.getBlockFBNetworkElement());
 		}
 		createdEo.setFbRuntime(runtime);
 		return createdEo;
@@ -39,8 +39,11 @@ public final class EventOccFactory {
 	public static EventOccurrence createFrom(final Event event) {
 		return createFrom(event, null);
 	}
-	/** @param events
-	 * @return */
+
+	/**
+	 * @param events
+	 * @return
+	 */
 	public static List<EventOccurrence> createFrom(final List<Event> events, final FBRuntimeAbstract initialRuntime) {
 		if (null == events || events.isEmpty()) {
 			return Collections.emptyList();

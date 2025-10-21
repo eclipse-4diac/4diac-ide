@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fmu.Messages;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -31,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -57,7 +57,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	public FMUPreferencePage() {
 		super(GRID);
 		setPreferenceStore(
-				new FixedScopedPreferenceStore(InstanceScope.INSTANCE, FMUPreferenceConstants.FMU_PREFERENCES_ID));
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, FMUPreferenceConstants.FMU_PREFERENCES_ID));
 		setDescription(Messages.FMUPreferencePage_FMUPreferencesPage);
 	}
 
@@ -154,7 +154,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 
 	public static List<String> getFoundLibraries() {
 		final List<String> found = new ArrayList<>();
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FMUPreferenceConstants.FMU_PREFERENCES_ID);
 		final String pathString = store.getString(FMUPreferenceConstants.P_PATH);
 		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())) { //$NON-NLS-1$

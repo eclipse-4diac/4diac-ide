@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *  						Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -147,12 +148,12 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	private boolean canGoInto() {
-		final FBNetworkElement element = getModel().getFBNetworkElement();
+		final FBNetworkElement element = getModel().getBlockFBNetworkElement();
 		return ((element instanceof SubApp) || (element instanceof CFBInstance));
 	}
 
 	protected void goInto() {
-		FBNetworkElement element = getModel().getFBNetworkElement();
+		BlockFBNetworkElement element = getModel().getBlockFBNetworkElement();
 		IInterfaceElement selectionElement = getModel();
 		if ((element instanceof final SubApp subApp) && (needsOppositeSubapp(subApp))) {
 			// we are mapped and the mirrored subapp located in the resource, get the one
@@ -172,7 +173,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	protected boolean isUnfoldedSubapp() {
-		return (getModel().getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded());
+		return (getModel().getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded());
 	}
 
 	@Override

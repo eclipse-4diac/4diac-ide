@@ -29,8 +29,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
-import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
 import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
@@ -88,14 +88,13 @@ class ResourceDeploymentTest {
 
 	private Stream<DynamicTest> generateDynamicTests(final String testNamePrefix,
 			final BiConsumer<TestNetwork, ResourceDeploymentData> assertion) {
-		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(), () -> {
-			assertion.accept(netw, generateDeploymentData(netw.name()));
-		}));
+		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(),
+				() -> assertion.accept(netw, generateDeploymentData(netw.name()))));
 	}
 
-	private static boolean hasDuplicateEntry(final List<ParameterData> parameters) {
+	private static boolean hasDuplicateEntry(final List<ParameterDeploymentData> parameters) {
 		final HashSet<String> set = new HashSet<>();
-		for (final ParameterData param : parameters) {
+		for (final ParameterDeploymentData param : parameters) {
 			if (!set.add(getParameterDestination(param))) {
 				return true;
 			}
@@ -103,8 +102,8 @@ class ResourceDeploymentTest {
 		return false;
 	}
 
-	private static String getParameterDestination(final ParameterData param) {
-		return param.getPrefix() + param.getVar().getQualifiedName();
+	private static String getParameterDestination(final ParameterDeploymentData param) {
+		return param.prefix() + param.variable().getQualifiedName();
 	}
 
 	private static EList<Resource> loadResources() throws CoreException, IOException {

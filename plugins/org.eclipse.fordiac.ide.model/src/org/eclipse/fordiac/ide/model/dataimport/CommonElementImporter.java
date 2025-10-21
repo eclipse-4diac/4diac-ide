@@ -1,8 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University, Linz
- *               2020, 2021  Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,11 +24,13 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -53,8 +55,10 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelp
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
@@ -84,12 +88,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
+import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -102,7 +107,7 @@ public abstract class CommonElementImporter {
 	private static final boolean IS_VISIBLE = false;
 	private static final boolean IS_VAR_CONFIGED = true;
 
-	private static class ImporterStreams implements AutoCloseable {
+	protected static final class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
 
@@ -133,13 +138,6 @@ public abstract class CommonElementImporter {
 
 	TypeLibrary getTypeLibrary() {
 		return typeLibrary;
-	}
-
-	protected FBTypeEntry getTypeEntry(final String typeFbElement) {
-		if (null != typeFbElement) {
-			return addDependency(getTypeLibrary().getFBTypeEntry(typeFbElement));
-		}
-		return null;
 	}
 
 	protected DataTypeLibrary getDataTypeLibrary() {
@@ -221,7 +219,7 @@ public abstract class CommonElementImporter {
 
 	protected abstract IChildHandler getBaseChildrenHandler();
 
-	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
+	protected ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
 		final XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
 		factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
@@ -422,36 +420,37 @@ public abstract class CommonElementImporter {
 
 	protected void parseGenericAttributeNode(final ConfigurableObject confObject)
 			throws XMLStreamException, TypeImportException {
+		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 		readNameCommentAttributes(attribute);
-
 		final AttributeDeclaration internalAttributeDecl = InternalAttributeDeclarations
 				.getInternalAttributeByName(attribute.getName());
 		if (internalAttributeDecl != null) {
-			// Internal Attributes
+			if (typeName != null && !typeName.isBlank()) {
+				warnings.add(new TypeImportDiagnostic(
+						MessageFormat.format(Messages.CommonElementImporter_ReservedAttributesValidation,
+								attribute.getName(), typeName, FordiacMarkerHelper.getLocation(confObject)),
+						attribute.getName() + " (Type=" + typeName + ")", getLineNumber())); //$NON-NLS-1$ //$NON-NLS-2$
+			}
 			attribute.setAttributeDeclaration(internalAttributeDecl);
 			attribute.setType(internalAttributeDecl.getType());
-		} else {
-			final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-			if (typeName != null) {
-				if (typeName.equals(HelperTypes.CDATA.getName())) {
-					attribute.setType(HelperTypes.CDATA);
-				} else {
-					attribute.setType(addDependency(getDataTypeLibrary().getType(typeName)));
-				}
+		} else if (typeName != null) {
+			if (typeName.equals(HelperTypes.CDATA.getName())) {
+				attribute.setType(HelperTypes.CDATA);
 			} else {
-				// AttributeDeclarations
-				// use element for resolving import since confObject may not have been added to
-				// enclosing type yet
-				final AttributeTypeEntry entry = ImportHelper.resolveImport(attribute.getName(), getElement(),
-						name -> getTypeLibrary().getAttributeTypeEntry(name), name -> null);
-				final AttributeTypeEntry attributeTypeEntry = addDependency(entry);
-				if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
-					attribute.setAttributeDeclaration(attributeTypeEntry.getType());
-					attribute.setType(attributeTypeEntry.getType().getType());
-				} else {
-					FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
-				}
+				attribute.setType(getType(typeName, getDataTypeLibrary()::getType));
+			}
+		} else {
+			// AttributeDeclarations
+			// use element for resolving import since confObject may not have been added to
+			// enclosing type yet
+			final AttributeTypeEntry attributeTypeEntry = getTypeEntry(attribute.getName(),
+					getTypeLibrary()::getAttributeTypeEntry);
+			if (attributeTypeEntry != null && attributeTypeEntry.getType() != null) {
+				attribute.setAttributeDeclaration(attributeTypeEntry.getType());
+				attribute.setType(attributeTypeEntry.getType().getType());
+			} else {
+				FordiacMarkerHelper.createAttributeErrorMarker(attribute, typeLibrary);
 			}
 		}
 
@@ -508,7 +507,7 @@ public abstract class CommonElementImporter {
 				&& pinNameAndVisibility.contains(":"); //$NON-NLS-1$
 	}
 
-	protected void parsePinVisibilityAttribute(final FBNetworkElement block) {
+	protected void parsePinVisibilityAttribute(final BlockFBNetworkElement block) {
 		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
 		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
@@ -524,7 +523,7 @@ public abstract class CommonElementImporter {
 				&& pinNameAndVarConfig.contains(":"); //$NON-NLS-1$
 	}
 
-	protected void parsePinVarConfigAttribute(final FBNetworkElement block) {
+	protected void parsePinVarConfigAttribute(final BlockFBNetworkElement block) {
 		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
 		final VarDeclaration inVar = block.getInterface().getVariable(temp[0]);
@@ -624,7 +623,7 @@ public abstract class CommonElementImporter {
 		compilerInfo.getImports().add(imp);
 	}
 
-	protected void parseFBChildren(final FBNetworkElement block, final String parentNodeName)
+	protected void parseFBChildren(final BlockFBNetworkElement block, final String parentNodeName)
 			throws TypeImportException, XMLStreamException {
 		processChildren(parentNodeName, name -> (switch (name) {
 		case LibraryElementTags.PARAMETER_ELEMENT -> {
@@ -639,7 +638,8 @@ public abstract class CommonElementImporter {
 		}));
 	}
 
-	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException, TypeImportException {
+	public void handleFBAttributeChild(final BlockFBNetworkElement block)
+			throws XMLStreamException, TypeImportException {
 		if (isPinCommentAttribute()) {
 			parsePinComment(block);
 		} else if (isPinVisibilityAttribute()) {
@@ -659,7 +659,7 @@ public abstract class CommonElementImporter {
 		return LibraryElementTags.PIN_COMMENT.equals(name);
 	}
 
-	private void parsePinComment(final FBNetworkElement block) {
+	private void parsePinComment(final BlockFBNetworkElement block) {
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		if (value != null) {
 			final int splitPos = value.indexOf(':');
@@ -688,7 +688,7 @@ public abstract class CommonElementImporter {
 		addDependency(block.getDataType());
 	}
 
-	protected void parseParameter(final FBNetworkElement block) throws TypeImportException, XMLStreamException {
+	protected void parseParameter(final BlockFBNetworkElement block) throws TypeImportException, XMLStreamException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (null == name) {
 			throw new TypeImportException(Messages.ImportUtils_ERROR_ParameterNotSet);
@@ -758,15 +758,18 @@ public abstract class CommonElementImporter {
 				}
 
 				final var relativeName = computeRelativeName(path, tsa.getName());
-				final var copy = EcoreUtil.copy(vd);
-				copy.getAttributes().clear();
-				copy.setName(relativeName);
-				copy.setValue(vd.getValue());
-				copy.setComment(vd.getComment());
-				result = copy;
-				if (!isAlreadyPresent(tsa.getVarConfigParams(), copy.getName())) {
+
+				final VarConfigInstance existing = tsa.getVarConfigParams().stream()
+						.filter(v -> relativeName.equals(v.getName())).findFirst().orElse(null);
+
+				if (existing != null) {
+					result = existing;
+				} else {
+					final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
 					tsa.getVarConfigParams().add(copy);
+					result = copy;
 				}
+
 			}
 		}
 		return result;
@@ -777,10 +780,6 @@ public abstract class CommonElementImporter {
 			return fullName.substring(rootName.length() + 1);
 		}
 		return fullName;
-	}
-
-	private static boolean isAlreadyPresent(final List<VarDeclaration> list, final String name) {
-		return list.stream().anyMatch(elem -> elem.getName().equals(name));
 	}
 
 	private static VarDeclaration getVarConfigVD(final FBNetworkElement context, final List<String> remainingPath,
@@ -845,7 +844,7 @@ public abstract class CommonElementImporter {
 		return null;
 	}
 
-	public static IInterfaceElement getInterfaceElement(final FBNetworkElement block, final String name,
+	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
 		IInterfaceElement ie = block.getInterfaceElement(name);
 		if (null == ie) {
@@ -854,8 +853,8 @@ public abstract class CommonElementImporter {
 		return ie;
 	}
 
-	protected static ErrorMarkerInterface createParameterErrorMarker(final FBNetworkElement block, final String name,
-			final Value value) {
+	protected static ErrorMarkerInterface createParameterErrorMarker(final BlockFBNetworkElement block,
+			final String name, final Value value) {
 		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
 				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, name, true, block.getInterface());
 		errorMarkerInterface.setValue(value);
@@ -922,7 +921,7 @@ public abstract class CommonElementImporter {
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final ResourceTypeEntry entry = addDependency(getTypeLibrary().getResourceTypeEntry(typeName));
+			final ResourceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getResourceTypeEntry);
 			if (null != entry) {
 				resource.setTypeEntry(entry);
 				createParameters(resource);
@@ -1037,5 +1036,19 @@ public abstract class CommonElementImporter {
 			addDependency(libraryElement.getTypeEntry());
 		}
 		return libraryElement;
+	}
+
+	protected <T extends TypeEntry> T getTypeEntry(final String name, final Function<String, T> typeResolver) {
+		if (name == null) {
+			return null;
+		}
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+	}
+
+	protected <T extends LibraryElement> T getType(final String name, final Function<String, T> typeResolver) {
+		if (name == null) {
+			return null;
+		}
+		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
 	}
 }

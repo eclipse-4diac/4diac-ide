@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,17 +24,19 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -44,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
@@ -69,7 +72,7 @@ public class VarConfigurationSection extends AbstractSection {
 	private static String separationPoint = "."; //$NON-NLS-1$
 	private TypedSubApp rootTSA;
 	private final Map<String, VarDeclaration> displayMap = new LinkedHashMap<>();
-	private final static Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
+	private static final Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -102,6 +105,7 @@ public class VarConfigurationSection extends AbstractSection {
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
 		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
@@ -162,9 +166,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 	private void collectVarConfigsRecursive(final INamedElement type, final Map<String, VarDeclaration> result,
 			final Set<INamedElement> visited, final String currentPrefix) {
-		if (!visited.add(type)) {
-			return;
-		}
+
 		switch (type) {
 		case final TypedSubApp tsa:
 			traverseInterfaceElements(tsa, result, visited, currentPrefix);
@@ -173,15 +175,11 @@ public class VarConfigurationSection extends AbstractSection {
 		case final UntypedSubApp utsa:
 			traverseFBNetwork(utsa.getSubAppNetwork().getNetworkElements(), result, visited, currentPrefix);
 			break;
-		case final SubAppType sat:
-			traverseFBNetwork(sat.getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
-			break;
 		case final Application app:
 			traverseFBNetwork(app.getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
 			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -199,12 +197,15 @@ public class VarConfigurationSection extends AbstractSection {
 		for (final FBNetworkElement fbne : elements) {
 			final String prefix = currentPrefix + fbne.getName() + separationPoint;
 			final boolean shouldCopy = !isPartOfEditedStructure(getType(), fbne);
-			addPossibleVarConfigs(fbne, result, prefix, shouldCopy);
-			if (fbne.getType() != null) {
-				collectVarConfigsRecursive(fbne.getType(), result, visited, prefix);
+			if (fbne instanceof final BlockFBNetworkElement bfbne) {
+				addPossibleVarConfigs(bfbne, result, prefix, shouldCopy);
+			}
+
+			if (fbne instanceof final TypedSubApp tsa) {
+				collectVarConfigsRecursive(tsa, result, visited, prefix);
 			}
 			if (fbne instanceof final UntypedSubApp usa) {
-				traverseFBNetwork(usa.getSubAppNetwork().getNetworkElements(), result, visited, currentPrefix);
+				traverseFBNetwork(usa.getSubAppNetwork().getNetworkElements(), result, visited, prefix);
 			}
 		}
 	}
@@ -223,7 +224,7 @@ public class VarConfigurationSection extends AbstractSection {
 		return false;
 	}
 
-	private void addPossibleVarConfigs(final FBNetworkElement fbne, final Map<String, VarDeclaration> result,
+	private void addPossibleVarConfigs(final BlockFBNetworkElement fbne, final Map<String, VarDeclaration> result,
 			final String prefix, final boolean shouldCopy) {
 		for (final IInterfaceElement elem : fbne.getInterface().getAllInterfaceElements()) {
 			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
@@ -252,12 +253,13 @@ public class VarConfigurationSection extends AbstractSection {
 		if (result.containsKey(qualifiedName)) {
 			return;
 		}
-		final String subAppTypeName = qualifiedName.split("\\.")[0]; //$NON-NLS-1$
 		switch (getType()) {
-		case final Application app -> rootTSA = (TypedSubApp) app.getFBNetwork().getNetworkElements().stream()
-				.filter(x -> x.getName().equals(subAppTypeName)).toList().getFirst();
+		case final Application app ->
+			rootTSA = findTypedSubAppByQualifiedNameInNetwork(app.getFBNetwork().getNetworkElements(), qualifiedName);
 		case final TypedSubApp tsa -> rootTSA = tsa;
-		case final UntypedSubApp usa -> rootTSA = findTypedSubAppByTypeNameInUntypedSubApp(usa, subAppTypeName);
+		case final UntypedSubApp usa ->
+			rootTSA = findTypedSubAppByQualifiedNameInNetwork(usa.getSubAppNetwork().getNetworkElements(),
+					qualifiedName);
 		default -> {
 			break;
 		}
@@ -265,49 +267,73 @@ public class VarConfigurationSection extends AbstractSection {
 
 		final String relativeName = rootTSA != null ? getRelativeName(qualifiedName, rootTSA.getName()) : qualifiedName;
 		VarDeclaration existing = null;
-		if (rootTSA != null) {
-			existing = (rootTSA != null)
-					? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
-							.orElse(null)
-					: null;
-		}
+		existing = (rootTSA != null)
+				? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
+						.orElse(null)
+				: null;
 
 		final VarDeclaration targetVD;
 		if (existing != null) {
 			targetVD = existing;
 		} else {
-			targetVD = EcoreUtil.copy(vd);
-			targetVD.setName(relativeName);
-			if (vd.getValue() != null) {
-				targetVD.setValue(EcoreUtil.copy(vd.getValue()));
-			}
-			targetVD.setComment(vd.getComment());
-			targetVD.getAttributes().clear();
-			rootTSA.getVarConfigParams().add(targetVD);
+			final VarConfigInstance vcI = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
+			rootTSA.getVarConfigParams().add(vcI);
+			targetVD = vcI;
 		}
 		result.put(qualifiedName, targetVD);
 		copiedMap.put(targetVD, Boolean.TRUE);
 	}
 
-	private static TypedSubApp findTypedSubAppByTypeNameInUntypedSubApp(final UntypedSubApp root,
-			final String satName) {
-		for (final FBNetworkElement element : root.getSubAppNetwork().getNetworkElements()) {
-			if (element instanceof final TypedSubApp tsa && tsa.getType().getName().equals(satName)) {
+	private static TypedSubApp findTypedSubAppByQualifiedNameInNetwork(final Iterable<FBNetworkElement> roots,
+			final String qualifiedName) {
+
+		final int lastDot = qualifiedName.lastIndexOf('.');
+		final String path = (lastDot > 0) ? qualifiedName.substring(0, lastDot) : qualifiedName;
+		Iterable<FBNetworkElement> current = roots;
+		for (final String seg : path.split("\\.")) { //$NON-NLS-1$
+			if (seg.isEmpty()) {
+				continue;
+			}
+
+			FBNetworkElement elem = null;
+			for (final FBNetworkElement fbE : current) {
+				if (seg.equals(fbE.getName())) {
+					elem = fbE;
+					break;
+				}
+			}
+			if (elem == null) {
+				return null;
+			}
+			if (elem instanceof final TypedSubApp tsa) {
 				return tsa;
 			}
-			if (element instanceof final UntypedSubApp nested) {
-				final TypedSubApp result = findTypedSubAppByTypeNameInUntypedSubApp(nested, satName);
-				if (result != null) {
-					return result;
-				}
+
+			if (elem instanceof final UntypedSubApp usa) {
+				current = usa.getSubAppNetwork().getNetworkElements();
+				continue;
 			}
 		}
 		return null;
 	}
 
 	private static String getRelativeName(final String qualifiedName, final String rootName) {
-		if (qualifiedName.startsWith(rootName + separationPoint)) {
-			return qualifiedName.substring(rootName.length() + 1);
+		final String[] parts = qualifiedName.split(java.util.regex.Pattern.quote(separationPoint));
+
+		for (int i = 0; i < parts.length; i++) {
+			if (rootName.equals(parts[i])) {
+				if (i + 1 >= parts.length) {
+					return ""; //$NON-NLS-1$
+				}
+				final StringBuilder sb = new StringBuilder();
+				for (int j = i + 1; j < parts.length; j++) {
+					if (!sb.isEmpty()) {
+						sb.append(separationPoint);
+					}
+					sb.append(parts[j]);
+				}
+				return sb.toString();
+			}
 		}
 		return qualifiedName;
 	}

@@ -207,13 +207,6 @@ public class ContractSpecSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case ContractSpecPackage.VALUE:
-      {
-        Value value = (Value)theEObject;
-        T result = caseValue(value);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case ContractSpecPackage.CAUSAL_FUNC_DECL:
       {
         CausalFuncDecl causalFuncDecl = (CausalFuncDecl)theEObject;
@@ -502,22 +495,6 @@ public class ContractSpecSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTimeExpr(TimeExpr object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Value</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Value</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseValue(Value object)
   {
     return null;
   }

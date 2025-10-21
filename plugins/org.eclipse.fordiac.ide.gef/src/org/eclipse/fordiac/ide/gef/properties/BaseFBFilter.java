@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,17 +29,14 @@ public class BaseFBFilter implements IFilter {
 	}
 
 	static BaseFBType getFBTypeFromSelectedElement(final Object element) {
-		Object retval = element;
-		if (element instanceof TextSelection) {
-			retval = getTypeFromActiveEditor();
-		}
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
-		}
-		if (retval instanceof ECC) {
-			return ((ECC) retval).getBasicFBType();
-		}
-		return (retval instanceof BaseFBType) ? (BaseFBType) retval : null;
+		final Object retval = switch (element) {
+		case final TextSelection textSel -> getTypeFromActiveEditor();
+		case final EditPart ep -> ep.getModel();
+		case final ECC ecc -> ecc.getBasicFBType();
+		default -> element;
+		};
+
+		return (retval instanceof final BaseFBType b) ? b : null;
 	}
 
 	private static Object getTypeFromActiveEditor() {

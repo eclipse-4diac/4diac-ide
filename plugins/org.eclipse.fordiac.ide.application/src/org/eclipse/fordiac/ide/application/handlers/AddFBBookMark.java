@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2020, 2025 Johannes Kepler University, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,12 +21,10 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -48,8 +45,8 @@ public class AddFBBookMark extends AbstractHandler {
 		final FBNetworkElement element = getSelectedFBElement(event);
 		if (null != element) {
 			final String description = getDescription(element, event);
-			final IResource file = getFile(element);
-			if (description != null && file != null) {
+			final IResource file = ModelHelper.getFileFromContextChecked(element);
+			if (description != null) {
 				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK,
 						ErrorMarkerBuilder.createErrorMarkerBuilder(description).setSeverity(IMarker.SEVERITY_INFO)
 								.setPriority(IMarker.PRIORITY_NORMAL).setTarget(element).getAttributes(),
@@ -90,23 +87,15 @@ public class AddFBBookMark extends AbstractHandler {
 		return null;
 	}
 
-	private static IResource getFile(final FBNetworkElement element) {
-		final EObject container = EcoreUtil.getRootContainer(element);
-		if (container instanceof LibraryElement) {
-			return ((LibraryElement) container).getTypeEntry().getFile();
-		}
-		return null;
-	}
-
 	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
-			if (selObj instanceof EditPart) {
-				selObj = ((EditPart) selObj).getModel();
+		if (selection instanceof final StructuredSelection structSel) {
+			Object selObj = structSel.getFirstElement();
+			if (selObj instanceof final EditPart ep) {
+				selObj = ep.getModel();
 			}
-			if (selObj instanceof FBNetworkElement) {
-				return (FBNetworkElement) selObj;
+			if (selObj instanceof final FBNetworkElement fbne) {
+				return fbne;
 			}
 		}
 		return null;

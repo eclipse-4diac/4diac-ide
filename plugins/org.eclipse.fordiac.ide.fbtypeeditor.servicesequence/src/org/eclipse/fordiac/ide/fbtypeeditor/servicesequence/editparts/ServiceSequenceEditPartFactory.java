@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,7 +55,7 @@ public class ServiceSequenceEditPartFactory extends Abstract4diacEditPartFactory
 		if (modelElement instanceof ConnectingConnection) {
 			return new ConnectingConnectionEditPart();
 		}
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 	}
 
 }

@@ -50,6 +50,11 @@ public class WatchValueAnnotationStyler implements GraphicalAnnotationStyler {
 	}
 
 	@Override
+	public boolean hasEditPart(final GraphicalAnnotation annotation) {
+		return annotation instanceof WatchValueAnnotation;
+	}
+
+	@Override
 	public EditPart getEditPart(final GraphicalAnnotation annotation) {
 		if (annotation instanceof final WatchValueAnnotation watchValueAnnotation) {
 			if (watchValueAnnotation.getElement() instanceof AdapterDeclaration) {
@@ -57,6 +62,6 @@ public class WatchValueAnnotationStyler implements GraphicalAnnotationStyler {
 			}
 			return new WatchValueEditPart();
 		}
-		return null;
+		return GraphicalAnnotationStyler.super.getEditPart(annotation);
 	}
 }

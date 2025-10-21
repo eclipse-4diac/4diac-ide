@@ -10,6 +10,9 @@
          </run>
       </runtime>
       <builder
+            id="org.eclipse.fordiac.ide.library.builder">
+      </builder>
+      <builder
             id="org.eclipse.fordiac.ide.export.builder">
       </builder>
    </extension>
@@ -23,4 +26,10 @@
          </run>
       </runtime>
    </extension>
+   <extension
+      point="org.eclipse.ui.startup">
+   		<startup
+        	class="org.eclipse.fordiac.ide.systemmanagement.changelistener.StartupHandler">
+   		</startup>
+   </extension> 
 </plugin>

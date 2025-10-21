@@ -32,7 +32,6 @@ import java.util.stream.StreamSupport;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -121,13 +120,10 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
-		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE) {
+		if (reference == STCorePackage.Literals.ST_VAR_DECLARATION__TYPE
+				|| reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForVariableType));
-		}
-		if (reference == STCorePackage.Literals.ST_TYPE_DECLARATION__TYPE) {
-			final IScope globalScope = super.getScope(context, reference);
-			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForTypeDeclaration));
+			return scopeForNonUserDefinedDataTypes(filterScope(globalScope, this::isApplicableForTypeReference));
 		}
 		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(LITERAL_TYPES_DESCRIPTIONS, true);
@@ -244,15 +240,18 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		return new FilteringScope(scope, filter);
 	}
 
-	protected boolean isApplicableForVariableType(final IEObjectDescription description) {
+	protected boolean isApplicableForTypeReference(final IEObjectDescription description) {
+		// filter out adapters
 		final var clazz = description.getEClass();
-		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz)
-				|| LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz);
-	}
-
-	protected boolean isApplicableForTypeDeclaration(final IEObjectDescription description) {
-		final var clazz = description.getEClass();
-		return DataPackage.eINSTANCE.getDataType().isSuperTypeOf(clazz);
+		if (LibraryElementPackage.eINSTANCE.getAdapterType().isSuperTypeOf(clazz)) {
+			return false;
+		}
+		// filter out nested elements
+		final String containerName = description.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
+		if (containerName != null) {
+			return containerName.isEmpty();
+		}
+		return description.getEObjectOrProxy().eContainer() == null;
 	}
 
 	protected boolean isApplicableForVariableReference(final IEObjectDescription description) {

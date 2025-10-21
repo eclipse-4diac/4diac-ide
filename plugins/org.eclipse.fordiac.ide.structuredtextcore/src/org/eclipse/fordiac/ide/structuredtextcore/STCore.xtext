@@ -77,14 +77,14 @@ STVarDeclaration:
 	{STVarDeclaration}
 	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
 	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	(type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	defaultValue=STInitializerExpression)? pragma=STPragma? ';';
 
 STTypeDeclaration:
 	{STTypeDeclaration}
 	(array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
 	('[' count+='*' (',' count+='*')* ']')) 'OF')?
-	(type=[libraryElement::INamedElement|STAnyType])
+	(type=[datatype::DataType|STAnyType])
 	('[' maxLength=STExpression ']')?;
 
 STTypeDeclaration0 returns STTypeDeclaration:

@@ -23,6 +23,23 @@
             id="org.eclipse.fordiac.ide.export.ui.preferences.FORTEExportPreferences"
             name="FORTE Export Preferences">
       </page>
+   </extension> 
+   <extension
+   		point="org.eclipse.ui.propertyPages">
+	  <page
+	        class="org.eclipse.fordiac.ide.export.ui.properties.TypeExportPropertyPage"
+	        id="org.eclipse.fordiac.ide.export.settingspage"
+	        name="%TypeExport">
+	    <enabledWhen>
+	        <adapt
+	              type="org.eclipse.core.resources.IProject">
+	           <test
+	                 property="org.eclipse.core.resources.projectNature"
+	                 value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+	           </test>
+	        </adapt>
+	     </enabledWhen>
+	  </page>
    </extension>
 
 </plugin>

@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Keppler University Linz,
+ *                          Primetals Technologies Germany GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,15 +19,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -71,7 +77,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	private boolean visible = true;
 
-	private boolean negated = false;
+	private final List<Attribute> attributes = new ArrayList<>();
 
 	private int elementIndex = -1;
 
@@ -131,10 +137,9 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		connection.setRoutingData(routingData);
 
 		parent.addConnectionWithIndex(connection, elementIndex);
-		// visible needs to be setup after the connection is added to correctly update
-		// ui
+		// setup visible after connection is add for correct UI refresh
 		connection.setVisible(visible);
-		connection.setNegated(negated);
+		connection.getAttributes().addAll(EcoreUtil.copyAll(attributes));
 
 		if (performMappingCheck) {
 			mirroredConnection = checkAndCreateMirroredConnection();
@@ -186,9 +191,9 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	 *         null otherwise
 	 */
 	private AbstractConnectionCreateCommand checkAndCreateMirroredConnection() {
-		if (null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()) {
-			final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
-			final FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
+		if (null != source.getBlockFBNetworkElement() && null != destination.getBlockFBNetworkElement()) {
+			final BlockFBNetworkElement opSource = source.getBlockFBNetworkElement().getOpposite();
+			final BlockFBNetworkElement opDestination = destination.getBlockFBNetworkElement().getOpposite();
 
 			if (opSource != null && opDestination != null) {
 				IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
@@ -212,6 +217,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 					cmd.setSource(opSrcIE);
 					cmd.setDestination(opDstIE);
 					cmd.setVisible(visible);
+					cmd.setAttributes(attributes);
 					return cmd;
 				}
 			}
@@ -229,8 +235,8 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 			return false;
 		}
 
-		if (opSource == opDestination && opSource instanceof SubApp
-				&& ((SubApp) getSource().getFBNetworkElement()).getSubAppNetwork() == getParent()) {
+		if (opSource == opDestination && opSource instanceof final SubApp subApp
+				&& subApp.getSubAppNetwork() == getParent()) {
 			// we have a connection inside of the subapp, currently we don't need to create
 			// this connection in the
 			// resource
@@ -263,16 +269,10 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	public void setVisible(final boolean visible) {
 		this.visible = visible;
-		if (null != mirroredConnection) {
-			mirroredConnection.setVisible(visible);
-		}
 	}
 
-	public void setNegated(final boolean negated) {
-		this.negated = negated;
-		if (null != mirroredConnection) {
-			mirroredConnection.setNegated(negated);
-		}
+	public void setAttributes(final List<Attribute> attributes) {
+		this.attributes.addAll(attributes);
 	}
 
 	public static AbstractConnectionCreateCommand createCommand(final FBNetwork network,
@@ -297,7 +297,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 		if (!(pin instanceof VarDeclaration)) {
 			return false;
 		}
-		final FBNetworkElement fbNE = pin.getFBNetworkElement();
+		final FBNetworkElement fbNE = pin.getBlockFBNetworkElement();
 
 		return ((fbNE instanceof Demultiplexer && pin.isIsInput()) || (fbNE instanceof Multiplexer && !pin.isIsInput())
 				|| (fbNE instanceof ConfigurableMoveFB));

@@ -28,6 +28,8 @@ public class Messages extends NLS {
 	public static String GlobalConstQuickFix_AddConstantKeyword;
 	public static String GlobalConstQuickFix_RenameGlobalConstants;
 
+	public static String GlobalConstantsEditor;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

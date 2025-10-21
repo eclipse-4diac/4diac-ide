@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,7 +58,7 @@ public class SearchNameDictionary {
 			return sb.toString() + FBNetworkHelper.getFullHierarchicalName(fbne);
 		}
 		if (element instanceof final IInterfaceElement ie) {
-			String parentName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());
+			String parentName = FBNetworkHelper.getFullHierarchicalName(ie.getBlockFBNetworkElement());
 			if (parentName == null && ie.eContainer() != null) {
 				if (ie.eContainer() instanceof final INamedElement econ) {
 					parentName = econ.getName();

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -122,7 +121,7 @@ public final class FBTestRunner {
 		final int length = result.getOutputEventOccurrences().size();
 		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1).getFbRuntime();
 		final var parameterList = ServiceSequenceUtils.splitAndCleanList(parameters, ";"); //$NON-NLS-1$
-		final SequenceMatcher sm = new SequenceMatcher(getFBType(captured));
+		final SequenceMatcher sm = new SequenceMatcher(captured.getModel());
 
 		for (final String assumption : parameterList) {
 			final Optional<String> errorMsg = sm.matchVariable(assumption, false);
@@ -131,14 +130,6 @@ public final class FBTestRunner {
 			}
 		}
 		return Optional.empty();
-	}
-
-	private static FBType getFBType(final FBRuntimeAbstract captured) {
-		final EObject type = captured.getModel();
-		if (type instanceof FBType) {
-			return (FBType) type;
-		}
-		return null;
 	}
 
 	private FBTestRunner() {

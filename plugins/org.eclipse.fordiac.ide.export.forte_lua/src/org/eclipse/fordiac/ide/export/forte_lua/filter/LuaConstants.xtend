@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 fortiss GmbH
- * 				 2019 Jan Holzweber
+ * Copyright (c) 2015, 2025 fortiss GmbH, Jan Holzweber
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,10 +57,10 @@ class LuaConstants {
 	def static luaStateName(ECState state) '''ECC_«state.name»'''
 
 	def static luaInputEventName(
-		Event event) '''«IF event.FBNetworkElement instanceof AdapterFB»AEI_«event.FBNetworkElement.name»_«event.name»«ELSE»EI_«event.name»«ENDIF»'''
+		Event event) '''«IF event.blockFBNetworkElement instanceof AdapterFB»AEI_«event.blockFBNetworkElement.name»_«event.name»«ELSE»EI_«event.name»«ENDIF»'''
 
 	def static luaOutputEventName(
-		Event event) '''«IF event.FBNetworkElement instanceof AdapterFB»AEO_«event.FBNetworkElement.name»_«event.name»«ELSE»EO_«event.name»«ENDIF»'''
+		Event event) '''«IF event.blockFBNetworkElement instanceof AdapterFB»AEO_«event.blockFBNetworkElement.name»_«event.name»«ELSE»EO_«event.name»«ENDIF»'''
 
 	def static luaAdapterInputEventName(Event event, String adapterName) '''AEI_«adapterName»_«event.name»'''
 

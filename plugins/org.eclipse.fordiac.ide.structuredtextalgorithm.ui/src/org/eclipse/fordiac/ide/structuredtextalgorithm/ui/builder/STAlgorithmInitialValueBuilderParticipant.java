@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -212,7 +211,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final List<Issue> issues = new ArrayList<>();
 		// do not parse value if blank or variable has invalid type
 		if (!value.isBlank() && varDeclaration.getType() instanceof AnyType) {
-			final INamedElement featureType = STCoreUtil.getFeatureType(varDeclaration);
+			final LibraryElement featureType = STCoreUtil.getFeatureType(varDeclaration);
 			try {
 				new TypedValueConverter((DataType) featureType, true).toValue(value);
 			} catch (final Exception e) {

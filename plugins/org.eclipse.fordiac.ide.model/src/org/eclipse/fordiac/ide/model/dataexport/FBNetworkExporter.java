@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *  						Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -129,8 +130,8 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		addCommentAttribute(comment.getComment());
 		addXYAttributes(comment);
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(comment.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(comment.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(comment.getHeight()));
 
 		if (comment.isInGroup()) {
 			addGroupAttribute(comment.getGroup());
@@ -145,8 +146,8 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
-		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, positionFormater.format(group.getWidth()));
-		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, positionFormater.format(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(group.getHeight()));
 		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
 	}
 
@@ -161,10 +162,10 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		addAttributes(fbnElement.getAttributes());
 
-		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
+		if (!isUntypedSubapp(fbnElement) && fbnElement instanceof final BlockFBNetworkElement blockFbnEl) {
 			// for untyped subapp initial values are stored in the vardeclarations
-			addParamsConfig(fbnElement.getInterface());
-			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
+			addParamsConfig(blockFbnEl.getInterface());
+			addErrorMarkerParamsConfig(blockFbnEl.getInterface().getErrorMarker());
 		}
 
 		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
@@ -184,11 +185,11 @@ class FBNetworkExporter extends CommonElementExporter {
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					positionFormater.format(subApp.getWidth()), null);
+					formatPosOrSizeVal(subApp.getWidth()), null);
 		}
 		if (subApp.getHeight() != 0) {
 			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
-					positionFormater.format(subApp.getHeight()), null);
+					formatPosOrSizeVal(subApp.getHeight()), null);
 		}
 	}
 
@@ -268,7 +269,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && isExportableErrorMarker(endPoint.getFBNetworkElement())
+		return (endPoint != null) && isExportableErrorMarker(endPoint.getBlockFBNetworkElement())
 				&& (endPoint.eContainer() instanceof InterfaceList);
 	}
 
@@ -279,10 +280,10 @@ class FBNetworkExporter extends CommonElementExporter {
 	private String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
 			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if ((null != interfaceElement.getFBNetworkElement())
-				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
+		if ((null != interfaceElement.getBlockFBNetworkElement())
+				&& (interfaceElement.getBlockFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = getFBNElementName(interfaceElement.getFBNetworkElement()) + "."; ////$NON-NLS-1$
+			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
 		}
 
 		retVal += interfaceElement.getName();
@@ -293,13 +294,11 @@ class FBNetworkExporter extends CommonElementExporter {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
 		if (routingData != null && !routingData.is1SegementData()) {
 			// only export connection routing information if not a straight line
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, positionFormater.format(routingData.getDx1()));
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx1()));
 			if (routingData.is5SegementData()) {
 				// only export the second two if a five segment connection
-				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						positionFormater.format(routingData.getDx2()));
-				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						positionFormater.format(routingData.getDy()));
+				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx2()));
+				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE, formatPosOrSizeVal(routingData.getDy()));
 			}
 		}
 	}

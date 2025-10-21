@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
 import org.eclipse.gef.commands.Command;
@@ -87,8 +87,8 @@ public class SystemConnectStructChange extends AbstractCommandChange<AutomationS
 	protected Command createCommand(final AutomationSystem element) {
 		final CompoundCommand cmds = new CompoundCommand();
 		conlist.forEach(uri -> {
-			if (element.eResource().getEObject(uri.fragment()) instanceof final FBNetworkElement fbnelem) {
-				final FBNetworkElement source = fbnelem.getInterface().getErrorMarker().stream()
+			if (element.eResource().getEObject(uri.fragment()) instanceof final BlockFBNetworkElement fbnelem) {
+				final BlockFBNetworkElement source = fbnelem.getInterface().getErrorMarker().stream()
 						.flatMap(err -> err.getInputConnections().stream())
 						.filter(con -> replaceableConMap.containsValue(con.getDestination().getName())).findFirst()
 						.get().getSourceElement();

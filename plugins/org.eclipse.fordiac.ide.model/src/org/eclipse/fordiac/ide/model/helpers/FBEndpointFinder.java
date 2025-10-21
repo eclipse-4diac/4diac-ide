@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2022, 2025  Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -91,7 +92,7 @@ public class FBEndpointFinder {
 	 * @param from the FB to get the destinations from
 	 * @return a Set of end-point FBs
 	 */
-	public static Set<FBNetworkElement> findDestinations(final FBNetworkElement from) {
+	public static Set<BlockFBNetworkElement> findDestinations(final BlockFBNetworkElement from) {
 		return findConnectedElements(from, false, true, true).keySet();
 	}
 
@@ -101,7 +102,7 @@ public class FBEndpointFinder {
 	 * @param from the FB to get the sources from
 	 * @return a Set of end-point FBs
 	 */
-	public static Set<FBNetworkElement> findSources(final FBNetworkElement from) {
+	public static Set<BlockFBNetworkElement> findSources(final BlockFBNetworkElement from) {
 		return findConnectedElements(from, true, false, true).keySet();
 	}
 
@@ -111,7 +112,7 @@ public class FBEndpointFinder {
 	 * @param from the FB to get the sources from
 	 * @return a Set of end-point FBs
 	 */
-	public static Set<FBNetworkElement> findAllConnectedElements(final FBNetworkElement from) {
+	public static Set<BlockFBNetworkElement> findAllConnectedElements(final BlockFBNetworkElement from) {
 		return findConnectedElements(from, true, true, true).keySet();
 	}
 
@@ -160,7 +161,8 @@ public class FBEndpointFinder {
 	 * @return a Map of the source interfaces and a set of their destination
 	 *         interfaces
 	 */
-	public static Map<IInterfaceElement, Set<IInterfaceElement>> findConnectedInterfaces(final FBNetworkElement fb) {
+	public static Map<IInterfaceElement, Set<IInterfaceElement>> findConnectedInterfaces(
+			final BlockFBNetworkElement fb) {
 		final Map<IInterfaceElement, Set<IInterfaceElement>> results = new HashMap<>();
 
 		final List<IInterfaceElement> outInt = new ArrayList<>();
@@ -189,7 +191,7 @@ public class FBEndpointFinder {
 	 * @return a Set of unique FB as destinations including the number of
 	 *         connections to that FB from the given start point
 	 */
-	public static Map<FBNetworkElement, Integer> findConnectedElements(final FBNetworkElement fb,
+	public static Map<BlockFBNetworkElement, Integer> findConnectedElements(final BlockFBNetworkElement fb,
 			final boolean includeInputs, final boolean includeOutputs, final boolean traverseParent) {
 
 		final List<IInterfaceElement> ifs = new ArrayList<>();
@@ -217,8 +219,8 @@ public class FBEndpointFinder {
 								(ifElem.isIsInput() ? con.getSource() : con.getDestination()), connectedIfs, false))));
 
 		// count connections between blocks
-		final Map<FBNetworkElement, Integer> result = new HashMap<>();
-		connectedIfs.stream().map(IInterfaceElement::getFBNetworkElement).forEach(destFB -> result.put(destFB,
+		final Map<BlockFBNetworkElement, Integer> result = new HashMap<>();
+		connectedIfs.stream().map(IInterfaceElement::getBlockFBNetworkElement).forEach(destFB -> result.put(destFB,
 				result.containsKey(destFB) ? Integer.valueOf(result.get(destFB).intValue() + 1) : Integer.valueOf(1)));
 
 		// if parent should not be traversed
@@ -246,9 +248,9 @@ public class FBEndpointFinder {
 	 * @param src               FBElement of the source element
 	 * @return a List of connected elements
 	 */
-	public static List<FBNetworkElement> getConnectedFbs(List<FBNetworkElement> connectedElements,
-			final FBNetworkElement src) {
-		final List<FBNetworkElement> foundElements = new ArrayList<>();
+	public static List<BlockFBNetworkElement> getConnectedFbs(List<BlockFBNetworkElement> connectedElements,
+			final BlockFBNetworkElement src) {
+		final List<BlockFBNetworkElement> foundElements = new ArrayList<>();
 
 		final List<IInterfaceElement> pins = new ArrayList<>();
 		pins.addAll(src.getInterface().getEventOutputs());
@@ -261,7 +263,7 @@ public class FBEndpointFinder {
 		// search for connected elements of connected elements
 		if (!foundElements.isEmpty()
 				&& ((foundElements.size() == 1 && !foundElements.get(0).equals(src)) || (foundElements.size() > 1))) {
-			for (final FBNetworkElement element : foundElements) {
+			for (final BlockFBNetworkElement element : foundElements) {
 				if (!element.equals(src) && !connectedElements.contains(element)) {
 					connectedElements.add(element);
 					connectedElements = getConnectedFbs(connectedElements, element);
@@ -279,9 +281,9 @@ public class FBEndpointFinder {
 	 * @param src               source pin
 	 * @return a List of connected elements
 	 */
-	private static List<FBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
+	private static List<BlockFBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
 
-		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+		final List<BlockFBNetworkElement> connectedElements = new ArrayList<>();
 		for (final Connection con : srcPin.getOutputConnections()) {
 			if (con.getDestinationElement() instanceof SubApp) {
 				connectedElements.addAll(getConnectedFbs(con.getDestination()));
@@ -315,7 +317,7 @@ public class FBEndpointFinder {
 		if (state.ifElem == null) {
 			return;
 		}
-		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
+		final FBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
 		if (fb == null) {
 			return;
 		}
@@ -353,7 +355,7 @@ public class FBEndpointFinder {
 	 * @param state the current state of the recursion
 	 */
 	private static void traceEvent(final RecursionState state) {
-		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
+		final BlockFBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
 
 		if (fb instanceof final SubApp subapp && !subapp.isTyped()) {
 			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
@@ -384,9 +386,13 @@ public class FBEndpointFinder {
 		final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections()
 				: state.ifElem.getOutputConnections();
 		for (final Connection subInt : subCons) {
-			trace(new RecursionState(state.plexStack, state.inputSide,
-					state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections,
-					state.traceMember));
+			final IInterfaceElement nextInterface = state.inputSide ? subInt.getSource() : subInt.getDestination();
+			if (state.traceMember && subInt.isVisible()) {
+				state.connections.add(nextInterface);
+			} else {
+				trace(new RecursionState(state.plexStack, state.inputSide, nextInterface, state.connections,
+						state.traceMember));
+			}
 		}
 	}
 
@@ -398,7 +404,7 @@ public class FBEndpointFinder {
 	 * @param state the current state of the recursion
 	 */
 	private static void traceTrunk(final RecursionState state) {
-		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
+		final BlockFBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
 		// get single in/output
 		final EList<VarDeclaration> vars = (state.inputSide) ? fb.getInterface().getInputVars()
 				: fb.getInterface().getOutputVars();
@@ -419,9 +425,14 @@ public class FBEndpointFinder {
 		// next item to skip through the only in/output of the plexer
 		if (state.traceMember) {
 			for (final var con : varCons) {
-				trace(new RecursionState(state.plexStack, state.inputSide,
-						state.inputSide ? con.getSource() : con.getDestination(), state.connections,
-						state.traceMember));
+				final IInterfaceElement nextInterface = state.inputSide ? con.getSource() : con.getDestination();
+
+				if (con.isVisible()) {
+					state.connections.add(nextInterface);
+				} else {
+					trace(new RecursionState(state.plexStack, state.inputSide, nextInterface, state.connections,
+							state.traceMember));
+				}
 			}
 		} else {
 			trace(new RecursionState(state.plexStack, state.inputSide,
@@ -438,7 +449,7 @@ public class FBEndpointFinder {
 	 * @param state the current state of the recursion
 	 */
 	private static void traceFan(final RecursionState state) {
-		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
+		final BlockFBNetworkElement fb = state.ifElem.getBlockFBNetworkElement();
 
 		// trace find right interface from the interface stack
 		for (final IInterfaceElement structMem : ((StructManipulator) fb).getMemberVars().stream()
@@ -472,11 +483,16 @@ public class FBEndpointFinder {
 
 			// find destinations (skip plexers between) from the interface of the plexer
 			// according to the previously updated interface-stack
-			for (final Connection next : (state.inputSide) ? realInt.getInputConnections()
+			for (final Connection next : state.inputSide ? realInt.getInputConnections()
 					: realInt.getOutputConnections()) {
-				trace(new RecursionState(subStack, state.inputSide,
-						state.inputSide ? next.getSource() : next.getDestination(), state.connections,
-						state.traceMember));
+				final IInterfaceElement nextInterface = state.inputSide ? next.getSource() : next.getDestination();
+
+				if (state.traceMember && next.isVisible()) {
+					state.connections.add(nextInterface);
+				} else {
+					trace(new RecursionState(subStack, state.inputSide, nextInterface, state.connections,
+							state.traceMember));
+				}
 			}
 		}
 	}

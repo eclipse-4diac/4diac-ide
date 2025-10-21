@@ -18,7 +18,7 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -40,7 +40,7 @@ public final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 		return INSTANCE.evaluateInitializerExpression(variable, expression);
 	}
 
-	public static INamedElement evaluateResultType(final STVarDeclaration varDeclaration)
+	public static LibraryElement evaluateResultType(final STVarDeclaration varDeclaration)
 			throws EvaluatorException, InterruptedException {
 		return INSTANCE.evaluateType(varDeclaration);
 	}

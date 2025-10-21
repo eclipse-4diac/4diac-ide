@@ -12,13 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueRefreshJob;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
@@ -84,10 +83,10 @@ public class InitialValueEditor extends XtextEmbeddedFieldEditor {
 				&& FordiacMessages.ComputingPlaceholderValue.equals(getModelAccess().getEditablePart())) {
 			final var commandExecutorCache = getCommandExecutor();
 			setCommandExecutor(null);
-			if (EcoreUtil.getRootContainer(getInterfaceElement()) instanceof final LibraryElement libElem
-					&& value.length() <= PreferenceStoreProvider
-							.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID, libElem.getTypeLibrary().getProject())
-							.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
+			if (value.length() <= PreferenceStoreProvider
+					.getStore(GefPreferenceConstants.GEF_PREFERENCES_ID,
+							ModelHelper.getProjectFromContextChecked(getInterfaceElement()))
+					.getInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)) {
 				getModelAccess().updateModel(value);
 			} else {
 				getModelAccess().updateModel(FordiacMessages.ValueTooLarge);

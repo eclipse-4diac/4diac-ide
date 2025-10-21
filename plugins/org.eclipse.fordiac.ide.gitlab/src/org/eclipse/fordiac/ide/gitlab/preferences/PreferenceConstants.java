@@ -12,8 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gitlab.preferences;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 
 public final class PreferenceConstants {
 
@@ -28,10 +30,12 @@ public final class PreferenceConstants {
 	public static final String P_GITLAB_PREFERENCE_ID = "org.eclipse.fordiac.ide.gitlab"; //$NON-NLS-1$
 
 	public static String getURL() {
-		return new FixedScopedPreferenceStore(InstanceScope.INSTANCE, P_GITLAB_PREFERENCE_ID).getString(P_GITLAB_URL);
+		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_URL, "", //$NON-NLS-1$
+				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}
 
 	public static String getToken() {
-		return new FixedScopedPreferenceStore(InstanceScope.INSTANCE, P_GITLAB_PREFERENCE_ID).getString(P_GITLAB_TOKEN);
+		return Platform.getPreferencesService().getString(P_GITLAB_PREFERENCE_ID, P_GITLAB_TOKEN, "", //$NON-NLS-1$
+				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}
 }

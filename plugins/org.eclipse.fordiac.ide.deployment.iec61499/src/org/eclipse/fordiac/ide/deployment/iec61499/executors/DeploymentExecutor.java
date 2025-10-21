@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2018 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- * 							 Johannes Kepler University
+ * Copyright (c) 2007, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *  Alois Zoitl, Florian Noack, Gerhard Ebenhofer, Monika Wenger
  *  		- initial API and implementation and/or initial documentation
  *  Alois Zoitl - Harmonized deployment and monitoring communication
+ *  Martin Jobst - add connection source suffix for delegate connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.executors;
 
@@ -22,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -43,6 +45,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -61,6 +68,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public static final String DELETE_CONNECTION = "<Request ID=\"{0}\" Action=\"DELETE\"><Connection Source=\"{1}\" Destination=\"{2}\"/></Request>"; //$NON-NLS-1$
 
 	public static final String QUERY_FB_INSTANCES = "<Request ID=\"{0}\" Action=\"QUERY\"><FB Name=\"*\" Type=\"*\"/></Request>"; //$NON-NLS-1$
+	public static final String QUERY_FB_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><FBType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_DATA_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><DataType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
+	public static final String QUERY_GLOBAL_CONST_TYPE = "<Request ID=\"{0}\" Action=\"QUERY\"><GlobalConstType Name=\"{1}\" /></Request>"; //$NON-NLS-1$
 
 	public static final String READ_WATCHES = "<Request ID=\"{0}\" Action=\"READ\"><Watches/></Request>"; //$NON-NLS-1$
 	public static final String ADD_WATCH = "<Request ID=\"{0}\" Action=\"CREATE\"><Watch Source=\"{1}\" Destination=\"{2}\" /></Request>"; //$NON-NLS-1$
@@ -112,7 +122,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
 		final String request = MessageFormat.format(CREATE_RESOURCE_INSTANCE, getNextId(), resource.getName(),
-				resource.getTypeName());
+				ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry()));
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final EOFException e) {
@@ -193,17 +203,17 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createConnection(final Resource resource, final ConnectionDeploymentData connData)
 			throws DeploymentException {
-		final IInterfaceElement source = connData.getSource();
-		final IInterfaceElement destination = connData.getDestination();
-		if ((null == source) || (null == destination) || (null == source.getFBNetworkElement())
-				|| (null == destination.getFBNetworkElement())) {
+		final IInterfaceElement source = connData.source();
+		final IInterfaceElement destination = connData.destination();
+		if ((null == source) || (null == destination) || (null == source.getBlockFBNetworkElement())
+				|| (null == destination.getBlockFBNetworkElement())) {
 			throw new DeploymentException(Messages.DeploymentExecutor_CreateConnectionFailed);
 		}
-		final FBNetworkElement sourceFB = source.getFBNetworkElement();
-		final FBNetworkElement destFB = destination.getFBNetworkElement();
+		final FBNetworkElement sourceFB = source.getBlockFBNetworkElement();
+		final FBNetworkElement destFB = destination.getBlockFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-				connData.getSourcePrefix() + sourceFB.getName() + "." + source.getName(), //$NON-NLS-1$
-				connData.getDestinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName() + connData.sourceSuffix(), //$NON-NLS-1$
+				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
 
 		try {
 			sendREQ(resource.getName(), request);
@@ -216,7 +226,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(START, getNextId());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -227,7 +237,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void stopResource(final Resource res) throws DeploymentException {
-		final String request = MessageFormat.format(STOP, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(STOP, getNextId());
 		try {
 			sendREQ(res.getName(), request);
 		} catch (final IOException e) {
@@ -238,7 +248,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		final String request = MessageFormat.format(START, Integer.valueOf(getNextId()));
+		final String request = MessageFormat.format(START, getNextId());
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -251,8 +261,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	public void writeDeviceParameter(final Device device, final String parameter, final String value)
 			throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
-		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(getNextId()),
-				encodedValue, parameter);
+		final String request = MessageFormat.format(getWriteParameterMessage(), getNextId(), encodedValue, parameter);
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final IOException e) {
@@ -370,6 +379,48 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		}
 	}
 
+	@Override
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_FB_TYPE, getNextId(), getTypeNameWithHash(entry));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_QueryFBTypeFailed, entry.getFullTypeName()), e);
+		}
+	}
+
+	@Override
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_DATA_TYPE, getNextId(), getTypeNameWithHash(entry));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(
+					MessageFormat.format(Messages.DeploymentExecutor_QueryDataTypeFailed, entry.getFullTypeName()), e);
+		}
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		try {
+			final String request = MessageFormat.format(QUERY_GLOBAL_CONST_TYPE, getNextId(),
+					getTypeNameWithHash(entry));
+			return parseResponse(sendREQ("", request)); //$NON-NLS-1$
+		} catch (final IOException | LibraryElementHashException e) {
+			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_QueryGlobalConstTypeFailed,
+					entry.getFullTypeName()), e);
+		}
+	}
+
+	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+		final String hash = entry.getTypeHash();
+		if (hash.isEmpty()) {
+			return ForteTypeNameCreator.getForteTypeName(entry);
+		}
+		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
+	}
+
 	protected Response parseResponse(final String result) throws IOException {
 		if (null != result) {
 			final InputSource source = new InputSource(new StringReader(result));
@@ -451,5 +502,15 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		} catch (final IOException e) {
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_ClearForceFailed, name), e);
 		}
+	}
+
+	@Override
+	public void readTraces(final Device device, final String path) throws DeploymentException {
+		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReadTracesNotSupported);
+	}
+
+	@Override
+	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
+		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReplayNextEventNotSupported);
 	}
 }

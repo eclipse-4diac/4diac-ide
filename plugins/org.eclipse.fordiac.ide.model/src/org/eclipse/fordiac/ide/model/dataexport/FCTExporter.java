@@ -36,6 +36,9 @@ public class FCTExporter extends AbstractBlockTypeExporter {
 	}
 
 	private void addFunctionBody(final FunctionBody body) throws XMLStreamException {
+		if (body == null) {
+			return;
+		}
 		addStartElement(LibraryElementTags.FUNCTION_BODY_ELEMENT);
 		if (body instanceof final STFunctionBody stFunctionBody) {
 			addSTFunctionBody(stFunctionBody);

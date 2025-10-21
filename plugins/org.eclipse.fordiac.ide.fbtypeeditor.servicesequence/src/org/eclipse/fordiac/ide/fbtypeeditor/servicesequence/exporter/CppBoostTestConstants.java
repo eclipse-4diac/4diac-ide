@@ -30,8 +30,8 @@ public final class CppBoostTestConstants {
 
 	public static final String TEST_FIXTURE_STRUCT = "struct {0}_TestFixture : public CFBTestFixtureBase '{'";
 
-	public static final String TEST_FICTURE_BASE = "{0}_TestFixture() : " + NEW_LINE
-			+ "CFBTestFixtureBase(g_nStringIdservSeq__{0}) '{'";
+	public static final String TEST_FIXTURE_BASE = "{0}_TestFixture() : " + NEW_LINE
+			+ "CFBTestFixtureBase(STRID(servSeq__{0})) '{'";
 
 	public static final String TEST_FICTURE_SETUP = "CFBTestFixtureBase::setup();" + NEW_LINE + "}";
 

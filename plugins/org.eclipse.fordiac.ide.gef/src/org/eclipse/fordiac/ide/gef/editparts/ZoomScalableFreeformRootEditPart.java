@@ -76,6 +76,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private static final float[] GRID_MINOR_DASHES_STYLE = new float[] { 1.0f, 5.0f };
 		private static final float[] GRID_MEDIUM_DASHES_STYLE = new float[] { 2.0f, 4.0f };
 		private static final float[] GRID_MAJOR_DASHES_STYLE = new float[] { 4.0f, 2.0f };
+		private static final int DASH_REPEAT = 6; // 1+5 = 2+4 = 4+2 = 6
 
 		@Override
 		protected void paintGrid(final Graphics g) {
@@ -101,10 +102,11 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 					g.getAbsoluteScale());
 
 			if (realInterleaveX > 0) {
+				final int clipYSnapped = snap2DashGrid(clip.y);
 				for (int i = getLineStart(origin.x, clip.x, realInterleaveX); i < clip.x
 						+ clip.width; i += realInterleaveX) {
 					setLineStyle(g, i, origin.x, majorInterleaveX, medInterleaveX);
-					g.drawLine(i, clip.y, i, clip.y + clip.height);
+					g.drawLine(i, clipYSnapped, i, clip.y + clip.height);
 				}
 			}
 		}
@@ -114,11 +116,13 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			final int medInterleaveY = gridY * MEDIUM_INTERLEAVE;
 			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY,
 					g.getAbsoluteScale());
+
 			if (realInterleaveY > 0) {
+				final int clipXSnapped = snap2DashGrid(clip.x);
 				for (int i = getLineStart(origin.y, clip.y, realInterleaveY); i < clip.y
 						+ clip.height; i += realInterleaveY) {
 					setLineStyle(g, i, origin.y, majorInterleaveY, medInterleaveY);
-					g.drawLine(clip.x, i, clip.x + clip.width, i);
+					g.drawLine(clipXSnapped, i, clip.x + clip.width, i);
 				}
 			}
 		}
@@ -140,17 +144,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		}
 
 		private static int getLineStart(final int origin, final int clip, final int distance) {
-			int newOrigin = origin;
 			if (origin >= clip) {
-				while (newOrigin - distance >= clip) {
-					newOrigin -= distance;
-				}
-			} else {
-				while (newOrigin < clip) {
-					newOrigin += distance;
-				}
+				return origin - Math.floorDiv(origin - clip, distance) * distance;
 			}
-			return newOrigin;
+			return origin + Math.ceilDiv(clip - origin, distance) * distance;
+		}
+
+		private static int snap2DashGrid(final int value) {
+			return Math.floorDiv(value, DASH_REPEAT) * DASH_REPEAT;
 		}
 
 		private static void setLineStyle(final Graphics g, final int currLinePos, final int origin,
@@ -164,7 +165,6 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 				g.setLineDash(GRID_MINOR_DASHES_STYLE);
 			}
 		}
-
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$

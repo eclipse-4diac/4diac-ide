@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.st
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
@@ -80,15 +81,16 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
 	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
-	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.key.generateFeatureTypeName(param.value)» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.generateParameterTypeName»«param.generateParameterName»«ENDFOR»'''
 
 	def private getStructuredTextFunctionParameters(STFunction func) {
-		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
-		func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
-			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
+		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] +
+			func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations] +
+			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations]
 	}
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
+		«func.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
 		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateTypeDefaultValue»;«ENDIF»
 		«func.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
 		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateVariables(true)»
@@ -116,7 +118,7 @@ class STFunctionSupport extends StructuredTextSupport {
 				varDeclarations.filter [
 					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
 				]
-			].flatMap[varDeclarations].map[type]).toSet
+			].flatMap[varDeclarations].map[type as INamedElement]).toSet
 		else
 			source.containedDependencies
 	}

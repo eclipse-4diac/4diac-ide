@@ -36,22 +36,22 @@
  *     - Change from BasicFB to SimpleFB tag
  *******************************************************************************/
  -->
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="TemplateSimpleInit" Comment="Example for a Simple Function Block Type with init event" >
+
+<FBType Name="TemplateSimpleInit" Comment="Example for a Simple Function Block Type with init event">
   <Identification Standard="61499-1" />
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>
     <EventInputs>
-      <Event Name="INIT" Type="EInit" Comment="Init Request" >
+      <Event Name="INIT" Type="EInit" Comment="Init Request">
       </Event>
-      <Event Name="REQ" Type="Event" Comment="Normal Execution Request" >
+      <Event Name="REQ" Type="Event" Comment="Normal Execution Request">
         <With Var="IN" />
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="INITO" Type="EInit" Comment="Init Confirmation" >
+      <Event Name="INITO" Type="EInit" Comment="Init Confirmation">
       </Event>
-      <Event Name="CNF" Type="Event" Comment="Execution Confirmation" >
+      <Event Name="CNF" Type="Event" Comment="Execution Confirmation">
         <With Var="OUT" />
       </Event>
     </EventOutputs>
@@ -69,10 +69,10 @@
     <ECState Name="REQ" Comment="">
       <ECAction Algorithm="REQ" Output="CNF"/>
     </ECState>
-    <Algorithm Name="INIT" Comment="" >
+    <Algorithm Name="INIT" Comment="">
       <ST Text="" />
     </Algorithm>
-    <Algorithm Name="REQ" Comment="Executed algorithm" >
+    <Algorithm Name="REQ" Comment="Executed algorithm">
       <ST Text="OUT := IN;&#10;" />
     </Algorithm>
   </SimpleFB>

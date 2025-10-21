@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University, Linz,
+ * Copyright (c) 2020, 2025 Johannes Kepler University, Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -26,7 +26,6 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.widgets.PackageInfoWidget;
@@ -37,11 +36,11 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -54,7 +53,6 @@ import org.eclipse.gef.ui.actions.RedoAction;
 import org.eclipse.gef.ui.actions.UndoAction;
 import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -79,7 +77,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
@@ -101,6 +98,8 @@ public class SystemEditor extends EditorPart
 
 	private AutomationSystem system;
 
+	private CommandStack commandStack;
+
 	private GraphicalAnnotationModel annotationModel;
 
 	private ScrolledForm form;
@@ -113,7 +112,6 @@ public class SystemEditor extends EditorPart
 	private final List<String> selectionActions = new ArrayList<>();
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
-	private boolean wasDirtyBeforeExecute = false;
 
 	private final Adapter appListener = new SingleRecursiveContentAdapter() {
 		@Override
@@ -124,7 +122,13 @@ public class SystemEditor extends EditorPart
 					appTableViewer.refresh();
 				}
 			});
+			if (notification.getNewValue() instanceof final CompilerInfo compInfo) {
+				compInfo.eAdapters().add(compilerInfoListener);
 
+				if (notification.getOldValue() instanceof final CompilerInfo oldCompInfo) {
+					oldCompInfo.eAdapters().remove(compilerInfoListener);
+				}
+			}
 		}
 	};
 
@@ -137,6 +141,13 @@ public class SystemEditor extends EditorPart
 		}
 	};
 
+	private final Adapter compilerInfoListener = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			typeInfo.refresh();
+		}
+	};
+
 	private final GraphicalAnnotationModelListener annotationModelListener = event -> {
 		if (typeInfo != null && !form.isDisposed()) {
 			form.getDisplay().asyncExec(typeInfo::refreshAnnotations);
@@ -146,23 +157,6 @@ public class SystemEditor extends EditorPart
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
-		final var commandStack = getCommandStack();
-		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = commandStack.isDirty();
-		}
-		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
-				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
-						&& bulkEditor.hasDirtyType(system.getTypeEntry())).length > 0) {
-			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
-					Messages.BulkEditorDirty, MessageDialog.QUESTION,
-					new String[] { Messages.Continue, Messages.Cancel }, 0);
-			if (dialog.open() == 1) {
-				// Cancel
-				commandStack.undo();
-				commandStack.flush();
-			}
-		}
-		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
@@ -171,6 +165,9 @@ public class SystemEditor extends EditorPart
 			getCommandStack().removeCommandStackEventListener(this);
 			system.eAdapters().remove(appListener);
 			system.getSystemConfiguration().eAdapters().remove(sysConfListener);
+			if (system.getCompilerInfo() != null) {
+				system.getCompilerInfo().eAdapters().remove(compilerInfoListener);
+			}
 		}
 		removeAnnotationModelListener();
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
@@ -199,6 +196,10 @@ public class SystemEditor extends EditorPart
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		setSite(site);
+		if ((getSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
+			getCommandStack().addCommandStackEventListener(this);
+		}
 		setInput(input);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		initializeActionRegistry();
@@ -210,10 +211,12 @@ public class SystemEditor extends EditorPart
 		if (input instanceof final FileEditorInput fileEditorInput) {
 			system = SystemManager.INSTANCE.getSystem(fileEditorInput.getFile());
 			if (system != null) {
-				getCommandStack().addCommandStackEventListener(this);
 				setPartName(system.getName());
 				system.eAdapters().add(appListener);
 				system.getSystemConfiguration().eAdapters().add(sysConfListener);
+				if (system.getCompilerInfo() != null) {
+					system.getCompilerInfo().eAdapters().add(compilerInfoListener);
+				}
 			}
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
@@ -407,15 +410,14 @@ public class SystemEditor extends EditorPart
 		form.setFocus();
 	}
 
-	public CommandStack getCommandStack() {
-		return (null != system) ? system.getCommandStack() : null;
+	private CommandStack getCommandStack() {
+		return commandStack;
 	}
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (this.equals(getSite().getPage().getActiveEditor())) {
 			updateActions(selectionActions);
-			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
 

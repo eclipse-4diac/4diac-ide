@@ -30,22 +30,29 @@ class FunctionFBImplTemplate extends FunctionFBTemplate {
 		
 		«generateImplIncludes»
 		
-		«generateFBDefinition»
-		«generateFBInterfaceDefinition»
-		«generateFBInterfaceSpecDefinition»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		«FBClassName»::«FBClassName»(const CStringDictionary::TStringId paInstanceNameId, forte::core::CFBContainer &paContainer) :
-		    «baseClass»(paContainer, scmFBInterfaceSpec, paInstanceNameId)«// no newline
-			»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
-			»«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterInitializer»«generateConnectionInitializer» {
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		  }
+		
+		  «generateFBDefinition»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«// no newline
+		  	»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		  	»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		  	»«generateConnectionInitializer» {
+		  }
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateInterfaceDefinitions»
+		  «generateExecuteEvent»
+		
+		  «generateBody»
 		}
-		«generateInitializeDefinition»
-		
-		«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
-		«generateInterfaceDefinitions»
-		«generateExecuteEvent»
-		
-		«generateBody»
 	'''
 
 	def protected CharSequence generateExecuteEvent() '''

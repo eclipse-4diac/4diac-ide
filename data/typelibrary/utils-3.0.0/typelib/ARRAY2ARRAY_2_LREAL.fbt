@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="ARRAY2ARRAY_2_LREAL" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2014 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Matthias Plasch" Date="2014-08-05">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="LREAL" Comment="array input" ArraySize="2"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="LREAL" Comment="array output" ArraySize="2"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_ARRAY2ARRAY'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

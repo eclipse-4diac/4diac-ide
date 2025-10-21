@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
- * 				 2022 Primetals Technologies Austria GmbH
- * 				 2023 Martin Erich Jobst
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -238,7 +239,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
 		if (isConnectionLayoutPreferenceTicked() && isTagged(event)) {
 			if (event.isPostChangeEvent()) {
 				if (event.getDetail() == CommandStack.POST_EXECUTE) {
@@ -259,7 +259,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 				layoutCommand.undo();
 			}
 		}
-
 	}
 
 	private static boolean isTagged(final CommandStackEvent event) {

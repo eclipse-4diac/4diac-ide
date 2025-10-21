@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,13 +17,13 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
-	protected FBNetworkElement getInputType(final Object input) {
+	protected BlockFBNetworkElement getInputType(final Object input) {
 		return ShowInterfaceAdapterSection.getFBNetworkElementFromInput(input);
 	}
 
@@ -50,8 +50,8 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	protected FBNetworkElement getType() {
-		return (FBNetworkElement) type;
+	protected BlockFBNetworkElement getType() {
+		return (BlockFBNetworkElement) type;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected InterfaceList getInterface() {
-		return getType().getType().getInterfaceList();
+		return getType().getTypeInterface();
 	}
 
 }

@@ -20,11 +20,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -42,6 +41,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
 
 public class DeviceCreateCommand extends Command {
+
+	private static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
+	private static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::system::EMB_RES"; //$NON-NLS-1$
+
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
 	private final DeviceTypeEntry entry;
 	private final SystemConfiguration parent;
@@ -75,21 +78,8 @@ public class DeviceCreateCommand extends Command {
 		// the name needs to be set after the device is added to the network
 		// so that name checking works correctly
 		device.setName(NameRepository.createUniqueName(device, entry.getType().getName()));
-		setDeviceAttributes();
+		AttributeInheritMode.copyAttributeValuesFromType(device);
 		createResource();
-	}
-
-	private void setDeviceAttributes() {
-		for (final AttributeDeclaration attributeDeclaration : entry.getType().getAttributeDeclarations()) {
-			final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
-			attribute.setName(attributeDeclaration.getName());
-			attribute.setComment(attributeDeclaration.getComment());
-			// TODO re-add when initial value infrastructure of attribute declarations is
-			// defined:
-			// attribute.setValue(attributeDeclaration.getInitialValue());
-			attribute.setAttributeDeclaration(attributeDeclaration);
-			device.getAttributes().add(attribute);
-		}
 	}
 
 	private void setDeviceProfile() {
@@ -132,7 +122,10 @@ public class DeviceCreateCommand extends Command {
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
 			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
 		} else {
-			type = getResourceType("EMB_RES"); //$NON-NLS-1$
+			type = getResourceType(DEFAULT_RESOURCE_FULL_TYPE);
+			if (type == null) {
+				type = getResourceType(DEFAULT_RESOURCE_TYPE);
+			}
 		}
 		if (null != type) {
 			final ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);

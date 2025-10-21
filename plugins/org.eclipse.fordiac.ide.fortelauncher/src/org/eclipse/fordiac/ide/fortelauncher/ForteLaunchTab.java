@@ -19,7 +19,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fortelauncher.preferences.FortePreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.preferences.FixedScopedPreferenceStore;
 import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
 import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -30,6 +29,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class ForteLaunchTab extends RuntimeLaunchTab {
 
@@ -62,7 +62,7 @@ public class ForteLaunchTab extends RuntimeLaunchTab {
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
-		final IPreferenceStore store = new FixedScopedPreferenceStore(InstanceScope.INSTANCE,
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FortePreferenceConstants.FORTELAUNCHER_PREFERENCES_ID);
 		final String fortePath = store.getString(FortePreferenceConstants.P_PATH);
 		if (fortePath != null && !fortePath.isBlank()) {

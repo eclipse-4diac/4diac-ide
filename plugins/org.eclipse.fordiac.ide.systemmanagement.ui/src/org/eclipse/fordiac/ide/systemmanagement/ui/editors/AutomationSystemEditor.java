@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -34,12 +35,14 @@ import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
@@ -74,12 +77,16 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CommandStackEvent;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
@@ -97,10 +104,13 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements ITypeEntryEditor {
 
 	private AutomationSystem system;
+	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
 	private DiagramOutlinePage outlinePage;
 	private final EditorTabCommandStackListener subEditorCommandStackListener;
 	private GraphicalAnnotationModel annotationModel;
 	private ValidationJob validationJob;
+	private boolean wasDirtyBeforeExecute = false;
+	private Composite mainComposite;
 
 	public AutomationSystemEditor() {
 		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
@@ -116,16 +126,35 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		mainComposite = parent;
+		createEditorContent();
+	}
+
+	private void createEditorContent() {
 		if (system != null) {
-			super.createPartControl(parent);
+			super.createPartControl(mainComposite);
 		} else {
-			showLoadErrorMessage(parent);
+			showLoadErrorMessage(mainComposite);
 		}
 	}
 
+	private void clearEditorContent() {
+		for (int i = getPageCount() - 1; i >= 0; i--) {
+			removePage(i);
+		}
+		pages.clear();
+		for (final Control child : mainComposite.getChildren()) {
+			child.dispose();
+		}
+		mainComposite.layout(true, true);
+	}
+
 	public void showLoadErrorMessage(final Composite parent) {
+		final TypeEntry entry = getTypeEntry();
+		final boolean fileExists = entry != null && entry.getFile() != null && entry.getFile().exists();
+
 		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(fileExists ? 3 : 2).applyTo(composite);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).applyTo(composite);
 
 		final Image image = Display.getDefault().getSystemImage(SWT.ICON_ERROR);
@@ -137,7 +166,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		final Label messageLabel = new Label(composite, SWT.NONE);
 		messageLabel.setText(
 				MessageFormat.format(Messages.AutomationSystemEditor_CouldNotLoadSystem, getEditorInput().getName()));
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(messageLabel);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(false, false).applyTo(messageLabel);
+
+		if (fileExists) {
+			final Button textEditorButton = new Button(composite, SWT.NONE);
+			textEditorButton.setText(Messages.AutomationSystemEditor_OpenTextEditor);
+			textEditorButton.addListener(SWT.Selection, e -> EditorUtils.openTextEditor(getEditorInput()));
+		}
 	}
 
 	@Override
@@ -364,8 +399,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	public CommandStack getCommandStack() {
-		return (null != system) ? system.getCommandStack() : null;
+	public OperationHistoryCommandStack getCommandStack() {
+		return commandStack;
 	}
 
 	@Override
@@ -388,6 +423,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		final boolean dirty = isDirty();
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
+			commandStack.dispose();
 		}
 		if (validationJob != null) {
 			validationJob.dispose();
@@ -405,26 +441,49 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		typeEntryAdapter.dispose();
 	}
 
-	@Override
-	public void reloadType() {
-		final CommandStack commandStack = system.getCommandStack();
-
-		final String path = getBreadcrumb().serializePath();
-
-		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
-
-		if (typeEntry.eAdapters().contains(typeEntryAdapter)) {
-			typeEntry.eAdapters().remove(typeEntryAdapter);
+	private SystemEntry getTypeEntry() {
+		if (system != null) {
+			return (SystemEntry) system.getTypeEntry();
 		}
 
+		if (getEditorInput() instanceof final FileEditorInput fileInput) {
+			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileInput.getFile());
+		}
+
+		return null;
+	}
+
+	@Override
+	public void reloadType() {
+		final var typeEntry = getTypeEntry();
+		if (typeEntry == null) {
+			return;
+		}
+
+		final var entrySystem = typeEntry.getSystem();
+		final boolean hasChanged = system == null && entrySystem != null || system != null && entrySystem == null;
+
+		typeEntry.eAdapters().remove(typeEntryAdapter);
 		typeEntry.setSystem(null);
 		system = typeEntry.getSystem();
-		system.setCommandStack(commandStack);
-		getCommandStack().flush();
 		typeEntry.eAdapters().add(typeEntryAdapter);
+
+		if (hasChanged) {
+			clearEditorContent();
+			createEditorContent();
+		}
+
+		if (system == null) {
+			return;
+		}
+
+		getCommandStack().setUndoContext(new ObjectUndoContext(system));
 		setPartName(system.getName());
 
-		if (!getBreadcrumb().openPath(path, system)) {
+		final String path = getBreadcrumb().serializePath();
+		final boolean opened = getBreadcrumb().openPath(path, system);
+
+		if (!opened) {
 			if (!system.getApplication().isEmpty()) {
 				OpenListenerManager.openEditor(system.getApplication().get(0));
 				showReloadErrorMessage(path, Messages.AutomationSystemEditor_ShowingFirstApplication);
@@ -451,10 +510,13 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			if (getEditorInput() == null) {
 				system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
 				if (system != null) {
-					getCommandStack().addCommandStackEventListener(this);
-					getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-					QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
-					system.getTypeEntry().eAdapters().add(typeEntryAdapter);
+					setupCommandStack();
+				}
+
+				final var entry = system == null ? TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile())
+						: system.getTypeEntry();
+				if (entry != null) {
+					entry.eAdapters().add(typeEntryAdapter);
 				}
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
@@ -466,6 +528,36 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 					.forEach(e -> e.setInput(e.getEditorInput()));
 		}
 		setInputWithNotify(input);
+	}
+
+	private void setupCommandStack() {
+		commandStack.setUndoContext(new ObjectUndoContext(system));
+		getCommandStack().addCommandStackEventListener(this);
+		getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
+		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
+	}
+
+	@Override
+	public void stackChanged(final CommandStackEvent event) {
+		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
+			wasDirtyBeforeExecute = getCommandStack().isDirty();
+		}
+		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
+				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
+						&& bulkEditor.hasDirtyType(system.getTypeEntry())).length > 0) {
+			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
+					Messages.BulkEditorDirty, MessageDialog.QUESTION,
+					new String[] { Messages.Continue, Messages.Cancel }, 0);
+			if (dialog.open() == 1) {
+				// Cancel
+				getCommandStack().undo();
+				getCommandStack().flush();
+			}
+		}
+		super.stackChanged(null);
+		if (event.isPostChangeEvent()) {
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 
 	private void selectRootModelOfEditor() {

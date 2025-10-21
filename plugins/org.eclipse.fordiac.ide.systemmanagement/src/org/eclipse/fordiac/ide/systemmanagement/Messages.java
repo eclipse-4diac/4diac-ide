@@ -23,12 +23,14 @@ public final class Messages extends NLS {
 	public static String AutomationSystemEditor_Overwrite_Changes;
 	public static String FordiacNature_Location;
 	public static String FordiacNature_MissingExportBuilder;
+	public static String FordiacNature_MissingLibraryBuilder;
 	public static String FordiacNature_MissingXtextNature;
 	public static String FordiacResourceChangeListener_4;
 	public static String FordiacResourceChangeListener_7;
 	public static String FordiacResourceChangeListener_UpdateTypeLibForNewProject;
 	public static String FordiacResourceChangeListener_CopyConflictTitle;
 	public static String FordiacResourceChangeListener_CopyConflictBody;
+	public static String FordiacSystemManagement_ErrorLoadingProjectNature;
 	public static String ValidateTypeLibrary;
 
 	static {

@@ -16,7 +16,6 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
@@ -30,7 +29,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 class VarDeclarationSupport extends StructuredTextSupport {
 	final VarDeclaration varDeclaration
 
-	INamedElement resultType
+	LibraryElement resultType
 	STInitializerExpressionSource parseResult
 
 	override prepare() {
@@ -71,12 +70,15 @@ class VarDeclarationSupport extends StructuredTextSupport {
 		if (options.get(ForteNgExportFilter.OPTION_TYPE) == Boolean.TRUE) {
 			prepareResultType
 			resultType?.generateTypeName
-		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_PARAM) == Boolean.TRUE) {
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_IN_PARAM) == Boolean.TRUE) {
 			prepareResultType
-			resultType?.generateTypeNameAsParameter
-		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_SPEC) == Boolean.TRUE) {
+			resultType?.generateTypeNameAsInputParameter
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_IN_OUT_PARAM) == Boolean.TRUE) {
 			prepareResultType
-			resultType?.generateTypeSpec
+			resultType?.generateTypeNameAsInOutParameter
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_OUT_PARAM) == Boolean.TRUE) {
+			prepareResultType
+			resultType?.generateTypeNameAsOutputParameter
 		} else if (varDeclaration.value?.value.nullOrEmpty) {
 			prepareResultType
 			resultType?.generateTypeDefaultValue

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,20 +20,22 @@ import java.util.Map;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class InterfaceElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
@@ -62,6 +64,26 @@ public final class InterfaceElementAnnotations {
 		return LibraryElementPackage.eINSTANCE.getInterfaceList_InOutVars().equals(varDecl.eContainingFeature())
 				|| LibraryElementPackage.eINSTANCE.getInterfaceList_OutMappedInOutVars()
 						.equals(varDecl.eContainingFeature());
+	}
+
+	public static BlockFBNetworkElement getBlockFBNetworkElement(final IInterfaceElement element) {
+		return switch (element.eContainer()) {
+		case final BlockFBNetworkElement blockFbNetworkElement -> blockFbNetworkElement;
+		case final InterfaceList interfaceList -> interfaceList.getBlockFBNetworkElement();
+		case null, default -> null;
+		};
+	}
+
+	public static FBType getFBType(final IInterfaceElement element) {
+		return switch (element.eContainer()) {
+		case final FBType fbType -> fbType;
+		case final InterfaceList interfaceList -> interfaceList.getFBType();
+		case null, default -> null;
+		};
+	}
+
+	public static InterfaceList getInterfaceList(final IInterfaceElement element) {
+		return element.eContainer() instanceof final InterfaceList interfaceList ? interfaceList : null;
 	}
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
@@ -96,7 +118,7 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static boolean isInTypedInstance(final IInterfaceElement element) {
-		final FBNetworkElement fbNetworkElement = element.getFBNetworkElement();
+		final FBNetworkElement fbNetworkElement = element.getBlockFBNetworkElement();
 		return fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null;
 	}
 
@@ -110,13 +132,33 @@ public final class InterfaceElementAnnotations {
 	}
 
 	static DataTypeLibrary getDataTypeLibrary(final IInterfaceElement element) {
-		if (EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement) {
-			final TypeLibrary typeLibrary = libraryElement.getTypeLibrary();
-			if (typeLibrary != null) {
-				return typeLibrary.getDataTypeLibrary();
-			}
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(element);
+		if (typeLibrary != null) {
+			return typeLibrary.getDataTypeLibrary();
 		}
 		return null;
+	}
+
+	static IInterfaceElement findInTypeInterface(final IInterfaceElement element) {
+		final BlockFBNetworkElement blockFbnEl = element.getBlockFBNetworkElement();
+		if (blockFbnEl == null) {
+			return null;
+		}
+
+		final InterfaceList typeInterface = blockFbnEl.getTypeInterface();
+		if (typeInterface == null) {
+			return null;
+		}
+
+		final IInterfaceElement typeIE = typeInterface.getInterfaceElement(element.getName());
+
+		if (typeIE instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !element.isIsInput()) {
+			// if the type pin is a varinout and the searched element is an output we need
+			// to get the output opposite
+			return varDecl.getInOutVarOpposite();
+		}
+
+		return typeIE;
 	}
 
 	private InterfaceElementAnnotations() {

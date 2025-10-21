@@ -68,7 +68,8 @@ public class Import4diacProject extends Task {
 				loadProject(description, project, projectPath);
 			}
 			check4diacProject(project);
-			TypeLibraryManager.INSTANCE.getTypeLibrary(project).reload();
+			// get the type library to make sure it is loaded
+			TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 			waitBuilderJobsComplete();
 			runFullBuild(project);
 			waitBuilderJobsComplete();

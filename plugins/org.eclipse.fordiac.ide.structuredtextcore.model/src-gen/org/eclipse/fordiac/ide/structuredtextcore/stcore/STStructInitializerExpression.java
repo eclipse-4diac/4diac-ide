@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -80,7 +81,7 @@ public interface STStructInitializerExpression extends STInitializerExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getResultType();
+	LibraryElement getResultType();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -88,7 +89,7 @@ public interface STStructInitializerExpression extends STInitializerExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getDeclaredResultType();
+	LibraryElement getDeclaredResultType();
 
 	/**
 	 * <!-- begin-user-doc -->

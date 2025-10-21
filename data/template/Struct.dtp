@@ -33,9 +33,9 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
  -->
-<DataType Name="Struct" Comment="A Template for a Data Type" >
+<DataType Name="Struct" Comment="A Template for a Data Type">
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="4DIAC-IDE" Date="2020-04-28" />
   <ASN1Tag Class="APPLICATION" Number="1" />
-  <StructuredType >
+  <StructuredType>
   </StructuredType>
 </DataType>

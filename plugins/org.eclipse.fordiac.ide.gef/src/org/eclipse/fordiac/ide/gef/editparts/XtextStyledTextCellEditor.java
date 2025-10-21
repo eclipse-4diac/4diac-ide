@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor;
 import org.eclipse.jface.text.DocumentEvent;
@@ -29,18 +31,26 @@ import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 	private EmbeddedEditor embeddedEditor;
 	private boolean proposalPopupOpen;
+	private final LibraryElementXtextDocumentUpdater updater = STAlgorithmEmbeddedEditorUtil
+			.getLibraryElementXtextDocumentUpdater();
 
-	/** @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor() */
+	/**
+	 * @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor()
+	 */
 	protected XtextStyledTextCellEditor() {
-		super();
 	}
 
-	/** @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor(Composite) */
+	/**
+	 * @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor(Composite)
+	 */
 	protected XtextStyledTextCellEditor(final Composite parent) {
 		super(parent);
 	}
 
-	/** @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor(Composite, int) */
+	/**
+	 * @see org.eclipse.fordiac.ide.ui.widget.StyledTextCellEditor#StyledTextCellEditor(Composite,
+	 *      int)
+	 */
 	protected XtextStyledTextCellEditor(final Composite parent, final int style) {
 		super(parent, style);
 	}
@@ -80,6 +90,10 @@ public abstract class XtextStyledTextCellEditor extends StyledTextCellEditor {
 				proposalPopupOpen = false;
 			}
 		});
+		if (embeddedEditor.getDocument() instanceof final LibraryElementXtextDocument libDocument) {
+			updater.install(libDocument);
+			embeddedEditor.getViewer().getControl().addDisposeListener(event -> updater.uninstall());
+		}
 		return (StyledText) embeddedEditor.getViewer().getControl();
 	}
 

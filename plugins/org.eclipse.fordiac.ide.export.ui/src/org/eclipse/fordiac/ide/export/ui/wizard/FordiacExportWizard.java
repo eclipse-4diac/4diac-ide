@@ -19,20 +19,15 @@
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
 import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.export.ExportException;
+import org.eclipse.fordiac.ide.export.AbstractExporter;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -91,14 +86,11 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			return false;
 		}
 
-		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), exportees, page.getDirectory(),
-				page.overwriteWithoutWarning(), page.enableCMakeLists());
+		final ExporterRunnable exporter = new ExporterRunnable(page.getSelectedExportFilter(), exportees,
+				page.getDirectory(), page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
 			setNeedsProgressMonitor(true);
 			getContainer().run(true, true, exporter);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt(); // mark interruption
-			showExceptionErrorDialog(e);
 		} catch (final Exception e) {
 			showExceptionErrorDialog(e);
 		}
@@ -109,7 +101,7 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	protected static void showExceptionErrorDialog(final Exception e) {
 		FordiacLogHelper.logError(e.getMessage(), e);
 		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-		msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
+		msg.setMessage(e.getMessage()); // TODO add Messages.FordiacExport_ERROR + e.getMessage()
 		msg.open();
 	}
 
@@ -118,110 +110,35 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast).toList();
 	}
 
-	private static class Exporter implements IRunnableWithProgress {
+	private static class ExporterRunnable extends AbstractExporter implements IRunnableWithProgress {
 
 		private final List<IFile> exportees;
-		private final String outputDirectory;
-		private final IConfigurationElement conf;
-		private boolean overwriteWithoutWarning;
-		private boolean enableCMakeLists;
 
-		public Exporter(final IConfigurationElement conf, final List<IFile> exportees, final String outputDirectory,
-				final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
-			this.conf = conf;
+		protected ExporterRunnable(final IConfigurationElement filterConfig, final List<IFile> exportees,
+				final String outputDirectory, final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
+			super(filterConfig, outputDirectory, overwriteWithoutWarning, enableCMakeLists);
 			this.exportees = exportees;
-			this.outputDirectory = outputDirectory;
-			this.overwriteWithoutWarning = overwriteWithoutWarning;
-			this.enableCMakeLists = enableCMakeLists;
 		}
 
 		@Override
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			monitor.beginTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingSelectedTypesUsingExporter,
-					conf.getAttribute("name")), exportees.size() + 1); //$NON-NLS-1$
-
-			final IExportFilter filter = createExportFilter();
-			if (null != filter) {
-				for (final IFile file : exportees) {
-
-					if (monitor.isCanceled()) {
-						break;
-					}
-					try {
-						exportElement(monitor, filter, file, null);
-					} catch (final ExportException.OverwriteAll e) {
-						overwriteWithoutWarning = true;
-					} catch (final ExportException.CancelAll e) {
-						enableCMakeLists = false;
-						filter.getWarnings().add(Messages.FordiacExportWizard_EXPORT_CANCELED);
-						break;
-					} catch (final ExportException.UserInteraction e) {
-						// noop
-					}
-					monitor.worked(1);
-				}
-				if (enableCMakeLists && !monitor.isCanceled()) {
-					try {
-						exportElement(monitor, filter, null, new CMakeListsMarker());
-					} catch (final ExportException.UserInteraction e) {
-						// noop
-					}
-					monitor.worked(1);
-				}
-				monitor.worked(1);
-				if (monitor.isCanceled()) {
-					filter.getErrors().add(Messages.FordiacExportWizard_EXPORT_CANCELED);
-				}
-				Display.getDefault().asyncExec(() -> showErrorWarningSummary(filter));
-			}
-			monitor.done();
+			exportElements(monitor, exportees);
 		}
 
-		private void exportElement(final IProgressMonitor monitor, final IExportFilter filter, final IFile file,
-				final EObject source) throws ExportException.UserInteraction {
-			try {
-				if (source instanceof CMakeListsMarker) {
-					monitor.subTask(Messages.FordiacExportWizard_ExportingCMakeLists);
-					filter.export(null, outputDirectory, overwriteWithoutWarning, source);
-				} else {
-					String name = "anonymous"; //$NON-NLS-1$
-					if (source instanceof final INamedElement ne) {
-						name = ne.getName();
-					} else if (file != null) {
-						name = file.getFullPath().removeFileExtension().lastSegment();
-					}
-
-					monitor.subTask(MessageFormat.format(Messages.FordiacExportWizard_ExportingType, name));
-					filter.export(file, outputDirectory, overwriteWithoutWarning, source);
-				}
-			} catch (final ExportException.UserInteraction e) {
-				throw (e);
-			} catch (final ExportException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-				msg.open();
-			}
-		}
-
-		private IExportFilter createExportFilter() {
-			IExportFilter filter = null;
-			try {
-				filter = (IExportFilter) conf.createExecutableExtension("class"); //$NON-NLS-1$
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-				final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-				msg.setMessage(Messages.FordiacExportWizard_ERROR + e.getMessage());
-				msg.open();
-			}
-			return filter;
-		}
-
-		private static void showErrorWarningSummary(final IExportFilter filter) {
+		@Override
+		protected void showErrorWarningSummary(final IExportFilter filter) {
 			if ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())) {
 				new ExportStatusMessageDialog(Display.getDefault().getActiveShell(), filter.getWarnings(),
 						filter.getErrors()).open();
 			}
+		}
+
+		@Override
+		protected void processError(final String errorMessage) {
+			FordiacLogHelper.logError(errorMessage);
+			final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+			msg.setMessage(errorMessage);
+			msg.open();
 		}
 
 	}

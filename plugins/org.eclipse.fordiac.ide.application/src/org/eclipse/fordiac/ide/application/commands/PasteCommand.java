@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz
  *                          Primetals Technologies Austria GmbH
  *
@@ -36,11 +36,13 @@ import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -64,7 +66,7 @@ import org.eclipse.swt.graphics.Point;
 /** The Class PasteCommand. */
 public class PasteCommand extends Command implements ScopedCommand {
 
-	private static final double DEFAULT_DELTA = 20 * 100 / 18;
+	private static final double DEFAULT_DELTA = 20 * 100.0 / 18;
 	private final CopyPasteData copyPasteData;
 	private final FBNetwork dstFBNetwork;
 
@@ -72,6 +74,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 	private final CompoundCommand updateTypeCmds = new CompoundCommand();
+	private final CompoundCommand importCmds = new CompoundCommand();
 
 	private double xDelta;
 	private double yDelta;
@@ -136,6 +139,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		updateTypeCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
+		importCmds.undo();
 	}
 
 	@Override
@@ -144,6 +148,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		connCreateCmds.redo();
 		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
+		importCmds.redo();
 	}
 
 	private void checkAndAddMissingImports() {
@@ -151,21 +156,27 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 		for (final FBNetworkElement elem : copiedElements.keySet()) {
 			final EObject srcObj = EcoreUtil.getRootContainer(elem);
-			if (srcObj instanceof final LibraryElement srcLE) {
+			if (srcObj instanceof final LibraryElement srcLE && srcLE.getCompilerInfo() != null) {
 				srcLE.getCompilerInfo().getImports().stream().map(Import::getImportedNamespace)
 						.forEach(neededImports::add);
 			}
 		}
 		final EObject destContainer = EcoreUtil.getRootContainer(dstFBNetwork);
 		if (destContainer instanceof final LibraryElement le) {
+			if (le.getCompilerInfo() == null) {
+				le.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+			}
+
 			final List<String> importNames = le.getCompilerInfo().getImports().stream()
 					.map(Import::getImportedNamespace).toList();
 
 			for (final String importName : neededImports) {
 				if (!importNames.contains(importName)) {
-					final Import newImp = LibraryElementFactory.eINSTANCE.createImport();
-					newImp.setImportedNamespace(importName);
-					le.getCompilerInfo().getImports().add(newImp);
+					final AddNewImportCommand importCmd = new AddNewImportCommand(le, importName);
+					if (importCmd.canExecute()) {
+						importCmd.execute();
+					}
+					importCmds.add(importCmd);
 				}
 			}
 		}
@@ -221,9 +232,9 @@ public class PasteCommand extends Command implements ScopedCommand {
 		}
 		copiedElement.setMapping(null);
 
-		if (copiedElement instanceof StructManipulator) {
+		if (copiedElement instanceof final StructManipulator copiedStructMan) {
 			// structmanipulators may destroy the param values during copy
-			checkDataValues(element, copiedElement);
+			checkDataValues((StructManipulator) element, copiedStructMan);
 		}
 
 		// copy content of Groups
@@ -246,12 +257,14 @@ public class PasteCommand extends Command implements ScopedCommand {
 				copiedElement.setTypeEntry(dstTypeEntry);
 			} else {
 				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
-						element.getTypeEntry().getType().eClass());
-				copiedElement.setInterface(InterfaceListCopier.copy(element.getInterface()));
+						element.getTypeEntry().getTypeEClass());
+				if (element instanceof final BlockFBNetworkElement bfbElement) {
+					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
+				}
 			}
-		} else {
+		} else if (copiedElement instanceof final BlockFBNetworkElement copiedBlockElement) {
 			// clear the connection references
-			for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
+			for (final IInterfaceElement ie : copiedBlockElement.getInterface().getAllInterfaceElements()) {
 				if (ie.isIsInput()) {
 					ie.getInputConnections().clear();
 				} else {
@@ -262,7 +275,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 		return copiedElement;
 	}
 
-	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
+	private static void checkDataValues(final StructManipulator src, final StructManipulator copy) {
 		final EList<VarDeclaration> srcList = src.getInterface().getInputVars();
 		final EList<VarDeclaration> copyList = copy.getInterface().getInputVars();
 
@@ -280,8 +293,9 @@ public class PasteCommand extends Command implements ScopedCommand {
 
 	private void copyConnections() {
 		for (final ConnectionReference connRef : copyPasteData.conns()) {
-			final FBNetworkElement copiedSrc = copiedElements.get(connRef.sourceElement());
-			final FBNetworkElement copiedDest = copiedElements.get(connRef.destinationElement());
+			final BlockFBNetworkElement copiedSrc = (BlockFBNetworkElement) copiedElements.get(connRef.sourceElement());
+			final BlockFBNetworkElement copiedDest = (BlockFBNetworkElement) copiedElements
+					.get(connRef.destinationElement());
 
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
@@ -311,8 +325,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 		return cmd;
 	}
 
-	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
-			final FBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
+	private void copyConnection(final ConnectionReference connRef, final BlockFBNetworkElement copiedSrc,
+			final BlockFBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
 		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
 		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
@@ -322,7 +336,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 		cmd.setVisible(connRef.visible());
 	}
 
-	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {
+	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig,
+			final BlockFBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
@@ -362,7 +377,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 	}
 
 	private void createUpdateTypeCommands() {
-		copiedElements.values().forEach(fbnEl -> {
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(copiedElements.values()).forEach(fbnEl -> {
 			if (fbnEl.getTypeEntry() != null && !(fbnEl instanceof ErrorMarkerFBNElement)) {
 				// we only need to update the type if we have a type entry
 				updateTypeCmds.add(new UpdateFBTypeCommand(fbnEl));

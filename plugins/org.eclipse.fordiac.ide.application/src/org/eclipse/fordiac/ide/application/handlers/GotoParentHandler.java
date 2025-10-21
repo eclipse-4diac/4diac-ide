@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 - 2020 Johannes Kepler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -114,7 +114,7 @@ public class GotoParentHandler extends AbstractHandler {
 		if (((selection instanceof final StructuredSelection structSel) && (structSel.size() == 1))
 				&& ((structSel.getFirstElement() instanceof final EditPart ep)
 						&& (ep.getModel() instanceof final IInterfaceElement ie))
-				&& (element.equals(ie.getFBNetworkElement()))) {
+				&& (element.equals(ie.getBlockFBNetworkElement()))) {
 			return ie;
 		}
 		return null;

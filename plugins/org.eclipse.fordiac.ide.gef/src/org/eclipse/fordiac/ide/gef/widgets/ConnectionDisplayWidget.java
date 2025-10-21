@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -216,8 +216,8 @@ public class ConnectionDisplayWidget {
 				if (null != ie) {
 					switch (columnIndex) {
 					case TARGET_COL_INDEX:
-						if (null != ie.getFBNetworkElement()) {
-							return labelProvider.getImage(ie.getFBNetworkElement());
+						if (null != ie.getBlockFBNetworkElement()) {
+							return labelProvider.getImage(ie.getBlockFBNetworkElement());
 						}
 						break;
 					case PIN_COL_INDEX:
@@ -237,14 +237,14 @@ public class ConnectionDisplayWidget {
 				if (null != ie) {
 					switch (columnIndex) {
 					case TARGET_COL_INDEX:
-						if (null != ie.getFBNetworkElement()) {
-							return ie.getFBNetworkElement().getName();
+						if (null != ie.getBlockFBNetworkElement()) {
+							return ie.getBlockFBNetworkElement().getName();
 						}
 						if (ie.eContainer() == null) { // broken connection
 							return ""; //$NON-NLS-1$
 						}
-						if (ie.eContainer().eContainer() instanceof CompositeFBType) {
-							return ((CompositeFBType) ie.eContainer().eContainer()).getName();
+						if (ie.getFBType() instanceof final CompositeFBType compositeFBType) {
+							return compositeFBType.getName();
 						}
 						break;
 					case PIN_COL_INDEX:
@@ -271,8 +271,8 @@ public class ConnectionDisplayWidget {
 		@Override
 		public Object[] getElements(final Object inputElement) {
 			if (inputElement instanceof final IInterfaceElement element) {
-				if ((element.isIsInput() && (null != element.getFBNetworkElement()))
-						|| (!element.isIsInput() && (null == element.getFBNetworkElement()))) {
+				if ((element.isIsInput() && (null != element.getBlockFBNetworkElement()))
+						|| (!element.isIsInput() && (null == element.getBlockFBNetworkElement()))) {
 					return element.getInputConnections().toArray();
 				}
 				return element.getOutputConnections().toArray();

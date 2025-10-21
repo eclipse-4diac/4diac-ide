@@ -32,43 +32,46 @@ import org.eclipse.emf.ecore.EReference;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory
  * @model kind="package"
  * @generated
  */
 public interface DevResponsePackage extends EPackage {
 	/**
-	 * The package name.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNAME = "devResponse"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace URI.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_URI = "org.eclipse.fordiac.ide.deployment"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace name.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	String eNS_PREFIX = "devResponse"; //$NON-NLS-1$
 
 	/**
-	 * The singleton instance of the package.
-	 * <!-- begin-user-doc --> <!--
+	 * The singleton instance of the package. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
+	 *
 	 * @generated
 	 */
 	DevResponsePackage eINSTANCE = org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
+	 * <em>Resource</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResource()
 	 * @generated
@@ -76,18 +79,18 @@ public interface DevResponsePackage extends EPackage {
 	int RESOURCE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int RESOURCE__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -112,8 +115,10 @@ public interface DevResponsePackage extends EPackage {
 	int RESOURCE_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
+	 * <em>FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFB()
 	 * @generated
@@ -121,18 +126,18 @@ public interface DevResponsePackage extends EPackage {
 	int FB = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int FB__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Type</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -141,6 +146,7 @@ public interface DevResponsePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Ports</b></em>' containment reference list.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -156,26 +162,58 @@ public interface DevResponsePackage extends EPackage {
 	int FB_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl <em>FB
+	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBType()
+	 * @generated
+	 */
+	int FB_TYPE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_TYPE__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>FB Type</em>' class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_TYPE_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
+	 * <em>Port</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getPort()
 	 * @generated
 	 */
-	int PORT = 2;
+	int PORT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int PORT__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Data Values</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Data Values</b></em>' containment reference
+	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -191,31 +229,24 @@ public interface DevResponsePackage extends EPackage {
 	int PORT_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl <em>Data</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
+	 * <em>Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getData()
 	 * @generated
 	 */
-	int DATA = 3;
+	int DATA = 4;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
 	int DATA__VALUE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Time</b></em>' attribute.
-	 * <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA__TIME = 1;
 
 	/**
 	 * The feature id for the '<em><b>Forced</b></em>' attribute. <!--
@@ -224,7 +255,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DATA__FORCED = 2;
+	int DATA__FORCED = 1;
 
 	/**
 	 * The number of structural features of the '<em>Data</em>' class. <!--
@@ -233,21 +264,23 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_FEATURE_COUNT = 3;
+	int DATA_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl <em>Response</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
+	 * <em>Response</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResponse()
 	 * @generated
 	 */
-	int RESPONSE = 4;
+	int RESPONSE = 5;
 
 	/**
-	 * The feature id for the '<em><b>ID</b></em>' attribute.
-	 * <!-- begin-user-doc
+	 * The feature id for the '<em><b>ID</b></em>' attribute. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 * @ordered
 	 */
@@ -281,13 +314,22 @@ public interface DevResponsePackage extends EPackage {
 	int RESPONSE__FBLIST = 3;
 
 	/**
+	 * The feature id for the '<em><b>Fb Type</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int RESPONSE__FB_TYPE = 4;
+
+	/**
 	 * The feature id for the '<em><b>Endpointlist</b></em>' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE__ENDPOINTLIST = 4;
+	int RESPONSE__ENDPOINTLIST = 5;
 
 	/**
 	 * The feature id for the '<em><b>Connection</b></em>' reference. <!--
@@ -296,7 +338,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE__CONNECTION = 5;
+	int RESPONSE__CONNECTION = 6;
 
 	/**
 	 * The number of structural features of the '<em>Response</em>' class. <!--
@@ -305,16 +347,18 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE_FEATURE_COUNT = 6;
+	int RESPONSE_FEATURE_COUNT = 7;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
+	 * <em>Watches</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getWatches()
 	 * @generated
 	 */
-	int WATCHES = 5;
+	int WATCHES = 6;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list. <!--
@@ -335,13 +379,15 @@ public interface DevResponsePackage extends EPackage {
 	int WATCHES_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl <em>FB List</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl <em>FB
+	 * List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBList()
 	 * @generated
 	 */
-	int FB_LIST = 6;
+	int FB_LIST = 7;
 
 	/**
 	 * The feature id for the '<em><b>Fbs</b></em>' reference list. <!--
@@ -362,13 +408,15 @@ public interface DevResponsePackage extends EPackage {
 	int FB_LIST_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl <em>Endpoint List</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
+	 * <em>Endpoint List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getEndpointList()
 	 * @generated
 	 */
-	int ENDPOINT_LIST = 7;
+	int ENDPOINT_LIST = 8;
 
 	/**
 	 * The feature id for the '<em><b>Connection</b></em>' reference list. <!--
@@ -389,13 +437,15 @@ public interface DevResponsePackage extends EPackage {
 	int ENDPOINT_LIST_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl <em>Connection</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
+	 * <em>Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 8;
+	int CONNECTION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' attribute. <!--
@@ -425,8 +475,10 @@ public interface DevResponsePackage extends EPackage {
 	int CONNECTION_FEATURE_COUNT = 2;
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource <em>Resource</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource
+	 * <em>Resource</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Resource</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource
 	 * @generated
@@ -434,8 +486,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getResource();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getName()
 	 * @see #getResource()
@@ -444,8 +498,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getResource_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getType()
 	 * @see #getResource()
@@ -454,8 +510,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getResource_Type();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getFbs <em>Fbs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getFbs
+	 * <em>Fbs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Fbs</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getFbs()
 	 * @see #getResource()
@@ -475,8 +533,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getFB();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getName()
 	 * @see #getFB()
@@ -485,8 +545,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getFB_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getType
+	 * <em>Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getType()
 	 * @see #getFB()
@@ -495,8 +557,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getFB_Type();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getPorts
+	 * <em>Ports</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the containment reference list '<em>Ports</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getPorts()
 	 * @see #getFB()
@@ -505,8 +569,33 @@ public interface DevResponsePackage extends EPackage {
 	EReference getFB_Ports();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port <em>Port</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType <em>FB
+	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>FB Type</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBType
+	 * @generated
+	 */
+	EClass getFBType();
+
+	/**
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName()
+	 * @see #getFBType()
+	 * @generated
+	 */
+	EAttribute getFBType_Name();
+
+	/**
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Port</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port
 	 * @generated
@@ -514,8 +603,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getName
+	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port#getName()
 	 * @see #getPort()
@@ -524,9 +615,12 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getPort_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getDataValues <em>Data Values</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Data Values</em>'.
+	 * Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port#getDataValues
+	 * <em>Data Values</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference list '<em>Data
+	 *         Values</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Port#getDataValues()
 	 * @see #getPort()
 	 * @generated
@@ -534,8 +628,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getPort_DataValues();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data <em>Data</em>}'.
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data <em>Data</em>}'.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Data</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data
 	 * @generated
@@ -543,8 +639,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getData();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue
+	 * <em>Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getValue()
 	 * @see #getData()
@@ -553,18 +651,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getData_Value();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime <em>Time</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Time</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getTime()
-	 * @see #getData()
-	 * @generated
-	 */
-	EAttribute getData_Time();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced <em>Forced</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced
+	 * <em>Forced</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Forced</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Data#getForced()
 	 * @see #getData()
@@ -573,8 +663,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getData_Forced();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response <em>Response</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response
+	 * <em>Response</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Response</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response
 	 * @generated
@@ -582,8 +674,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getResponse();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID
+	 * <em>ID</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>ID</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getID()
 	 * @see #getResponse()
@@ -592,8 +686,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getResponse_ID();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches
+	 * <em>Watches</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Watches</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches()
 	 * @see #getResponse()
@@ -602,8 +698,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Watches();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason
+	 * <em>Reason</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Reason</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason()
 	 * @see #getResponse()
@@ -612,8 +710,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getResponse_Reason();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist
+	 * <em>Fblist</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Fblist</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist()
 	 * @see #getResponse()
@@ -622,8 +722,22 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Fblist();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType
+	 * <em>Fb Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Fb Type</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType()
+	 * @see #getResponse()
+	 * @generated
+	 */
+	EReference getResponse_FbType();
+
+	/**
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist
+	 * <em>Endpointlist</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Endpointlist</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist()
 	 * @see #getResponse()
@@ -632,8 +746,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Endpointlist();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection <em>Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection
+	 * <em>Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference '<em>Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection()
 	 * @see #getResponse()
@@ -642,8 +758,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Connection();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches <em>Watches</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches
+	 * <em>Watches</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Watches</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Watches
 	 * @generated
@@ -651,8 +769,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getWatches();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches#getResources <em>Resources</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Watches#getResources
+	 * <em>Resources</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Resources</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Watches#getResources()
 	 * @see #getWatches()
@@ -661,8 +781,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getWatches_Resources();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBList <em>FB List</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBList <em>FB
+	 * List</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>FB List</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBList
 	 * @generated
@@ -670,8 +792,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getFBList();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBList#getFbs <em>Fbs</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBList#getFbs
+	 * <em>Fbs</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Fbs</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBList#getFbs()
 	 * @see #getFBList()
@@ -680,8 +804,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getFBList_Fbs();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList <em>Endpoint List</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList
+	 * <em>Endpoint List</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Endpoint List</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.EndpointList
 	 * @generated
@@ -689,8 +815,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getEndpointList();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList#getConnection <em>Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.EndpointList#getConnection
+	 * <em>Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the reference list '<em>Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.EndpointList#getConnection()
 	 * @see #getEndpointList()
@@ -699,8 +827,10 @@ public interface DevResponsePackage extends EPackage {
 	EReference getEndpointList_Connection();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection <em>Connection</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection
+	 * <em>Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for class '<em>Connection</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection
 	 * @generated
@@ -708,8 +838,10 @@ public interface DevResponsePackage extends EPackage {
 	EClass getConnection();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getSource <em>Source</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getSource
+	 * <em>Source</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Source</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection#getSource()
 	 * @see #getConnection()
@@ -718,8 +850,10 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getConnection_Source();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getDestination <em>Destination</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the meta object for the attribute
+	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Connection#getDestination
+	 * <em>Destination</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @return the meta object for the attribute '<em>Destination</em>'.
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Connection#getDestination()
 	 * @see #getConnection()
@@ -745,12 +879,15 @@ public interface DevResponsePackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
+		 * <em>Resource</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResource()
 		 * @generated
@@ -760,6 +897,7 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE__NAME = eINSTANCE.getResource_Name();
@@ -767,20 +905,24 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute RESOURCE__TYPE = eINSTANCE.getResource_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Fbs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Fbs</b></em>' containment reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESOURCE__FBS = eINSTANCE.getResource_Fbs();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
+		 * <em>FB</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFB()
 		 * @generated
@@ -790,6 +932,7 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute FB__NAME = eINSTANCE.getFB_Name();
@@ -797,20 +940,43 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute FB__TYPE = eINSTANCE.getFB_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Ports</b></em>' containment reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB__PORTS = eINSTANCE.getFB_Ports();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl <em>FB
+		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBType()
+		 * @generated
+		 */
+		EClass FB_TYPE = eINSTANCE.getFBType();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EAttribute FB_TYPE__NAME = eINSTANCE.getFBType_Name();
+
+		/**
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
+		 * <em>Port</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getPort()
 		 * @generated
@@ -820,20 +986,24 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute PORT__NAME = eINSTANCE.getPort_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Data Values</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Data Values</b></em>' containment
+		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference PORT__DATA_VALUES = eINSTANCE.getPort_DataValues();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl <em>Data</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
+		 * <em>Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getData()
 		 * @generated
@@ -843,27 +1013,24 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DATA__VALUE = eINSTANCE.getData_Value();
 
 		/**
-		 * The meta object literal for the '<em><b>Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DATA__TIME = eINSTANCE.getData_Time();
-
-		/**
 		 * The meta object literal for the '<em><b>Forced</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute DATA__FORCED = eINSTANCE.getData_Forced();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl <em>Response</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
+		 * <em>Response</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getResponse()
 		 * @generated
@@ -881,6 +1048,7 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Watches</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESPONSE__WATCHES = eINSTANCE.getResponse_Watches();
@@ -888,6 +1056,7 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Reason</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute RESPONSE__REASON = eINSTANCE.getResponse_Reason();
@@ -895,27 +1064,40 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fblist</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESPONSE__FBLIST = eINSTANCE.getResponse_Fblist();
 
 		/**
-		 * The meta object literal for the '<em><b>Endpointlist</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Fb Type</b></em>' reference feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference RESPONSE__FB_TYPE = eINSTANCE.getResponse_FbType();
+
+		/**
+		 * The meta object literal for the '<em><b>Endpointlist</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESPONSE__ENDPOINTLIST = eINSTANCE.getResponse_Endpointlist();
 
 		/**
-		 * The meta object literal for the '<em><b>Connection</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Connection</b></em>' reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference RESPONSE__CONNECTION = eINSTANCE.getResponse_Connection();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl <em>Watches</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
+		 * <em>Watches</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getWatches()
 		 * @generated
@@ -923,15 +1105,18 @@ public interface DevResponsePackage extends EPackage {
 		EClass WATCHES = eINSTANCE.getWatches();
 
 		/**
-		 * The meta object literal for the '<em><b>Resources</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Resources</b></em>' reference list
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference WATCHES__RESOURCES = eINSTANCE.getWatches_Resources();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl <em>FB List</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl <em>FB
+		 * List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBListImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBList()
 		 * @generated
@@ -941,13 +1126,16 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fbs</b></em>' reference list feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference FB_LIST__FBS = eINSTANCE.getFBList_Fbs();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl <em>Endpoint List</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
+		 * <em>Endpoint List</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getEndpointList()
 		 * @generated
@@ -955,15 +1143,18 @@ public interface DevResponsePackage extends EPackage {
 		EClass ENDPOINT_LIST = eINSTANCE.getEndpointList();
 
 		/**
-		 * The meta object literal for the '<em><b>Connection</b></em>' reference list feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Connection</b></em>' reference list
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EReference ENDPOINT_LIST__CONNECTION = eINSTANCE.getEndpointList_Connection();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl <em>Connection</em>}' class.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
+		 * <em>Connection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.ConnectionImpl
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getConnection()
 		 * @generated
@@ -973,13 +1164,15 @@ public interface DevResponsePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__SOURCE = eINSTANCE.getConnection_Source();
 
 		/**
-		 * The meta object literal for the '<em><b>Destination</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Destination</b></em>' attribute
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
 		 * @generated
 		 */
 		EAttribute CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();

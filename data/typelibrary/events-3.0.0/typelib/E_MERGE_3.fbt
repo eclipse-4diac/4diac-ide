@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_MERGE_3" Comment="Merge (OR) of three input events (generic FB)">
+	<Identification Standard="61499-1 Annex A" Function="Output EO is triggered when either EI1 or EI2 is received" Description="Copyright (c) 2017, 2025 fortiss GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2025-02-12" Remarks="copy from E_MERGE and make a E_MERGE3 in the same way">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="First input event">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="Second input event">
+			</Event>
+			<Event Name="EI3" Type="Event" Comment="Third input event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Event">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_MERGE'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

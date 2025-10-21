@@ -23,6 +23,7 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String AutomationSystemEditor_CouldNotLoadSystem;
+	public static String AutomationSystemEditor_OpenTextEditor;
 
 	public static String AutomationSystemEditor_ShowingFirstApplication;
 
@@ -31,8 +32,10 @@ public final class Messages extends NLS {
 	public static String OpenApplicationForEditing;
 
 	public static String MissingExportBuilderMarkerResolution_Description;
-
 	public static String MissingExportBuilderMarkerResolution_Label;
+
+	public static String MissingLibraryBuilderMarkerResolution_Description;
+	public static String MissingLibraryBuilderMarkerResolution_Label;
 
 	public static String NewSystemWizard_ShowAdvanced;
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
@@ -66,15 +65,10 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 			return getElementURI(editPart.getModel());
 		}
 		if (element instanceof final IInterfaceElement interfaceElement) {
-			final FBNetworkElement fbNetworkElement = interfaceElement.getFBNetworkElement();
+			final FBNetworkElement fbNetworkElement = interfaceElement.getBlockFBNetworkElement();
 			if (fbNetworkElement != null && fbNetworkElement.getTypeEntry() != null) {
-				final FBType fbType = fbNetworkElement.getType();
-				if (fbType != null) {
-					return getElementURI(fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName()));
-				}
-				return null; // do not refactor typed instances
+				return getElementURI(interfaceElement.findInTypeInterface());
 			}
-			// fall through
 		}
 		if (element instanceof final EObject eObject) {
 			return EcoreUtil.getURI(eObject);

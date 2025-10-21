@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH,
  *                          Johannes Kepler University Linz
  *
@@ -95,7 +95,10 @@ public class DiagramOutlinePage extends org.eclipse.ui.part.Page implements ICon
 
 	private GraphicalViewer graphicalViewer;
 
-	/*** @param graphicalViewer the viewer for which the overview should be shown, may be null */
+	/***
+	 * @param graphicalViewer the viewer for which the overview should be shown, may
+	 *                        be null
+	 */
 	public DiagramOutlinePage(final GraphicalViewer graphicalViewer) {
 		this.graphicalViewer = graphicalViewer;
 	}
@@ -133,14 +136,22 @@ public class DiagramOutlinePage extends org.eclipse.ui.part.Page implements ICon
 	}
 
 	private void removeDisposeListener() {
-		if (null != graphicalViewer) {
-			getViewerControl().removeDisposeListener(disposeListener);
+		final GraphicalViewer curViewer = getGraphicalViewer();
+		if (curViewer != null) {
+			final Control viewerControl = curViewer.getControl();
+			if (viewerControl != null) {
+				viewerControl.removeDisposeListener(disposeListener);
+			}
 		}
 	}
 
-	/** allows to change the content of the outline for a given editor (e.g., multipage editor)
+	/**
+	 * allows to change the content of the outline for a given editor (e.g.,
+	 * multipage editor)
 	 *
-	 * @param graphicalViewer the new graphical viewer for which content should be shown in the outline */
+	 * @param graphicalViewer the new graphical viewer for which content should be
+	 *                        shown in the outline
+	 */
 	public void viewerChanged(final GraphicalViewer graphicalViewer) {
 		removeThumbnail();
 		removeDisposeListener();
@@ -220,7 +231,8 @@ public class DiagramOutlinePage extends org.eclipse.ui.part.Page implements ICon
 	private static IFigure getSourceFigure(final Viewport viewport) {
 		final IFigure contents = viewport.getContents();
 		if (contents instanceof BackgroundFreeformFigure) {
-			// if we have a BackgroundFreeformFigure we only want to show the content area of that
+			// if we have a BackgroundFreeformFigure we only want to show the content area
+			// of that
 			return contents.getChildren().get(0);
 		}
 		return contents;

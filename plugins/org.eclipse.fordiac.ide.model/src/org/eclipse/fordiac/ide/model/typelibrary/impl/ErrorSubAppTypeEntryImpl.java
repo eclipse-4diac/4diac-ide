@@ -12,8 +12,14 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 public class ErrorSubAppTypeEntryImpl extends SubAppTypeEntryImpl implements ErrorTypeEntry {
-	// marker class
+
+	@Override
+	public InterfaceList getInterface() {
+		return LibraryElementFactory.eINSTANCE.createInterfaceList();
+	}
 }

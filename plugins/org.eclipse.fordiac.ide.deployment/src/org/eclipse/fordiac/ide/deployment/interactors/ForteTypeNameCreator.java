@@ -22,8 +22,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class ForteTypeNameCreator {
+
+	public static String getForteTypeName(final TypeEntry entry) {
+		return convertFullTypeNameToFORTE(entry.getFullTypeName());
+	}
 
 	public static String getForteTypeName(final FBNetworkElement fb) {
 		if (fb != null && fb.getTypeEntry() != null) {
@@ -64,7 +69,7 @@ public class ForteTypeNameCreator {
 	}
 
 	private static String convertFullTypeNameToFORTE(final String fullTypeName) {
-		return fullTypeName.replace(':', '_');
+		return fullTypeName;
 	}
 
 	private ForteTypeNameCreator() {

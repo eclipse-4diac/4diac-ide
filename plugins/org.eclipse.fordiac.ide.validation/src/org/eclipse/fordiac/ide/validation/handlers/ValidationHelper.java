@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Sandor Bacsi
- *               2021 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Sandor Bacsi, Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -49,8 +50,8 @@ import org.eclipse.ocl.expressions.Variable;
 
 public final class ValidationHelper {
 
-
 	private static class OCLJob extends Job {
+		private static final String ECC = "ECC"; //$NON-NLS-1$
 		private final INamedElement namedElement;
 
 		public OCLJob(final String JobName, final INamedElement namedElement) {
@@ -73,7 +74,6 @@ public final class ValidationHelper {
 
 			final IResource iresource = getFile(namedElement);
 			clearErrorMarkers(iresource);
-
 
 			for (final TreeIterator<?> iterator = namedElement.eAllContents(); iterator.hasNext();) {
 				final EObject object = (EObject) iterator.next();
@@ -133,21 +133,16 @@ public final class ValidationHelper {
 		}
 
 		private static IResource getFile(final INamedElement element) {
-			if (element instanceof FBType) {
-				return ((FBType) element).getTypeEntry().getFile();
+			if (element instanceof final FBType fbtype) {
+				return fbtype.getTypeEntry().getFile();
 			}
-
-			if (element instanceof Application || element instanceof SubApp) {
-				return ((Application) element).getAutomationSystem().getTypeEntry().getFile();
-			}
-			return null;
+			return ModelHelper.getFileFromContext(element);
 		}
 
 		private static String createHierarchicalName(final EObject object) {
 			// We have to cover all possible context of the constraints
-			if (object instanceof VarDeclaration) {
-				final VarDeclaration varDeclaration = (VarDeclaration) object;
-				final FBNetworkElement element = varDeclaration.getFBNetworkElement();
+			if (object instanceof final VarDeclaration varDeclaration) {
+				final FBNetworkElement element = varDeclaration.getBlockFBNetworkElement();
 				final EObject runner = element.getFbNetwork().eContainer();
 				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
 				builder.append('.');
@@ -155,27 +150,27 @@ public final class ValidationHelper {
 				builder.append('.');
 				builder.append(varDeclaration.getName());
 				return builder.toString();
-			} else if (object instanceof Connection) {
-				final StringBuilder builder = new StringBuilder(
-						createHierarchicalName(((Connection) object).getSource()));
+			}
+			if (object instanceof final Connection conn) {
+				final StringBuilder builder = new StringBuilder(createHierarchicalName(conn.getSource()));
 				builder.append(" -> "); //$NON-NLS-1$
-				builder.append(createHierarchicalName(((Connection) object).getDestination()));
+				builder.append(createHierarchicalName(conn.getDestination()));
 				return builder.toString();
-			} else if (object instanceof FBNetwork) {
-				final FBNetwork element = (FBNetwork) object;
+			}
+			if (object instanceof final FBNetwork element) {
 				final EObject runner = element.eContainer();
 				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
 				return builder.toString();
-			} else if (object instanceof FBNetworkElement) {
-				final FBNetworkElement element = (FBNetworkElement) object;
+			}
+			if (object instanceof final FBNetworkElement element) {
 				final EObject runner = element.getFbNetwork().eContainer();
 				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
 				builder.append('.');
 				builder.append(element.getName());
 				return builder.toString();
-			} else if (object instanceof Event) {
-				final Event event = (Event) object;
-				final FBNetworkElement element = event.getFBNetworkElement();
+			}
+			if (object instanceof final Event event) {
+				final FBNetworkElement element = event.getBlockFBNetworkElement();
 				final EObject runner = element.getFbNetwork().eContainer();
 				final StringBuilder builder = new StringBuilder(getApplicationHierarchy(runner));
 				builder.append('.');
@@ -183,44 +178,43 @@ public final class ValidationHelper {
 				builder.append('.');
 				builder.append(event.getName());
 				return builder.toString();
-			} else if (object instanceof ECState) {
-				final ECState state = (ECState) object;
-				final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
+			}
+			if (object instanceof final ECState state) {
+				final StringBuilder builder = new StringBuilder(ECC);
 				builder.append('.');
 				builder.append(state.getName());
 				return builder.toString();
-			} else if (object instanceof ECC) {
-				final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
-				return builder.toString();
-			} else if (object instanceof ECTransition) {
-				final ECTransition transition = (ECTransition) object;
-				final StringBuilder builder = new StringBuilder("ECC"); //$NON-NLS-1$
+			}
+			if (object instanceof ECC) {
+				return ECC;
+			}
+			if (object instanceof final ECTransition transition) {
+				final StringBuilder builder = new StringBuilder(ECC);
 				builder.append('.');
 				builder.append(
 						"Transition X:" + transition.getPosition().getX() + " Y:" + transition.getPosition().getY()); //$NON-NLS-1$ //$NON-NLS-2$
 				return builder.toString();
-			} else if (object == null) {
-				return "NULL"; //$NON-NLS-1$
-			} else {
-				return object.toString();
 			}
+			if (object == null) {
+				return "NULL"; //$NON-NLS-1$
+			}
+			return object.toString();
 		}
 
 		private static String getApplicationHierarchy(EObject runner) {
 			final StringBuilder builder = new StringBuilder();
-			while (runner instanceof SubApp) {
-				final SubApp parent = (SubApp) runner;
+			while (runner instanceof final SubApp parent) {
 				builder.insert(0, '.');
 				builder.insert(0, parent.getName());
 				runner = parent.getFbNetwork().eContainer();
 			}
-			if (runner instanceof Application) {
+			if (runner instanceof final Application app) {
 				builder.insert(0, '.');
-				builder.insert(0, ((Application) runner).getName());
+				builder.insert(0, app.getName());
 			}
 			int lastIndex = builder.length();
 			lastIndex = lastIndex == 0 ? 0 : lastIndex - 1;
-			if (builder.length() > 0 && builder.charAt(lastIndex) == '.') {
+			if (!builder.isEmpty() && builder.charAt(lastIndex) == '.') {
 				builder.deleteCharAt(lastIndex);
 			}
 			return builder.toString();

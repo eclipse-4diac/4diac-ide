@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,7 +37,7 @@ public final class CommentHelper {
 
 	public static String getTypeComment(final IInterfaceElement interfaceElement) {
 		if (interfaceElement != null) {
-			final FBNetworkElement fbn = interfaceElement.getFBNetworkElement();
+			final FBNetworkElement fbn = interfaceElement.getBlockFBNetworkElement();
 			if (fbn instanceof final StructManipulator structManipulator
 					&& structManipulator.getDataType() instanceof final StructuredType struct) {
 				final VarDeclaration structMember = struct.getMemberVariables().stream()
@@ -46,13 +46,12 @@ public final class CommentHelper {
 					return structMember.getComment();
 				}
 			}
-			if (fbn != null && fbn.getType() != null) {
-				final IInterfaceElement typeElement = fbn.getType().getInterfaceList()
-						.getInterfaceElement(interfaceElement.getName());
-				if (typeElement != null && typeElement.getComment() != null) {
-					return typeElement.getComment();
-				}
+
+			final IInterfaceElement typeElement = interfaceElement.findInTypeInterface();
+			if (typeElement != null && typeElement.getComment() != null) {
+				return typeElement.getComment();
 			}
+
 		}
 		return ""; //$NON-NLS-1$
 	}

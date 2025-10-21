@@ -113,6 +113,9 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		if (container != null) {
 			userData.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
 			userData.put(CONTAINMENT_FEATURE_NAME, eObject.eContainmentFeature().getName());
+		} else {
+			userData.put(CONTAINER_ECLASS_NAME, ""); //$NON-NLS-1$
+			userData.put(CONTAINMENT_FEATURE_NAME, ""); //$NON-NLS-1$
 		}
 		if (eObject instanceof final ICallable callable) {
 			userData.put(SIGNATURE_HASH, computeSignatureHash(callable));
@@ -175,7 +178,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		return ""; //$NON-NLS-1$
 	}
 
-	protected static String getCallableParameterTypeDefaultValue(final INamedElement type) {
+	protected static String getCallableParameterTypeDefaultValue(final LibraryElement type) {
 		if (type instanceof AnyDerivedType) {
 			return "VAR"; //$NON-NLS-1$
 		}
@@ -225,7 +228,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 			builder.append(s);
 		}
 
-		public SignatureHashBuilder appendType(final INamedElement type) {
+		public SignatureHashBuilder appendType(final LibraryElement type) {
 			if (type != null) {
 				append(EcoreUtil.getURI(type).toString());
 			}

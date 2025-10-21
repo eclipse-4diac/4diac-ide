@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -119,6 +120,11 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseFunctionFBTypeRuntime(FunctionFBTypeRuntime object) {
 			return createFunctionFBTypeRuntimeAdapter();
+		}
+
+		@Override
+		public Adapter caseCompositeFBTypeRuntime(CompositeFBTypeRuntime object) {
+			return createCompositeFBTypeRuntimeAdapter();
 		}
 
 		@Override
@@ -271,6 +277,22 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFunctionFBTypeRuntimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime
+	 * <em>Composite FB Type Runtime</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime
+	 * @generated
+	 */
+	public Adapter createCompositeFBTypeRuntimeAdapter() {
 		return null;
 	}
 

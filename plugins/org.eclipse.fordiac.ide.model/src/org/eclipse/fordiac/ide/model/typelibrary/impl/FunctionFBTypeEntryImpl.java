@@ -15,14 +15,14 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.FCTExporter;
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FCTImporter;
+import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<FunctionFBType>
+public class FunctionFBTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<FunctionFBType>
 		implements FunctionFBTypeEntry {
 
 	public FunctionFBTypeEntryImpl() {
@@ -30,7 +30,7 @@ public class FunctionFBTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Functi
 	}
 
 	@Override
-	protected CommonElementImporter getImporter() {
+	protected BlockTypeImporter getImporter() {
 		return new FCTImporter(getFile());
 	}
 

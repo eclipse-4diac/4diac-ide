@@ -91,6 +91,18 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 	}
 
 	@Override
+	public void completeSTVarDeclaration_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor, this::isVisible);
+	}
+
+	@Override
+	public void completeSTTypeDeclaration_Type(final EObject model, final Assignment assignment,
+			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
+		lookupCrossReference((CrossReference) assignment.getTerminal(), context, acceptor, this::isVisible);
+	}
+
+	@Override
 	public void completeSTImport_ImportedNamespace(final EObject model, final Assignment assignment,
 			final ContentAssistContext context, final ICompletionProposalAcceptor acceptor) {
 		createReferenceImportProposals(model, context, acceptor);
@@ -99,9 +111,19 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 
 	protected boolean isVisible(final IEObjectDescription description) {
 		return description.getName().getSegmentCount() == 1
-				|| LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
+				|| (LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
+						&& isGlobalLibraryElement(description))
 				|| (STCorePackage.eINSTANCE.getSTVarDeclaration().equals(description.getEClass())
 						&& isGlobalVariable(description));
+	}
+
+	protected static boolean isGlobalLibraryElement(final IEObjectDescription description) {
+		final String containerEClassName = description
+				.getUserData(STCoreResourceDescriptionStrategy.CONTAINER_ECLASS_NAME);
+		if (containerEClassName != null) {
+			return containerEClassName.isEmpty();
+		}
+		return description.getEObjectOrProxy().eContainer() == null;
 	}
 
 	protected static boolean isGlobalVariable(final IEObjectDescription description) {
@@ -341,7 +363,7 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 			return description != null && description.getEClass() != null
 			// library element with package (more than one segment)
 					&& ((LibraryElementPackage.eINSTANCE.getLibraryElement().isSuperTypeOf(description.getEClass())
-							&& description.getName().getSegmentCount() > 1)
+							&& description.getName().getSegmentCount() > 1 && isGlobalLibraryElement(description))
 							// global constant with package on enclosing type (more than two segments)
 							|| (isGlobalVariable(description) && description.getName().getSegmentCount() > 2));
 		}

@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -58,15 +57,14 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitAndCleanList(final String text, final String separator) {
+		return splitAndCleanList(text, separator, 0);
+	}
+
+	private static List<String> splitAndCleanList(final String text, final String separator, final int limit) {
 		if (text == null) {
 			return Collections.emptyList();
 		}
-		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank()).map(String::strip)
-				.map(ServiceSequenceUtils::removeSemicolon).toList();
-	}
-
-	private static String removeSemicolon(final String s) {
-		return s.replace(PARAMETER_SEPARATOR, " "); //$NON-NLS-1$
+		return Arrays.stream(text.split(separator, limit)).filter(s -> !s.isBlank()).map(String::strip).toList();
 	}
 
 	public static List<String> splitList(final String parameters) {
@@ -82,7 +80,7 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<String> splitParameter(final String parameter) {
-		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR);
+		return splitAndCleanList(parameter, ASSIGNMENT_OPERATOR, 2);
 	}
 
 	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
@@ -118,7 +116,7 @@ public final class ServiceSequenceUtils {
 		final List<OutputPrimitive> ops = new ArrayList<>();
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			final FBType typeInterface = seq.getService().getFBType();
-			final FBType typeRuntime = getFbTypeFromRuntime(outputEvent);
+			final FBType typeRuntime = outputEvent.getFbRuntime().getModel();
 			if (typeInterface != null && typeRuntime != null) {
 				ops.add(ServiceFactory.createOutputPrimitiveFrom(typeInterface.getService().getLeftInterface(),
 						outputEvent.getEvent(), typeRuntime.getInterfaceList().getOutputVars()));
@@ -134,14 +132,6 @@ public final class ServiceSequenceUtils {
 		for (int i = 0; i < parameter.size(); i++) {
 			seq.getServiceTransaction().get(i).getInputPrimitive().setParameters(parameter.get(i));
 		}
-	}
-
-	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {
-		final EObject type = eo.getFbRuntime().getModel();
-		if (type instanceof final FBType fbtype) {
-			return fbtype;
-		}
-		return null;
 	}
 
 	public static List<Event> getEvents(final FBType type, final List<String> eventNames) {

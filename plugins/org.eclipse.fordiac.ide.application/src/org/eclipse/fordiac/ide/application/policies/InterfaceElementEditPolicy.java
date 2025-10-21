@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH
  *
@@ -125,12 +125,12 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			if (srcParent == dstParent) {
 				return checkParentInSameNetwork(source, destination, parent, srcParent);
 			}
-			if ((source.getFBNetworkElement() instanceof final SubApp subapp)
+			if ((source.getBlockFBNetworkElement() instanceof final SubApp subapp)
 					&& (subapp.getSubAppNetwork() == dstParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return dstParent;
 			}
-			if ((destination.getFBNetworkElement() instanceof final SubApp subapp)
+			if ((destination.getBlockFBNetworkElement() instanceof final SubApp subapp)
 					&& (subapp.getSubAppNetwork() == srcParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return srcParent;
@@ -141,8 +141,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	private static FBNetwork checkParentInSameNetwork(final IInterfaceElement src, final IInterfaceElement dest,
 			final FBNetwork parent, final FBNetwork srcParent) {
-		if (src.getFBNetworkElement() instanceof final SubApp srcSubApp
-				&& dest.getFBNetworkElement() instanceof final SubApp destSubApp && srcSubApp == destSubApp
+		if (src.getBlockFBNetworkElement() instanceof final SubApp srcSubApp
+				&& dest.getBlockFBNetworkElement() instanceof final SubApp destSubApp && srcSubApp == destSubApp
 				&& !srcSubApp.isTyped() && srcSubApp.getSubAppNetwork() != parent) {
 			// we have a connection request for a pin to pin untyped expanded subapp
 			// connection
@@ -157,7 +157,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		if (srcParent == parent) {
 			return parent;
 		}
-		if ((src.getFBNetworkElement() instanceof final SubApp subApp) && (subApp.getSubAppNetwork() == parent)) {
+		if ((src.getBlockFBNetworkElement() instanceof final SubApp subApp) && (subApp.getSubAppNetwork() == parent)) {
 			// we have a subapp pin to pin connection inside of a subapp
 			return parent;
 		}
@@ -167,8 +167,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	private static FBNetwork getFBNetwork4Pin(final IInterfaceElement pin) {
 		if (pin != null) {
-			if (pin.getFBNetworkElement() != null) {
-				return pin.getFBNetworkElement().getFbNetwork();
+			if (pin.getBlockFBNetworkElement() != null) {
+				return pin.getBlockFBNetworkElement().getFbNetwork();
 			}
 			if (pin.eContainer().eContainer() instanceof final CompositeFBType cfbType) {
 				return cfbType.getFBNetwork();
@@ -180,7 +180,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	@Override
 	protected ConnectionAnchor getSourceConnectionAnchor(final CreateConnectionRequest request) {
 		final IInterfaceElement ie = getHost().getModel();
-		if (ie.isIsInput() && ie.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
+		if (ie.isIsInput() && ie.getBlockFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded()) {
 			// we are unfolded and this is an internal connection
 			return new FixedAnchor(getHostFigure(), false);
 		}

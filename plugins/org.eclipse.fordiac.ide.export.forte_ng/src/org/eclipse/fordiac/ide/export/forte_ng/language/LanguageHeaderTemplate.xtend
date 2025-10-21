@@ -52,12 +52,10 @@ class LanguageHeaderTemplate extends ForteNgExportTemplate {
 	'''
 
 	def protected generateIncludeGuardStart() '''
-		#ifndef _«fileBasename.toUpperCase»_H_
-		#define _«fileBasename.toUpperCase»_H_
+		#pragma once
 	'''
 
 	def protected generateIncludeGuardEnd() '''
-		#endif // _«fileBasename.toUpperCase»_H_
 	'''
 
 	def protected generateHeaderIncludes() '''

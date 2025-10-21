@@ -93,6 +93,9 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 
 		if (choices.keySet().stream().filter(TableItem::getChecked).toList().isEmpty()) {
 			choices.firstEntry().getKey().setChecked(true);
+			final ChangeState cs = choices.firstEntry().getValue();
+			change.addState(cs);
+			change.getState().removeIf(state -> !state.equals(cs));
 		}
 
 	}
@@ -100,11 +103,9 @@ public class ChangeConfigurationViewer implements IChangePreviewViewer {
 	private void initializeChoices(final ChangePreviewViewerInput input) {
 		if (input.getChange() instanceof final IFordiacPreviewChange previewChange) {
 			previewChange.getAllowedChoices().forEach(s -> {
-				if (!s.equals(ChangeState.NO_CHANGE)) { // no change should not be selectable by the User
-					final TableItem ti = new TableItem(table, SWT.NONE);
-					ti.setText(s.toString());
-					choices.put(ti, s);
-				}
+				final TableItem ti = new TableItem(table, SWT.NONE);
+				ti.setText(s.toString());
+				choices.put(ti, s);
 			});
 		}
 

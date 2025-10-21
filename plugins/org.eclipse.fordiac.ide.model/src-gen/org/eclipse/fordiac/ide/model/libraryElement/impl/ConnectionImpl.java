@@ -24,10 +24,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -403,8 +403,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getSourceElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);
+	public BlockFBNetworkElement getSourceElement() {
+		return ConnectionAnnotations.getSourceElement(this);
 	}
 
 	/**
@@ -413,8 +413,8 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	 * @generated
 	 */
 	@Override
-	public FBNetworkElement getDestinationElement() {
-		return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);
+	public BlockFBNetworkElement getDestinationElement() {
+		return ConnectionAnnotations.getDestinationElement(this);
 	}
 
 	/**

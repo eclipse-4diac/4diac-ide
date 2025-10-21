@@ -14,17 +14,15 @@
 package org.eclipse.fordiac.ide.contractSpec.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.contractSpec.ContractSpecPackage;
 import org.eclipse.fordiac.ide.contractSpec.TimeExpr;
-import org.eclipse.fordiac.ide.contractSpec.Value;
+import org.eclipse.fordiac.ide.contractSpec.Unit;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,14 +41,24 @@ import org.eclipse.fordiac.ide.contractSpec.Value;
 public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeExpr
 {
   /**
-   * The cached value of the '{@link #getValue() <em>Value</em>}' containment reference.
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getValue()
    * @generated
    * @ordered
    */
-  protected Value value;
+  protected static final double VALUE_EDEFAULT = 0.0;
+
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected double value = VALUE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
@@ -60,7 +68,7 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * @generated
    * @ordered
    */
-  protected static final String UNIT_EDEFAULT = null;
+  protected static final Unit UNIT_EDEFAULT = Unit.S;
 
   /**
    * The cached value of the '{@link #getUnit() <em>Unit</em>}' attribute.
@@ -70,7 +78,7 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * @generated
    * @ordered
    */
-  protected String unit = UNIT_EDEFAULT;
+  protected Unit unit = UNIT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -99,7 +107,7 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * @generated
    */
   @Override
-  public Value getValue()
+  public double getValue()
   {
     return value;
   }
@@ -109,16 +117,13 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetValue(Value newValue, NotificationChain msgs)
+  @Override
+  public void setValue(double newValue)
   {
-    Value oldValue = value;
+    double oldValue = value;
     value = newValue;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.TIME_EXPR__VALUE, oldValue, newValue);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.TIME_EXPR__VALUE, oldValue, value));
   }
 
   /**
@@ -127,29 +132,7 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * @generated
    */
   @Override
-  public void setValue(Value newValue)
-  {
-    if (newValue != value)
-    {
-      NotificationChain msgs = null;
-      if (value != null)
-        msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.TIME_EXPR__VALUE, null, msgs);
-      if (newValue != null)
-        msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.TIME_EXPR__VALUE, null, msgs);
-      msgs = basicSetValue(newValue, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.TIME_EXPR__VALUE, newValue, newValue));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String getUnit()
+  public Unit getUnit()
   {
     return unit;
   }
@@ -160,28 +143,12 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
    * @generated
    */
   @Override
-  public void setUnit(String newUnit)
+  public void setUnit(Unit newUnit)
   {
-    String oldUnit = unit;
-    unit = newUnit;
+    Unit oldUnit = unit;
+    unit = newUnit == null ? UNIT_EDEFAULT : newUnit;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.TIME_EXPR__UNIT, oldUnit, unit));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
-  {
-    switch (featureID)
-    {
-      case ContractSpecPackage.TIME_EXPR__VALUE:
-        return basicSetValue(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
@@ -213,10 +180,10 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
     switch (featureID)
     {
       case ContractSpecPackage.TIME_EXPR__VALUE:
-        setValue((Value)newValue);
+        setValue((Double)newValue);
         return;
       case ContractSpecPackage.TIME_EXPR__UNIT:
-        setUnit((String)newValue);
+        setUnit((Unit)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -233,7 +200,7 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
     switch (featureID)
     {
       case ContractSpecPackage.TIME_EXPR__VALUE:
-        setValue((Value)null);
+        setValue(VALUE_EDEFAULT);
         return;
       case ContractSpecPackage.TIME_EXPR__UNIT:
         setUnit(UNIT_EDEFAULT);
@@ -253,9 +220,9 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
     switch (featureID)
     {
       case ContractSpecPackage.TIME_EXPR__VALUE:
-        return value != null;
+        return value != VALUE_EDEFAULT;
       case ContractSpecPackage.TIME_EXPR__UNIT:
-        return UNIT_EDEFAULT == null ? unit != null : !UNIT_EDEFAULT.equals(unit);
+        return unit != UNIT_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -271,7 +238,9 @@ public class TimeExprImpl extends MinimalEObjectImpl.Container implements TimeEx
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (unit: ");
+    result.append(" (value: ");
+    result.append(value);
+    result.append(", unit: ");
     result.append(unit);
     result.append(')');
     return result.toString();

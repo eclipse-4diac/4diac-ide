@@ -25,7 +25,6 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -97,12 +96,6 @@ final class InterfaceListAnnotations {
 		}
 
 		return element;
-	}
-
-	public static FBNetworkElement getFBNetworkElement(final InterfaceList il) {
-		// an FB should mostly in an FBNetworkElement otherwise it is in CFB interface
-		// this is at the same time also a null check
-		return (il.eContainer() instanceof final FBNetworkElement fbnEl) ? fbnEl : null;
 	}
 
 	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {

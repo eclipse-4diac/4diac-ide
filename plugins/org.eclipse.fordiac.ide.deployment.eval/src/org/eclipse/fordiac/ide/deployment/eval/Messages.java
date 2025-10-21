@@ -20,8 +20,17 @@ public class Messages extends NLS {
 	public static String DeploymentEvaluatorTraceProxy_ConnectionClosed;
 	public static String DeploymentEvaluatorTraceProxy_ConnectionOpened;
 	public static String DeploymentFBEvaluator_CannotAddWatch;
-	public static String DeploymentFBEvaluator_InvalidEventCounter;
-	public static String DeploymentFBEvaluator_NoSuchInstanceEvent;
+	public static String DeploymentFBEvaluator_CannotRemoveWatch;
+	public static String DeploymentFBEvaluator_CannotTriggerEvent;
+	public static String DeploymentFBEvaluator_CannotWriteValue;
+	public static String DeploymentFBNetworkElementEvaluator_InvalidWatchValue;
+	public static String DeploymentFBNetworkElementEvaluator_NoSuchInstanceEvent;
+	public static String DeploymentFBNetworkElementEvaluator_NoSuchTypeEvent;
+	public static String DeploymentFBNetworkElementEvaluator_NoWatchValue;
+	public static String DeploymentSubAppEvaluator_CannotAddWatch;
+	public static String DeploymentSubAppEvaluator_CannotRemoveWatch;
+	public static String DeploymentSubAppEvaluator_CannotTriggerEvent;
+	public static String DeploymentSubAppEvaluator_CannotWriteValue;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

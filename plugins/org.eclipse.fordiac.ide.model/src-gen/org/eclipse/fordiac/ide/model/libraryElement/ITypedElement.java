@@ -37,7 +37,7 @@ public interface ITypedElement extends INamedElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	INamedElement getType();
+	LibraryElement getType();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -197,25 +197,6 @@ public final class TypeLibrary {
 		return fileMap.get(typeFile);
 	}
 
-	public void reload() {
-		adapterTypes.clear();
-		attributeTypes.clear();
-		deviceTypes.clear();
-		fbTypes.clear();
-		resourceTypes.clear();
-		segmentTypes.clear();
-		subAppTypes.clear();
-		systems.clear();
-		globalConstants.clear();
-		dataTypeLib.clear();
-		programTypes.clear();
-		fileMap.clear();
-		packages.clear();
-		deleteTypeLibraryMarkers(project);
-		buildpath = BuildpathUtil.loadBuildpath(project);
-		checkAdditions(project);
-	}
-
 	public DataTypeLibrary getDataTypeLibrary() {
 		return dataTypeLib;
 	}
@@ -238,19 +219,24 @@ public final class TypeLibrary {
 	}
 
 	public TypeEntry createTypeEntry(final IFile file) {
-		if (BuildpathUtil.findSourceFolder(buildpath, file).isEmpty()) {
+		if (file == null || BuildpathUtil.findSourceFolder(buildpath, file).isEmpty()) {
 			return null;
 		}
-		final TypeEntry entry = fileMap.computeIfAbsent(file, TypeEntryFactory.INSTANCE::createTypeEntry);
-		if (entry != null) {
-			final Optional<String> message = IdentifierVerifier.verifyIdentifier(entry.getTypeName());
-			if (message.isEmpty()) {
-				addTypeEntry(entry);
-			} else {
+
+		return fileMap.computeIfAbsent(file, f -> {
+			final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
+			if (entry != null) {
+				final Optional<String> message = IdentifierVerifier.verifyIdentifier(entry.getTypeName());
+				if (message.isEmpty()) {
+					// add is adding the entry to file map and all other containers required
+					entry.setTypeLibrary(this);
+					addTypeEntryNameReference(entry);
+					return entry;
+				}
 				createTypeLibraryMarker(file, message.get());
 			}
-		}
-		return entry;
+			return null;
+		});
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {

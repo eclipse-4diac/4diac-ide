@@ -63,7 +63,8 @@ public final class LibraryElementTags {
 	public static final String ADAPTERCONNECTIONS_ELEMENT = "AdapterConnections"; //$NON-NLS-1$
 	public static final String DATA_CONNECTIONS_ELEMENT = "DataConnections"; //$NON-NLS-1$
 	public static final String EVENT_CONNECTIONS_ELEMENT = "EventConnections"; //$NON-NLS-1$
-	public static final String RETAIN_ATTRIBUTE = "Retain";
+	public static final String RETAIN_ATTRIBUTE = "Retain"; //$NON-NLS-1$
+	public static final String INHERIT_ATTRIBUTE = "INHERIT"; //$NON-NLS-1$
 
 	public static final String INTERNAL_VARS_ELEMENT = "InternalVars"; //$NON-NLS-1$
 	public static final String INTERNAL_CONST_VARS_ELEMENT = "InternalConstVars"; //$NON-NLS-1$
@@ -106,8 +107,8 @@ public final class LibraryElementTags {
 
 	public static final String FB_ELEMENT = "FB"; //$NON-NLS-1$
 	public static final String GROUP_ELEMENT = "Group"; //$NON-NLS-1$
-	public static final String GROUP_NAME = "GroupName"; ////$NON-NLS-1$
-	public static final String PIN_COMMENT = "PinComment"; ////$NON-NLS-1$
+	public static final String GROUP_NAME = "GroupName"; //$NON-NLS-1$
+	public static final String PIN_COMMENT = "PinComment"; //$NON-NLS-1$
 	public static final String FBNETWORK_ELEMENT = "FBNetwork"; //$NON-NLS-1$
 	public static final String BASIC_F_B_ELEMENT = "BasicFB"; //$NON-NLS-1$
 	public static final String SIMPLE_F_B_ELEMENT = "SimpleFB"; //$NON-NLS-1$

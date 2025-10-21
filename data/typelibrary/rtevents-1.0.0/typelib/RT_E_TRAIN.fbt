@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+
 <FBType Comment="Generation of a finite train of events" Name="RT_E_TRAIN">
   <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
@@ -50,4 +50,5 @@
       <Connection Comment="" Destination="RT_E_CYCLE.STOP" Source="E_SWITCH.EO1" dx1="345.0" dx2="-285.0" dy="-715.0"/>
     </EventConnections>
   </FBNetwork>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -17,11 +17,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.filters.AttributeFilter;
 import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
@@ -29,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
@@ -37,13 +41,16 @@ import org.eclipse.fordiac.ide.model.data.InternalDataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
@@ -52,6 +59,8 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -68,9 +77,14 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.data.validate.IDataValidator;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
+import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
+import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
+import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -99,6 +113,10 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 		provider = new ChangeableListDataProvider<>(new AttributeColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
+
+		dataLayer.unregisterCommandHandler(UpdateDataCommand.class);
+		dataLayer.registerCommandHandler(new AttributeUpdateDataCommandHandler(dataLayer));
+
 		dataLayer.setConfigLabelAccumulator(new AttributeConfigLabelAccumulator(provider, this::getAnnotationModel));
 		final NatTableColumnProvider<AttributeTableColumn> columnProvider = new NatTableColumnProvider<>(
 				AttributeTableColumn.DEFAULT_COLUMNS);
@@ -129,6 +147,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, attributeNameCellEditor,
 						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
+				configRegistry.registerConfigAttribute(EditConfigAttributes.DATA_VALIDATOR, attributeNameValidator,
+						DisplayMode.EDIT, NatTableWidgetFactory.ATTRIBUTE_PROPOSAL_CELL);
 			}
 		});
 
@@ -147,8 +167,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	private boolean isTypeEditable() {
 		final ConfigurableObject type = getType();
 		return !(type instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance()
-				|| (type instanceof final IInterfaceElement ie && ie.getFBNetworkElement() != null
-						&& ie.getFBNetworkElement().isContainedInTypedInstance())
+				|| (type instanceof final IInterfaceElement ie && ie.getBlockFBNetworkElement() != null
+						&& ie.getBlockFBNetworkElement().isContainedInTypedInstance())
 				|| (type instanceof final Connection conn && FBNetworkElementHelper.isContainedInTypedInstance(conn)));
 	}
 
@@ -178,12 +198,36 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 
 	private List<Attribute> getFilteredAttributeList() {
 		final ConfigurableObject confObject = getType();
-		return confObject != null
+		List<Attribute> filteredList = confObject != null
 				? confObject.getAttributes().stream()
 						.filter(att -> !(att.getType() instanceof InternalDataType)
 								&& !InternalAttributeDeclarations.isInternalAttribute(att.getAttributeDeclaration()))
 						.toList()
 				: Collections.emptyList();
+
+		final ConfigurableObject original = getTypeElement(confObject);
+		if (original != null) {
+			final var copiedInheritAttributes = EcoreUtil
+					.copyAll(AttributeInheritMode.getInheritAttributes(confObject, original.getAttributes()));
+			if (!copiedInheritAttributes.isEmpty()) {
+				filteredList = new ArrayList<>(filteredList);
+				filteredList.addAll(copiedInheritAttributes);
+			}
+		}
+		return filteredList;
+	}
+
+	private ConfigurableObject getTypeElement(final ConfigurableObject copy) {
+		if (copy instanceof final TypedConfigureableObject typedConfigObject
+				&& typedConfigObject.getTypeEntry() != null) {
+			return typedConfigObject.getTypeEntry().getType();
+		}
+		if (copy instanceof final IInterfaceElement interfaceElement
+				&& getTypeElement(interfaceElement.getBlockFBNetworkElement()) instanceof final FBType fbType) {
+			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
+		}
+
+		return null;
 	}
 
 	@Override
@@ -247,9 +291,72 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 	}
 
+	public static boolean isInternalAttribute(final String name) {
+		return InternalAttributeDeclarations.getInternalAttributeByName(name) != null;
+	}
+
+	private final IDataValidator attributeNameValidator = new IDataValidator() {
+		@Override
+		public boolean validate(final int columnIndex, final int rowIndex, final Object newValue) {
+			if (!(newValue instanceof final String name)) {
+				return true;
+			}
+
+			if (isInternalAttribute(name)) {
+				ErrorMessenger
+						.popUpErrorMessage(MessageFormat.format(Messages.AttributeSection_NameReservedKeyWord, name));
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean validate(final ILayerCell cell, final IConfigRegistry configRegistry, final Object newValue) {
+			return validate(cell.getColumnIndex(), cell.getRowIndex(), newValue);
+		}
+	};
+
 	@Override
 	protected ConfigurableObject getType() {
 		return type instanceof final ConfigurableObject configurableObject ? configurableObject : null;
+	}
+
+	protected class AttributeUpdateDataCommandHandler extends UpdateDataCommandHandler {
+		private final DataLayer dataLayer;
+
+		public AttributeUpdateDataCommandHandler(final DataLayer dataLayer) {
+			super(dataLayer);
+			this.dataLayer = dataLayer;
+		}
+
+		@Override
+		protected boolean doCommand(final UpdateDataCommand command) {
+			try {
+				final int columnPosition = command.getColumnPosition();
+				final int rowPosition = command.getRowPosition();
+
+				final Object currentValue = dataLayer.getDataValueByPosition(columnPosition, rowPosition);
+				final Object newValue = command.getNewValue();
+
+				if ((currentValue == null && newValue != null) || (newValue == null && currentValue != null)
+						|| (currentValue != null && !currentValue.equals(newValue))) {
+
+					final Attribute attribute = provider.getRowObject(rowPosition);
+					if (attribute.eContainer() == null) {
+						getType().getAttributes().add(attribute);
+					}
+
+					dataLayer.setDataValueByPosition(columnPosition, rowPosition, newValue);
+					dataLayer.fireLayerEvent(
+							new DataUpdateEvent(dataLayer, columnPosition, rowPosition, currentValue, newValue));
+				}
+				return true;
+			} catch (final Exception e) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.NatTable_Update_Failed, command.getNewValue()),
+						e);
+				return false;
+			}
+		}
 	}
 
 	protected class AttributeNameCellEditor extends TextCellEditor {
@@ -261,8 +368,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 
 		protected void proposalAccepted(final IContentProposal proposal) {
+			final LibraryElement libraryElement = ModelHelper.getLibraryElementFromContextChecked(getType());
 			if (proposal instanceof final ImportContentProposal importProposal
-					&& EcoreUtil.getRootContainer(getType()) instanceof final LibraryElement libraryElement
 					&& !ImportHelper.matchesImports(importProposal.getImportedNamespace(), libraryElement)) {
 				executeCommand(new AddNewImportCommand(libraryElement, importProposal.getImportedNamespace()));
 			}

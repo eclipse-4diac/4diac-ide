@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010  Profactor GmbH, TU Wien ACIN
+ * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
+ * 								   Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Sebastian Hollersbacher
+ *	  - externalized translatable strings
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -18,7 +21,7 @@ import org.eclipse.osgi.util.NLS;
 /** The Class Messages. */
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String ArrayValueConverter_IllegalElementValue;
 
@@ -27,6 +30,7 @@ public final class Messages extends NLS {
 	public static String CommonElementImporter_ERROR_DeclarationNotSet;
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
+	public static String CommonElementImporter_ReservedAttributesValidation;
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
 	public static String CompilableElementImporter_ERROR_VendorNotSet;
@@ -97,6 +101,8 @@ public final class Messages extends NLS {
 	public static String IdentifierVerifier_NameReservedKeyWord;
 	public static String IdentifierVerifier_NameTrailingUnderscore;
 	public static String IdentifierVerifier_PackageNameMessage;
+	public static String IdentifierVerifier_QualifiedNameNotValid;
+	public static String IdentifierVerifier_NotMatchingWithFilename;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;
@@ -135,6 +141,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_TypeNotSupported;
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
+	public static String VarDeclarationAnnotations_IllegalVariableLengthArray;
+
 	public static String VarDeclarationAnnotations_MultipleInputConnections;
 
 	public static String VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds;
@@ -143,6 +151,8 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;
 
+	public static String VarDeclarationAnnotations_ValueOverriddenBySubAppInput;
+
 	public static String VarDeclarationAnnotations_VarInOutLeftNotConnected;
 
 	public static String VarDeclarationAnnotations_VarInOutRightNotConnected;
@@ -150,6 +160,7 @@ public final class Messages extends NLS {
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
 
 	// === AttributeTarget Groups ===
+	public static String AttributeTarget_General_group;
 	public static String AttributeTarget_Types_group;
 	public static String AttributeTarget_Instances_group;
 	public static String AttributeTarget_InstancePins_group;

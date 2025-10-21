@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="RT_E_SELECT" Comment="Selection between two events" >
+
+<FBType Name="RT_E_SELECT" Comment="Selection between two events">
   <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
   <InterfaceList>
     <EventInputs>
-      <Event Name="INIT" >
+      <Event Name="INIT">
         <With Var="QI" />
         <With Var="Tmin" />
         <With Var="Deadline" />
         <With Var="WCET" />
       </Event>
-      <Event Name="EI0" Comment="Input event,selected when G=0" >
+      <Event Name="EI0" Comment="Input event,selected when G=0">
         <With Var="G" />
       </Event>
-      <Event Name="EI1" Comment="Input event,selected when G=1" >
+      <Event Name="EI1" Comment="Input event,selected when G=1">
         <With Var="G" />
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="INITO" >
+      <Event Name="INITO">
         <With Var="QO" />
       </Event>
-      <Event Name="EO" Comment="Output Event" >
+      <Event Name="EO" Comment="Output Event">
       </Event>
     </EventOutputs>
     <InputVars>
@@ -36,4 +36,5 @@
       <VarDeclaration Name="QO" Type="BOOL" />
     </OutputVars>
   </InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

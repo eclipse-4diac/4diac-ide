@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2014, 2016 AIT, Profactor GmbH, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2012, 2025 AIT, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,13 +10,13 @@
  *
  * Contributors:
  *   Filip Andren, Gerhard Ebenhofer, Alois Zoitl, Gerhard Ebenhofer
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked update fb type to accept also supapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -58,7 +58,7 @@ public class UpdateFBTypeAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		for (final Object selected : getSelectedObjects()) {
-			if (selected instanceof AbstractFBNElementEditPart) {
+			if (selected instanceof AbstractBlockFBNElementEditPart) {
 				return true;
 			}
 		}
@@ -74,8 +74,9 @@ public class UpdateFBTypeAction extends SelectionAction {
 	public void run() {
 		final CompoundCommand updateCmd = new CompoundCommand();
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof AbstractFBNElementEditPart) {
-				final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(((AbstractFBNElementEditPart) obj).getModel(), entry);
+			if (obj instanceof AbstractBlockFBNElementEditPart) {
+				final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(
+						((AbstractBlockFBNElementEditPart) obj).getModel(), entry);
 				if (cmd.canExecute()) {
 					updateCmd.add(cmd);
 				}

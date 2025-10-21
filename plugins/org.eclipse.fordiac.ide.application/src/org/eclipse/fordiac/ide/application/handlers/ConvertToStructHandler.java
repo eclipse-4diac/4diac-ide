@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,16 +25,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.wizards.ExtractStructTypeWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.EditPart;
@@ -63,7 +61,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 		final FBNetworkElement fb = getNetworkElementFromSelectedPins(sel);
 
 		if ((null != fb) && (null != commandStack) && !varDecls.isEmpty()) {
-			project = getProject(fb);
+			project = ModelHelper.getProjectFromContextChecked(fb);
 			// open wizard to save in struct
 			invokeSaveWizard(varDecls, editor);
 
@@ -81,14 +79,6 @@ public class ConvertToStructHandler extends AbstractHandler {
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	private static IProject getProject(final FBNetworkElement fb) {
-		final EObject root = EcoreUtil.getRootContainer(fb);
-		if (root instanceof final LibraryElement libEl) {
-			return libEl.getTypeLibrary().getProject();
-		}
-		return null;
 	}
 
 	@Override
@@ -122,7 +112,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	private static FBNetworkElement getNetworkElementFromSelectedPins(final IStructuredSelection selectedPins) {
 		for (final Object pin : selectedPins) {
 			if (pin instanceof final SubAppInternalInterfaceEditPart ep && ep.getModel() instanceof VarDeclaration) {
-				return ep.getModel().getFBNetworkElement();
+				return ep.getModel().getBlockFBNetworkElement();
 			}
 			if (pin instanceof final InterfaceEditPartForFBNetwork ep && ep.getModel() instanceof VarDeclaration) {
 				return (FBNetworkElement) ep.getParent().getModel();

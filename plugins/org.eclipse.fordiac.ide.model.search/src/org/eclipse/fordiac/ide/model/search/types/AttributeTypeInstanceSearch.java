@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,10 +20,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -69,7 +69,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			return 	obj instanceof AutomationSystem ||
 					obj instanceof Application ||
 					obj instanceof FBType ||
-					obj instanceof FBNetworkElement ||
+					obj instanceof BlockFBNetworkElement ||
 					obj instanceof StructuredType ||
 					obj instanceof AttributeDeclaration ||
 					obj instanceof DeviceType ||
@@ -92,17 +92,12 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 				stream = Stream.concat(stream, system.getSystemConfiguration().getSegments().stream());
 				yield stream;
 			}
-			case final Application application -> {
-				Stream<? extends EObject> stream = application.getFBNetwork().getNetworkElements().stream();
-				stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
-				yield stream;
-			}
+			case final Application application ->
+				SearchChildrenProviderHelper.getFBNetworkChildren(application.getFBNetwork());
 			case final FBType fbType -> SearchChildrenProviderHelper.getFBTypeChildren(fbType);
 			case final UntypedSubApp untypedSubapp ->
 				SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);
-			case final FBNetworkElement fbnElement ->
+			case final BlockFBNetworkElement fbnElement ->
 				SearchChildrenProviderHelper.getInterfaceListChildren(fbnElement.getInterface());
 			case final StructuredType structType -> SearchChildrenProviderHelper.getStructChildren(structType);
 			case final AttributeDeclaration attrdecl -> SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
@@ -117,7 +112,7 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 			case final Resource resource -> resource.getVarDeclarations().stream();
 			case final Segment segment -> segment.getVarDeclarations().stream();
 			case final GlobalConstants globalConstants -> globalConstants.getConstants().stream();
-			default -> null;
+			default -> Stream.empty();
 			};
 		}
 	}

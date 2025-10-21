@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH
@@ -71,7 +71,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
+public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart implements IContainerEditPart {
 
 	private final ExpandedInterfacePositionMap positionMap = new ExpandedInterfacePositionMap(this);
 	private InstanceContract instanceContract;
@@ -85,7 +85,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		@Override
 		public void notifyChanged(final Notification notification) {
 			if (!notification.isTouch()) {
-				Display.getDefault().execute(() -> handleRefresh(notification));
+				Display.getDefault().execute(() -> {
+					// check if editpart has not been removed in the meantime
+					if (isActive()) {
+						handleRefresh(notification);
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
@@ -113,7 +118,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				layoutExpandedInterface();
 			}
 			refreshToolTip();
-			backgroundColorChanged(getFigure());
+			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
+				updateDeviceListener();
+			}
 		}
 
 		private static boolean isUnfoldedAttribute(final Object obj) {

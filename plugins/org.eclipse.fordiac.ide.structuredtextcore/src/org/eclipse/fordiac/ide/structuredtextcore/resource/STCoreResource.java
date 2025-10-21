@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -65,13 +64,13 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 	@Inject
 	private STCoreGrammarAccess grammarAccess;
 
-	private INamedElement expectedType;
+	private LibraryElement expectedType;
 
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final Map<?, ?> actualOptions = Objects.requireNonNullElse(options, getDefaultLoadOptions());
 		if (isLoadPlainST(actualOptions, inputStream)) {
-			setExpectedType((INamedElement) actualOptions.get(OPTION_EXPECTED_TYPE));
+			setExpectedType((LibraryElement) actualOptions.get(OPTION_EXPECTED_TYPE));
 			super.doLoad(inputStream, actualOptions);
 			if (getLibraryElement() == null) {
 				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(uri);
@@ -299,23 +298,23 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 	}
 
 	@Override
-	public INamedElement getExpectedType() {
+	public LibraryElement getExpectedType() {
 		return expectedType;
 	}
 
 	@Override
-	public void setExpectedType(final INamedElement expectedType) {
+	public void setExpectedType(final LibraryElement expectedType) {
 		this.expectedType = expectedType;
 	}
 
 	@Override
-	public INamedElement getExpectedType(final STExpression expression) {
+	public LibraryElement getExpectedType(final STExpression expression) {
 		return getCache().get(Tuples.create(EXPECTED_TYPE_CACHE_KEY, expression), this,
 				() -> STCoreUtil.computeExpectedType(expression));
 	}
 
 	@Override
-	public INamedElement getExpectedType(final STInitializerExpression expression) {
+	public LibraryElement getExpectedType(final STInitializerExpression expression) {
 		return getCache().get(Tuples.create(EXPECTED_TYPE_CACHE_KEY, expression), this,
 				() -> STCoreUtil.computeExpectedType(expression));
 	}

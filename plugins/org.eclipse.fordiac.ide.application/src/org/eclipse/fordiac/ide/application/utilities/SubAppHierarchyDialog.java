@@ -26,12 +26,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -82,15 +84,11 @@ public class SubAppHierarchyDialog {
 
 				final Button expandAll = WidgetFactory.button(SWT.NONE).image(FordiacImage.ICON_EXPAND_ALL.getImage())
 						.create(buttonsComposite);
-				expandAll.addListener(SWT.Selection, event -> {
-					viewer.expandAll();
-				});
+				expandAll.addListener(SWT.Selection, event -> viewer.expandAll());
 				final Button collapseAll = WidgetFactory.button(SWT.NONE)
 						.image(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL))
 						.create(buttonsComposite);
-				collapseAll.addListener(SWT.Selection, event -> {
-					viewer.collapseAll();
-				});
+				collapseAll.addListener(SWT.Selection, event -> viewer.collapseAll());
 				return viewer;
 			}
 		};
@@ -158,15 +156,15 @@ public class SubAppHierarchyDialog {
 	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
 		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getSystem),
 				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
-		final var list = stream.toList();
-		return buildNodeList(list.stream(), Collections.emptyList());
+		return buildNodeList(stream, Collections.emptyList());
 	}
 
 	private List<TreeNode> buildNodeList(final List<FBNetworkElement> filterList) {
-		if (EcoreUtil.getRootContainer(root) instanceof final AutomationSystem automationSystem) {
+		final LibraryElement le = ModelHelper.getLibraryElementFromContextChecked(root);
+		if (le instanceof final AutomationSystem automationSystem) {
 			return buildNodeList(automationSystem.getApplication().stream(), filterList);
 		}
-		return buildNodeList(Stream.of(EcoreUtil.getRootContainer(root)), filterList);
+		return buildNodeList(Stream.of(le), filterList);
 	}
 
 	private List<TreeNode> buildNodeList(final Stream<? extends EObject> roots,

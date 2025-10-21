@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2011, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -19,7 +19,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
@@ -56,8 +55,6 @@ public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IG
 	}
 
 	void reloadType();
-
-	void setCommonCommandStack(final CommandStack commandStack);
 
 	default LibraryElement getType() {
 		if (getEditorInput() instanceof final TypeEditorInput typeEI) {

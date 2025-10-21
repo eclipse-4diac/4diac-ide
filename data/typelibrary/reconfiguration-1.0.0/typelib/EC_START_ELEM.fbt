@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+
 <FBType Comment="Starts the instance of a FB, Connection (Event/Data), Resource or Device according to the state machine of IEC 61499 FBs" Name="EC_START_ELEM">
   <Identification Classification="Reconfiguration" Function="Starts FB, Connection, Resource or Device instances" Standard="61499-1" Type="Execution Control Service" 
     Description="Copyright (c) 2012 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
@@ -74,4 +74,5 @@
       </ServiceTransaction>
     </ServiceSequence>
   </Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

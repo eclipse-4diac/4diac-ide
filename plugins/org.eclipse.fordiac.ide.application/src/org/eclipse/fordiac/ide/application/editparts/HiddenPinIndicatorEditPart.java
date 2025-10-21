@@ -65,7 +65,9 @@ public class HiddenPinIndicatorEditPart extends AbstractGraphicalEditPart {
 			r.resize(-1, -1);
 			int size = Math.min(r.height, r.width);
 			size = Math.max(size, 1); // Size cannot be negative
-			final Point head, p2, p3;
+			final Point head;
+			final Point p2;
+			final Point p3;
 			if (isInput) {
 				head = new Point(r.x, r.y);
 				p2 = new Point(head.x, head.y + size);

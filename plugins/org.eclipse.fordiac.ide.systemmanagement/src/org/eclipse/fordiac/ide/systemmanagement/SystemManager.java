@@ -25,6 +25,7 @@
 package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
+import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /**
@@ -66,6 +69,7 @@ public enum SystemManager {
 
 	public static final String FORDIAC_PROJECT_NATURE_ID = "org.eclipse.fordiac.ide.systemmanagement.FordiacNature"; //$NON-NLS-1$
 	public static final String FORDIAC_EXPORT_BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
+	public static final String FORDIAC_LIBRARY_BUILDER_ID = "org.eclipse.fordiac.ide.library.builder"; //$NON-NLS-1$
 	public static final String ROBOT_PROJECT_NATURE_ID = "org.robotframework.ide.eclipse.main.plugin.robotNature"; //$NON-NLS-1$
 	public static final String OLD_DISTRIBUTED_PROJECT_NATURE_ID = "org.fordiac.systemManagement.DistributedNature"; //$NON-NLS-1$
 
@@ -123,12 +127,10 @@ public enum SystemManager {
 
 		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
 
-		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 		project.refreshLocal(IResource.DEPTH_ONE, monitor);
 		return project;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name,
 			final IProgressMonitor monitor) throws CoreException {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
@@ -155,7 +157,6 @@ public enum SystemManager {
 		return null;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
 		SystemEntry sysEntry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
@@ -165,7 +166,6 @@ public enum SystemManager {
 		return sysEntry != null ? sysEntry.getSystem() : null;
 	}
 
-	@SuppressWarnings("static-method")
 	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().stream().map(SystemEntry::getSystem)
 				.toList();
@@ -176,7 +176,7 @@ public enum SystemManager {
 	}
 
 	private static String[] getBuilderIDs() {
-		return new String[] { XtextProjectHelper.BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
+		return new String[] { FORDIAC_LIBRARY_BUILDER_ID, XtextProjectHelper.BUILDER_ID, FORDIAC_EXPORT_BUILDER_ID };
 	}
 
 	public void removeFordiacChangeListener() {
@@ -185,6 +185,17 @@ public enum SystemManager {
 
 	public void addFordiacChangeListener() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(fordiacListener);
+	}
+
+	public static void validateProjectNature(final IProject project) {
+		try {
+			if (project.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) instanceof final FordiacNature nature) {
+				nature.validate();
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(MessageFormat
+					.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()), e);
+		}
 	}
 
 }

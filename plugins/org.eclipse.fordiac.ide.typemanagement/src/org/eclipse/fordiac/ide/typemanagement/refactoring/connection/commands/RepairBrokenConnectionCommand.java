@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,10 +24,10 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCom
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -45,6 +45,8 @@ import org.eclipse.gef.commands.CompoundCommand;
  */
 public class RepairBrokenConnectionCommand extends Command {
 
+	private static final String STRUCT_MUX_TYPE_NAME = "STRUCT_MUX"; //$NON-NLS-1$
+	private static final String STRUCT_DEMUX_TYPE_NAME = "STRUCT_DEMUX"; //$NON-NLS-1$
 	private final Connection connection;
 	final boolean isSourceReconnect;
 	private final StructuredType structType;
@@ -84,17 +86,17 @@ public class RepairBrokenConnectionCommand extends Command {
 		return port.orElse(null);
 	}
 
-	private FBNetworkElement getMux(final IInterfaceElement port) {
-		final Optional<FBNetworkElement> optmux;
+	private BlockFBNetworkElement getMux(final IInterfaceElement port) {
+		final Optional<BlockFBNetworkElement> optmux;
 		if (isSourceReconnect) {
 			optmux = port.getOutputConnections().stream().map(Connection::getDestinationElement)
-					.filter(elem -> elem.getType().getTypeEntry()
-							.equals(port.getFBNetworkElement().getTypeLibrary().getFBTypeEntry("STRUCT_DEMUX")))
+					.filter(elem -> elem.getType().getTypeEntry().equals(
+							port.getBlockFBNetworkElement().getTypeLibrary().getFBTypeEntry(STRUCT_DEMUX_TYPE_NAME)))
 					.findAny();
 		} else {
 			optmux = port.getInputConnections().stream().map(Connection::getSourceElement)
-					.filter(elem -> elem.getType().getTypeEntry()
-							.equals(port.getFBNetworkElement().getTypeLibrary().getFBTypeEntry("STRUCT_MUX")))
+					.filter(elem -> elem.getType().getTypeEntry().equals(
+							port.getBlockFBNetworkElement().getTypeLibrary().getFBTypeEntry(STRUCT_MUX_TYPE_NAME)))
 					.findAny();
 		}
 
@@ -109,8 +111,9 @@ public class RepairBrokenConnectionCommand extends Command {
 	public boolean canExecute() {
 		final IInterfaceElement port = getPort();
 		if (port != null) {
-			final TypeLibrary lib = port.getFBNetworkElement().getTypeLibrary();
-			return lib.getFBTypeEntry("STRUCT_DEMUX") != null && lib.getFBTypeEntry("STRUCT_MUX") != null;
+			final TypeLibrary lib = port.getBlockFBNetworkElement().getTypeLibrary();
+			return lib.getFBTypeEntry(STRUCT_DEMUX_TYPE_NAME) != null
+					&& lib.getFBTypeEntry(STRUCT_MUX_TYPE_NAME) != null;
 		}
 		return false;
 	}
@@ -125,7 +128,7 @@ public class RepairBrokenConnectionCommand extends Command {
 		if (port == null) {
 			return;
 		}
-		final FBNetworkElement mux = getMux(port);
+		final BlockFBNetworkElement mux = getMux(port);
 
 		final Stream<Event> eventStream = ((VarDeclaration) port).getWiths().stream().map(With::eContainer)
 				.filter(Event.class::isInstance).map(Event.class::cast);

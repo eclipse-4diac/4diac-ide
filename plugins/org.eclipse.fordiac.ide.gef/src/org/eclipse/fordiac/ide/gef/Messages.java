@@ -28,12 +28,10 @@ public final class Messages extends NLS {
 	public static String AbstractAttributeSection_DeleteSelectedAttribute;
 	public static String AdjustConnectionCommand_WrongConnectionSegmentIndex;
 	public static String AbstractViewEditPart_ERROR_createFigure;
-	public static String Abstract4diacEditPartFactory_ERROR_CantCreatePartForModelElement;
-	public static String Abstract4diacEditPartFactory_LABEL_RUNTIMEException_CantCreateModelForElement;
 	public static String AppearancePropertySection_ChangeBackgroundColor;
 	public static String AppearancePropertySection_LABEL_BackgroundColor;
 	public static String AppearancePropertySection_LABEL_ChooseColor;
-	public static String AppearancePropertySection_LABLE_Color;
+	public static String AppearancePropertySection_LABEL_Color;
 	public static String ChangeCommentCommand_LABEL_ChangeComment;
 	public static String ConnectionSection_Comment;
 	public static String ConnectionSection_ShowConnection;
@@ -116,6 +114,10 @@ public final class Messages extends NLS {
 	public static String InterfaceElementSection_MessageDialog_TITLE;
 
 	public static String HandlerPreferenceSafeError;
+
+	public static String AttributeSection_NameReservedKeyWord;
+
+	public static String NatTable_Update_Failed;
 
 	static {
 		// initialize resource bundle

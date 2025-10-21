@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -26,8 +27,10 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.dataimport.MappingTargetCreator;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -46,15 +49,15 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class MapToCommand extends Command implements ScopedCommand {
-	protected final FBNetworkElement srcElement;
+	protected final BlockFBNetworkElement srcElement;
 	private final MappingTarget resource;
 	private UnmapCommand unmapFromExistingTarget;
-	protected FBNetworkElement targetElement;
+	protected BlockFBNetworkElement targetElement;
 	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 	private final CompoundCommand createdConnections = new CompoundCommand();
 	private int elementIndex = -1;
 
-	protected MapToCommand(final FBNetworkElement srcElement, final MappingTarget resource) {
+	protected MapToCommand(final BlockFBNetworkElement srcElement, final MappingTarget resource) {
 		this.srcElement = srcElement;
 		this.resource = resource;
 	}
@@ -153,12 +156,12 @@ public class MapToCommand extends Command implements ScopedCommand {
 	 *
 	 * @return newly created element for mapping target
 	 */
-	protected FBNetworkElement createTargetElement() {
+	protected BlockFBNetworkElement createTargetElement() {
 		return MappingTargetCreator.createMappingTarget(((Resource) resource), srcElement, srcElement.getName());
 	}
 
 	private AutomationSystem getAutomationSystem() {
-		return srcElement.getFbNetwork().getApplication().getAutomationSystem();
+		return (AutomationSystem) EcoreUtil.getRootContainer(srcElement);
 	}
 
 	protected void checkConnections() {
@@ -322,14 +325,18 @@ public class MapToCommand extends Command implements ScopedCommand {
 		if (resource instanceof Resource) {
 			if (srcElement instanceof final Group group) {
 				final CompoundCommand cmd = new CompoundCommand();
-				group.getGroupElements().forEach(el -> cmd.add(new MapToCommand(el, resource)));
+				FBNetworkHelper.getBlockFBNetworkElementsFromList(group.getGroupElements())
+						.forEach(el -> cmd.add(new MapToCommand(el, resource)));
 				return cmd;
 			}
-			return new MapToCommand(srcElement, resource);
+			if (srcElement instanceof final BlockFBNetworkElement bfbEl) {
+				return new MapToCommand(bfbEl, resource);
+			}
 		}
 
-		if (resource instanceof final CommunicationMappingTarget communicationMappingTarget) {
-			return new MapCommunicationCommand(srcElement, communicationMappingTarget);
+		if (resource instanceof final CommunicationMappingTarget communicationMappingTarget
+				&& srcElement instanceof final BlockFBNetworkElement bfbEl) {
+			return new MapCommunicationCommand(bfbEl, communicationMappingTarget);
 		}
 		return null;
 	}

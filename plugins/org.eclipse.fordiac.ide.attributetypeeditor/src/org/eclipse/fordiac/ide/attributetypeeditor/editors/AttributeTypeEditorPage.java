@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2024 Johannes Kepler University, Linz,
+ * Copyright (c) 2020, 2025 Johannes Kepler University, Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -24,9 +24,6 @@
 
 package org.eclipse.fordiac.ide.attributetypeeditor.editors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
@@ -41,47 +38,27 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
+import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.gef.ui.actions.RedoAction;
-import org.eclipse.gef.ui.actions.UndoAction;
-import org.eclipse.gef.ui.actions.UpdateAction;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
-public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPage, CommandStackEventListener {
+public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 	private static final int STRUCT_EDITOR_INDEX = 0;
 	private static final int DIRECTLYDERIVEDTYPE_EDITOR_INDEX = 1;
 
-	private CommandStack commandStack;
 	private GraphicalAnnotationModel annotationModel;
 	private StructEditingComposite structComposite;
 	private DirectlyDerivedTypeComposite directlyDerivedTypeComposite;
 	private Combo comboBox;
-
-	private ActionRegistry actionRegistry;
-	private final List<String> selectionActions = new ArrayList<>();
-	private final List<String> stackActions = new ArrayList<>();
-	private final List<String> propertyActions = new ArrayList<>();
 
 	private final Adapter adapter = new AdapterImpl() {
 		@Override
@@ -100,16 +77,7 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 	};
 
 	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		updateActions(stackActions);
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-	}
-
-	@Override
 	public void dispose() {
-		getCommandStack().removeCommandStackEventListener(this);
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
-		getActionRegistry().dispose();
 		removeListenerFromAttributeDeclaration();
 		if (structComposite != null) {
 			structComposite.dispose();
@@ -132,13 +100,8 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setSite(site);
-		setInput(input);
+		super.init(site, input);
 		addListenerToAttributeDeclaration();
-		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-		getCommandStack().addCommandStackEventListener(this);
-		initializeActionRegistry();
-		setActionHandlers(site);
 		setPartName(Messages.AttributeTypeEditorPage_Title);
 		setTitleImage(FordiacImage.ICON_ATTRIBUTE_DECLARATION.getImage());
 	}
@@ -163,26 +126,9 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 	}
 
 	private void removeListenerFromAttributeDeclaration() {
-		if (getType() != null && getType().eAdapters().contains(adapter)) {
+		if (getType() != null) {
 			getType().eAdapters().remove(adapter);
 		}
-	}
-
-	private void setActionHandlers(final IEditorSite site) {
-		final ActionRegistry registry = getActionRegistry();
-		final IActionBars bars = site.getActionBars();
-		String id = ActionFactory.UNDO.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-		id = ActionFactory.REDO.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-		id = ActionFactory.DELETE.getId();
-		bars.setGlobalActionHandler(id, registry.getAction(id));
-		bars.updateActionBars();
-	}
-
-	@Override
-	public boolean isDirty() {
-		return getCommandStack().isDirty();
 	}
 
 	@Override
@@ -206,7 +152,7 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 				if (comboBox.getSelectionIndex() == STRUCT_EDITOR_INDEX && type instanceof DirectlyDerivedType
 						|| comboBox.getSelectionIndex() == DIRECTLYDERIVEDTYPE_EDITOR_INDEX
 								&& type instanceof StructuredType) {
-					commandStack.execute(new ChangeAttributeDeclarationTypeCommand(getType()));
+					getCommandStack().execute(new ChangeAttributeDeclarationTypeCommand(getType()));
 				}
 			}
 		});
@@ -259,69 +205,6 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 		}
 	}
 
-	private CommandStack getCommandStack() {
-		return commandStack;
-	}
-
-	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (this.equals(getSite().getPage().getActiveEditor())) {
-			updateActions(selectionActions);
-		}
-	}
-
-	private void createActions() {
-		final ActionRegistry registry = getActionRegistry();
-		IAction action;
-
-		action = new UndoAction(this);
-		registry.registerAction(action);
-		getStackActions().add(action.getId());
-
-		action = new RedoAction(this);
-		registry.registerAction(action);
-		getStackActions().add(action.getId());
-	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		// adapting to the command stack is needed for the undo/redo actions
-		if (key == CommandStack.class) {
-			return key.cast(getCommandStack());
-		}
-		if (key == ActionRegistry.class) {
-			return key.cast(getActionRegistry());
-		}
-		return super.getAdapter(key);
-	}
-
-	private List<String> getStackActions() {
-		return stackActions;
-	}
-
-	private void initializeActionRegistry() {
-		createActions();
-		updateActions(propertyActions);
-		updateActions(stackActions);
-	}
-
-	private void updateActions(final List<String> actionIds) {
-		final ActionRegistry registry = getActionRegistry();
-		actionIds.forEach(id -> {
-			final IAction action = registry.getAction(id);
-			if (action instanceof final UpdateAction updateAction) {
-				updateAction.update();
-			}
-		});
-	}
-
-	private ActionRegistry getActionRegistry() {
-		if (null == actionRegistry) {
-			actionRegistry = new ActionRegistry();
-		}
-		return actionRegistry;
-	}
-
 	@Override
 	public void reloadType() {
 		removeListenerFromAttributeDeclaration();
@@ -338,7 +221,7 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 
 	@Override
 	public AttributeDeclaration getType() {
-		return (AttributeDeclaration) ITypeEditorPage.super.getType();
+		return (AttributeDeclaration) super.getType();
 	}
 
 	@Override
@@ -356,11 +239,6 @@ public class AttributeTypeEditorPage extends EditorPart implements ITypeEditorPa
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		return false;
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override

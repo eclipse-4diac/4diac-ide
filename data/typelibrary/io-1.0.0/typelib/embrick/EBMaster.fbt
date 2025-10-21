@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="EBMaster" Comment="Service Interface Function Block Type" >
-	<Identification Description="Copyright (c) 2016 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0 " >
+<FBType Name="EBMaster" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2016 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0 ">
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Johannes Messmer" Date="2016-11-30">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="EInit" Comment="Service Initialization" >
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
 				<With Var="QI"/>
 				<With Var="BusInitSpeed"/>
 				<With Var="SlaveUpdateInterval"/>
@@ -16,11 +16,11 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm" >
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="IND" Type="Event" Comment="Indication from Resource" >
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
@@ -41,4 +41,5 @@
 			<AdapterDeclaration Name="BusAdapterOut" Type="EBBusAdapter"/>
 		</Plugs>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

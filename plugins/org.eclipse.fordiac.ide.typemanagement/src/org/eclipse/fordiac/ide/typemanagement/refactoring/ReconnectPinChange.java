@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,9 +16,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
@@ -27,39 +25,38 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCom
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
+public class ReconnectPinChange extends ConfigurableChange<BlockFBNetworkElement> {
 
 	private final String newName;
 	private final String oldName;
 
-	public ReconnectPinChange(final URI elementURI, final Class<FBNetworkElement> elementClass, final String newName,
-			final String oldName) {
-		super("Handle connection of : " + oldName, elementURI, elementClass);
+	public ReconnectPinChange(final URI elementURI, final Class<BlockFBNetworkElement> elementClass,
+			final String newName, final String oldName) {
+		super("Handle connection of : " + oldName, elementURI, elementClass); //$NON-NLS-1$
 		this.newName = newName;
 		this.oldName = oldName;
 	}
 
 	@Override
-	protected Command createCommand(final FBNetworkElement element) {
+	protected Command createCommand(final BlockFBNetworkElement element) {
 		return new ReconnectPinByName(oldName, newName, element, getState());
 
 	}
 
 	@Override
 	public EnumSet<ChangeState> getAllowedChoices() {
-		return EnumSet.of(ChangeState.RECONNECT, ChangeState.NO_CHANGE, ChangeState.DELETE);
+		return EnumSet.of(ChangeState.RECONNECT, ChangeState.DELETE);
 	}
 
 	@Override
@@ -68,27 +65,20 @@ public class ReconnectPinChange extends ConfigurableChange<FBNetworkElement> {
 	}
 
 	@Override
-	public void initializeValidationData(final FBNetworkElement element, final IProgressMonitor pm) {
+	public void initializeValidationData(final BlockFBNetworkElement element, final IProgressMonitor pm) {
 		// No special initialization required
 	}
-
-	@Override
-	public RefactoringStatus isValid(final FBNetworkElement element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		return super.isValid(element, pm);
-	}
-
 }
 
 class ReconnectPinByName extends Command {
 
 	final String oldName;
 	final String newName;
-	final FBNetworkElement element;
+	final BlockFBNetworkElement element;
 	final CompoundCommand cmds = new CompoundCommand();
 	private final Set<ChangeState> state;
 
-	public ReconnectPinByName(final String oldName, final String newName, final FBNetworkElement fbNeworkElement,
+	public ReconnectPinByName(final String oldName, final String newName, final BlockFBNetworkElement fbNeworkElement,
 			final Set<ChangeState> state) {
 		this.oldName = oldName;
 		this.newName = newName;

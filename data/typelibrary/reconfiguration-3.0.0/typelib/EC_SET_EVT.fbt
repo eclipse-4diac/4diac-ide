@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EC_SET_EVT" Comment="Sets an event in- or output event of a FB instance (e.g. like an event sniffer)">
+	<Identification Standard="61499-1" Classification="Reconfiguration" Function="Sets Event In-/Output" Type="Execution Control Service" Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::reconfiguration">
+		<Compiler Language="Cpp" Vendor="GNU" Product="GCC" Version="&gt;3.0"/>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="QI"/>
+				<With Var="DST"/>
+				<With Var="FB_NAME"/>
+				<With Var="FB_EVENT_IO"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="FB_NAME" Type="WSTRING" Comment="FunctionBlock instance name"/>
+			<VarDeclaration Name="FB_EVENT_IO" Type="WSTRING" Comment="event name"/>
+			<VarDeclaration Name="DST" Type="WSTRING" Comment="Destination where the event has to be set (Syntax: ResourceName)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Sets an event in- or output event of a FB instance (e.g. like an event sniffer)">
+		<ServiceSequence Name="normal_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

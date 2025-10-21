@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT fortiss GmbH,
+ * 							Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -214,8 +215,8 @@ public final class LinkConstraints {
 
 	public static boolean isSwapNeeded(final IInterfaceElement source, final FBNetwork parent) {
 		if (((source.eContainer() != null) && (source.eContainer().eContainer() instanceof CompositeFBType))
-				|| ((source.getFBNetworkElement() != null)
-						&& (source.getFBNetworkElement().getFbNetwork() != parent))) {
+				|| ((source.getBlockFBNetworkElement() != null)
+						&& (source.getBlockFBNetworkElement().getFbNetwork() != parent))) {
 			// the FBNetwork elements are not in the same resource this means one of both is
 			// a subapp interface element of the containing subapp
 			return !source.isIsInput();

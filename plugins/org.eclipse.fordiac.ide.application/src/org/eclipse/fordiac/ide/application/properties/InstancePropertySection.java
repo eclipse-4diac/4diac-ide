@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH,
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,8 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -173,9 +174,9 @@ public class InstancePropertySection extends AbstractSection {
 				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
-				instanceEditableRule);
+				new VarDeclEditRule(inputDataProvider));
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, columnProvider,
-				instanceEditableRule);
+				new VarDeclEditRule(outputDataProvider));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -279,8 +280,8 @@ public class InstancePropertySection extends AbstractSection {
 	}
 
 	@Override
-	protected FBNetworkElement getType() {
-		if (type instanceof final FBNetworkElement fbNetworkElement) {
+	protected BlockFBNetworkElement getType() {
+		if (type instanceof final BlockFBNetworkElement fbNetworkElement) {
 			return fbNetworkElement;
 		}
 		return null;
@@ -295,13 +296,14 @@ public class InstancePropertySection extends AbstractSection {
 	protected void setInputInit() {
 		if (getType() != null) {
 			final List<VarDeclaration> allInputs = new ArrayList<>();
-			allInputs.addAll(getType().getInterface().getInputVars());
-			allInputs.addAll(getType().getInterface().getInOutVars());
+			final InterfaceList fbInterface = getType().getInterface();
+			allInputs.addAll(fbInterface.getInputVars());
+			allInputs.addAll(fbInterface.getInOutVars());
 			inputDataProvider.setInput(allInputs);
 
 			final List<VarDeclaration> allOutputs = new ArrayList<>();
-			allOutputs.addAll(getType().getInterface().getOutputVars());
-			allOutputs.addAll(getType().getInterface().getOutMappedInOutVars());
+			allOutputs.addAll(fbInterface.getOutputVars());
+			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
 			outputDataProvider.setInput(allOutputs);
 		}
 		inputTable.refresh();
@@ -348,19 +350,25 @@ public class InstancePropertySection extends AbstractSection {
 		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
 	}
 
-	private final IEditableRule instanceEditableRule = new IEditableRule() {
+	private class VarDeclEditRule implements IEditableRule {
+
+		final IChangeableRowDataProvider<VarDeclaration> dataProvider;
+
+		public VarDeclEditRule(final IChangeableRowDataProvider<VarDeclaration> dataProvider) {
+			this.dataProvider = dataProvider;
+		}
+
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
 			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
 					.get(columnIndex);
-			final VarDeclaration varDecl = inputDataProvider.getRowObject(rowIndex);
+			final VarDeclaration varDecl = dataProvider.getRowObject(rowIndex);
 
 			if (getType() instanceof TypedSubApp && varDecl.isInOutVar()
 					&& (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VISIBLEIN
 							|| column == VarDeclarationTableColumn.VISIBLEOUT)) {
 				return false;
 			}
-
 			return VarDeclarationTableColumn.DEFAULT_EDITABLE.contains(column);
 		}
 
@@ -368,6 +376,5 @@ public class InstancePropertySection extends AbstractSection {
 		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
 			return isEditable(cell.getColumnIndex(), cell.getRowIndex());
 		}
-	};
-
+	}
 }

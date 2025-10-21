@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -129,7 +130,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	};
 
-	private boolean handleResourceChanged(final IResourceDelta delta) {
+	private static boolean handleResourceChanged(final IResourceDelta delta) {
 		switch (delta.getResource().getType()) {
 		case IResource.FILE:
 			if (testFlags(delta, IResourceDelta.CONTENT)) {
@@ -137,10 +138,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 			break;
 		case IResource.PROJECT:
+			if (testFlags(delta, IResourceDelta.DESCRIPTION)) {
+				// the .project file changed (metadata, natures, builders)
+				SystemManager.validateProjectNature(delta.getResource().getProject());
+			}
 			if (testFlags(delta, IResourceDelta.OPEN)) {
 				if (delta.getResource().isAccessible()) {
 					// refresh type library when opening project
 					TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject()).refresh();
+					SystemManager.validateProjectNature(delta.getResource().getProject());
 				} else {
 					// this is the odd way of Eclipse Platform telling us a project was closed
 					handleProjectRemove(delta);
@@ -158,8 +164,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IFile file = (IFile) delta.getResource();
 
 		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (typeEntryForFile != null
-				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
+		if (typeEntryForFile != null) {
 			typeEntryForFile.refresh();
 		}
 	}
@@ -194,6 +199,11 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private boolean handleResourceCopy(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
+
+		if (delta.getResource().getType() == IResource.PROJECT) {
+			SystemManager.validateProjectNature(project);
+		}
+
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			return false;
 		}
@@ -247,9 +257,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					return;
 				}
 				if (ENABLE_COPY_DIALOG && fileExists(file, delta)) {
-					Display.getDefault().syncExec(() -> {
-						openRenameDialog(file, entry);
-					});
+					Display.getDefault().syncExec(() -> openRenameDialog(file, entry));
 					return;
 				}
 			} else if (!file.equals(typeEntryForFile.getFile())) {

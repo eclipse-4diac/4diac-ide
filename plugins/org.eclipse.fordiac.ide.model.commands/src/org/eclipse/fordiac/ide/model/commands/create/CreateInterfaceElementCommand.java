@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -54,7 +53,9 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	/** constructor for copying an interface element */
 	public CreateInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
 			final InterfaceList targetInterfaceList, final int index) {
-		this(copySrc.getType(), copySrc.getName(), targetInterfaceList, isInput, index);
+		this(copySrc.getType(), copySrc.getName(), targetInterfaceList, isInput, false, null, index,
+				copySrc instanceof final VarDeclaration decl && decl.getValue() != null ? decl.getValue().getValue()
+						: ""); //$NON-NLS-1$
 		newInterfaceElement = EcoreUtil.copy(copySrc);
 	}
 
@@ -63,7 +64,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 	 * information
 	 */
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
-			final boolean isInput, final boolean isInOut, final String arraySize, final int index) {
+			final boolean isInput, final boolean isInOut, final String arraySize, final int index, final String value) {
 		this.isInput = isInput;
 		this.isInOut = isInOut;
 		this.switchOpposite = false;
@@ -72,7 +73,12 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		this.targetInterfaceList = interfaceList;
 		this.name = ((null != name) && isValidName(name)) ? name : getNameProposal(dataType, isInput);
 		this.arraySize = arraySize;
-		this.value = ""; //$NON-NLS-1$
+		this.value = value;
+	}
+
+	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
+			final boolean isInput, final boolean isInOut, final String arraySize, final int index) {
+		this(dataType, name, interfaceList, isInput, isInOut, arraySize, index, ""); //$NON-NLS-1$
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final String name, final InterfaceList interfaceList,
@@ -222,7 +228,7 @@ public class CreateInterfaceElementCommand extends CreationCommand implements Sc
 		if (dataType instanceof AdapterType) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterFBCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					(targetInterfaceList.eContainer() instanceof final FBType fbType) ? fbType : null);
+					targetInterfaceList.getFBType());
 		}
 	}
 

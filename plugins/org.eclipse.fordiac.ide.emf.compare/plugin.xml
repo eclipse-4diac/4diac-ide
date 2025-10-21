@@ -25,7 +25,7 @@
    <extension
          point="org.eclipse.emf.compare.rcp.matchEngine">
       <engineFactory
-            class="org.eclipse.fordiac.ide.emf.compare.MatchEngine.FordiacMatchEngineFactory"
+            class="org.eclipse.fordiac.ide.emf.compare.matchengine.FordiacMatchEngineFactory"
             ranking="300">
       </engineFactory>
    </extension>

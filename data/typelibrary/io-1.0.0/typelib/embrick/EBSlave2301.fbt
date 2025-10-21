@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="EBSlave2301" Comment="Service Interface Function Block Type" >
-	<Identification Description="Copyright (c) 2016 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  " >
+<FBType Name="EBSlave2301" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2016 fortiss GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  ">
 	</Identification>
 	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Johannes Messmer" Date="2016-11-30">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="MAP" Type="Event" Comment="Map Pins" >
+			<Event Name="MAP" Type="Event" Comment="Map Pins">
 				<With Var="Relay_1"/>
 				<With Var="Relay_2"/>
 				<With Var="Relay_3"/>
@@ -17,10 +17,10 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping" >
+			<Event Name="MAPO" Type="Event" Comment="Confirm Pin Mapping">
 				<With Var="QO"/>
 			</Event>
-			<Event Name="IND" Type="Event" Comment="Indication from Resource" >
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
@@ -46,4 +46,5 @@
 			<AdapterDeclaration Name="BusAdapterIn" Type="EBBusAdapter"/>
 		</Sockets>
 	</InterfaceList>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

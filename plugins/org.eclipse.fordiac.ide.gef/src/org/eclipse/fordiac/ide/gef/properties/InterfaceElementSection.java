@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -103,7 +103,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
-			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
+			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getTypeName()));
 		} else if (getType() instanceof VarDeclaration) {
 			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}
@@ -115,7 +115,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void performRefresh() {
-		setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
+		setEditableFields(getType().getBlockFBNetworkElement() instanceof SubApp);
 		nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 		String itype = ""; //$NON-NLS-1$

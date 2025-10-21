@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 Luka Lednicki, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2014, 2025 Luka Lednicki, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -57,7 +57,7 @@ public class Analyzer {
 			final Resource sourceResource = connection.getSourceElement().getResource();
 			final Resource destinationResource = connection.getDestinationElement().getResource();
 
-			final FBNetworkElement mappedElement = connection.getDestinationElement().getOpposite();
+			final BlockFBNetworkElement mappedElement = connection.getDestinationElement().getOpposite();
 			final boolean local = sourceResource.getDevice() == destinationResource.getDevice();
 
 			for (final Event sourceEvent : sourceEvents) {
@@ -98,7 +98,7 @@ public class Analyzer {
 
 	private static List<Event> getSourceEvents(final Connection connection) {
 		final List<Event> sourceEvents = new ArrayList<>();
-		final FBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
+		final BlockFBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
 		if (connection instanceof EventConnection) {
 			sourceEvents.add((Event) mappedElement.getInterfaceElement(connection.getSource().getName()));
 		} else if (connection instanceof DataConnection) {
@@ -111,7 +111,8 @@ public class Analyzer {
 		return sourceEvents;
 	}
 
-	private CommunicationChannel getComChannel(final boolean local, final Event sourceEvent, final Connection connection) {
+	private CommunicationChannel getComChannel(final boolean local, final Event sourceEvent,
+			final Connection connection) {
 		CommunicationChannel channel = communicationModel.getChannels().get(sourceEvent);
 		if (null == channel) {
 			if (connection instanceof EventConnection) {
@@ -148,7 +149,7 @@ public class Analyzer {
 			for (final Link destinationLink : destinationDevice.getInConnections()) {
 				if (sourceLink.getSegment() == destinationLink.getSegment()) {
 					destination.getAvailableMedia()
-					.add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
+							.add(new CommunicationMediaInfo(sourceLink, destinationLink, sourceLink.getSegment()));
 				}
 			}
 		}

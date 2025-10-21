@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="F_MOVE" Comment="moves input to output">
-	<Identification Standard="61131-3" Classification="standard arithmetic function" Description="Copyright (c) 2013 TU Wien ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0" >
+	<Identification Standard="61131-3" Classification="standard arithmetic function" Description="Copyright (c) 2013 TU Wien ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
 	<VersionInfo Organization="TU Wien ACIN" Version="1.0" Author="Monika Wenger" Date="2013-08-17">
 	</VersionInfo>
@@ -23,4 +23,5 @@
 		</OutputVars>
 	</InterfaceList>
 	<Attribute Name="GenericClassName" Value="'GEN_FORTE_F_MOVE'"/>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

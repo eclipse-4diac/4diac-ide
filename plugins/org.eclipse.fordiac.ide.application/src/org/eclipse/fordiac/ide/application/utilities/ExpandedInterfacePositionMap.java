@@ -256,14 +256,14 @@ public class ExpandedInterfacePositionMap {
 
 	private Map<IFigure, Integer> getPinSizes(final List<InterfaceEditPart> inputList,
 			final List<InterfaceEditPart> outputList) {
-		final var sizes = new HashMap<IFigure, Integer>();
+		final var newSizes = new HashMap<IFigure, Integer>();
 		for (final var pin : inputList) {
-			prozessInterfacEditPartSize(sizes, pin);
+			prozessInterfacEditPartSize(newSizes, pin);
 		}
 		for (final var pin : outputList) {
-			prozessInterfacEditPartSize(sizes, pin);
+			prozessInterfacEditPartSize(newSizes, pin);
 		}
-		return sizes;
+		return newSizes;
 	}
 
 	protected void prozessInterfacEditPartSize(final HashMap<IFigure, Integer> sizes, final InterfaceEditPart pin) {

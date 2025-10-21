@@ -2,13 +2,13 @@
  * *******************************************************************************
  * Copyright (c) 2022 Primetals Technologies GmbH,
  *               2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Martin Jobst, Martin Melik Merkumians
  *      - initial API and implementation and/or initial documentation
@@ -18,26 +18,21 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
 
 import java.util.Collection;
 import java.util.Map;
-
 import java.util.stream.Stream;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
@@ -45,9 +40,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STPragma;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Var Declaration</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>ST Var
+ * Declaration</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -68,9 +62,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  */
 public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implements STVarDeclaration {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -78,9 +72,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -89,8 +83,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -99,8 +92,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -109,8 +101,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getLocatedAt() <em>Located At</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getLocatedAt()
 	 * @generated
 	 * @ordered
@@ -118,9 +109,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	protected INamedElement locatedAt;
 
 	/**
-	 * The default value of the '{@link #isArray() <em>Array</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #isArray() <em>Array</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isArray()
 	 * @generated
 	 * @ordered
@@ -128,9 +119,9 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	protected static final boolean ARRAY_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isArray() <em>Array</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #isArray() <em>Array</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #isArray()
 	 * @generated
 	 * @ordered
@@ -139,8 +130,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getRanges() <em>Ranges</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getRanges()
 	 * @generated
 	 * @ordered
@@ -149,8 +139,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getCount() <em>Count</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getCount()
 	 * @generated
 	 * @ordered
@@ -158,19 +147,18 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	protected EList<String> count;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getType() <em>Type</em>}' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getType()
 	 * @generated
 	 * @ordered
 	 */
-	protected INamedElement type;
+	protected DataType type;
 
 	/**
 	 * The cached value of the '{@link #getMaxLength() <em>Max Length</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getMaxLength()
 	 * @generated
 	 * @ordered
@@ -179,8 +167,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getDefaultValue() <em>Default Value</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDefaultValue()
 	 * @generated
 	 * @ordered
@@ -189,8 +176,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 
 	/**
 	 * The cached value of the '{@link #getPragma() <em>Pragma</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPragma()
 	 * @generated
 	 * @ordered
@@ -198,8 +184,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	protected STPragma pragma;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected STVarDeclarationImpl() {
@@ -207,8 +192,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -217,8 +201,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -227,8 +210,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -240,8 +222,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -250,8 +231,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -263,8 +243,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -281,8 +260,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public INamedElement basicGetLocatedAt() {
@@ -290,8 +268,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -303,8 +280,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -313,8 +289,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -326,8 +301,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -339,8 +313,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -352,15 +325,14 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public INamedElement getType() {
+	public DataType getType() {
 		if (type != null && type.eIsProxy()) {
 			InternalEObject oldType = (InternalEObject)type;
-			type = (INamedElement)eResolveProxy(oldType);
+			type = (DataType)eResolveProxy(oldType);
 			if (type != oldType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_VAR_DECLARATION__TYPE, oldType, type));
@@ -370,30 +342,27 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public INamedElement basicGetType() {
+	public DataType basicGetType() {
 		return type;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setType(INamedElement newType) {
-		INamedElement oldType = type;
+	public void setType(DataType newType) {
+		DataType oldType = type;
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_VAR_DECLARATION__TYPE, oldType, type));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -402,8 +371,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetMaxLength(STExpression newMaxLength, NotificationChain msgs) {
@@ -417,8 +385,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -437,8 +404,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -447,8 +413,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetDefaultValue(STInitializerExpression newDefaultValue, NotificationChain msgs) {
@@ -462,8 +427,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -482,8 +446,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -492,8 +455,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public NotificationChain basicSetPragma(STPragma newPragma, NotificationChain msgs) {
@@ -507,8 +469,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -527,13 +488,12 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String getTypeName() {
-		org.eclipse.fordiac.ide.model.libraryElement.INamedElement type = getType();
+		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = getType();
 		if(type != null){
 			return type.getName();
 		}
@@ -541,8 +501,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -551,8 +510,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -561,8 +519,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -571,8 +528,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -581,8 +537,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -591,8 +546,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -601,8 +555,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -622,8 +575,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -657,8 +609,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -686,7 +637,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				getCount().addAll((Collection<? extends String>)newValue);
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__TYPE:
-				setType((INamedElement)newValue);
+				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
 				setMaxLength((STExpression)newValue);
@@ -704,8 +655,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -730,7 +680,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 				getCount().clear();
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__TYPE:
-				setType((INamedElement)null);
+				setType((DataType)null);
 				return;
 			case STCorePackage.ST_VAR_DECLARATION__MAX_LENGTH:
 				setMaxLength((STExpression)null);
@@ -748,8 +698,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -781,8 +730,7 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -802,4 +750,4 @@ public class STVarDeclarationImpl extends MinimalEObjectImpl.Container implement
 		return result.toString();
 	}
 
-} //STVarDeclarationImpl
+} // STVarDeclarationImpl

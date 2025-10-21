@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH,
- * 				 2023 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,7 +24,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.TargetInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
@@ -76,7 +76,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 		for (final Object obj : selection) {
 			if (obj instanceof final ConnectionEditPart conep) {
 				visibility.add(Boolean.valueOf(!conep.getFigure().isHidden()));
-			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
+			} else if (obj instanceof final AbstractBlockFBNElementEditPart fbEP) {
 				for (final IInterfaceElement element : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 					if (element.isIsInput() && !element.getInputConnections().isEmpty()) {
 						element.getInputConnections()
@@ -104,7 +104,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 		for (final Object obj : selection.toList()) {
 			if (obj instanceof final ConnectionEditPart conEP) {
 				addHideCommand(commands, conEP.getModel(), !isVisible);
-			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
+			} else if (obj instanceof final AbstractBlockFBNElementEditPart fbEP) {
 				fbEP.getModel().getInterface().getAllInterfaceElements()
 						.forEach(pin -> togglePinConnections(commands, pin, isVisible));
 			} else if (obj instanceof final TargetInterfaceElementEditPart iep) {
@@ -169,7 +169,7 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean hasConnection(final Object ep) {
-		if (ep instanceof final AbstractFBNElementEditPart fbEP) {
+		if (ep instanceof final AbstractBlockFBNElementEditPart fbEP) {
 			for (final IInterfaceElement ie : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 				if (hasConnection(ie)) {
 					return true;

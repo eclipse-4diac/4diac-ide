@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -40,8 +41,7 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = getDatatypelib().getType(typeName);
 		element.setType(type);
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return commandExecution(state);
 	}
@@ -53,8 +53,7 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		final DataType type = EventTypeLibrary.getInstance().getType(null);
 		element.setType(type);
 		element.setIsInput(!isInput);
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return commandExecution(state);
 	}
@@ -63,8 +62,7 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
 
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return disabledCommandExecution(state);
 	}
@@ -205,6 +203,10 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		));
 
 		return commands;
+	}
+
+	private static BlockFBNetworkElement getFB(final State state) {
+		return (BlockFBNetworkElement) state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME);
 	}
 
 }

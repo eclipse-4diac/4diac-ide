@@ -30,14 +30,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -71,27 +70,12 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	@Override
 	public void addPages() {
-		final IProject project = checkSubAppEditor();
+		final IProject project = ModelHelper.getProjectFromContextChecked(subApp);
 		final StructuredSelection selection = new StructuredSelection(project); // select the current project
 		newFilePage = SaveAsWizardPage
 				.createSaveAsSubAppWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
 		newFilePage.setFileName(subApp.getName());
 		addPage(newFilePage);
-	}
-
-	private IProject checkSubAppEditor() {
-		IProject project = null;
-		final EObject obj = EcoreUtil.getRootContainer(subApp);
-		if (obj instanceof final SubAppType subappType) {
-			project = subappType.getTypeEntry().getFile().getProject();
-		} else {
-			project = getSystem().getTypeLibrary().getProject();
-		}
-		return project;
-	}
-
-	private AutomationSystem getSystem() {
-		return subApp.getSubAppNetwork().getAutomationSystem();
 	}
 
 	@Override

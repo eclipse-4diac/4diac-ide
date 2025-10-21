@@ -18,12 +18,13 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class ModelPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ModelPreferences() {
 		super(GRID);
-		setPreferenceStore(new FixedScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.fordiac.ide.model"));//$NON-NLS-1$
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, "org.eclipse.fordiac.ide.model"));//$NON-NLS-1$
 		setDescription("Settings for the Model Plug-In.");
 	}
 

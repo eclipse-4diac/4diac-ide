@@ -171,6 +171,11 @@ public class GlobalConstantsItemProvider extends LibraryElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__CONSTANTS,
+				 LibraryElementFactory.eINSTANCE.createVarConfigInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LibraryElementPackage.Literals.GLOBAL_CONSTANTS__SOURCE,
 				 LibraryElementFactory.eINSTANCE.createOriginalSource()));
 	}

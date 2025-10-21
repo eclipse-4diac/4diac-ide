@@ -16,6 +16,7 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
@@ -74,15 +75,16 @@ class STMethodSupport extends StructuredTextSupport {
 	'''«method.returnType?.generateTypeName ?: "void"» «IF !header»«FBType.generateTypeName»::«ENDIF»method_«method.name»(«method.generateStructuredTextMethodParameters»)'''
 
 	def private CharSequence generateStructuredTextMethodParameters(STMethod method) //
-	'''«FOR param : method.structuredTextMethodParameters SEPARATOR ", "»«param.key.generateFeatureTypeName(param.value)» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : method.structuredTextMethodParameters SEPARATOR ", "»«param.generateParameterTypeName»«param.generateParameterName»«ENDFOR»'''
 
 	def private getStructuredTextMethodParameters(STMethod method) {
-		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
-			method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
-			method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
+		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] +
+			method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations] +
+			method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations]
 	}
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
+		«method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateOutputGuard»
 		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val = «method.returnType.generateTypeDefaultValue»;«ENDIF»
 		«method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
 		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateVariables(true)»
@@ -110,7 +112,7 @@ class STMethodSupport extends StructuredTextSupport {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
 					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				].flatMap[varDeclarations].map[type]).toSet
+				].flatMap[varDeclarations].map[type as INamedElement]).toSet
 			else
 				parseResult.containedDependencies
 		} else

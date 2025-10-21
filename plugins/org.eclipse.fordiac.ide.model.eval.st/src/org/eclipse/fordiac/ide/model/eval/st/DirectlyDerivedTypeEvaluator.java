@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
@@ -100,7 +99,7 @@ public class DirectlyDerivedTypeEvaluator extends StructuredTextEvaluator implem
 	}
 
 	@Override
-	public INamedElement evaluateResultType() throws EvaluatorException, InterruptedException {
+	public LibraryElement evaluateResultType() throws EvaluatorException, InterruptedException {
 		return directlyDerivedType.getBaseType();
 	}
 

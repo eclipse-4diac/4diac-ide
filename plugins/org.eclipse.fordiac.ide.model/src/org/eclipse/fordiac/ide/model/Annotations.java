@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
@@ -95,14 +97,6 @@ public final class Annotations {
 	}
 
 	// *** Connection ***//
-	public static FBNetworkElement getSourceElement(final Connection c) {
-		return (null != c.getSource()) ? c.getSource().getFBNetworkElement() : null;
-	}
-
-	public static FBNetworkElement getDestinationElement(final Connection c) {
-		return (null != c.getDestination()) ? c.getDestination().getFBNetworkElement() : null;
-	}
-
 	public static boolean isResourceConnection(final Connection c) {
 		// if source element is null it is a connection from a CFB interface element
 		return ((null != c.getSourceElement()) && (null != c.getSourceElement().getFbNetwork())
@@ -125,8 +119,8 @@ public final class Annotations {
 		}
 
 		// TODO: verify interface detection for CFB
-		final FBNetworkElement s = c.getSourceElement();
-		final FBNetworkElement d = c.getDestinationElement();
+		final BlockFBNetworkElement s = c.getSourceElement();
+		final BlockFBNetworkElement d = c.getDestinationElement();
 		final EObject container = c.eContainer().eContainer();
 
 		boolean sourceIsInterface = (s == container);
@@ -212,8 +206,8 @@ public final class Annotations {
 	}
 
 	public static String getTransitionEventName(final Event event) {
-		if (event.getFBNetworkElement() instanceof AdapterFB) {
-			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
 		}
 		return event.getName();
 	}
@@ -352,7 +346,11 @@ public final class Annotations {
 	}
 
 	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {
-		setVarConfig(varDeclarationImpl, Boolean.toString(config));
+		if (!config) {
+			varDeclarationImpl.deleteAttribute(LibraryElementTags.VAR_CONFIG);
+		} else {
+			setVarConfig(varDeclarationImpl, Boolean.toString(config));
+		}
 	}
 
 	private static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final String config) {
@@ -531,10 +529,10 @@ public final class Annotations {
 
 	public static void setAttribute(final ConfigurableObject object, final AttributeDeclaration attributeDeclaration,
 			final String value, final String comment) {
-		Attribute attribute = getAttribute(object, attributeDeclaration.getName());
+		Attribute attribute = getAttribute(object, PackageNameHelper.getFullTypeName(attributeDeclaration));
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
-			attribute.setName(attributeDeclaration.getName());
+			attribute.setName(PackageNameHelper.getFullTypeName(attributeDeclaration));
 			attribute.setAttributeDeclaration(attributeDeclaration);
 			attribute.setType(attributeDeclaration.getType());
 			attribute.setValue(value);
@@ -599,11 +597,6 @@ public final class Annotations {
 
 	public static AdapterDeclaration getAdapterDestination(final AdapterConnection ac) {
 		return (AdapterDeclaration) ac.getDestination();
-	}
-
-	// *** IInterfaceElement ***//
-	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement iie) {
-		return (iie.eContainer() instanceof final InterfaceList il) ? il.getFBNetworkElement() : null;
 	}
 
 	// *** SystemConfiguration ***//

@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -50,7 +52,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
@@ -89,6 +91,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
@@ -254,14 +259,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) {
 		switch (expr.receiver.resultType) {
-			AdapterType: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
+			AdapterType,
 			FBType: '''«expr.receiver.generateExpression»->«expr.member.generateExpression»'''
 			default: '''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
 		}
 	}
 
 	def protected dispatch CharSequence generateExpression(STArrayAccessExpression expr) //
-	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
+	'''«expr.receiver.generateExpression»«FOR index : expr.index».at(«index.generateExpression»)«ENDFOR»'''
 
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) //
 	'''«expr.feature.generateFeatureName»«expr.generateTemplateArguments»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
@@ -319,7 +324,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument,
+	def protected CharSequence generateInputCallArgument(ITypedElement parameter, STCallArgument argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
 			FB case argument === null: '''«expr.feature.generateFeatureName»->«parameter.generateFeatureName»'''
@@ -330,11 +335,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateInputCallArgument(ITypedElement parameter, STCallArgument argument) {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateInOutCallArgument(ITypedElement parameter, STCallArgument argument) {
 		switch (argument) {
 			case null: '''ST_IGNORE_OUT_PARAM(«parameter.featureType.generateTypeName»(«parameter.generateVariableDefaultValue»))'''
 			case (argument.argument instanceof STMemberAccessExpression) &&
@@ -345,14 +350,21 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateOutputCallArgument(ITypedElement parameter, STCallArgument argument) {
 		switch (argument) {
-			case null: '''ST_IGNORE_OUT_PARAM(«parameter.featureType.generateTypeName»(«parameter.generateVariableDefaultValue»))'''
-			STCallNamedOutputArgument case argument.
-				not: '''ST_EXTEND_LIFETIME(CIEC_ANY_BIT_NOT(«argument.argument.generateExpression»))'''
+			case null: {
+				if (parameter.featureType instanceof AnyBitType)
+					'''CAnyBitOutputParameter<«parameter.generateFeatureTypeName»>()'''
+				else
+					'''COutputParameter<«parameter.generateFeatureTypeName»>()'''
+			}
+			STCallNamedOutputArgument case argument.not: {
+				'''CAnyBitOutputParameter<«parameter.generateFeatureTypeName»>(«argument.argument.generateExpression», true)'''
+			}
 			case (argument.argument instanceof STMemberAccessExpression) &&
-				(argument.argument as STMemberAccessExpression).
-					member instanceof STMultibitPartialExpression: '''ST_EXTEND_LIFETIME(«argument.argument.generateExpression»)'''
+				(argument.argument as STMemberAccessExpression).member instanceof STMultibitPartialExpression: {
+				'''ST_EXTEND_LIFETIME(«argument.argument.generateExpression»)'''
+			}
 			default:
 				argument.argument.generateExpression
 		}
@@ -446,14 +458,16 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
 		switch (feature.eContainer) {
-			STVarGlobalDeclarationBlock: '''st_global_«feature.name»'''
+			STVarGlobalDeclarationBlock: '''«feature.generateDefiningTypeName»::var_«feature.name»'''
+			STVarOutputDeclarationBlock: '''(*st_lv_«feature.name»)'''
 			default: '''st_lv_«feature.name»'''
 		}
 	}
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) '''func_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(FunctionFBType feature) //
+	'''«feature.generateTypeNamespace»::func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»'''
 
@@ -471,17 +485,42 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		ForteNgExportUtil.generateName(feature)
 	}
 
-	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable) {
-		variable.generateFeatureTypeName(false)
+	def protected dispatch CharSequence generateFeatureTypeName(VarDeclaration variable) {
+		VariableOperations.evaluateResultType(variable).generateTypeName
 	}
 
-	def protected CharSequence generateFeatureTypeName(STVarDeclaration variable, boolean output) {
-		val type = STVariableOperations.evaluateResultType(variable)
-		if (output)
-			type.generateTypeNameAsParameter
-		else
-			type.generateTypeName
+	def protected dispatch CharSequence generateFeatureTypeName(STVarDeclaration variable) {
+		STVariableOperations.evaluateResultType(variable).generateTypeName
 	}
+
+	def protected CharSequence generateParameterName(STVarDeclaration feature) {
+		'''st_lv_«feature.name»'''
+	}
+
+	def protected CharSequence generateParameterTypeName(STVarDeclaration variable) {
+		val type = STVariableOperations.evaluateResultType(variable)
+		switch (variable.eContainer) {
+			STVarInputDeclarationBlock: '''const «type.generateTypeNameAsInputParameter» &'''
+			STVarInOutDeclarationBlock: '''«type.generateTypeNameAsInOutParameter» &'''
+			STVarOutputDeclarationBlock: '''«type.generateTypeNameAsOutputParameter» '''
+		}
+	}
+
+	def protected CharSequence generateOutputGuard(Iterable<? extends STVarDeclarationBlock> blocks) '''
+		«FOR block : blocks»
+			«block.generateOutputGuard»
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateOutputGuard(STVarDeclarationBlock block) '''
+		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
+			«variable.generateOutputGuard»
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateOutputGuard(STVarDeclaration variable) '''
+		COutputGuard st_guard_«variable.name»(«variable.generateParameterName»);
+	'''
 
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
 		switch (type) {
@@ -541,7 +580,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STDateAndTimeLiteral:
 				#[object.resultType]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
-				object.feature.featureDependencies + object.argumentDependencies
+				object.feature.featureDependencies
 			STFunction:
 				object.returnType !== null ? #[object.returnType] : emptySet
 			default:
@@ -585,15 +624,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			default:
 				emptySet
 		}
-	}
-
-	def protected Iterable<INamedElement> getArgumentDependencies(STFeatureExpression expression) {
-		if (expression.parameters.filter(STCallNamedOutputArgument).exists[not])
-			#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-				name = "forte_any_bit_not_decorator"
-			]]
-		else
-			emptySet
 	}
 
 	def protected generateLineDirective(EObject element) {

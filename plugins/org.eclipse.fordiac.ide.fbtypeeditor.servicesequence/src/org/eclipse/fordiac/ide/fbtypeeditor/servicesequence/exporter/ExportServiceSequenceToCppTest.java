@@ -157,7 +157,7 @@ public class ExportServiceSequenceToCppTest {
 
 		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FIXTURE_STRUCT, fb.getName()));
 		writer.newLine();
-		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FICTURE_BASE, fb.getName()));
+		writer.append(MessageFormat.format(CppBoostTestConstants.TEST_FIXTURE_BASE, fb.getName()));
 		writer.newLine();
 		writer.append(CppBoostTestConstants.SET_INPUT_DATA_START);
 		if (!inputData.isEmpty()) {
@@ -174,11 +174,11 @@ public class ExportServiceSequenceToCppTest {
 		writer.append(CppBoostTestConstants.TEST_FICTURE_SETUP);
 		writer.newLine();
 
-		for (final INamedElement varDec : inputData) {
+		for (final var varDec : inputData) {
 			writer.append(getForteDataType(((VarDeclaration) varDec).getType()) + " " + varDec.getName() + ";");
 			writer.newLine();
 		}
-		for (final INamedElement varDec : outputData) {
+		for (final var varDec : outputData) {
 			writer.append(getForteDataType(((VarDeclaration) varDec).getType()) + " " + varDec.getName() + ";");
 			writer.newLine();
 		}

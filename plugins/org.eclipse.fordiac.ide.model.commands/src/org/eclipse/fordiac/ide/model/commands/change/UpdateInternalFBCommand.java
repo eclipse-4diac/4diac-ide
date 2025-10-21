@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2023, 205 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -64,7 +64,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		newElement.setInterface(newElement.getTypeInterface().copy());
 		newElement.setName(oldElement.getName());
 		createValues();
 		transferInstanceComments();
@@ -75,7 +75,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 		if (entry instanceof AdapterTypeEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
-		} else if (entry.getType() instanceof CompositeFBType) {
+		} else if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();

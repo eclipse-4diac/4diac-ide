@@ -21,27 +21,16 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstants
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-import static extension org.eclipse.fordiac.ide.globalconstantseditor.util.GlobalConstantsParseUtil.parse
-
 @FinalFieldsConstructor
 class VarGlobalConstantsSupport extends StructuredTextSupport {
-	final GlobalConstants globalConstants
-	STGlobalConstsSource source
-
-	new(STGlobalConstsSource source) {
-		this(null as GlobalConstants)
-		this.source = source
-	}
+	final STGlobalConstsSource source
 
 	override prepare() {
-		if (source === null && errors.empty) {
-			source = globalConstants.parse(errors, warnings, infos)
-		}
-		return source !== null
+		return true
 	}
 
 	override generate(Map<?, ?> options) throws ExportException {
@@ -96,7 +85,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			if (source.constants !== null)
-				source.constants.elements.flatMap[varDeclarations].map[type].toSet
+				source.constants.elements.flatMap[varDeclarations].map[type as INamedElement].toSet
 			else
 				emptySet
 		else

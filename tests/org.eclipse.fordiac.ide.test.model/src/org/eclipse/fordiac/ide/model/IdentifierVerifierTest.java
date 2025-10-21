@@ -64,4 +64,19 @@ class IdentifierVerifierTest {
 	void testVerifyInvalidPackageName(final String identifier) {
 		assertTrue(IdentifierVerifier.verifyPackageName(identifier.translateEscapes()).isPresent());
 	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "a", "foo.bar", "sub1.block.pin", "_test.block42", "X.Y.Z" })
+	void testVerifyValidQualifiedIdentifier(final String identifier) {
+		assertTrue(IdentifierVerifier.verifyQualifiedIdentifier(identifier).isEmpty());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "", ".", "foo.", ".bar", "foo..bar", "foo...bar", "9foo.bar", "foo.9bar", "__foo.bar",
+			"foo.__bar", "foo.bar_", "foo._", "_.bar", "ANY.bar", "foo.ANY", "foo.TEST$", "foo.Test\u00C4",
+			"foo.bar baz", "foo.bar\\n", "foo.\tbar", "foo.bar-name", "foo.bar/", "foo.bar\\", "foo.:bar", "foo:bar",
+			" .foo", "foo. ", "foo..", "..foo", "foo..bar..baz" })
+	void testVerifyInvalidQualifiedIdentifier(final String identifier) {
+		assertTrue(IdentifierVerifier.verifyQualifiedIdentifier(identifier).isPresent());
+	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,7 +29,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class CreateConnectionAtSubappInterface extends AbstractHandler {
 
-	// use FBInterfaceElementIsFreeAndPartOfSubapp property tester before to ensure right types
+	// use FBInterfaceElementIsFreeAndPartOfSubapp property tester before to ensure
+	// right types
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
@@ -41,7 +42,7 @@ public class CreateConnectionAtSubappInterface extends AbstractHandler {
 			if (ie.eContainer().eContainer() instanceof final FB fb) {
 				subApp = FBNetworkElementHelper.getContainerSubappOfFB(fb);
 			}
-			if (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().isNestedInSubApp()
+			if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement().isNestedInSubApp()
 					&& ie.eContainer().eContainer() instanceof final SubApp typedSubapp) {
 				subApp = FBNetworkElementHelper.getUntypedContainerSubappOfTypedSubapp(typedSubapp);
 			}

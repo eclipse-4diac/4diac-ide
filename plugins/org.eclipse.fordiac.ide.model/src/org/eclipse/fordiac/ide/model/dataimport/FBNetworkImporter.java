@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University, Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University, Linz,
  *                          Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
  *
@@ -38,12 +38,12 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -201,7 +201,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private void parseFB() throws TypeImportException, XMLStreamException {
 		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBNetworkElement fb = createFBInstance(typeFbElement);
+		final BlockFBNetworkElement fb = createFBInstance(typeFbElement);
 
 		readNameCommentAttributes(fb);
 		getXandY(fb);
@@ -218,18 +218,20 @@ class FBNetworkImporter extends CommonElementImporter {
 		fbNetworkElementMap.putIfAbsent(fb.getName(), fb);
 	}
 
-	private FBNetworkElement createFBInstance(final String typeName) {
-		final FBTypeEntry entry = getTypeEntry(typeName);
+	private BlockFBNetworkElement createFBInstance(final String typeName) {
+		final FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
 		if (null == entry) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getFBType()));
 		}
-		final FBType type = entry.getType();
-		if (type == null) {
-			return FordiacMarkerHelper.createErrorMarkerFB(typeName, entry);
-		}
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
-		fb.setInterface(type.getInterfaceList().copy());
+		InterfaceList fbInterface = entry.getInterface();
+		if (fbInterface == null) {
+			fbInterface = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		} else {
+			fbInterface = fbInterface.copy();
+		}
+		fb.setInterface(fbInterface);
 		fb.setTypeEntry(entry);
 		return fb;
 	}

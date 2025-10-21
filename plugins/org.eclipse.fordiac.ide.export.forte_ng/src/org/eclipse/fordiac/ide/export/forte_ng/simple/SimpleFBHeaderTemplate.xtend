@@ -29,7 +29,7 @@ class SimpleFBHeaderTemplate extends BaseFBHeaderTemplate<SimpleFBType> {
 		super(type, name, prefix, "CSimpleFB", options)
 	}
 
-	override generateClassInclude() '''«generateDependencyInclude("core/simplefb.h")»'''
+	override generateClassInclude() '''«generateDependencyInclude("forte/simplefb.h")»'''
 
 	override generateAdditionalDeclarations() '''
 		«generateStates»

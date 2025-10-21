@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,10 +13,10 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public final class BlockInstanceFactory {
 
-	public static FBNetworkElement createBlockInstanceForTypeEntry(final TypeEntry entry) {
+	public static BlockFBNetworkElement createBlockInstanceForTypeEntry(final TypeEntry entry) {
 		if (entry == null || entry instanceof ErrorTypeEntry) {
 			return LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		}
@@ -54,7 +54,7 @@ public final class BlockInstanceFactory {
 		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
-		if (entry.getType() instanceof CompositeFBType) {
+		if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}
 		return LibraryElementFactory.eINSTANCE.createFB();

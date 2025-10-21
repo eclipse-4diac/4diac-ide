@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STResource
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocumentUpdater
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
@@ -40,13 +41,17 @@ final class STAlgorithmEmbeddedEditorUtil {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory)
 	}
 
+	def static LibraryElementXtextDocumentUpdater getLibraryElementXtextDocumentUpdater() {
+		return SERVICE_PROVIDER.get(LibraryElementXtextDocumentUpdater)
+	}
+
 	def static void updateEditor(EmbeddedEditor editor, INamedElement element) {
 		editor.updateEditor(element?.eResource?.URI ?: SYNTHETIC_URI,
 			switch (root : element.rootContainer) { LibraryElement: root }, null, element.featureType)
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,
-		Collection<? extends EObject> additionalContent, INamedElement expectedType) {
+		Collection<? extends EObject> additionalContent, LibraryElement expectedType) {
 		editor.updateEditor(uri, type, additionalContent, #{STResource.OPTION_EXPECTED_TYPE -> expectedType})
 	}
 

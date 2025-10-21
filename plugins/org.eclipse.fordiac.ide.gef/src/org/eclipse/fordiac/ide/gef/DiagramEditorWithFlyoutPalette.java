@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
@@ -17,11 +17,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
@@ -40,7 +38,6 @@ import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
@@ -83,7 +80,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
@@ -116,24 +112,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	private GraphicalAnnotationModel annotationModel;
 	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
-
-	// needed for tabbed property sheets
-	@Override
-	public CommandStack getCommandStack() {
-		return super.getCommandStack();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
-	 * .EventObject)
-	 */
-	@Override
-	public void commandStackChanged(final EventObject event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-		super.commandStackChanged(event);
-	}
 
 	/**
 	 * refresh all child editparts when editor gets focus.
@@ -401,14 +379,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 					"Editor input with new content given to diagram editor. This is currently not supported!"); //$NON-NLS-1$
 		}
 		if (getEditorInput() == null) {
-			setEditDomain(createEditDomain());
-			getEditDomain().setDefaultTool(createDefaultTool());
-			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-			// use one "System - Wide" command stack to avoid inconsistencies due to
-			// undo redo
-			if (null != getSystem()) {
-				getEditDomain().setCommandStack(getSystem().getCommandStack());
-			}
+			setupEditDomain();
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			removeAnnotationModelDispatcher();
@@ -416,6 +387,17 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 			addAnnotationModelDispatcher();
 		}
 		super.setInputWithNotify(input);
+	}
+
+	private void setupEditDomain() {
+		final CommandStack commandStack = (getSite() instanceof final MultiPageEditorSite multiPageEditorSite)
+				? multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class)
+				: new CommandStack();
+		final DefaultEditDomain editDomain = createEditDomain();
+		editDomain.setCommandStack(commandStack);
+		editDomain.setDefaultTool(createDefaultTool());
+		editDomain.setActiveTool(editDomain.getDefaultTool());
+		setEditDomain(editDomain);
 	}
 
 	protected DefaultEditDomain createEditDomain() {
@@ -426,30 +408,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	protected AdvancedPanningSelectionTool createDefaultTool() {
 		return new AdvancedPanningSelectionTool();
 	}
-
-	/**
-	 * Gets the system.
-	 *
-	 * @return the system
-	 */
-	public abstract AutomationSystem getSystem();
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
-	 * IProgressMonitor)
-	 */
-	@Override
-	public abstract void doSave(final IProgressMonitor monitor);
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
-	 */
-	@Override
-	public abstract void doSaveAs();
 
 	/*
 	 * (non-Javadoc)

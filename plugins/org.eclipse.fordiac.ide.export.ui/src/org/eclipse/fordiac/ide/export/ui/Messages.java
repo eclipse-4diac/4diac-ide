@@ -18,9 +18,10 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.ui.messages"; //$NON-NLS-1$
+
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
 	public static String ExportStatusMessageDialog_4diacIDETypeExportErrors;
 
@@ -33,16 +34,6 @@ public final class Messages extends NLS {
 	public static String ExportStatusMessageDialog_WarningsNotEmpty;
 
 	public static String FordiacExportWizard_DESCRIPTION_WizardPage;
-
-	public static String FordiacExportWizard_ERROR;
-
-	public static String FordiacExportWizard_EXPORT_CANCELED;
-
-	public static String FordiacExportWizard_ExportingCMakeLists;
-
-	public static String FordiacExportWizard_ExportingSelectedTypesUsingExporter;
-
-	public static String FordiacExportWizard_ExportingType;
 
 	public static String FordiacExportWizard_LABEL_Window_Title;
 
@@ -71,6 +62,18 @@ public final class Messages extends NLS {
 	public static String SelectFBTypesWizardPage_OverwriteWithoutWarning;
 
 	public static String SelectFBTypesWizardPage_SelectADirectoryToExportTo;
+
+	public static String TypeExport;
+
+	public static String TypeExport_Enable;
+
+	public static String TypeExport_Exporter;
+
+	public static String TypeExport_OutputFolder;
+
+	public static String TypeExport_Settings;
+
+	public static String TypeExport_FileDialogMessage;
 
 	static {
 		// initialize resource bundle

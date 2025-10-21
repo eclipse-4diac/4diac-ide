@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2012 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.resourceediting.editparts;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
@@ -33,9 +33,8 @@ public class ResourceDiagramEditPartFactory extends ElementEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof IInterfaceElement) {
-			final IInterfaceElement element = (IInterfaceElement) modelElement;
-			if (element.getFBNetworkElement() instanceof SubApp && null == element.getFBNetworkElement().getType()) {
+		if (modelElement instanceof final IInterfaceElement element) {
+			if (element.getBlockFBNetworkElement() instanceof UntypedSubApp) {
 				return new UntypedSubAppInterfaceElementEditPartForResource();
 			}
 			return new InterfaceEditPartForResourceFBs();

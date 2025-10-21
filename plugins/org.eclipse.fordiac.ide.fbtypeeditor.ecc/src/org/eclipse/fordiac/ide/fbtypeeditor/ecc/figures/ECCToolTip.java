@@ -50,7 +50,7 @@ public class ECCToolTip extends Figure {
 		setLayoutManager(new GridLayout());
 	}
 
-	protected void setLabel(String name, String comment) {
+	protected void setLabel(final String name, final String comment) {
 		nameLabel.setText(name);
 		add(nameLabel);
 		setConstraint(nameLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
@@ -58,11 +58,11 @@ public class ECCToolTip extends Figure {
 		setLabelContent(comment);
 	}
 
-	private void setLabelContent(String text) {
+	private void setLabelContent(final String text) {
 		add(line);
 		setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		if ((text != null) && (text.length() > 0)) {
+		if ((text != null) && (!text.isEmpty())) {
 			content.setText(text);
 		} else {
 			content.setText("[not set]");

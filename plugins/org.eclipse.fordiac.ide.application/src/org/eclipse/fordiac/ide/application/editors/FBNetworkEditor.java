@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Germany GmbH
  *
@@ -41,16 +41,16 @@ import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -78,10 +78,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	protected void setModel(final FBNetwork model) {
 		this.model = model;
-	}
-
-	public CommandStack getFBEditorCommandStack() {
-		return getCommandStack();
 	}
 
 	@Override
@@ -118,13 +114,17 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 	}
 
 	protected TypeLibrary getTypeLibrary() {
-		return getSystem().getTypeLibrary();
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getModel());
+		if (typeLib != null) {
+			return typeLib;
+		}
+		throw new IllegalStateException("Could not get type lib for: " + getModel()); //$NON-NLS-1$
 	}
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				getSystem().getTypeLibrary().getProject());
+				ModelHelper.getProjectFromContextChecked(getModel()));
 	}
 
 	@Override
@@ -147,11 +147,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 		getGraphicalViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING,
 				new Dimension((int) CoordinateConverter.INSTANCE.getLineHeight(),
 						(int) CoordinateConverter.INSTANCE.getLineHeight()));
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return getModel().getAutomationSystem();
 	}
 
 	@Override
@@ -220,7 +215,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getTypeLibrary().getProject(), getEditDomain(),
+		return new FBTypePaletteViewerProvider(ModelHelper.getProjectFromContextChecked(getModel()), getEditDomain(),
 				getPaletteNavigatorID());
 	}
 

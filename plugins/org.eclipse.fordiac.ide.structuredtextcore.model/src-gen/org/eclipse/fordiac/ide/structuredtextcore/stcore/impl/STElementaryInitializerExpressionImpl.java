@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
@@ -123,7 +124,7 @@ public class STElementaryInitializerExpressionImpl extends STInitializerExpressi
 	 * @generated
 	 */
 	@Override
-	public INamedElement getResultType() {
+	public LibraryElement getResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
 	}
 
@@ -133,7 +134,7 @@ public class STElementaryInitializerExpressionImpl extends STInitializerExpressi
 	 * @generated
 	 */
 	@Override
-	public INamedElement getDeclaredResultType() {
+	public LibraryElement getDeclaredResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);
 	}
 

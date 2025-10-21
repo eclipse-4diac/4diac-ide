@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,8 +25,9 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 	public static TargetInterfaceElement createFor(final IInterfaceElement host, final IInterfaceElement refElement,
 			final FBNetwork parentNW) {
-		if (refElement.getFBNetworkElement() == null || (refElement.getFBNetworkElement() instanceof final SubApp subapp
-				&& subapp.getSubAppNetwork() == parentNW)) {
+		if (refElement.getBlockFBNetworkElement() == null
+				|| (refElement.getBlockFBNetworkElement() instanceof final SubApp subapp
+						&& subapp.getSubAppNetwork() == parentNW)) {
 			return new SubappTargetInterfaceElement(host, refElement);
 		}
 		return new TargetInterfaceElement(host, refElement);
@@ -47,14 +48,14 @@ public class TargetInterfaceElement implements Comparable<TargetInterfaceElement
 
 	public String getRefPinFullName() {
 		final StringBuilder retVal = new StringBuilder();
-		final var fbelement = getRefElement().getFBNetworkElement();
+		final var fbelement = getRefElement().getBlockFBNetworkElement();
 		if (fbelement != null) {
 			final FBNetworkElement parent = fbelement.getOuterFBNetworkElement();
 			if (parent != null) {
 				final FBNetworkElement grandParent = parent.getOuterFBNetworkElement();
-				if (grandParent != null && getHost().getFBNetworkElement() != null
-						&& getHost().getFBNetworkElement() != grandParent
-						&& getHost().getFBNetworkElement().getOuterFBNetworkElement() != grandParent) {
+				if (grandParent != null && getHost().getBlockFBNetworkElement() != null
+						&& getHost().getBlockFBNetworkElement() != grandParent
+						&& getHost().getBlockFBNetworkElement().getOuterFBNetworkElement() != grandParent) {
 					retVal.append(grandParent.getName());
 					retVal.append('.');
 				}

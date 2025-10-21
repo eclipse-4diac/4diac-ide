@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -16,10 +16,6 @@
  *               - extracted this policy from the AbstractContainerContentEditPart
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -73,31 +69,6 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 
 	protected FBNetworkElement getParentModel() {
 		return (getHost() instanceof final AbstractContainerContentEditPart accep) ? accep.getContainerElement() : null;
-	}
-
-	protected Rectangle getNewContentBounds(final List<EditPart> editParts) {
-		Rectangle selectionExtend = null;
-		for (final EditPart selElem : editParts) {
-			if (selElem instanceof final GraphicalEditPart gep
-					&& selElem.getModel() instanceof final FBNetworkElement fbnElm) {
-				// only consider the selected FBNetworkElements
-				final Rectangle fbBounds = gep.getFigure().getBounds();
-				if (selectionExtend == null) {
-					selectionExtend = fbBounds.getCopy();
-				} else {
-					selectionExtend.union(fbBounds);
-				}
-				addValueBounds(fbnElm, selectionExtend);
-			}
-		}
-		return (selectionExtend != null) ? selectionExtend : new Rectangle();
-	}
-
-	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
-		final Map<Object, EditPart> editPartRegistry = getHost().getViewer().getEditPartRegistry();
-		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
-				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-				.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
 	}
 
 	public static Rectangle getContainerAreaBounds(final GraphicalEditPart containerContentEP) {

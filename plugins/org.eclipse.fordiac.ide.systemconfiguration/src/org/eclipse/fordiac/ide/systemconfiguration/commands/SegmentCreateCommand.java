@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -64,6 +65,7 @@ public class SegmentCreateCommand extends Command {
 		segment.setWidth(CoordinateConverter.INSTANCE.screenToIEC61499(width));
 		redo();
 		segment.setName(NameRepository.createUniqueName(segment, type.getType().getName()));
+		AttributeInheritMode.copyAttributeValuesFromType(segment);
 	}
 
 	@Override

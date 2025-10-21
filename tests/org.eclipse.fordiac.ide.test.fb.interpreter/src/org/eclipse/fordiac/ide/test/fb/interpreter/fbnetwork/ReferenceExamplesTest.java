@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University Linz
+ * Copyright (c) 2023, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,8 +33,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -83,7 +83,8 @@ public class ReferenceExamplesTest {
 		// third element: subapplication name
 		final SubApp testCase = (SubApp) app.getFBNetwork().getElementNamed(request[2]);
 		// fourth element: FB to trigger
-		final FBNetworkElement initialFb = testCase.getSubAppNetwork().getElementNamed(request[3]);
+		final BlockFBNetworkElement initialFb = (BlockFBNetworkElement) testCase.getSubAppNetwork()
+				.getElementNamed(request[3]);
 		// fifth element: pin to trigger
 		final Event eventPin = (Event) initialFb.getInterfaceElement(request[4]);
 		// sixth element must be opsem
@@ -101,6 +102,7 @@ public class ReferenceExamplesTest {
 				.loadResource(URI.createPlatformResourceURI(res.getFullPath().toString(), true));
 
 		final Comparison eventComparison = EventManagerComparisonUtils.compareEventManager(resLeft, resRight);
+		// printed table stays empty, because elements do not inherit ENamedElement
 		EMFComparePrettyPrinter.printComparison(eventComparison, System.out);
 		assertTrue(eventComparison.getDifferences().isEmpty());
 	}

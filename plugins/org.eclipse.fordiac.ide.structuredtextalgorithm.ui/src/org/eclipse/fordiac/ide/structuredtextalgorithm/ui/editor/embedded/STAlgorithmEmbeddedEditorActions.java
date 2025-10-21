@@ -15,22 +15,28 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.expressions.EvaluationResult;
+import org.eclipse.core.expressions.Expression;
+import org.eclipse.core.expressions.ExpressionInfo;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ActiveShellExpression;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.handlers.IHandlerActivation;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.swt.IFocusService;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorActions;
 
 @SuppressWarnings("restriction")
 public class STAlgorithmEmbeddedEditorActions extends EmbeddedEditorActions {
+
+	private static final String CONTROL_ID = "org.eclipse.xtext.ui.embeddedTextEditor"; //$NON-NLS-1$
 
 	public static class Factory extends EmbeddedEditorActions.Factory {
 
@@ -49,32 +55,43 @@ public class STAlgorithmEmbeddedEditorActions extends EmbeddedEditorActions {
 		final List<IHandlerActivation> handlerActivations = new ArrayList<>(allActions.size());
 		final IHandlerService handlerService = workbench.getAdapter(IHandlerService.class);
 		final IContextService contextService = workbench.getAdapter(IContextService.class);
-		final Shell shell = viewer.getTextWidget().getShell();
-		final ActiveShellExpression expression = new ActiveShellExpression(shell);
+		final IFocusService focusService = workbench.getService(IFocusService.class);
+		focusService.addFocusTracker(viewer.getTextWidget(), CONTROL_ID);
+		final Expression expression = new ActiveFocusExpression(viewer.getTextWidget());
 		final IContextActivation contextActivation = contextService.activateContext(EMBEDDED_TEXT_EDITOR_SCOPE,
 				expression);
+
+		viewer.getTextWidget().addFocusListener(FocusListener.focusGainedAdapter(e -> {
+			if (handlerActivations.isEmpty()) {
+				for (final IAction action : allActions.values()) {
+					handlerActivations.add(handlerService.activateHandler(action.getActionDefinitionId(),
+							new ActionHandler(action), expression, true));
+				}
+			}
+		}));
+
 		viewer.getTextWidget().addDisposeListener(e -> {
 			handlerService.deactivateHandlers(handlerActivations);
 			contextService.deactivateContext(contextActivation);
 		});
+	}
 
-		viewer.getTextWidget().addFocusListener(new FocusListener() {
-			@Override
-			public void focusLost(final FocusEvent e) {
-				handlerService.deactivateHandlers(handlerActivations);
-				handlerActivations.clear();
-			}
+	protected static class ActiveFocusExpression extends Expression {
+		private final Control control;
 
-			@Override
-			public void focusGained(final FocusEvent e) {
-				if (handlerActivations.isEmpty()) {
-					for (final IAction action : allActions.values()) {
-						handlerActivations.add(handlerService.activateHandler(action.getActionDefinitionId(),
-								new ActionHandler(action), expression, true));
-					}
-				}
-			}
+		public ActiveFocusExpression(final Control control) {
+			this.control = control;
+		}
 
-		});
+		@Override
+		public EvaluationResult evaluate(final IEvaluationContext context) {
+			return context.getVariable(ISources.ACTIVE_FOCUS_CONTROL_NAME) == control ? EvaluationResult.TRUE
+					: EvaluationResult.FALSE;
+		}
+
+		@Override
+		public void collectExpressionInfo(final ExpressionInfo info) {
+			info.addVariableNameAccess(ISources.ACTIVE_FOCUS_CONTROL_NAME);
+		}
 	}
 }

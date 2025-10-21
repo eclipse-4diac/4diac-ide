@@ -1,199 +1,224 @@
 <?xml version="1.0" encoding="ASCII"?>
-<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
+<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:data="org.eclipse.fordiac.ide.model.datatype" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
   <transactions xsi:type="opsem:FBTransaction">
     <inputEventOccurrence active="false">
       <event href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0/@interface/@eventInputs.0"/>
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="Q" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="CV" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="Q" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="CV" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="OUT" outputConnections="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
         <transferData key="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0">
           <value value="1"/>
         </transferData>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2INT" comment="Writing INT from input to output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="1"/>
+                <inputVars name="IN" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
+                  <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
@@ -206,23 +231,30 @@
           <identification standard="61499-1"/>
           <interfaceList>
             <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@inputVars.0"/>
             </eventInputs>
             <eventOutputs name="CNF" comment="Execution Confirmation">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@outputVars.0"/>
             </eventOutputs>
-            <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-              <value errorMessage="" value="1"/>
+            <inputVars name="IN" isInput="true" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+              <type xsi:type="data:IntType" href="data.lib#/7"/>
+              <value value="1"/>
             </inputVars>
-            <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+            <outputVars name="OUT" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+              <type xsi:type="data:IntType" href="data.lib#/7"/>
               <value value="1"/>
             </outputVars>
           </interfaceList>
           <service/>
           <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+          <simpleECStates name="REQ" inputEvent="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0">
+            <simpleECActions algorithm="REQ" output="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+          </simpleECStates>
         </simpleFBType>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
     </outputEventOccurrences>
   </transactions>
   <transactions xsi:type="opsem:FBTransaction" parentEO="//@transactions.0/@outputEventOccurrences.0">
@@ -231,195 +263,220 @@
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="Q" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="CV" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
         <transferData key="//@transactions.1/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0">
           <value value="1"/>
         </transferData>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2INT" comment="Writing INT from input to output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="1"/>
+                <inputVars name="IN" isInput="true" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
+                  <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.1/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="Q" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="CV" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
         <transferData key="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0">
@@ -429,52 +486,66 @@
           <value value="1"/>
         </transferData>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2INT" comment="Writing INT from input to output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="1"/>
+                <inputVars name="IN" isInput="true" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
+                  <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2UINT" comment="Writing INT from input to UINT output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                <inputVars name="IN" isInput="true" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="UINT" arraySize="-1" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:UintType" href="data.lib#/3"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=INT_TO_UINT(IN);&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.1/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
@@ -487,23 +558,30 @@
           <identification standard="61499-1"/>
           <interfaceList>
             <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@inputVars.0"/>
             </eventInputs>
             <eventOutputs name="CNF" comment="Execution Confirmation">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@outputVars.0"/>
             </eventOutputs>
-            <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+            <inputVars name="IN" isInput="true" withs="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+              <type xsi:type="data:IntType" href="data.lib#/7"/>
               <value value="1"/>
             </inputVars>
-            <outputVars name="OUT" typeName="UINT" arraySize="-1" withs="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+            <outputVars name="OUT" withs="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+              <type xsi:type="data:UintType" href="data.lib#/3"/>
               <value value="1"/>
             </outputVars>
           </interfaceList>
           <service/>
           <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=INT_TO_UINT(IN);&#xA;END_ALGORITHM&#xA;&#xA;"/>
+          <simpleECStates name="REQ" inputEvent="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0">
+            <simpleECActions algorithm="REQ" output="//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+          </simpleECStates>
         </simpleFBType>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
     </outputEventOccurrences>
   </transactions>
   <transactions xsi:type="opsem:FBTransaction" parentEO="//@transactions.1/@outputEventOccurrences.0">
@@ -512,83 +590,92 @@
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="Q" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
+                <value/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <outputVars name="CV" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
         <transferData key="//@transactions.2/@inputEventOccurrence/@fbRuntime/@fbnetwork/@dataConnections.0">
@@ -598,137 +685,160 @@
           <value value="1"/>
         </transferData>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2INT" comment="Writing INT from input to output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="1"/>
+                <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
+                  <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2UINT" comment="Writing INT from input to UINT output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:UintType" href="data.lib#/3"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=INT_TO_UINT(IN);&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
       <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork>
           <networkElements xsi:type="libraryElement:FB" name="Fb1">
-            <position x="40" y="1"/>
+            <position x="266.6666666666667" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage="" value="1"/>
+              <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value value="1"/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb3">
-            <position x="311"/>
+            <position x="2073.3333333333335"/>
             <interface>
               <eventInputs name="CU" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0"/>
               </eventInputs>
-              <eventInputs name="R" isInput="true"/>
+              <eventInputs name="R" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              </eventInputs>
               <eventOutputs name="CUO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
               <eventOutputs name="RO">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.0"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@outputVars.1"/>
               </eventOutputs>
-              <inputVars name="PV" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="PV" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
+                <value/>
               </inputVars>
-              <outputVars name="Q" typeName="BOOL" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="Q" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.0">
+                <type xsi:type="data:BoolType" href="data.lib#/12"/>
                 <value value="TRUE"/>
               </outputVars>
-              <outputVars name="CV" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="CV" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.0/@with.1 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventOutputs.1/@with.1">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <networkElements xsi:type="libraryElement:FB" name="Fb2">
-            <position x="165" y="1"/>
+            <position x="1100.0" y="6.666666666666667"/>
             <interface>
               <eventInputs name="REQ" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.0">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0"/>
               </eventInputs>
               <eventOutputs name="CNF" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@eventConnections.1">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                 <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0"/>
               </eventOutputs>
-              <inputVars name="IN" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
-                <value errorMessage=""/>
+              <inputVars name="IN" isInput="true" inputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:IntType" href="data.lib#/7"/>
+                <value/>
               </inputVars>
-              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
-                <attributes name="VarConfig" value="false"/>
+              <outputVars name="OUT" outputConnections="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:UintType" href="data.lib#/3"/>
                 <value value="1"/>
               </outputVars>
             </interface>
           </networkElements>
           <dataConnections source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@inputVars.0">
-            <routingData dx1="13" dx2="13"/>
+            <routingData dx1="86.66666666666667" dx2="86.66666666666667"/>
           </dataConnections>
           <dataConnections source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@outputVars.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@inputVars.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </dataConnections>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventInputs.0">
-            <routingData dx1="15" dx2="15"/>
+            <routingData dx1="100.0" dx2="100.0"/>
           </eventConnections>
           <eventConnections source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.2/@interface/@eventOutputs.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.1/@interface/@eventInputs.0">
-            <routingData dx1="16"/>
+            <routingData dx1="106.66666666666667"/>
           </eventConnections>
         </fbnetwork>
         <transferData key="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@dataConnections.0">
@@ -738,85 +848,107 @@
           <value value="1"/>
         </transferData>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2INT" comment="Writing INT from input to output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
-                  <value errorMessage="" value="1"/>
+                <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
+                  <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=IN;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.2"/>
           <value xsi:type="opsem:SimpleFBTypeRuntime">
             <simpleFBType name="INT2UINT" comment="Writing INT from input to UINT output">
               <versionInfo author="Bianca Wiesmayr" date="2023-03-07" version="1.0"/>
               <identification standard="61499-1"/>
               <interfaceList>
                 <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
                 </eventInputs>
                 <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
                 </eventOutputs>
-                <inputVars name="IN" isInput="true" typeName="INT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                <inputVars name="IN" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:IntType" href="data.lib#/7"/>
                   <value value="1"/>
                 </inputVars>
-                <outputVars name="OUT" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="OUT" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:UintType" href="data.lib#/3"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
               <service/>
               <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;&#x9;OUT:=INT_TO_UINT(IN);&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.1/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
             </simpleFBType>
           </value>
         </typeRuntimes>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
-          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0">
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
+          <value xsi:type="opsem:BasicFBTypeRuntime" activeState="START">
             <basicfbtype name="E_CTU" comment="Event driven up counter">
               <versionInfo author="Alois Zoitl" date="2017-09-21" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
               <identification description="&lt;p>Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p>&#xA;" standard="61499-1 Annex 2"/>
               <interfaceList>
                 <eventInputs name="CU" comment="Count up" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@inputVars.0"/>
                 </eventInputs>
-                <eventInputs name="R" comment="Reset" isInput="true"/>
+                <eventInputs name="R" comment="Reset" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                </eventInputs>
                 <eventOutputs name="CUO" comment="Count up output">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@outputVars.0"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@outputVars.1"/>
                 </eventOutputs>
                 <eventOutputs name="RO" comment="Reset output">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@outputVars.0"/>
                   <with variables="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@outputVars.1"/>
                 </eventOutputs>
-                <inputVars name="PV" comment="Process Value" isInput="true" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
+                <inputVars name="PV" comment="Process Value" isInput="true" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:UintType" href="data.lib#/3"/>
                   <value value="1"/>
                 </inputVars>
-                <outputVars name="Q" comment="True if CV >= PV" typeName="BOOL" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.1/@with.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0/@with.0">
+                <outputVars name="Q" comment="True if CV >= PV" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0/@with.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.1/@with.0">
+                  <type xsi:type="data:BoolType" href="data.lib#/12"/>
                   <value value="TRUE"/>
                 </outputVars>
-                <outputVars name="CV" comment="Counter Value" typeName="UINT" arraySize="-1" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.1/@with.1 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0/@with.1">
+                <outputVars name="CV" comment="Counter Value" withs="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0/@with.1 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.1/@with.1">
+                  <type xsi:type="data:UintType" href="data.lib#/3"/>
                   <value value="1"/>
                 </outputVars>
               </interfaceList>
-              <service>
+              <service comment="Event driven up counter">
                 <rightInterface name="right interface"/>
                 <leftInterface name="left interface"/>
                 <serviceSequence name="Service Sequence">
@@ -858,27 +990,27 @@
               <callables xsi:type="libraryElement:STAlgorithm" name="CU" text="&#xA;&#xA;ALGORITHM CU&#xA;CV := CV + 1;&#xA;Q  := (CV >= PV);&#xA;END_ALGORITHM&#xA;&#xA;"/>
               <eCC start="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0">
                 <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.0 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.2" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.1 //@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.3">
-                  <position x="82" y="63"/>
+                  <position x="546.6666666666667" y="420.0"/>
                 </eCState>
                 <eCState name="CU" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.0">
-                  <position x="235" y="24"/>
+                  <position x="1566.6666666666667" y="160.0"/>
                   <eCAction algorithm="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@callables.1" output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0"/>
                 </eCState>
                 <eCState name="R" outTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.3" inTransitions="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCTransition.2">
-                  <position x="135" y="150"/>
+                  <position x="900.0" y="1000.0"/>
                   <eCAction algorithm="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@callables.0" output="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.1"/>
                 </eCState>
                 <eCTransition conditionExpression="CV &lt; 65535" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventInputs.0">
-                  <position x="145" y="31"/>
+                  <position x="966.6666666666667" y="206.66666666666669"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="192" y="76"/>
+                  <position x="1280.0" y="506.6666666666667"/>
                 </eCTransition>
                 <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventInputs.1">
-                  <position x="126" y="115"/>
+                  <position x="840.0" y="766.6666666666667"/>
                 </eCTransition>
                 <eCTransition source="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@eCC/@eCState.0">
-                  <position x="81" y="157"/>
+                  <position x="540.0" y="1046.6666666666667"/>
                 </eCTransition>
               </eCC>
             </basicfbtype>
@@ -887,34 +1019,42 @@
       </resultFBRuntime>
     </inputEventOccurrence>
     <outputEventOccurrences event="//@transactions.2/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.2/@value/@basicfbtype/@interfaceList/@eventOutputs.0">
-      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime">
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="CU">
         <basicfbtype name="E_CTU" comment="Event driven up counter">
           <versionInfo author="Alois Zoitl" date="2017-09-21" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
           <identification description="&lt;p>Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p>&#xA;" standard="61499-1 Annex 2"/>
           <interfaceList>
             <eventInputs name="CU" comment="Count up" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@inputVars.0"/>
             </eventInputs>
-            <eventInputs name="R" comment="Reset" isInput="true"/>
+            <eventInputs name="R" comment="Reset" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+            </eventInputs>
             <eventOutputs name="CUO" comment="Count up output">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
               <with variables="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
             </eventOutputs>
             <eventOutputs name="RO" comment="Reset output">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
               <with variables="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
               <with variables="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
             </eventOutputs>
-            <inputVars name="PV" comment="Process Value" isInput="true" typeName="UINT" arraySize="-1" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
+            <inputVars name="PV" comment="Process Value" isInput="true" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0/@with.0">
+              <type xsi:type="data:UintType" href="data.lib#/3"/>
               <value value="1"/>
             </inputVars>
-            <outputVars name="Q" comment="True if CV >= PV" typeName="BOOL" arraySize="-1" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1/@with.0 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0/@with.0">
+            <outputVars name="Q" comment="True if CV >= PV" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0/@with.0 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1/@with.0">
+              <type xsi:type="data:BoolType" href="data.lib#/12"/>
               <value value="TRUE"/>
             </outputVars>
-            <outputVars name="CV" comment="Counter Value" typeName="UINT" arraySize="-1" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1/@with.1 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0/@with.1">
+            <outputVars name="CV" comment="Counter Value" withs="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0/@with.1 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1/@with.1">
+              <type xsi:type="data:UintType" href="data.lib#/3"/>
               <value value="1"/>
             </outputVars>
           </interfaceList>
-          <service>
+          <service comment="Event driven up counter">
             <rightInterface name="right interface"/>
             <leftInterface name="left interface"/>
             <serviceSequence name="Service Sequence">
@@ -956,32 +1096,32 @@
           <callables xsi:type="libraryElement:STAlgorithm" name="CU" text="&#xA;&#xA;ALGORITHM CU&#xA;CV := CV + 1;&#xA;Q  := (CV >= PV);&#xA;END_ALGORITHM&#xA;&#xA;"/>
           <eCC start="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
             <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.2" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1 //@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.3">
-              <position x="82" y="63"/>
+              <position x="546.6666666666667" y="420.0"/>
             </eCState>
             <eCState name="CU" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
-              <position x="235" y="24"/>
+              <position x="1566.6666666666667" y="160.0"/>
               <eCAction algorithm="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@callables.1" output="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
             </eCState>
             <eCState name="R" outTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.3" inTransitions="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCTransition.2">
-              <position x="135" y="150"/>
+              <position x="900.0" y="1000.0"/>
               <eCAction algorithm="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@callables.0" output="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1"/>
             </eCState>
             <eCTransition conditionExpression="CV &lt; 65535" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
-              <position x="145" y="31"/>
+              <position x="966.6666666666667" y="206.66666666666669"/>
             </eCTransition>
             <eCTransition source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
-              <position x="192" y="76"/>
+              <position x="1280.0" y="506.6666666666667"/>
             </eCTransition>
             <eCTransition conditionExpression="" source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.2" conditionEvent="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.1">
-              <position x="126" y="115"/>
+              <position x="840.0" y="766.6666666666667"/>
             </eCTransition>
             <eCTransition source="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.2" destination="//@transactions.2/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
-              <position x="81" y="157"/>
+              <position x="540.0" y="1046.6666666666667"/>
             </eCTransition>
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.1/@fBNetwork/@networkElements.7/@subAppNetwork/@networkElements.1"/>
     </outputEventOccurrences>
   </transactions>
 </opsem:EventManager>

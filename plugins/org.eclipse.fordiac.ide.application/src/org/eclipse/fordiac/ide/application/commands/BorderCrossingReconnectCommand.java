@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -134,7 +134,7 @@ public class BorderCrossingReconnectCommand extends CompoundCommand {
 	}
 
 	private static boolean isEpxandedSubapp(final IInterfaceElement ie) {
-		return ie.getFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
+		return ie.getBlockFBNetworkElement() instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	@Override

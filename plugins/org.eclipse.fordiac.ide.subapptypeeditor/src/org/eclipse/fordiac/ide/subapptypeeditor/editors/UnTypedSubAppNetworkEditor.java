@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,35 +16,20 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.DefaultEditDomain;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.jface.util.TransferDropTargetListener;
 
 public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements IFBTEditorPart {
 
-	private CommandStack commandStack;
 	private TypeLibrary typeLib;
 
 	public void setTypeLib(final TypeLibrary typeLib) {
 		this.typeLib = typeLib;
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
-	}
-
-	@Override
-	protected DefaultEditDomain createEditDomain() {
-		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override
@@ -58,11 +43,6 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	@Override
 	protected TypeLibrary getTypeLibrary() {
 		return typeLib;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null;
 	}
 
 	@Override

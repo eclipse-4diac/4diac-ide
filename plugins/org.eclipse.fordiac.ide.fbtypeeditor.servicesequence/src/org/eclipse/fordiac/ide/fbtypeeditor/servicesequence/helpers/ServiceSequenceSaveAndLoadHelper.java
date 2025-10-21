@@ -128,4 +128,8 @@ public class ServiceSequenceSaveAndLoadHelper {
 		serviceSequences.removeIf(s -> s.getName().equals(seq.getName()));
 		saveServiceSequenceToFile(fbtype, serviceSequences);
 	}
+
+	private ServiceSequenceSaveAndLoadHelper() {
+		throw new UnsupportedOperationException();
+	}
 }

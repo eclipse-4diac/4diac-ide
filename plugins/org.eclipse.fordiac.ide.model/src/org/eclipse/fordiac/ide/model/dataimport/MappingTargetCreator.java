@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
@@ -30,9 +30,9 @@ public final class MappingTargetCreator {
 		throw new UnsupportedOperationException("Utility class shall not be instantated!"); //$NON-NLS-1$
 	}
 
-	public static FBNetworkElement createMappingTarget(final Resource res, final FBNetworkElement srcElement,
+	public static BlockFBNetworkElement createMappingTarget(final Resource res, final BlockFBNetworkElement srcElement,
 			final String targetFBName) {
-		final FBNetworkElement created = createFBNetworkElement(srcElement);
+		final BlockFBNetworkElement created = createFBNetworkElement(srcElement);
 
 		if (created != null) {
 			if (srcElement.getTypeEntry() != null) {
@@ -50,7 +50,7 @@ public final class MappingTargetCreator {
 		return created;
 	}
 
-	private static FBNetworkElement createFBNetworkElement(final FBNetworkElement srcElement) {
+	private static BlockFBNetworkElement createFBNetworkElement(final BlockFBNetworkElement srcElement) {
 		return switch (srcElement) {
 		case final FB fb -> BlockInstanceFactory.createFBInstanceForTypeEntry((FBTypeEntry) fb.getTypeEntry());
 		case final TypedSubApp typedSubapp -> LibraryElementFactory.eINSTANCE.createTypedSubApp();

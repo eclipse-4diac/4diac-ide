@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2023 fortiss GmbH, Johannes Keppler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz
  *                          Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -109,7 +110,10 @@ public class DeleteFBNetworkElementCommand extends Command implements QualNameAf
 	}
 
 	private void collectDeleteCommands(final FBNetworkElement element) {
-		for (final IInterfaceElement intElement : element.getInterface().getAllInterfaceElements()) {
+		if (!(element instanceof final BlockFBNetworkElement bfbel)) {
+			return;
+		}
+		for (final IInterfaceElement intElement : bfbel.getInterface().getAllInterfaceElements()) {
 			final EList<Connection> connections = intElement.isIsInput() ? intElement.getInputConnections()
 					: intElement.getOutputConnections();
 			connections.forEach(con -> cmds.add(new DeleteConnectionCommand(con, element)));

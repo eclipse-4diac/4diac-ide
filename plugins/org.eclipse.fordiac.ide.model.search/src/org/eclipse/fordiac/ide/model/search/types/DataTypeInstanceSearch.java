@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
@@ -110,7 +111,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				return SearchChildrenProviderHelper.getAttributeDeclChildren(attrdecl);
 			}
 
-			if (obj instanceof final FBNetworkElement elem) {
+			if (obj instanceof final BlockFBNetworkElement elem) {
 				return Stream.concat(elem.getAttributes().stream(),
 						SearchChildrenProviderHelper.getInterfaceListChildren(elem.getInterface()));
 			}
@@ -127,7 +128,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				return object.getAttributes().stream();
 			}
 
-			return null;
+			return Stream.empty();
 		}
 	}
 }

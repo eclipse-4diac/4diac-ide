@@ -26,7 +26,7 @@ public final class StringValueConverter extends AbstractStringValueConverter {
 
 	@Override
 	public String toValue(final String string) throws IllegalArgumentException {
-		if (string.length() < 1 || string.charAt(0) != '\'') {
+		if (string.isEmpty() || string.charAt(0) != '\'') {
 			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		}
 		return super.toValue(string);

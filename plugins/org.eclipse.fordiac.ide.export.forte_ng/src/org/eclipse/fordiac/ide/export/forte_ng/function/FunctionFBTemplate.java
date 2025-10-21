@@ -23,10 +23,8 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport;
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType> {
 
@@ -50,37 +48,9 @@ public abstract class FunctionFBTemplate extends ForteFBTemplate<FunctionFBType>
 		builder.append(" func_"); //$NON-NLS-1$
 		builder.append(getType().getName());
 		builder.append('(');
-		builder.append(generateFunctionParameters());
+		builder.append(generateParameters(getType()));
 		builder.append(')');
 		return builder;
-	}
-
-	protected CharSequence generateFunctionParameters() {
-		return getFunctionParameters().map(FunctionFBTemplate::generateFunctionParameter)
-				.collect(Collectors.joining(", ")); //$NON-NLS-1$
-	}
-
-	protected static CharSequence generateFunctionParameter(final VarDeclaration param) {
-		final boolean reference = param.isInOutVar() || !param.isIsInput();
-		final StringBuilder builder = new StringBuilder();
-		builder.append(generateParameterTypeName(param, reference));
-		builder.append(' ');
-		if (reference) {
-			builder.append('&');
-		}
-		builder.append(ForteNgExportUtil.generateName(param));
-		return builder;
-	}
-
-	protected Stream<VarDeclaration> getFunctionParameters() {
-		return Stream
-				.of(getType().getInputParameters(), getType().getInOutParameters(), getType().getOutputParameters())
-				.flatMap(List::stream).filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast);
-	}
-
-	protected static CharSequence generateParameterTypeName(final VarDeclaration variable, final boolean output) {
-		final INamedElement type = VariableOperations.evaluateResultType(variable);
-		return output ? ForteNgExportUtil.generateTypeNameAsParameter(type) : ForteNgExportUtil.generateTypeName(type);
 	}
 
 	public ILanguageSupport getBodyLanguageSupport() {

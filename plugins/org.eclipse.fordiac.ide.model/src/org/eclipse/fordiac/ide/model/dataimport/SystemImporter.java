@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2024 fortiss GmbH, Johannes Kepler University, Linz,
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University, Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuild
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
@@ -60,12 +61,11 @@ import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurat
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
 
 	private final Map<Resource, Map<String, FBNetworkElement>> resFBNElementMapping = new HashMap<>();
-	private final List<FBNetworkElement> mappedFBs = new ArrayList<>();
+	private final List<BlockFBNetworkElement> mappedFBs = new ArrayList<>();
 	private final List<ConnectionBuilder<Connection>> brokenConnections = new ArrayList<>();
 
 	public SystemImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
@@ -104,11 +104,9 @@ public class SystemImporter extends CommonElementImporter {
 	 */
 	public static AutomationSystem createAutomationSystem() {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setCommandStack(new CommandStack());
 		// create PhysicalConfiguration
 		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
 		system.setSystemConfiguration(sysConf);
-
 		return system;
 	}
 
@@ -170,7 +168,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
-			segment.setTypeEntry(addDependency(getTypeLibrary().getSegmentTypeEntry(type)));
+			segment.setTypeEntry(getTypeEntry(type, getTypeLibrary()::getSegmentTypeEntry));
 			parseCommunication(segment);
 		}
 
@@ -252,7 +250,7 @@ public class SystemImporter extends CommonElementImporter {
 	private void parseDeviceType(final Device device) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final DeviceTypeEntry entry = addDependency(getTypeLibrary().getDeviceTypeEntry(typeName));
+			final DeviceTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getDeviceTypeEntry);
 			if (null != entry) {
 				device.setTypeEntry(entry);
 				createParameters(device);
@@ -311,13 +309,13 @@ public class SystemImporter extends CommonElementImporter {
 			return null;
 		}
 		final FBNetworkElement fbNetworkElement = fbNetworkElementMap.get(targetFBName);
-		if (fbNetworkElement == null && fromElement != null) {
-			final FBNetworkElement mappingTarget = MappingTargetCreator.createMappingTarget(res, fromElement,
+		if (fbNetworkElement == null && fromElement instanceof final BlockFBNetworkElement blockFbnEl) {
+			final FBNetworkElement mappingTarget = MappingTargetCreator.createMappingTarget(res, blockFbnEl,
 					targetFBName);
 			if (mappingTarget != null) {
 				// we generated a new target element put the from element into the list for
 				// connection generation at the end
-				mappedFBs.add(fromElement);
+				mappedFBs.add(blockFbnEl);
 				fbNetworkElementMap.put(targetFBName, mappingTarget);
 
 			}
@@ -338,7 +336,7 @@ public class SystemImporter extends CommonElementImporter {
 	private FBNetworkElement findMappingTargetFromName(final String targetName,
 			final FBNetworkElement copyCommunication) {
 		if (null != targetName) {
-			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
 			if (parts.size() >= 2) {
 				final Segment segment = getElement().getSystemConfiguration().getSegmentNamed(parts.getFirst());
 				if (null != segment) {
@@ -364,7 +362,7 @@ public class SystemImporter extends CommonElementImporter {
 
 	private FBNetworkElement findMappingTargetFromName(final String targetName) {
 		if (null != targetName) {
-			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
+			final Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
 			if (parts.size() >= 2) {
 				final Application application = getElement().getApplicationNamed(parts.getFirst());
 				if (null != application) {
@@ -498,8 +496,8 @@ public class SystemImporter extends CommonElementImporter {
 	 *
 	 */
 	private void generateMappedFBConnections() {
-		for (final FBNetworkElement fbnEl : mappedFBs) {
-			final FBNetworkElement srcResFb = fbnEl.getOpposite();
+		for (final BlockFBNetworkElement fbnEl : mappedFBs) {
+			final BlockFBNetworkElement srcResFb = fbnEl.getOpposite();
 			final Resource res = fbnEl.getResource();
 			fbnEl.getInterface().getOutputs().flatMap(ie -> ie.getOutputConnections().stream()) //
 					.filter(con -> con.getDestinationElement().getResource() == res) //
@@ -516,8 +514,8 @@ public class SystemImporter extends CommonElementImporter {
 		brokenConnections.forEach(ConnectionBuilder<Connection>::repair);
 	}
 
-	private static Connection createResourceCon(final FBNetworkElement srcResFB, final Connection con) {
-		final FBNetworkElement dstResFB = con.getDestinationElement().getOpposite();
+	private static Connection createResourceCon(final BlockFBNetworkElement srcResFB, final Connection con) {
+		final BlockFBNetworkElement dstResFB = con.getDestinationElement().getOpposite();
 		final Connection resCon = EcoreUtil.copy(con);
 		resCon.setSource(srcResFB.getOutput(con.getSource().getName()));
 		resCon.setDestination(dstResFB.getInput(con.getDestination().getName()));

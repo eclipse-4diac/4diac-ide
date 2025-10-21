@@ -393,7 +393,7 @@ ruleSTVarDeclaration returns [EObject current=null]
 					}
 				}
 				{
-					newCompositeNode(grammarAccess.getSTVarDeclarationAccess().getTypeINamedElementCrossReference_5_0());
+					newCompositeNode(grammarAccess.getSTVarDeclarationAccess().getTypeDataTypeCrossReference_5_0());
 				}
 				ruleSTAnyType
 				{
@@ -633,7 +633,7 @@ ruleSTTypeDeclaration returns [EObject current=null]
 					}
 				}
 				{
-					newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getTypeINamedElementCrossReference_2_0());
+					newCompositeNode(grammarAccess.getSTTypeDeclarationAccess().getTypeDataTypeCrossReference_2_0());
 				}
 				ruleSTAnyType
 				{

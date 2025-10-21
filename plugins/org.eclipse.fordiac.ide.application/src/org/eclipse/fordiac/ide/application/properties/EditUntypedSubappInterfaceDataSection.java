@@ -98,7 +98,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 				.createRowNatTable(outputsGroup, inputDataLayer, columnProvider,
 						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
 								VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE, outputProvider),
-						null, this, true);
+						null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());

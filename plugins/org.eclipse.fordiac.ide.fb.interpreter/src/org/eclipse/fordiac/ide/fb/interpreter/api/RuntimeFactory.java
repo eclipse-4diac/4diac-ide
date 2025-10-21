@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
@@ -59,14 +60,14 @@ public final class RuntimeFactory {
 		return rt;
 	}
 
-	private static FBRuntimeAbstract createFrom(final BasicFBType fb, final ECState startState) {
+	private static BasicFBTypeRuntime createFrom(final BasicFBType fb, final ECState startState) {
 		final BasicFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		basicFBTypeRT.setBasicfbtype(fb);
 		basicFBTypeRT.setActiveState(startState.getName());
 		return basicFBTypeRT;
 	}
 
-	private static FBRuntimeAbstract createFrom(final BasicFBType fb) {
+	private static BasicFBTypeRuntime createFrom(final BasicFBType fb) {
 		// set the start state
 		final EList<ECState> stateList = fb.getECC().getECState();
 		final ECState startState = stateList.stream().filter(ECState::isStartState).findAny().orElse(null);
@@ -76,25 +77,25 @@ public final class RuntimeFactory {
 		return createFrom(fb, startState);
 	}
 
-	private static FBRuntimeAbstract createFrom(final SimpleFBType fb) {
+	private static SimpleFBTypeRuntime createFrom(final SimpleFBType fb) {
 		final SimpleFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime();
 		basicFBTypeRT.setSimpleFBType(fb);
 		return basicFBTypeRT;
 	}
 
-	private static FBRuntimeAbstract createFrom(final FunctionFBType fb) {
+	private static FunctionFBTypeRuntime createFrom(final FunctionFBType fb) {
 		final FunctionFBTypeRuntime funcFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createFunctionFBTypeRuntime();
 		funcFBTypeRT.setFunctionFBType(fb);
 		return funcFBTypeRT;
 	}
 
-	private static FBRuntimeAbstract createFrom(final CompositeFBType fb) {
-		final FBNetworkRuntime compositeRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
-		compositeRT.setFbnetwork(fb.getFBNetwork());
+	private static CompositeFBTypeRuntime createFrom(final CompositeFBType fb) {
+		final CompositeFBTypeRuntime compositeRT = OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime();
+		compositeRT.setCompositeFBType(fb);
 		return compositeRT;
 	}
 
-	public static FBRuntimeAbstract createFrom(final FBNetwork app) {
+	public static FBNetworkRuntime createFrom(final FBNetwork app) {
 		final FBNetworkRuntime networkRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
 		networkRT.setFbnetwork(app);
 		return networkRT;

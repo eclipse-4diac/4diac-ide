@@ -43,7 +43,7 @@ import org.eclipse.fordiac.ide.gef.draw2d.OverlayAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -107,10 +107,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	private final int maxTypeLabelSize;
 
-	public FBShape(final FBType fbType, final int maxTypeLabelSize) {
+	public FBShape(final TypeEntry typeEntry, final int maxTypeLabelSize) {
 		this.maxTypeLabelSize = maxTypeLabelSize;
 		configureMainFigure();
-		createFBFigureShape(fbType);
+		createFBFigureShape(typeEntry);
 		setTypeLabelFont();
 		setBorder(new FBShapeShadowBorder());
 	}
@@ -245,10 +245,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		setLayoutManager(mainLayout);
 	}
 
-	private void createFBFigureShape(final FBType fbType) {
+	private void createFBFigureShape(final TypeEntry typeEntry) {
 		createFigureContainer();
 		createFBTop(GefPreferenceConstants.CORNER_DIM);
-		configureFBMiddle(fbType);
+		configureFBMiddle(typeEntry);
 		createFBBottom(GefPreferenceConstants.CORNER_DIM);
 	}
 
@@ -283,13 +283,13 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		fbFigureContainer.add(bottom, createTopBottomLayoutData(), -1);
 	}
 
-	protected void configureFBMiddle(final FBType fbType) {
+	protected void configureFBMiddle(final TypeEntry typeEntry) {
 		middleContainer = new Figure();
 		middleContainer.setLayoutManager(new BorderLayout());
 		middleContainer.setBorder(new MarginBorder(0, FB_NOTCH_INSET, 0, FB_NOTCH_INSET));
 
 		addMiddle();
-		setupTypeNameAndVersion(fbType, middleContainer);
+		setupTypeNameAndVersion(typeEntry, middleContainer);
 	}
 
 	protected void addMiddle() {
@@ -413,7 +413,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return new GridData(SWT.END, SWT.TOP, true, false);
 	}
 
-	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
+	protected void setupTypeNameAndVersion(final TypeEntry typeEntry, final Figure container) {
 		middle = new RectangleFigure();
 		middle.setOutline(false);
 		container.add(middle, BorderLayout.CENTER);
@@ -426,10 +426,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		middle.setLayoutManager(middleLayout);
 
 		typeLabel = new OverlayAlphaLabel();
-		changeTypeLabelText((null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET);
+		changeTypeLabelText((null != typeEntry) ? typeEntry.getTypeName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
 		typeLabel.setOpaque(true);
-		typeLabel.setIcon((null != type) ? TypeImageProvider.getImageForTypeEntry(type.getTypeEntry()) : null);
+		typeLabel.setIcon((null != typeEntry) ? TypeImageProvider.getImageForTypeEntry(typeEntry) : null);
 		typeLabel.setIconTextGap(2);
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));

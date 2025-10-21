@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getE1 <em>E1</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getE2 <em>E2</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getOutput <em>Output</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getInput <em>Input</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getInterval <em>Interval</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.contractSpec.impl.CausalAgeImpl#getClock <em>Clock</em>}</li>
  * </ul>
@@ -46,24 +46,24 @@ import org.eclipse.fordiac.ide.contractSpec.Interval;
 public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
 {
   /**
-   * The cached value of the '{@link #getE1() <em>E1</em>}' containment reference.
+   * The cached value of the '{@link #getOutput() <em>Output</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getE1()
+   * @see #getOutput()
    * @generated
    * @ordered
    */
-  protected EventSpec e1;
+  protected EventSpec output;
 
   /**
-   * The cached value of the '{@link #getE2() <em>E2</em>}' containment reference.
+   * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getE2()
+   * @see #getInput()
    * @generated
    * @ordered
    */
-  protected EventSpec e2;
+  protected EventSpec input;
 
   /**
    * The cached value of the '{@link #getInterval() <em>Interval</em>}' containment reference.
@@ -112,9 +112,9 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * @generated
    */
   @Override
-  public EventSpec getE1()
+  public EventSpec getOutput()
   {
-    return e1;
+    return output;
   }
 
   /**
@@ -122,13 +122,13 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetE1(EventSpec newE1, NotificationChain msgs)
+  public NotificationChain basicSetOutput(EventSpec newOutput, NotificationChain msgs)
   {
-    EventSpec oldE1 = e1;
-    e1 = newE1;
+    EventSpec oldOutput = output;
+    output = newOutput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__E1, oldE1, newE1);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__OUTPUT, oldOutput, newOutput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -140,20 +140,20 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * @generated
    */
   @Override
-  public void setE1(EventSpec newE1)
+  public void setOutput(EventSpec newOutput)
   {
-    if (newE1 != e1)
+    if (newOutput != output)
     {
       NotificationChain msgs = null;
-      if (e1 != null)
-        msgs = ((InternalEObject)e1).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__E1, null, msgs);
-      if (newE1 != null)
-        msgs = ((InternalEObject)newE1).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__E1, null, msgs);
-      msgs = basicSetE1(newE1, msgs);
+      if (output != null)
+        msgs = ((InternalEObject)output).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__OUTPUT, null, msgs);
+      if (newOutput != null)
+        msgs = ((InternalEObject)newOutput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__OUTPUT, null, msgs);
+      msgs = basicSetOutput(newOutput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__E1, newE1, newE1));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__OUTPUT, newOutput, newOutput));
   }
 
   /**
@@ -162,9 +162,9 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * @generated
    */
   @Override
-  public EventSpec getE2()
+  public EventSpec getInput()
   {
-    return e2;
+    return input;
   }
 
   /**
@@ -172,13 +172,13 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetE2(EventSpec newE2, NotificationChain msgs)
+  public NotificationChain basicSetInput(EventSpec newInput, NotificationChain msgs)
   {
-    EventSpec oldE2 = e2;
-    e2 = newE2;
+    EventSpec oldInput = input;
+    input = newInput;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__E2, oldE2, newE2);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__INPUT, oldInput, newInput);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -190,20 +190,20 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
    * @generated
    */
   @Override
-  public void setE2(EventSpec newE2)
+  public void setInput(EventSpec newInput)
   {
-    if (newE2 != e2)
+    if (newInput != input)
     {
       NotificationChain msgs = null;
-      if (e2 != null)
-        msgs = ((InternalEObject)e2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__E2, null, msgs);
-      if (newE2 != null)
-        msgs = ((InternalEObject)newE2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__E2, null, msgs);
-      msgs = basicSetE2(newE2, msgs);
+      if (input != null)
+        msgs = ((InternalEObject)input).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__INPUT, null, msgs);
+      if (newInput != null)
+        msgs = ((InternalEObject)newInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ContractSpecPackage.CAUSAL_AGE__INPUT, null, msgs);
+      msgs = basicSetInput(newInput, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__E2, newE2, newE2));
+      eNotify(new ENotificationImpl(this, Notification.SET, ContractSpecPackage.CAUSAL_AGE__INPUT, newInput, newInput));
   }
 
   /**
@@ -311,10 +311,10 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_AGE__E1:
-        return basicSetE1(null, msgs);
-      case ContractSpecPackage.CAUSAL_AGE__E2:
-        return basicSetE2(null, msgs);
+      case ContractSpecPackage.CAUSAL_AGE__OUTPUT:
+        return basicSetOutput(null, msgs);
+      case ContractSpecPackage.CAUSAL_AGE__INPUT:
+        return basicSetInput(null, msgs);
       case ContractSpecPackage.CAUSAL_AGE__INTERVAL:
         return basicSetInterval(null, msgs);
     }
@@ -331,10 +331,10 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_AGE__E1:
-        return getE1();
-      case ContractSpecPackage.CAUSAL_AGE__E2:
-        return getE2();
+      case ContractSpecPackage.CAUSAL_AGE__OUTPUT:
+        return getOutput();
+      case ContractSpecPackage.CAUSAL_AGE__INPUT:
+        return getInput();
       case ContractSpecPackage.CAUSAL_AGE__INTERVAL:
         return getInterval();
       case ContractSpecPackage.CAUSAL_AGE__CLOCK:
@@ -354,11 +354,11 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_AGE__E1:
-        setE1((EventSpec)newValue);
+      case ContractSpecPackage.CAUSAL_AGE__OUTPUT:
+        setOutput((EventSpec)newValue);
         return;
-      case ContractSpecPackage.CAUSAL_AGE__E2:
-        setE2((EventSpec)newValue);
+      case ContractSpecPackage.CAUSAL_AGE__INPUT:
+        setInput((EventSpec)newValue);
         return;
       case ContractSpecPackage.CAUSAL_AGE__INTERVAL:
         setInterval((Interval)newValue);
@@ -380,11 +380,11 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_AGE__E1:
-        setE1((EventSpec)null);
+      case ContractSpecPackage.CAUSAL_AGE__OUTPUT:
+        setOutput((EventSpec)null);
         return;
-      case ContractSpecPackage.CAUSAL_AGE__E2:
-        setE2((EventSpec)null);
+      case ContractSpecPackage.CAUSAL_AGE__INPUT:
+        setInput((EventSpec)null);
         return;
       case ContractSpecPackage.CAUSAL_AGE__INTERVAL:
         setInterval((Interval)null);
@@ -406,10 +406,10 @@ public class CausalAgeImpl extends TimeSpecImpl implements CausalAge
   {
     switch (featureID)
     {
-      case ContractSpecPackage.CAUSAL_AGE__E1:
-        return e1 != null;
-      case ContractSpecPackage.CAUSAL_AGE__E2:
-        return e2 != null;
+      case ContractSpecPackage.CAUSAL_AGE__OUTPUT:
+        return output != null;
+      case ContractSpecPackage.CAUSAL_AGE__INPUT:
+        return input != null;
       case ContractSpecPackage.CAUSAL_AGE__INTERVAL:
         return interval != null;
       case ContractSpecPackage.CAUSAL_AGE__CLOCK:

@@ -104,4 +104,9 @@ public abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditP
 		return new Point(location.x, location.y).scale(1.0 / getZoom());
 	}
 
+	@Override
+	protected void eraseDirectEditFeedback(final DirectEditRequest request) {
+		// for creating instances we do not need to do anything for erasing the feedback
+	}
+
 }

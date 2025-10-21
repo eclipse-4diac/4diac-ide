@@ -117,6 +117,7 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
 	public static String DeleteFBTypeParticipant_Change_DeleteFBTypeInterface;
 	public static String DeleteFBTypeParticipant_Change_UpdateMemberVariable;
+	public static String DeleteFBTypeParticipant_Change_UpdateAttribute;
 	public static String DeleteFBTypeParticipant_Change_DeleteSubappPins;
 	public static String DeleteFBTypeParticipant_Change_SafeDeletionChangeTitle;
 	public static String DeleteFBTypeParticipant_Change_UpdateFBType;
@@ -126,7 +127,6 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
-	public static String ConfigurableChange_noChangeErrorMessage;
 
 	public static String ImportChange_ImportedNamespaceChanged;
 
@@ -178,6 +178,7 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageVersionTitle;
 	public static String typeManagementPreferencePageDescription;
 
+	public static String Refactoring_StructUsers;
 	public static String Refactoring_RenameFromTo;
 	public static String Refactoring_AffectedStruct;
 	public static String Refactoring_AffectedInstancesOfFB;
@@ -192,11 +193,6 @@ public final class Messages extends NLS {
 	public static String PreviewChange_DeleteChoice;
 	public static String PreviewChange_ChangeToAnyStruct;
 	public static String PreviewChange_ReplaceWithMarker;
-	public static String PreviewChange_NoChange;
-
-	public static String DeleteLibraryParticipant_Name;
-	public static String DeleteLibraryParticipant_Change_Title;
-	public static String AddLibraryDependency_Change_Title;
 
 	public static String SafeStructDeletionChange_RootNodeChangeText;
 

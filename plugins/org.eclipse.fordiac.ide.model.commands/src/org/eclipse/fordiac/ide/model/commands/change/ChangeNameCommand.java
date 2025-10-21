@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
- *                          Johannes Kepler Unviersity Linz
- *               2023 Primetals Technologies Austria GmbHy
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler Unviersity Linz,
+ *                          Primetals Technologies Austria GmbHy
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -73,7 +73,7 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 			result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
 		}
 		if (element instanceof final IInterfaceElement interfaceElement
-				&& interfaceElement.getFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
+				&& interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
 			result.getAdditionalCommands().add(
 					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
 		}

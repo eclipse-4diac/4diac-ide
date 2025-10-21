@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,13 +22,13 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -60,7 +60,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	private void parseSubApp() throws TypeImportException, XMLStreamException {
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final FBNetworkElement subApp;
+		final BlockFBNetworkElement subApp;
 		if (type == null) {
 			subApp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		} else {
@@ -97,26 +97,28 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	}
 
-	public FBNetworkElement createTypedSubapp(final String typeName) {
-		final SubAppTypeEntry subEntry = addDependency(getTypeLibrary().getSubAppTypeEntry(typeName));
+	public BlockFBNetworkElement createTypedSubapp(final String typeName) {
+		final SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry);
 		if (subEntry == null) {
 			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
 					LibraryElementPackage.eINSTANCE.getSubAppType()));
 		}
-		final SubAppType type = subEntry.getType();
-		if (type == null) {
-			return FordiacMarkerHelper.createErrorMarkerFB(typeName, subEntry);
-		}
 		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		subApp.setTypeEntry(subEntry);
-		subApp.setInterface(type.getInterfaceList().copy());
+		InterfaceList interfaceList = subEntry.getInterface();
+		if (interfaceList == null) {
+			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		} else {
+			interfaceList = interfaceList.copy();
+		}
+		subApp.setInterface(interfaceList);
 		return subApp;
 	}
 
 	private void parseUntypedSubapp(final UntypedSubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> (switch (name) {
 		case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT -> {
-			final SubAppTImporter interfaceImporter = new SubAppTImporter(this);
+			final SubAppInterfaceListImporter interfaceImporter = new SubAppInterfaceListImporter(this);
 			subApp.setInterface(interfaceImporter.parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 			yield true;
 		}

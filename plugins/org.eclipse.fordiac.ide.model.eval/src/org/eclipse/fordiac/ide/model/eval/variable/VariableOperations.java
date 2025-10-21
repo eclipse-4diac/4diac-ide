@@ -47,17 +47,16 @@ import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 @SuppressWarnings("java:S1452")
 public final class VariableOperations {
-	public static Variable<?> newVariable(final String name, final INamedElement type) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType);
@@ -72,7 +71,7 @@ public final class VariableOperations {
 		};
 	}
 
-	public static Variable<?> newVariable(final String name, final INamedElement type, final String value) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type, final String value) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
@@ -88,7 +87,7 @@ public final class VariableOperations {
 		};
 	}
 
-	public static Variable<?> newVariable(final String name, final INamedElement type, final Value value) {
+	public static Variable<?> newVariable(final String name, final LibraryElement type, final Value value) {
 		return switch (type) {
 		case final AnyType anyType when GenericTypes.isAnyType(anyType) -> new GenericVariable(name, anyType, value);
 		case final ArrayType arrayType -> new ArrayVariable(name, arrayType, value);
@@ -149,7 +148,7 @@ public final class VariableOperations {
 				}
 				if (hasInheritedInitialValue(varDeclaration)) {
 					// use variable from FB type since the initial value is inherited
-					final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+					final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 					return newVariable(varDeclaration.getName(), evaluateResultType(varDeclaration),
 							cache.computeInitialValueIfAbsent(typeVariable, VariableOperations::doEvaluateValue));
 				}
@@ -226,7 +225,7 @@ public final class VariableOperations {
 		return newVariable(withValue(type, initialValue));
 	}
 
-	public static INamedElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {
+	public static LibraryElement evaluateResultType(final VarDeclaration decl) throws EvaluatorException {
 		if (decl.isArray()) {
 			try (EvaluatorCache cache = EvaluatorCache.open()) {
 				return cache.computeResultTypeIfAbsent(decl, VariableOperations::doEvaluateResultType);
@@ -237,7 +236,7 @@ public final class VariableOperations {
 		return decl.getType();
 	}
 
-	private static INamedElement doEvaluateResultType(final VarDeclaration varDeclaration)
+	private static LibraryElement doEvaluateResultType(final VarDeclaration varDeclaration)
 			throws EvaluatorException, InterruptedException {
 		if (TypeDeclarationParser.isSimpleTypeDeclaration(varDeclaration.getArraySize().getValue())) {
 			return TypeDeclarationParser.parseSimpleTypeDeclaration(varDeclaration.getType(),
@@ -424,7 +423,7 @@ public final class VariableOperations {
 	}
 
 	public static boolean hasInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 		if (typeVariable != null) {
 			return hasDeclaredInitialValue(typeVariable);
 		}
@@ -447,23 +446,9 @@ public final class VariableOperations {
 	}
 
 	public static String getInheritedInitialValue(final VarDeclaration varDeclaration) {
-		final VarDeclaration typeVariable = getTypeVariable(varDeclaration);
+		final VarDeclaration typeVariable = varDeclaration.findInTypeInterface();
 		if (typeVariable != null && hasDeclaredInitialValue(typeVariable)) {
 			return typeVariable.getValue().getValue();
-		}
-		return null;
-	}
-
-	private static VarDeclaration getTypeVariable(final VarDeclaration varDeclaration) {
-		final FBNetworkElement networkElement = varDeclaration.getFBNetworkElement();
-		if (networkElement != null) {
-			final FBType type = networkElement.getType();
-			if (type != null) {
-				final VarDeclaration typeVariable = type.getInterfaceList().getVariable(varDeclaration.getName());
-				if (typeVariable != null) {
-					return typeVariable;
-				}
-			}
 		}
 		return null;
 	}
@@ -515,7 +500,7 @@ public final class VariableOperations {
 		return copy;
 	}
 
-	private static boolean isSimpleInitialValue(final VarDeclaration varDeclaration) {
+	public static boolean isSimpleInitialValue(final VarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
 			return false;
 		}
@@ -530,7 +515,7 @@ public final class VariableOperations {
 		return true;
 	}
 
-	private static boolean isSimpleAttributeValue(final Attribute attribute) {
+	public static boolean isSimpleAttributeValue(final Attribute attribute) {
 		if (hasValue(attribute) && attribute.getType() instanceof final AnyType type) {
 			try {
 				new TypedValueConverter(type, true).toValue(attribute.getValue());

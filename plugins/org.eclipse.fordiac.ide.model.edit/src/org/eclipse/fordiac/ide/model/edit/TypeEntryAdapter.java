@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -94,18 +95,11 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 			return;
 		}
 
-		String feature = ""; //$NON-NLS-1$
-		if (notification.getFeature() instanceof final String string) {
-			feature = string;
+		if (!(notification.getFeature() instanceof final String feature)) {
+			return;
 		}
 
 		switch (feature) {
-		case TypeEntry.TYPE_ENTRY_TYPE_FEATURE:
-			// make sure type was reloaded and not just loaded
-			if (notification.getOldValue() != null) {
-				handleFileContentChange();
-			}
-			break;
 		case TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE:
 			handleFileContentChange();
 			break;
@@ -173,13 +167,19 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 		checkEditorLocation();
 
-		search.performSearch().stream().filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast)
-				.map(fbnEl -> {
+		search.performSearch().stream().filter(BlockFBNetworkElement.class::isInstance)
+				.map(BlockFBNetworkElement.class::cast).map(fbnEl -> {
 					if (fbnEl instanceof final FB fb && fbnEl.eContainer() == editedElement) {
 						return new UpdateInternalFBCommand(fb, typeEntry);
 					}
+
+					if (fbnEl.isMapped() && fbnEl.getMapping().getTo() == fbnEl) {
+						// the resource side will be update by its opposite so we do not need to do it
+						// here
+						return null;
+					}
 					return new UpdateFBTypeCommand(fbnEl, typeEntry);
-				}).forEach(Command::execute);
+				}).filter(Objects::nonNull).filter(Command::canExecute).forEach(Command::execute);
 
 		if (isActiveEditor()) {
 			performLocationRestore();
@@ -213,7 +213,7 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 				return new ConfigureFBCommand(configFB, dataType);
 			}
 			return null;
-		}).filter(Objects::nonNull).forEach(Command::execute);
+		}).filter(Objects::nonNull).filter(Command::canExecute).forEach(Command::execute);
 	}
 
 	private void performLocationRestore() {

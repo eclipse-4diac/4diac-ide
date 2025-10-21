@@ -20,12 +20,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.attributetypeeditor.editors.AttributeTypeEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
 import org.eclipse.fordiac.ide.model.AttributeTarget;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeInheritAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTargetAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -40,7 +44,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -49,6 +53,9 @@ public class AttributeTargetSection extends AbstractSection {
 
 	private final List<Button> buttons = new ArrayList<>();
 	private StructuredType lock;
+
+	private Button inheritButton;
+	private Button copyButton;
 
 	private final SelectionListener buttonListener = new SelectionAdapter() {
 		@Override
@@ -68,60 +75,64 @@ public class AttributeTargetSection extends AbstractSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createCheckBoxes(parent);
-	}
 
-	public void createCheckBoxes(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout(7, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		final Composite ungroupedComposite = new Composite(composite, SWT.NONE);
-		ungroupedComposite.setData(TARGET_CATEGORY, AttributeTarget.EMPTY_GROUP);
-		ungroupedComposite.setLayout(new GridLayout(1, false));
-		ungroupedComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		final Map<String, Composite> groups = new HashMap<>();
+		final Map<String, Group> groups = new HashMap<>();
 		final StructuredType targetType = (StructuredType) InternalAttributeDeclarations.TARGET.getType();
 
 		targetType.getMemberVariables().stream().map(member -> AttributeTarget.fromName(member.getName()))
 				.filter(Objects::nonNull).forEach(target -> {
-					final String category = target.getCategory();
-					Composite container = composite;
-
-					if (category.equals(AttributeTarget.EMPTY_GROUP)) {
-						container = ungroupedComposite;
-					} else {
-						container = groups.computeIfAbsent(category, cat -> {
-							final Composite group = new Composite(composite, SWT.NONE);
-							group.setLayout(new GridLayout(1, false));
-							group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-							final Label groupHeading = new Label(group, SWT.NONE);
-							groupHeading.setText(cat);
-
-							group.setData(TARGET_CATEGORY, cat);
-							return group;
-						});
-					}
+					final Group container = groups.computeIfAbsent(target.getCategory(), cat -> {
+						final Group group = getWidgetFactory().createGroup(composite, cat);
+						group.setLayout(new GridLayout(1, false));
+						group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+						group.setData(TARGET_CATEGORY, cat);
+						return group;
+					});
 
 					createButton(container, target);
 				});
 
+		createInheritButtons(composite);
 	}
 
 	private void createButton(final Composite parent, final AttributeTarget target) {
-		final Button button = new Button(parent, SWT.CHECK);
-		button.setBackground(parent.getBackground());
-		button.setText(target.getDisplayName());
+		final Button button = getWidgetFactory().createButton(parent, target.getDisplayName(), SWT.CHECK);
 		button.setToolTipText(target.getToolTip());
 		button.addSelectionListener(buttonListener);
 		buttons.add(button);
 	}
 
+	public void createInheritButtons(final Composite parent) {
+		final Group group = getWidgetFactory().createGroup(parent, Messages.AttributeInherit_SectionTitle);
+		group.setLayout(new GridLayout(1, false));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+		inheritButton = getWidgetFactory().createButton(group, Messages.AttributeInherit_InheritAttribute, SWT.CHECK);
+		inheritButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				executeCommand(new ChangeInheritAttributeCommand(getType(), getInheritModeFromButtons()));
+			}
+		});
+
+		copyButton = getWidgetFactory().createButton(group, Messages.AttributeInherit_CopyAttribute, SWT.CHECK);
+		copyButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				executeCommand(new ChangeInheritAttributeCommand(getType(), getInheritModeFromButtons()));
+			}
+		});
+		updateInheritButtons();
+	}
+
 	@Override
 	public void performRefresh() {
 		updateButtons(getType());
+		updateInheritButtons();
 	}
 
 	private void updateButtons(final AttributeDeclaration attributeDeclaration) {
@@ -136,6 +147,19 @@ public class AttributeTargetSection extends AbstractSection {
 		});
 	}
 
+	private void updateInheritButtons() {
+		if (getType() == null) {
+			return;
+		}
+		final Attribute inheritAttribute = getType().getAttribute(InternalAttributeDeclarations.INHERIT.getName());
+		final AttributeInheritMode mode = inheritAttribute != null
+				? AttributeInheritMode.valueOf(inheritAttribute.getValue())
+				: AttributeInheritMode.IGNORE;
+
+		inheritButton.setSelection(mode == AttributeInheritMode.COPY_INHERIT || mode == AttributeInheritMode.INHERIT);
+		copyButton.setSelection(mode == AttributeInheritMode.COPY_INHERIT || mode == AttributeInheritMode.COPY);
+	}
+
 	private static StructuredType getTarget(final AttributeDeclaration attributeDeclaration) {
 		final StructuredType targetStruct = attributeDeclaration.getTarget();
 		if (targetStruct == null || targetStruct.getMemberVariables().stream()
@@ -145,6 +169,19 @@ public class AttributeTargetSection extends AbstractSection {
 			return (StructuredType) EcoreUtil.copy(InternalAttributeDeclarations.TARGET.getType());
 		}
 		return targetStruct;
+	}
+
+	private AttributeInheritMode getInheritModeFromButtons() {
+		if (inheritButton.getSelection() && copyButton.getSelection()) {
+			return AttributeInheritMode.COPY_INHERIT;
+		}
+		if (copyButton.getSelection()) {
+			return AttributeInheritMode.COPY;
+		}
+		if (inheritButton.getSelection()) {
+			return AttributeInheritMode.INHERIT;
+		}
+		return AttributeInheritMode.IGNORE;
 	}
 
 	@Override

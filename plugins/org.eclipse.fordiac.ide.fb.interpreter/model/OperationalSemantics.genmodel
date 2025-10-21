@@ -63,6 +63,13 @@
       <genOperations ecoreOperation="OperationalSemantics.ecore#//FunctionFBTypeRuntime/getModel"
           body="return functionFBType;"/>
     </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//CompositeFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/compositeFBType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/fbElement"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/networkRuntime"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//CompositeFBTypeRuntime/getModel"
+          body="return compositeFBType;"/>
+    </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/parentEO"/>
@@ -73,8 +80,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbnetwork"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/transferData"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/typeRuntimes"/>
-      <genOperations ecoreOperation="OperationalSemantics.ecore#//FBNetworkRuntime/getModel"
-          body="return this.fbnetwork;"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/outerNetworkRuntime"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
