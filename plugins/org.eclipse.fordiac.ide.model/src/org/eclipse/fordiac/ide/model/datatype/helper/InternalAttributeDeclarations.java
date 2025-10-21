@@ -108,7 +108,8 @@ public final class InternalAttributeDeclarations {
 	}
 
 	public static AttributeDeclaration getInternalAttributeByName(final String name) {
-		return getAllInternalAttributes().stream().filter(decl -> decl.getName().equals(name)).findFirst().orElse(null);
+		return getAllInternalAttributes().stream().filter(decl -> decl.getName().equalsIgnoreCase(name)).findFirst()
+				.orElse(null);
 	}
 
 	public static List<AttributeDeclaration> getAllInternalAttributes() {
