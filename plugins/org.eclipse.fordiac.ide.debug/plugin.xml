@@ -4,6 +4,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
+            allowPrototypes="true"
             delegate="org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate"
             delegateName="%fbLaunch.name"
             id="org.eclipse.fordiac.ide.debug.fbLaunch"

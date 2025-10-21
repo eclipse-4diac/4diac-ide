@@ -19,18 +19,21 @@
    
 	<extension point="org.eclipse.debug.core.launchConfigurationTypes">
 		<launchConfigurationType
+			allowPrototypes="true"
     		name="Local 4diac FORTE"
     		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.runLocalFORTE">        
 		</launchConfigurationType>
 		<launchConfigurationType
+			allowPrototypes="true"
     		name="Build 4diac FORTE"
     		delegate="org.eclipse.core.externaltools.internal.launchConfigurations.ProgramLaunchDelegate"
     		modes="run"               
     		id="org.eclipse.fordiac.ide.buildFORTE">        
 		</launchConfigurationType>
 		<launchConfigurationType
+			allowPrototypes="true"
     		name="Stop 4diac FORTEs"
     		delegate="org.eclipse.fordiac.ide.fortelauncher.StopForteLaunchDelegate"
     		modes="run"               
