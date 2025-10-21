@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,12 +41,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.PlatformUI;
 
 public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 
@@ -85,7 +88,9 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 			initializeDefaultLaunchConfiguration(configuration, resource, selection, mode);
 			configuration.launch(mode, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ErrorDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), null,
+					MessageFormat.format(Messages.DeploymentLaunchShortcut_ErrorMessage, resource.getFullPath()),
+					e.getStatus());
 		}
 	}
 

@@ -12,26 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.ui.fb;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.ui.LaunchShortcut;
 import org.eclipse.fordiac.ide.deployment.debug.fb.DeploymentFBLaunchConfigurationAttributes;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DeploymentFBLaunchShortcut extends LaunchShortcut {
-
-	@Override
-	public void launch(final IResource resource, final ILaunchConfiguration configuration, final String mode) {
-		try {
-			configuration.launch(mode, new NullProgressMonitor());
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(
-					String.format("Could not launch resource %s with mode %s", resource.getFullPath().toString(), mode), //$NON-NLS-1$
-					e);
-		}
-	}
 
 	@Override
 	public String getLaunchConfigurationId() {

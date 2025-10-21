@@ -12,10 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui;
 
+import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -24,10 +26,12 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PlatformUI;
 
 /** @author mjobst */
 public abstract class LaunchShortcut implements ILaunchShortcut2 {
@@ -63,11 +67,16 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 				launch(resource, configurations[0], mode);
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ErrorDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), null,
+					MessageFormat.format(Messages.LaunchShortcut_ErrorMessage, resource.getFullPath()), e.getStatus());
 		}
 	}
 
-	public abstract void launch(IResource resource, ILaunchConfiguration configuration, String mode);
+	@SuppressWarnings("static-method") // subclasses may override
+	public void launch(final IResource resource, final ILaunchConfiguration configuration, final String mode)
+			throws CoreException {
+		configuration.launch(mode, new NullProgressMonitor());
+	}
 
 	@SuppressWarnings("static-method") // subclasses may override
 	public void initializeDefaultLaunchConfiguration(final ILaunchConfigurationWorkingCopy configuration,
