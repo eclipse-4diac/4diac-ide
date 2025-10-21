@@ -19,8 +19,12 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -291,8 +295,8 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(1, markers.length);
-		assertEquals(TEST01, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
+		assertEquals(2, markers.length);
+		assertEquals(TEST01, findFirstDependencyMarker(markers).orElse(null));
 	}
 
 	@Test
@@ -330,8 +334,12 @@ class LibraryImportTest {
 		final var markers = manifestFile.findMarkers(FordiacErrorMarker.LIBRARY_MARKER, false,
 				IResource.DEPTH_INFINITE);
 
-		assertEquals(1, markers.length);
-		assertEquals(MATH, markers[0].getAttribute(LibraryManager.MARKER_ATTRIBUTE, null));
+		assertEquals(2, markers.length);
+		assertEquals(MATH, findFirstDependencyMarker(markers).orElse(null));
 	}
 
+	static Optional<String> findFirstDependencyMarker(final IMarker[] markers) {
+		return Stream.of(markers).map(marker -> marker.getAttribute(LibraryManager.MARKER_ATTRIBUTE, null))
+				.filter(Objects::nonNull).findFirst();
+	}
 }
