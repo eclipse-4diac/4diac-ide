@@ -280,15 +280,6 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 		result.put(qualifiedName, targetVD);
 		copiedMap.put(targetVD, Boolean.TRUE);
-		cleanVarConfigParams(rootTSA);
-	}
-
-	private void cleanVarConfigParams(final TypedSubApp rootTSA) {
-		for (final VarDeclaration vd : rootTSA.getVarConfigParams()) {
-			if (!displayMap.values().contains(vd)) {
-				rootTSA.getVarConfigParams().remove(vd);
-			}
-		}
 	}
 
 	private static TypedSubApp findTypedSubAppByQualifiedNameInNetwork(final Iterable<FBNetworkElement> roots,
