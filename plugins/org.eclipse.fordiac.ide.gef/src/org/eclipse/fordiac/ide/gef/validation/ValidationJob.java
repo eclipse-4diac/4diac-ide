@@ -130,18 +130,25 @@ public class ValidationJob extends UIJob {
 		}
 	}
 
-	public void reset() {
-		cancel();
+	public void clear() {
 		queue.clear();
-		annotationModel.removeAnnotationIf(GraphicalValidationAnnotation.class::isInstance);
+		cancel();
+	}
+
+	public void reset() {
+		clear();
+		annotationModel.refresh();
+	}
+
+	public void reload() {
+		clear();
 		annotationModel.reload();
 	}
 
 	public void dispose() {
 		commandStackEventListener.uninstall(commandStack);
-		enabled = false;
-		queue.clear();
-		cancel();
+		setEnabled(false);
+		clear();
 	}
 
 	public boolean isEnabled() {
@@ -150,9 +157,6 @@ public class ValidationJob extends UIJob {
 
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
-		if (!enabled) {
-			reset();
-		}
 	}
 
 	protected class ValidationCommandStackEventListener implements CommandStackEventListener {
@@ -163,7 +167,8 @@ public class ValidationJob extends UIJob {
 				switch (event.getDetail()) {
 				case CommandStack.POST_EXECUTE, CommandStack.POST_UNDO, CommandStack.POST_REDO ->
 					handleCommand(event.getCommand());
-				case CommandStack.POST_FLUSH, CommandStack.POST_MARK_SAVE -> reset();
+				case CommandStack.POST_MARK_SAVE -> reset();
+				case CommandStack.POST_FLUSH -> reload();
 				default -> {
 					// empty
 				}

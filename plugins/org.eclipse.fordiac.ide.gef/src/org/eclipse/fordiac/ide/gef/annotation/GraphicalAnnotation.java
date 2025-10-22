@@ -37,6 +37,8 @@ public abstract class GraphicalAnnotation {
 
 	public abstract Map<String, Object> getAttributes();
 
+	public abstract boolean isTransient();
+
 	public final String getType() {
 		return type;
 	}

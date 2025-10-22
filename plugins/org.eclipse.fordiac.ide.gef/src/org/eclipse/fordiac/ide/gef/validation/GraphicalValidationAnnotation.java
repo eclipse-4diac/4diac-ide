@@ -68,6 +68,11 @@ public class GraphicalValidationAnnotation extends GraphicalAnnotation {
 	}
 
 	@Override
+	public boolean isTransient() {
+		return true;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(getType(), getTarget(), message);
 	}
