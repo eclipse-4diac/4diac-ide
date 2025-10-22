@@ -513,7 +513,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				}
 				commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
 			}
-			typeEditorInput.getTypeEntry().eAdapters().add(typeEntryAdapter);
+			final TypeEntry typeEntry = typeEditorInput.getTypeEntry();
+			if (!typeEntry.eAdapters().contains(typeEntryAdapter)) {
+				typeEntry.eAdapters().add(typeEntryAdapter);
+			}
 			setInputWithNotify(typeEditorInput);
 		} else {
 			setInputWithNotify(input);
