@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -165,7 +166,6 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (!isUntypedSubapp(fbnElement) && fbnElement instanceof final BlockFBNetworkElement blockFbnEl) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(blockFbnEl.getInterface());
-			addErrorMarkerParamsConfig(blockFbnEl.getInterface().getErrorMarker());
 		}
 
 		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
@@ -179,6 +179,21 @@ class FBNetworkExporter extends CommonElementExporter {
 
 		if (fbnElement.isInGroup()) {
 			addGroupAttribute(fbnElement.getGroup());
+		}
+	}
+
+	private void addParamsConfig(final InterfaceList il) throws XMLStreamException {
+		Stream<? extends IInterfaceElement> stream = il.getEventInputs().stream();
+		stream = Stream.concat(stream, il.getInputVars().stream());
+		stream = Stream.concat(stream, il.getInOutVars().stream());
+		stream = Stream.concat(stream, il.getSockets().stream());
+		stream = Stream.concat(stream, il.getEventOutputs().stream());
+		stream = Stream.concat(stream, il.getOutputVars().stream());
+		stream = Stream.concat(stream, il.getPlugs().stream());
+		stream = Stream.concat(stream, il.getErrorMarker().stream());
+
+		for (final IInterfaceElement ie : stream.toList()) {
+			addParam(ie);
 		}
 	}
 
