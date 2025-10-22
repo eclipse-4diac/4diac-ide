@@ -5,7 +5,7 @@
   <VersionInfo Author="Matthias Plasch" Date="2014-07-11" Organization="Profactor GmbH" Version="1.0"/>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-	<CompilerInfo packageName="eclipse4diac::utils">
+	<CompilerInfo packageName="eclipse4diac::convert">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
