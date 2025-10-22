@@ -144,8 +144,13 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 	}
 
 	@Override
+	public void refresh() {
+		// nothing to do, annotations will be re-added on the next debug event
+	}
+
+	@Override
 	public void reload() {
-		model.removeAnnotationIf(WatchValueAnnotation.class::isInstance);
+		// nothing to do, annotations will be re-added on the next debug event
 	}
 
 	@Override

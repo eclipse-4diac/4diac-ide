@@ -65,6 +65,12 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		providers.forEach(GraphicalAnnotationProvider::refresh);
+	}
+
+	@Override
 	public void reload() {
 		super.reload();
 		providers.forEach(GraphicalAnnotationProvider::reload);

@@ -167,10 +167,16 @@ public interface GraphicalAnnotationModel {
 	long getModificationStamp();
 
 	/**
+	 * Refresh the annotation model.
+	 * <p>
+	 * This removes stale and adds new annotations.
+	 */
+	void refresh();
+
+	/**
 	 * Reload the annotation model.
 	 * <p>
-	 * This removes and re-adds all annotations managed by the concrete
-	 * implementation.
+	 * This removes and re-adds all annotations.
 	 */
 	void reload();
 

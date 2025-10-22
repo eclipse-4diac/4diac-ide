@@ -170,4 +170,10 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 		});
 		return result[0];
 	}
+
+	@Override
+	public void dispose() {
+		annotations.clear();
+		listeners.clear();
+	}
 }

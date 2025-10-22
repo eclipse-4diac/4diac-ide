@@ -66,4 +66,9 @@ public class WatchValueAnnotation extends GraphicalAnnotation {
 	public Map<String, Object> getAttributes() {
 		return Map.of();
 	}
+
+	@Override
+	public boolean isTransient() {
+		return true;
+	}
 }
