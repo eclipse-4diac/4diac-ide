@@ -50,14 +50,11 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
@@ -448,25 +445,13 @@ public class CommonElementExporter {
 		writer.writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, (null != name) ? name : ""); //$NON-NLS-1$
 	}
 
-	protected void addParamsConfig(final InterfaceList interfaces) throws XMLStreamException {
-		for (final IInterfaceElement ie : interfaces.getAllInterfaceElements()) {
-			addParam(ie);
-		}
-	}
-
 	protected void addParamsConfig(final EList<? extends VarDeclaration> inputVars) throws XMLStreamException {
 		for (final VarDeclaration inVar : inputVars) {
 			addParam(inVar);
 		}
 	}
 
-	protected void addErrorMarkerParamsConfig(final EList<ErrorMarkerInterface> errorPins) throws XMLStreamException {
-		for (final ErrorMarkerInterface ep : errorPins) {
-			addParam(ep.getName(), ep.getValue());
-		}
-	}
-
-	private void addParam(final IInterfaceElement ie) throws XMLStreamException {
+	protected void addParam(final IInterfaceElement ie) throws XMLStreamException {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
 		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
 				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
@@ -501,14 +486,6 @@ public class CommonElementExporter {
 		return ie.getAttributes().stream()
 				.anyMatch(att -> att.getAttributeDeclaration() != InternalAttributeDeclarations.VAR_CONFIG
 						|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
-	}
-
-	private void addParam(final String pinName, final Value value) throws XMLStreamException {
-		if ((value != null) && (value.getValue() != null) && !value.getValue().isBlank()) {
-			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-			addNameAttribute(pinName);
-			writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value.getValue());
-		}
 	}
 
 	protected void addXYAttributes(final PositionableElement fb) throws XMLStreamException {
