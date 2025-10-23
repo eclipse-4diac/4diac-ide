@@ -138,8 +138,10 @@ public class ValidationJob extends UIJob {
 	}
 
 	public void dispose() {
-		setEnabled(false);
 		commandStackEventListener.uninstall(commandStack);
+		enabled = false;
+		queue.clear();
+		cancel();
 	}
 
 	public boolean isEnabled() {

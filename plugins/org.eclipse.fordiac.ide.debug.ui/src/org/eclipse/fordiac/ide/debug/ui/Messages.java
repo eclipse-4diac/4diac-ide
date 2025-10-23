@@ -49,6 +49,7 @@ public final class Messages extends NLS {
 	public static String FBLaunchConfigurationTab_Event;
 	public static String FBLaunchConfigurationTab_KeepDebuggerRunningWhenIdle;
 	public static String FBLaunchConfigurationTab_RepeatEvent;
+	public static String LaunchShortcut_ErrorMessage;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

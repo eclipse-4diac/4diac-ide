@@ -63,7 +63,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
@@ -285,8 +284,8 @@ public class ExtractCallableRefactoring extends Refactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final ProviderDocumentChange change = new EditorDocumentChange(getName(),
-				(IFileEditorInput) editor.getEditorInput(), editor.getDocumentProvider(), editor, false);
+		final ProviderDocumentChange change = new EditorDocumentChange(getName(), editor, editor.getDocumentProvider(),
+				false);
 		change.setEdit(createTextEdit());
 		change.setTextType(editor.getDocument().getResourceURI().fileExtension());
 		return change;

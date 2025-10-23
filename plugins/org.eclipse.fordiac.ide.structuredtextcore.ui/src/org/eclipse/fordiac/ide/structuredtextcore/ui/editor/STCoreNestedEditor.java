@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui.editor;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.ISaveablePart;
+
 public interface STCoreNestedEditor {
 
 	/**
@@ -20,4 +23,12 @@ public interface STCoreNestedEditor {
 	 * @param block true to block updates, false otherwise
 	 */
 	void setBlockUpdates(boolean block);
+
+	/**
+	 * Save the outer editor
+	 *
+	 * @param monitor The progress monitor
+	 * @see ISaveablePart#doSave(IProgressMonitor)
+	 */
+	void doSaveOuterEditor(IProgressMonitor monitor);
 }

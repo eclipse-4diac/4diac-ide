@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.st;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
 import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
@@ -26,6 +27,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreMapper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.util.ITextRegion;
 
@@ -134,6 +136,13 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor
 		final TypeEntryAdapter typeEntryAdapter = getTypeEntryAdapter();
 		if (typeEntryAdapter != null) {
 			typeEntryAdapter.setBlockUpdates(block);
+		}
+	}
+
+	@Override
+	public void doSaveOuterEditor(final IProgressMonitor monitor) {
+		if (getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			multiPageEditorSite.getMultiPageEditor().doSave(monitor);
 		}
 	}
 }

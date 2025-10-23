@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -424,14 +425,20 @@ final class ForteNgExportUtil {
 		END_COMMENT_PATTERN.matcher(string).replaceAll("* /")
 	}
 
-	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "GenericClassName"
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE_NAME = "GenericClassName"
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::GenericClassName"
 
 	def static boolean isGenericType(LibraryElement type) {
-		type.attributes.exists[name == GENERIC_CLASS_NAME_ATTRIBUTE]
+		getGenericClassNameAttributeValue(type) !== null
 	}
 
 	def static String getGenericClassName(LibraryElement type) {
-		StringValueConverter.INSTANCE.toValue(type.attributes.findFirst[name == GENERIC_CLASS_NAME_ATTRIBUTE].value)
+		StringValueConverter.INSTANCE.toValue(getGenericClassNameAttributeValue(type))
+	}
+
+	private def static getGenericClassNameAttributeValue(LibraryElement type) {
+		type.getAttributeValue(GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME) ?:
+			type.getAttributeValue(GENERIC_CLASS_NAME_ATTRIBUTE_NAME)
 	}
 
 	private new() {

@@ -19,17 +19,15 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.text.edits.UndoEdit;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 public class EditorDocumentUndoChange extends ProviderDocumentUndoChange {
 
 	private final IEditorPart editorPart;
 
-	public EditorDocumentUndoChange(final String name, final IFileEditorInput editorInput,
-			final IDocumentProvider documentProvider, final UndoEdit undoEdit, final IEditorPart editorPart,
-			final boolean doSave) {
-		super(name, editorInput, documentProvider, undoEdit, doSave);
+	public EditorDocumentUndoChange(final String name, final IEditorPart editorPart,
+			final IDocumentProvider documentProvider, final UndoEdit undoEdit, final boolean doSave) {
+		super(name, editorPart.getEditorInput(), documentProvider, undoEdit, doSave);
 		this.editorPart = editorPart;
 	}
 
@@ -40,6 +38,9 @@ public class EditorDocumentUndoChange extends ProviderDocumentUndoChange {
 				nestedEditor.setBlockUpdates(true);
 			}
 			super.commit(document, pm);
+			if (isDoSave() && editorPart instanceof final STCoreNestedEditor nestedEditor) {
+				nestedEditor.doSaveOuterEditor(pm);
+			}
 		} finally {
 			if (editorPart instanceof final STCoreNestedEditor nestedEditor) {
 				nestedEditor.setBlockUpdates(false);
@@ -49,8 +50,7 @@ public class EditorDocumentUndoChange extends ProviderDocumentUndoChange {
 
 	@Override
 	protected Change createUndoChange(final UndoEdit edit) {
-		return new EditorDocumentUndoChange(getName(), getEditorInput(), getDocumentProvider(), edit, editorPart,
-				isDoSave());
+		return new EditorDocumentUndoChange(getName(), editorPart, getDocumentProvider(), edit, isDoSave());
 	}
 
 }

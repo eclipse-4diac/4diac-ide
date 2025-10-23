@@ -61,6 +61,8 @@ public class InfoPropertySection extends AbstractSection {
 	private Label subAppsVal;
 	private Label instancesVal;
 
+	private Font boldFont;
+
 	private static final int SORT_BY_KEY = 1;
 	private static final int SORT_BY_VALUE_ASC = 2;
 	private static final int SORT_BY_VALUE_DESC = 3;
@@ -97,6 +99,14 @@ public class InfoPropertySection extends AbstractSection {
 		sortCombo = createCombo(fbGroup, Messages.InfoPropertySection_Combo_Text_SortBy,
 				Messages.InfoPropertySection_Combo_Text_Name, Messages.InfoPropertySection_Combo_Text_CountASC,
 				Messages.InfoPropertySection_Combo_Text_CountDESC);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (boldFont != null) {
+			boldFont.dispose();
+		}
 	}
 
 	private Combo createCombo(final Composite parent, final String... content) {
@@ -143,7 +153,7 @@ public class InfoPropertySection extends AbstractSection {
 		return group;
 	}
 
-	private static Label createLabelPair(final Composite parent, final String string, final Color backgroundColor) {
+	private Label createLabelPair(final Composite parent, final String string, final Color backgroundColor) {
 		createLabel(parent, string, backgroundColor, true);
 		return createValueLabel(parent, backgroundColor);
 	}
@@ -157,18 +167,25 @@ public class InfoPropertySection extends AbstractSection {
 		return label;
 	}
 
-	private static Label createLabel(final Composite parent, final String text, final Color c, final boolean bold) {
+	private Label createLabel(final Composite parent, final String text, final Color c, final boolean bold) {
 		final Label label = new Label(parent, SWT.NONE);
 		label.setBackground(c);
 		label.setText(text);
 		if (bold) {
-			final FontData[] fontData = label.getFont().getFontData();
+			label.setFont(getBoldFont(parent));
+		}
+		return label;
+	}
+
+	private Font getBoldFont(final Composite parent) {
+		if (boldFont == null) {
+			final FontData[] fontData = parent.getFont().getFontData();
 			for (final FontData fd : fontData) {
 				fd.setStyle(SWT.BOLD);
 			}
-			label.setFont(new Font(parent.getDisplay(), fontData));
+			boldFont = new Font(parent.getDisplay(), fontData);
 		}
-		return label;
+		return boldFont;
 	}
 
 	@Override

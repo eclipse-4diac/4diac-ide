@@ -620,7 +620,7 @@
  <extension
        point="org.eclipse.ltk.core.refactoring.renameParticipants">
     <renameParticipant
-          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring2.participant.XtextRenameResourceParticipant"
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameResourceParticipant"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.renameParticipant"
           name="ST Rename Resource Participant">
        <enablement>
@@ -633,7 +633,7 @@
  <extension
        point="org.eclipse.ltk.core.refactoring.moveParticipants">
     <moveParticipant
-          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring2.participant.XtextMoveResourceParticipant"
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreMoveResourceParticipant"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.moveParticipant"
           name="ST Move Resource Participant">
        <enablement>

@@ -19,22 +19,21 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.text.edits.UndoEdit;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 public class EditorDocumentChange extends ProviderDocumentChange {
 
 	private final IEditorPart editorPart;
 
-	public EditorDocumentChange(final String name, final IFileEditorInput editorInput,
-			final IDocumentProvider documentProvider, final IEditorPart editorPart) {
-		super(name, editorInput, documentProvider);
+	public EditorDocumentChange(final String name, final IEditorPart editorPart,
+			final IDocumentProvider documentProvider) {
+		super(name, editorPart.getEditorInput(), documentProvider);
 		this.editorPart = editorPart;
 	}
 
-	public EditorDocumentChange(final String name, final IFileEditorInput editorInput,
-			final IDocumentProvider documentProvider, final IEditorPart editorPart, final boolean doSave) {
-		super(name, editorInput, documentProvider, doSave);
+	public EditorDocumentChange(final String name, final IEditorPart editorPart,
+			final IDocumentProvider documentProvider, final boolean doSave) {
+		super(name, editorPart.getEditorInput(), documentProvider, doSave);
 		this.editorPart = editorPart;
 	}
 
@@ -45,6 +44,9 @@ public class EditorDocumentChange extends ProviderDocumentChange {
 				nestedEditor.setBlockUpdates(true);
 			}
 			super.commit(document, pm);
+			if (isDoSave() && editorPart instanceof final STCoreNestedEditor nestedEditor) {
+				nestedEditor.doSaveOuterEditor(pm);
+			}
 		} finally {
 			if (editorPart instanceof final STCoreNestedEditor nestedEditor) {
 				nestedEditor.setBlockUpdates(false);
@@ -54,7 +56,6 @@ public class EditorDocumentChange extends ProviderDocumentChange {
 
 	@Override
 	protected Change createUndoChange(final UndoEdit edit) {
-		return new EditorDocumentUndoChange(getName(), getEditorInput(), getDocumentProvider(), edit, editorPart,
-				isDoSave());
+		return new EditorDocumentUndoChange(getName(), editorPart, getDocumentProvider(), edit, isDoSave());
 	}
 }
