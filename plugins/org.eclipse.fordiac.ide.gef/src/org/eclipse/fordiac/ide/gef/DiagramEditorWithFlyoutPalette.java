@@ -27,7 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalViewerAnnotationModelEventDispatcher;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
@@ -111,7 +111,7 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	private DiagramOutlinePage outlinePage;
 
 	private GraphicalAnnotationModel annotationModel;
-	private GraphicalAnnotationModelListener annotationModelEventDispatcher;
+	private GraphicalViewerAnnotationModelEventDispatcher annotationModelEventDispatcher;
 
 	/**
 	 * refresh all child editparts when editor gets focus.
@@ -311,14 +311,15 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	protected void addAnnotationModelDispatcher() {
 		if (annotationModel != null && getGraphicalViewer() != null) {
-			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getGraphicalViewer());
-			annotationModel.addAnnotationModelListener(annotationModelEventDispatcher, true);
+			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getPartName(),
+					getGraphicalViewer(), annotationModel);
 		}
 	}
 
 	protected void removeAnnotationModelDispatcher() {
-		if (annotationModel != null && annotationModelEventDispatcher != null) {
-			annotationModel.removeAnnotationModelListener(annotationModelEventDispatcher);
+		if (annotationModelEventDispatcher != null) {
+			annotationModelEventDispatcher.dispose();
+			annotationModelEventDispatcher = null;
 		}
 	}
 

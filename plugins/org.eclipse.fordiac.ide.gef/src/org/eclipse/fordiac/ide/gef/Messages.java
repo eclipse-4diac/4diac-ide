@@ -123,6 +123,8 @@ public final class Messages extends NLS {
 
 	public static String AttributeSection_NameReservedKeyWord;
 
+	public static String GraphicalViewerAnnotationModelEventDispatcher_Name;
+
 	public static String NatTable_Update_Failed;
 
 	static {

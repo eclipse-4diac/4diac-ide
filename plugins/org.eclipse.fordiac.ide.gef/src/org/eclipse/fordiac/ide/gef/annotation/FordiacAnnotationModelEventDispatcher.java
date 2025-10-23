@@ -17,8 +17,9 @@ import org.eclipse.gef.GraphicalViewer;
 
 public class FordiacAnnotationModelEventDispatcher extends GraphicalViewerAnnotationModelEventDispatcher {
 
-	public FordiacAnnotationModelEventDispatcher(final GraphicalViewer viewer) {
-		super(viewer);
+	public FordiacAnnotationModelEventDispatcher(final String name, final GraphicalViewer viewer,
+			final GraphicalAnnotationModel annotationModel) {
+		super(name, viewer, annotationModel);
 	}
 
 	@Override
