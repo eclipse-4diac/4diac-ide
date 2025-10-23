@@ -241,7 +241,11 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<String> getSubdirectories() {
-		try (Stream<Path> list = Files.list(getCurrentSourceDir())) {
+		final Path currentSourceDir = getCurrentSourceDir();
+		if (!Files.exists(currentSourceDir)) {
+			return List.of();
+		}
+		try (Stream<Path> list = Files.list(currentSourceDir)) {
 			return list.filter(Files::isDirectory).map(Path::getFileName).map(Path::toString).toList();
 		} catch (final IOException e) {
 			errors.add(e.getMessage());
@@ -250,7 +254,11 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<String> getSourceFiles() {
-		try (Stream<Path> list = Files.list(getCurrentSourceDir())) {
+		final Path currentSourceDir = getCurrentSourceDir();
+		if (!Files.exists(currentSourceDir)) {
+			return List.of();
+		}
+		try (Stream<Path> list = Files.list(currentSourceDir)) {
 			return list.filter(CMakeListsUtil::isSourceFile).map(Path::getFileName).map(Path::toString).toList();
 		} catch (final IOException e) {
 			errors.add(e.getMessage());

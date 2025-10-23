@@ -23,7 +23,11 @@ import org.eclipse.fordiac.ide.export.ExportException;
 public final class CMakeListsUtil {
 
 	public static List<Path> getSubdirs(final Path path, final String name) throws ExportException {
-		try (Stream<Path> walk = Files.walk(path.resolve(name))) {
+		final Path start = path.resolve(name);
+		if (!Files.exists(start)) {
+			return List.of();
+		}
+		try (Stream<Path> walk = Files.walk(start)) {
 			return walk.filter(Files::isDirectory).map(path::relativize).toList();
 		} catch (final IOException e) {
 			throw new ExportException(e.getMessage());
