@@ -26,10 +26,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.ProgressProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
@@ -64,6 +66,7 @@ public class ValidationJob extends UIJob {
 		this.commandStack = commandStack;
 		this.annotationModel = annotationModel;
 		commandStackEventListener.install(commandStack);
+		reload();
 	}
 
 	@Override
@@ -74,7 +77,8 @@ public class ValidationJob extends UIJob {
 		try {
 			final CancelableDiagnostician diagnostician = new VariableDiagnostician(monitorFor(monitor));
 			final List<Diagnostic> diagnostics = filtered.stream().map(diagnostician::validate).toList();
-			updateAnnotations(diagnostics, monitor);
+			runInBackground(MessageFormat.format(Messages.ValidationJob_UpdateJobName, getName()),
+					pm -> updateAnnotations(diagnostics, pm));
 		} catch (final OperationCanceledException e) {
 			queue.addAll(filtered); // add (filtered) elements back to queue
 			return Status.CANCEL_STATUS;
@@ -90,6 +94,12 @@ public class ValidationJob extends UIJob {
 			}
 		}
 		return IProgressMonitor.nullSafe(monitor);
+	}
+
+	protected static void runInBackground(final String name, final ICoreRunnable runnable) {
+		final Job job = Job.create(name, runnable);
+		job.setPriority(Job.DECORATE);
+		job.schedule();
 	}
 
 	protected void updateAnnotations(final List<Diagnostic> diagnostics, final IProgressMonitor monitor) {
@@ -137,12 +147,14 @@ public class ValidationJob extends UIJob {
 
 	public void reset() {
 		clear();
-		annotationModel.refresh();
+		runInBackground(MessageFormat.format(Messages.ValidationJob_RefreshJobName, getName()),
+				unused -> annotationModel.refresh());
 	}
 
 	public void reload() {
 		clear();
-		annotationModel.reload();
+		runInBackground(MessageFormat.format(Messages.ValidationJob_ReloadJobName, getName()),
+				unused -> annotationModel.reload());
 	}
 
 	public void dispose() {

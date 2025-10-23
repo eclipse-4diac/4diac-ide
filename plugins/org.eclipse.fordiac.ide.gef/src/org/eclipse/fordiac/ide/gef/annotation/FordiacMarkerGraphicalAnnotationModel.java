@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.ui.editors.text.EditorsUI;
@@ -34,7 +35,6 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 		super(resource);
 		this.libraryElementSupplier = Objects.requireNonNull(libraryElementSupplier);
 		providers = GraphicalAnnotationModelManager.getInstance().getProviders(this, resource);
-		reload();
 	}
 
 	@Override
@@ -67,18 +67,18 @@ public class FordiacMarkerGraphicalAnnotationModel extends ResourceMarkerGraphic
 	@Override
 	public void refresh() {
 		super.refresh();
-		providers.forEach(GraphicalAnnotationProvider::refresh);
+		providers.forEach(provider -> SafeRunner.run(provider::refresh));
 	}
 
 	@Override
 	public void reload() {
 		super.reload();
-		providers.forEach(GraphicalAnnotationProvider::reload);
+		providers.forEach(provider -> SafeRunner.run(provider::reload));
 	}
 
 	@Override
 	public void dispose() {
-		providers.forEach(GraphicalAnnotationProvider::dispose);
+		providers.forEach(provider -> SafeRunner.run(provider::dispose));
 		super.dispose();
 	}
 
