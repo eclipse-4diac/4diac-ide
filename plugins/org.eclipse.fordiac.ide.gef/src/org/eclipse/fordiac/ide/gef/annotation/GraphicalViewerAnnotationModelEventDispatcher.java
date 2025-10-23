@@ -12,9 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.widgets.Display;
@@ -34,8 +32,7 @@ public class GraphicalViewerAnnotationModelEventDispatcher implements GraphicalA
 	}
 
 	protected void dispatch(final GraphicalAnnotationModelEvent event) {
-		Stream.of(event.getAdded(), event.getRemoved(), event.getChanged()).flatMap(Collection::stream)
-				.map(GraphicalAnnotation::getTarget).distinct().forEachOrdered(target -> dispatch(target, event));
+		event.getTargets().forEach(target -> dispatch(target, event));
 	}
 
 	protected void dispatch(final Object target, final GraphicalAnnotationModelEvent event) {
