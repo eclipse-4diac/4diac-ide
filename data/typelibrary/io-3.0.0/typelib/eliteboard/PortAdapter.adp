@@ -2,9 +2,9 @@
 <AdapterType Name="PortAdapter" Comment="Adapter Interface">
 	<Identification Standard="61499-1" Description="Copyright (c) 2020, 2022 Jonathan Lainer&#10;&#10; This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
-	<VersionInfo Organization="4DIAC-Consortium" Version="0.1" Author="Jonathan Lainer" Date="2020-03-13" Remarks="Initial Contribution">
-	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="4DIAC-Consortium" Version="0.1" Author="Jonathan Lainer" Date="2020-03-13" Remarks="Initial Contribution">
 	</VersionInfo>
 	<CompilerInfo header="package fb.test;" packageName="eclipse4diac::io::eliteboard">
 	</CompilerInfo>
