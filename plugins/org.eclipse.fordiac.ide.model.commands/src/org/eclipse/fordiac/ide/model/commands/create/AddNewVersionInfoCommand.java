@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2012, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -46,7 +45,6 @@ public class AddNewVersionInfoCommand extends CreationCommand {
 	 * @param comment          the comment
 	 */
 	public AddNewVersionInfoCommand(final LibraryElement type) {
-		super();
 		this.type = type;
 	}
 
@@ -83,7 +81,7 @@ public class AddNewVersionInfoCommand extends CreationCommand {
 	 */
 	@Override
 	public void redo() {
-		type.getVersionInfo().add(info);
+		type.getVersionInfo().add(0, info);
 	}
 
 	@Override
