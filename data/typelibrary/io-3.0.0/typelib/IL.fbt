@@ -2,9 +2,9 @@
 <FBType Name="IL" Comment="Input service interface function block for long word input data">
 	<Identification Description="Copyright (c) 2018 TU Wien/ACIN &#10; &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
-	<VersionInfo Organization="TU Wien/ACIN" Version="1.0" Author="Martin Melik-Merkumians" Date="2018-10-05">
-	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="TU Wien/ACIN" Version="1.0" Author="Martin Melik-Merkumians" Date="2018-10-05">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::io">
 	</CompilerInfo>

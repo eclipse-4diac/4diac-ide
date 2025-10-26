@@ -2,9 +2,9 @@
 
 <FBType Comment="Rendezvous (AND) of two events" Name="E_REND">
   <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
+  <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
   <InterfaceList>

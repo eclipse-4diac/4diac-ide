@@ -2,9 +2,9 @@
 
 <FBType Comment="bitwise rotate left function" Name="F_ROL">
   <Identification Description="Copyright (c) 2013 TU Wien ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Classification="standard bit shift function" Standard="61131-3"/>
-  <VersionInfo Author="Monika Wenger" Date="2013-04-22" Organization="TU Wien ACIN" Version="1.0"/>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
+  <VersionInfo Author="Monika Wenger" Date="2013-04-22" Organization="TU Wien ACIN" Version="1.0"/>
 	<CompilerInfo packageName="iec61131::bitwiseOperators">
 	</CompilerInfo>
   <InterfaceList>

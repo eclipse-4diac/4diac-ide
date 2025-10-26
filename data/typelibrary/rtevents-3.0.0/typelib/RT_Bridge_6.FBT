@@ -2,9 +2,9 @@
 <FBType Name="RT_Bridge_6" Comment="Data connection decoupling bridge for data connection between real-time event chains">
 	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
-	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Alois Zoitl" Date="2023-11-02">
-	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Alois Zoitl" Date="2023-11-02">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::rtevents">
 	</CompilerInfo>
