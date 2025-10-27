@@ -613,4 +613,10 @@
        </enablement>
     </renameParticipant>
  </extension>
+ <extension
+       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
+    <strategy
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceRelocationStrategy">
+    </strategy>
+ </extension>
 </plugin>

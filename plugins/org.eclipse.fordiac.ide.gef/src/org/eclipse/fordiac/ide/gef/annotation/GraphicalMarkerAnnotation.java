@@ -56,6 +56,11 @@ public class GraphicalMarkerAnnotation extends GraphicalAnnotation {
 		}
 	}
 
+	@Override
+	public boolean isTransient() {
+		return false;
+	}
+
 	public void refresh() {
 		text = marker.getAttribute(IMarker.MESSAGE, null);
 		location = marker.getAttribute(IMarker.LOCATION, null);

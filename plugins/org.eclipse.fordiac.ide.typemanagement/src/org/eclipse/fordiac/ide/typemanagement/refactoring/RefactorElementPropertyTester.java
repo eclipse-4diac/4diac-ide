@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 
 public class RefactorElementPropertyTester extends PropertyTester {
@@ -36,18 +37,24 @@ public class RefactorElementPropertyTester extends PropertyTester {
 
 		if (element instanceof final EObject eObject
 				&& EcoreUtil.getRootContainer(eObject) instanceof final LibraryElement libraryElement
-				&& libraryElement.getTypeEntry().getFile().isReadOnly()) {
+				&& !isEditableTypeEntry(libraryElement.getTypeEntry())) {
 			return false;
 		}
 
 		if (element instanceof final IInterfaceElement ie && !(ie instanceof ErrorMarkerInterface)) {
-			if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement().getTypeEntry() != null
-					&& ie.getBlockFBNetworkElement().getTypeEntry().getFile() != null) {
-				return !ie.getBlockFBNetworkElement().getTypeEntry().getFile().isReadOnly();
+			if (ie.getBlockFBNetworkElement() != null) {
+				return isEditableTypeEntry(ie.getBlockFBNetworkElement().getTypeEntry());
 			}
 			return true;
 		}
 
 		return element instanceof final FB fbb && fbb.eContainer() instanceof BaseFBType;
+	}
+
+	private static boolean isEditableTypeEntry(final TypeEntry typeEntry) {
+		if (typeEntry == null || typeEntry.getFile() == null) {
+			return false;
+		}
+		return !typeEntry.getFile().isReadOnly();
 	}
 }

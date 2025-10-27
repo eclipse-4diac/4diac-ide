@@ -67,7 +67,9 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 class ForteNgExportFilter extends TemplateExportFilter {
 
 	public static final String OPTION_TYPE = "type"
-	public static final String OPTION_TYPE_PARAM = "type_param"
+	public static final String OPTION_TYPE_IN_PARAM = "type_in_param"
+	public static final String OPTION_TYPE_OUT_PARAM = "type_out_param"
+	public static final String OPTION_TYPE_IN_OUT_PARAM = "type_in_out_param"
 	public static final String OPTION_HEADER = "header"
 
 	override protected getTemplates(String name, EObject source) {

@@ -107,7 +107,7 @@ public final class GraphicalAnnotationStyles {
 	public static void updateAnnotationFeedback(final IFigure annonFigure, final Object target,
 			final GraphicalAnnotationModelEvent event, final Predicate<GraphicalAnnotation> filter) {
 		// remove styles for removed annotations
-		event.getRemoved().stream().filter(filter).map(GraphicalAnnotationStyles::getStyledAnnotation)
+		event.getRemoved(target).stream().filter(filter).map(GraphicalAnnotationStyles::getStyledAnnotation)
 				.filter(Objects::nonNull)
 				.forEachOrdered(entry -> entry.getValue().styler().removeStyles(annonFigure, entry.getKey()));
 		// apply styles for all current annotations

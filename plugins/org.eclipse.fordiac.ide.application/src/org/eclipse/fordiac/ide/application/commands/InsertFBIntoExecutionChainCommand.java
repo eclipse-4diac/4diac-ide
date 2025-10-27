@@ -52,14 +52,14 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 	@Override
 	public boolean canExecute() {
-		return subApp != null && insertedFB != null && predecessorOutputPin != null
-				&& !predecessorOutputPin.getOutputConnections().isEmpty();
+		return subApp != null && insertedFB != null;
 	}
 
 	@Override
 	public void execute() {
 		if (insertedFB.getInterface() == null || insertedFB.getInterface().getEventInputs().isEmpty()
-				|| insertedFB.getInterface().getEventOutputs().isEmpty()) {
+				|| insertedFB.getInterface().getEventOutputs().isEmpty() || predecessorOutputPin == null
+				|| predecessorOutputPin.getOutputConnections().isEmpty()) {
 			return;
 		}
 		final Optional<IInterfaceElement> inputInsertedFB = Optional

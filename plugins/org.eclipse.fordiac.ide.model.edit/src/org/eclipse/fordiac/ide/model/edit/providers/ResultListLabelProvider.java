@@ -80,7 +80,10 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	private static void addFilePath(final StyledString styledString, final IFile file, final String packageName) {
 		final String pathString;
 		final IPath filePath = file.getFullPath();
-		if (!packageName.isEmpty() && packageName.equalsIgnoreCase(PackageNameHelper.getPackageNameFromFile(file))) {
+		final String filePackageName = PackageNameHelper.getPackageNameFromFile(file);
+
+		if (!packageName.isEmpty() && !filePackageName.isEmpty()
+				&& filePackageName.toLowerCase().endsWith(packageName.toLowerCase())) {
 			final int stripCount = packageName.split(PackageNameHelper.PACKAGE_NAME_DELIMITER).length + 1;
 			pathString = filePath.removeLastSegments(stripCount).addTrailingSeparator().toOSString() + "..."; //$NON-NLS-1$
 		} else {

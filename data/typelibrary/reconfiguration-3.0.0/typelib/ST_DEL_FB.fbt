@@ -2,9 +2,9 @@
 <FBType Name="ST_DEL_FB" Comment="Deletes a FB instance from a certain FB type">
 	<Identification Standard="61499-1" Classification="Reconfiguration" Function="Deletes FB" Type="Structural Service" Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
-	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
-	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
 	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::reconfiguration">
 		<Compiler Language="Cpp" Vendor="GNU" Product="GCC" Version="&gt;3.0"/>

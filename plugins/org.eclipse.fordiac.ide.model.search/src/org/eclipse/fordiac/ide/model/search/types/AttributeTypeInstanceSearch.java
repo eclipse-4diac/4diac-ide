@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -92,13 +92,8 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 				stream = Stream.concat(stream, system.getSystemConfiguration().getSegments().stream());
 				yield stream;
 			}
-			case final Application application -> {
-				Stream<? extends EObject> stream = application.getFBNetwork().getNetworkElements().stream();
-				stream = Stream.concat(stream, application.getFBNetwork().getAdapterConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getDataConnections().stream());
-				stream = Stream.concat(stream, application.getFBNetwork().getEventConnections().stream());
-				yield stream;
-			}
+			case final Application application ->
+				SearchChildrenProviderHelper.getFBNetworkChildren(application.getFBNetwork());
 			case final FBType fbType -> SearchChildrenProviderHelper.getFBTypeChildren(fbType);
 			case final UntypedSubApp untypedSubapp ->
 				SearchChildrenProviderHelper.getUntypedSubappChildren(untypedSubapp);

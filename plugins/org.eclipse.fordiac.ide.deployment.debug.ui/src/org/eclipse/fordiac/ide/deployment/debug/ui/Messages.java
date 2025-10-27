@@ -44,6 +44,7 @@ public class Messages extends NLS {
 	public static String DeploymentLaunchConfigurationTab_SelectionLabel;
 	public static String DeploymentLaunchConfigurationTab_SystemLabel;
 	public static String DeploymentLaunchConfigurationTab_SystemMessage;
+	public static String DeploymentLaunchShortcut_ErrorMessage;
 	public static String DeploymentLaunchWatchesTab_AddButton;
 	public static String DeploymentLaunchWatchesTab_AddDialogEmptyListMessage;
 	public static String DeploymentLaunchWatchesTab_AddDialogEmptySelectionMessage;

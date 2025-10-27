@@ -98,7 +98,10 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static CharSequence generateFindPackage(final CharSequence name, final CharSequence version,
 			final boolean required) {
-		return "find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		return "if (NOT TARGET " + name + ")" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
+				+ ("find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						+ System.lineSeparator()).indent(INDENT) //
+				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
 	}
 
 	protected static CharSequence generateAddSubdirectories(final List<? extends CharSequence> subdirs) {
@@ -241,7 +244,11 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<String> getSubdirectories() {
-		try (Stream<Path> list = Files.list(getCurrentSourceDir())) {
+		final Path currentSourceDir = getCurrentSourceDir();
+		if (!Files.exists(currentSourceDir)) {
+			return List.of();
+		}
+		try (Stream<Path> list = Files.list(currentSourceDir)) {
 			return list.filter(Files::isDirectory).map(Path::getFileName).map(Path::toString).toList();
 		} catch (final IOException e) {
 			errors.add(e.getMessage());
@@ -250,7 +257,11 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected List<String> getSourceFiles() {
-		try (Stream<Path> list = Files.list(getCurrentSourceDir())) {
+		final Path currentSourceDir = getCurrentSourceDir();
+		if (!Files.exists(currentSourceDir)) {
+			return List.of();
+		}
+		try (Stream<Path> list = Files.list(currentSourceDir)) {
 			return list.filter(CMakeListsUtil::isSourceFile).map(Path::getFileName).map(Path::toString).toList();
 		} catch (final IOException e) {
 			errors.add(e.getMessage());

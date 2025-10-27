@@ -31,6 +31,8 @@ public class Messages extends NLS {
 
 	public static String LibraryManager_DownloadJobName;
 
+	public static String LibraryManager_UnresolvableDependencies;
+
 	public static String PreferenceForceLoad;
 	public static String PreferenceLoadingGroup;
 

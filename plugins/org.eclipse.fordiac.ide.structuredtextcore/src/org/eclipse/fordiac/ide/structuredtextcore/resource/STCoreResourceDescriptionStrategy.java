@@ -113,6 +113,9 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 		if (container != null) {
 			userData.put(CONTAINER_ECLASS_NAME, container.eClass().getName());
 			userData.put(CONTAINMENT_FEATURE_NAME, eObject.eContainmentFeature().getName());
+		} else {
+			userData.put(CONTAINER_ECLASS_NAME, ""); //$NON-NLS-1$
+			userData.put(CONTAINMENT_FEATURE_NAME, ""); //$NON-NLS-1$
 		}
 		if (eObject instanceof final ICallable callable) {
 			userData.put(SIGNATURE_HASH, computeSignatureHash(callable));

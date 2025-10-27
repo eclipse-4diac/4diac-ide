@@ -70,9 +70,15 @@ class VarDeclarationSupport extends StructuredTextSupport {
 		if (options.get(ForteNgExportFilter.OPTION_TYPE) == Boolean.TRUE) {
 			prepareResultType
 			resultType?.generateTypeName
-		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_PARAM) == Boolean.TRUE) {
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_IN_PARAM) == Boolean.TRUE) {
 			prepareResultType
-			resultType?.generateTypeNameAsParameter
+			resultType?.generateTypeNameAsInputParameter
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_IN_OUT_PARAM) == Boolean.TRUE) {
+			prepareResultType
+			resultType?.generateTypeNameAsInOutParameter
+		} else if (options.get(ForteNgExportFilter.OPTION_TYPE_OUT_PARAM) == Boolean.TRUE) {
+			prepareResultType
+			resultType?.generateTypeNameAsOutputParameter
 		} else if (varDeclaration.value?.value.nullOrEmpty) {
 			prepareResultType
 			resultType?.generateTypeDefaultValue

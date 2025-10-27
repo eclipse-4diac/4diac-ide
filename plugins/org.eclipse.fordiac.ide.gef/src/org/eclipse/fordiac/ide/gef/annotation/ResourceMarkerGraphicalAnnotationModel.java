@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -39,11 +40,29 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	}
 
 	@Override
+	public void refresh() {
+		final Set<IMarker> markers = findMarkers();
+		final Set<GraphicalAnnotation> added = new HashSet<>();
+		final Set<GraphicalAnnotation> removed = new HashSet<>();
+		forEach(annotation -> {
+			if (annotation.isTransient()) {
+				removed.add(annotation);
+			}
+		});
+		markerAnnotations.keySet().stream().filter(Predicate.not(markers::contains))
+				.forEach(marker -> markerRemoved(marker, removed));
+		markerAnnotations.values().removeIf(Predicate.not(this::containsAnnotation));
+		markers.forEach(marker -> markerAdded(marker, added));
+		updateAnnotations(added, removed, Collections.emptySet());
+	}
+
+	@Override
 	public void reload() {
 		final Set<IMarker> markers = findMarkers();
 		final Set<GraphicalAnnotation> added = new HashSet<>();
 		final Set<GraphicalAnnotation> removed = new HashSet<>();
-		markerAnnotations.keySet().forEach(marker -> markerRemoved(marker, removed));
+		forEach(removed::add);
+		markerAnnotations.clear();
 		markers.forEach(marker -> markerAdded(marker, added));
 		updateAnnotations(added, removed, Collections.emptySet());
 	}
@@ -52,6 +71,7 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	public void dispose() {
 		resource.getWorkspace().removeResourceChangeListener(resourceChangeListener);
 		markerAnnotations.clear();
+		super.dispose();
 	}
 
 	protected void resourceChanged(final IResourceChangeEvent event) {
@@ -88,11 +108,13 @@ public abstract class ResourceMarkerGraphicalAnnotationModel extends AbstractGra
 	}
 
 	protected void markerAdded(final IMarker marker, final Set<GraphicalAnnotation> added) {
-		final GraphicalMarkerAnnotation annotation = markerAnnotations.computeIfAbsent(marker,
-				this::createMarkerAnnotation);
-		if (annotation != null) {
-			added.add(annotation);
-		}
+		markerAnnotations.computeIfAbsent(marker, unused -> {
+			final GraphicalMarkerAnnotation annotation = createMarkerAnnotation(marker);
+			if (annotation != null) {
+				added.add(annotation);
+			}
+			return annotation;
+		});
 	}
 
 	protected void markerRemoved(final IMarker marker, final Set<GraphicalAnnotation> removed) {

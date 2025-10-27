@@ -118,7 +118,6 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			const auto cPlugNameIds = std::array{«type.interfaceList.plugs.FORTENameList»};
 		«ENDIF»
 	'''
-	
 
 	def containsOnlyBasicEventType(EList<Event> events) {
 		events.findFirst[!it.typeName.contentEquals(EventTypeLibrary.EVENT)] === null
@@ -419,36 +418,36 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''
 
 	def protected generateEventAccessorDefinition(Event event) '''
-		void «event.generateName»(«event.generateEventAccessorParameters») {
+		void «event.generateName»(«event.generateParameters») {
+		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
+		  	«variable.generateOutputGuard»
+		  «ENDFOR»
 		  «FOR variable : (event.inputParameters + event.inOutParameters).filter(VarDeclaration)»
 		  	«variable.generateName» = «variable.generateNameAsParameter»;
 		  «ENDFOR»
 		  executeEvent(«event.generateEventID», nullptr);
-		  «FOR variable : (event.outputParameters + event.inOutParameters).filter(VarDeclaration)»
+		  «FOR variable : event.inOutParameters.filter(VarDeclaration)»
 		  	«IF GenericTypes.isAnyType(variable.type)»
 		  		«variable.generateNameAsParameter».setValue(«variable.generateName».unwrap());
 		  	«ELSE»
 		  		«variable.generateNameAsParameter» = «variable.generateName»;
 		  	«ENDIF»
 		  «ENDFOR»
+		  «FOR variable : event.outputParameters.filter(VarDeclaration)»
+		  	«IF GenericTypes.isAnyType(variable.type)»
+		  		«variable.generateNameAsParameter»->setValue(«variable.generateName».unwrap());
+		  	«ELSE»
+		  		*«variable.generateNameAsParameter» = «variable.generateName»;
+		  	«ENDIF»
+		  «ENDFOR»
 		}
 	'''
 
 	def protected generateEventAccessorCallOperator(Event event) '''
-		void operator()(«event.generateEventAccessorParameters») {
-		  «event.generateName»(«event.generateEventAccessorForwardArguments»);
+		void operator()(«event.generateParameters») {
+		  «event.generateName»(«event.generateForwardArguments»);
 		}
 	'''
-
-	def protected CharSequence generateEventAccessorParameters(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isInput && !param.inOutVar»const «ENDIF»«param.generateVariableTypeNameAsParameter» &«param.generateNameAsParameter»«ENDFOR»'''
-
-	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateNameAsParameter»«ENDFOR»'''
-
-	def protected getEventAccessorParameters(Event event) {
-		(event.inputParameters + event.inOutParameters + event.outputParameters).filter(VarDeclaration)
-	}
 
 	def protected getFBClassName() { className }
 

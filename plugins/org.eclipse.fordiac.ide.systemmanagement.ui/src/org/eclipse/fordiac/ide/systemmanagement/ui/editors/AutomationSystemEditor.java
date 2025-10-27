@@ -515,7 +515,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 				final var entry = system == null ? TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile())
 						: system.getTypeEntry();
-				if (entry != null) {
+				if (entry != null && !entry.eAdapters().contains(typeEntryAdapter)) {
 					entry.eAdapters().add(typeEntryAdapter);
 				}
 			}

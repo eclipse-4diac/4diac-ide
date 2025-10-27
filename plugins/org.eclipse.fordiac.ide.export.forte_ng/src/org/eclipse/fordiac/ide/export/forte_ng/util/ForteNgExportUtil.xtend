@@ -13,11 +13,13 @@
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
 import java.nio.file.Path
+import java.util.List
 import java.util.Set
 import java.util.regex.Pattern
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyType
@@ -30,6 +32,7 @@ import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
@@ -37,6 +40,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -194,14 +198,13 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»'''
 
+	def static CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
+
 	def static CharSequence generateTypeName(LibraryElement type) {
 		switch (type) {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
-					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
-					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
-				].toString
+				generateArrayTypeName(type.subranges, type.baseType)
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
 			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
@@ -211,20 +214,30 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence generateTypeNameAsParameter(LibraryElement type) {
-		switch (type) {
-			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-			ArrayType:
-				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
-					'''CIEC_ARRAY_COMMON<«result»>'''
-				].toString
-			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
-			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
-			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
-			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
-			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
-			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
-		}
+	def static CharSequence generateTypeNameAsInputParameter(LibraryElement type) {
+		generateTypeName(type)
+	}
+
+	def static CharSequence generateTypeNameAsInOutParameter(LibraryElement type) {
+		if (type instanceof ArrayType)
+			// use CIEC_ARRAY_COMMON for first dimension
+			'''CIEC_ARRAY_COMMON<«generateArrayTypeName(type.subranges.subList(1, type.subranges.size), type.baseType)»>'''
+		else
+			generateTypeName(type)
+	}
+
+	def static CharSequence generateTypeNameAsOutputParameter(LibraryElement type) {
+		if (type instanceof AnyBitType)
+			'''CAnyBitOutputParameter<«type.generateTypeName»>'''
+		else
+			'''COutputParameter<«type.generateTypeName»>'''
+	}
+
+	def static String generateArrayTypeName(List<Subrange> subranges, DataType baseType) {
+		subranges.reverseView.fold(baseType.generateTypeName) [ result, subrange |
+			val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+			'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+		].toString
 	}
 
 	def static CharSequence generateTypeSpec(LibraryElement type) {
@@ -412,14 +425,20 @@ final class ForteNgExportUtil {
 		END_COMMENT_PATTERN.matcher(string).replaceAll("* /")
 	}
 
-	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "GenericClassName"
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE_NAME = "GenericClassName"
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::GenericClassName"
 
 	def static boolean isGenericType(LibraryElement type) {
-		type.attributes.exists[name == GENERIC_CLASS_NAME_ATTRIBUTE]
+		getGenericClassNameAttributeValue(type) !== null
 	}
 
 	def static String getGenericClassName(LibraryElement type) {
-		StringValueConverter.INSTANCE.toValue(type.attributes.findFirst[name == GENERIC_CLASS_NAME_ATTRIBUTE].value)
+		StringValueConverter.INSTANCE.toValue(getGenericClassNameAttributeValue(type))
+	}
+
+	private def static getGenericClassNameAttributeValue(LibraryElement type) {
+		type.getAttributeValue(GENERIC_CLASS_NAME_ATTRIBUTE_FULL_NAME) ?:
+			type.getAttributeValue(GENERIC_CLASS_NAME_ATTRIBUTE_NAME)
 	}
 
 	private new() {

@@ -104,11 +104,14 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 			handleFileContentChange();
 			break;
 		case TypeEntry.TYPE_ENTRY_FILE_FEATURE:
-			Display.getDefault().asyncExec(() -> {
-				if (!editorClosed() && notification.getNewValue() instanceof final IFile newFile) {
-					getEditor().setInput(new FileEditorInput(newFile));
-				}
-			});
+			if (notification.getNewValue() instanceof final IFile newFile) {
+				final FileEditorInput newEditorInput = new FileEditorInput(newFile);
+				Display.getDefault().execute(() -> {
+					if (!editorClosed() && !newEditorInput.equals(getEditor().getEditorInput())) {
+						getEditor().setInput(newEditorInput);
+					}
+				});
+			}
 			break;
 		case TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE:
 			// if there is no typeEntry inside, then the notification is used wrong, and for

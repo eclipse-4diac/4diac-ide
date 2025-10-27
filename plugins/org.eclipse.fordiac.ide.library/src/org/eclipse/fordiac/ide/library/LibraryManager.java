@@ -48,6 +48,7 @@ import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -698,9 +699,6 @@ public enum LibraryManager {
 
 		checkLibChanges(progress.split(4));
 
-		// TODO this is for migrating old projects: remove when no longer needed
-		moveLinksToVirtualFolders(project, progress.split(1));
-
 		if (projectManifest.getDependencies() == null) {
 			return;
 		}
@@ -753,10 +751,20 @@ public enum LibraryManager {
 			progress.worked(3);
 		}
 
+		final int maxSeverity = markerList.stream().mapToInt(ErrorMarkerBuilder::getSeverity).max().orElse(-1);
+		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
+			markerList.add(ErrorMarkerBuilder.createErrorMarkerBuilder(Messages.LibraryManager_UnresolvableDependencies)
+					.setType(FordiacErrorMarker.LIBRARY_MARKER));
+		}
+
 		FordiacMarkerHelper.updateMarkers(project.getFile(MANIFEST), FordiacErrorMarker.LIBRARY_MARKER, markerList,
 				true);
 
 		TypeLibraryManager.INSTANCE.getTypeLibrary(project).refresh();
+
+		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
+			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
+		}
 	}
 
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
@@ -964,55 +972,6 @@ public enum LibraryManager {
 		}
 
 		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable + dlResult.message());
-	}
-
-	/**
-	 * Moves linked libraries from 'Type Library' to 'Standard Libraries' and
-	 * 'External Libraries'
-	 *
-	 * @param project  selected project
-	 * @param progress {@link SubMonitor} to show progress
-	 */
-	private void moveLinksToVirtualFolders(final IProject project, final SubMonitor progress) {
-		if (project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).exists()) {
-			return;
-		}
-		progress.beginTask("Moving Links to virtual folders", 10); //$NON-NLS-1$
-
-		IResource[] members = null;
-		try {
-			project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
-					true, null);
-			project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE,
-					true, null);
-			members = project.getFolder(TypeLibraryTags.TYPE_LIB_FOLDER_NAME).members();
-			progress.worked(1);
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-		if (members != null) {
-			progress.setWorkRemaining(members.length);
-			for (final IResource res : members) {
-				if (res instanceof final IFolder folder && folder.isLinked() && folder.getFile(MANIFEST).exists()) {
-					final java.net.URI libURI = folder.getRawLocationURI();
-
-					final IFolder libDirectory = project
-							.getFolder(libURI.getPath().startsWith(standardLibraryUri.getPath())
-									? TypeLibraryTags.STANDARD_LIB_FOLDER_NAME
-									: TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)
-							.getFolder(folder.getName());
-
-					try {
-						folder.move(libDirectory.getFullPath(), IResource.FORCE | IResource.SHALLOW, null);
-						final IFile man = libDirectory.getFile(MANIFEST);
-						man.setHidden(true);
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError(e.getMessage(), e);
-					}
-				}
-				progress.worked(1);
-			}
-		}
 	}
 
 	/**

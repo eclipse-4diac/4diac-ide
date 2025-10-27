@@ -20,22 +20,23 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.TextChange;
 import org.eclipse.text.edits.UndoEdit;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 public class ProviderDocumentChange extends TextChange {
 
-	private final IFileEditorInput editorInput;
+	private final IEditorInput editorInput;
 	private final IDocumentProvider documentProvider;
 	private final boolean doSave;
 	private long modificationStamp = -1L;
 
-	public ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
+	public ProviderDocumentChange(final String name, final IEditorInput editorInput,
 			final IDocumentProvider documentProvider) {
 		this(name, editorInput, documentProvider, true);
 	}
 
-	public ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
+	public ProviderDocumentChange(final String name, final IEditorInput editorInput,
 			final IDocumentProvider documentProvider, final boolean doSave) {
 		super(name);
 		this.editorInput = editorInput;
@@ -97,10 +98,13 @@ public class ProviderDocumentChange extends TextChange {
 
 	@Override
 	public Object[] getAffectedObjects() {
-		return new Object[] { editorInput.getFile() };
+		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
+			return new Object[] { fileEditorInput.getFile() };
+		}
+		return new Object[0];
 	}
 
-	public IFileEditorInput getEditorInput() {
+	public IEditorInput getEditorInput() {
 		return editorInput;
 	}
 

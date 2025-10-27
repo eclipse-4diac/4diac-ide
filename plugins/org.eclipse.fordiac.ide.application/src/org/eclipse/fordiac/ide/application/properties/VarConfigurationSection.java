@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
@@ -104,6 +105,7 @@ public class VarConfigurationSection extends AbstractSection {
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
 		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
@@ -280,15 +282,6 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 		result.put(qualifiedName, targetVD);
 		copiedMap.put(targetVD, Boolean.TRUE);
-		cleanVarConfigParams(rootTSA);
-	}
-
-	private void cleanVarConfigParams(final TypedSubApp rootTSA) {
-		for (final VarDeclaration vd : rootTSA.getVarConfigParams()) {
-			if (!displayMap.values().contains(vd)) {
-				rootTSA.getVarConfigParams().remove(vd);
-			}
-		}
 	}
 
 	private static TypedSubApp findTypedSubAppByQualifiedNameInNetwork(final Iterable<FBNetworkElement> roots,

@@ -25,6 +25,11 @@ public interface GraphicalAnnotationProvider {
 	boolean initialize(GraphicalAnnotationModel model, Object context);
 
 	/**
+	 * Refresh the participant
+	 */
+	void refresh();
+
+	/**
 	 * Reload the participant
 	 */
 	void reload();
