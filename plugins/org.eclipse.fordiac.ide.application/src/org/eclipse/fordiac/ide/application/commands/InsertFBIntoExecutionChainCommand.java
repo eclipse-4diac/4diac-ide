@@ -168,10 +168,6 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 			if ((resource != null) && (UtilityMarkerHelper.getMarkedElement(MarkerDescriptor.PREDECESSOR,
 					resource) instanceof final BlockFBNetworkElement elem)) {
 				oldPredecessor = elem;
-				// AbstractMarkerHandler.deleteElementMarker(FordiacErrorMarker.PREDECESSOR_MARKER,
-				// resource);
-				// AbstractMarkerHandler.addElementMarker(FordiacErrorMarker.PREDECESSOR_MARKER,
-				// resource, predecessor);
 				UtilityMarkerHelper.deleteElementMarker(MarkerDescriptor.PREDECESSOR, resource);
 				UtilityMarkerHelper.addElementMarker(MarkerDescriptor.PREDECESSOR, resource, predecessor);
 			}
@@ -181,9 +177,6 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		public void undo() {
 			UtilityMarkerHelper.deleteElementMarker(MarkerDescriptor.PREDECESSOR, getResource());
 			UtilityMarkerHelper.addElementMarker(MarkerDescriptor.PREDECESSOR, getResource(), oldPredecessor);
-//			AbstractMarkerHandler.deleteElementMarker(FordiacErrorMarker.PREDECESSOR_MARKER, getResource());
-//			AbstractMarkerHandler.addElementMarker(FordiacErrorMarker.PREDECESSOR_MARKER, getResource(),
-//					oldPredecessor);
 		}
 
 		@Override
