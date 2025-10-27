@@ -25,8 +25,6 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -37,12 +35,9 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -115,23 +110,13 @@ public class VarConfigurationSection extends AbstractSection {
 
 	@Override
 	protected INamedElement getInputType(final Object input) {
-		if (input instanceof final FBNetworkEditPart fbnEP) {
-			return fbnEP.getModel().getApplication();
-		}
-		if (input instanceof final INamedElement namedElement) {
-			return namedElement;
-		}
-		if (input instanceof final SubAppForFBNetworkEditPart safbnEp) {
-			return safbnEp.getModel();
-		}
-		return null;
+		return VarConfigurationFilter.getModel(input);
 	}
 
 	@Override
 	protected INamedElement getType() {
-		if ((type instanceof Application) || (type instanceof FB) || (type instanceof SubApp)
-				|| (type instanceof CFBInstance) || (type instanceof TypedSubApp)) {
-			return (INamedElement) type;
+		if (type instanceof final INamedElement namedElement) {
+			return namedElement;
 		}
 		return null;
 	}
