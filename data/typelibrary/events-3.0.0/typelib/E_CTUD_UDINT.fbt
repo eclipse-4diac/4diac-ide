@@ -2,13 +2,13 @@
 <FBType Name="E_CTUD_UDINT" Comment="Event-Driven Up-Down Counter">
 	<Identification Standard="61499-1-A.x" Classification="Event-driven blocks" Function="Up-Down-counter" Description="Copyright (c) 2017, 2024 fortiss GmbH, JKU, HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0">
 	</Identification>
-	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation (E_CTUD)">
-	</VersionInfo>
-	<VersionInfo Organization="JKU" Version="1.1" Author="Alois Zoitl" Date="2019-07-09" Remarks="fixed bug in down counting (E_CTUD)">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
 	</VersionInfo>
 	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.2" Author="Franz Höpfinger" Date="2024-02-10" Remarks="Copy over E_CTUD to E_CTUD_UDINT">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
+	<VersionInfo Organization="JKU" Version="1.1" Author="Alois Zoitl" Date="2019-07-09" Remarks="fixed bug in down counting (E_CTUD)">
+	</VersionInfo>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation (E_CTUD)">
 	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>

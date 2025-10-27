@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnotationModel {
 
@@ -36,9 +35,8 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 			final boolean initialEvent) {
 		listeners.add(listener);
 		if (initialEvent) {
-			listener.modelChanged(new GraphicalAnnotationModelEvent(this,
-					annotations.values().stream().flatMap(Set::stream).collect(Collectors.toSet()),
-					Collections.emptySet(), Collections.emptySet(), getModificationStamp()));
+			listener.modelChanged(
+					new GraphicalAnnotationModelEvent(this, annotations, Map.of(), Map.of(), getModificationStamp()));
 		}
 	}
 
@@ -132,7 +130,7 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 
 	@Override
 	public void forEach(final Consumer<? super GraphicalAnnotation> action) {
-		annotations.forEach((unused, values) -> values.forEach(annotation -> action.accept(annotation)));
+		annotations.forEach((unused, values) -> values.forEach(action::accept));
 	}
 
 	@Override
@@ -169,5 +167,11 @@ public abstract class AbstractGraphicalAnnotationModel implements GraphicalAnnot
 			return value.isEmpty() ? null : value;
 		});
 		return result[0];
+	}
+
+	@Override
+	public void dispose() {
+		annotations.clear();
+		listeners.clear();
 	}
 }

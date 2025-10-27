@@ -2,9 +2,9 @@
 
 <FBType Comment="Set value of array at given index. Data types of value to be set must correspond to the array data type. Data type of resulting output array must correspond to input array data type." Name="SET_AT_INDEX">
     <Identification Description="Copyright (c) 2014 Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
-  <VersionInfo Author="Matthias Plasch" Date="2014-08-05" Organization="Profactor GmbH" Version="1.0"/>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
+  <VersionInfo Author="Matthias Plasch" Date="2014-08-05" Organization="Profactor GmbH" Version="1.0"/>
 	<CompilerInfo packageName="eclipse4diac::convert">
 	</CompilerInfo>
   <InterfaceList>
