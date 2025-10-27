@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -62,7 +61,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case TYPE -> rowObject.getFullTypeName();
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);
-		case VAR_CONFIG -> getVarConfValue(rowObject);
+		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
 		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
 		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
@@ -70,22 +69,6 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case LOCATION -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
-	}
-
-	private static Boolean getVarConfValue(final VarDeclaration rowObject) {
-		return isFBinsideCompositeNetwork(rowObject) ? null : Boolean.valueOf(rowObject.isVarConfig());
-	}
-
-	private static boolean isFBinsideCompositeNetwork(final VarDeclaration rowObject) {
-		final var fbElement = rowObject.getBlockFBNetworkElement();
-		if (fbElement == null) {
-			return false;
-		}
-		final var fbNetwork = fbElement.getFbNetwork();
-		if (fbNetwork == null) {
-			return false;
-		}
-		return fbNetwork.eContainer() instanceof CompositeFBType;
 	}
 
 	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
