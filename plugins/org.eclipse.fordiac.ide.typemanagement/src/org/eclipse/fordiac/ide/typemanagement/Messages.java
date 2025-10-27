@@ -143,6 +143,21 @@ public final class Messages extends NLS {
 	public static String MoveTypeToPackage_NameChanged;
 	public static String MoveTypeToPackage_UpdateTypeEntryFile;
 	public static String FordiacCopyProcessor_Name;
+	public static String FordiacCopyProcessor_CompositeChangeName;
+	public static String CopyResourceChange_Name;
+
+	public static String Copy_OverwriteDialog_Title;
+	public static String Copy_OverwriteDialog_Message;
+	public static String Copy_OverwriteDialog_Source;
+	public static String Copy_OverwriteDialog_Destination;
+	public static String Copy_OverwriteDialog_Yes;
+	public static String Copy_OverwriteDialog_No;
+	public static String Copy_OverwriteDialog_Rename;
+	public static String Copy_OverwriteDialog_Cancel;
+	public static String Copy_RenameDialog_Title;
+	public static String Copy_RenameDialog_Message;
+	public static String Copy_RenameDialog_MustBeNewName;
+	public static String Copy_RenameDialog_NameAlreadyExists;
 
 	public static String NewFBTypeWizard_TemplateNotAvailable;
 	public static String NewFBTypeWizardPage_TypeAlreadyExists;
