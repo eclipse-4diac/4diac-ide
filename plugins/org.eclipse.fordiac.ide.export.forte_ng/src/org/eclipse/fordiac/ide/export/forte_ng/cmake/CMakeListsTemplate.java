@@ -98,7 +98,10 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static CharSequence generateFindPackage(final CharSequence name, final CharSequence version,
 			final boolean required) {
-		return "find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" + System.lineSeparator(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		return "if (NOT TARGET " + name + ")" + System.lineSeparator() //$NON-NLS-1$ //$NON-NLS-2$
+				+ ("find_package(" + name + " " + version + (required ? " REQUIRED" : "") + ")" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						+ System.lineSeparator()).indent(INDENT) //
+				+ "endif ()" + System.lineSeparator(); //$NON-NLS-1$
 	}
 
 	protected static CharSequence generateAddSubdirectories(final List<? extends CharSequence> subdirs) {
