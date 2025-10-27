@@ -17,7 +17,10 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -29,6 +32,15 @@ public class ChangeVarConfigurationCommand extends Command implements ScopedComm
 	public ChangeVarConfigurationCommand(final VarDeclaration varDeclaration, final boolean config) {
 		this.varDeclaration = Objects.requireNonNull(varDeclaration);
 		this.config = config;
+	}
+
+	@Override
+	public boolean canExecute() {
+		final EObject root = EcoreUtil.getRootContainer(varDeclaration);
+		if (root instanceof AutomationSystem || root instanceof SubAppType) {
+			return super.canExecute();
+		}
+		return false;
 	}
 
 	@Override
