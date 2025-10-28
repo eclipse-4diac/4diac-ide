@@ -55,7 +55,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		/*************************************************************************
 		 *** FORTE Library Element
 		 ***
-		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+		 *** «HEADER_TEXT»
 		 ***
 		 *** Name: «type.name»
 		 *** Description: «type.comment.escapeMultilineCommentString»

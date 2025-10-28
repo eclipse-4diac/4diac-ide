@@ -41,8 +41,6 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	protected static final int INDENT = 8;
 
-	protected static final String HEADER = "# This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!\n\n"; //$NON-NLS-1$
-
 	protected static final String FORTE = "forte"; //$NON-NLS-1$
 	protected static final String FORTE_VERSION = "3.0"; //$NON-NLS-1$
 	protected static final String CMAKE_MINIMUM_VERSION = "3.30"; //$NON-NLS-1$
@@ -83,7 +81,7 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	}
 
 	protected static CharSequence generateHeader() {
-		return HEADER;
+		return "# " + HEADER_TEXT + System.lineSeparator() + System.lineSeparator(); //$NON-NLS-1$
 	}
 
 	protected static CharSequence generateProject(final CharSequence name, final CharSequence comment,
