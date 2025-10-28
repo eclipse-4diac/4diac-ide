@@ -15,6 +15,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.Optional;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -59,13 +61,15 @@ public class InsertFB extends AbstractHandler {
 	}
 
 	private static EditPart getTargetEditPart(final IWorkbenchPart part, final GraphicalViewer viewer) {
-		final FBNetwork fbn = part.getAdapter(FBNetwork.class);
-		final EditPart editPart = viewer.getEditPartForModel(fbn);
-		if (editPart != null) {
-			return editPart;
+		if (!viewer.getSelection().isEmpty()) {
+			final Optional<EditPart> ep = viewer.getSelectedEditParts().stream()
+					.filter(FBNetworkEditPart.class::isInstance).map(EditPart.class::cast).findFirst();
+			if (ep.isPresent()) {
+				return ep.get();
+			}
 		}
-		return viewer.getSelectedEditParts().stream().filter(FBNetworkEditPart.class::isInstance)
-				.map(EditPart.class::cast).findAny().orElse(viewer.getRootEditPart());
+		return Optional.ofNullable(viewer.getEditPartForModel(part.getAdapter(FBNetwork.class)))
+				.orElse(viewer.getRootEditPart());
 	}
 
 	private static SelectionRequest createSelectionRequest(final GraphicalViewer viewer) {
