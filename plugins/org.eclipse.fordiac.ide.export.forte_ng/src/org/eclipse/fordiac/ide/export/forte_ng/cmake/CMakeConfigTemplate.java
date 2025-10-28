@@ -22,8 +22,6 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 
 public class CMakeConfigTemplate extends ForteNgExportTemplate {
 
-	protected static final String HEADER = "# This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!\n\n"; //$NON-NLS-1$
-
 	public CMakeConfigTemplate(final IProject project) {
 		super(generateConfigTemplateName(project), Path.of("")); //$NON-NLS-1$
 	}
@@ -31,7 +29,7 @@ public class CMakeConfigTemplate extends ForteNgExportTemplate {
 	@Override
 	public CharSequence generate() throws ExportException {
 		final StringBuilder builder = new StringBuilder();
-		builder.append(HEADER);
+		builder.append("# ").append(HEADER_TEXT).append(System.lineSeparator()).append(System.lineSeparator()); //$NON-NLS-1$
 		builder.append("@PACKAGE_INIT@").append(System.lineSeparator()); //$NON-NLS-1$
 		builder.append(System.lineSeparator());
 		builder.append("include(${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@-export.cmake)"); //$NON-NLS-1$
