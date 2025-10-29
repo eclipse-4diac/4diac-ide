@@ -11,7 +11,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.Objects;
 import java.util.Set;

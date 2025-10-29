@@ -65,7 +65,7 @@ public final class Messages extends NLS {
 	public static String CommandRedoChange_CannotRedoCommand;
 
 	public static String CommandUndoChange_CannotUndoCommand;
-
+	public static String ConditionExpressionEdit_ConditionExpressionChanged;
 	public static String ConnectionsToStructRefactoring_ChangeName;
 	public static String ConnectionsToStructRefactoring_CheckPreconditions;
 	public static String ConnectionsToStructRefactoring_IncompatibleStructType;
