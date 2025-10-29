@@ -12,12 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.util.ArrayList;
 import java.util.function.Predicate;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 public class STMatcher implements IModelMatcher {
 
@@ -29,15 +33,48 @@ public class STMatcher implements IModelMatcher {
 
 	@Override
 	public boolean matches(final EObject object) {
+
+		if (object instanceof final STVarDeclaration var) {
+			return predicate.test(var.getQualifiedName());
+		}
+
+		if (object instanceof final STAssignment sta) {
+			if ((sta.getRight() instanceof final STFeatureExpression featureExpression)) {
+				final INamedElement feature = featureExpression.getFeature();
+				if (feature instanceof final STVarDeclaration var) {
+					return predicate.test(getFullQualifiedName(var));
+				}
+			}
+
+			return false;
+		}
+
 		if (object instanceof final STFeatureExpression featureExpression) {
 			if (featureExpression.getFeature() instanceof final FBType type) {
 				return predicate.test(type.getTypeEntry().getFullTypeName());
 			}
+
 			return predicate.test(featureExpression.getFeature().getName());
 		}
+
 		if (object instanceof final INamedElement element) {
 			return predicate.test(element.getName());
 		}
+
 		return false;
 	}
+
+	private static String getFullQualifiedName(final STVarDeclaration varDecl) {
+		final ArrayList<String> qualifiedName = new ArrayList<>();
+		EObject o = varDecl;
+		while (o.eContainer() != null) {
+			if (o instanceof final INamedElement e) {
+				qualifiedName.add(e.getName());
+			}
+			o = o.eContainer();
+		}
+
+		return String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, qualifiedName.reversed());
+	}
+
 }
