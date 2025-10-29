@@ -19,17 +19,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
+import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.xtext.EcoreUtil2;
 
-public class ECTransitionEvaluator extends StructuredTextEvaluator {
+public class ECTransitionEvaluator extends StructuredTextEvaluator implements VariableEvaluator {
 
 	private final ECTransition transition;
 	private STExpressionSource parseResult;
@@ -42,13 +48,11 @@ public class ECTransitionEvaluator extends StructuredTextEvaluator {
 
 	@Override
 	public void prepare() {
-		if (parseResult == null) {
+		if (parseResult == null && VariableOperations.hasConditionExpression(transition)) {
 			final List<String> errors = new ArrayList<>();
 			final List<String> warnings = new ArrayList<>();
 			final List<String> infos = new ArrayList<>();
-			parseResult = StructuredTextParseUtil.parse(transition.getConditionExpression(),
-					IecTypes.ElementaryTypes.BOOL, EcoreUtil2.getContainerOfType(transition, FBType.class), errors,
-					warnings, infos);
+			parseResult = parseConditionExpression(errors, warnings, infos);
 			errors.forEach(this::error);
 			warnings.forEach(this::warn);
 			infos.forEach(this::info);
@@ -63,10 +67,49 @@ public class ECTransitionEvaluator extends StructuredTextEvaluator {
 		parseResult = null;
 	}
 
+	private STExpressionSource parseConditionExpression(final List<String> errors, final List<String> warnings,
+			final List<String> infos) {
+		return StructuredTextParseUtil.parse(transition.getConditionExpression(), IecTypes.ElementaryTypes.BOOL,
+				EcoreUtil2.getContainerOfType(transition, FBType.class), errors, warnings, infos);
+	}
+
 	@Override
 	public Value evaluate() throws InterruptedException {
 		prepare();
-		return evaluateExpression(trap(parseResult.getExpression()));
+		if (parseResult != null && parseResult.getExpression() != null) {
+			return evaluateExpression(trap(parseResult.getExpression()));
+		}
+		return BoolValue.TRUE;
+	}
+
+	@Override
+	public Variable<?> evaluateVariable() throws EvaluatorException, InterruptedException {
+		prepare();
+		final Variable<?> result = VariableOperations.newVariable("", ElementaryTypes.BOOL, BoolValue.TRUE); //$NON-NLS-1$
+		if (parseResult != null && parseResult.getExpression() != null) {
+			result.setValue(evaluateExpression(trap(parseResult).getExpression()));
+		}
+		return result;
+	}
+
+	@Override
+	public boolean validateVariable(final List<String> errors, final List<String> warnings, final List<String> infos)
+			throws EvaluatorException, InterruptedException {
+		if (VariableOperations.hasConditionExpression(transition)) {
+			return parseConditionExpression(errors, warnings, infos) != null;
+		}
+		return true;
+	}
+
+	@Override
+	public LibraryElement evaluateResultType() {
+		return ElementaryTypes.BOOL;
+	}
+
+	@Override
+	public boolean validateResultType(final List<String> errors, final List<String> warnings,
+			final List<String> infos) {
+		return true;
 	}
 
 	@Override

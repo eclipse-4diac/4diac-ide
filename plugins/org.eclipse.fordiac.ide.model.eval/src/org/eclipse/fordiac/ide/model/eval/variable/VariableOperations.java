@@ -46,11 +46,13 @@ import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
@@ -348,6 +350,27 @@ public final class VariableOperations {
 		return false;
 	}
 
+	public static boolean validateConditionExpression(final ECTransition transition, final List<String> errors,
+			final List<String> warnings, final List<String> infos) {
+		if (!hasConditionExpression(transition)) {
+			return true;
+		}
+		final Evaluator evaluator = EvaluatorFactory.createEvaluator(transition, ECTransition.class, null,
+				Collections.emptySet(), null);
+		if (evaluator instanceof final VariableEvaluator variableEvaluator) {
+			try {
+				return variableEvaluator.validateVariable(errors, warnings, infos);
+			} catch (final EvaluatorException e) {
+				errors.add(e.getMessage());
+				return false;
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		errors.add(Messages.VariableOperations_NoEvaluatorForVarDeclaration);
+		return false;
+	}
+
 	public static String validateValue(final VarDeclaration varDeclaration, final String initialValue) {
 		return validateValue(withValue(varDeclaration, initialValue));
 	}
@@ -407,6 +430,11 @@ public final class VariableOperations {
 
 	public static boolean hasValue(final Attribute attribute) {
 		return attribute.getValue() != null && !attribute.getValue().isEmpty();
+	}
+
+	public static boolean hasConditionExpression(final ECTransition transition) {
+		return transition.getConditionExpression() != null && !transition.getConditionExpression().isEmpty()
+				&& transition.eIsSet(LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION);
 	}
 
 	public static boolean hasInitialValue(final DirectlyDerivedType type) {
