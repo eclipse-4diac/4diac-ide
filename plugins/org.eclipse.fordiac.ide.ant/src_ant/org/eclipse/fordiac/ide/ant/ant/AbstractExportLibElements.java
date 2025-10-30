@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHasher;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 
 public abstract class AbstractExportLibElements extends AbstractFBTask {
 	private static final String ANT_CONVERT_TASK_DIRECTORY_NAME = "converted_FBs"; //$NON-NLS-1$
@@ -70,7 +71,7 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 			throw new BuildException("Type hash attribute is missing from type library"); //$NON-NLS-1$
 		}
 
-		element.setAttribute(hashDecl.getType(), hash, null);
+		element.setAttribute(hashDecl.getType(), StringValueConverter.INSTANCE.toString(hash), null);
 
 		final Resource resource = FordiacTypeResourceFactory.INSTANCE
 				.createResource(URI.createFileURI(new File(folder, file.getName()).getAbsolutePath()));
