@@ -35,6 +35,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
@@ -65,7 +68,7 @@ import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
-public class ECTransitionEditPart extends AbstractConnectionEditPart {
+public class ECTransitionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
 	private DirectEditManager manager;
 
@@ -363,5 +366,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	@Override
 	public ECTransitionFigure getFigure() {
 		return (ECTransitionFigure) super.getFigure();
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getLabel(), getModel(), event);
+		getFigure().getToolTip().refreshAnotations(getModel(), event.getModel());
 	}
 }
