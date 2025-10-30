@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
@@ -459,7 +460,7 @@ public class CommonElementExporter {
 
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-		} else if (hasInitalValue || hasComment) {
+		} else if (hasInitalValue || hasComment || ie instanceof VarConfigInstance) {
 			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 		} else {
 			return;
