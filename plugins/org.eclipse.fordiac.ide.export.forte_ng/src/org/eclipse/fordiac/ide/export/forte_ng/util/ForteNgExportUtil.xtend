@@ -207,9 +207,10 @@ final class ForteNgExportUtil {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				generateArrayTypeName(type.subranges, type.baseType)
+			// match generic types (must be before other data types)
+			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
-			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
 			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
 			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
 			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
