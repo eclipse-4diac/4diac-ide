@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,12 +25,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -72,7 +74,8 @@ public class CopyTypeChange extends Change {
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		final var resource = CopyTypeParticipant.getResource(destination);
 		if (resource.isEmpty()) {
-			return null;
+			throw new CoreException(
+					Status.error(MessageFormat.format(Messages.CopyTypeChange_CannotLoadResource, destination)));
 		}
 		final var optElement = CopyTypeParticipant.getLibraryElement(resource.get());
 		if (optElement.isEmpty()) {
@@ -80,24 +83,31 @@ public class CopyTypeChange extends Change {
 		}
 		final LibraryElement element = optElement.get();
 
-		final String fileName = destination.trimFileExtension().lastSegment();
-		if (!element.getName().equals(fileName)) {
-			element.setName(fileName);
+		final String typeName = TypeEntry.getTypeNameFromFileName(destination.lastSegment());
+		if (!element.getName().equals(typeName)) {
+			element.setName(typeName);
 		}
-		if (element.getCompilerInfo() == null) {
-			element.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
-		}
-		element.getCompilerInfo().setPackageName(newPackageName);
+		PackageNameHelper.setPackageName(element, newPackageName);
 		try {
 			resource.get().save(Map.of());
 		} catch (final IOException e) {
-			FordiacLogHelper.logError("CopyTypeChange could not save resource", e); //$NON-NLS-1$
+			throw new CoreException(
+					Status.error(MessageFormat.format(Messages.CopyTypeChange_CannotSaveResource, destination), e));
 		}
 		return null; // no undo change necessary, the element will be deleted
 	}
 
 	@Override
-	public Object getModifiedElement() {
-		return CopyTypeParticipant.getResource(destination);
+	public Resource getModifiedElement() {
+		return CopyTypeParticipant.getResource(destination).orElse(null);
+	}
+
+	@Override
+	public Object[] getAffectedObjects() {
+		final Resource res = getModifiedElement();
+		if (res != null) {
+			return new Object[] { res };
+		}
+		return super.getAffectedObjects();
 	}
 }
