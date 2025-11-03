@@ -28,15 +28,20 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.text.Collator;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -92,6 +97,8 @@ public final class TypeLibrary {
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
 	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
+	private final NavigableSet<IProject> referencedProjects = new ConcurrentSkipListSet<>(
+			Comparator.comparing(IProject::getName));
 
 	public Collection<AdapterTypeEntry> getAdapterTypes() {
 		return Collections.unmodifiableCollection(adapterTypes.values());
@@ -209,12 +216,16 @@ public final class TypeLibrary {
 		return buildpath;
 	}
 
+	public NavigableSet<IProject> getReferencedProjects() {
+		return Collections.unmodifiableNavigableSet(referencedProjects);
+	}
+
 	/** Instantiates a new fB type library. */
 	TypeLibrary(final IProject project) {
 		this.project = project;
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		if (project != null && project.isAccessible()) {
-			checkAdditions(project);
+			checkAdditions();
 		}
 	}
 
@@ -394,10 +405,11 @@ public final class TypeLibrary {
 	public void refresh() {
 		buildpath = BuildpathUtil.loadBuildpath(project);
 		checkDeletions();
-		checkAdditions(project);
+		checkAdditions();
 	}
 
 	private void checkDeletions() {
+		checkReferencedProjectDeletions();
 		checkDeletionsForTypeGroup(adapterTypes.values());
 		checkDeletionsForTypeGroup(attributeTypes.values());
 		checkDeletionsForTypeGroup(deviceTypes.values());
@@ -420,23 +432,47 @@ public final class TypeLibrary {
 				&& BuildpathUtil.findSourceFolder(buildpath, entry.getFile()).isPresent();
 	}
 
-	private void checkAdditions(final IContainer container) {
+	private void checkAdditions() {
 		try {
-			final IResource[] members = container.members();
-
-			for (final IResource resource : members) {
-				if (resource instanceof final IFolder folder) {
-					checkAdditions(folder);
-				}
-				if (resource instanceof final IFile file && !containsType(file)) {
-					// only add new entry if it does not exist
-					createTypeEntry(file);
-				}
-			}
+			checkReferencedProjectsAdditions();
+			checkAdditions(project);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
+	}
 
+	private void checkAdditions(final IContainer container) throws CoreException {
+		final IResource[] members = container.members();
+
+		for (final IResource resource : members) {
+			if (resource instanceof final IFolder folder) {
+				checkAdditions(folder);
+			}
+			if (resource instanceof final IFile file && !containsType(file)) {
+				// only add new entry if it does not exist
+				createTypeEntry(file);
+			}
+		}
+	}
+
+	private void checkReferencedProjectsAdditions() throws CoreException {
+		for (final IProject referencedProject : project.getReferencedProjects()) {
+			addReferencedProject(referencedProject);
+		}
+	}
+
+	private void checkReferencedProjectDeletions() {
+		final Set<IProject> currentReferencedProjects = new HashSet<>();
+		try {
+			currentReferencedProjects.addAll(Arrays.asList(project.getReferencedProjects()));
+		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
+		}
+		for (final IProject referencedProject : referencedProjects) {
+			if (!currentReferencedProjects.contains(referencedProject)) {
+				removeReferencedProject(referencedProject);
+			}
+		}
 	}
 
 	public boolean containsType(final IFile file) {
@@ -490,6 +526,14 @@ public final class TypeLibrary {
 			yield true;
 		}
 		};
+	}
+
+	private boolean addReferencedProject(final IProject project) {
+		return referencedProjects.add(project);
+	}
+
+	private boolean removeReferencedProject(final IProject project) {
+		return referencedProjects.remove(project);
 	}
 
 	private static boolean isProgramTypeEntry(final TypeEntry entry) {
