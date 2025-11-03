@@ -20,18 +20,17 @@ import java.text.MessageFormat;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -47,19 +46,13 @@ public class CopyTypeParticipant extends CopyParticipant {
 	@Override
 	protected boolean initialize(final Object element) {
 		if (element instanceof final IFile file && getArguments().getDestination() instanceof final IPath destination) {
-			final Optional<Resource> resource = getResource(file);
-			if (resource.isEmpty()) {
-				return false;
-			}
-			if (getLibraryElement(resource.get()).isEmpty()) {
+			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) == null) {
 				return false;
 			}
 
 			origin = file;
 			destinationURI = URI.createPlatformResourceURI(destination.toString(), true);
-			final Path filePath = new Path(destinationURI.toPlatformString(true));
-			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
-			newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
+			newPackageName = PackageNameHelper.getPackageNameFromURI(destinationURI);
 			return true;
 		}
 		return false;
@@ -74,9 +67,6 @@ public class CopyTypeParticipant extends CopyParticipant {
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!(getArguments().getDestination() instanceof IPath)) {
-			status.addError(Messages.MoveTypeToPackage_InvalidDestination);
-		}
 		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(newPackageName);
 		if (errorMessage.isPresent()) {
 			status.addFatalError(errorMessage.get());

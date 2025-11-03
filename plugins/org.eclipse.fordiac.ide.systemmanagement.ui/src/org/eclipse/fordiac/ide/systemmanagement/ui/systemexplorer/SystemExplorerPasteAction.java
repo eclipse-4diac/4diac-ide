@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.FordiacCopyProcessor;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.UserCopyRefactoringQueries;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -165,7 +166,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 	}
 
 	private static void startCopyRefactoring(final IResource[] files, final IContainer destination, final Shell shell) {
-		final var processor = new FordiacCopyProcessor(files, destination, shell);
+		final var refactorQueries = new UserCopyRefactoringQueries(shell);
+		final var processor = new FordiacCopyProcessor(files, destination, refactorQueries);
 		final var refactoring = new ProcessorBasedRefactoring(processor);
 		final var checkOp = new CheckConditionsOperation(refactoring, CheckConditionsOperation.ALL_CONDITIONS);
 		final var changeOp = new CreateChangeOperation(checkOp, RefactoringStatus.ERROR);
