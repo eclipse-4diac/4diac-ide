@@ -67,9 +67,12 @@ public class FordiacLogListener implements ILogListener {
 
 	@Override
 	public void logging(final IStatus status, final String plugin) {
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException()) && !singleWindow.getAndSet(true)
+		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
 				&& (status.getPlugin().startsWith(Activator.PLUGIN_ID)
-						|| status.getPlugin().equals(PlatformUI.PLUGIN_ID))) {
+						|| status.getPlugin().equals(PlatformUI.PLUGIN_ID))
+				// checking/setting the flag must be last, so that we only set it when actually
+				// showing an error dialog and resetting the flag afterwards
+				&& !singleWindow.getAndSet(true)) {
 			// inform the user that an error has happened
 			// we currently only treat errors with exception and from a 4diac IDE or the
 			// Platform UI plug-in as noteworthy
