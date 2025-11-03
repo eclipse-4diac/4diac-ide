@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
@@ -27,8 +28,7 @@ public final class ErrorMarkerInterfaceAnnotations {
 
 	public static boolean validateValue(final ErrorMarkerInterface element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (element.getValue() != null && element.getValue().getValue() != null
-				&& !element.getValue().getValue().isBlank()) {
+		if (hasValue(element) && !isContainedInErrorMarkerFBNElement(element)) {
 			if (diagnostics != null) {
 				diagnostics
 						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -44,18 +44,29 @@ public final class ErrorMarkerInterfaceAnnotations {
 
 	public static boolean validateAttributes(final ErrorMarkerInterface element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (!element.getAttributes().isEmpty()) {
+		if (!element.getAttributes().isEmpty() && !isContainedInErrorMarkerFBNElement(element)) {
 			if (diagnostics != null) {
 				element.getAttributes()
-						.forEach(attribute -> diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR,
-								LibraryElementValidator.DIAGNOSTIC_SOURCE,
-								LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES,
-								MessageFormat.format(Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute, attribute.getName()),
-								FordiacMarkerHelper.getDiagnosticData(element))));
+						.forEach(attribute -> diagnostics
+								.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+										LibraryElementValidator.ERROR_MARKER_INTERFACE__VALIDATE_ATTRIBUTES,
+										MessageFormat.format(
+												Messages.ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute,
+												attribute.getName()),
+										FordiacMarkerHelper.getDiagnosticData(element))));
 			}
 			return false;
 		}
 		return true;
+	}
+
+	private static boolean hasValue(final ErrorMarkerInterface element) {
+		return element.getValue() != null && element.getValue().getValue() != null
+				&& !element.getValue().getValue().isBlank();
+	}
+
+	private static boolean isContainedInErrorMarkerFBNElement(final ErrorMarkerInterface element) {
+		return element.getBlockFBNetworkElement() instanceof ErrorMarkerFBNElement;
 	}
 
 	private ErrorMarkerInterfaceAnnotations() {
