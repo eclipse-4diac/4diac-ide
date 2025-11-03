@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
@@ -68,13 +70,32 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	protected IProject[] build(final int kind, final Map<String, String> args, final IProgressMonitor monitor)
 			throws CoreException {
 
-		final IResourceDelta root = getDelta(getProject());
-		if (!enableAutoExport || exporter == null || root == null) {
+		if (!enableAutoExport || exporter == null) {
 			return new IProject[0];
 		}
 
 		exportees.clear();
-		addResourceDeltas(exportees, root);
+
+		switch (kind) {
+		case FULL_BUILD:
+			final List<SourceFolder> buildPathFolders = getExportableFoldersFromBuildpath();
+			for (final SourceFolder folder : buildPathFolders) {
+				BuildpathUtil.acceptMatches(folder, getProject(), (IResourceVisitor) resource -> {
+					if ((resource instanceof final IFile file) && isExportableFileType(file)) {
+						exportees.add(file);
+					} else if (resource instanceof IFolder || resource instanceof IProject) {
+						return true;
+					}
+					return false;
+				});
+			}
+			break;
+		case INCREMENTAL_BUILD, AUTO_BUILD:
+			Optional.ofNullable(getDelta(getProject())).ifPresent(root -> addResourceDeltas(exportees, root));
+			break;
+		default:
+			break;
+		}
 
 		if (!exportees.isEmpty()) {
 			exporter.exportElements(monitor, exportees);
@@ -135,8 +156,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		getProjectPreferenceNode().addPreferenceChangeListener(evt -> {
 			switch (evt.getKey()) {
 			case PreferenceConstants.ENABLE_TYPE_EXPORT:
-				this.enableAutoExport = getProjectPreferenceNode().getBoolean(PreferenceConstants.ENABLE_TYPE_EXPORT,
-						false);
+				initializePreferences();
 				break;
 			case PreferenceConstants.OUTPUT_FOLDER:
 				this.outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER, ""); //$NON-NLS-1$
@@ -164,13 +184,25 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	}
 
+	private List<SourceFolder> getExportableFoldersFromBuildpath() {
+		return BuildpathUtil.loadBuildpath(getProject()).getSourceFolders().stream()
+				.filter(ExportBuilder::getExportAttributeValue).toList();
+	}
+
 	private boolean isExportable(final IFile file) {
-		if (file.getFileExtension() != null && fileTypes.contains(file.getFileExtension())) {
+		if (isExportableFileType(file)) {
+			// if we have performance issues we might want to cache the buildpath and detect
+			// buildpath file changes via resource deltas to reload only on changes, as
+			// loading the buildpath involves file operations
 			final Buildpath buildpath = BuildpathUtil.loadBuildpath(getProject());
 			final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(buildpath, file);
 			return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
 		}
 		return false;
+	}
+
+	private static boolean isExportableFileType(final IFile file) {
+		return file.getFileExtension() != null && fileTypes.contains(file.getFileExtension());
 	}
 
 	private IEclipsePreferences getProjectPreferenceNode() {
@@ -211,7 +243,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 		@Override
 		protected void showErrorWarningSummary(final IExportFilter filter) {
-			filter.getErrors().stream().forEach(FordiacLogHelper::logError);
+			filter.getErrors().stream().filter(Objects::nonNull).forEach(FordiacLogHelper::logError);
 		}
 
 		@Override
