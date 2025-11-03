@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class ConnectionAnnotations {
@@ -73,7 +74,8 @@ public class ConnectionAnnotations {
 
 	public static boolean validateMissingSourceEndpoint(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (connection.getSource() instanceof final ErrorMarkerInterface endpoint) {
+		if (connection.getSource() instanceof final ErrorMarkerInterface endpoint
+				&& !isIncomplete(connection.getSourceElement())) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_SOURCE_ENDPOINT,
@@ -104,7 +106,8 @@ public class ConnectionAnnotations {
 
 	public static boolean validateMissingDestinationEndpoint(final Connection connection,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (connection.getDestination() instanceof final ErrorMarkerInterface endpoint) {
+		if (connection.getDestination() instanceof final ErrorMarkerInterface endpoint
+				&& !isIncomplete(connection.getDestinationElement())) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_MISSING_DESTINATION_ENDPOINT,
@@ -138,7 +141,7 @@ public class ConnectionAnnotations {
 			final Map<Object, Object> context) {
 		final IInterfaceElement src = connection.getSource();
 		final IInterfaceElement dest = connection.getDestination();
-		if (src == null || dest == null || connection.isNegated()) {
+		if (isIncomplete(connection) || connection.isNegated()) {
 			return true; // ignore incomplete or negated connections
 		}
 		// basic type check
@@ -363,7 +366,7 @@ public class ConnectionAnnotations {
 
 	public static boolean validateNegatedConnection(final Connection connection, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (connection.isNegated() && !connection.supportsNegated()) {
+		if (connection.isNegated() && !connection.supportsNegated() && !isIncomplete(connection)) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.CONNECTION__VALIDATE_NEGATED_CONNECTION,
@@ -399,5 +402,15 @@ public class ConnectionAnnotations {
 	private static boolean isPlainBoolVariable(final IInterfaceElement element) {
 		return element instanceof final VarDeclaration varDeclaration && !varDeclaration.isInOutVar()
 				&& !varDeclaration.isArray() && ElementaryTypes.BOOL.equals(varDeclaration.getType());
+	}
+
+	private static boolean isIncomplete(final Connection connection) {
+		return connection.getSource() == null || connection.getSource() instanceof ErrorMarkerInterface
+				|| connection.getDestination() == null || connection.getDestination() instanceof ErrorMarkerInterface;
+	}
+
+	private static boolean isIncomplete(final BlockFBNetworkElement element) {
+		return element instanceof ErrorMarkerFBNElement
+				|| (element != null && element.getTypeEntry() instanceof ErrorTypeEntry);
 	}
 }
