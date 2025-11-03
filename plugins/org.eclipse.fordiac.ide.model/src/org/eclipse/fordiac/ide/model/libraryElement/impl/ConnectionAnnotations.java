@@ -337,7 +337,7 @@ public class ConnectionAnnotations {
 	}
 
 	private static boolean isDuplicateConnection(final Connection connection) {
-		return connection.getSource().getOutputConnections().stream().anyMatch(
+		return connection.getSource() != null && connection.getSource().getOutputConnections().stream().anyMatch(
 				candidate -> candidate != connection && candidate.getDestination() == connection.getDestination());
 	}
 
