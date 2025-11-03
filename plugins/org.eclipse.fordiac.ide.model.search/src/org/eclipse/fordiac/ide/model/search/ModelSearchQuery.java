@@ -372,19 +372,11 @@ public class ModelSearchQuery implements ISearchQuery {
 						|| (namElem.getTypeEntry() != null && compareStrings(namElem.getTypeEntry().getFullTypeName()));
 			}
 			if (modelElement instanceof final VarDeclaration varDecl) {
-
 				if (modelQuerySpec.referenceObject() instanceof STVarDeclaration) {
-					// format is PackageName::TypeName::VariableName
-					final List<String> segments = new ArrayList<>(
-							List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER)));
-
-					final String variableName = segments.removeLast();
-					final String typeName = segments.removeLast();
-					final String packageName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments);
-
-					return GlobalConstantsTypeInstanceSearch
-							.createSearchFilter(new GlobalConstantsMatcher(packageName, typeName, variableName))
-							.apply(varDecl);
+					final GlobalConstantsMatcher globalConstMatcher = createGlobalConstMatcher();
+					if (globalConstMatcher != null) {
+						return GlobalConstantsTypeInstanceSearch.createSearchFilter(globalConstMatcher).apply(varDecl);
+					}
 				}
 
 				return compareStrings(varDecl.getTypeName())
@@ -410,7 +402,13 @@ public class ModelSearchQuery implements ISearchQuery {
 		}
 
 		if (searchSupport != null) {
-			final IModelMatcher matcher = new STMatcher(this::compareStrings);
+			final GlobalConstantsMatcher globalConstMatcher = modelQuerySpec
+					.referenceObject() instanceof STVarDeclaration ? createGlobalConstMatcher() : null;
+
+			final IModelMatcher matcher = globalConstMatcher != null
+					? new CompositeMatcher(List.of(new STMatcher(this::compareStrings), globalConstMatcher))
+					: new STMatcher(this::compareStrings);
+
 			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
 					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength(),
@@ -418,6 +416,20 @@ public class ModelSearchQuery implements ISearchQuery {
 					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
+	}
+
+	private GlobalConstantsMatcher createGlobalConstMatcher() {
+		// format is PackageName::TypeName::VariableName
+		final List<String> segments = new ArrayList<>(
+				List.of(modelQuerySpec.searchString().split(PackageNameHelper.PACKAGE_NAME_DELIMITER)));
+
+		if (segments.size() < 2) {
+			return null;
+		}
+		final String variableName = segments.removeLast();
+		final String typeName = segments.removeLast();
+		final String packageName = String.join(PackageNameHelper.PACKAGE_NAME_DELIMITER, segments);
+		return new GlobalConstantsMatcher(packageName, typeName, variableName);
 	}
 
 	private boolean compareStrings(final String toTest) {
