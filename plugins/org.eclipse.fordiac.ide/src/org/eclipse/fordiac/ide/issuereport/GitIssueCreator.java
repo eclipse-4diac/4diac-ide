@@ -21,9 +21,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.fordiac.ide.Activator;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 
 public class GitIssueCreator {
 
@@ -43,6 +48,9 @@ public class GitIssueCreator {
 		}
 		if (repDest == PreferenceConstants.ReportDestination.GITHUB) {
 			return createGitHubIssue(info);
+		}
+		if (repDest == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
+			return createGitHubIssueManual(info);
 		}
 		return -1;
 	}
@@ -74,6 +82,21 @@ public class GitIssueCreator {
 		final StringWriter writer = new StringWriter();
 		exception.printStackTrace(new PrintWriter(writer));
 		return writer.toString();
+	}
+
+	private static int createGitHubIssueManual(final IssueInfo info) {
+		try {
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
+			final String reportingURI = MessageFormat.format(
+					"https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}", //$NON-NLS-1$
+					URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
+					URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
+			browser.openURL(new URI(reportingURI).toURL());
+			return 200;
+		} catch (final Exception e) {
+			return -1;
+		}
 	}
 
 	private static int createGitLabIssue(final IssueInfo info) {

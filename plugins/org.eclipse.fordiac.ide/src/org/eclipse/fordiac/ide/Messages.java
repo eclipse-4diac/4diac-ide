@@ -31,6 +31,7 @@ public final class Messages extends NLS {
 	public static String IssueReporting_DestinationGroupLabel;
 	public static String IssueReporting_GitLab;
 	public static String IssueReporting_GitHub;
+	public static String IssueReporting_GitHub_Manual;
 	public static String IssueReporting_URLInput;
 	public static String IssueReporting_TokenInput;
 	public static String IssueReporting_ProjectPathInput;

@@ -41,6 +41,7 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 	private Button promptReportButton;
 	private Button autoReportButton;
 	private Group group;
+	private Button gitHubManualButton;
 	private Button gitLabButton;
 	private Text gitLabURLText;
 	private Text gitLabProjectPathText;
@@ -79,15 +80,16 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 
 	@Override
 	protected void performDefaults() {
-		noReportButton.setSelection(true);
-		promptReportButton.setSelection(false);
+		noReportButton.setSelection(false);
+		promptReportButton.setSelection(true);
 		autoReportButton.setSelection(false);
-		selectReportMode(ReportMode.NO_REPORT);
+		selectReportMode(ReportMode.PROMPT_REPORT);
 
-		reportDestination = ReportDestination.GITLAB;
-		gitLabButton.setSelection(true);
+		reportDestination = ReportDestination.GITHUB_MANUAL;
+		gitHubManualButton.setSelection(true);
+		gitLabButton.setSelection(false);
 		gitHubButton.setSelection(false);
-		selectReportDest(ReportDestination.GITLAB);
+		selectReportDest(ReportDestination.GITHUB_MANUAL);
 
 		gitLabURLText.setText(""); //$NON-NLS-1$
 		gitLabProjectPathText.setText(""); //$NON-NLS-1$
@@ -142,10 +144,7 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		autoReportButton.setSelection(reportMode == ReportMode.AUTO_REPORT);
 	}
 
-	@SuppressWarnings("unused")
 	private void createReportDestinationGroup(final Composite composite) {
-		final IPreferenceStore store = getPreferenceStore();
-
 		group = new Group(composite, SWT.LEFT);
 		final GridLayout layout = new GridLayout(2, false);
 		group.setLayout(layout);
@@ -154,36 +153,27 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		group.setText(Messages.IssueReporting_DestinationGroupLabel);
 		group.setVisible(reportMode != ReportMode.NO_REPORT);
 
-		final boolean isGitHub = reportDestination == ReportDestination.GITHUB;
-		gitHubButton = createRadioButton(group, Messages.IssueReporting_GitHub);
-		gitHubButton.addSelectionListener(widgetSelectedAdapter(e -> selectReportDest(ReportDestination.GITHUB)));
-		gitHubButton.setSelection(isGitHub);
-		new Label(group, SWT.NONE);
+		gitHubManualButton = createDestinationButton(group, Messages.IssueReporting_GitHub_Manual,
+				ReportDestination.GITHUB_MANUAL);
 
+		final boolean isGitHub = reportDestination == ReportDestination.GITHUB;
+		gitHubButton = createDestinationButton(group, Messages.IssueReporting_GitHub, ReportDestination.GITHUB);
 		createFieldLabel(group, Messages.IssueReporting_URLInput);
 		gitHubURLText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_URL);
-
 		createFieldLabel(group, Messages.IssueReporting_ProjectPathInput);
 		gitHubProjectPathText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_PROJECT_PATH);
 		gitHubProjectPathText.setToolTipText(Messages.IssueReporting_ProjectPathToolTip);
-
 		createFieldLabel(group, Messages.IssueReporting_TokenInput);
 		gitHubTokenText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_TOKEN);
 		gitHubTokenText.setEchoChar('*');
 
 		final boolean isGitLab = reportDestination == ReportDestination.GITLAB;
-		gitLabButton = createRadioButton(group, Messages.IssueReporting_GitLab);
-		gitLabButton.addSelectionListener(widgetSelectedAdapter(e -> selectReportDest(ReportDestination.GITLAB)));
-		gitLabButton.setSelection(isGitLab);
-		new Label(group, SWT.NONE);
-
+		gitLabButton = createDestinationButton(group, Messages.IssueReporting_GitLab, ReportDestination.GITLAB);
 		createFieldLabel(group, Messages.IssueReporting_URLInput);
 		gitLabURLText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_URL);
-
 		createFieldLabel(group, Messages.IssueReporting_ProjectPathInput);
 		gitLabProjectPathText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_PROJECT_PATH);
 		gitLabProjectPathText.setToolTipText(Messages.IssueReporting_ProjectPathToolTip);
-
 		createFieldLabel(group, Messages.IssueReporting_TokenInput);
 		gitLabTokenText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_TOKEN);
 		gitLabTokenText.setEchoChar('*');
@@ -197,6 +187,17 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
 		return composite;
+	}
+
+	private Button createDestinationButton(final Composite parent, final String label,
+			final ReportDestination reportDest) {
+		final Button button = createRadioButton(parent, label);
+		button.addSelectionListener(widgetSelectedAdapter(e -> selectReportDest(reportDest)));
+		button.setSelection(reportDestination == reportDest);
+		final GridData data = new GridData();
+		data.horizontalSpan = 2;
+		button.setLayoutData(data);
+		return button;
 	}
 
 	private static Button createRadioButton(final Composite parent, final String label) {

@@ -24,7 +24,7 @@ public final class PreferenceConstants {
 	}
 
 	public enum ReportDestination {
-		GITLAB, GITHUB
+		GITLAB, GITHUB, GITHUB_MANUAL
 	}
 
 	private PreferenceConstants() {
