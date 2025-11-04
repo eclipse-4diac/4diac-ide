@@ -45,7 +45,7 @@ class LanguageHeaderTemplate extends ForteNgExportTemplate {
 		/*************************************************************************
 		 *** FORTE Language Element
 		 ***
-		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+		 *** «ForteNgExportTemplate.HEADER_TEXT»
 		 ***
 		 *** Name: «fileBasename»
 		 *************************************************************************/

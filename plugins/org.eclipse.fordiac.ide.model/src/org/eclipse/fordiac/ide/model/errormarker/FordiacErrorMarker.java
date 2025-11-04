@@ -46,6 +46,7 @@ public final class FordiacErrorMarker {
 	public static final String VALIDATION_MARKER = "org.eclipse.fordiac.ide.model.validation"; //$NON-NLS-1$
 	public static final String INITIAL_VALUE_MARKER = "org.eclipse.fordiac.ide.model.initialValue"; //$NON-NLS-1$
 	public static final String TYPE_DECLARATION_MARKER = "org.eclipse.fordiac.ide.model.typeDeclaration"; //$NON-NLS-1$
+	public static final String CONDITION_EXPRESSION_MARKER = "org.eclipse.fordiac.ide.model.conditionExpression"; //$NON-NLS-1$
 	public static final String IMPORT_MARKER = "org.eclipse.fordiac.ide.model.import"; //$NON-NLS-1$
 	public static final String UNUSED_MARKER = "org.eclipse.fordiac.ide.model.unused"; //$NON-NLS-1$
 	public static final String TYPE_LIBRARY_MARKER = "org.eclipse.fordiac.ide.model.typeLibrary"; //$NON-NLS-1$
@@ -54,8 +55,8 @@ public final class FordiacErrorMarker {
 	public static final String TEMPORARY_MARKER = "org.eclipse.fordiac.ide.model.temporary"; //$NON-NLS-1$
 
 	private static final Set<String> MODEL_MARKER_TYPES = Set.of(IEC61499_MARKER, VALIDATION_MARKER,
-			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, IMPORT_MARKER, UNUSED_MARKER, TYPE_LIBRARY_MARKER,
-			PROJECT_CONFIGURATION_MARKER, LIBRARY_MARKER, TEMPORARY_MARKER);
+			INITIAL_VALUE_MARKER, TYPE_DECLARATION_MARKER, CONDITION_EXPRESSION_MARKER, IMPORT_MARKER, UNUSED_MARKER,
+			TYPE_LIBRARY_MARKER, PROJECT_CONFIGURATION_MARKER, LIBRARY_MARKER, TEMPORARY_MARKER);
 
 	/**
 	 * The source-specific diagnostic code.

@@ -40,11 +40,10 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.Event
-import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
@@ -189,14 +188,17 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateConnectionValue(Connection conn) {
 		if (conn.sourceElement.type.genericType)
-			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
+			'''«conn.sourceElement.generateName»->getDOConnection(«conn.source.name.FORTEStringId»)->getValue()'''
 		else
-			'''«FB_EXPORT_PREFIX»«conn.sourceElement.name»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
+			'''«conn.sourceElement.generateName»->«CONNECTION_EXPORT_PREFIX»«conn.source.name».getValue()'''
 	}
 
-	def static CharSequence generateName(FB feature) '''«FB_EXPORT_PREFIX»«feature.name»'''
-
-	def static CharSequence generateName(AdapterFB feature) '''«VARIABLE_EXPORT_PREFIX»«feature.name»'''
+	def static CharSequence generateName(BlockFBNetworkElement element) {
+		switch (element) {
+			AdapterFB: '''«VARIABLE_EXPORT_PREFIX»«element.name»'''
+			default: '''«FB_EXPORT_PREFIX»«element.name»'''
+		}
+	}
 
 	def static CharSequence generateNameAsParameter(VarDeclaration variable) '''pa«variable.name»'''
 
@@ -205,9 +207,10 @@ final class ForteNgExportUtil {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				generateArrayTypeName(type.subranges, type.baseType)
+			// match generic types (must be before other data types)
+			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
 			AnyElementaryType: '''CIEC_«type.generateTypeNamePlain»'''
-			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
 			DataType: '''«type.generateTypeNamespace»::CIEC_«type.generateTypeNamePlain»'''
 			case type.genericType: '''«type.generateTypeNamespace»::«type.genericClassName»'''
 			default: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''

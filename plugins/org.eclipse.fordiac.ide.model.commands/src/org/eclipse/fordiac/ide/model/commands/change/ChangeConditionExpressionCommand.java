@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 TU Wien ACIN
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,15 +11,20 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
+package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeConditionCommand.
  */
-public class ChangeConditionExpressionCommand extends Command {
+public class ChangeConditionExpressionCommand extends Command implements ScopedCommand {
 
 	/** The transition. */
 	private final ECTransition transition;
@@ -32,19 +37,18 @@ public class ChangeConditionExpressionCommand extends Command {
 
 	/**
 	 * Instantiates a new change condition command.
-	 * 
+	 *
 	 * @param transition          the transition
 	 * @param conditionExpression the condition
 	 */
 	public ChangeConditionExpressionCommand(final ECTransition transition, final String conditionExpression) {
-		super();
-		this.transition = transition;
+		this.transition = Objects.requireNonNull(transition);
 		this.conditionExpression = conditionExpression;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -55,7 +59,7 @@ public class ChangeConditionExpressionCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -66,7 +70,7 @@ public class ChangeConditionExpressionCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
@@ -74,4 +78,8 @@ public class ChangeConditionExpressionCommand extends Command {
 		transition.setConditionExpression(conditionExpression);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(transition);
+	}
 }

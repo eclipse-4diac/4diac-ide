@@ -84,10 +84,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		if (!event.getAdded(this).isEmpty() || !event.getRemoved(this).isEmpty()) {
+		if (!event.getAdded(this.getModel()).isEmpty() || !event.getRemoved(this.getModel()).isEmpty()) {
 			refreshChildren();
 		}
-		event.getChanged(this).stream().map(getViewer().getEditPartRegistry()::get).filter(Objects::nonNull)
+		event.getChanged(this.getModel()).stream().map(getViewer().getEditPartRegistry()::get).filter(Objects::nonNull)
 				.forEachOrdered(EditPart::refresh);
 	}
 

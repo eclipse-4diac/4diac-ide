@@ -36,7 +36,8 @@ public class ProjectCMakeListsTemplate extends CMakeListsTemplate {
 		builder.append(System.lineSeparator());
 		builder.append(generateFindPackage(FORTE, FORTE_VERSION, true));
 		for (final Required dep : getExternalDependencies()) {
-			builder.append(generateFindPackage(generateTargetName(dep.getSymbolicName()), dep.getVersion(), true));
+			builder.append(generateFindPackage(generateTargetName(dep.getSymbolicName()),
+					generateVersionRange(dep.getVersion()), true));
 		}
 		builder.append(System.lineSeparator());
 		builder.append(generateAddLibrary(generateTargetName()));

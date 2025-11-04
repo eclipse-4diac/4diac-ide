@@ -35,10 +35,12 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -127,6 +129,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		if (file != null && file.exists()) {
 			file.deleteMarkers(FordiacErrorMarker.INITIAL_VALUE_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.TYPE_DECLARATION_MARKER, true, IResource.DEPTH_INFINITE);
+			file.deleteMarkers(FordiacErrorMarker.CONDITION_EXPRESSION_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.IMPORT_MARKER, true, IResource.DEPTH_INFINITE);
 			file.deleteMarkers(FordiacErrorMarker.UNUSED_MARKER, true, IResource.DEPTH_INFINITE);
 		}
@@ -153,22 +156,29 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
-			final EObject target = allContents.next();
-			if (target instanceof SystemConfiguration) {
-				allContents.prune();
-			} else if (target instanceof final Attribute attribute) {
+			switch (allContents.next()) {
+			case final SystemConfiguration configuration -> allContents.prune();
+			case final Attribute attribute -> {
 				validateType(attribute, delta, typeUsageCollector, ignoreWarnings, context, monitor);
 				validateValue(attribute, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
 						monitor);
-			} else if (target instanceof final VarDeclaration varDeclaration) {
+			}
+			case final VarDeclaration varDeclaration -> {
 				validateType(varDeclaration, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings, context,
 						monitor);
 				validateValue(varDeclaration, delta, typeUsageCollector, variableUsageValidator, ignoreWarnings,
 						context, monitor);
-			} else if (target instanceof STSource) {
-				typeUsageCollector.collectUsedTypes(target);
-				variableUsageValidator.addReferences(target);
+			}
+			case final ECTransition transition -> validateConditionExpression(transition, delta, typeUsageCollector,
+					variableUsageValidator, ignoreWarnings, context, monitor);
+			case final STSource source -> {
+				typeUsageCollector.collectUsedTypes(source);
+				variableUsageValidator.addReferences(source);
 				allContents.prune();
+			}
+			default -> {
+				// ignore
+			}
 			}
 		}
 	}
@@ -265,6 +275,27 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final IFile file = getFile(delta.getUri());
 			if (file != null && file.exists()) {
 				createMarkers(file, FordiacErrorMarker.INITIAL_VALUE_MARKER, issues, ignoreWarnings, monitor);
+			}
+		}
+	}
+
+	protected void validateConditionExpression(final ECTransition transition, final IResourceDescription.Delta delta,
+			final STCoreTypeUsageCollector typeUsageCollector,
+			final STCoreVariableUsageValidator variableUsageValidator, final boolean ignoreWarnings,
+			final IBuildContext context, final IProgressMonitor monitor) throws CoreException {
+		final List<Issue> issues = new ArrayList<>();
+		if (VariableOperations.hasConditionExpression(transition)) {
+			validate(transition, delta, typeUsageCollector, variableUsageValidator, issues, context);
+			issues.replaceAll(issue -> ValidationUtil.convertToModelIssue(issue, transition,
+					LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION));
+		}
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+		if (!issues.isEmpty()) {
+			final IFile file = getFile(delta.getUri());
+			if (file != null && file.exists()) {
+				createMarkers(file, FordiacErrorMarker.CONDITION_EXPRESSION_MARKER, issues, ignoreWarnings, monitor);
 			}
 		}
 	}

@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionDestinationCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionPriorityCommand;
@@ -33,6 +32,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.StateContentProvider;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;

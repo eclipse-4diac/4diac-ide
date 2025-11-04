@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 
 public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 
@@ -40,8 +42,6 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	protected static final String FILE_SET_HEADERS = "HEADERS"; //$NON-NLS-1$
 
 	protected static final int INDENT = 8;
-
-	protected static final String HEADER = "# This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!\n\n"; //$NON-NLS-1$
 
 	protected static final String FORTE = "forte"; //$NON-NLS-1$
 	protected static final String FORTE_VERSION = "3.0"; //$NON-NLS-1$
@@ -82,8 +82,41 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 		return name + "-export"; //$NON-NLS-1$
 	}
 
+	protected CharSequence generateVersionRange(final String manifestVersionRange) {
+		try {
+			return generateVersionRange(VersionRange.valueOf(manifestVersionRange.replace('-', ',')));
+		} catch (final IllegalArgumentException e) {
+			getErrors().add(e.getLocalizedMessage());
+			return manifestVersionRange;
+		}
+	}
+
+	protected static CharSequence generateVersionRange(final VersionRange range) {
+		final StringBuilder result = new StringBuilder(64);
+		result.append(generateVersion(range.getLeft()));
+		if (range.getRight() == null) {
+			return result;
+		}
+		result.append("..."); //$NON-NLS-1$
+		if (range.getRightType() == VersionRange.RIGHT_OPEN) {
+			result.append('<');
+		}
+		result.append(generateVersion(range.getRight()));
+		return result;
+	}
+
+	protected static CharSequence generateVersion(final Version version) {
+		final StringBuilder result = new StringBuilder(32);
+		result.append(version.getMajor());
+		result.append('.');
+		result.append(version.getMinor());
+		result.append('.');
+		result.append(version.getMicro());
+		return result;
+	}
+
 	protected static CharSequence generateHeader() {
-		return HEADER;
+		return "# " + HEADER_TEXT + System.lineSeparator() + System.lineSeparator(); //$NON-NLS-1$
 	}
 
 	protected static CharSequence generateProject(final CharSequence name, final CharSequence comment,
