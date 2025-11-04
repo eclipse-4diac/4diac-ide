@@ -31,7 +31,7 @@ public final class PreferenceConstants {
 		// Shall not be instantiated
 	}
 
-	public static final String P_ISSUE_REPORT_PREFERENCE_ID = "org.eclipse.fordiac.ide.issuereport"; //$NON-NLS-1$
+	public static final String P_BUG_REPORT_PREFERENCE_ID = "org.eclipse.fordiac.ide.issuereport"; //$NON-NLS-1$
 
 	public static final String P_BUG_REPORT_MODE = "bugReportingMode"; //$NON-NLS-1$
 
@@ -42,6 +42,8 @@ public final class PreferenceConstants {
 	public static final String P_BUG_REPORT_GITLAB_PROJECT_PATH = "bugReportingGitLabProjectPath"; //$NON-NLS-1$
 
 	public static final String P_BUG_REPORT_GITLAB_TOKEN = "bugReportingGitLabToken"; //$NON-NLS-1$
+
+	public static final String P_BUG_REPORT_GITHUB_URL = "bugReportingGitHubURL"; //$NON-NLS-1$
 
 	public static final String P_BUG_REPORT_GITHUB_PROJECT_PATH = "bugReportingGitHubProjectPath"; //$NON-NLS-1$
 
@@ -75,6 +77,10 @@ public final class PreferenceConstants {
 		return getPrefString(P_BUG_REPORT_GITLAB_TOKEN);
 	}
 
+	public static String getReportGitHubURL() {
+		return getPrefString(P_BUG_REPORT_GITHUB_URL, "https://api.github.com/"); //$NON-NLS-1$
+	}
+
 	public static String getReportGitHubProjectPath() {
 		return getPrefString(P_BUG_REPORT_GITHUB_PROJECT_PATH);
 	}
@@ -84,7 +90,11 @@ public final class PreferenceConstants {
 	}
 
 	private static String getPrefString(final String key) {
-		return Platform.getPreferencesService().getString(P_ISSUE_REPORT_PREFERENCE_ID, key, "", //$NON-NLS-1$
+		return getPrefString(key, ""); //$NON-NLS-1$
+	}
+
+	private static String getPrefString(final String key, final String defaultValue) {
+		return Platform.getPreferencesService().getString(P_BUG_REPORT_PREFERENCE_ID, key, defaultValue,
 				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}
 }

@@ -81,13 +81,12 @@ public class GitIssueCreator {
 			return -1;
 		}
 
-		final String baseURI = PreferenceConstants.getReportGitLabURL();
+		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabURL());
 		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabProjectPath());
 		final String accessToken = PreferenceConstants.getReportGitLabToken();
 		final String labels = String.join(",", info.labels()); //$NON-NLS-1$
 
-		final String baseTrim = removeLeadingTrailingSlashes(baseURI);
-		final String uri = baseTrim + "/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
+		final String uri = baseURI + "/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
 
 		final String reportingURI = uri.formatted(URLEncoder.encode(projectPath, StandardCharsets.UTF_8),
 				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
@@ -102,6 +101,7 @@ public class GitIssueCreator {
 
 	@SuppressWarnings("nls")
 	private static int createGitHubIssue(final IssueInfo info) {
+		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubURL());
 		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubProjectPath());
 		final String token = PreferenceConstants.getReportGitHubToken();
 
@@ -110,7 +110,7 @@ public class GitIssueCreator {
 				""".formatted(jsonQuote(info.title()), jsonQuote(info.body()), toJsonArray(info.labels()));
 
 		final HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://api.github.com/repos/" + projectPath + "/issues"))
+				.uri(URI.create(baseURI + "/repos/" + projectPath + "/issues"))
 				.header("Accept", "application/vnd.github+json").header("Authorization", "Bearer " + token)
 				.header("X-GitHub-Api-Version", "2022-11-28").POST(HttpRequest.BodyPublishers.ofString(jsonBody))
 				.build();
