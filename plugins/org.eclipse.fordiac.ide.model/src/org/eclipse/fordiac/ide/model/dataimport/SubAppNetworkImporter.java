@@ -20,7 +20,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -97,11 +96,11 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 	}
 
-	public BlockFBNetworkElement createTypedSubapp(final String typeName) {
-		final SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry);
+	public TypedSubApp createTypedSubapp(final String typeName) {
+		SubAppTypeEntry subEntry = getTypeEntry(typeName, getTypeLibrary()::getSubAppTypeEntry);
 		if (subEntry == null) {
-			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
-					LibraryElementPackage.eINSTANCE.getSubAppType()));
+			subEntry = (SubAppTypeEntry) addDependency(
+					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getSubAppType()));
 		}
 		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		subApp.setTypeEntry(subEntry);

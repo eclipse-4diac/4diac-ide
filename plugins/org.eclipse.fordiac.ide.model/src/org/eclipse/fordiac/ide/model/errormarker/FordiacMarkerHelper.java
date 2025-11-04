@@ -40,7 +40,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -303,18 +302,6 @@ public final class FordiacMarkerHelper {
 			FordiacLogHelper.logError("Could not update error markers on resource: " + resource.getName(), //$NON-NLS-1$
 					e);
 		}
-	}
-
-	public static BlockFBNetworkElement createTypeErrorMarkerFB(final String typeName, final TypeLibrary typeLibrary,
-			final EClass typeClass) {
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeName, typeClass);
-		return createErrorMarkerFB(typeName, entry);
-	}
-
-	public static BlockFBNetworkElement createErrorMarkerFB(final String name, final TypeEntry entry) {
-		final ErrorMarkerFBNElement errorFb = createErrorMarkerFB(name);
-		errorFb.setTypeEntry(entry);
-		return errorFb;
 	}
 
 	public static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
