@@ -169,4 +169,5 @@ QUARTER_BYTE_31 := LWORD_TO_BYTE(SHR(IN AND quarterconst::LWORD_QUARTER_31, quar
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>

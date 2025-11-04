@@ -294,4 +294,5 @@ BIT_63 := IN.%X63;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

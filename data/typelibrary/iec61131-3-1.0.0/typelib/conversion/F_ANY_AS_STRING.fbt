@@ -35,4 +35,5 @@ END_ALGORITHM
 		</Algorithm>
 	</SimpleFB>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[]]></Attribute>
+	<Attribute Name="TypeHash" Value="''"/>
 </FBType>

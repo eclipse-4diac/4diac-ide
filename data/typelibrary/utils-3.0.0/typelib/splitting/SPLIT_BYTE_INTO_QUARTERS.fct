@@ -57,4 +57,5 @@ QUARTER_BYTE_03 := SHR(IN AND quarterconst::BYTE_QUARTER_03, quarterconst::SHIFT
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>

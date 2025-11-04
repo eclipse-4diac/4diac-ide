@@ -71,4 +71,5 @@ QUARTER_BYTE_07 := WORD_TO_BYTE(SHR(IN AND quarterconst::WORD_QUARTER_07, quarte
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

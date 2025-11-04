@@ -103,4 +103,5 @@ BIT_15 := IN.%X15;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

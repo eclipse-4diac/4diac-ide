@@ -39,4 +39,5 @@ END_ALGORITHM
 		</Algorithm>
 	</SimpleFB>
 	<Attribute Name="Documentation" Type="CDATA"><![CDATA[]]></Attribute>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
