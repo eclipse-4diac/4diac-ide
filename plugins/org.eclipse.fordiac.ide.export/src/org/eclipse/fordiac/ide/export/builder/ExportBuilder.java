@@ -165,7 +165,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean isExportable(final IFile file) {
-		if (fileTypes.contains(file.getFileExtension())) {
+		if (file.getFileExtension() != null && fileTypes.contains(file.getFileExtension())) {
 			final Buildpath buildpath = BuildpathUtil.loadBuildpath(getProject());
 			final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(buildpath, file);
 			return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
@@ -198,7 +198,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		try {
 			folder.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
 		} catch (final CoreException e) {
-			e.printStackTrace();
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 

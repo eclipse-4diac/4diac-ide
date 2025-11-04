@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -43,15 +44,23 @@ public class VariableDiagnostician extends CancelableDiagnostician {
 	protected boolean doValidate(final EValidator eValidator, final EClass eClass, final EObject eObject,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		boolean result = super.doValidate(eValidator, eClass, eObject, diagnostics, context);
-		if (eObject instanceof final VarDeclaration varDeclaration && varDeclaration.getType() instanceof AnyType) {
+		switch (eObject) {
+		case final VarDeclaration varDeclaration when varDeclaration.getType() instanceof AnyType -> {
 			result &= validate(varDeclaration, VariableOperations::validateType, diagnostics,
 					varDeclaration.getArraySize());
 			result &= validate(varDeclaration, VariableOperations::validateValue, diagnostics,
 					varDeclaration.getValue());
-		} else if (eObject instanceof final Attribute attribute && attribute.getType() instanceof AnyType
-				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration())) {
+		}
+		case final Attribute attribute when attribute.getType() instanceof AnyType
+				&& !InternalAttributeDeclarations.isInternalAttribute(attribute.getAttributeDeclaration()) ->
 			result &= validate(attribute, VariableOperations::validateValue, diagnostics, attribute,
 					LibraryElementPackage.Literals.ATTRIBUTE__VALUE);
+		case final ECTransition transition ->
+			result &= validate(transition, VariableOperations::validateConditionExpression, diagnostics, transition,
+					LibraryElementPackage.Literals.EC_TRANSITION__CONDITION_EXPRESSION);
+		default -> {
+			// ignore
+		}
 		}
 		return result;
 	}

@@ -14,6 +14,63 @@
 -->
 <introContent>
 	<extensionContent id="whatsnew-top-left" name="Whats New Current Version" path="whatsnew/@">
+		<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 3.0.0">
+			<text>An overview on the new and noteworthy features of Eclipse 4diac.
+			&lt;ul&gt;
+			    &lt;li&gt;4diac IDE:
+			        &lt;ul&gt;
+			            &lt;li&gt;Refactoring functions in graphical and textual editors&lt;/li&gt;
+			            &lt;li&gt;Validation of IEC 61499 projects, including support for loading and repairing incomplete projects&lt;/li&gt;
+			            &lt;li&gt;Completely reworked and largely improved the IEC 61131-3 Structured Text editors&lt;/li&gt;
+			            &lt;li&gt;Interpreter for IEC 61131-3 Structured Text allowing testing and debugging of FBs directly in 4diac IDE&lt;/li&gt;
+			            &lt;li&gt;Support for named constants&lt;/li&gt;
+			            &lt;li&gt;A new library and package system&lt;/li&gt;
+			            &lt;li&gt;Added IEC 61131-3 functions and VAR_IN_OUT support&lt;/li&gt;
+			            &lt;li&gt;Simplified deployment and monitoring, with the ability to store deployment and monitoring configurations&lt;/li&gt;
+		            &lt;/ul&gt;
+			    &lt;/li&gt;
+			    &lt;li&gt;4diac FORTE:
+			        &lt;ul&gt;
+			            &lt;li&gt;Support for ARRAYs with arbitrary boundaries [n..m]&lt;/li&gt;
+			            &lt;li&gt;Support for variable length ARRAYs [*]&lt;/li&gt;
+			            &lt;li&gt;Support for negated outputs ( => NOT)&lt;/li&gt;
+			            &lt;li&gt;Fixed casting behavior for type where binary transfer or sign extension is necessary&lt;/li&gt;
+			            &lt;li&gt;Added LTIME types&lt;/li&gt;
+			            &lt;li&gt;Improved partial ANY_BIT support (comparisons + assignments to partials (non standard))&lt;/li&gt;
+			            &lt;li&gt;Improved standard compliance for implicit and explicit casts&lt;/li&gt;
+			            &lt;li&gt;Improved STRING support (partial access)&lt;/li&gt;
+			            &lt;li&gt;Added all IEC 61131-3 standard functions&lt;/li&gt;
+			            &lt;li&gt;Added support for all variadic functions (MIN, MAX, CONCAT, ADD, MUL)&lt;/li&gt;
+			            &lt;li&gt;Fixed that now STRINGS and CHARS can be CONCATenated to a STRING&lt;/li&gt;
+			            &lt;li&gt;Improved return type support for FUNCTIONS with ANY-type return types&lt;/li&gt;
+			            &lt;li&gt;Added standard-conformant FOR loop&lt;/li&gt;
+			            &lt;li&gt;Support of high resolution clocks&lt;/li&gt;
+			            &lt;li&gt;Fixed representations of TIME data types and ANY_REAL types&lt;/li&gt;
+			            &lt;li&gt;Improved support for ANY type IN/OUTs&lt;/li&gt;
+			            &lt;li&gt;Fixed SHR/SHL/ROR/ROL to standard conformity&lt;/li&gt;
+			            &lt;li&gt;Fixed XOR corner case when BOOL is involved&lt;/li&gt;
+			            &lt;li&gt;Changed code base to C++20&lt;/li&gt;
+			        &lt;/ul&gt;
+			    &lt;/li&gt;
+			    &lt;li&gt;4diac FBE:
+			        &lt;ul&gt;
+			            &lt;li&gt;New component in 4diac 3.0&lt;/li&gt;
+			            &lt;li&gt;4diac FBE builds 4diac FORTE fully automatically, no manual downloads or installs of third-party software needed&lt;/li&gt;
+			            &lt;li&gt;Manages multiple 4diac FORTE configurations for multiple target machines and operating systems on a single developer machine&lt;/li&gt;
+			            &lt;li&gt;Integration into 4diac IDE upcoming, a beta-quality setup is available&lt;/li&gt;
+			        &lt;/ul&gt;
+			    &lt;/li&gt;
+			&lt;/ul&gt;
+			</text>
+		</group>
+		
+		<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 2.0.1">
+  	 	<link label="Issues Addressed in 2.0.1" style-id="content-link" 
+  	 			url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=CLOSED&amp;list_id=21082039&amp;product=4DIAC&amp;query_format=advanced&amp;target_milestone=2.0.1" id="orgfordiacide-webLink">
+  	 		<text>In the 2.0.1 maintenance release of Eclipse 4diac 29 issues have been addressed in 4diac IDE and 2 in 4diac FORTE.</text>
+  	 	</link>
+  	 	</group> 
+		
   	 	<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 2.0.0">
 	    <link label="New and Noteworthy in 2.0.0" style-id="content-link" url="https://eclipse.dev/4diac/newandnoteworthy/2.0" id="orgfordiacide-webLink">
   	 		<text>An overview on the new and noteworthy features of Eclipse 4diac.
@@ -43,19 +100,12 @@
   	 		<text>A list of all issues and bugs addressed for Eclipse 4diac 2.0.0.</text>
   	 	</link>
   	 	</group>
-  	 	
-		<group style-id="content-group" id="orgfordiacide-introLink-group" label="What's New in 2.0.1">
-  	 	<link label="Issues Addressed in 2.0.1" style-id="content-link" 
-  	 			url="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=CLOSED&amp;list_id=21082039&amp;product=4DIAC&amp;query_format=advanced&amp;target_milestone=2.0.1" id="orgfordiacide-webLink">
-  	 		<text>In the 2.0.1 maintenance release of Eclipse 4diac 29 issues have been addressed in 4diac IDE and 2 in 4diac FORTE.</text>
-  	 	</link>
-  	 	</group> 
 
    	</extensionContent>
    	
    	<extensionContent id="fordiac-news" style="css/style.css" name="Whats New Extension" path="whatsnew/@">
         <group style-id="content-group" id="news-web" label="4diac News">
-            <contentProvider id="url=https://eclipse.dev/4diac/feed/##welcome_items=10##no_news_url=https://eclipse.dev/4diac/en_news.php##no_news_text=Welcome to the 4diac news page" 
+            <contentProvider id="url=https://eclipse.dev/4diac/index.xml##welcome_items=10##no_news_url=https://eclipse.dev/4diac/news/##no_news_text=Welcome to the 4diac news page" 
             pluginId="org.eclipse.ui.intro" 
             class="org.eclipse.ui.intro.contentproviders.EclipseRSSViewer">
             </contentProvider>

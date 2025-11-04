@@ -24,8 +24,10 @@ import java.util.Objects;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -155,6 +157,11 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 				setExpectedType(STCoreUtil.getFeatureType(varDeclaration));
 				return Objects.requireNonNullElse(value.getValue(), ""); //$NON-NLS-1$
 			}
+			if (sourceElement instanceof final ECTransition transition) {
+				setEntryPoint(grammarAccess.getSTExpressionSourceRule());
+				setExpectedType(ElementaryTypes.BOOL);
+				return Objects.requireNonNullElse(transition.getConditionExpression(), ""); //$NON-NLS-1$
+			}
 			throw new IOException("Invalid query in ST resource: " + uri.query()); //$NON-NLS-1$
 		}
 		setEntryPoint(null);
@@ -206,6 +213,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 				case final Attribute attribute -> attribute.setValue(text);
 				case final ArraySize arraySize -> arraySize.setValue(text);
 				case final Value value -> value.setValue(text);
+				case final ECTransition transition -> transition.setConditionExpression(text);
 				default -> throw new IOException("Invalid query in ST resource: " + uri.query()); //$NON-NLS-1$
 				}
 			} else {

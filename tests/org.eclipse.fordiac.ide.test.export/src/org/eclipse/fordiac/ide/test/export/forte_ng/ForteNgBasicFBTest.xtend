@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.test.export.forte_ng
 
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate
 import org.eclipse.fordiac.ide.test.export.ExporterTestBase
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 import org.junit.jupiter.api.Test
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.fail
 
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.getFORTEStringId;
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.getFORTEStringId
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
@@ -48,7 +49,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						/*************************************************************************
 						 *** FORTE Library Element
 						 ***
-						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+						 *** «ForteNgExportTemplate.HEADER_TEXT»
 						 ***
 						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 						 *** Description:
@@ -105,7 +106,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 					/*************************************************************************
 					 *** FORTE Library Element
 					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+					 *** «ForteNgExportTemplate.HEADER_TEXT»
 					 ***
 					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
 					 *** Description:

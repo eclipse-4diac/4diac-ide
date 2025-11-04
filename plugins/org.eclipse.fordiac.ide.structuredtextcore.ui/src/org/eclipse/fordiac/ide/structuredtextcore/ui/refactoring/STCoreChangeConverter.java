@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -35,6 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.AttributeValueEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ConditionExpressionEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ImportEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.InitialValueEdit;
@@ -157,23 +159,23 @@ public class STCoreChangeConverter extends ChangeConverter {
 		if (change.getResource() instanceof final STCoreResource coreResource && coreResource.getURI().hasQuery()) {
 			final EObject sourceElement = coreResource.getSourceElement();
 			final String sourceElementName = getSourceElementName(sourceElement);
-			if (sourceElement instanceof final Attribute attribute) {
-				addModelEdit(
-						new AttributeValueEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(attribute),
-								getEditedText(attribute.getValue(), textEdit)));
-			} else if (sourceElement instanceof final ArraySize arraySize
-					&& arraySize.eContainer() instanceof final VarDeclaration varDeclaration) {
+			switch (sourceElement) {
+			case final Attribute attribute -> addModelEdit(
+					new AttributeValueEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(attribute),
+							getEditedText(attribute.getValue(), textEdit)));
+			case final ArraySize arraySize when arraySize.eContainer() instanceof final VarDeclaration varDeclaration ->
 				addModelEdit(
 						new DataTypeEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(varDeclaration),
 								getEditedText(varDeclaration.getFullTypeName(), textEdit)));
-			} else if (sourceElement instanceof final Value value
-					&& value.eContainer() instanceof final VarDeclaration varDeclaration) {
+			case final Value value when value.eContainer() instanceof final VarDeclaration varDeclaration ->
 				addModelEdit(new InitialValueEdit(sourceElementName,
 						LibraryElementXtextResource.getExternalURI(varDeclaration),
 						getEditedText(value.getValue(), textEdit)));
-			} else {
-				issues.add(RefactoringIssueAcceptor.Severity.FATAL,
-						"Invalid query in ST resource: " + change.getOldURI().query()); //$NON-NLS-1$
+			case final ECTransition transition -> addModelEdit(new ConditionExpressionEdit(sourceElementName,
+					LibraryElementXtextResource.getExternalURI(transition),
+					getEditedText(transition.getConditionExpression(), textEdit)));
+			default -> issues.add(RefactoringIssueAcceptor.Severity.FATAL,
+					"Invalid query in ST resource: " + change.getOldURI().query()); //$NON-NLS-1$
 			}
 		} else {
 			final TextChange ltkChange = createDocumentChange(change);
