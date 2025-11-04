@@ -43,4 +43,5 @@ ASSEMBLE_DWORD_FROM_WORDS.%W1 := WORD_01;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

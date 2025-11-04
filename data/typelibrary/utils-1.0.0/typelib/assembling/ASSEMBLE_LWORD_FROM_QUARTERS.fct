@@ -196,4 +196,5 @@ ASSEMBLE_LWORD_FROM_QUARTERS := ASSEMBLE_LWORD_FROM_QUARTERS
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

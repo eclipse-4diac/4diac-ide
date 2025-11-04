@@ -47,4 +47,5 @@ WORD_01 := IN.%X1;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>
