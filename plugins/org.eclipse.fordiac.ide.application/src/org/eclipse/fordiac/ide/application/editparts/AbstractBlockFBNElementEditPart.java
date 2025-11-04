@@ -633,8 +633,8 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 
 	@Override
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
-		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
-				FordiacAnnotationUtil::showOnTarget);
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getFbFigureContainer(), getModel(), event,
+				FordiacAnnotationUtil::showOnTarget, FordiacAnnotationUtil::showOnTargetType);
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getTypeLabel(), getModel(), event,
 				FordiacAnnotationUtil::showOnTargetType);
 		getChildren().stream().filter(InstanceNameEditPart.class::isInstance).map(InstanceNameEditPart.class::cast)

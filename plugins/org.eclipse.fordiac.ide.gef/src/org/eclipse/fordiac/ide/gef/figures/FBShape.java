@@ -203,7 +203,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		return middleContainer;
 	}
 
-	protected Figure getFbFigureContainer() {
+	public Figure getFbFigureContainer() {
 		return fbFigureContainer;
 	}
 
