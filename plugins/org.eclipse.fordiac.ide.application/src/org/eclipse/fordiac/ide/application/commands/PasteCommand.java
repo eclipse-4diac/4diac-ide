@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateComm
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -248,7 +247,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 	}
 
 	private FBNetworkElement createCopiedElement(final FBNetworkElement element) {
-		FBNetworkElement copiedElement = EcoreUtil.copy(element);
+		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
 		if (dstTypeLib != null && element.getTypeEntry() != null) {
 			// we are copying between projects and it is a typed FBNetworkElement
 			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getFullTypeName());
@@ -256,8 +255,8 @@ public class PasteCommand extends Command implements ScopedCommand {
 				// the target project has the type
 				copiedElement.setTypeEntry(dstTypeEntry);
 			} else {
-				copiedElement = FordiacMarkerHelper.createTypeErrorMarkerFB(copiedElement.getName(), dstTypeLib,
-						element.getTypeEntry().getTypeEClass());
+				copiedElement.setTypeEntry(dstTypeLib.createErrorTypeEntry(element.getFullTypeName(),
+						element.getTypeEntry().getTypeEClass()));
 				if (element instanceof final BlockFBNetworkElement bfbElement) {
 					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
 				}

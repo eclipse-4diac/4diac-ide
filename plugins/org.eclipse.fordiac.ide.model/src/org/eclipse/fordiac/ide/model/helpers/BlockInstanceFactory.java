@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -26,7 +25,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 public final class BlockInstanceFactory {
 
 	public static BlockFBNetworkElement createBlockInstanceForTypeEntry(final TypeEntry entry) {
-		if (entry == null || entry instanceof ErrorTypeEntry) {
+		if (entry == null) {
 			return LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
 		}
 		if (entry instanceof SubAppTypeEntry) {
