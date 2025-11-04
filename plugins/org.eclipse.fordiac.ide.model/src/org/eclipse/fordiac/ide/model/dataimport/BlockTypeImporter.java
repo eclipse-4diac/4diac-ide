@@ -69,27 +69,27 @@ public abstract class BlockTypeImporter extends TypeImporter {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(getElement());
 
-			boolean compilerInfo = false;
-			boolean interfaceList = false;
-
 			while (getReader().hasNext()) {
 				final int event = getReader().next();
 				if (XMLStreamConstants.START_ELEMENT == event) {
 					final String localName = getReader().getLocalName();
 					if (LibraryElementTags.COMPILER_INFO_ELEMENT.equals(localName)) {
 						getElement().setCompilerInfo(parseCompilerInfo());
-						compilerInfo = true;
 					} else if (getInterfaceListElementName().equals(localName)) {
 						getElement().setInterfaceList(
 								getInterfaceListImporter().parseInterfaceList(getInterfaceListElementName()));
-						interfaceList = true;
+						// stop at the first interface we get.
+						break;
 					}
-				}
-				if (interfaceList && compilerInfo) {
-					break;
 				}
 			}
 		}
+
+		if (getElement().getCompilerInfo() == null) {
+			// in case we could not parse a compiler info set an empty one
+			getElement().setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+		}
+
 		return getElement();
 	}
 
