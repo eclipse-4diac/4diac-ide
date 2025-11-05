@@ -78,4 +78,5 @@ ASSEMBLE_WORD_FROM_QUARTERS := ASSEMBLE_WORD_FROM_QUARTERS
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>
