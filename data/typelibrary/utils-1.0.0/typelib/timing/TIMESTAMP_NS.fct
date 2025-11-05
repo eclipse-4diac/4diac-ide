@@ -34,4 +34,5 @@ END_FUNCTION
 
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>
