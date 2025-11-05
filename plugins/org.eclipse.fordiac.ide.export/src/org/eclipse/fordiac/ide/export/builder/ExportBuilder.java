@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ExportBuilder extends IncrementalProjectBuilder {
@@ -50,7 +51,9 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	public static final String BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
 	private static final String FORTE_NG_FILTER_ID = "org.eclipse.fordiac.ide.export.exportFilter.forteNg"; //$NON-NLS-1$
 
-	private static final Set<String> fileTypes = Set.of("fbt", "adp", "dtp", "gcf"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	private static final Set<String> fileTypes = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
+			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
+			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
 	private boolean enableAutoExport;
 	private String outputDirectory;
@@ -202,7 +205,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	}
 
 	private static boolean isExportableFileType(final IFile file) {
-		return file.getFileExtension() != null && fileTypes.contains(file.getFileExtension());
+		return fileTypes.stream().anyMatch(type -> type.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	private IEclipsePreferences getProjectPreferenceNode() {
