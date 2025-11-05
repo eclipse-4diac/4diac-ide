@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -237,7 +238,11 @@ public class ResourceDeploymentData {
 	private static IInterfaceElement getSubAppInternalElement(final IInterfaceElement element, final SubApp subApp) {
 		final InterfaceList interfaceList;
 		if (subApp instanceof TypedSubApp) {
-			interfaceList = subApp.getType().getInterfaceList();
+			final SubAppType type = subApp.getType();
+			if (type == null) {
+				return null;
+			}
+			interfaceList = type.getInterfaceList();
 		} else if (subApp.getSubAppNetwork() == null && subApp.getOpposite() instanceof final SubApp subAppOpposite) {
 			// we should have a mapped subapp, then the network is in the opposite subapp
 			interfaceList = subAppOpposite.getInterface();
@@ -257,7 +262,11 @@ public class ResourceDeploymentData {
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {
 		if (subApp instanceof TypedSubApp) {
-			return subApp.getType().getFBNetwork();
+			final SubAppType type = subApp.getType();
+			if (type == null) {
+				return null;
+			}
+			return type.getFBNetwork();
 		}
 		if (subApp.getSubAppNetwork() == null && subApp.getOpposite() instanceof final SubApp oppositeSubApp) {
 			// we should have a mapped subapp, then the network is in the opposite subapp
