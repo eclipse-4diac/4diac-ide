@@ -16,8 +16,10 @@ package org.eclipse.fordiac.ide.gef.editors;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.CellEditorLayoutFactory;
+import org.eclipse.fordiac.ide.gef.utilities.MostRecentlyUsedTracker;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -60,6 +62,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	private boolean blockTableSelection = false;
 	private TypeEntry selectedEntry = null;
 	protected Text textControl;
+	private MostRecentlyUsedTracker mruTracker;
 
 	private ResultListLabelProvider resultListLabelProvider;
 
@@ -85,6 +88,19 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	public void setTypeLibrary(final TypeLibrary typeLib) {
 		paletteFilter = new PaletteFilter(typeLib);
+
+		// Initialize MRU tracker for the current project
+		if (typeLib != null && mruTracker == null) {
+			try {
+				final IProject project = typeLib.getProject();
+				if (project != null && project.exists()) {
+					mruTracker = new MostRecentlyUsedTracker(project);
+				}
+			} catch (final Exception e) {
+				System.err.println("Failed to initialize MRUTracker: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -135,6 +151,14 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	@Override
 	public Object doGetValue() {
 		if (null != selectedEntry) {
+			if (mruTracker != null && !mruTracker.isDisposed()) {
+				try {
+					mruTracker.recordUsage(selectedEntry.getTypeName());
+					System.out.println("DEBUG: Recorded usage of: " + selectedEntry.getTypeName());
+				} catch (final Exception e) {
+					System.err.println("Failed to record MRU usage: " + e.getMessage());
+				}
+			}
 			return selectedEntry;
 		}
 		return super.doGetValue();
