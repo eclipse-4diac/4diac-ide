@@ -35,6 +35,30 @@ public class PaletteFilter {
 				Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream()))).toList();
 	}
 
+	/**
+	 * Find a specific TypeEntry by its exact type name.
+	 *
+	 * @param typeName the full type name (e.g., "E_CYCLE")
+	 * @return the TypeEntry or null if not found
+	 */
+	public TypeEntry findTypeEntry(final String typeName) {
+		if (typeName == null || typeName.isEmpty()) {
+			return null;
+		}
+
+		// Reuse existing search - search for the type name
+		final List<TypeEntry> results = findFBAndSubappTypes(typeName);
+
+		// Find exact match (not just substring)
+		for (final TypeEntry entry : results) {
+			if (typeName.equals(entry.getTypeName())) {
+				return entry;
+			}
+		}
+
+		return null;
+	}
+
 	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
 		setSearchPattern(searchString);
 		return stream.filter(entry -> matcher.matches(entry.getFullTypeName()))

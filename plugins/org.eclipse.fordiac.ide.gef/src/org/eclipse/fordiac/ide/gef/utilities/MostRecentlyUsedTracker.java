@@ -69,9 +69,6 @@ public class MostRecentlyUsedTracker {
 			this.preferences = projectScope.getNode(PREF_NODE);
 			loadFromPreferences();
 
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Initialized for project: " + project.getName());
-			System.out.println("[MRU] Loaded " + mruList.size() + " items: " + mruList);
 		} else {
 			this.preferences = null;
 			this.mruList = new LinkedList<>();
@@ -103,10 +100,6 @@ public class MostRecentlyUsedTracker {
 		}
 
 		saveToPreferences();
-
-		// TODO: Remove debug output after UI integration is complete
-		System.out.println("[MRU] Recorded usage: " + fbTypeName);
-		System.out.println("[MRU] Current list: " + mruList);
 	}
 
 	/**
@@ -169,8 +162,7 @@ public class MostRecentlyUsedTracker {
 				}
 			}
 		} catch (final IllegalStateException e) {
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Preference node removed, cannot load");
+			// Preference node has been removed (project deleted) - silent handling
 		} catch (final Exception e) {
 			System.err.println("[MRU] Failed to load preferences: " + e.getMessage());
 		}
@@ -201,9 +193,6 @@ public class MostRecentlyUsedTracker {
 			preferences.flush();
 
 		} catch (final IllegalStateException e) {
-			// Preference node has been removed (project is being deleted)
-			// TODO: Remove debug output after UI integration is complete
-			System.out.println("[MRU] Preference node removed, cannot save");
 			disposed = true;
 		} catch (final BackingStoreException e) {
 			System.err.println("[MRU] Failed to save preferences: " + e.getMessage());

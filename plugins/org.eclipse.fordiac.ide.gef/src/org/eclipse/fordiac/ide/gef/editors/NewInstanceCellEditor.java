@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -101,6 +102,11 @@ public class NewInstanceCellEditor extends TextCellEditor {
 				e.printStackTrace();
 			}
 		}
+
+		// Trigger update now that paletteFilter is initialized
+		if (textControl != null && !textControl.isDisposed()) {
+			updateSelectionList();
+		}
 	}
 
 	@Override
@@ -151,14 +157,15 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	@Override
 	public Object doGetValue() {
 		if (null != selectedEntry) {
+			// Record usage in MRU tracker
 			if (mruTracker != null && !mruTracker.isDisposed()) {
 				try {
 					mruTracker.recordUsage(selectedEntry.getTypeName());
-					System.out.println("DEBUG: Recorded usage of: " + selectedEntry.getTypeName());
 				} catch (final Exception e) {
 					System.err.println("Failed to record MRU usage: " + e.getMessage());
 				}
 			}
+
 			return selectedEntry;
 		}
 		return super.doGetValue();
@@ -208,18 +215,65 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	protected void updateSelectionList() {
 		blockTableSelection = true;
-		if (textControl.getText().length() >= 2) {
-			final List<TypeEntry> entries = paletteFilter.findFBAndSubappTypes((textControl.getText()));
-			resultListLabelProvider.setSearchString(textControl.getText());
+		final String searchText = textControl.getText();
+
+		if (searchText.length() >= 2) {
+			// Normal search with 2+ characters
+			final List<TypeEntry> entries = paletteFilter.findFBAndSubappTypes(searchText);
+			resultListLabelProvider.setSearchString(searchText);
 			tableViewer.setInput(entries);
 			if (!entries.isEmpty()) {
 				selectItemAtIndex(0);
 			}
 			markDirty();
+		} else if (searchText.length() == 0) {
+			// Show MRU when search is empty
+			showMRUList();
+		} else {
+			// 1 character typed - hide list (keep current behavior)
+			tableViewer.setInput(null);
+		}
+
+		blockTableSelection = false;
+	}
+
+	/**
+	 * Show the MRU (Most Recently Used) list when no search text is entered.
+	 */
+	private void showMRUList() {
+		if (paletteFilter == null) {
+			tableViewer.setInput(null);
+			return;
+		}
+
+		if (mruTracker == null || mruTracker.isDisposed()) {
+			tableViewer.setInput(null);
+			return;
+		}
+
+		final List<String> mruTypeNames = mruTracker.getMRUList();
+
+		if (mruTypeNames.isEmpty()) {
+			tableViewer.setInput(null);
+			return;
+		}
+
+		// Convert type names to TypeEntry objects
+		final List<TypeEntry> mruEntries = new ArrayList<>();
+		for (final String typeName : mruTypeNames) {
+			final TypeEntry entry = paletteFilter.findTypeEntry(typeName);
+			if (entry != null) {
+				mruEntries.add(entry);
+			}
+		}
+
+		if (!mruEntries.isEmpty()) {
+			resultListLabelProvider.setSearchString(""); // No highlighting for MRU
+			tableViewer.setInput(mruEntries);
+			selectItemAtIndex(0);
 		} else {
 			tableViewer.setInput(null);
 		}
-		blockTableSelection = false;
 	}
 
 	private void handleKeyPress(final Event event, final Text textControl) {
