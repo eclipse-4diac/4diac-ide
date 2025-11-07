@@ -117,6 +117,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 
 	private void addTimeOutFB(final FBNetwork net, final FB fb, final int x, final int y) {
 		final BlockFBNetworkElement compEl = LibraryElementFactory.eINSTANCE.createCFBInstance();
+
 		final TypeEntry compType = sourceType.getTypeLibrary().getFBTypeEntry(TestGenBlockNames.TIMEOUT_COMPOSITE_NAME);
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + (double) 200, y + (double) 150);
