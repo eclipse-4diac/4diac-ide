@@ -60,18 +60,6 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		this.cmdToExecuteBefore = commandToExecuteBefore;
 	}
 
-	public ResizeGroupOrSubappCommand(final GraphicalEditPart groupOrSubAppContentGraphicalEditPart,
-			final List<FBNetworkElement> fbnetworkElements) {
-		this(groupOrSubAppContentGraphicalEditPart);
-		this.fbnetworkElements = fbnetworkElements;
-	}
-
-	public ResizeGroupOrSubappCommand(final GraphicalEditPart groupOrSubAppContentGraphicalEditPart,
-			final List<FBNetworkElement> fbnetworkElements, final Command commandToExecuteBefore) {
-		this(groupOrSubAppContentGraphicalEditPart, fbnetworkElements);
-		this.cmdToExecuteBefore = commandToExecuteBefore;
-	}
-
 	@Override
 	public void execute() {
 		if (cmdToExecuteBefore != null && cmdToExecuteBefore.canExecute()) {

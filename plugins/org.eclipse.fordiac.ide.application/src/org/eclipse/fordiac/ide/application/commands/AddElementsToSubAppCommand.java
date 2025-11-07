@@ -56,7 +56,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.graphics.Point;
 
 public class AddElementsToSubAppCommand extends Command implements ScopedCommand {
 
@@ -76,11 +75,6 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
 		this.targetSubApp = Objects.requireNonNull(targetSubApp);
 		fillElementList(selection);
-	}
-
-	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection, final Point moveDelta) {
-		this(targetSubApp, selection);
-		this.moveDelta = moveDelta;
 	}
 
 	@Override

@@ -23,16 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 public class ChangeAttributeOrderCommand extends AbstractChangeListElementOrderCommand<Attribute> {
 
 	public ChangeAttributeOrderCommand(final ConfigurableObject configurableObject, final Attribute attribute,
-			final IndexUpDown updown) {
-		super(attribute, isMoveUp(updown), configurableObject.getAttributes());
-	}
-
-	public ChangeAttributeOrderCommand(final ConfigurableObject configurableObject, final Attribute attribute,
 			final Attribute ref) {
 		super(attribute, ref, false, configurableObject.getAttributes());
-	}
-
-	private static boolean isMoveUp(final IndexUpDown updown) {
-		return updown == IndexUpDown.UP;
 	}
 }
