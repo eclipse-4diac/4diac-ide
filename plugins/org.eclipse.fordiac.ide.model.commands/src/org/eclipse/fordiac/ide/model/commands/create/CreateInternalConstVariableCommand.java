@@ -18,20 +18,16 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/** The Class CreateInternalConstVariableCommand.
+/**
+ * The Class CreateInternalConstVariableCommand.
  *
- * This command is used to create an internal constant variable for a BasicFBType. */
+ * This command is used to create an internal constant variable for a
+ * BasicFBType.
+ */
 public class CreateInternalConstVariableCommand extends CreateVariableCommand {
 
-	/** Instantiates command that creates a new internal constant variable.
-	 *
-	 * @param dataType the data type
-	 * @param fbType   the fb type */
-	public CreateInternalConstVariableCommand(final BaseFBType fbType) {
-		super(fbType, fbType.getInternalConstVars().size(), null, null);
-	}
-
-	public CreateInternalConstVariableCommand(final BaseFBType fbType, final int index, final String name, final DataType dataType) {
+	public CreateInternalConstVariableCommand(final BaseFBType fbType, final int index, final String name,
+			final DataType dataType) {
 		super(fbType, index, name, dataType);
 	}
 

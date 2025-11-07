@@ -47,16 +47,6 @@ public abstract class CreateVariableCommand extends CreationCommand implements S
 	/** The new variable declaration */
 	private VarDeclaration varDecl;
 
-	/**
-	 * Instantiates a new create variable command.
-	 *
-	 * @param dataType the data type
-	 * @param type     the library element the new variable is added to
-	 */
-	protected CreateVariableCommand(final LibraryElement type) {
-		this(type, 0, null, null);
-	}
-
 	protected CreateVariableCommand(final LibraryElement type, final int index, final String name,
 			final DataType dataType) {
 		this.type = Objects.requireNonNull(type);
