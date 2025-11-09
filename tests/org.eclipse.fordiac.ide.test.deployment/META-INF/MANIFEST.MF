@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Deployment Test
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.deployment
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.100.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.deployment
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.deployment
 Bundle-RequiredExecutionEnvironment: JavaSE-21

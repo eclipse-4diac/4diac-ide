@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model UI
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.ui;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.100.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,

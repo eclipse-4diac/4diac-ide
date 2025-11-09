@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.gef,
 Import-Package: org.osgi.service.event 
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.0.100.qualifier
 Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2
