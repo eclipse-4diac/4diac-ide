@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Localization: plugin
 Bundle-Name: %BulkEditor.bundleName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.bulkeditor;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,

@@ -51,7 +51,7 @@
     	</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 
-			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.0.0.qualifier">
+			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.1.0.qualifier">
 
    
 
