@@ -62,6 +62,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 /**
@@ -263,6 +265,10 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 	}
 
 	private void handleActivationChanged(final Event event) {
+		if (PlatformUI.getWorkbench().isClosing()) {
+			return;
+		}
+
 		final boolean activated = event.type == SWT.Activate;
 
 		setAction(ActionFactory.COPY.getId(), activated);
@@ -274,10 +280,12 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 
 	private void setAction(final String actionId, final boolean activated) {
 		final IAction action = getActionRegistry().getAction(actionId);
-		if (activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) != action) {
-			getEditorSite().getActionBars().setGlobalActionHandler(actionId, action);
-		} else if (!activated && getEditorSite().getActionBars().getGlobalActionHandler(actionId) == action) {
-			getEditorSite().getActionBars().setGlobalActionHandler(actionId, null);
+		final IActionBars actionBars = getEditorSite().getActionBars();
+
+		if (activated && actionBars.getGlobalActionHandler(actionId) != action) {
+			actionBars.setGlobalActionHandler(actionId, action);
+		} else if (!activated && actionBars.getGlobalActionHandler(actionId) == action) {
+			actionBars.setGlobalActionHandler(actionId, null);
 		}
 	}
 
