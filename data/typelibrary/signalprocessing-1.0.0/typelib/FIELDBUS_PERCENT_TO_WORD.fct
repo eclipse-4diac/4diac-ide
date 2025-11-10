@@ -41,4 +41,5 @@ FIELDBUS_PERCENT_TO_WORD := UDINT_TO_WORD(REAL_TO_UDINT(RI
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

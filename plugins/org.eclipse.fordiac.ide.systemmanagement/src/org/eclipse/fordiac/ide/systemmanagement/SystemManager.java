@@ -189,12 +189,16 @@ public enum SystemManager {
 
 	public static void validateProjectNature(final IProject project) {
 		try {
-			if (project.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) instanceof final FordiacNature nature) {
-				nature.validate();
+			if (project != null && project.isAccessible()) {
+				final var nature = project.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
+				if (nature instanceof final FordiacNature fordiacNature) {
+					fordiacNature.validate();
+				}
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logError(MessageFormat
-					.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()), e);
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()),
+					e);
 		}
 	}
 

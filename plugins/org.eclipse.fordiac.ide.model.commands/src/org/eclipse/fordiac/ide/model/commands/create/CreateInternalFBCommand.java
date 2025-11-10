@@ -41,10 +41,6 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 
 	static final String DEFAULT_INTERNAL_FB_NAME = "InternalFB1"; //$NON-NLS-1$
 
-	protected CreateInternalFBCommand(final BaseFBType baseFbType) {
-		this(baseFbType, 0, null, null);
-	}
-
 	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
 			final FBTypeEntry fbTypeEntry) {
 		this.baseFbType = Objects.requireNonNull(baseFbType);

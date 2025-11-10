@@ -105,4 +105,5 @@ BIT_15 := IN.%X15;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>

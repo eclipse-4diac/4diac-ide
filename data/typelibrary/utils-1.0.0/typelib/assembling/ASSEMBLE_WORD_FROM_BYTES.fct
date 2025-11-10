@@ -43,4 +43,5 @@ ASSEMBLE_WORD_FROM_BYTES.%B1 := BYTE_01;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

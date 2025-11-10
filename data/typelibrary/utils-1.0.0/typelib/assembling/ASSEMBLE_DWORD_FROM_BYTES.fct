@@ -51,4 +51,5 @@ ASSEMBLE_DWORD_FROM_BYTES.%B3 := BYTE_03;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>
