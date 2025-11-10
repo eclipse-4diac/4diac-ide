@@ -69,4 +69,5 @@ ASSEMBLE_BYTE_FROM_BOOLS.%X7 := BIT_07;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>

@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class InterfaceListImporter extends TypeImporter {
 	/** The output events. */
 	private final Map<String, Event> outputEvents = new HashMap<>();
 
-	private final Map<Event, List<String>> withList = new HashMap<>();
+	private final Map<Event, List<String>> withList = new LinkedHashMap<>();
 
 	public InterfaceListImporter(final CommonElementImporter importer) {
 		super(importer);

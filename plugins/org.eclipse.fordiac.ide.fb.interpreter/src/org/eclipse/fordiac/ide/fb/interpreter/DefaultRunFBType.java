@@ -342,6 +342,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEventOccurrence.setFbRuntime(newFBTypeRT);
 		newEventOccurrence.setEvent(output);
+		if (runtime instanceof FBNetworkRuntime) {
+			newEventOccurrence.setParentFB(output.getBlockFBNetworkElement());
+		}
 		return newEventOccurrence;
 	}
 

@@ -162,4 +162,5 @@ ASSEMBLE_DWORD_FROM_BOOLS.%X31 := BIT_31;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

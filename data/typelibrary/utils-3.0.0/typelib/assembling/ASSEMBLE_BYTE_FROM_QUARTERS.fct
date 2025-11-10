@@ -54,4 +54,5 @@ ASSEMBLE_BYTE_FROM_QUARTERS := ASSEMBLE_BYTE_FROM_QUARTERS OR SHL(QUARTER_BYTE_0
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>

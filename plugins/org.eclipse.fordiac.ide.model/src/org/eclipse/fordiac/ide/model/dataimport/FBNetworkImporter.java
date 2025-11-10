@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -218,11 +217,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		fbNetworkElementMap.putIfAbsent(fb.getName(), fb);
 	}
 
-	private BlockFBNetworkElement createFBInstance(final String typeName) {
-		final FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
+	private FB createFBInstance(final String typeName) {
+		FBTypeEntry entry = getTypeEntry(typeName, getTypeLibrary()::getFBTypeEntry);
 		if (null == entry) {
-			return addDependency(FordiacMarkerHelper.createTypeErrorMarkerFB(typeName, getTypeLibrary(),
-					LibraryElementPackage.eINSTANCE.getFBType()));
+			entry = (FBTypeEntry) addDependency(
+					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getFBType()));
 		}
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
 		InterfaceList fbInterface = entry.getInterface();

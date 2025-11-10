@@ -99,4 +99,5 @@ ASSEMBLE_DWORD_FROM_QUARTERS := SHL(BYTE_TO_DWORD(QUARTER_BYTE_15), quarterconst
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="TypeHash" Value="''"/>
 </Function>

@@ -168,4 +168,5 @@ BIT_31 := IN.%X31;
 END_FUNCTION
 ]]></ST>
 	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </Function>
