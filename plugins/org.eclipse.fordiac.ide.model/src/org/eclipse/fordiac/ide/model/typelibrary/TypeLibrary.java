@@ -52,10 +52,15 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
+import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
+import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
@@ -78,7 +83,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public final class TypeLibrary {
+public final class TypeLibrary extends ConcurrentNotifierImpl {
+
+	public static final String TYPE_ENTRY_NAME_REFERENCES_FEATURE = "TYPE_ENTRY_NAME_REFERENCES_FEATURE"; //$NON-NLS-1$
+
+	public static final int TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID = 1;
 
 	private IProject project;
 	private Buildpath buildpath;
@@ -325,6 +334,10 @@ public final class TypeLibrary {
 			handleDuplicateTypeName(entry);
 		}
 		addPackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
+		if (eNotificationRequired() && isPublicNameReference(entry)) {
+			eNotify(new TypeLibraryNotificationImpl(this, Notification.ADD, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
+					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, null, entry));
+		}
 	}
 
 	private void handleDuplicateTypeName(final TypeEntry entry) {
@@ -356,7 +369,17 @@ public final class TypeLibrary {
 		}
 		removePackageNameReference(PackageNameHelper.extractPackageName(entry.getFullTypeName()));
 		deleteTypeLibraryMarkers(entry.getFile());
+		if (eNotificationRequired() && isPublicNameReference(entry)) {
+			eNotify(new TypeLibraryNotificationImpl(this, Notification.REMOVE, TYPE_ENTRY_NAME_REFERENCES_FEATURE,
+					TYPE_ENTRY_NAME_REFERENCES_FEATURE_ID, entry, null));
+		}
 		retryDuplicates();
+	}
+
+	private boolean isPublicNameReference(final TypeEntry entry) {
+		return entry.getTypeLibrary() == this && Boolean.parseBoolean(BuildpathUtil
+				.findSourceFolder(buildpath, entry.getFile()).map(SourceFolder::getAttributes)
+				.map(attrs -> BuildpathAttributes.getAttributeValue(attrs, BuildpathAttributes.EXPORT)).orElse(null));
 	}
 
 	private void retryDuplicates() {
@@ -556,5 +579,34 @@ public final class TypeLibrary {
 
 	void setProject(final IProject newProject) {
 		project = newProject;
+	}
+
+	private static class TypeLibraryNotificationImpl extends NotificationImpl {
+		private final TypeLibrary notifier;
+		private final String feature;
+		private final int featureID;
+
+		public TypeLibraryNotificationImpl(final TypeLibrary notifier, final int eventType, final String feature,
+				final int featureID, final Object oldValue, final Object newValue) {
+			super(eventType, oldValue, newValue, NO_INDEX);
+			this.notifier = notifier;
+			this.feature = feature;
+			this.featureID = featureID;
+		}
+
+		@Override
+		public TypeLibrary getNotifier() {
+			return notifier;
+		}
+
+		@Override
+		public Object getFeature() {
+			return feature;
+		}
+
+		@Override
+		public int getFeatureID(final Class<?> expectedClass) {
+			return featureID;
+		}
 	}
 }
