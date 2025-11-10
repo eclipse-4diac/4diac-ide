@@ -56,7 +56,14 @@ public enum TypeLibraryManager {
 
 	public TypeLibrary getTypeLibrary(final IProject proj) {
 		synchronized (typeLibraryList) {
-			return typeLibraryList.computeIfAbsent(proj, TypeLibrary::new);
+			// cannot use computeIfAbsent() because TypeLibrary#TypeLibrary(IProject) may
+			// create additional type libraries
+			TypeLibrary typeLibrary = typeLibraryList.get(proj); // NOSONAR
+			if (typeLibrary == null) {
+				typeLibrary = new TypeLibrary(proj);
+				typeLibraryList.put(proj, typeLibrary);
+			}
+			return typeLibrary;
 		}
 	}
 
