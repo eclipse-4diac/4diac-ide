@@ -54,6 +54,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.NotificationImpl;
+import org.eclipse.emf.common.notify.impl.SingletonAdapterImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.ConcurrentNotifierImpl;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -108,6 +109,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
 	private final NavigableSet<IProject> referencedProjects = new ConcurrentSkipListSet<>(
 			Comparator.comparing(IProject::getName));
+	private final TypeLibraryAdapter typeLibraryAdapter = new TypeLibraryAdapter();
 
 	public Collection<AdapterTypeEntry> getAdapterTypes() {
 		return Collections.unmodifiableCollection(adapterTypes.values());
@@ -552,11 +554,27 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	private boolean addReferencedProject(final IProject project) {
-		return referencedProjects.add(project);
+		if (!referencedProjects.add(project)) {
+			return false;
+		}
+		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+		referencedTypeLibrary.eAdapters().add(typeLibraryAdapter);
+		referencedTypeLibrary.getAllPublicTypes().forEachOrdered(this::addTypeEntryNameReference);
+		return true;
 	}
 
 	private boolean removeReferencedProject(final IProject project) {
-		return referencedProjects.remove(project);
+		if (!referencedProjects.remove(project)) {
+			return false;
+		}
+		final TypeLibrary referencedTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+		referencedTypeLibrary.eAdapters().remove(typeLibraryAdapter);
+		referencedTypeLibrary.getAllPublicTypes().forEachOrdered(this::removeTypeEntryNameReference);
+		return true;
+	}
+
+	private Stream<TypeEntry> getAllPublicTypes() {
+		return fileMap.values().stream().filter(this::isPublicNameReference);
 	}
 
 	private static boolean isProgramTypeEntry(final TypeEntry entry) {
@@ -607,6 +625,28 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		@Override
 		public int getFeatureID(final Class<?> expectedClass) {
 			return featureID;
+		}
+	}
+
+	private class TypeLibraryAdapter extends SingletonAdapterImpl {
+
+		@Override
+		public void notifyChanged(final Notification msg) {
+			super.notifyChanged(msg);
+			if (msg.getNotifier() instanceof final TypeLibrary typeLibrary
+					&& referencedProjects.contains(typeLibrary.getProject())) {
+				switch (msg.getEventType()) {
+				case Notification.ADD -> addTypeEntryNameReference((TypeEntry) msg.getNewValue());
+				case Notification.ADD_MANY -> ((Collection<?>) msg.getNewValue()).stream().map(TypeEntry.class::cast)
+						.forEachOrdered(TypeLibrary.this::addTypeEntryNameReference);
+				case Notification.REMOVE -> removeTypeEntryNameReference((TypeEntry) msg.getOldValue());
+				case Notification.REMOVE_MANY -> ((Collection<?>) msg.getOldValue()).stream().map(TypeEntry.class::cast)
+						.forEachOrdered(TypeLibrary.this::removeTypeEntryNameReference);
+				default -> {
+					// do nothing
+				}
+				}
+			}
 		}
 	}
 }
