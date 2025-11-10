@@ -496,14 +496,18 @@ public final class TypeLibrary {
 		return entry instanceof FBTypeEntry || entry instanceof SubAppTypeEntry || entry instanceof DataTypeEntry;
 	}
 
-	private static void createTypeLibraryMarker(final IResource resource, final String message) {
-		FordiacMarkerHelper.createMarkers(resource, List.of(
-				ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
+	private void createTypeLibraryMarker(final IResource resource, final String message) {
+		if (resource != null && project.equals(resource.getProject())) {
+			FordiacMarkerHelper.createMarkers(resource, List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message)
+					.setType(FordiacErrorMarker.TYPE_LIBRARY_MARKER)));
+		}
 	}
 
-	private static void deleteTypeLibraryMarkers(final IResource resource) {
-		FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
-				true);
+	private void deleteTypeLibraryMarkers(final IResource resource) {
+		if (resource != null && project.equals(resource.getProject())) {
+			FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.TYPE_LIBRARY_MARKER, Collections.emptyList(),
+					true);
+		}
 	}
 
 	void setProject(final IProject newProject) {
