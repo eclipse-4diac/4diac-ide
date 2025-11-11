@@ -67,26 +67,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="activeState" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SimpleFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
-    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return simpleFBType;"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFBType" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FunctionFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
-    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return functionFBType;"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="functionFBType" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType"
-        containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
     <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CompositeFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -100,6 +80,36 @@
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//BlockFBNetworkElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="networkRuntime" lowerBound="1"
         eType="#//FBNetworkRuntime"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return functionFBType;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionFBType" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FunctionFBType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInterfaceFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ServiceInterfaceFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return serviceFBType;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceFBType" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ServiceInterfaceFBType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return simpleFBType;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFBType" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Transaction" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>

@@ -298,7 +298,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
-						OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime()));
+						OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime()));
 
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
@@ -306,7 +306,11 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
-						OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime()));
+						OperationalSemanticsFactory.eINSTANCE.createServiceInterfaceFBTypeRuntime()));
+
+		newChildDescriptors
+				.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
+						OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime()));
 
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,

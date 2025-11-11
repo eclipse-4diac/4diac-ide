@@ -210,6 +210,31 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 
 	/**
 	 * This keeps track of the one adapter used for all
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime}
+	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected ServiceInterfaceFBTypeRuntimeItemProvider serviceInterfaceFBTypeRuntimeItemProvider;
+
+	/**
+	 * This creates an adapter for a
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime}.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public Adapter createServiceInterfaceFBTypeRuntimeAdapter() {
+		if (serviceInterfaceFBTypeRuntimeItemProvider == null) {
+			serviceInterfaceFBTypeRuntimeItemProvider = new ServiceInterfaceFBTypeRuntimeItemProvider(this);
+		}
+
+		return serviceInterfaceFBTypeRuntimeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all
 	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -516,14 +541,17 @@ public class OperationalSemanticsItemProviderAdapterFactory extends OperationalS
 		if (basicFBTypeRuntimeItemProvider != null) {
 			basicFBTypeRuntimeItemProvider.dispose();
 		}
-		if (simpleFBTypeRuntimeItemProvider != null) {
-			simpleFBTypeRuntimeItemProvider.dispose();
+		if (compositeFBTypeRuntimeItemProvider != null) {
+			compositeFBTypeRuntimeItemProvider.dispose();
 		}
 		if (functionFBTypeRuntimeItemProvider != null) {
 			functionFBTypeRuntimeItemProvider.dispose();
 		}
-		if (compositeFBTypeRuntimeItemProvider != null) {
-			compositeFBTypeRuntimeItemProvider.dispose();
+		if (serviceInterfaceFBTypeRuntimeItemProvider != null) {
+			serviceInterfaceFBTypeRuntimeItemProvider.dispose();
+		}
+		if (simpleFBTypeRuntimeItemProvider != null) {
+			simpleFBTypeRuntimeItemProvider.dispose();
 		}
 		if (fbNetworkRuntimeItemProvider != null) {
 			fbNetworkRuntimeItemProvider.dispose();
