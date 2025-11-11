@@ -146,7 +146,7 @@ public enum LibraryManager {
 	 * accordingly
 	 */
 	private void checkLibChanges(final SubMonitor progress) {
-		progress.beginTask("Check for library changes", 10); //$NON-NLS-1$
+		progress.beginTask(Messages.LibraryManager_ChekForLibraryChanges, 10);
 		if (watchService == null) {
 			return;
 		}
@@ -412,7 +412,7 @@ public enum LibraryManager {
 	}
 
 	private void setStandardLibsReadOnly() {
-		final WorkspaceJob job = new WorkspaceJob("Set standard libraries read only") { //$NON-NLS-1$
+		final WorkspaceJob job = new WorkspaceJob(Messages.LibraryManager_SetStandardLibrariesReadOnly) {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
@@ -606,7 +606,7 @@ public enum LibraryManager {
 	private DownloadResult<java.net.URI> libraryDownload(final String symbolicName, final VersionRange versionRange,
 			final Version preferred, final IProject project, final boolean autoImport, final boolean resolve,
 			final SubMonitor progress) throws OperationCanceledException {
-		progress.setTaskName("Library download: " + symbolicName); //$NON-NLS-1$
+		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
 				+ " preferring " + preferred); //$NON-NLS-1$
 
@@ -652,7 +652,8 @@ public enum LibraryManager {
 	 * @param versionRange version range of dependency
 	 */
 	public void updateLibrary(final IProject project, final String symbolicName, final String versionRange) {
-		final WorkspaceJob job = new WorkspaceJob("Update Library package: " + symbolicName + " = " + versionRange) { //$NON-NLS-1$//$NON-NLS-2$
+		final WorkspaceJob job = new WorkspaceJob(
+				MessageFormat.format(Messages.LibraryManager_UpdateLibraryPackage, symbolicName, versionRange)) {
 
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
@@ -678,10 +679,12 @@ public enum LibraryManager {
 	 * This method will remove already linked libraries if they cause conflicts or
 	 * are no longer needed
 	 *
-	 * @param project selected project
+	 * @param project  selected project
+	 * @param manifest
+	 * @throws CoreException
 	 */
-	public void resolveDependencies(final IProject project, final IProgressMonitor monitor)
-			throws OperationCanceledException {
+	public void resolveDependencies(final IProject project, final Manifest projectManifest,
+			final IProgressMonitor monitor) throws OperationCanceledException, CoreException {
 		final Map<String, DependencyNode> deps = new HashMap<>();
 		final Map<String, ResolveNode> res = new HashMap<>();
 		final Map<String, Version> preferred = new HashMap<>();
@@ -689,9 +692,8 @@ public enum LibraryManager {
 
 		final Queue<String> queue = new LinkedList<>(); // symbolicNames
 
-		final SubMonitor progress = SubMonitor.convert(monitor, "Resolving library dependencies", 100); //$NON-NLS-1$
-
-		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryManager_ResolvingLibraryDependencies,
+				100);
 
 		if (projectManifest == null) {
 			return;
@@ -770,7 +772,7 @@ public enum LibraryManager {
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
 			final Map<String, Version> preferred, final Queue<String> queue, final SubMonitor progress)
 			throws OperationCanceledException {
-		progress.setTaskName("Building dependency graph"); //$NON-NLS-1$
+		progress.setTaskName(Messages.LibraryManager_BuildingDependencyGraph);
 		while (!queue.isEmpty()) {
 			progress.setWorkRemaining(Math.max(queue.size(), 10));
 			final String symbolicName = queue.poll();
@@ -847,17 +849,13 @@ public enum LibraryManager {
 		}
 	}
 
-	private static void cleanupLinks(final Map<String, IFolder> linked, final SubMonitor progress) {
-		progress.setTaskName("Removing unnecessary links"); //$NON-NLS-1$
+	private static void cleanupLinks(final Map<String, IFolder> linked, final SubMonitor progress)
+			throws CoreException {
+		progress.setTaskName(Messages.LibraryManager_RemovingUnnecessaryLinks);
 		progress.setWorkRemaining(linked.size());
-		linked.values().forEach(f -> {
-			try {
-				f.delete(true, null);
-				progress.worked(1);
-			} catch (final CoreException e) {
-				// empty
-			}
-		});
+		for (final IFolder folder : linked.values()) {
+			folder.delete(true, progress.split(1));
+		}
 	}
 
 	/**
@@ -875,7 +873,7 @@ public enum LibraryManager {
 		if (!standardLibFolder.exists() || !externalLibFolder.exists()) {
 			return;
 		}
-		progress.beginTask("Finding preferred library versions", 100); //$NON-NLS-1$
+		progress.beginTask(Messages.LibraryManager_FindingPreferredLibraryVersion, 100);
 		final IResourceVisitor visitor = res -> {
 			if (res instanceof final IFolder libFolder) {
 				progress.setWorkRemaining(100).worked(1);
@@ -925,7 +923,7 @@ public enum LibraryManager {
 		final boolean usePref = prefVersion != null && range.includes(prefVersion);
 		LibraryRecord rec;
 
-		progress.setTaskName("Resolving dependency: " + symbolicName); //$NON-NLS-1$
+		progress.setTaskName(Messages.LibraryManager_ResolvingDependency + symbolicName);
 		progress.setWorkRemaining(100);
 
 		if (stdlibraries.containsKey(symbolicName)) {
