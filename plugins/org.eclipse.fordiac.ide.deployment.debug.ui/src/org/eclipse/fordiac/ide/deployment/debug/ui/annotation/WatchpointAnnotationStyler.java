@@ -30,7 +30,8 @@ public class WatchpointAnnotationStyler implements GraphicalAnnotationStyler {
 
 	@Override
 	public void applyStyles(final IFigure figure, final GraphicalAnnotation annotation) {
-		if (figure instanceof final FBShape fbShape && FigureUtilities.isAncestor(fbShape, fbShape.getTypeLabel())) {
+		if (figure.getParent() instanceof final FBShape fbShape
+				&& FigureUtilities.isAncestor(fbShape, fbShape.getTypeLabel())) {
 			fbShape.getTypeLabel().setOverlayIcon(getOverlayImage(annotation));
 		} else {
 			final Image image = getImage(annotation);
@@ -42,7 +43,8 @@ public class WatchpointAnnotationStyler implements GraphicalAnnotationStyler {
 
 	@Override
 	public void removeStyles(final IFigure figure, final GraphicalAnnotation annotation) {
-		if (figure instanceof final FBShape fbShape && FigureUtilities.isAncestor(fbShape, fbShape.getTypeLabel())) {
+		if (figure.getParent() instanceof final FBShape fbShape
+				&& FigureUtilities.isAncestor(fbShape, fbShape.getTypeLabel())) {
 			fbShape.getTypeLabel().setOverlayIcon(null);
 		} else {
 			GraphicalAnnotationStyles.removeAnnotationBorders(figure);
