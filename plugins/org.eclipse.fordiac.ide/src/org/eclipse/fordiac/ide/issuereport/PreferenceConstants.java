@@ -53,7 +53,7 @@ public final class PreferenceConstants {
 		try {
 			return ReportMode.valueOf(getPrefString(P_BUG_REPORT_MODE));
 		} catch (final Exception e) {
-			return ReportMode.NO_REPORT;
+			return ReportMode.PROMPT_REPORT;
 		}
 	}
 
@@ -61,7 +61,7 @@ public final class PreferenceConstants {
 		try {
 			return ReportDestination.valueOf(getPrefString(P_BUG_REPORT_DESTINATION));
 		} catch (final Exception e) {
-			return ReportDestination.GITLAB;
+			return ReportDestination.GITHUB_MANUAL;
 		}
 	}
 

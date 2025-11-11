@@ -20,7 +20,10 @@ public final class Messages extends NLS {
 
 	public static String FordiacLogListener_ErrorDialogRestartSave;
 	public static String FordiacLogListener_ErrorDialogReportPrompt;
-	public static String FordiacLogListener_ErrorDialogAutoReportInfo;
+	public static String FordiacLogListener_ReportInProgress;
+	public static String FordiacLogListener_BrowserOpened;
+	public static String FordiacLogListener_ReportingError;
+	public static String FordiacLogListener_ReportingResult;
 	public static String FordiacLogListener_ErrorDialogTitle;
 	public static String FordiacLogListener_ErrorDialogReportIssue;
 

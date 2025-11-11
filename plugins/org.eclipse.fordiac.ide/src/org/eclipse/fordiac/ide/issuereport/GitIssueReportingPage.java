@@ -63,19 +63,9 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		final IPreferenceStore store = getPreferenceStore();
-		final String repMode = store.getString(PreferenceConstants.P_BUG_REPORT_MODE);
-		try {
-			reportMode = ReportMode.valueOf(repMode);
-		} catch (final Exception e) {
-			reportMode = ReportMode.NO_REPORT;
-		}
-		final String repDest = store.getString(PreferenceConstants.P_BUG_REPORT_DESTINATION);
-		try {
-			reportDestination = ReportDestination.valueOf(repDest);
-		} catch (final Exception e) {
-			reportDestination = ReportDestination.GITLAB;
-		}
+		reportMode = PreferenceConstants.getReportMode();
+		reportDestination = PreferenceConstants.getReportDestination();
+		getPreferenceStore().setDefault(PreferenceConstants.P_BUG_REPORT_GITHUB_URL, "https://api.github.com/"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -91,13 +81,13 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		gitHubButton.setSelection(false);
 		selectReportDest(ReportDestination.GITHUB_MANUAL);
 
-		gitLabURLText.setText(""); //$NON-NLS-1$
-		gitLabProjectPathText.setText(""); //$NON-NLS-1$
-		gitLabTokenText.setText(""); //$NON-NLS-1$
-		gitHubURLText.setText(""); //$NON-NLS-1$
-		gitHubProjectPathText.setText(""); //$NON-NLS-1$
-		gitHubTokenText.setText(""); //$NON-NLS-1$
-
+		final IPreferenceStore store = getPreferenceStore();
+		gitLabURLText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITLAB_URL));
+		gitLabProjectPathText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITLAB_PROJECT_PATH));
+		gitLabTokenText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITLAB_TOKEN));
+		gitHubURLText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITHUB_URL));
+		gitHubProjectPathText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITHUB_PROJECT_PATH));
+		gitHubTokenText.setText(store.getDefaultString(PreferenceConstants.P_BUG_REPORT_GITHUB_TOKEN));
 		super.performDefaults();
 	}
 
@@ -159,23 +149,23 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		final boolean isGitHub = reportDestination == ReportDestination.GITHUB;
 		gitHubButton = createDestinationButton(group, Messages.IssueReporting_GitHub, ReportDestination.GITHUB);
 		createFieldLabel(group, Messages.IssueReporting_URLInput);
-		gitHubURLText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_URL);
+		gitHubURLText = createFieldInput(group, isGitHub, PreferenceConstants.getReportGitHubURL());
 		createFieldLabel(group, Messages.IssueReporting_ProjectPathInput);
-		gitHubProjectPathText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_PROJECT_PATH);
+		gitHubProjectPathText = createFieldInput(group, isGitHub, PreferenceConstants.getReportGitHubProjectPath());
 		gitHubProjectPathText.setToolTipText(Messages.IssueReporting_ProjectPathToolTip);
 		createFieldLabel(group, Messages.IssueReporting_TokenInput);
-		gitHubTokenText = createFieldInput(group, isGitHub, PreferenceConstants.P_BUG_REPORT_GITHUB_TOKEN);
+		gitHubTokenText = createFieldInput(group, isGitHub, PreferenceConstants.getReportGitHubToken());
 		gitHubTokenText.setEchoChar('*');
 
 		final boolean isGitLab = reportDestination == ReportDestination.GITLAB;
 		gitLabButton = createDestinationButton(group, Messages.IssueReporting_GitLab, ReportDestination.GITLAB);
 		createFieldLabel(group, Messages.IssueReporting_URLInput);
-		gitLabURLText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_URL);
+		gitLabURLText = createFieldInput(group, isGitLab, PreferenceConstants.getReportGitLabURL());
 		createFieldLabel(group, Messages.IssueReporting_ProjectPathInput);
-		gitLabProjectPathText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_PROJECT_PATH);
+		gitLabProjectPathText = createFieldInput(group, isGitLab, PreferenceConstants.getReportGitLabProjectPath());
 		gitLabProjectPathText.setToolTipText(Messages.IssueReporting_ProjectPathToolTip);
 		createFieldLabel(group, Messages.IssueReporting_TokenInput);
-		gitLabTokenText = createFieldInput(group, isGitLab, PreferenceConstants.P_BUG_REPORT_GITLAB_TOKEN);
+		gitLabTokenText = createFieldInput(group, isGitLab, PreferenceConstants.getReportGitLabToken());
 		gitLabTokenText.setEchoChar('*');
 	}
 
@@ -214,13 +204,12 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		label.setLayoutData(data);
 	}
 
-	private Text createFieldInput(final Composite composite, final boolean enabled, final String prefString) {
+	private static Text createFieldInput(final Composite composite, final boolean enabled, final String initialText) {
 		final Text text = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		text.setEnabled(enabled);
 		text.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-		final String pref = getPreferenceStore().getString(prefString);
-		if (pref != null) {
-			text.setText(pref);
+		if (initialText != null) {
+			text.setText(initialText);
 		}
 		return text;
 	}

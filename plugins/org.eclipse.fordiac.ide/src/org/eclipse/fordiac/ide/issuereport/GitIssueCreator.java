@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
@@ -30,16 +31,28 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 
+import com.google.gson.Gson;
+
 public class GitIssueCreator {
 
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}"; //$NON-NLS-1$
+
 	private static record IssueInfo(String title, String body, String[] labels) {
+	}
+
+	private static record GitHubResponse(String html_url) {
+
+	}
+
+	private static record GitLabResponse(String web_url) {
+
 	}
 
 	@SuppressWarnings("nls")
 	private final static String[] LABELS = new String[] { "bug", "autoreport" };
 	private final static String SESSION_ID = UUID.randomUUID().toString();
 
-	public static int createIssue(final IStatus status) {
+	public static Optional<String> createIssue(final IStatus status) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
 
 		final PreferenceConstants.ReportDestination repDest = PreferenceConstants.getReportDestination();
@@ -52,7 +65,18 @@ public class GitIssueCreator {
 		if (repDest == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
 			return createGitHubIssueManual(info);
 		}
-		return -1;
+		return Optional.empty();
+	}
+
+	public static boolean openLinkInBrowser(final String url) {
+		try {
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
+			browser.openURL(new URI(url).toURL());
+			return true;
+		} catch (final Exception e) {
+			return false;
+		}
 	}
 
 	private static String buildBody(final IStatus status) {
@@ -84,24 +108,21 @@ public class GitIssueCreator {
 		return writer.toString();
 	}
 
-	private static int createGitHubIssueManual(final IssueInfo info) {
+	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
 		try {
-			final IWorkbench wb = PlatformUI.getWorkbench();
-			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
-			final String reportingURI = MessageFormat.format(
-					"https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}", //$NON-NLS-1$
+			final String reportingURI = MessageFormat.format(FORDIAC_IDE_ISSUE_URL,
 					URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
 					URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
-			browser.openURL(new URI(reportingURI).toURL());
-			return 200;
+			openLinkInBrowser(reportingURI);
+			return Optional.empty(); // no issue created yet...
 		} catch (final Exception e) {
-			return -1;
+			return Optional.empty();
 		}
 	}
 
-	private static int createGitLabIssue(final IssueInfo info) {
+	private static Optional<String> createGitLabIssue(final IssueInfo info) {
 		if (info.body().length() > 1048575) { // ~max GitLab description length
-			return -1;
+			return Optional.empty();
 		}
 
 		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabURL());
@@ -116,82 +137,62 @@ public class GitIssueCreator {
 				URLEncoder.encode(info.body(), StandardCharsets.UTF_8),
 				URLEncoder.encode(labels, StandardCharsets.UTF_8));
 
-		final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(reportingURI))
-				.header("PRIVATE-TOKEN", accessToken) //$NON-NLS-1$
-				.POST(HttpRequest.BodyPublishers.noBody()).build();
-		return makeRequest(request);
+		try {
+			final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(reportingURI))
+					.header("PRIVATE-TOKEN", accessToken) //$NON-NLS-1$
+					.POST(HttpRequest.BodyPublishers.noBody()).build();
+			return makeRequest(request);
+		} catch (final IllegalArgumentException e) {
+			return Optional.empty();
+		}
 	}
 
 	@SuppressWarnings("nls")
-	private static int createGitHubIssue(final IssueInfo info) {
+	private static Optional<String> createGitHubIssue(final IssueInfo info) {
 		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubURL());
 		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubProjectPath());
 		final String token = PreferenceConstants.getReportGitHubToken();
 
-		final String jsonBody = """
-				{"title":%s,"body":%s,"labels":%s}
-				""".formatted(jsonQuote(info.title()), jsonQuote(info.body()), toJsonArray(info.labels()));
+		final Gson gson = new Gson();
+		final String jsonBody = gson.toJson(info);
 
-		final HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(baseURI + "/repos/" + projectPath + "/issues"))
-				.header("Accept", "application/vnd.github+json").header("Authorization", "Bearer " + token)
-				.header("X-GitHub-Api-Version", "2022-11-28").POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-				.build();
-		return makeRequest(request);
+		try {
+			final HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(baseURI + "/repos/" + projectPath + "/issues"))
+					.header("Accept", "application/vnd.github+json").header("Authorization", "Bearer " + token)
+					.header("X-GitHub-Api-Version", "2022-11-28").POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+					.build();
+			return makeRequest(request);
+		} catch (final IllegalArgumentException e) {
+			return Optional.empty();
+		}
 	}
 
-	private static int makeRequest(final HttpRequest request) {
+	private static Optional<String> makeRequest(final HttpRequest request) {
 		try {
 			final HttpResponse<String> response = HttpClient.newHttpClient().send(request,
 					HttpResponse.BodyHandlers.ofString());
-			return response.statusCode();
+
+			if (response.statusCode() != 201) { // 201 - Created
+				return Optional.empty();
+			}
+			final Gson gson = new Gson();
+			final PreferenceConstants.ReportDestination repDest = PreferenceConstants.getReportDestination();
+			if (repDest == PreferenceConstants.ReportDestination.GITLAB) {
+				final GitLabResponse r = gson.fromJson(response.body(), GitLabResponse.class);
+				return Optional.ofNullable(r.web_url());
+			}
+			if (repDest == PreferenceConstants.ReportDestination.GITHUB) {
+				final GitHubResponse r = gson.fromJson(response.body(), GitHubResponse.class);
+				return Optional.ofNullable(r.html_url());
+			}
+			return Optional.empty();
 		} catch (IOException | InterruptedException e) {
-			return -1;
+			return Optional.empty();
 		}
 	}
 
 	private static String removeLeadingTrailingSlashes(final String s) {
 		return s.replaceAll("^/+|/+$", ""); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	private static String toJsonArray(final String[] array) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append('[');
-
-		String prefix = ""; //$NON-NLS-1$
-		for (final String elem : array) {
-			sb.append(prefix);
-			prefix = ","; //$NON-NLS-1$
-			sb.append(jsonQuote(elem));
-		}
-
-		sb.append(']');
-		return sb.toString();
-	}
-
-	@SuppressWarnings("boxing")
-	private static String jsonQuote(final String input) {
-		final StringBuilder sb = new StringBuilder("\""); //$NON-NLS-1$
-		for (int i = 0; i < input.length(); i++) {
-			final char ch = input.charAt(i);
-			switch (ch) {
-			case '"' -> sb.append("\\\""); //$NON-NLS-1$
-			case '\\' -> sb.append("\\\\"); //$NON-NLS-1$
-			case '\b' -> sb.append("\\b"); //$NON-NLS-1$
-			case '\f' -> sb.append("\\f"); //$NON-NLS-1$
-			case '\n' -> sb.append("\\n"); //$NON-NLS-1$
-			case '\r' -> sb.append("\\r"); //$NON-NLS-1$
-			case '\t' -> sb.append("\\t"); //$NON-NLS-1$
-			default -> {
-				if (ch < ' ' || ch == 0x7F) { // control chars
-					sb.append(String.format("\\u%04x", (int) ch)); //$NON-NLS-1$
-				} else {
-					sb.append(ch);
-				}
-			}
-			}
-		}
-		sb.append("\""); //$NON-NLS-1$
-		return sb.toString();
 	}
 }

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.ILogListener;
@@ -25,35 +26,72 @@ import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 public class FordiacLogListener implements ILogListener {
 
 	private static final class LogErrorDialog extends ErrorDialog {
+
+		private final IStatus status;
+		private Link reportInfo;
+
 		private LogErrorDialog(final Shell parentShell, final IStatus status) {
-			super(parentShell, Messages.FordiacLogListener_ErrorDialogTitle, getMessage(), status,
+			super(parentShell, Messages.FordiacLogListener_ErrorDialogTitle,
+					Messages.FordiacLogListener_ErrorDialogRestartSave, status,
 					IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
+			this.status = status;
 		}
 
-		private static String getMessage() {
-			final StringBuilder sb = new StringBuilder();
-			sb.append(Messages.FordiacLogListener_ErrorDialogRestartSave);
-			sb.append(System.lineSeparator());
-			sb.append(System.lineSeparator());
+		@Override
+		protected Control createDialogArea(final Composite parent) {
+			final Control control = super.createDialogArea(parent);
+
+			reportInfo = new Link(parent, SWT.NONE);
+			reportInfo.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					GitIssueCreator.openLinkInBrowser(e.text);
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+					// nothing to do
+				}
+			});
+
 			if (PreferenceConstants.getReportMode() == PreferenceConstants.ReportMode.AUTO_REPORT) {
-				sb.append(Messages.FordiacLogListener_ErrorDialogAutoReportInfo);
+				report(); // immediately start report in this mode
 			} else {
-				sb.append(Messages.FordiacLogListener_ErrorDialogReportPrompt);
+				reportInfo.setText(Messages.FordiacLogListener_ErrorDialogReportPrompt);
 			}
-			return sb.toString();
+			return control;
 		}
 
-		public boolean shouldReportIssue() {
-			return PreferenceConstants.getReportMode() == PreferenceConstants.ReportMode.AUTO_REPORT
-					|| getReturnCode() == IDialogConstants.OK_ID;
+		private void report() {
+			reportInfo.setText(Messages.FordiacLogListener_ReportInProgress);
+			new Thread(() -> {
+				final Optional<String> url = GitIssueCreator.createIssue(status);
+				Display.getDefault().asyncExec(() -> {
+					if (PreferenceConstants
+							.getReportDestination() == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
+						reportInfo.setText(Messages.FordiacLogListener_BrowserOpened);
+					} else if (url.isEmpty()) {
+						reportInfo.setText(Messages.FordiacLogListener_ReportingError);
+					} else {
+						reportInfo.setText(Messages.FordiacLogListener_ReportingResult.formatted(url.get()));
+					}
+					reportInfo.requestLayout();
+				});
+			}).start();
 		}
 
 		@Override
@@ -63,9 +101,14 @@ public class FordiacLogListener implements ILogListener {
 				// "this will be reported" -> OK, Details
 				createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 			} else if (repMode == PreferenceConstants.ReportMode.PROMPT_REPORT) {
-				// "please report this issue" -> Report Issue, Cancel, Details
-				createButton(parent, IDialogConstants.OK_ID, Messages.FordiacLogListener_ErrorDialogReportIssue, true);
-				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+				// "please report this issue" -> Report Issue, Close, Details
+				final Button rep = createButton(parent, IDialogConstants.YES_ID,
+						Messages.FordiacLogListener_ErrorDialogReportIssue, true);
+				rep.addListener(SWT.Selection, e -> {
+					rep.setEnabled(false);
+					report();
+				});
+				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, false);
 			} else {
 				// "please report this issue" -> Close, Details
 				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
@@ -113,11 +156,7 @@ public class FordiacLogListener implements ILogListener {
 
 	private static void showErrorDialog(final IStatus displayStatus) {
 		if ((null != Display.getCurrent()) && (null != Display.getCurrent().getActiveShell())) {
-			final LogErrorDialog dialog = new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus);
-			dialog.open();
-			if (dialog.shouldReportIssue()) {
-				GitIssueCreator.createIssue(displayStatus);
-			}
+			new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus).open();
 		}
 	}
 }
