@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -212,7 +213,8 @@ class LibraryImportTest {
 	void testImportWithResolve() throws Exception {
 		LibraryManager.INSTANCE.importLibrary(project, java.net.URI.create(LIB_LOC + TEST02 + "-" + V1_0_0), //$NON-NLS-1$
 				true, false);
-		LibraryManager.INSTANCE.resolveDependencies(project, null);
+		final Manifest projectManifest = ManifestHelper.getContainerManifest(project);
+		LibraryManager.INSTANCE.resolveDependencies(project, projectManifest, null);
 
 		waitForBuild();
 

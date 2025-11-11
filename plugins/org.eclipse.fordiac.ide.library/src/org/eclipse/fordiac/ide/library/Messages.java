@@ -29,9 +29,33 @@ public class Messages extends NLS {
 	public static String ImportFailedOnLinkCreation;
 	public static String InstanceUpdate;
 
+	public static String LibraryBuilder_CleaningLibrary;
+
+	public static String LibraryBuilder_LibraryBuild;
+
+	public static String LibraryBuilder_ResolveProjectDependencies;
+
+	public static String LibraryManager_BuildingDependencyGraph;
+
+	public static String LibraryManager_ChekForLibraryChanges;
+
 	public static String LibraryManager_DownloadJobName;
 
+	public static String LibraryManager_FindingPreferredLibraryVersion;
+
+	public static String LibraryManager_LibraryDownload;
+
+	public static String LibraryManager_RemovingUnnecessaryLinks;
+
+	public static String LibraryManager_ResolvingDependency;
+
+	public static String LibraryManager_ResolvingLibraryDependencies;
+
+	public static String LibraryManager_SetStandardLibrariesReadOnly;
+
 	public static String LibraryManager_UnresolvableDependencies;
+
+	public static String LibraryManager_UpdateLibraryPackage;
 
 	public static String PreferenceForceLoad;
 	public static String PreferenceLoadingGroup;
