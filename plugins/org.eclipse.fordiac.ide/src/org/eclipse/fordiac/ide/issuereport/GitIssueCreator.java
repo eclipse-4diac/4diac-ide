@@ -41,31 +41,22 @@ public class GitIssueCreator {
 	}
 
 	private static record GitHubResponse(String html_url) {
-
 	}
 
 	private static record GitLabResponse(String web_url) {
-
 	}
 
 	@SuppressWarnings("nls")
-	private final static String[] LABELS = new String[] { "bug", "autoreport" };
-	private final static String SESSION_ID = UUID.randomUUID().toString();
+	private static final String[] LABELS = new String[] { "bug", "autoreport" };
+	private static final String SESSION_ID = UUID.randomUUID().toString();
 
 	public static Optional<String> createIssue(final IStatus status) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
-
-		final PreferenceConstants.ReportDestination repDest = PreferenceConstants.getReportDestination();
-		if (repDest == PreferenceConstants.ReportDestination.GITLAB) {
-			return createGitLabIssue(info);
-		}
-		if (repDest == PreferenceConstants.ReportDestination.GITHUB) {
-			return createGitHubIssue(info);
-		}
-		if (repDest == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
-			return createGitHubIssueManual(info);
-		}
-		return Optional.empty();
+		return switch (PreferenceConstants.getReportDestination()) {
+		case GITLAB -> createGitLabIssue(info);
+		case GITHUB -> createGitHubIssue(info);
+		case GITHUB_MANUAL -> createGitHubIssueManual(info);
+		};
 	}
 
 	public static boolean openLinkInBrowser(final String url) {
@@ -169,24 +160,18 @@ public class GitIssueCreator {
 	}
 
 	private static Optional<String> makeRequest(final HttpRequest request) {
-		try {
-			final HttpResponse<String> response = HttpClient.newHttpClient().send(request,
-					HttpResponse.BodyHandlers.ofString());
+		try (HttpClient client = HttpClient.newHttpClient()) {
+			final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
 			if (response.statusCode() != 201) { // 201 - Created
 				return Optional.empty();
 			}
 			final Gson gson = new Gson();
-			final PreferenceConstants.ReportDestination repDest = PreferenceConstants.getReportDestination();
-			if (repDest == PreferenceConstants.ReportDestination.GITLAB) {
-				final GitLabResponse r = gson.fromJson(response.body(), GitLabResponse.class);
-				return Optional.ofNullable(r.web_url());
-			}
-			if (repDest == PreferenceConstants.ReportDestination.GITHUB) {
-				final GitHubResponse r = gson.fromJson(response.body(), GitHubResponse.class);
-				return Optional.ofNullable(r.html_url());
-			}
-			return Optional.empty();
+			return switch (PreferenceConstants.getReportDestination()) {
+			case GITLAB -> Optional.ofNullable(gson.fromJson(response.body(), GitLabResponse.class).web_url());
+			case GITHUB -> Optional.ofNullable(gson.fromJson(response.body(), GitHubResponse.class).html_url());
+			default -> Optional.empty();
+			};
 		} catch (IOException | InterruptedException e) {
 			return Optional.empty();
 		}

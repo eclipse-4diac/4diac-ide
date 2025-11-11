@@ -96,12 +96,11 @@ public class FordiacLogListener implements ILogListener {
 
 		@Override
 		protected void createButtonsForButtonBar(final Composite parent) {
-			final var repMode = PreferenceConstants.getReportMode();
-			if (repMode == PreferenceConstants.ReportMode.AUTO_REPORT) {
-				// "this will be reported" -> OK, Details
+			switch (PreferenceConstants.getReportMode()) {
+			case AUTO_REPORT: // "this will be reported" -> OK, Details
 				createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-			} else if (repMode == PreferenceConstants.ReportMode.PROMPT_REPORT) {
-				// "please report this issue" -> Report Issue, Close, Details
+				break;
+			case PROMPT_REPORT: // "please report this issue" -> Report Issue, Close, Details
 				final Button rep = createButton(parent, IDialogConstants.YES_ID,
 						Messages.FordiacLogListener_ErrorDialogReportIssue, true);
 				rep.addListener(SWT.Selection, e -> {
@@ -109,8 +108,8 @@ public class FordiacLogListener implements ILogListener {
 					report();
 				});
 				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, false);
-			} else {
-				// "please report this issue" -> Close, Details
+				break;
+			default: // "please report this issue" -> Close, Details
 				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
 			}
 			createDetailsButton(parent);
