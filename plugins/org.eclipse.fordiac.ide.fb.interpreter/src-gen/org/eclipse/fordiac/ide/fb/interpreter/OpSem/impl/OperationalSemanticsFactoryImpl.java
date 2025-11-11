@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
@@ -89,12 +90,14 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createEventManager();
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME:
 			return createBasicFBTypeRuntime();
-		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME:
-			return createSimpleFBTypeRuntime();
-		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME:
-			return createFunctionFBTypeRuntime();
 		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME:
 			return createCompositeFBTypeRuntime();
+		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME:
+			return createFunctionFBTypeRuntime();
+		case OperationalSemanticsPackage.SERVICE_INTERFACE_FB_TYPE_RUNTIME:
+			return createServiceInterfaceFBTypeRuntime();
+		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME:
+			return createSimpleFBTypeRuntime();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
 			return createFBNetworkRuntime();
 		case OperationalSemanticsPackage.FB_TRANSACTION:
@@ -197,6 +200,17 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public FunctionFBTypeRuntime createFunctionFBTypeRuntime() {
 		FunctionFBTypeRuntimeImpl functionFBTypeRuntime = new FunctionFBTypeRuntimeImpl();
 		return functionFBTypeRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public ServiceInterfaceFBTypeRuntime createServiceInterfaceFBTypeRuntime() {
+		ServiceInterfaceFBTypeRuntimeImpl serviceInterfaceFBTypeRuntime = new ServiceInterfaceFBTypeRuntimeImpl();
+		return serviceInterfaceFBTypeRuntime;
 	}
 
 	/**

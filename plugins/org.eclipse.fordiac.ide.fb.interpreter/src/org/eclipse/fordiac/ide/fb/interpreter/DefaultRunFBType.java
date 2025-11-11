@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
@@ -115,7 +116,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType) //
 				.on(FunctionFBTypeRuntime.class).then(runTypeVisitor::runFunctionFBType) //
 				.on(CompositeFBTypeRuntime.class).then(runTypeVisitor::runCompositeFBType) //
-				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBNetwork);
+				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBNetwork) //
+				.on(ServiceInterfaceFBTypeRuntime.class).then(runTypeVisitor::runServiceInterfaceFBType);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -722,6 +724,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(InitialValueHelper.getDefaultValue(variable));
 		return value;
+	}
+
+	@Override
+	public EList<EventOccurrence> runServiceInterfaceFBType(final ServiceInterfaceFBTypeRuntime fbTypeRuntime) {
+		// not supported
+		return ECollections.emptyEList();
 	}
 
 	private static EList<VarDeclaration> getAssociatedDataPins(final EventOccurrence sourceEventOcurrence,
