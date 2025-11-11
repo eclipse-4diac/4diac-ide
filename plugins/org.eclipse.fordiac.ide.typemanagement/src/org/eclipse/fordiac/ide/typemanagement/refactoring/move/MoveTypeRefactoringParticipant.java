@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
@@ -127,7 +128,9 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
 
 		for (final EObject eObject : searchResult) {
-			if (eObject instanceof final VarDeclaration varDecl) {
+			if (eObject instanceof final VarDeclaration varDecl
+					&& !(varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB)) { // configurable fb pins are
+																							// updated below
 				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
