@@ -81,6 +81,9 @@ public class FordiacLogListener implements ILogListener {
 			new Thread(() -> {
 				final Optional<String> url = GitIssueCreator.createIssue(status);
 				Display.getDefault().asyncExec(() -> {
+					if (reportInfo == null || reportInfo.isDisposed()) {
+						return; // dialog was already closed
+					}
 					if (PreferenceConstants
 							.getReportDestination() == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
 						reportInfo.setText(Messages.FordiacLogListener_BrowserOpened);

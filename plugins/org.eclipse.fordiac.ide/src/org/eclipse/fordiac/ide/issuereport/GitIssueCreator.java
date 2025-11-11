@@ -21,7 +21,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,7 +34,7 @@ import com.google.gson.Gson;
 
 public class GitIssueCreator {
 
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&body=%s"; //$NON-NLS-1$
 
 	private static record IssueInfo(String title, String body, String[] labels) {
 	}
@@ -101,7 +100,7 @@ public class GitIssueCreator {
 
 	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
 		try {
-			final String reportingURI = MessageFormat.format(FORDIAC_IDE_ISSUE_URL,
+			final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
 					URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
 					URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
 			openLinkInBrowser(reportingURI);
@@ -121,18 +120,21 @@ public class GitIssueCreator {
 		final String accessToken = PreferenceConstants.getReportGitLabToken();
 		final String labels = String.join(",", info.labels()); //$NON-NLS-1$
 
-		final String uri = baseURI + "/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
-
-		final String reportingURI = uri.formatted(URLEncoder.encode(projectPath, StandardCharsets.UTF_8),
+		final String uri = "%s/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
+		final String reportingURI = uri.formatted(baseURI, URLEncoder.encode(projectPath, StandardCharsets.UTF_8),
 				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
 				URLEncoder.encode(info.body(), StandardCharsets.UTF_8),
 				URLEncoder.encode(labels, StandardCharsets.UTF_8));
-
 		try {
 			final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(reportingURI))
 					.header("PRIVATE-TOKEN", accessToken) //$NON-NLS-1$
 					.POST(HttpRequest.BodyPublishers.noBody()).build();
-			return makeRequest(request);
+			final Optional<String> body = makeRequest(request);
+			if (body.isEmpty()) {
+				return body;
+			}
+			final Gson gson = new Gson();
+			return Optional.ofNullable(gson.fromJson(body.get(), GitLabResponse.class).web_url());
 		} catch (final IllegalArgumentException e) {
 			return Optional.empty();
 		}
@@ -149,11 +151,15 @@ public class GitIssueCreator {
 
 		try {
 			final HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(baseURI + "/repos/" + projectPath + "/issues"))
+					.uri(URI.create("%s/repos/%s/issues".formatted(baseURI, projectPath)))
 					.header("Accept", "application/vnd.github+json").header("Authorization", "Bearer " + token)
 					.header("X-GitHub-Api-Version", "2022-11-28").POST(HttpRequest.BodyPublishers.ofString(jsonBody))
 					.build();
-			return makeRequest(request);
+			final Optional<String> body = makeRequest(request);
+			if (body.isEmpty()) {
+				return body;
+			}
+			return Optional.ofNullable(gson.fromJson(body.get(), GitHubResponse.class).html_url());
 		} catch (final IllegalArgumentException e) {
 			return Optional.empty();
 		}
@@ -163,15 +169,10 @@ public class GitIssueCreator {
 		try (HttpClient client = HttpClient.newHttpClient()) {
 			final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-			if (response.statusCode() != 201) { // 201 - Created
-				return Optional.empty();
+			if (response.statusCode() == 201) { // 201 - Created
+				return Optional.of(response.body());
 			}
-			final Gson gson = new Gson();
-			return switch (PreferenceConstants.getReportDestination()) {
-			case GITLAB -> Optional.ofNullable(gson.fromJson(response.body(), GitLabResponse.class).web_url());
-			case GITHUB -> Optional.ofNullable(gson.fromJson(response.body(), GitHubResponse.class).html_url());
-			default -> Optional.empty();
-			};
+			return Optional.empty();
 		} catch (IOException | InterruptedException e) {
 			return Optional.empty();
 		}
