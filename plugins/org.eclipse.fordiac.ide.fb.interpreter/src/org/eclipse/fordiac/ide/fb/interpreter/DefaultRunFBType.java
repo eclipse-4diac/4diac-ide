@@ -11,6 +11,7 @@
  *   Antonio Garmend�a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *   Paul Pavlicek - cleanup
+ *   Felix Schmid - implemented functions and subapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
@@ -387,6 +388,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runSimpleFBType(final SimpleFBTypeRuntime simpleFBTypeRuntime) {
+		if (!eventOccurrence.isActive()) {
+			return ECollections.emptyEList();
+		}
 		// Initialization of variables
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
@@ -405,6 +409,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runFunctionFBType(final FunctionFBTypeRuntime fBTypeRuntime) {
+		if (!eventOccurrence.isActive()) {
+			return ECollections.emptyEList();
+		}
 		final FunctionFBType functionFBType = fBTypeRuntime.getFunctionFBType();
 		VariableUtils.fBVariableInitialization(functionFBType);
 
@@ -518,10 +525,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 					runtime.setOuterNetworkRuntime(fBNetworkRuntime);
 					fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
 				}
-			} else { // we are leaving the inner SubAPp network
+			} else { // we are leaving the inner SubApp network
 				runtime = fBNetworkRuntime.getOuterNetworkRuntime();
 			}
 			return switchNetwork(eventOccurrence.getEvent().getOutputConnections(), runtime);
+		}
+		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
+		if (!eventOccurrence.getEvent().isIsInput()) {
+			return switchNetwork(eventOccurrence.getEvent().getOutputConnections(), EcoreUtil.copy(fBNetworkRuntime));
 		}
 
 		// run FB Type to get the output events for the instance in the network
@@ -561,21 +572,17 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private EList<EventOccurrence> switchNetwork(final List<Connection> outputs, final FBNetworkRuntime runtime) {
-		final var outputEvents = new BasicEList<EventOccurrence>();
-
+		final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
 		for (final Connection conn : outputs) {
-			final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
-
-			// add transaction
+			// add transactions
 			final EventConnection eventConn = (EventConnection) conn;
 			final EventOccurrence inputEO = EventOccFactory.createFrom(eventConn.getEventDestination());
 			inputEO.setResultFBRuntime(runtime);
 			final FBTransaction fbTrans = TransactionFactory.createFrom(inputEO);
 			outputEO.getCreatedTransactions().add(fbTrans);
 
-			outputEvents.add(outputEO);
 		}
-		return outputEvents;
+		return ECollections.asEList(outputEO);
 	}
 
 	private void writeDataOutput(final FBNetworkRuntime fBNetworkRuntime, final EList<EventOccurrence> typeOutputEos) {
