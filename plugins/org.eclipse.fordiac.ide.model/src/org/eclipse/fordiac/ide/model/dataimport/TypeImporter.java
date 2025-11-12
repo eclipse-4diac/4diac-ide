@@ -69,7 +69,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 		if (null == typeName) {
 			throw new TypeImportException(Messages.Import_ERROR_InputVariableTypeNotDefined);
 		}
-		final DataType dataType = getType(typeName, getDataTypeLibrary()::getType);
+		final DataType dataType = getDataType(typeName);
 		v.setType(dataType);
 
 		final String arraySize = getAttributeValue(LibraryElementTags.ARRAYSIZE_ATTRIBUTE);
