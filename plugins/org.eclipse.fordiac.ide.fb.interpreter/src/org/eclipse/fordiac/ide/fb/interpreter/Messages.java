@@ -20,6 +20,10 @@ public class Messages extends NLS {
 	public static String RecordExecutionTraceHandler_Incorrect_Selection;
 	public static String RecordExecutionTraceHandler_Select_FB_input_event;
 	public static String CreateRuntimeTestFunctionBlockHandler_Select_Service_Model;
+	public static String SelectAdapterEventDialog_0;
+	public static String SelectAdapterEventDialog_1;
+	public static String SelectAdapterEventDialog_2;
+	public static String SelectAdapterEventDialog_3;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
