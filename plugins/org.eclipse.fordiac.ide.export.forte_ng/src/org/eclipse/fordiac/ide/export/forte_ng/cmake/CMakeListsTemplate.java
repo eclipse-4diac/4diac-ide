@@ -205,7 +205,7 @@ public abstract class CMakeListsTemplate extends ForteNgExportTemplate {
 	protected static CharSequence generateWriteBasicPackageVersionFile(final CharSequence name) {
 		return "write_basic_package_version_file(" + System.lineSeparator() //$NON-NLS-1$
 				+ ("${CMAKE_CURRENT_BINARY_DIR}/" + name.toString().toLowerCase() + "-config-version.cmake" //$NON-NLS-1$ //$NON-NLS-2$
-						+ System.lineSeparator() + "COMPATIBILITY SameMajorVersion" + System.lineSeparator() //$NON-NLS-1$
+						+ System.lineSeparator() + "COMPATIBILITY AnyNewerVersion" + System.lineSeparator() //$NON-NLS-1$
 				).indent(INDENT) //
 				+ ")" + System.lineSeparator(); //$NON-NLS-1$
 	}
