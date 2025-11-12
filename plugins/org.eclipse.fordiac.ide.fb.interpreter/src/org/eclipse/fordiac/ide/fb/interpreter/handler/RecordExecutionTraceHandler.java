@@ -30,8 +30,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.ui.SelectAdapterEventDialog;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -49,9 +52,12 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		// user should have selected an input event pin of an FB
-		final Event triggerEvent = getSelectedEvent(selection);
-		if (triggerEvent == null) {
+		// user should have selected an event pin of an FB
+		var selectedPin = getSelectedPin(selection);
+		if (selectedPin instanceof final AdapterDeclaration aDecl) {
+			selectedPin = handleAdapterSelection(aDecl, event);
+		}
+		if (!(selectedPin instanceof final Event triggerEvent)) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					Messages.RecordExecutionTraceHandler_Incorrect_Selection,
 					Messages.RecordExecutionTraceHandler_Select_FB_input_event);
@@ -90,6 +96,17 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
+	private static IInterfaceElement handleAdapterSelection(final AdapterDeclaration adapter,
+			final ExecutionEvent event) {
+		final SelectAdapterEventDialog dialog = new SelectAdapterEventDialog(HandlerUtil.getActiveShell(event),
+				adapter);
+		final int returnCode = dialog.open();
+		if (returnCode != -1) {
+			return adapter.getAdapterFB().getInterface().getInterfaceElement(dialog.getSelectedEvent());
+		}
+		return null;
+	}
+
 	protected static void openEditorForGeneratedFile(final ExecutionEvent event, final IFile file) {
 		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 		final IWorkbenchPage page = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
@@ -101,13 +118,13 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		}
 	}
 
-	private static Event getSelectedEvent(final IStructuredSelection structuredSelection) {
+	private static IInterfaceElement getSelectedPin(final IStructuredSelection structuredSelection) {
 		Object selected = structuredSelection.getFirstElement();
 		if (selected instanceof EditPart) {
 			selected = ((EditPart) structuredSelection.getFirstElement()).getModel();
 		}
-		if (selected instanceof final Event selectedEvent) {
-			return selectedEvent;
+		if (selected instanceof final IInterfaceElement pin) {
+			return pin;
 		}
 		return null;
 	}
