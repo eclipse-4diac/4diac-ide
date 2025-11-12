@@ -94,7 +94,7 @@ public class AttributeTypeImporter extends TypeImporter {
 		directlyDerivedType.setName(attribute.getName());
 
 		final String baseTypeName = getAttributeValue(LibraryElementTags.BASE_TYPE_ATTRIBUTE);
-		final DataType baseType = getType(baseTypeName, getDataTypeLibrary()::getType);
+		final DataType baseType = getDataType(baseTypeName);
 		directlyDerivedType.setBaseType(baseType);
 
 		final String initalValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);

@@ -46,9 +46,11 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
@@ -438,7 +440,7 @@ public abstract class CommonElementImporter {
 			if (typeName.equals(HelperTypes.CDATA.getName())) {
 				attribute.setType(HelperTypes.CDATA);
 			} else {
-				attribute.setType(getType(typeName, getDataTypeLibrary()::getType));
+				attribute.setType(getDataType(typeName));
 			}
 		} else {
 			// AttributeDeclarations
@@ -1045,10 +1047,11 @@ public abstract class CommonElementImporter {
 		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
 	}
 
-	protected <T extends LibraryElement> T getType(final String name, final Function<String, T> typeResolver) {
+	protected DataType getDataType(final String name) {
 		if (name == null) {
-			return null;
+			return GenericTypes.ANY;
 		}
-		return addDependency(ImportHelper.resolveImport(name, getElement(), typeResolver, unused -> null));
+		return addDependency(ImportHelper.resolveImport(name, getElement(), getDataTypeLibrary()::getTypeIfExists,
+				getDataTypeLibrary()::getType));
 	}
 }
