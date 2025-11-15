@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ "release", "develop", "freeze", "3.0.x"]
 
+permissions: {}	
+
 jobs:
   event_file:
     name: "Upload Event File"
