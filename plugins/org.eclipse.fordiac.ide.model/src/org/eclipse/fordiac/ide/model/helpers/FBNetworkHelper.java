@@ -192,13 +192,13 @@ public final class FBNetworkHelper {
 			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
 		final IInterfaceElement interfaceElement;
 		if (ie.getBlockFBNetworkElement() == null || srcNetwork != ie.getBlockFBNetworkElement().getFbNetwork()) {
-			interfaceElement = destInterface.getInterfaceElement(ie.getName());
+			interfaceElement = destInterface.getInterfaceElement(ie);
 		} else {
 			final FBNetworkElement element = dstNetwork.getElementNamed(ie.getBlockFBNetworkElement().getName());
 			if (!(element instanceof final BlockFBNetworkElement blockFbnel)) {
 				return null;
 			}
-			interfaceElement = blockFbnel.getInterfaceElement(ie.getName());
+			interfaceElement = blockFbnel.getInterfaceElement(ie);
 		}
 		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 				&& varDeclaration.isIsInput() != ie.isIsInput()) {

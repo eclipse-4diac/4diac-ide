@@ -156,6 +156,10 @@
           body="if(!(newTypeEntry instanceof org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry)){&#xA;&#x9;throw new IllegalArgumentException(&quot;Non InterfaceTypeEntry given in setTypeEntry of BlockFBNetworkElement&quot;);  //$NON-NLS-1$&#xA;}&#xA;super.setTypeEntry(newTypeEntry);&#xA;">
         <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/setTypeEntry/newTypeEntry"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getInterfaceElement.1"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, refElement);">
+        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/getInterfaceElement.1/refElement"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CFBInstance">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
@@ -659,6 +663,10 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutput" body="return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getOutput/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInterfaceElement.1"
+          body="return InterfaceListAnnotations.getInterfaceElement(this, refElement);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement.1/refElement"/>
       </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//ITypedElement">

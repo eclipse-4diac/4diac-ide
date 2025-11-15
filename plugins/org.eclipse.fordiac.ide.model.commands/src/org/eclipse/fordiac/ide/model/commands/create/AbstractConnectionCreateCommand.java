@@ -196,13 +196,13 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 			final BlockFBNetworkElement opDestination = destination.getBlockFBNetworkElement().getOpposite();
 
 			if (opSource != null && opDestination != null) {
-				IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
+				IInterfaceElement opSrcIE = opSource.getInterfaceElement(source);
 				if (opSrcIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
 					opSrcIE = varDeclaration.getInOutVarOpposite();
 				}
 
-				IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
+				IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination);
 				if (opDstIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
 					opDstIE = varDeclaration.getInOutVarOpposite();

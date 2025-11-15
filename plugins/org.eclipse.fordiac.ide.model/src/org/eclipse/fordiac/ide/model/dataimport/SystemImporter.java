@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -44,9 +45,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
@@ -499,10 +502,19 @@ public class SystemImporter extends CommonElementImporter {
 		for (final BlockFBNetworkElement fbnEl : mappedFBs) {
 			final BlockFBNetworkElement srcResFb = fbnEl.getOpposite();
 			final Resource res = fbnEl.getResource();
-			fbnEl.getInterface().getOutputs().flatMap(ie -> ie.getOutputConnections().stream()) //
+			fbnEl.getInterface().getOutputs().flatMap(SystemImporter::flattenAccessPins)
+					.flatMap(ie -> ie.getOutputConnections().stream()) //
 					.filter(con -> con.getDestinationElement().getResource() == res) //
 					.forEach(con -> res.getFBNetwork().addConnection(createResourceCon(srcResFb, con)));
 		}
+	}
+
+	private static Stream<IInterfaceElement> flattenAccessPins(final IInterfaceElement ie) {
+		if (ie instanceof final ContainerVarDeclaration contVarDecl) {
+			return Stream.concat(Stream.of(ie),
+					contVarDecl.getCachedMembers().stream().flatMap(SystemImporter::flattenAccessPins));
+		}
+		return Stream.of(ie);
 	}
 
 	/*
@@ -517,8 +529,8 @@ public class SystemImporter extends CommonElementImporter {
 	private static Connection createResourceCon(final BlockFBNetworkElement srcResFB, final Connection con) {
 		final BlockFBNetworkElement dstResFB = con.getDestinationElement().getOpposite();
 		final Connection resCon = EcoreUtil.copy(con);
-		resCon.setSource(srcResFB.getOutput(con.getSource().getName()));
-		resCon.setDestination(dstResFB.getInput(con.getDestination().getName()));
+		resCon.setSource(srcResFB.getInterfaceElement(con.getSource()));
+		resCon.setDestination(dstResFB.getInterfaceElement(con.getDestination()));
 		return resCon;
 	}
 

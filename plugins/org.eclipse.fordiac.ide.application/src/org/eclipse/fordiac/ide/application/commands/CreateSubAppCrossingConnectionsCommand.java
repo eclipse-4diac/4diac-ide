@@ -370,7 +370,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 			final SubApp subapp, final IInterfaceElement template) {
 
 		if (emptyPinAlreadyExists(subapp, ie, isRightPath)) {
-			return subapp.getInterfaceElement(ie.getName());
+			return subapp.getInterfaceElement(ie);
 		}
 
 		final boolean isInOut = template instanceof final VarDeclaration templateVar && templateVar.isInOutVar();
@@ -384,7 +384,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 	}
 
 	private boolean emptyPinAlreadyExists(final SubApp subapp, final IInterfaceElement ie, final boolean isRightPath) {
-		final IInterfaceElement pin = subapp.getInterfaceElement(ie.getName());
+		final IInterfaceElement pin = subapp.getInterfaceElement(ie);
 		if ((pin != null) && pin.getInputConnections().isEmpty() && pin.getOutputConnections().isEmpty()
 				&& compatibleTypes(pin)) {
 			return (pin.isIsInput() && isRightPath) || (!pin.isIsInput() && !isRightPath);

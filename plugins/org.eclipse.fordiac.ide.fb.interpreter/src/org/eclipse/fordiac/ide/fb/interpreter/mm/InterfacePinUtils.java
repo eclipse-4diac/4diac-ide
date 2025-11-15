@@ -113,7 +113,7 @@ public class InterfacePinUtils {
 	}
 
 	public static IInterfaceElement findPinInInterface(final FBType fbType, final IInterfaceElement iel) {
-		IInterfaceElement foundPin = fbType.getInterfaceList().getInterfaceElement(iel.getName());
+		IInterfaceElement foundPin = fbType.getInterfaceList().getInterfaceElement(iel);
 		if (foundPin == null && isContainedInAdapter(iel)) {
 			// pin is part of an adapter
 			final String sourceAdapter = getContainingAdapterDecl(iel).getName();
@@ -124,12 +124,12 @@ public class InterfacePinUtils {
 	}
 
 	public static IInterfaceElement findPinInInterface(final BlockFBNetworkElement fb, final IInterfaceElement iel) {
-		IInterfaceElement foundPin = fb.getInterface().getInterfaceElement(iel.getName());
+		IInterfaceElement foundPin = fb.getInterface().getInterfaceElement(iel);
 		if (foundPin == null && isContainedInAdapter(iel)) {
 			// pin is part of an adapter
 			final String sourceAdapter = getContainingAdapterDecl(iel).getName();
 			final AdapterDeclaration adapter = fb.getInterface().getAdapter(sourceAdapter);
-			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel.getName());
+			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel);
 		}
 		return foundPin;
 	}

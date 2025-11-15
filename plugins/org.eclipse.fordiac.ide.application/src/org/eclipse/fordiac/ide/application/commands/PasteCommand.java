@@ -339,7 +339,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 			final BlockFBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
-			return copiedElement.getInterfaceElement(orig.getName());
+			return copiedElement.getInterfaceElement(orig);
 		}
 		if (dstFBNetwork.equals(copyPasteData.srcNetwork())
 				|| (dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
