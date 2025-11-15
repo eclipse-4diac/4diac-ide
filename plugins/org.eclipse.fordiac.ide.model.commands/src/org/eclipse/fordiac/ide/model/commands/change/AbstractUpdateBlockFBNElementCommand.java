@@ -235,7 +235,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
 		varDeclList.forEach(varDecl -> {
-			if (newElement.getInterfaceElement(varDecl.getName()) instanceof final VarDeclaration newDecl) {
+			if (newElement.getInterfaceElement(varDecl) instanceof final VarDeclaration newDecl) {
 				if ((newDecl.isIsInput() && newDecl.getInputConnections().isEmpty())
 						|| (!newDecl.isIsInput() && newDecl.getOutputConnections().isEmpty())) {
 					newDecl.setVisible(varDecl.isVisible());
@@ -302,7 +302,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
 				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
 					if (newIE != null) {
 						newIE.setComment(ie.getComment());
 					}
@@ -398,8 +398,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
-				if (newElement
-						.getInterfaceElement(erroMarker.getName()) instanceof final VarDeclaration varDeclaration) {
+				if (newElement.getInterfaceElement(erroMarker) instanceof final VarDeclaration varDeclaration) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					varDeclaration.setValue(value);
@@ -454,8 +453,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private static IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
 			final BlockFBNetworkElement newElement) {
-		IInterfaceElement updatedSelected = oldInterface.isIsInput() ? newElement.getInput(oldInterface.getName())
-				: newElement.getOutput(oldInterface.getName());
+		IInterfaceElement updatedSelected = newElement.getInterfaceElement(oldInterface);
 		if ((updatedSelected == null) || (updatedSelected.isIsInput() != oldInterface.isIsInput())) {
 			updatedSelected = createMissingMarker(oldInterface, newElement);
 		}
@@ -529,7 +527,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getAttributes().isEmpty())
 				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
 					if (newIE != null) {
 						newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
 					}

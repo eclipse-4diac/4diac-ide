@@ -275,6 +275,14 @@ public interface InterfaceList extends EObject {
 	IInterfaceElement getOutput(String name);
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" refElementRequired="true"
+	 * @generated
+	 */
+	IInterfaceElement getInterfaceElement(IInterfaceElement refElement);
+
+	/**
 	 * Returns the value of the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
 	 * <!-- begin-user-doc -->

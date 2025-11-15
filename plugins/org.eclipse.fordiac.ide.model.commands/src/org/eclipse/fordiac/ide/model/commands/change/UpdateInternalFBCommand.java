@@ -102,7 +102,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 	protected void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
 				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
 					if (newIE != null) {
 						newIE.setComment(ie.getComment());
 					}

@@ -74,8 +74,8 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 		final ChangeDataTypeCommand result = new ChangeDataTypeCommand(interfaceElement, dataType);
 		if (interfaceElement != null && interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp
 				&& subApp.isMapped()) {
-			result.getAdditionalCommands().add(new ChangeDataTypeCommand(
-					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));
+			result.getAdditionalCommands().add(
+					new ChangeDataTypeCommand(subApp.getOpposite().getInterfaceElement(interfaceElement), dataType));
 		}
 		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration
 				&& interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType

@@ -23,7 +23,7 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 		super(interfaceElement);
 		if (interfaceElement.getBlockFBNetworkElement().isMapped()) {
 			final BlockFBNetworkElement fbE = interfaceElement.getBlockFBNetworkElement().getOpposite();
-			final IInterfaceElement element = fbE.getInterfaceElement(interfaceElement.getName());
+			final IInterfaceElement element = fbE.getInterfaceElement(interfaceElement);
 			if (null != element) {
 				opposite = new DeleteInterfaceCommand(element);
 			}

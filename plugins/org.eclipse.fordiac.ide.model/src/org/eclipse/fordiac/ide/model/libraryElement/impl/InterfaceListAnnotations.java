@@ -19,11 +19,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -96,6 +99,28 @@ final class InterfaceListAnnotations {
 		}
 
 		return element;
+	}
+
+	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final IInterfaceElement refElement) {
+		if (refElement == null || il == refElement.eContainer()) {
+			return refElement;
+		}
+
+		final BlockFBNetworkElement refbfbne = refElement.getBlockFBNetworkElement();
+		final String refName = (refbfbne != null) ? refElement.getRelativeName(refbfbne) : refElement.getName();
+		final String[] nameList = refName.split("\\."); //$NON-NLS-1$
+
+		final IInterfaceElement ie = (refElement.isIsInput()) ? il.getInput(nameList[0]) : il.getOutput(nameList[0]);
+
+		if (nameList.length == 1) {
+			return ie;
+		}
+
+		if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
+			return null;
+		}
+		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), false);
+
 	}
 
 	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {

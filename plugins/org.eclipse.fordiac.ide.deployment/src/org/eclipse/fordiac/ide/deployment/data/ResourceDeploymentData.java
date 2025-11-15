@@ -257,7 +257,7 @@ public class ResourceDeploymentData {
 		if (subApp instanceof UntypedSubApp) {
 			return element;
 		}
-		return element.isIsInput() ? subApp.getInput(element.getName()) : subApp.getOutput(element.getName());
+		return subApp.getInterfaceElement(element);
 	}
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {
