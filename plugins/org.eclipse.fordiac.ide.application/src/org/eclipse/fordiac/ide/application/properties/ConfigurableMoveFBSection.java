@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.stream.Stream;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.ConfigurableMoveFBEditPart;
@@ -27,6 +29,8 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -132,11 +136,13 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		final GridDataFactory fillGrabData = GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true);
 		fillGrabData.applyTo(memberAccessComp);
 
-		final Group inputsGroup = getWidgetFactory().createGroup(memberAccessComp, Messages.ConfigurableMoveFBSection_Inputs);
+		final Group inputsGroup = getWidgetFactory().createGroup(memberAccessComp,
+				Messages.ConfigurableMoveFBSection_Inputs);
 		fillGrabData.applyTo(inputsGroup);
 		inputDataMemberAccessViewer = createMemberAccessViewer(inputsGroup);
 
-		final Group outputsGroup = getWidgetFactory().createGroup(memberAccessComp, Messages.ConfigurableMoveFBSection_Outputs);
+		final Group outputsGroup = getWidgetFactory().createGroup(memberAccessComp,
+				Messages.ConfigurableMoveFBSection_Outputs);
 		fillGrabData.applyTo(outputsGroup);
 		outputDataMemberAccessViewer = createMemberAccessViewer(outputsGroup);
 	}
@@ -259,11 +265,26 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 			inputDataMemberAccessViewer
 					.setInput(new MemberAccessTree(getType(), getType().getInterface().getInputVars()));
 		}
+		updateVisibility(inputDataMemberAccessViewer, getType().getInterface().getAllInterfaceElements()
+				.filter(ie -> ie instanceof final VarDeclaration vardecl && ie.isIsInput() && !vardecl.isInOutVar()));
 
 		if (!(outputDataMemberAccessViewer.getInput() instanceof final MemberAccessTree memAccessTree)
 				|| memAccessTree.getBlockFBNetworkElement() != getType()) {
 			outputDataMemberAccessViewer
-					.setInput(new MemberAccessTree(getType(), getType().getInterface().getInputVars()));
+					.setInput(new MemberAccessTree(getType(), getType().getInterface().getOutputVars()));
 		}
+		updateVisibility(outputDataMemberAccessViewer, getType().getInterface().getAllInterfaceElements()
+				.filter(ie -> ie instanceof final VarDeclaration vardecl && !ie.isIsInput() && !vardecl.isInOutVar()));
+	}
+
+	private void updateVisibility(final TreeViewer viewer, final Stream<IInterfaceElement> vars) {
+		final MemberAccessTree memAccessTree = (MemberAccessTree) viewer.getInput();
+		vars.forEach(ie -> {
+			final MemberAccessTreeNode node = memAccessTree.getChild(ie.getRelativeName(getType()));
+			if (node != null && node.isVisible() != ie.isVisible()) {
+				node.setVisible(ie.isVisible());
+				viewer.update(node, null);
+			}
+		});
 	}
 }

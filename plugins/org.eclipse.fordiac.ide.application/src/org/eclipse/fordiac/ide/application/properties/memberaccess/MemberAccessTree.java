@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties.memberaccess;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -26,6 +27,25 @@ public class MemberAccessTree {
 		this.children = rootEntries.stream().map(varDecl -> MemberAccessTreeNode.createTreeNode(null, varDecl))
 				.toList();
 		this.blockFBNEl = blockFBNEl;
+	}
+
+	public MemberAccessTreeNode getChild(final String path) {
+		final String[] nameList = path.split("\\."); //$NON-NLS-1$
+		return getChild(children, nameList);
+	}
+
+	private static MemberAccessTreeNode getChild(final List<MemberAccessTreeNode> children, final String[] nameList) {
+		final MemberAccessTreeNode treeNode = children.stream().filter(n -> n.getName().equals(nameList[0])).findFirst()
+				.orElse(null);
+
+		if (nameList.length == 1) {
+			return treeNode;
+		}
+
+		if (!(treeNode instanceof final StructMemberAccessTreeNode structTreeNode)) {
+			return null;
+		}
+		return getChild(structTreeNode.getChildren(), Arrays.copyOfRange(nameList, 1, nameList.length));
 	}
 
 	public BlockFBNetworkElement getBlockFBNetworkElement() {
