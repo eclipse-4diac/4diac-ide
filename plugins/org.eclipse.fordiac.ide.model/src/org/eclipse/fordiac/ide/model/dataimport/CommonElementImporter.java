@@ -833,7 +833,7 @@ public abstract class CommonElementImporter {
 	}
 
 	private static VarDeclaration findAndMarkVarConfig(final InterfaceList iface, final String name) {
-		return iface.getAllInterfaceElements().stream()
+		return iface.getAllInterfaceElements() //
 				.filter(i -> i instanceof VarDeclaration && i.getName().equals(name)).map(VarDeclaration.class::cast)
 				.peek(vd -> vd.setVarConfig(true)).findFirst().orElse(null);
 	}

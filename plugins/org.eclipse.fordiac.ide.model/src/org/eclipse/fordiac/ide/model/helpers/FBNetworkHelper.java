@@ -198,7 +198,7 @@ public final class FBNetworkHelper {
 			if (!(element instanceof final BlockFBNetworkElement blockFbnel)) {
 				return null;
 			}
-			interfaceElement = blockFbnel.getInterfaceElement(ie);
+			interfaceElement = blockFbnel.getInterface().getInterfaceElement(ie);
 		}
 		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 				&& varDeclaration.isIsInput() != ie.isIsInput()) {

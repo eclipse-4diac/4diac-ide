@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 205 Primetals Technologies Germany GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -100,9 +100,10 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 	}
 
 	protected void transferInstanceComments() {
-		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
+		oldElement.getInterface().getAllInterfaceElements() //
+				.filter(ie -> !ie.getComment().isBlank()) //
 				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
+					final IInterfaceElement newIE = newElement.getInterface().getInterfaceElement(ie);
 					if (newIE != null) {
 						newIE.setComment(ie.getComment());
 					}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -61,13 +61,11 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 		affectedVarNames.clear();
 
 		final String oldQualName = packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + oldTypeName;
-		for (final IInterfaceElement elem : element.getInterfaceList().getAllInterfaceElements()) {
-			if ((elem instanceof final VarDeclaration vd)
-					&& (packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + vd.getType().getName())
-							.equals(oldQualName)) {
-				affectedVarNames.add(vd.getName());
-			}
-		}
+		element.getInterfaceList().getAllInterfaceElements()
+				.filter(elem -> elem instanceof final VarDeclaration vd
+						&& (packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + vd.getType().getName())
+								.equals(oldQualName))
+				.forEach(ie -> affectedVarNames.add(ie.getName()));
 
 		if (affectedVarNames.isEmpty()) {
 			status.addError(oldTypeName + " is not part of the interface of " + getName());

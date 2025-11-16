@@ -42,28 +42,6 @@ public final class BlockFBNetworkElementAnnotations {
 		return null;
 	}
 
-	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement bfbne,
-			final IInterfaceElement refElement) {
-		if (bfbne.getInterface() != null) {
-			return bfbne.getInterface().getInterfaceElement(refElement);
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getInput(final BlockFBNetworkElement fbne, final String name) {
-		if (fbne.getInterface() != null) {
-			return fbne.getInterface().getInput(name);
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getOutput(final BlockFBNetworkElement fbne, final String name) {
-		if (fbne.getInterface() != null) {
-			return fbne.getInterface().getOutput(name);
-		}
-		return null;
-	}
-
 	private BlockFBNetworkElementAnnotations() {
 		throw new UnsupportedOperationException();
 	}

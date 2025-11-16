@@ -20,10 +20,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
@@ -35,21 +34,32 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 final class InterfaceListAnnotations {
 
 	// *** InterfaceList ***
-	public static EList<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
-		final EList<IInterfaceElement> retVal = new BasicEList<>();
-		retVal.addAll(il.getEventInputs());
-		retVal.addAll(il.getInputVars());
-		retVal.addAll(il.getInOutVars());
-		retVal.addAll(il.getSockets());
-		retVal.addAll(il.getEventOutputs());
-		retVal.addAll(il.getOutputVars());
+	public static Stream<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
 		// Users of getAllInterfaceElements expect to get all elements for ui and
-		// connection checks. Therefore we need
-		// to deliver also the mapped output side here
-		retVal.addAll(il.getOutMappedInOutVars());
-		retVal.addAll(il.getPlugs());
-		retVal.addAll(il.getErrorMarker());
-		return retVal;
+		// connection checks. Therefore we need to deliver also the member access pins
+		// as well as the mapped output side of var_in_outs here
+		// @formatter:off
+		return Stream.concat(
+				Stream.of(il.getEventInputs(),
+						il.getEventOutputs(),
+						il.getInOutVars(),
+						il.getOutMappedInOutVars(),
+						il.getSockets(),
+						il.getPlugs(),
+						il.getErrorMarker())
+					.flatMap(List::stream),
+				Stream.of(il.getInputVars(), il.getOutputVars())
+					.flatMap(List::stream)
+					.flatMap(InterfaceListAnnotations::flattenAccessPins));
+		// @formatter:on
+	}
+
+	private static Stream<IInterfaceElement> flattenAccessPins(final IInterfaceElement ie) {
+		if (ie instanceof final ContainerVarDeclaration contVarDecl) {
+			return Stream.concat(Stream.of(ie),
+					contVarDecl.getCachedMembers().stream().flatMap(InterfaceListAnnotations::flattenAccessPins));
+		}
+		return Stream.of(ie);
 	}
 
 	public static Event getEvent(final InterfaceList il, final String name) {

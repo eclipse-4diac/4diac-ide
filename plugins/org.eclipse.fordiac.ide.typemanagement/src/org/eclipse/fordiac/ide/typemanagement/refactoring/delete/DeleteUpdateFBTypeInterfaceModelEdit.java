@@ -100,7 +100,7 @@ public class DeleteUpdateFBTypeInterfaceModelEdit extends ConfigurableModelEdit<
 	}
 
 	private List<VarDeclaration> getVarDeclarationsForStruct(final FBType element) {
-		return element.getInterfaceList().getAllInterfaceElements().stream().filter(VarDeclaration.class::isInstance)
+		return element.getInterfaceList().getAllInterfaceElements().filter(VarDeclaration.class::isInstance)
 				.map(VarDeclaration.class::cast).filter(decl -> PackageNameHelper.getFullTypeName(decl.getType())
 						.equalsIgnoreCase(PackageNameHelper.getFullTypeName(struct)))
 				.toList();

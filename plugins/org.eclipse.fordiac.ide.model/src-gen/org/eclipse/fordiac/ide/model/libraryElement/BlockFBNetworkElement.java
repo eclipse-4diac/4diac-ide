@@ -84,22 +84,6 @@ public interface BlockFBNetworkElement extends FBNetworkElement {
 	 * @model
 	 * @generated
 	 */
-	IInterfaceElement getInput(String name);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model
-	 * @generated
-	 */
-	IInterfaceElement getOutput(String name);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model
-	 * @generated
-	 */
 	void checkConnections();
 
 	/**
@@ -133,12 +117,4 @@ public interface BlockFBNetworkElement extends FBNetworkElement {
 	 * @generated
 	 */
 	void setTypeEntry(TypeEntry newTypeEntry);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model required="true" refElementRequired="true"
-	 * @generated
-	 */
-	IInterfaceElement getInterfaceElement(IInterfaceElement refElement);
 } // BlockFBNetworkElement

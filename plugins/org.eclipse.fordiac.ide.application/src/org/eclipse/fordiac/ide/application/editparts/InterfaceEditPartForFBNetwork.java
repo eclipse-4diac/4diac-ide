@@ -159,7 +159,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 			// we are mapped and the mirrored subapp located in the resource, get the one
 			// from the application
 			element = element.getOpposite();
-			selectionElement = element.getInterfaceElement(selectionElement);
+			selectionElement = element.getInterface().getInterfaceElement(selectionElement);
 		}
 		final IEditorPart newEditor = OpenListenerManager.openEditor(element);
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);

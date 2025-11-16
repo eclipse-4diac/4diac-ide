@@ -47,7 +47,7 @@ public class DeploymentSubAppEvaluator extends DeploymentFBNetworkElementEvaluat
 	public DeploymentSubAppEvaluator(final SubAppType type, final Variable<?> context,
 			final Iterable<Variable<?>> variables, final Evaluator parent) {
 		super(type, LibraryElementFactory.eINSTANCE.createTypedSubApp(), context, variables, parent);
-		connectionEndpoints = getInstance().getInterface().getAllInterfaceElements().stream().collect(Collectors
+		connectionEndpoints = getInstance().getInterface().getAllInterfaceElements().collect(Collectors
 				.toUnmodifiableMap(Function.identity(), DeploymentSubAppEvaluator::resolveSubappInterfaceEndpoints));
 	}
 

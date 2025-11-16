@@ -74,7 +74,8 @@ public class Analyzer {
 						destinationPortList = new ArrayList<>();
 						destination.getDestinationPorts().put(Integer.valueOf(portIndex), destinationPortList);
 					}
-					destinationPortList.add(mappedElement.getInterfaceElement(connection.getDestination()));
+					destinationPortList
+							.add(mappedElement.getInterface().getInterfaceElement(connection.getDestination()));
 				}
 			}
 		}
@@ -100,11 +101,12 @@ public class Analyzer {
 		final List<Event> sourceEvents = new ArrayList<>();
 		final BlockFBNetworkElement mappedElement = connection.getSourceElement().getOpposite();
 		if (connection instanceof EventConnection) {
-			sourceEvents.add((Event) mappedElement.getInterfaceElement(connection.getSource()));
+			sourceEvents.add((Event) mappedElement.getInterface().getInterfaceElement(connection.getSource()));
 		} else if (connection instanceof DataConnection) {
 			for (final With with : ((VarDeclaration) connection.getSource()).getWiths()) {
 				if (with.eContainer() instanceof Event) {
-					sourceEvents.add((Event) mappedElement.getInterfaceElement((Event) with.eContainer()));
+					sourceEvents
+							.add((Event) mappedElement.getInterface().getInterfaceElement((Event) with.eContainer()));
 				}
 			}
 		}

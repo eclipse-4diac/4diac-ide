@@ -249,8 +249,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_InvalidName, target)));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(fbURI) instanceof final InterfaceTypeEntry ifTypeEntry)
-				&& (ifTypeEntry.getInterface().getAllInterfaceElements().stream()
-						.anyMatch(port -> port.getName().equals(name)) && !nameCol.contains(name))) {
+				&& (ifTypeEntry.getInterface().getAllInterfaceElements().anyMatch(port -> port.getName().equals(name))
+						&& !nameCol.contains(name))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus(
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_NameExists, target)));
 		}

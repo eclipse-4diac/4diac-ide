@@ -84,15 +84,14 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 
 		for (final Object object : children) {
 			if (object instanceof final BlockFBNetworkElement fbNetworkelement && fbNetworkelement.isMapped()) {
-				for (final IInterfaceElement ie : fbNetworkelement.getOpposite().getInterface()
-						.getAllInterfaceElements()) {
+				fbNetworkelement.getOpposite().getInterface().getAllInterfaceElements().forEach(ie -> {
 					final EList<Connection> connections = (ie.isIsInput()) ? ie.getInputConnections()
 							: ie.getOutputConnections();
 
 					connections.stream().filter(Connection::isBrokenConnection)
 							.map(con -> createVirtualIOElement(fbNetworkelement, ie.getName())).filter(Objects::nonNull)
 							.forEach(interfaceElements::add);
-				}
+				});
 			}
 		}
 

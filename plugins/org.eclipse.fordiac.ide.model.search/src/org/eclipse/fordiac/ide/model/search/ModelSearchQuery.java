@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022-2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -189,7 +189,7 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (fbnetworkElement instanceof final BlockFBNetworkElement bfbne && bfbne.getInterface() != null) {
 				if (modelQuerySpec.checkPinName()) {
-					final List<IInterfaceElement> matchingPins = bfbne.getInterface().getAllInterfaceElements().stream()
+					final List<IInterfaceElement> matchingPins = bfbne.getInterface().getAllInterfaceElements()
 							.filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
 					if (!matchingPins.isEmpty()) {
 						if (!path.isEmpty()) {

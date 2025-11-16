@@ -529,8 +529,8 @@ public class SystemImporter extends CommonElementImporter {
 	private static Connection createResourceCon(final BlockFBNetworkElement srcResFB, final Connection con) {
 		final BlockFBNetworkElement dstResFB = con.getDestinationElement().getOpposite();
 		final Connection resCon = EcoreUtil.copy(con);
-		resCon.setSource(srcResFB.getInterfaceElement(con.getSource()));
-		resCon.setDestination(dstResFB.getInterfaceElement(con.getDestination()));
+		resCon.setSource(srcResFB.getInterface().getInterfaceElement(con.getSource()));
+		resCon.setDestination(dstResFB.getInterface().getInterfaceElement(con.getDestination()));
 		return resCon;
 	}
 

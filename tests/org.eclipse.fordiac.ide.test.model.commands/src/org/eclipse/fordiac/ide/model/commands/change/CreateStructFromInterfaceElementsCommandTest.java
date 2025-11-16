@@ -81,7 +81,7 @@ public class CreateStructFromInterfaceElementsCommandTest
 	private static void verifyInitalValues(final State s, final State o, final TestFunction t) {
 		t.test(s.getSubApp());
 		t.test(s.getSubApp().getInterface());
-		t.test(s.getSubApp().getInterface().getAllInterfaceElements().isEmpty());
+		t.test(s.getSubApp().getInterface().getAllInterfaceElements().findAny().isEmpty());
 	}
 
 	private static State createInterfaceElements(final State state) {

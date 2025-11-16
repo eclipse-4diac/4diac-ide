@@ -135,13 +135,6 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getTypeInterface"
           body="if(getTypeEntry() != null) {&#xA;&#x9;return getTypeEntry().getInterface();&#xA;}&#xA;return null;"/>
-      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getInput" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInput(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/getInput/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getOutput"
-          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getOutput(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/getOutput/name"/>
-      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/checkConnections"
           body="org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.checkConnections(this);"/>
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/setMapping"
@@ -155,10 +148,6 @@
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/setTypeEntry"
           body="if(!(newTypeEntry instanceof org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry)){&#xA;&#x9;throw new IllegalArgumentException(&quot;Non InterfaceTypeEntry given in setTypeEntry of BlockFBNetworkElement&quot;);  //$NON-NLS-1$&#xA;}&#xA;super.setTypeEntry(newTypeEntry);&#xA;">
         <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/setTypeEntry/newTypeEntry"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getInterfaceElement.1"
-          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, refElement);">
-        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/getInterfaceElement.1/refElement"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CFBInstance">
