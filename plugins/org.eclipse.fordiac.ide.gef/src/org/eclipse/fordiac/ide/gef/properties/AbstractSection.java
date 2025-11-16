@@ -18,15 +18,9 @@ package org.eclipse.fordiac.ide.gef.properties;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
-import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
-import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -48,7 +42,6 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected Object type;
 	private CommandStack commandStack;
-	private ComposedAdapterFactory adapterFactory;
 	private Composite parent;
 
 	private GraphicalAnnotationModel annotationModel;
@@ -252,18 +245,6 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		text.setEditable(editable);
 		text.setEnabled(editable);
 		return text;
-	}
-
-	protected ComposedAdapterFactory getAdapterFactory() {
-		if (null == adapterFactory) {
-			adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-			adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new LibraryElementItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new DataItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		}
-		return adapterFactory;
 	}
 
 	public GraphicalAnnotationModel getAnnotationModel() {
