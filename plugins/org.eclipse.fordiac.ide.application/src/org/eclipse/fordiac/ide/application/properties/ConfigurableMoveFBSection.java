@@ -15,6 +15,10 @@ package org.eclipse.fordiac.ide.application.properties;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.ConfigurableMoveFBEditPart;
+import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessContentProvider;
+import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessLabelProvider;
+import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTree;
+import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTreeNode;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
@@ -31,23 +35,34 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.TreeColumnLayout;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ConfigurableMoveFBSection extends AbstractSection implements CommandStackEventListener {
-	protected TypeSelectionWidget typeSelectionWidget;
+	private TypeSelectionWidget typeSelectionWidget;
 
-	protected CLabel configurableFbLabel;
+	private CLabel configurableFbLabel;
+
+	private TreeViewer inputDataMemberAccessViewer;
+	private TreeViewer outputDataMemberAccessViewer;
 
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
@@ -108,6 +123,67 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createDataTypeSelector(parent);
+		createMemberAccessTables(parent);
+	}
+
+	private void createMemberAccessTables(final Composite parent) {
+		final Composite memberAccessComp = getWidgetFactory().createComposite(parent);
+		memberAccessComp.setLayout(new GridLayout(2, true));
+		final GridDataFactory fillGrabData = GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true);
+		fillGrabData.applyTo(memberAccessComp);
+
+		final Group inputsGroup = getWidgetFactory().createGroup(memberAccessComp, Messages.ConfigurableMoveFBSection_Inputs);
+		fillGrabData.applyTo(inputsGroup);
+		inputDataMemberAccessViewer = createMemberAccessViewer(inputsGroup);
+
+		final Group outputsGroup = getWidgetFactory().createGroup(memberAccessComp, Messages.ConfigurableMoveFBSection_Outputs);
+		fillGrabData.applyTo(outputsGroup);
+		outputDataMemberAccessViewer = createMemberAccessViewer(outputsGroup);
+	}
+
+	private static TreeViewer createMemberAccessViewer(final Composite parent) {
+		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
+		viewer.setUseHashlookup(true);
+		viewer.setAutoExpandLevel(2);
+		configureTreeLayout(parent, viewer);
+		viewer.setContentProvider(new MemberAccessContentProvider());
+		viewer.setLabelProvider(new MemberAccessLabelProvider());
+		viewer.setCheckStateProvider(new ICheckStateProvider() {
+			@Override
+			public boolean isChecked(final Object element) {
+				if (element instanceof final MemberAccessTreeNode memAccessTreeNode) {
+					return memAccessTreeNode.isVisible();
+				}
+				return false;
+			}
+
+			@Override
+			public boolean isGrayed(final Object element) {
+				return false;
+			}
+		});
+		return viewer;
+	}
+
+	private static void configureTreeLayout(final Composite parent, final TreeViewer viewer) {
+		final TreeColumnLayout layout = new TreeColumnLayout();
+		parent.setLayout(layout);
+
+		final TreeViewerColumn variableName = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn variableType = new TreeViewerColumn(viewer, SWT.LEFT);
+		final TreeViewerColumn comment = new TreeViewerColumn(viewer, SWT.LEFT);
+
+		viewer.getTree().setHeaderVisible(true);
+		variableName.getColumn().setResizable(true);
+		variableType.getColumn().setResizable(true);
+
+		variableName.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_NAME);
+		variableType.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_TYPE);
+		comment.getColumn().setText(Messages.StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT);
+
+		layout.setColumnData(variableName.getColumn(), new ColumnWeightData(30, true));
+		layout.setColumnData(variableType.getColumn(), new ColumnWeightData(20, true));
+		layout.setColumnData(comment.getColumn(), new ColumnWeightData(50, true));
 	}
 
 	@Override
@@ -173,6 +249,21 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 
 	@Override
 	protected void performRefresh() {
-		// Currently nothing needs to be done here
+		if (getType() == null) {
+			inputDataMemberAccessViewer.setInput(null);
+			outputDataMemberAccessViewer.setInput(null);
+		}
+
+		if (!(inputDataMemberAccessViewer.getInput() instanceof final MemberAccessTree memAccessTree)
+				|| memAccessTree.getBlockFBNetworkElement() != getType()) {
+			inputDataMemberAccessViewer
+					.setInput(new MemberAccessTree(getType(), getType().getInterface().getInputVars()));
+		}
+
+		if (!(outputDataMemberAccessViewer.getInput() instanceof final MemberAccessTree memAccessTree)
+				|| memAccessTree.getBlockFBNetworkElement() != getType()) {
+			outputDataMemberAccessViewer
+					.setInput(new MemberAccessTree(getType(), getType().getInterface().getInputVars()));
+		}
 	}
 }
