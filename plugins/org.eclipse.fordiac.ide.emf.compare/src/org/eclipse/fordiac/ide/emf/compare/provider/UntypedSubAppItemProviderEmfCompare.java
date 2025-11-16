@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -54,9 +54,10 @@ public class UntypedSubAppItemProviderEmfCompare extends UntypedSubAppItemProvid
 	@Override
 	public Collection<?> getChildren(final Object object) {
 		final Collection<Object> children = new ArrayList<>();
-		children.add(((SubApp) object).getSubAppNetwork());
-		if (!((SubApp) object).getInterface().getAllInterfaceElements().isEmpty()) {
-			children.add(((SubApp) object).getInterface());
+		final SubApp subApp = (SubApp) object;
+		children.add(subApp.getSubAppNetwork());
+		if (subApp.getInterface().getAllInterfaceElements().findAny().isPresent()) {
+			children.add(subApp.getInterface());
 		}
 		return children;
 	}

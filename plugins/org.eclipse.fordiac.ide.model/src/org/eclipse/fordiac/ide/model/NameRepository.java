@@ -200,7 +200,7 @@ public final class NameRepository {
 					// this is an internal variable
 					interfaceList = ((BaseFBType) refElement.eContainer()).getInterfaceList();
 				}
-				elements.addAll(interfaceList.getAllInterfaceElements());
+				elements.addAll(interfaceList.getAllInterfaceElements().toList());
 				if (interfaceList.eContainer() instanceof final BaseFBType baseFBType) { // has internal variables
 					elements.addAll(baseFBType.getInternalVars());
 					elements.addAll(baseFBType.getInternalConstVars());

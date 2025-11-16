@@ -481,7 +481,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(expandAllVisibleMemberAccessIEs(getModel().getInterface().getAllInterfaceElements()));
+		elements.addAll(getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
 		addPinIndicators(elements);
 		return elements;
 	}

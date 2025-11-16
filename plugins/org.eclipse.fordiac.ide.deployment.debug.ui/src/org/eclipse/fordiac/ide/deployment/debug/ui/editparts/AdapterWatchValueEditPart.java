@@ -47,7 +47,7 @@ public class AdapterWatchValueEditPart extends AbstractWatchValueEditPart {
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
-		elements.addAll(getFB().getInterface().getAllInterfaceElements());
+		elements.addAll(getFB().getInterface().getAllInterfaceElements().toList());
 		return elements;
 	}
 

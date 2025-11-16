@@ -22,18 +22,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -113,11 +110,9 @@ public class DeleteFBNetworkElementCommand extends Command implements QualNameAf
 		if (!(element instanceof final BlockFBNetworkElement bfbel)) {
 			return;
 		}
-		for (final IInterfaceElement intElement : bfbel.getInterface().getAllInterfaceElements()) {
-			final EList<Connection> connections = intElement.isIsInput() ? intElement.getInputConnections()
-					: intElement.getOutputConnections();
-			connections.forEach(con -> cmds.add(new DeleteConnectionCommand(con, element)));
-		}
+		bfbel.getInterface().getAllInterfaceElements() //
+				.flatMap(ie -> ie.isIsInput() ? ie.getInputConnections().stream() : ie.getOutputConnections().stream())
+				.forEach(con -> cmds.add(new DeleteConnectionCommand(con, element)));
 	}
 
 	private static void closeSubApplicationEditor(final SubApp subapp) {

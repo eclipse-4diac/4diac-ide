@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,7 @@ public class InterfaceListItemProviderEmfCompare extends InterfaceListItemProvid
 
 	@Override
 	public Collection<?> getChildren(final Object object) {
-		return ((InterfaceList) object).getAllInterfaceElements();
+		return ((InterfaceList) object).getAllInterfaceElements().toList();
 	}
 
 }

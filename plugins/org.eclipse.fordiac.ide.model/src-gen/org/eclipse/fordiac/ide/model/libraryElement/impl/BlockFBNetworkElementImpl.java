@@ -170,26 +170,6 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInput(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInput(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IInterfaceElement getOutput(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getOutput(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public void checkConnections() {
 		org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.checkConnections(this);
 	}
@@ -248,24 +228,15 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final IInterfaceElement refElement) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, refElement);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				if (interface_ != null)
 					msgs = ((InternalEObject)interface_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE, null, msgs);
 				return basicSetInterface((InterfaceList)otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -278,8 +249,9 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 		switch (featureID) {
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				return basicSetInterface(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -293,8 +265,9 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				if (resolve) return getInterface();
 				return basicGetInterface();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -308,8 +281,10 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				setInterface((InterfaceList)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -323,8 +298,10 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				setInterface((InterfaceList)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -337,8 +314,9 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 		switch (featureID) {
 			case LibraryElementPackage.BLOCK_FB_NETWORK_ELEMENT__INTERFACE:
 				return interface_ != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } //BlockFBNetworkElementImpl

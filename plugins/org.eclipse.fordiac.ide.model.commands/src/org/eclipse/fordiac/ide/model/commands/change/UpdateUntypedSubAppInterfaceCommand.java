@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Johannes Kepler University
+ * Copyright (c) 2023, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,13 +35,13 @@ public class UpdateUntypedSubAppInterfaceCommand extends Command {
 
 	@Override
 	public void execute() {
-		subApp.getInterface().getAllInterfaceElements().stream()
+		subApp.getInterface().getAllInterfaceElements() //
 				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
 					el.setType(dataTypeEntry.getType());
-					if (el.getValue() != null && !el.getValue().getValue().isBlank()) { // as a fallback we just reset
-						// the current value
-						el.getValue().setValue("");
+					if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
+						// as a fallback we just reset the current value
+						el.getValue().setValue(""); //$NON-NLS-1$
 					}
 				});
 	}

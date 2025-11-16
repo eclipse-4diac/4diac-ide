@@ -25,7 +25,8 @@ public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderComma
 
 		if (selection.getBlockFBNetworkElement().isMapped()) {
 			mirroredElement = new ChangeInterfaceOrderCommand(
-					selection.getBlockFBNetworkElement().getOpposite().getInterfaceElement(selection), moveUp);
+					selection.getBlockFBNetworkElement().getOpposite().getInterface().getInterfaceElement(selection),
+					moveUp);
 		}
 	}
 

@@ -249,7 +249,7 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 			}
 			if (element instanceof final UntypedSubApp untypedSubApp
 					&& untypedSubApp.getSubAppNetwork().getNetworkElements().isEmpty()
-					&& untypedSubApp.getInterface().getAllInterfaceElements().isEmpty()) {
+					&& untypedSubApp.getInterface().getAllInterfaceElements().findAny().isEmpty()) {
 				return false;
 			}
 			if (element instanceof final EObject eObject) {

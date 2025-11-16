@@ -95,8 +95,8 @@ public class SystemConnectStructChange extends AbstractCommandChange<AutomationS
 				final StructDataConnectionCreateCommand structCon = new StructDataConnectionCreateCommand(
 						fbnelem.getFbNetwork());
 
-				structCon.setDestination(fbnelem.getInput(destinationVarName));
-				structCon.setSource(source.getOutput(sourceVarName));
+				structCon.setDestination(fbnelem.getInterface().getInput(destinationVarName));
+				structCon.setSource(source.getInterface().getOutput(sourceVarName));
 				cmds.add(structCon);
 				fbnelem.getInterface().getErrorMarker().stream().flatMap(err -> err.getInputConnections().stream())
 						.filter(con -> replaceableConMap.containsValue(con.getDestination().getName()))

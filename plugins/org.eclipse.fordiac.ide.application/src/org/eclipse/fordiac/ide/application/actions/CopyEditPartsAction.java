@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2012, 2016, 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johanes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johanes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -31,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
@@ -113,17 +111,15 @@ public class CopyEditPartsAction extends SelectionAction {
 	private static Collection<ConnectionReference> getAllFBNElementConnections(final BlockFBNetworkElement model,
 			final Set<Connection> connectionSet) {
 		final List<ConnectionReference> connections = new ArrayList<>();
-		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
-			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
-				connectionSet.add(conn);
-				connections.add(new ConnectionReference(conn));
-			});
-		}
-		return connections;
-	}
 
-	private static EList<Connection> getConnectionList(final IInterfaceElement elem) {
-		return elem.isIsInput() ? elem.getInputConnections() : elem.getOutputConnections();
+		model.getInterface().getAllInterfaceElements() //
+				.flatMap(elem -> elem.isIsInput() ? elem.getInputConnections().stream()
+						: elem.getOutputConnections().stream())
+				.filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
+					connectionSet.add(conn);
+					connections.add(new ConnectionReference(conn));
+				});
+		return connections;
 	}
 
 }

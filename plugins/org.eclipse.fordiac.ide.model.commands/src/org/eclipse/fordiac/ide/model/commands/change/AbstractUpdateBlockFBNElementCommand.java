@@ -235,7 +235,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private void transferVisibleAndVarConfigAttributes(final EList<VarDeclaration> varDeclList) {
 		varDeclList.forEach(varDecl -> {
-			if (newElement.getInterfaceElement(varDecl) instanceof final VarDeclaration newDecl) {
+			if (newElement.getInterface().getInterfaceElement(varDecl) instanceof final VarDeclaration newDecl) {
 				if ((newDecl.isIsInput() && newDecl.getInputConnections().isEmpty())
 						|| (!newDecl.isIsInput() && newDecl.getOutputConnections().isEmpty())) {
 					newDecl.setVisible(varDecl.isVisible());
@@ -283,13 +283,10 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	}
 
 	private static Stream<Connection> getAllConnections(final BlockFBNetworkElement element) {
-		return element.getInterface().getAllInterfaceElements().stream().map((final IInterfaceElement ifEle) -> {
-			if (ifEle.isIsInput()) {
-				return ifEle.getInputConnections();
-			}
-			return ifEle.getOutputConnections();
-		}).flatMap(List::stream).distinct();
-		// distinct filters duplicated connection objects originating from self loops
+		return element.getInterface().getAllInterfaceElements().flatMap(
+				ifEl -> ifEl.isIsInput() ? ifEl.getInputConnections().stream() : ifEl.getOutputConnections().stream())
+				.distinct(); // distinct filters duplicated connection objects originating from self loops
+
 	}
 
 	private void createValues() {
@@ -300,13 +297,12 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	}
 
 	private void transferInstanceComments() {
-		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
-				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
-					if (newIE != null) {
-						newIE.setComment(ie.getComment());
-					}
-				});
+		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getComment().isBlank()).forEach(ie -> {
+			final IInterfaceElement newIE = newElement.getInterface().getInterfaceElement(ie);
+			if (newIE != null) {
+				newIE.setComment(ie.getComment());
+			}
+		});
 	}
 
 	private void checkSourceParam(final VarDeclaration variable) {
@@ -398,7 +394,8 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
-				if (newElement.getInterfaceElement(erroMarker) instanceof final VarDeclaration varDeclaration) {
+				if (newElement.getInterface()
+						.getInterfaceElement(erroMarker) instanceof final VarDeclaration varDeclaration) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					varDeclaration.setValue(value);
@@ -453,7 +450,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private static IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
 			final BlockFBNetworkElement newElement) {
-		IInterfaceElement updatedSelected = newElement.getInterfaceElement(oldInterface);
+		IInterfaceElement updatedSelected = newElement.getInterface().getInterfaceElement(oldInterface);
 		if ((updatedSelected == null) || (updatedSelected.isIsInput() != oldInterface.isIsInput())) {
 			updatedSelected = createMissingMarker(oldInterface, newElement);
 		}
@@ -525,13 +522,12 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private void copyAttributes() {
 		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
-		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getAttributes().isEmpty())
-				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie);
-					if (newIE != null) {
-						newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
-					}
-				});
+		oldElement.getInterface().getAllInterfaceElements().filter(ie -> !ie.getAttributes().isEmpty()).forEach(ie -> {
+			final IInterfaceElement newIE = newElement.getInterface().getInterfaceElement(ie);
+			if (newIE != null) {
+				newIE.getAttributes().addAll(EcoreUtil.copyAll(ie.getAttributes()));
+			}
+		});
 	}
 
 	protected abstract BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement);

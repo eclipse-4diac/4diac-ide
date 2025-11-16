@@ -288,18 +288,6 @@
         <details key="body" value="if(getTypeEntry() != null) {&#xA;&#x9;return getTypeEntry().getInterface();&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getInput" eType="#//IInterfaceElement">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInput(this, name);"/>
-      </eAnnotations>
-      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getOutput" eType="#//IInterfaceElement">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getOutput(this, name);"/>
-      </eAnnotations>
-      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
     <eOperations name="checkConnections" lowerBound="1">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.checkConnections(this);"/>
@@ -326,12 +314,6 @@
         <details key="body" value="if(!(newTypeEntry instanceof org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry)){&#xA;&#x9;throw new IllegalArgumentException(&quot;Non InterfaceTypeEntry given in setTypeEntry of BlockFBNetworkElement&quot;);  //$NON-NLS-1$&#xA;}&#xA;super.setTypeEntry(newTypeEntry);&#xA;"/>
       </eAnnotations>
       <eParameters name="newTypeEntry" eType="#//TypeEntry"/>
-    </eOperations>
-    <eOperations name="getInterfaceElement" lowerBound="1" eType="#//IInterfaceElement">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, refElement);"/>
-      </eAnnotations>
-      <eParameters name="refElement" lowerBound="1" eType="#//IInterfaceElement"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//InterfaceList"
         containment="true" eOpposite="#//InterfaceList/BlockFBNetworkElement"/>
@@ -1637,13 +1619,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPrimitive" eSuperTypes="#//Primitive"/>
   <eClassifiers xsi:type="ecore:EClass" name="InterfaceList">
-    <eOperations name="getAllInterfaceElements" lowerBound="1">
+    <eOperations name="getAllInterfaceElements" lowerBound="1" eType="#//InterfaceElementStream">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return InterfaceListAnnotations.getAllInterfaceElements(this);"/>
       </eAnnotations>
-      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
-        <eTypeArguments eClassifier="#//IInterfaceElement"/>
-      </eGenericType>
     </eOperations>
     <eOperations name="getEvent" eType="#//Event">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

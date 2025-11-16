@@ -75,7 +75,7 @@ public class ChangeValueCommand extends AbstractChangeInterfaceElementCommand {
 		if ((null != variable.getBlockFBNetworkElement()) && variable.getBlockFBNetworkElement().isMapped()) {
 			final BlockFBNetworkElement opposite = variable.getBlockFBNetworkElement().getOpposite();
 			if (null != opposite) {
-				final IInterfaceElement element = opposite.getInterfaceElement(variable);
+				final IInterfaceElement element = opposite.getInterface().getInterfaceElement(variable);
 				if (element instanceof final VarDeclaration varDecl) {
 					return varDecl;
 				}

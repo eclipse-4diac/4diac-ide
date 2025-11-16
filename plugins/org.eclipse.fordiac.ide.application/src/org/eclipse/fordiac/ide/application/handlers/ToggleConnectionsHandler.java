@@ -74,10 +74,10 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	private static boolean checkVisibilityOfSelection(final List<?> selection) {
 		final Set<Boolean> visibility = new HashSet<>();
 		for (final Object obj : selection) {
-			if (obj instanceof final ConnectionEditPart conep) {
-				visibility.add(Boolean.valueOf(!conep.getFigure().isHidden()));
-			} else if (obj instanceof final AbstractBlockFBNElementEditPart fbEP) {
-				for (final IInterfaceElement element : fbEP.getModel().getInterface().getAllInterfaceElements()) {
+			switch (obj) {
+			case final ConnectionEditPart conep -> visibility.add(Boolean.valueOf(!conep.getFigure().isHidden()));
+			case final AbstractBlockFBNElementEditPart fbEP ->
+				fbEP.getModel().getInterface().getAllInterfaceElements().forEach(element -> {
 					if (element.isIsInput() && !element.getInputConnections().isEmpty()) {
 						element.getInputConnections()
 								.forEach(conn -> visibility.add(Boolean.valueOf(conn.isVisible())));
@@ -86,9 +86,11 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 						element.getOutputConnections()
 								.forEach(conn -> visibility.add(Boolean.valueOf(conn.isVisible())));
 					}
-				}
-			} else if (obj instanceof final InterfaceEditPart iep) {
-				visibility.add(Boolean.valueOf(checkPinVisibility(iep.getModel())));
+				});
+			case final InterfaceEditPart iep -> visibility.add(Boolean.valueOf(checkPinVisibility(iep.getModel())));
+			default -> {
+				// do nothing in the other case
+			}
 			}
 		}
 
@@ -169,12 +171,9 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean hasConnection(final Object ep) {
-		if (ep instanceof final AbstractBlockFBNElementEditPart fbEP) {
-			for (final IInterfaceElement ie : fbEP.getModel().getInterface().getAllInterfaceElements()) {
-				if (hasConnection(ie)) {
-					return true;
-				}
-			}
+		if ((ep instanceof final AbstractBlockFBNElementEditPart fbEP) && fbEP.getModel().getInterface()
+				.getAllInterfaceElements().anyMatch(ToggleConnectionsHandler::hasConnection)) {
+			return true;
 		}
 
 		return ((ep instanceof final TargetInterfaceElementEditPart tiep) && (hasConnection(tiep.getModel().getHost()))

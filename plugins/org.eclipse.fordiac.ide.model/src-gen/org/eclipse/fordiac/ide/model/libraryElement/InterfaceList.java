@@ -181,10 +181,10 @@ public interface InterfaceList extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true" many="false"
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream" required="true"
 	 * @generated
 	 */
-	EList<IInterfaceElement> getAllInterfaceElements();
+	Stream<IInterfaceElement> getAllInterfaceElements();
 
 	/**
 	 * <!-- begin-user-doc -->
