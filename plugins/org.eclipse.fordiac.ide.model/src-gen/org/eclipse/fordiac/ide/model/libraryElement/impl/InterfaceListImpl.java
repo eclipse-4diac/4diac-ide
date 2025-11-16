@@ -425,6 +425,16 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
+	public IInterfaceElement getInterfaceElement(final String path, final boolean demandCreate) {
+		return InterfaceListAnnotations.getInterfaceElement(this, path, demandCreate);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case LibraryElementPackage.INTERFACE_LIST__FB_TYPE:

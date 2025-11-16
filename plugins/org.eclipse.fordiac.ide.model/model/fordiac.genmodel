@@ -657,6 +657,11 @@
           body="return InterfaceListAnnotations.getInterfaceElement(this, refElement);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement.1/refElement"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInterfaceElement.2"
+          body="return InterfaceListAnnotations.getInterfaceElement(this, path, demandCreate);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement.2/path"/>
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement.2/demandCreate"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//ITypedElement">
       <genOperations ecoreOperation="lib.ecore#//ITypedElement/getType"/>

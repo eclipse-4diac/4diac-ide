@@ -111,17 +111,15 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 		if (newStructTypeEntry != null) {
 			if (getNewElement() instanceof StructManipulator) {
 				getNewMux().setDataType(getDataTypeFromTypeEntry());
-			} else if (getNewElement() instanceof ConfigurableFB) {
-				getNewMoveFB().setDataType(getDataTypeFromTypeEntry());
+			} else if (getNewElement() instanceof final ConfigurableFB confFB) {
+				confFB.setDataType(getDataTypeFromTypeEntry());
 			}
 
 		}
 		if (isDemuxConfiguration()) {
 			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
-		} else if (getNewElement() instanceof ConfigurableFB) {
-			getNewMoveFB().updateConfiguration();
-		} else {
-			getNewMux().updateConfiguration();
+		} else if (getNewElement() instanceof final ConfigurableFB confFB) {
+			confFB.updateConfiguration();
 		}
 	}
 
@@ -130,10 +128,6 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 			return demux.isIsConfigured() || newVisibleChildren != null;
 		}
 		return false;
-	}
-
-	public ConfigurableFB getNewMoveFB() {
-		return (ConfigurableFB) newElement;
 	}
 
 	public StructManipulator getNewMux() {

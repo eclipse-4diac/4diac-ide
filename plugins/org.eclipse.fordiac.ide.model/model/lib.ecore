@@ -1691,6 +1691,13 @@
       </eAnnotations>
       <eParameters name="refElement" lowerBound="1" eType="#//IInterfaceElement"/>
     </eOperations>
+    <eOperations name="getInterfaceElement" lowerBound="1" eType="#//IInterfaceElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return InterfaceListAnnotations.getInterfaceElement(this, path, demandCreate);"/>
+      </eAnnotations>
+      <eParameters name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="demandCreate" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventInputs" upperBound="-1"
         eType="#//Event" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
