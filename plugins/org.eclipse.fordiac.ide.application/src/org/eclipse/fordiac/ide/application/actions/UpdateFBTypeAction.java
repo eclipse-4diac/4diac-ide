@@ -74,9 +74,8 @@ public class UpdateFBTypeAction extends SelectionAction {
 	public void run() {
 		final CompoundCommand updateCmd = new CompoundCommand();
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof AbstractBlockFBNElementEditPart) {
-				final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(
-						((AbstractBlockFBNElementEditPart) obj).getModel(), entry);
+			if (obj instanceof final AbstractBlockFBNElementEditPart bFBNElEP) {
+				final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(bFBNElEP.getModel(), entry);
 				if (cmd.canExecute()) {
 					updateCmd.add(cmd);
 				}

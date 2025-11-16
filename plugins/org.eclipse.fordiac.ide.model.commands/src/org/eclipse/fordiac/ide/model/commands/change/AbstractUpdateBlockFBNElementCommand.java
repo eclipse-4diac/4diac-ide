@@ -182,6 +182,21 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		}
 	}
 
+	private void handleMemberAccessPins() {
+		if (!Objects.equals(getOldElement().getTypeEntry(), getNewElement().getTypeEntry())) {
+			// if the types are not equal checking member access pins does not make sense
+			return;
+		}
+
+		final InterfaceList newInterface = getNewElement().getInterface();
+		// for each member access pin create the according pin in the new element,
+		// attributes for visibility values or command will be handled in the respective
+		// update methods
+		getOldElement().getInterface().getAllInterfaceElements()
+				.filter(ie -> ie.eContainer() instanceof IInterfaceElement) //
+				.forEach(ie -> newInterface.getInterfaceElement(ie.getRelativeName(getOldElement()), true));
+	}
+
 	@Override
 	public void redo() {
 		if (unmapCmd != null) {
@@ -509,6 +524,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		newElement = createCopiedFBEntry(oldElement);
 		setInterface();
 		handleConfigurableFB();
+		handleMemberAccessPins();
 		newElement.setName(oldElement.getName());
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
 		if (newElement instanceof final TypedSubApp newTsa && oldElement instanceof final TypedSubApp oldTsa

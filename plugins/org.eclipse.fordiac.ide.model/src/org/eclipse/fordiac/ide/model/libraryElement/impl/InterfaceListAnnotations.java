@@ -130,7 +130,22 @@ final class InterfaceListAnnotations {
 			return null;
 		}
 		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), false);
+	}
 
+	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final String path,
+			final boolean demandCreate) {
+		final String[] nameList = path.split("\\."); //$NON-NLS-1$
+
+		final IInterfaceElement ie = il.getInterfaceElement(nameList[0]);
+
+		if (nameList.length == 1) {
+			return ie;
+		}
+
+		if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
+			return null;
+		}
+		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), demandCreate);
 	}
 
 	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {
