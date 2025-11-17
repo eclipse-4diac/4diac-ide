@@ -18,9 +18,28 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
-	public static String FordiacLogListener_ErrorDialogDescription;
+	public static String FordiacLogListener_ErrorDialogRestartSave;
+	public static String FordiacLogListener_ErrorDialogReportPrompt;
+	public static String FordiacLogListener_ReportInProgress;
+	public static String FordiacLogListener_BrowserOpened;
+	public static String FordiacLogListener_ReportingError;
+	public static String FordiacLogListener_ReportingResult;
 	public static String FordiacLogListener_ErrorDialogTitle;
-	public static String FordiacLogListener_ReportIssue;
+	public static String FordiacLogListener_ErrorDialogReportIssue;
+
+	public static String IssueReporting_ModeGroupLabel;
+	public static String IssueReporting_NoReport;
+	public static String IssueReporting_PromptReport;
+	public static String IssueReporting_AutoReport;
+	public static String IssueReporting_DestinationGroupLabel;
+	public static String IssueReporting_GitLab;
+	public static String IssueReporting_GitHub;
+	public static String IssueReporting_GitHub_Manual;
+	public static String IssueReporting_URLInput;
+	public static String IssueReporting_TokenInput;
+	public static String IssueReporting_ProjectPathInput;
+	public static String IssueReporting_ProjectPathToolTip;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

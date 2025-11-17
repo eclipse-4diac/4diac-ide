@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreNestedEditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.text.edits.UndoEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -45,7 +46,7 @@ public class EditorDocumentChange extends ProviderDocumentChange {
 			}
 			super.commit(document, pm);
 			if (isDoSave() && editorPart instanceof final STCoreNestedEditor nestedEditor) {
-				nestedEditor.doSaveOuterEditor(pm);
+				Display.getDefault().syncExec(() -> nestedEditor.doSaveOuterEditor(pm));
 			}
 		} finally {
 			if (editorPart instanceof final STCoreNestedEditor nestedEditor) {

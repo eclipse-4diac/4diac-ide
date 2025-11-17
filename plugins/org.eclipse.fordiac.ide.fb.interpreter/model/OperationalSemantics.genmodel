@@ -53,22 +53,27 @@
         <genParameters ecoreParameter="OperationalSemantics.ecore#//BasicFBTypeRuntime/getActiveState/activeStateString"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>
-      <genOperations ecoreOperation="OperationalSemantics.ecore#//SimpleFBTypeRuntime/getModel"
-          body="return simpleFBType;"/>
-    </genClasses>
-    <genClasses ecoreClass="OperationalSemantics.ecore#//FunctionFBTypeRuntime">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FunctionFBTypeRuntime/functionFBType"/>
-      <genOperations ecoreOperation="OperationalSemantics.ecore#//FunctionFBTypeRuntime/getModel"
-          body="return functionFBType;"/>
-    </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//CompositeFBTypeRuntime">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/compositeFBType"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/fbElement"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//CompositeFBTypeRuntime/networkRuntime"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//CompositeFBTypeRuntime/getModel"
           body="return compositeFBType;"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//FunctionFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FunctionFBTypeRuntime/functionFBType"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//FunctionFBTypeRuntime/getModel"
+          body="return functionFBType;"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//ServiceInterfaceFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ServiceInterfaceFBTypeRuntime/serviceFBType"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//ServiceInterfaceFBTypeRuntime/getModel"
+          body="return serviceFBType;"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//SimpleFBTypeRuntime/getModel"
+          body="return simpleFBType;"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>

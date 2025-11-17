@@ -3,7 +3,8 @@ Export-Package: org.eclipse.fordiac.ide
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.systemmanagement
+ org.eclipse.fordiac.ide.systemmanagement,
+ com.google.gson
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 3.0.0.qualifier

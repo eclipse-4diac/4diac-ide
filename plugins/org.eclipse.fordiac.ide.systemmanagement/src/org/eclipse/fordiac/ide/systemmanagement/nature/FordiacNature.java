@@ -112,11 +112,11 @@ public class FordiacNature implements IProjectNature {
 	public static boolean configureLibraryBuilder(final IProjectDescription description) {
 		final ICommand[] commands = description.getBuildSpec();
 		if (Stream.of(commands).noneMatch(FordiacNature::isLibraryBuilderCommand)) {
-			final ICommand[] newCommands = Arrays.copyOf(commands, commands.length + 1);
+			final List<ICommand> newCommands = new ArrayList<>(Arrays.asList(commands));
 			final ICommand command = description.newCommand();
 			command.setBuilderName(SystemManager.FORDIAC_LIBRARY_BUILDER_ID);
-			newCommands[commands.length] = command;
-			description.setBuildSpec(newCommands);
+			newCommands.addFirst(command);
+			description.setBuildSpec(newCommands.toArray(ICommand[]::new));
 			return true;
 		}
 		return false;

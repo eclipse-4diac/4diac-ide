@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -126,11 +127,11 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 			}
 			return result;
 		}
-		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME: {
-			SimpleFBTypeRuntime simpleFBTypeRuntime = (SimpleFBTypeRuntime) theEObject;
-			T result = caseSimpleFBTypeRuntime(simpleFBTypeRuntime);
+		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME: {
+			CompositeFBTypeRuntime compositeFBTypeRuntime = (CompositeFBTypeRuntime) theEObject;
+			T result = caseCompositeFBTypeRuntime(compositeFBTypeRuntime);
 			if (result == null) {
-				result = caseFBRuntimeAbstract(simpleFBTypeRuntime);
+				result = caseFBRuntimeAbstract(compositeFBTypeRuntime);
 			}
 			if (result == null) {
 				result = defaultCase(theEObject);
@@ -148,11 +149,22 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 			}
 			return result;
 		}
-		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME: {
-			CompositeFBTypeRuntime compositeFBTypeRuntime = (CompositeFBTypeRuntime) theEObject;
-			T result = caseCompositeFBTypeRuntime(compositeFBTypeRuntime);
+		case OperationalSemanticsPackage.SERVICE_INTERFACE_FB_TYPE_RUNTIME: {
+			ServiceInterfaceFBTypeRuntime serviceInterfaceFBTypeRuntime = (ServiceInterfaceFBTypeRuntime) theEObject;
+			T result = caseServiceInterfaceFBTypeRuntime(serviceInterfaceFBTypeRuntime);
 			if (result == null) {
-				result = caseFBRuntimeAbstract(compositeFBTypeRuntime);
+				result = caseFBRuntimeAbstract(serviceInterfaceFBTypeRuntime);
+			}
+			if (result == null) {
+				result = defaultCase(theEObject);
+			}
+			return result;
+		}
+		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME: {
+			SimpleFBTypeRuntime simpleFBTypeRuntime = (SimpleFBTypeRuntime) theEObject;
+			T result = caseSimpleFBTypeRuntime(simpleFBTypeRuntime);
+			if (result == null) {
+				result = caseFBRuntimeAbstract(simpleFBTypeRuntime);
 			}
 			if (result == null) {
 				result = defaultCase(theEObject);
@@ -329,6 +341,22 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFunctionFBTypeRuntime(FunctionFBTypeRuntime object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Service
+	 * Interface FB Type Runtime</em>'. <!-- begin-user-doc --> This implementation
+	 * returns null; returning a non-null result will terminate the switch. <!--
+	 * end-user-doc -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Service
+	 *         Interface FB Type Runtime</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseServiceInterfaceFBTypeRuntime(ServiceInterfaceFBTypeRuntime object) {
 		return null;
 	}
 

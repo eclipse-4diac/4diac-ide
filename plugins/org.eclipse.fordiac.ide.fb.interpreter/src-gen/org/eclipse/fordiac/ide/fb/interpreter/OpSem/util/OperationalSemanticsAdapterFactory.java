@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -113,8 +114,8 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseSimpleFBTypeRuntime(SimpleFBTypeRuntime object) {
-			return createSimpleFBTypeRuntimeAdapter();
+		public Adapter caseCompositeFBTypeRuntime(CompositeFBTypeRuntime object) {
+			return createCompositeFBTypeRuntimeAdapter();
 		}
 
 		@Override
@@ -123,8 +124,13 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseCompositeFBTypeRuntime(CompositeFBTypeRuntime object) {
-			return createCompositeFBTypeRuntimeAdapter();
+		public Adapter caseServiceInterfaceFBTypeRuntime(ServiceInterfaceFBTypeRuntime object) {
+			return createServiceInterfaceFBTypeRuntimeAdapter();
+		}
+
+		@Override
+		public Adapter caseSimpleFBTypeRuntime(SimpleFBTypeRuntime object) {
+			return createSimpleFBTypeRuntimeAdapter();
 		}
 
 		@Override
@@ -277,6 +283,22 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFunctionFBTypeRuntimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime
+	 * <em>Service Interface FB Type Runtime</em>}'. <!-- begin-user-doc --> This
+	 * default implementation returns null so that we can easily ignore cases; it's
+	 * useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime
+	 * @generated
+	 */
+	public Adapter createServiceInterfaceFBTypeRuntimeAdapter() {
 		return null;
 	}
 
