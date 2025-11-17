@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.ui.SelectAdapterEventDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -54,6 +55,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// user should have selected an event pin of an FB
 		var selectedPin = getSelectedPin(selection);
+		final FBNetwork network = selectedPin.getBlockFBNetworkElement().getFbNetwork();
 		if (selectedPin instanceof final AdapterDeclaration aDecl) {
 			selectedPin = handleAdapterSelection(aDecl, event);
 		}
@@ -65,13 +67,12 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		}
 
 		// record the trace
-		final EventManager manager = EventManagerFactory.createFrom(triggerEvent,
-				triggerEvent.getBlockFBNetworkElement().getFbNetwork());
+		final EventManager manager = EventManagerFactory.createFrom(triggerEvent, network);
 		manager.processNetwork();
 
 		// serialize event manager
 		final ResourceSet reset = new ResourceSetImpl();
-		final AutomationSystem system = triggerEvent.getBlockFBNetworkElement().getFbNetwork().getAutomationSystem();
+		final AutomationSystem system = network.getAutomationSystem();
 		final IProject project = system.getTypeEntry().getFile().getProject();
 		final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
 		if (!folder.exists()) {
@@ -87,7 +88,6 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		res.getContents().add(manager);
 		try {
 			res.save(Collections.emptyMap());
-
 			openEditorForGeneratedFile(event, file);
 		} catch (final IOException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);

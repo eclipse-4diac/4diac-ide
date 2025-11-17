@@ -139,8 +139,8 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static Event findEventInType(final FBType fbType, final String eventName) {
-		final Event foundEvent = EventUtils.findEventInInterface(fbType, eventName);
-		if (foundEvent == null || !EventUtils.isInput(foundEvent)) {
+		final Event foundEvent = InterfacePinUtils.findEventInInterface(fbType, eventName);
+		if (foundEvent == null || !InterfacePinUtils.isInput(foundEvent)) {
 			throw new IllegalArgumentException("input primitive: event " + eventName + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		return foundEvent;

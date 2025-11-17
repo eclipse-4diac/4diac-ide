@@ -14,7 +14,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.compare,
  junit-jupiter-api,
  junit-jupiter-params,
- org.eclipse.fordiac.ide.test.model
+ org.eclipse.fordiac.ide.test.model,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.model.eval.st,
+ org.eclipse.fordiac.ide.export.forte_ng.st,
+ org.eclipse.fordiac.ide.globalconstantseditor,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-ActivationPolicy: lazy

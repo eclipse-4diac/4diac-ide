@@ -9,7 +9,8 @@
  *
  * Contributors:
  *   Paul Pavlicek
- *     - initial API and implementation and/or initial documentation
+ *     - initial API and implementation and/or initial documentation+
+ *   Bianca Wiesmayr - extended for adapters
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
@@ -20,6 +21,8 @@ import java.util.List;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.InterfacePinUtils;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 public final class EventOccFactory {
@@ -30,20 +33,24 @@ public final class EventOccFactory {
 		createdEo.setActive(true);
 		createdEo.setIgnored(false);
 		if (null != event) {
-			createdEo.setParentFB(event.getBlockFBNetworkElement());
+			createdEo.setParentFB(getParentFbOfEvent(event));
 		}
 		createdEo.setFbRuntime(runtime);
 		return createdEo;
+	}
+
+	private static BlockFBNetworkElement getParentFbOfEvent(final Event event) {
+		final var aDecl = InterfacePinUtils.getContainingAdapterDecl(event);
+		if (aDecl != null) {
+			return aDecl.getBlockFBNetworkElement();
+		}
+		return event.getBlockFBNetworkElement();
 	}
 
 	public static EventOccurrence createFrom(final Event event) {
 		return createFrom(event, null);
 	}
 
-	/**
-	 * @param events
-	 * @return
-	 */
 	public static List<EventOccurrence> createFrom(final List<Event> events, final FBRuntimeAbstract initialRuntime) {
 		if (null == events || events.isEmpty()) {
 			return Collections.emptyList();

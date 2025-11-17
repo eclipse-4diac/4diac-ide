@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -56,34 +57,51 @@ public final class VariableUtils {
 	public static void fBVariableInitialization(final BaseFBType baseFbType) {
 		initInternalVars(baseFbType);
 		initInternalConstVars(baseFbType);
-		initInputVars(baseFbType);
-		initOutputVars(baseFbType);
+		initializeFbType(baseFbType);
 	}
 
 	public static void fBVariableInitialization(final CompositeFBType compFBType) {
-		initInputVars(compFBType);
-		initOutputVars(compFBType);
+		initializeFbType(compFBType);
 	}
 
 	public static void fBVariableInitialization(final FunctionFBType functionFBType) {
-		initInputVars(functionFBType);
-		initOutputVars(functionFBType);
+		initializeFbType(functionFBType);
 	}
 
-	public static void initOutputVars(final FBType fbType) {
+	private static void initializeFbType(final FBType fbType) {
+		initInputVars(fbType);
+		initOutputVars(fbType);
+		initPlugs(fbType);
+		initSockets(fbType);
+	}
+
+	private static void initOutputVars(final FBType fbType) {
 		fbType.getInterfaceList().getOutputVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInputVars(final FBType fbType) {
+	private static void initInputVars(final FBType fbType) {
 		fbType.getInterfaceList().getInputVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInternalVars(final BaseFBType basicFbType) {
-		basicFbType.getInternalVars().forEach(VariableUtils::initVariable);
+	private static void initInternalVars(final BaseFBType baseFbType) {
+		baseFbType.getInternalVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInternalConstVars(final BaseFBType basicFbType) {
-		basicFbType.getInternalConstVars().forEach(VariableUtils::initVariable);
+	private static void initInternalConstVars(final BaseFBType baseFbType) {
+		baseFbType.getInternalConstVars().forEach(VariableUtils::initVariable);
+	}
+
+	private static void initSockets(final FBType fbType) {
+		fbType.getInterfaceList().getSockets().forEach(adp -> initializeAdapter(adp.getType()));
+	}
+
+	private static void initPlugs(final FBType fbType) {
+		fbType.getInterfaceList().getPlugs().forEach(adp -> initializeAdapter(adp.getType()));
+	}
+
+	private static void initializeAdapter(final AdapterType type) {
+		initInputVars(type);
+		initOutputVars(type);
 	}
 
 	private VariableUtils() {
