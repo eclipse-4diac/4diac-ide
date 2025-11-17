@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -28,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -50,6 +52,7 @@ public final class RuntimeFactory {
 		case final SimpleFBType simple -> createFrom(simple);
 		case final FunctionFBType function -> createFrom(function);
 		case final CompositeFBType composite -> createFrom(composite);
+		case final ServiceInterfaceFBType service -> createFrom(service);
 		default -> null;
 		};
 	}
@@ -93,6 +96,12 @@ public final class RuntimeFactory {
 		final CompositeFBTypeRuntime compositeRT = OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime();
 		compositeRT.setCompositeFBType(fb);
 		return compositeRT;
+	}
+
+	private static ServiceInterfaceFBTypeRuntime createFrom(final ServiceInterfaceFBType fb) {
+		final var serviceRT = OperationalSemanticsFactory.eINSTANCE.createServiceInterfaceFBTypeRuntime();
+		serviceRT.setServiceFBType(fb);
+		return serviceRT;
 	}
 
 	public static FBNetworkRuntime createFrom(final FBNetwork app) {

@@ -401,7 +401,7 @@ public class FBTImporter extends BlockTypeImporter {
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName && !typeName.isEmpty()) {
-			type = getType(typeName, getDataTypeLibrary()::getType);
+			type = getDataType(typeName);
 		}
 
 		Method retVal = null;

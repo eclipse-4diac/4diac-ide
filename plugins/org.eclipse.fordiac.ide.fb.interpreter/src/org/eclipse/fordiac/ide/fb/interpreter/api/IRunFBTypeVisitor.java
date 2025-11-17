@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 
 public interface IRunFBTypeVisitor {
@@ -30,6 +31,8 @@ public interface IRunFBTypeVisitor {
 	EList<EventOccurrence> runFunctionFBType(FunctionFBTypeRuntime fBTypeRuntime);
 
 	EList<EventOccurrence> runCompositeFBType(CompositeFBTypeRuntime fbTypeRuntime);
+
+	EList<EventOccurrence> runServiceInterfaceFBType(ServiceInterfaceFBTypeRuntime fbTypeRuntime);
 
 	EList<EventOccurrence> runFBNetwork(FBNetworkRuntime fBNetworkRuntime);
 }

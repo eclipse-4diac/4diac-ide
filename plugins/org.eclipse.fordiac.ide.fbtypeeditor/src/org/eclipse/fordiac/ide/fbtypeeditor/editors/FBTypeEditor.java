@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeEntryDataHandler;
@@ -167,7 +169,8 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 				|| (cmd instanceof final AbstractChangeInterfaceElementCommand changeIFCmd
 						&& fbType.getInterfaceList().equals(changeIFCmd.getInterfaceElement().eContainer()))
 				|| (cmd instanceof final ChangeNameCommand chgNameCmd
-						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer())));
+						&& fbType.getInterfaceList().equals(chgNameCmd.getElement().eContainer()))
+				|| cmd instanceof WithCreateCommand || cmd instanceof DeleteWithCommand);
 	}
 
 	@Override

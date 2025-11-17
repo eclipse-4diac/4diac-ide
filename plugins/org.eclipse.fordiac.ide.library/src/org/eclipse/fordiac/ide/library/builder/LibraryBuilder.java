@@ -27,10 +27,12 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
@@ -44,7 +46,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(final int kind, final Map<String, String> args, final IProgressMonitor monitor)
 			throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Resolve Project Dependencies", 1); //$NON-NLS-1$
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_ResolveProjectDependencies, 1);
 		final IProject project = getProject();
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 		if (manifest != null) {
@@ -70,7 +72,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Cleaning Library", 1); //$NON-NLS-1$
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 1);
 		FordiacMarkerHelper.updateMarkers(getProject().getFile(LibraryManager.MANIFEST),
 				FordiacErrorMarker.LIBRARY_MARKER, Collections.emptyList(), true);
 		progress.worked(1);
@@ -83,9 +85,10 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 		return getProject();
 	}
 
-	private static void fullBuild(final IProject project, final Manifest manifest, final IProgressMonitor monitor) {
-		final SubMonitor progress = SubMonitor.convert(monitor, "Library build", 1); //$NON-NLS-1$
-		LibraryManager.INSTANCE.resolveDependencies(project, progress.split(1));
+	private static void fullBuild(final IProject project, final Manifest manifest, final IProgressMonitor monitor)
+			throws OperationCanceledException, CoreException {
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_LibraryBuild, 1);
+		LibraryManager.INSTANCE.resolveDependencies(project, manifest, progress.split(1));
 	}
 
 	private final IResourceDeltaVisitor visitor = delta -> {

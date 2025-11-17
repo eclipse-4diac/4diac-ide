@@ -12,21 +12,19 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - remove dependencies and unproper inheritance from
  *   	other concrete classes
+ *   Sebastian Hollersbacher - Changed handling of VarConfigParamter of TypedSubApps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -34,15 +32,14 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -54,6 +51,7 @@ import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
 import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -66,13 +64,30 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class VarConfigurationSection extends AbstractSection {
+	private static final String SEPARATION_POINT = "."; //$NON-NLS-1$
 
 	private NatTable inputTable;
 	private IChangeableRowDataProvider<VarDeclaration> inputDataProvider;
-	private static String separationPoint = "."; //$NON-NLS-1$
-	private TypedSubApp rootTSA;
-	private final Map<String, VarDeclaration> displayMap = new LinkedHashMap<>();
-	private static final Map<VarDeclaration, Boolean> copiedMap = new HashMap<>();
+	private EObject selectionRoot;
+
+	// keys are VarDeclarations shown in the table (should not change after init)
+	private final LinkedHashMap<VarDeclaration, VDInfo> varConfigInfoMap = new LinkedHashMap<>();
+
+	// every VarDeclaration should have a displayName
+	// VarConfigParameter should also store their VarDeclType and TypedSubApp
+	record VDInfo(String displayName, VarDeclaration varDeclType, TypedSubApp typedSubApp) {
+		private String getSubAppRelativePath(final INamedElement selectedElement) {
+			final String selectedElementName = selectedElement.getQualifiedName();
+			final String typedSubappName = typedSubApp().getQualifiedName();
+
+			final var cutTypedSubappName = typedSubappName.startsWith(selectedElementName + SEPARATION_POINT)
+					? typedSubappName.substring(selectedElementName.length() + 1)
+					: typedSubappName;
+			return displayName().startsWith(cutTypedSubappName + SEPARATION_POINT)
+					? displayName().substring(cutTypedSubappName.length() + 1)
+					: displayName();
+		}
+	}
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -115,23 +130,13 @@ public class VarConfigurationSection extends AbstractSection {
 
 	@Override
 	protected INamedElement getInputType(final Object input) {
-		if (input instanceof final FBNetworkEditPart fbnEP) {
-			return fbnEP.getModel().getApplication();
-		}
-		if (input instanceof final INamedElement namedElement) {
-			return namedElement;
-		}
-		if (input instanceof final SubAppForFBNetworkEditPart safbnEp) {
-			return safbnEp.getModel();
-		}
-		return null;
+		return VarConfigurationFilter.getModel(input);
 	}
 
 	@Override
 	protected INamedElement getType() {
-		if ((type instanceof Application) || (type instanceof FB) || (type instanceof SubApp)
-				|| (type instanceof CFBInstance) || (type instanceof TypedSubApp)) {
-			return (INamedElement) type;
+		if (type instanceof final INamedElement namedElement) {
+			return namedElement;
 		}
 		return null;
 	}
@@ -158,239 +163,165 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	private List<VarDeclaration> collectVarConfigs() {
-		displayMap.clear();
-		final Set<INamedElement> visited = new HashSet<>();
-		collectVarConfigsRecursive(getType(), displayMap, visited, ""); //$NON-NLS-1$
-		return new ArrayList<>(displayMap.values());
+		varConfigInfoMap.clear();
+		selectionRoot = EcoreUtil.getRootContainer(getType());
+		collectVarConfigsRecursive(getType(), "", null); //$NON-NLS-1$
+		final var varDeclList = new ArrayList<>(varConfigInfoMap.keySet());
+		// sort for consistent order (overrideParams might change order)
+		varDeclList.sort((decl1, decl2) -> varConfigInfoMap.get(decl2).displayName()
+				.compareTo(varConfigInfoMap.get(decl1).displayName()));
+		return varDeclList;
 	}
 
-	private void collectVarConfigsRecursive(final INamedElement type, final Map<String, VarDeclaration> result,
-			final Set<INamedElement> visited, final String currentPrefix) {
-
+	private void collectVarConfigsRecursive(final INamedElement type, final String currentPrefix,
+			final TypedSubApp currentSubappInstance) {
 		switch (type) {
-		case final TypedSubApp tsa:
-			traverseInterfaceElements(tsa, result, visited, currentPrefix);
-			traverseFBNetwork(tsa.getType().getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
-			break;
-		case final UntypedSubApp utsa:
-			traverseFBNetwork(utsa.getSubAppNetwork().getNetworkElements(), result, visited, currentPrefix);
-			break;
-		case final Application app:
-			traverseFBNetwork(app.getFBNetwork().getNetworkElements(), result, visited, currentPrefix);
-			break;
-		default:
-			break;
+		case final Application app -> traverseFBNetwork(app.getFBNetwork(), currentPrefix, null);
+		case final SubAppType subappType -> {
+			traverseFBNetwork(subappType.getFBNetwork(), currentPrefix, null);
+			subappType.getInterfaceList().getInputVars().stream().filter(VarDeclaration::isVarConfig)
+					.forEach(varDecl -> {
+						final String qualifiedName = currentPrefix + varDecl.getName();
+						varConfigInfoMap.put(varDecl, new VDInfo(qualifiedName, null, null));
+					});
 		}
-	}
-
-	private static void traverseInterfaceElements(final TypedSubApp tsa, final Map<String, VarDeclaration> result,
-			final Set<INamedElement> visited, final String currentPrefix) {
-		for (final IInterfaceElement elem : tsa.getInterface().getAllInterfaceElements()) {
-			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
-				addOriginalElement(vd, currentPrefix, result);
-			}
+		case final TypedSubApp tsa -> {
+			final boolean copy = EcoreUtil.getRootContainer(tsa) != selectionRoot;
+			final TypedSubApp newSubappInstance = copy ? currentSubappInstance : tsa;
+			traverseFBNetwork(tsa.getType().getFBNetwork(), currentPrefix, newSubappInstance);
+			traverseInterfaceElements(tsa, currentPrefix, copy, newSubappInstance);
+			overrideParams(tsa, currentPrefix, copy);
 		}
-	}
-
-	private void traverseFBNetwork(final Iterable<FBNetworkElement> elements, final Map<String, VarDeclaration> result,
-			final Set<INamedElement> visited, final String currentPrefix) {
-		for (final FBNetworkElement fbne : elements) {
-			final String prefix = currentPrefix + fbne.getName() + separationPoint;
-			final boolean shouldCopy = !isPartOfEditedStructure(getType(), fbne);
-			if (fbne instanceof final BlockFBNetworkElement bfbne) {
-				addPossibleVarConfigs(bfbne, result, prefix, shouldCopy);
-			}
-
-			if (fbne instanceof final TypedSubApp tsa) {
-				collectVarConfigsRecursive(tsa, result, visited, prefix);
-			}
-			if (fbne instanceof final UntypedSubApp usa) {
-				traverseFBNetwork(usa.getSubAppNetwork().getNetworkElements(), result, visited, prefix);
-			}
+		case final UntypedSubApp utsa -> {
+			traverseFBNetwork(utsa.getSubAppNetwork(), currentPrefix, currentSubappInstance);
+			traverseInterfaceElements(utsa, currentPrefix, EcoreUtil.getRootContainer(utsa) != selectionRoot,
+					currentSubappInstance);
 		}
-	}
-
-	private static boolean isPartOfEditedStructure(final INamedElement root, final EObject obj) {
-		EObject current = obj;
-		while (current != null) {
-			if (current == root) {
-				return true;
-			}
-			if ((current instanceof Application || current instanceof SubAppType) && (current != root)) {
-				return false;
-			}
-			current = current.eContainer();
-		}
-		return false;
-	}
-
-	private void addPossibleVarConfigs(final BlockFBNetworkElement fbne, final Map<String, VarDeclaration> result,
-			final String prefix, final boolean shouldCopy) {
-		for (final IInterfaceElement elem : fbne.getInterface().getAllInterfaceElements()) {
-			if (elem instanceof final VarDeclaration vd && vd.isVarConfig()) {
-				if (shouldCopy) {
-					addAndCopyElement(vd, prefix, result);
-				} else {
-					addOriginalElement(vd, prefix, result);
-				}
-			}
-		}
-	}
-
-	private static void addOriginalElement(final VarDeclaration vd, final String currentPrefix,
-			final Map<String, VarDeclaration> result) {
-		final String qualifiedName = currentPrefix + vd.getName();
-		if (result.containsKey(qualifiedName)) {
-			return;
-		}
-		result.put(qualifiedName, vd);
-		copiedMap.put(vd, Boolean.FALSE);
-	}
-
-	private void addAndCopyElement(final VarDeclaration vd, final String currentPrefix,
-			final Map<String, VarDeclaration> result) {
-		final String qualifiedName = currentPrefix + vd.getName();
-		if (result.containsKey(qualifiedName)) {
-			return;
-		}
-		switch (getType()) {
-		case final Application app ->
-			rootTSA = findTypedSubAppByQualifiedNameInNetwork(app.getFBNetwork().getNetworkElements(), qualifiedName);
-		case final TypedSubApp tsa -> rootTSA = tsa;
-		case final UntypedSubApp usa ->
-			rootTSA = findTypedSubAppByQualifiedNameInNetwork(usa.getSubAppNetwork().getNetworkElements(),
-					qualifiedName);
+		case final BlockFBNetworkElement bfbne -> traverseInterfaceElements(bfbne, currentPrefix,
+				EcoreUtil.getRootContainer(bfbne) != selectionRoot, currentSubappInstance);
 		default -> {
-			break;
+			// do nothing
 		}
 		}
-
-		final String relativeName = rootTSA != null ? getRelativeName(qualifiedName, rootTSA.getName()) : qualifiedName;
-		VarDeclaration existing = null;
-		existing = (rootTSA != null)
-				? rootTSA.getVarConfigParams().stream().filter(v -> v.getName().equals(relativeName)).findFirst()
-						.orElse(null)
-				: null;
-
-		final VarDeclaration targetVD;
-		if (existing != null) {
-			targetVD = existing;
-		} else {
-			final VarConfigInstance vcI = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
-			rootTSA.getVarConfigParams().add(vcI);
-			targetVD = vcI;
-		}
-		result.put(qualifiedName, targetVD);
-		copiedMap.put(targetVD, Boolean.TRUE);
 	}
 
-	private static TypedSubApp findTypedSubAppByQualifiedNameInNetwork(final Iterable<FBNetworkElement> roots,
-			final String qualifiedName) {
-
-		final int lastDot = qualifiedName.lastIndexOf('.');
-		final String path = (lastDot > 0) ? qualifiedName.substring(0, lastDot) : qualifiedName;
-		Iterable<FBNetworkElement> current = roots;
-		for (final String seg : path.split("\\.")) { //$NON-NLS-1$
-			if (seg.isEmpty()) {
-				continue;
+	private void overrideParams(final TypedSubApp typedSubApp, final String currentPrefix, final boolean needCopy) {
+		typedSubApp.getVarConfigParams().forEach(varConfigParameter -> {
+			final String qualifiedName = currentPrefix + varConfigParameter.getName();
+			final VarDeclaration toReplaceVarConfig = varConfigInfoMap.entrySet().stream()
+					.filter(e -> e.getValue().displayName.equals(qualifiedName)).map(Map.Entry::getKey).findFirst()
+					.orElse(null);
+			if (toReplaceVarConfig == null) {
+				// VarConfigParamter is saved but is not set anymore
+				return;
 			}
 
-			FBNetworkElement elem = null;
-			for (final FBNetworkElement fbE : current) {
-				if (seg.equals(fbE.getName())) {
-					elem = fbE;
-					break;
+			// replace default VarConfig with already saved one
+			final VDInfo info = varConfigInfoMap.remove(toReplaceVarConfig);
+			if (info != null) {
+				if (needCopy) {
+					final VDInfo newInfo = new VDInfo(info.displayName(), varConfigParameter, info.typedSubApp());
+					varConfigInfoMap.put(EcoreUtil.copy(varConfigParameter), newInfo);
+				} else {
+					varConfigInfoMap.put(varConfigParameter, info);
 				}
 			}
-			if (elem == null) {
-				return null;
-			}
-			if (elem instanceof final TypedSubApp tsa) {
-				return tsa;
-			}
+		});
+	}
 
-			if (elem instanceof final UntypedSubApp usa) {
-				current = usa.getSubAppNetwork().getNetworkElements();
-				continue;
+	private void traverseInterfaceElements(final BlockFBNetworkElement fbne, final String currentPrefix,
+			final boolean isParamsCandidate, final TypedSubApp currentSubappInstance) {
+		fbne.getInterface().getInputVars().stream().filter(VarDeclaration::isVarConfig).forEach(varConfig -> {
+			final String qualifiedName = currentPrefix + varConfig.getName();
+			if (isParamsCandidate) {
+				final VDInfo info = new VDInfo(qualifiedName, varConfig, currentSubappInstance);
+				final String relativePath = info.getSubAppRelativePath(getType());
+				varConfigInfoMap.put(InterfaceListCopier.copyVarConfigInstance(varConfig, relativePath), info);
+			} else {
+				varConfigInfoMap.put(varConfig, new VDInfo(qualifiedName, null, null));
 			}
+		});
+	}
+
+	private void traverseFBNetwork(final FBNetwork network, final String currentPrefix,
+			final TypedSubApp currentSubappInstance) {
+		network.getBlockFBNetworkElements().forEach(bfbne -> {
+			final String prefix = currentPrefix + bfbne.getName() + SEPARATION_POINT;
+			collectVarConfigsRecursive(bfbne, prefix, currentSubappInstance);
+		});
+	}
+
+	@Override
+	public void executeCommand(final Command cmd) {
+		super.executeCommand(cmd);
+
+		if (cmd instanceof final ChangeValueCommand valueCmd) {
+			final VarDeclaration decl = valueCmd.getInterfaceElement();
+			processVarConfigChange(decl, InitialValueHelper::getInitialOrDefaultValue);
 		}
-		return null;
-	}
 
-	private static String getRelativeName(final String qualifiedName, final String rootName) {
-		final String[] parts = qualifiedName.split(java.util.regex.Pattern.quote(separationPoint));
-
-		for (int i = 0; i < parts.length; i++) {
-			if (rootName.equals(parts[i])) {
-				if (i + 1 >= parts.length) {
-					return ""; //$NON-NLS-1$
-				}
-				final StringBuilder sb = new StringBuilder();
-				for (int j = i + 1; j < parts.length; j++) {
-					if (!sb.isEmpty()) {
-						sb.append(separationPoint);
-					}
-					sb.append(parts[j]);
-				}
-				return sb.toString();
+		if (cmd instanceof final ChangeCommentCommand commentCmd) {
+			final Object[] affected = commentCmd.getAffectedObjects().toArray();
+			if (affected.length == 0 || !(affected[0] instanceof final VarConfigInstance decl)) {
+				return;
 			}
+			processVarConfigChange(decl, VarDeclaration::getComment);
 		}
-		return qualifiedName;
 	}
 
-	public String getDisplayName(final VarDeclaration varDecl) {
-		return displayMap.entrySet().stream().filter(e -> e.getValue() == varDecl).map(Map.Entry::getKey).findFirst()
-				.orElse(varDecl.getName());
+	private void processVarConfigChange(final VarDeclaration varConfig,
+			final Function<VarDeclaration, String> varConfigMapper) {
+		final VDInfo info = varConfigInfoMap.get(varConfig);
+		if (info == null || info.varDeclType() == null || info.typedSubApp() == null) {
+			return;
+		}
+
+		final List<VarConfigInstance> varConfigParameter = info.typedSubApp().getVarConfigParams();
+		final boolean matchesTyp = varConfigMapper.apply(varConfig).equals(varConfigMapper.apply(info.varDeclType()));
+
+		if (matchesTyp) {
+			// remove matching config entries
+			final String subAppRelativePath = info.getSubAppRelativePath(getType());
+			varConfigParameter.removeIf(param -> param.getName().equals(subAppRelativePath));
+		} else if (varConfig instanceof final VarConfigInstance vci && !varConfigParameter.contains(vci)) {
+			// add only if not already present
+			varConfigParameter.add(vci);
+		}
 	}
 
-	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
-
+	private class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
 		private VarConfigDeclarationColumnAccessor(final VarConfigurationSection section) {
 			super(section, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
 		}
 
 		@Override
-		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
-			if (columnIndex == VarDeclarationTableColumn.NAME.ordinal()) {
-				return getCommandExecutor().getDisplayName(rowObject);
+		public Object getDataValue(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
+			if (column == VarDeclarationTableColumn.NAME) {
+				return varConfigInfoMap.get(rowObject).displayName;
 			}
-			return super.getDataValue(rowObject, columnIndex);
-		}
-
-		@Override
-		protected VarConfigurationSection getCommandExecutor() {
-			return (VarConfigurationSection) super.getCommandExecutor();
+			return super.getDataValue(rowObject, column);
 		}
 	}
 
 	private class VarConfigEditableRule implements IEditableRule {
-
 		@Override
 		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-			final Object rowObject = cell.getDataValue();
-			final int columnIndex = cell.getColumnIndex();
-			return checkEditable(columnIndex, rowObject);
+			return isEditable(cell.getColumnIndex(), cell.getRowIndex());
 		}
 
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
-			final Object rowObject = inputDataProvider.getRowObject(rowIndex);
+			final VarDeclaration rowObject = inputDataProvider.getRowObject(rowIndex);
 			return checkEditable(columnIndex, rowObject);
 		}
 
-		private boolean checkEditable(final int columnIndex, final Object rowObject) {
-			if (rowObject instanceof final VarDeclaration vd) {
-				final VarDeclarationTableColumn col = VarDeclarationTableColumn.values()[columnIndex];
-				if (col == VarDeclarationTableColumn.VISIBLE || col == VarDeclarationTableColumn.VAR_CONFIG) {
-					return isInsideOwnNetwork(vd);
-				}
+		private boolean checkEditable(final int columnIndex, final VarDeclaration rowObject) {
+			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
+					.get(columnIndex);
+			if (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VAR_CONFIG) {
+				return !(rowObject instanceof VarConfigInstance);
 			}
 			return true;
 		}
-
-		private boolean isInsideOwnNetwork(final VarDeclaration vd) {
-			return !Boolean.TRUE.equals(copiedMap.get(vd));
-		}
-
 	}
 }
