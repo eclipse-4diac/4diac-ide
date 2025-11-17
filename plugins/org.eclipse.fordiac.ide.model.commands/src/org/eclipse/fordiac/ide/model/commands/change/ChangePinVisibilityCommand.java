@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -26,12 +28,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
-public class HidePinCommand extends Command implements ScopedCommand {
+public class ChangePinVisibilityCommand extends Command implements ScopedCommand {
 
 	private final IInterfaceElement interfaceElement; // The pin
 	private final boolean visible;
 
-	public HidePinCommand(final IInterfaceElement interfaceElement, final boolean visible) {
+	public ChangePinVisibilityCommand(final BlockFBNetworkElement fb, final List<String> path, final boolean visible) {
+		this(fb.getInterface().getInterfaceElement(path, visible), visible);
+	}
+
+	public ChangePinVisibilityCommand(final IInterfaceElement interfaceElement, final boolean visible) {
 		this.interfaceElement = Objects.requireNonNull(interfaceElement);
 		this.visible = visible;
 	}
@@ -43,7 +49,7 @@ public class HidePinCommand extends Command implements ScopedCommand {
 
 	@Override
 	public void redo() {
-		execute();
+		interfaceElement.setVisible(visible);
 	}
 
 	@Override
@@ -78,6 +84,10 @@ public class HidePinCommand extends Command implements ScopedCommand {
 			});
 		}
 		return false;
+	}
+
+	protected IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
 	}
 
 	@Override

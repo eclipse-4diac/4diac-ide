@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
@@ -89,8 +89,8 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case VISIBLE, VISIBLEIN ->
-			new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEOUT -> new HidePinCommand(rowObject.getInOutVarOpposite(),
+			new ChangePinVisibilityCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLEOUT -> new ChangePinVisibilityCommand(rowObject.getInOutVarOpposite(),
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),

@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties.memberaccess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -37,11 +40,10 @@ public class MemberAccessTreeNode {
 		return varDecl.getComment();
 	}
 
-	public String getFullName() {
-		if (parent == null) {
-			return varDecl.getName();
-		}
-		return parent.getFullName() + "." + varDecl.getName(); //$NON-NLS-1$
+	public List<String> getNamePath() {
+		final List<String> path = (parent != null) ? parent.getNamePath() : new ArrayList<>();
+		path.add(varDecl.getName());
+		return path;
 	}
 
 	public String getFullTypeName() {
