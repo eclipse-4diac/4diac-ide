@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.InterfacePinUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -57,7 +57,7 @@ public final class ServiceFactory {
 	private static InputPrimitive createInputPrimitiveFrom(final ServiceInterface si, final Event event,
 			final String parameters) {
 		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		inputPrimitive.setEvent(EventUtils.getFullName(event));
+		inputPrimitive.setEvent(InterfacePinUtils.getFullName(event));
 		inputPrimitive.setInterface(si);
 		inputPrimitive.setParameters(parameters);
 		return inputPrimitive;
@@ -71,7 +71,7 @@ public final class ServiceFactory {
 	private static OutputPrimitive createOutputPrimitiveFrom(final ServiceInterface si, final Event event,
 			final String parameters) {
 		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		outputPrimitive.setEvent(EventUtils.getFullName(event));
+		outputPrimitive.setEvent(InterfacePinUtils.getFullName(event));
 		outputPrimitive.setInterface(si);
 		outputPrimitive.setParameters(parameters);
 		return outputPrimitive;

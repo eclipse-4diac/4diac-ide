@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.InterfacePinUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -93,7 +93,7 @@ public final class TransactionFactory {
 		}
 		final String inputEvent = st.getInputPrimitive().getEvent();
 		if (inputEvent != null) {
-			final Event eventPin = EventUtils.findEventInInterface(fb, inputEvent);
+			final Event eventPin = InterfacePinUtils.findEventInInterface(fb, inputEvent);
 			if (eventPin == null) {
 				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 			}

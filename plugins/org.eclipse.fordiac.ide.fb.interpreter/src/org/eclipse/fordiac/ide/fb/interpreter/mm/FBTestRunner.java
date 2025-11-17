@@ -76,7 +76,7 @@ public final class FBTestRunner {
 	private static Optional<String> checkTransaction(final FBTransaction result,
 			final ServiceTransaction expectedResult) {
 		// input event was correctly generated
-		if (!EventUtils.compareEventNames(result.getInputEventOccurrence().getEvent(),
+		if (!InterfacePinUtils.compareEventNames(result.getInputEventOccurrence().getEvent(),
 				expectedResult.getInputPrimitive().getEvent())) {
 			return Optional.of(
 					"Input event " + expectedResult.getInputPrimitive().getEvent() + " was not generated correctly"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -106,8 +106,8 @@ public final class FBTestRunner {
 			final OutputPrimitive p) {
 		// generated output event is correct
 		final var generatedEvent = result.getOutputEventOccurrences().get(j).getEvent();
-		if (!EventUtils.compareEventNames(generatedEvent, p.getEvent())) {
-			return Optional.of("Generated output event " + EventUtils.getFullName(generatedEvent) + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (!InterfacePinUtils.compareEventNames(generatedEvent, p.getEvent())) {
+			return Optional.of("Generated output event " + InterfacePinUtils.getFullName(generatedEvent) + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		// the associated data is correct
 		final Optional<String> errorMsg = processParameters(p.getParameters(), result);

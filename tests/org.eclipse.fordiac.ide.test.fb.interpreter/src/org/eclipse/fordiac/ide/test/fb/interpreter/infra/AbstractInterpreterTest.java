@@ -25,12 +25,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.FBTestRunner;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner.IllegalTraceException;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.FBTestRunner;
+import org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstantsStandaloneSetup;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory;
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -38,6 +42,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
@@ -54,6 +60,12 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	public static void runFBTest(final FBType fb, final ServiceSequence seq) {
+		STAlgorithmStandaloneSetup.doSetup();
+		StructuredTextEvaluatorFactory.register();
+		FBEvaluatorFactory.register();
+		StructuredTextSupportFactory.register();
+		GlobalConstantsStandaloneSetup.doSetup();
+		STFunctionStandaloneSetup.doSetup();
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
 		assertTrue(!result.isPresent());
 	}
