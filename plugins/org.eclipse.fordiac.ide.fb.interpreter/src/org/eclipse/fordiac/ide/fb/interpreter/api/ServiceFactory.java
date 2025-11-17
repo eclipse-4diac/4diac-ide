@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -48,29 +49,29 @@ public final class ServiceFactory {
 		return createOutputPrimitiveFrom(si, event, dataSource);
 	}
 
-	public static InputPrimitive createInputPrimitiveFrom(final ServiceInterface si,
-			final Event event, final EList<VarDeclaration> dataSource) {
+	public static InputPrimitive createInputPrimitiveFrom(final ServiceInterface si, final Event event,
+			final EList<VarDeclaration> dataSource) {
 		return createInputPrimitiveFrom(si, event, ServiceSequenceUtils.summarizeParameters(dataSource));
 	}
 
 	private static InputPrimitive createInputPrimitiveFrom(final ServiceInterface si, final Event event,
 			final String parameters) {
 		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		inputPrimitive.setEvent(event.getName());
+		inputPrimitive.setEvent(EventUtils.getFullName(event));
 		inputPrimitive.setInterface(si);
 		inputPrimitive.setParameters(parameters);
 		return inputPrimitive;
 	}
 
-	public static OutputPrimitive createOutputPrimitiveFrom(final ServiceInterface si,
-			final Event event, final EList<VarDeclaration> dataSources) {
+	public static OutputPrimitive createOutputPrimitiveFrom(final ServiceInterface si, final Event event,
+			final EList<VarDeclaration> dataSources) {
 		return createOutputPrimitiveFrom(si, event, ServiceSequenceUtils.summarizeParameters(dataSources));
 	}
 
-	private static OutputPrimitive createOutputPrimitiveFrom(final ServiceInterface si,
-			final Event event, final String parameters) {
+	private static OutputPrimitive createOutputPrimitiveFrom(final ServiceInterface si, final Event event,
+			final String parameters) {
 		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		outputPrimitive.setEvent(event.getName());
+		outputPrimitive.setEvent(EventUtils.getFullName(event));
 		outputPrimitive.setInterface(si);
 		outputPrimitive.setParameters(parameters);
 		return outputPrimitive;
@@ -112,8 +113,7 @@ public final class ServiceFactory {
 		return si;
 	}
 
-	public static void createServiceInterface(final Service service, final String name,
-			final boolean isLeftInterface) {
+	public static void createServiceInterface(final Service service, final String name, final boolean isLeftInterface) {
 		final ServiceInterface si = createServiceInterfaceFrom(name);
 		if (isLeftInterface) {
 			service.setLeftInterface(si);
@@ -121,7 +121,6 @@ public final class ServiceFactory {
 			service.setRightInterface(si);
 		}
 	}
-
 
 	public static Service createDefaultServiceModel() {
 		final Service s = LibraryElementFactory.eINSTANCE.createService();
