@@ -225,5 +225,13 @@
           isEqualityPattern="true"
           pattern="org.eclipse.ui.edit.text.gotoNextEditPosition"/>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.issuereport.GitIssueReportingPage"
+            id="org.eclipse.fordiac.ide.issuereport.GitIssueReportingPage"
+            name="Git Issue Reporting">
+      </page>
+   </extension>
 </plugin>

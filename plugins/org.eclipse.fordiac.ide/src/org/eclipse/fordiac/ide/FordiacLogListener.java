@@ -14,52 +14,108 @@ package org.eclipse.fordiac.ide;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
+import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
 
 public class FordiacLogListener implements ILogListener {
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title={0}&body={1}"; //$NON-NLS-1$
 
 	private static final class LogErrorDialog extends ErrorDialog {
+
+		private final IStatus status;
+		private Link reportInfo;
+
 		private LogErrorDialog(final Shell parentShell, final IStatus status) {
 			super(parentShell, Messages.FordiacLogListener_ErrorDialogTitle,
-					Messages.FordiacLogListener_ErrorDialogDescription, status,
+					Messages.FordiacLogListener_ErrorDialogRestartSave, status,
 					IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
+			this.status = status;
+		}
+
+		@Override
+		protected Control createDialogArea(final Composite parent) {
+			final Control control = super.createDialogArea(parent);
+
+			reportInfo = new Link(parent, SWT.NONE);
+			reportInfo.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					GitIssueCreator.openLinkInBrowser(e.text);
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+					// nothing to do
+				}
+			});
+
+			if (PreferenceConstants.getReportMode() == PreferenceConstants.ReportMode.AUTO_REPORT) {
+				report(); // immediately start report in this mode
+			} else {
+				reportInfo.setText(Messages.FordiacLogListener_ErrorDialogReportPrompt);
+			}
+			return control;
+		}
+
+		private void report() {
+			reportInfo.setText(Messages.FordiacLogListener_ReportInProgress);
+			new Thread(() -> {
+				final Optional<String> url = GitIssueCreator.createIssue(status);
+				Display.getDefault().asyncExec(() -> {
+					if (reportInfo == null || reportInfo.isDisposed()) {
+						return; // dialog was already closed
+					}
+					if (PreferenceConstants
+							.getReportDestination() == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
+						reportInfo.setText(Messages.FordiacLogListener_BrowserOpened);
+					} else if (url.isEmpty()) {
+						reportInfo.setText(Messages.FordiacLogListener_ReportingError);
+					} else {
+						reportInfo.setText(Messages.FordiacLogListener_ReportingResult.formatted(url.get()));
+					}
+					reportInfo.requestLayout();
+				});
+			}).start();
 		}
 
 		@Override
 		protected void createButtonsForButtonBar(final Composite parent) {
-			createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+			switch (PreferenceConstants.getReportMode()) {
+			case AUTO_REPORT: // "this will be reported" -> OK, Details
+				createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+				break;
+			case PROMPT_REPORT: // "please report this issue" -> Report Issue, Close, Details
+				final Button rep = createButton(parent, IDialogConstants.YES_ID,
+						Messages.FordiacLogListener_ErrorDialogReportIssue, true);
+				rep.addListener(SWT.Selection, e -> {
+					rep.setEnabled(false);
+					report();
+				});
+				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, false);
+				break;
+			default: // "please report this issue" -> Close, Details
+				createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
+			}
 			createDetailsButton(parent);
-			final Button button = createButton(parent, IDialogConstants.YES_ID, Messages.FordiacLogListener_ReportIssue,
-					false);
-			button.addListener(SWT.Selection, ev -> {
-				setReturnCode(IDialogConstants.YES_ID);
-				close();
-			});
 		}
 	}
 
@@ -102,24 +158,7 @@ public class FordiacLogListener implements ILogListener {
 
 	private static void showErrorDialog(final IStatus displayStatus) {
 		if ((null != Display.getCurrent()) && (null != Display.getCurrent().getActiveShell())) {
-			final ErrorDialog dialog = new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus);
-			if (IDialogConstants.YES_ID == dialog.open()) {
-				openBugReportBrowser(displayStatus);
-			}
+			new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus).open();
 		}
 	}
-
-	private static void openBugReportBrowser(final IStatus displayStatus) {
-		try {
-			final IWorkbench wb = PlatformUI.getWorkbench();
-			final IWebBrowser browser = wb.getBrowserSupport().createBrowser(Activator.PLUGIN_ID);
-			final String reportingURI = MessageFormat.format(FORDIAC_IDE_ISSUE_URL,
-					URLEncoder.encode(displayStatus.getMessage(), StandardCharsets.UTF_8), // title
-					URLEncoder.encode(getStackTrace(displayStatus.getException()), StandardCharsets.UTF_8)); // body
-			browser.openURL(new URI(reportingURI).toURL());
-		} catch (PartInitException | MalformedURLException | URISyntaxException e) {
-			FordiacLogHelper.logError("Error in opening the 4diac bugzilla web-page!", e); //$NON-NLS-1$
-		}
-	}
-
 }
