@@ -21,6 +21,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -125,17 +126,15 @@ public class GitIssueCreator {
 				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
 				URLEncoder.encode(info.body(), StandardCharsets.UTF_8),
 				URLEncoder.encode(labels, StandardCharsets.UTF_8));
+		final Gson gson = new Gson();
+
 		try {
 			final HttpRequest request = HttpRequest.newBuilder().uri(URI.create(reportingURI))
 					.header("PRIVATE-TOKEN", accessToken) //$NON-NLS-1$
 					.POST(HttpRequest.BodyPublishers.noBody()).build();
 			final Optional<String> body = makeRequest(request);
-			if (body.isEmpty()) {
-				return body;
-			}
-			final Gson gson = new Gson();
 			return Optional.ofNullable(gson.fromJson(body.get(), GitLabResponse.class).web_url());
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException | NoSuchElementException e) {
 			return Optional.empty();
 		}
 	}
@@ -156,11 +155,8 @@ public class GitIssueCreator {
 					.header("X-GitHub-Api-Version", "2022-11-28").POST(HttpRequest.BodyPublishers.ofString(jsonBody))
 					.build();
 			final Optional<String> body = makeRequest(request);
-			if (body.isEmpty()) {
-				return body;
-			}
 			return Optional.ofNullable(gson.fromJson(body.get(), GitHubResponse.class).html_url());
-		} catch (final IllegalArgumentException e) {
+		} catch (final IllegalArgumentException | NoSuchElementException e) {
 			return Optional.empty();
 		}
 	}
