@@ -24,6 +24,8 @@ import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessT
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HideMemberAccessPinCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ShowMemberAccessPinCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
@@ -41,8 +43,10 @@ import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.TreeColumnLayout;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -99,6 +103,29 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		typeSelectionWidget.setEditable(true);
 	}
 
+	protected ICheckStateListener getCheckStateListener() {
+		return new ICheckStateListener() {
+			@Override
+			public void checkStateChanged(final CheckStateChangedEvent event) {
+				final MemberAccessTreeNode node = (MemberAccessTreeNode) event.getElement();
+				final Command cmd = createMemberAccessPinChangeCommand(event.getChecked(), node);
+				if (cmd.canExecute()) {
+					executeCommand(cmd);
+				} else {
+					// reset checkmark as command was not executed
+					((TreeViewer) event.getSource()).update(node, null);
+				}
+			}
+
+			private Command createMemberAccessPinChangeCommand(final boolean checked, final MemberAccessTreeNode node) {
+				if (!checked) {
+					return new HideMemberAccessPinCommand(getType(), node.getNamePath());
+				}
+				return new ShowMemberAccessPinCommand(getType(), node.getNamePath());
+			}
+		};
+	}
+
 	protected void handleSelectionChanged(final String newTypeName) {
 		if (null != getType() && newDataTypeSelected(newTypeName)) {
 			final DataType newDtp = getDataTypeLib().getTypeIfExists(newTypeName);
@@ -147,7 +174,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		outputDataMemberAccessViewer = createMemberAccessViewer(outputsGroup);
 	}
 
-	private static TreeViewer createMemberAccessViewer(final Composite parent) {
+	private TreeViewer createMemberAccessViewer(final Composite parent) {
 		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
 		viewer.setUseHashlookup(true);
 		viewer.setAutoExpandLevel(2);
@@ -168,6 +195,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 				return false;
 			}
 		});
+		viewer.addCheckStateListener(getCheckStateListener());
 		return viewer;
 	}
 

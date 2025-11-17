@@ -16,8 +16,11 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
@@ -69,7 +72,7 @@ public class ContainerVarDeclarationAnnotations {
 		newVisibleMember.setType(memVar.getType());
 		setArraySize(newVisibleMember, getArraySize(memVar));
 		newVisibleMember.setIsInput(contVarDeclaration.isIsInput());
-		contVarDeclaration.getCachedMembers().add(newVisibleMember);
+		insertNewVisibleMember(contVarDeclaration, newVisibleMember);
 		return newVisibleMember;
 	}
 
@@ -80,6 +83,35 @@ public class ContainerVarDeclarationAnnotations {
 			return null;
 		}
 		return type.getMemberVar(memberName);
+	}
+
+	private static void insertNewVisibleMember(final ContainerVarDeclaration contVarDeclaration,
+			final VarDeclaration newVisibleMember) {
+		final EList<VarDeclaration> cachedMembers = contVarDeclaration.getCachedMembers();
+		if (contVarDeclaration.getType() instanceof final StructuredType type) {
+			final EList<VarDeclaration> typeMemVars = type.getMemberVariables();
+
+			int pos = Collections.binarySearch(cachedMembers, newVisibleMember,
+					Comparator.comparingInt(vm -> findIndex(typeMemVars, vm.getName())));
+			if (pos < 0) {
+				pos = -(pos + 1);
+				// we have a position add it accordingly
+				cachedMembers.add(pos, newVisibleMember);
+				return;
+			}
+		}
+		// per default add it at the end
+		cachedMembers.add(newVisibleMember);
+
+	}
+
+	private static int findIndex(final EList<VarDeclaration> memberVars, final String varName) {
+		for (int i = 0; i < memberVars.size(); i++) {
+			if (memberVars.get(i).getName().equals(varName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private ContainerVarDeclarationAnnotations() {

@@ -43,7 +43,7 @@ public class HidePinCommand extends Command implements ScopedCommand {
 
 	@Override
 	public void redo() {
-		execute();
+		interfaceElement.setVisible(visible);
 	}
 
 	@Override
@@ -78,6 +78,10 @@ public class HidePinCommand extends Command implements ScopedCommand {
 			});
 		}
 		return false;
+	}
+
+	protected IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
 	}
 
 	@Override
