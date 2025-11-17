@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -64,6 +65,8 @@ import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -364,7 +367,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private boolean transitionCanFire(final ECTransition outTransition, final BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var event = outTransition.getConditionEvent();
-		if (transitionHoldsFor(event)) {
+		if (transitionHoldsFor(event, this.eventOccurrence)) {
 			final var condExpression = outTransition.getConditionExpression();
 			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
 				return true;
@@ -375,9 +378,10 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return false;
 	}
 
-	private boolean transitionHoldsFor(final Event event) {
-		return (event == null) || (event.getName().equals(this.eventOccurrence.getEvent().getName())
-				&& this.eventOccurrence.isActive());
+	private static boolean transitionHoldsFor(final Event transitionCondition, final EventOccurrence eo) {
+		return (transitionCondition == null)
+				|| EventUtils.compareEventNames(eo.getEvent(), EventUtils.getFullName(transitionCondition))
+						&& eo.isActive();
 	}
 
 	private static void isConsumed(final EventOccurrence eo) {
@@ -644,14 +648,28 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		});
 	}
 
+	// for data pin of an FB instance: look for the equivalent data pin in the FB
+	// type
 	protected static VarDeclaration getEquivalentDataPinFromType(final FBRuntimeAbstract runtime,
 			final VarDeclaration varDec) {
 		final FBType type = runtime.getModel();
+		if (varDec.eContainer().eContainer() instanceof final AdapterFB adapter) {
+			final AdapterDeclaration aDecl = (AdapterDeclaration) type.getInterfaceList()
+					.getInterfaceElement(adapter.getName());
+			return aDecl.getInterfaceList().getVariable(varDec.getName());
+		}
 		return (VarDeclaration) type.getInterfaceList().getInterfaceElement(varDec.getName());
 	}
 
+	// for event pin of an FB instance: look for the equivalent event pin in the FB
+	// type
 	private static Event getEquivalentEventTypePin(final EventOccurrence sourceEventOcurrence) {
 		final BlockFBNetworkElement fbElem = sourceEventOcurrence.getParentFB();
+		if (sourceEventOcurrence.getEvent().eContainer().eContainer() instanceof final AdapterFB adapter) {
+			final AdapterDeclaration aDecl = (AdapterDeclaration) fbElem.getInterface()
+					.getInterfaceElement(adapter.getName());
+			return aDecl.getInterfaceList().getEvent(sourceEventOcurrence.getEvent().getName());
+		}
 		return (Event) fbElem.getInterface().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
 	}
 
@@ -717,6 +735,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private static IInterfaceElement getEquivalentNetworkPin(final FBNetworkRuntime runtime,
 			final FBNetworkElement parentFB, final VarDeclaration pin) {
+		if (pin.eContainer().eContainer() instanceof final AdapterFB adapter) {
+			final AdapterDeclaration networkAdapter = (AdapterDeclaration) runtime.getFbnetwork()
+					.getFBNamed(parentFB.getName()).getInterfaceElement(adapter.getName());
+			return networkAdapter.getInterfaceList().getInterfaceElement(pin.getName());
+		}
 		return runtime.getFbnetwork().getFBNamed(parentFB.getName()).getInterfaceElement(pin.getName());
 	}
 

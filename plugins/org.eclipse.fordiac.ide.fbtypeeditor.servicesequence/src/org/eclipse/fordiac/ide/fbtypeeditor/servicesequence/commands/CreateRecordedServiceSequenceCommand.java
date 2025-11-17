@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 
 public class CreateRecordedServiceSequenceCommand extends Command {
@@ -102,24 +103,28 @@ public class CreateRecordedServiceSequenceCommand extends Command {
 		if (cmd != null) {
 			cmd.execute();
 		}
-		if (oldSequence != null && !forceOverwrite) {
-			newSequence = EcoreUtil.copy(oldSequence);
-			// potential improvement: calculate the end state of the old sequence first
-			startState = oldSequence.getStartState();
-		} else {
-			cmd = new CreateServiceSequenceCommand(fbType.getService());
-			cmd.execute();
-			newSequence = cmd.getCreatedElement();
-		}
-		updateSequences(oldSequence, newSequence);
-		runInterpreter();
-		final List<String> parameter = parameters.stream().map(CreateRecordedServiceSequenceCommand::sumParameter)
-				.toList();
-		ServiceSequenceUtils.convertEventManagerToServiceModel(newSequence, fbType, eventManager, parameter);
-		newSequence.setStartState(startState);
-		if (traceInfo) {
-			newSequence.setComment("Coverage: " //$NON-NLS-1$
-					+ CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
+		try {
+			runInterpreter();
+			if (oldSequence != null && !forceOverwrite) {
+				newSequence = EcoreUtil.copy(oldSequence);
+				// potential improvement: calculate the end state of the old sequence first
+				startState = oldSequence.getStartState();
+			} else {
+				cmd = new CreateServiceSequenceCommand(fbType.getService());
+				cmd.execute();
+				newSequence = cmd.getCreatedElement();
+			}
+			updateSequences(oldSequence, newSequence);
+			final List<String> parameter = parameters.stream().map(CreateRecordedServiceSequenceCommand::sumParameter)
+					.toList();
+			ServiceSequenceUtils.convertEventManagerToServiceModel(newSequence, fbType, eventManager, parameter);
+			newSequence.setStartState(startState);
+			if (traceInfo) {
+				newSequence.setComment("Coverage: " //$NON-NLS-1$
+						+ CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions(), fbType));
+			}
+		} catch (final Exception e) {
+			FordiacLogHelper.logWarning("interpreter could not execute: " + e.getMessage()); //$NON-NLS-1$
 		}
 	}
 

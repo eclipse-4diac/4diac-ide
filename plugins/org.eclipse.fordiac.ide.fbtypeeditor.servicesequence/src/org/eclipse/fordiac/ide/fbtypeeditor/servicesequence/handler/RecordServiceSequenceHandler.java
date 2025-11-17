@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -60,9 +59,9 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final int returnCode = dialog.open();
 		if (returnCode != CANCEL) {
 
-			try {
-				addRandomElements(type, events, parameters, dialog);
+			addRandomElements(type, events, parameters, dialog);
 
+			try {
 				final CreateRecordedServiceSequenceCommand recordCmd = new CreateRecordedServiceSequenceCommand(type,
 						seq, events, parameters, !dialog.isAppend());
 				recordCmd.setStartState(dialog.getStartState());
@@ -71,8 +70,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 					cmdstack.execute(recordCmd);
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-				MessageDialog.openError(HandlerUtil.getActiveShell(event),
+				MessageDialog.openWarning(HandlerUtil.getActiveShell(event),
 						Messages.RecordServiceSequenceHandler_PROBLEM,
 						Messages.RecordServiceSequenceHandler_CHECK_VARIABLE_NAMES);
 			}
@@ -85,8 +83,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		// append a specified number of random events
 		if (dialog.isRandomEventBoxChecked()) {
 			final List<Event> randomEvents = InputGenerator.getRandomEventsSequence(type, dialog.getCount());
-			eventNames.addAll(
-					randomEvents.stream().map(event -> event.getName()).toList());
+			eventNames.addAll(randomEvents.stream().map(Event::getName).toList());
 		}
 		// apply random data values
 		if (dialog.isRandomParameterBoxChecked() && dialog.getCount() > 0) {
