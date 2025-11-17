@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -45,22 +44,11 @@ import org.eclipse.ltk.core.refactoring.participants.SharableParticipants;
 public final class FordiacCopyProcessor extends CopyProcessor {
 
 	public enum ExistsResolve {
-		OVERWRITE, DONT_COPY, RENAME, CANCEL_ALL;
-
-		private String newName;
-
-		public ExistsResolve setNewName(final String newName) {
-			this.newName = newName;
-			return this;
-		}
-
-		public String getNewName() {
-			return newName;
-		}
+		OVERWRITE, DONT_COPY, CANCEL_ALL
 	}
 
 	private final IResource[] files;
-	private final IPath[] copies;
+	private final boolean[] doCopy;
 	private final IContainer destination;
 	private final ReorgExecutionLog log;
 	private final ICopyRefactoringQueries queries;
@@ -71,7 +59,7 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 		this.files = files;
 		this.destination = destination;
 		this.queries = queries;
-		this.copies = new IPath[files.length];
+		this.doCopy = new boolean[files.length];
 		log = new ReorgExecutionLog();
 	}
 
@@ -88,10 +76,8 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 			final IResource file = files[i];
 			final ExistsResolve resolve = handleAlreadyExists(file);
 
-			if (resolve == ExistsResolve.RENAME) {
-				copies[i] = destination.getFullPath().append(resolve.getNewName());
-			} else if (resolve == ExistsResolve.OVERWRITE) {
-				copies[i] = destination.getFullPath().append(file.getName());
+			if (resolve == ExistsResolve.OVERWRITE) {
+				doCopy[i] = true;
 			} else if (resolve == ExistsResolve.CANCEL_ALL) {
 				canceled = true;
 				break;
@@ -109,10 +95,10 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 		final CompositeChange compChange = new CompositeChange(Messages.FordiacCopyProcessor_CompositeChangeName);
 
 		for (int i = 0; i < files.length; i++) {
-			if (copies[i] == null) {
+			if (!doCopy[i]) {
 				continue;
 			}
-			compChange.add(new CopyResourceChange(files[i], copies[i], destination));
+			compChange.add(new CopyResourceChange(files[i], destination));
 		}
 		return compChange;
 	}
@@ -128,11 +114,11 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 		final List<CopyParticipant> result = new ArrayList<>();
 
 		for (int i = 0; i < files.length; i++) {
-			if (copies[i] == null) {
+			if (!doCopy[i]) {
 				continue;
 			}
 			final CopyParticipant[] participants = ParticipantManager.loadCopyParticipants(status, this, files[i],
-					new CopyArguments(copies[i], log), affectedNatures, sharedParticipants);
+					new CopyArguments(destination, log), affectedNatures, sharedParticipants);
 			result.addAll(Arrays.asList(participants));
 		}
 		return result.toArray(new RefactoringParticipant[result.size()]);

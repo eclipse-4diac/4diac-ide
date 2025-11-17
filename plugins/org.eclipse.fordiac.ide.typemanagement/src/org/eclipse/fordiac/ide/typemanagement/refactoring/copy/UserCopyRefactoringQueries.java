@@ -15,16 +15,11 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.FordiacCopyProcessor.ExistsResolve;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
@@ -37,11 +32,12 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 
 	@Override
 	public ExistsResolve queryOverwrite(final IResource file, final IContainer destination) {
-		final ExistsResolve[] result = new ExistsResolve[1];
-		shell.getDisplay().syncExec(() -> {
-			result[0] = queryUserOverwrite(file, destination);
-		});
-		return result[0];
+		return queryUserOverwrite(file, destination);
+	}
+
+	@Override
+	public ExistsResolve queryOverwriteSelf(final IResource file, final IContainer destination) {
+		return queryUserOverwrite(file, destination);
 	}
 
 	private ExistsResolve queryUserOverwrite(final IResource file, final IContainer destination) {
@@ -51,66 +47,15 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 		msg.append(System.lineSeparator()).append(System.lineSeparator());
 		msg.append(Messages.Copy_OverwriteDialog_Source).append(file.getLocation());
 
-		final int result = MessageDialog.open(MessageDialog.WARNING, shell, Messages.Copy_OverwriteDialog_Title,
-				msg.toString(), SWT.NONE, Messages.Copy_OverwriteDialog_Yes, Messages.Copy_OverwriteDialog_No,
-				Messages.Copy_OverwriteDialog_Rename, Messages.Copy_OverwriteDialog_Cancel);
-
-		return switch (result) {
+		final int[] result = new int[1];
+		shell.getDisplay()
+				.syncExec(() -> result[0] = MessageDialog.open(MessageDialog.WARNING, shell,
+						Messages.Copy_OverwriteDialog_Title, msg.toString(), SWT.NONE, IDialogConstants.YES_LABEL,
+						IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL));
+		return switch (result[0]) {
 		case 0 -> ExistsResolve.OVERWRITE;
 		case 1 -> ExistsResolve.DONT_COPY;
-		case 2 -> queryUserOverwriteSelf(file, destination);
 		default -> ExistsResolve.CANCEL_ALL;
 		};
-	}
-
-	@Override
-	public ExistsResolve queryOverwriteSelf(final IResource file, final IContainer destination) {
-		final ExistsResolve[] result = new ExistsResolve[1];
-		shell.getDisplay().syncExec(() -> {
-			result[0] = queryUserOverwriteSelf(file, destination);
-		});
-		return result[0];
-	}
-
-	@SuppressWarnings("unused")
-	private ExistsResolve queryUserOverwriteSelf(final IResource file, final IContainer destination) {
-		final StringBuilder msg = new StringBuilder(Messages.Copy_RenameDialog_Message);
-		msg.append(file.getName());
-		msg.append('\'');
-
-		final int lastIndex = file.getName().lastIndexOf(file.getFileExtension());
-		final String nameWithoutExt = file.getName().substring(0, lastIndex - 1);
-
-		final String initial = nameWithoutExt + "_2." + file.getFileExtension(); //$NON-NLS-1$
-
-		final IInputValidator validator = string -> {
-			final IWorkspace workspace = file.getWorkspace();
-			if (file.getName().equals(string)) {
-				return Messages.Copy_RenameDialog_MustBeNewName;
-			}
-			final IStatus status = workspace.validateName(string, file.getType());
-			if (!status.isOK()) {
-				return status.getMessage();
-			}
-			if (workspace.getRoot().exists(destination.getFullPath().append(string))) {
-				return Messages.Copy_RenameDialog_NameAlreadyExists;
-			}
-			return null;
-		};
-
-		final InputDialog dialog = new InputDialog(shell, Messages.Copy_RenameDialog_Title, msg.toString(), initial,
-				validator) {
-			@Override
-			protected Control createContents(final Composite parent) {
-				final Control contents = super.createContents(parent);
-				getText().setSelection(0, lastIndex + 1);
-				return contents;
-			}
-		};
-		final int result = dialog.open();
-		if (result == 0) {
-			return ExistsResolve.RENAME.setNewName(dialog.getValue());
-		}
-		return ExistsResolve.CANCEL_ALL;
 	}
 }

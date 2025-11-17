@@ -34,15 +34,13 @@ import org.eclipse.ltk.core.refactoring.resource.ResourceChange;
 public class CopyResourceChange extends ResourceChange {
 
 	private final IResource origin;
-	private final IPath copy;
 	private final IContainer destination;
 
-	public CopyResourceChange(final IResource origin, final IPath copy, final IContainer destination) {
+	public CopyResourceChange(final IResource origin, final IContainer destination) {
 		Assert.isTrue(origin instanceof IFile || origin instanceof IFolder);
 		Assert.isTrue(destination instanceof IProject || destination instanceof IFolder);
 
 		this.origin = origin;
-		this.copy = copy;
 		this.destination = destination;
 	}
 
@@ -56,16 +54,16 @@ public class CopyResourceChange extends ResourceChange {
 		try {
 			pm.beginTask(getName(), 2);
 
-			final String newName = copy.lastSegment();
-			final boolean performReorg = deleteIfAlreadyExists(SubMonitor.convert(pm, 1), newName);
+			final boolean performReorg = deleteIfAlreadyExists(SubMonitor.convert(pm, 1), origin.getName());
 			if (!performReorg) {
 				return null;
 			}
 
-			origin.copy(copy, getReorgFlags(), SubMonitor.convert(pm, 1));
+			final IPath copyPath = destination.getFullPath().append(origin.getName());
+			origin.copy(copyPath, getReorgFlags(), SubMonitor.convert(pm, 1));
 
 			markAsExecuted(origin);
-			return new DeleteResourceChange(copy, false);
+			return new DeleteResourceChange(copyPath, false);
 		} finally {
 			pm.done();
 		}
@@ -99,12 +97,10 @@ public class CopyResourceChange extends ResourceChange {
 			return false;
 		}
 
-		if (current instanceof IFile) {
-			((IFile) current).delete(false, true, SubMonitor.convert(pm, 1));
-		} else if (current instanceof IFolder) {
-			((IFolder) current).delete(false, true, SubMonitor.convert(pm, 1));
-		} else {
-			Assert.isTrue(false);
+		switch (current) {
+		case final IFile file -> file.delete(false, true, SubMonitor.convert(pm, 1));
+		case final IFolder folder -> folder.delete(false, true, SubMonitor.convert(pm, 1));
+		default -> Assert.isTrue(false);
 		}
 		return true;
 	}
