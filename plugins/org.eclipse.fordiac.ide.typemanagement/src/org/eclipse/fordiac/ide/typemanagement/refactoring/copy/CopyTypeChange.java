@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -72,7 +74,7 @@ public class CopyTypeChange extends Change {
 
 	@Override
 	public Change perform(final IProgressMonitor pm) throws CoreException {
-		final var resource = CopyTypeParticipant.getResource(destination);
+		final var resource = getResource(destination);
 		if (resource.isEmpty()) {
 			throw new CoreException(
 					Status.error(MessageFormat.format(Messages.CopyTypeChange_CannotLoadResource, destination)));
@@ -99,7 +101,7 @@ public class CopyTypeChange extends Change {
 
 	@Override
 	public Resource getModifiedElement() {
-		return CopyTypeParticipant.getResource(destination).orElse(null);
+		return getResource(destination).orElse(null);
 	}
 
 	@Override
@@ -109,5 +111,17 @@ public class CopyTypeChange extends Change {
 			return new Object[] { res };
 		}
 		return super.getAffectedObjects();
+	}
+
+	private static Optional<Resource> getResource(final URI uri) {
+		if (!uri.isPlatformResource()) {
+			return Optional.empty();
+		}
+		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+		final Resource resource = resourceSet.getResource(uri, true);
+		if (resource == null || !resource.getErrors().isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.of(resource);
 	}
 }

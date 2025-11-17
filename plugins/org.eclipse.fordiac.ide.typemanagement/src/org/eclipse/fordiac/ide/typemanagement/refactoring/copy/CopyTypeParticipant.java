@@ -19,14 +19,13 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 import java.text.MessageFormat;
 import java.util.Optional;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -45,13 +44,15 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IFile file && getArguments().getDestination() instanceof final IPath destination) {
+		if (element instanceof final IFile file
+				&& getArguments().getDestination() instanceof final IContainer destination) {
 			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) == null) {
 				return false;
 			}
 
 			origin = file;
-			destinationURI = URI.createPlatformResourceURI(destination.toString(), true);
+			destinationURI = URI.createPlatformResourceURI(destination.getFullPath().append(file.getName()).toString(),
+					true);
 			newPackageName = PackageNameHelper.getPackageNameFromURI(destinationURI);
 			return true;
 		}
@@ -77,22 +78,6 @@ public class CopyTypeParticipant extends CopyParticipant {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return new CopyTypeChange(newPackageName, getName(), origin, destinationURI);
-	}
-
-	public static Optional<Resource> getResource(final IFile typeFile) {
-		return getResource(URI.createPlatformResourceURI(typeFile.getFullPath().toString(), true));
-	}
-
-	public static Optional<Resource> getResource(final URI uri) {
-		if (!uri.isPlatformResource()) {
-			return Optional.empty();
-		}
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		final Resource resource = resourceSet.getResource(uri, true);
-		if (resource == null || !resource.getErrors().isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(resource);
 	}
 
 	public static Optional<LibraryElement> getLibraryElement(final Resource resource) {
