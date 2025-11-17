@@ -16,9 +16,14 @@ package org.eclipse.fordiac.ide.export.utils;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.export.IExportFilter;
+import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ExportFilterUtil {
@@ -34,6 +39,37 @@ public class ExportFilterUtil {
 
 	public static IConfigurationElement[] getExportFilters() {
 		return filters;
+	}
+
+	public static IExportFilter createExportFilter(final Optional<IConfigurationElement> filterConfig) {
+		try {
+			if (filterConfig.isPresent()) {
+				return (IExportFilter) filterConfig.get().createExecutableExtension("class"); //$NON-NLS-1$
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(Messages.FordiacExporter_ERROR, e);
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if a given export path is valid project
+	 *
+	 * @param directory to check
+	 * @param project   the project
+	 * @return true if a given path is relative and points to a location within the
+	 *         given project
+	 */
+	public static boolean validateExportPath(final String directoy, final IProject project) {
+		if (!directoy.isEmpty()) {
+			final Path path = new Path(directoy);
+			if (path.isAbsolute() || path.getDevice() != null) {
+				return false;
+			}
+			final Path resolved = new Path(project.getFullPath().append(path).toPath().normalize().toString());
+			return project.getFullPath().isPrefixOf(resolved);
+		}
+		return false;
 	}
 
 	private static IConfigurationElement[] getAvailableExportFilters() {

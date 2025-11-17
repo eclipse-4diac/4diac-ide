@@ -14,15 +14,14 @@
 package org.eclipse.fordiac.ide.export.builder;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -31,10 +30,15 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.fordiac.ide.export.AbstractExporter;
+import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
@@ -43,8 +47,10 @@ import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ExportBuilder extends IncrementalProjectBuilder {
 
@@ -55,150 +61,130 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
 			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
-	private boolean enableAutoExport;
 	private String outputDirectory;
-	private Optional<IConfigurationElement> exportFilterConfiguration;
-	private Exporter exporter;
-	List<IFile> exportees = new ArrayList<>();
-
-	@Override
-	protected void startupOnInitialize() {
-		createOutputFolder();
-		initializePreferences();
-		addPreferenceListener();
-		super.startupOnInitialize();
-	}
+	private IExportFilter filter;
+	private MultiStatus status;
 
 	@Override
 	protected IProject[] build(final int kind, final Map<String, String> args, final IProgressMonitor monitor)
 			throws CoreException {
 
-		if (!enableAutoExport || exporter == null) {
+		if (!isExportEnabled()) {
 			return new IProject[0];
 		}
 
-		exportees.clear();
+		performSetup();
+
+		if (filter == null || !ExportFilterUtil.validateExportPath(outputDirectory, getProject())) {
+			return new IProject[0];
+		}
+
+		final SubMonitor progress = SubMonitor.convert(monitor, 2);
+		progress.setTaskName(Messages.ExportBuilder_Build);
 
 		switch (kind) {
 		case FULL_BUILD:
-			final List<SourceFolder> buildPathFolders = getExportableFoldersFromBuildpath();
-			for (final SourceFolder folder : buildPathFolders) {
-				BuildpathUtil.acceptMatches(folder, getProject(), (IResourceVisitor) resource -> {
-					if ((resource instanceof final IFile file) && isExportableFileType(file)) {
-						exportees.add(file);
-					} else if (resource instanceof IFolder || resource instanceof IProject) {
-						return true;
-					}
-					return false;
-				});
-			}
+			fullBuild(progress.split(1));
 			break;
 		case INCREMENTAL_BUILD, AUTO_BUILD:
-			Optional.ofNullable(getDelta(getProject())).ifPresent(root -> addResourceDeltas(exportees, root));
+			final IResourceDelta root = getDelta(getProject());
+			if (root != null) {
+				incrementalBuild(root, progress.split(1));
+			}
 			break;
 		default:
 			break;
 		}
 
-		if (!exportees.isEmpty()) {
-			exporter.exportElements(monitor, exportees);
-		}
+		exportCmakeLists(progress.split(1));
 
+		filter.getErrors().forEach(e -> status.add(new Status(IStatus.ERROR, getClass(), e)));
+
+		if (status.matches(IStatus.ERROR)) {
+			throw new CoreException(status);
+		}
 		return new IProject[0];
+	}
+
+	private void fullBuild(final SubMonitor monitor) throws CoreException {
+		final SubMonitor progress = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
+
+		final List<SourceFolder> buildPathFolders = getExportableFoldersFromBuildpath();
+		for (final SourceFolder folder : buildPathFolders) {
+			BuildpathUtil.acceptMatches(folder, getProject(), (IResourceVisitor) resource -> {
+				if (!isExportCanceled(progress)) {
+					if ((resource instanceof final IFile file) && isExportableFileType(file)) {
+						exportElement(progress, file);
+					} else if (resource instanceof IFolder || resource instanceof IProject) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+	}
+
+	private void exportElement(final SubMonitor monitor, final IFile file) throws CoreException {
+		try {
+			if (!hasRelevantErrorMarker(file)) {
+				monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, file.getName()));
+				filter.export(file, getProject().getLocation().append(new Path(outputDirectory)).toString(), true);
+				monitor.split(1);
+			}
+		} catch (final ExportException e) {
+			status.add(new Status(IStatus.ERROR, getClass(), e.getMessage()));
+		}
 	}
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		if (outputDirectory == null || outputDirectory.isEmpty()) {
+		if (!isExportEnabled()) {
 			return;
 		}
-		final IFolder folder = getProject().getFolder(outputDirectory);
-		if (folder.exists()) {
-			folder.accept(resource -> {
-				if (resource instanceof final IFolder root && root.equals(folder)) {
-					// do not delete root folder
-					return true;
-				}
-				resource.delete(enableAutoExport, monitor);
-				return true;
-			});
+
+		performSetup();
+
+		final SubMonitor progress = SubMonitor.convert(monitor, 1);
+		progress.setTaskName(Messages.ExportBuilder_Clean);
+
+		if (ExportFilterUtil.validateExportPath(outputDirectory, getProject())) {
+			final IFolder folder = getProject().getFolder(outputDirectory);
+			if (folder.exists()) {
+				folder.delete(true, progress.split(1));
+			}
 		}
-		super.clean(monitor);
 	}
 
-	private void initializePreferences() {
-		this.enableAutoExport = getProjectPreferenceNode().getBoolean(PreferenceConstants.ENABLE_TYPE_EXPORT, false);
-
-		if (!enableAutoExport) {
-			return;
-		}
-
+	private void performSetup() {
 		this.outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
 				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
 		final String exportFilterID = getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
-		this.exportFilterConfiguration = ExportFilterUtil.getExportFilter(exportFilterID);
-		updateExporter();
+		final Optional<IConfigurationElement> filterConfig = ExportFilterUtil.getExportFilter(exportFilterID);
+		this.filter = filterConfig.isPresent() ? ExportFilterUtil.createExportFilter(filterConfig) : null;
+		this.status = new MultiStatus(getClass(), IStatus.OK, "Export Builder Status"); //$NON-NLS-1$
+
 	}
 
-	private void updateExporter() {
-		if ((exportFilterConfiguration.isPresent() && !outputDirectory.isEmpty())) {
-			final IFolder destinationDirectory = getProject().getFolder(outputDirectory);
-			if (exportFilterConfiguration.get().getAttribute(ExportFilterUtil.FILTER_ID).equals(FORTE_NG_FILTER_ID)
-					&& destinationDirectory.exists()) {
-				// enable export of CmakeListsFile only for forte_ng
-				this.exporter = new Exporter(exportFilterConfiguration.get(),
-						destinationDirectory.getLocation().toOSString(), true, true);
-			} else {
-				this.exporter = new Exporter(exportFilterConfiguration.get(),
-						destinationDirectory.getLocation().toOSString(), true, false);
+	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor) throws CoreException {
+		for (final IResourceDelta delta : rootDelta
+				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED)) {
+			if (!isExportCanceled(monitor)) {
+				if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
+					exportElement(monitor, file);
+				} else if (delta.getResource() instanceof IFolder) {
+					incrementalBuild(delta, monitor);
+				}
 			}
 		}
-	}
-
-	private void addPreferenceListener() {
-		getProjectPreferenceNode().addPreferenceChangeListener(evt -> {
-			switch (evt.getKey()) {
-			case PreferenceConstants.ENABLE_TYPE_EXPORT:
-				initializePreferences();
-				break;
-			case PreferenceConstants.OUTPUT_FOLDER:
-				this.outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER, ""); //$NON-NLS-1$
-				break;
-			case PreferenceConstants.EXPORT_FILTER_ID:
-				this.exportFilterConfiguration = ExportFilterUtil
-						.getExportFilter(getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "")); //$NON-NLS-1$
-				break;
-			default:
-				// do nothing here a preference has been change which is not of our interest
-				break;
-			}
-			updateExporter();
-		});
-	}
-
-	private void addResourceDeltas(final List<IFile> exportees, final IResourceDelta deltas) {
-		for (final IResourceDelta delta : deltas.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED)) {
-			if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
-				exportees.add(file);
-			} else if (delta.getResource() instanceof IFolder) {
-				addResourceDeltas(exportees, delta);
-			}
-		}
-
 	}
 
 	private List<SourceFolder> getExportableFoldersFromBuildpath() {
-		return BuildpathUtil.loadBuildpath(getProject()).getSourceFolders().stream()
-				.filter(ExportBuilder::getExportAttributeValue).toList();
+		return getBuildpath().getSourceFolders().stream().filter(ExportBuilder::getExportAttributeValue).toList();
 	}
 
 	private boolean isExportable(final IFile file) {
 		if (isExportableFileType(file)) {
-			// if we have performance issues we might want to cache the buildpath and detect
-			// buildpath file changes via resource deltas to reload only on changes, as
-			// loading the buildpath involves file operations
-			final Buildpath buildpath = BuildpathUtil.loadBuildpath(getProject());
-			final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(buildpath, file);
+			final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(getBuildpath(), file);
 			return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
 		}
 		return false;
@@ -213,51 +199,45 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		return projectScope.getNode(PreferenceConstants.EXPORT_PREFERENCES_ID);
 	}
 
+	private boolean isExportEnabled() {
+		return getProjectPreferenceNode().getBoolean(PreferenceConstants.ENABLE_TYPE_EXPORT, false);
+	}
+
+	private Buildpath getBuildpath() {
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(getProject()).getBuildpath();
+	}
+
 	private static boolean getExportAttributeValue(final SourceFolder folder) {
 		final String attributeValue = BuildpathAttributes.getAttributeValue(folder.getAttributes(),
 				BuildpathAttributes.EXPORT);
 		return !attributeValue.isEmpty() && Boolean.parseBoolean(attributeValue);
 	}
 
-	private void createOutputFolder() {
-		final IFolder folder = getProject().getFolder(PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
-		if (!folder.exists()) {
+	private void exportCmakeLists(final IProgressMonitor monitor) {
+		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID) //$NON-NLS-1$
+				&& !isExportCanceled(monitor)) {
+			final IPath location = getProject().getLocation().append(new Path(outputDirectory));
+			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath());
+			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, marker.getName()));
 			try {
-				folder.create(true, true, new NullProgressMonitor());
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(MessageFormat.format(Messages.ExportBuilder_CannotCreateDirectory,
-						PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME));
+				filter.export(null, location.toString(), true, marker);
+				monitor.worked(1);
+			} catch (final ExportException e) {
+				status.add(new Status(IStatus.ERROR, getClass(), e.getMessage()));
 			}
-		}
-
-		try {
-			folder.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 
-	private class Exporter extends AbstractExporter {
-
-		protected Exporter(final IConfigurationElement filterConfig, final String outputDirectory,
-				final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
-			super(filterConfig, outputDirectory, overwriteWithoutWarning, enableCMakeLists);
+	private static boolean hasRelevantErrorMarker(final IFile file) throws CoreException {
+		for (final IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
+			if (FordiacErrorMarker.isModelMarkerType(marker.getType())) {
+				return true;
+			}
 		}
+		return false;
+	}
 
-		@Override
-		protected void showErrorWarningSummary(final IExportFilter filter) {
-			filter.getErrors().stream().filter(Objects::nonNull).forEach(FordiacLogHelper::logError);
-		}
-
-		@Override
-		protected void processError(final String errorMessage) {
-			FordiacLogHelper.logError(errorMessage);
-		}
-
-		@Override
-		protected boolean exportIsCanceled(final IProgressMonitor monitor) {
-			return super.exportIsCanceled(monitor) || isInterrupted();
-		}
-
+	private boolean isExportCanceled(final IProgressMonitor monitor) {
+		return isInterrupted() || monitor.isCanceled();
 	}
 }

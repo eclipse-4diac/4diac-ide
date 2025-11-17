@@ -119,18 +119,8 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 		directoryEditor.setPreferenceStore(getPreferenceStore());
 		directoryEditor.setPage(this);
-		directoryEditor.setEmptyStringAllowed(false);
 		directoryEditor.getTextControl(directoryEditorContainer)
 				.addModifyListener(e -> directoryEditor.getTextControl(directoryEditorContainer).requestLayout());
-	}
-
-	private String getOutputFolder() {
-		if (getProject().getFolder(PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME).exists()) {
-			return getProject().getFolder(PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME).getProjectRelativePath()
-					.toPortableString();
-		}
-
-		return ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -138,7 +128,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 		final ProjectScope projectScope = new ProjectScope(getProject());
 		final ScopedPreferenceStore prefStore = new ScopedPreferenceStore(projectScope,
 				PreferenceConstants.EXPORT_PREFERENCES_ID);
-		prefStore.setDefault(PreferenceConstants.OUTPUT_FOLDER, getOutputFolder());
+		prefStore.setDefault(PreferenceConstants.OUTPUT_FOLDER, PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
 		return prefStore;
 	}
 
@@ -188,7 +178,7 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 		public OutputDirectoryFieldEditor(final String name, final String labelText, final Composite parent) {
 			init(name, labelText);
-			setErrorMessage(JFaceResources.getString("DirectoryFieldEditor.errorMessage"));//$NON-NLS-1$
+			setErrorMessage(Messages.TypeExport_InvalidPath);
 			setChangeButtonText(JFaceResources.getString("openBrowse"));//$NON-NLS-1$
 			setValidateStrategy(VALIDATE_ON_FOCUS_LOST);
 			createControl(parent);
@@ -207,12 +197,9 @@ public class TypeExportPropertyPage extends PropertyPage {
 
 		@Override
 		protected boolean doCheckState() {
-			String fileName = getTextControl().getText();
-			fileName = fileName.trim();
-			if (fileName.isEmpty() && isEmptyStringAllowed()) {
-				return true;
-			}
-			return getProject().getFolder(fileName).exists();
+			String directory = getTextControl().getText();
+			directory = directory.trim();
+			return ExportFilterUtil.validateExportPath(directory, getProject());
 		}
 
 		private Optional<IFolder> chooseOutputFolder() {

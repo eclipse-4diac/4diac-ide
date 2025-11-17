@@ -75,6 +75,8 @@ public final class Messages extends NLS {
 
 	public static String TypeExport_FileDialogMessage;
 
+	public static String TypeExport_InvalidPath;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
