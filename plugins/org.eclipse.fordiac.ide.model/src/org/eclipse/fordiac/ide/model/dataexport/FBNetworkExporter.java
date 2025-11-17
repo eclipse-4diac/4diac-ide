@@ -284,8 +284,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && isExportableErrorMarker(endPoint.getBlockFBNetworkElement())
-				&& (endPoint.eContainer() instanceof InterfaceList);
+		return (endPoint != null) && (endPoint.eContainer() instanceof InterfaceList);
 	}
 
 	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
