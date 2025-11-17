@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessT
 import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessTreeNode;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.TypeSelectionWidget;
+import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ConfigureFBCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -43,6 +44,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -99,6 +101,19 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		typeSelectionWidget.setEditable(true);
 	}
 
+	protected ICheckStateListener getCheckStateListener() {
+		return event -> {
+			final MemberAccessTreeNode node = (MemberAccessTreeNode) event.getElement();
+			final Command cmd = new ChangePinVisibilityCommand(getType(), node.getNamePath(), event.getChecked());
+			if (cmd.canExecute()) {
+				executeCommand(cmd);
+			} else {
+				// reset checkmark as command was not executed
+				((TreeViewer) event.getSource()).update(node, null);
+			}
+		};
+	}
+
 	protected void handleSelectionChanged(final String newTypeName) {
 		if (null != getType() && newDataTypeSelected(newTypeName)) {
 			final DataType newDtp = getDataTypeLib().getTypeIfExists(newTypeName);
@@ -147,7 +162,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 		outputDataMemberAccessViewer = createMemberAccessViewer(outputsGroup);
 	}
 
-	private static TreeViewer createMemberAccessViewer(final Composite parent) {
+	private TreeViewer createMemberAccessViewer(final Composite parent) {
 		final CheckboxTreeViewer viewer = new CheckboxTreeViewer(parent);
 		viewer.setUseHashlookup(true);
 		viewer.setAutoExpandLevel(2);
@@ -168,6 +183,7 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 				return false;
 			}
 		});
+		viewer.addCheckStateListener(getCheckStateListener());
 		return viewer;
 	}
 
