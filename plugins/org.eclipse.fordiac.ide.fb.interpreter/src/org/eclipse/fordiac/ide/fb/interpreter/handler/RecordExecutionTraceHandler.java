@@ -24,17 +24,21 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.ui.SelectAdapterEventDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -72,8 +76,15 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// serialize event manager
 		final ResourceSet reset = new ResourceSetImpl();
-		final AutomationSystem system = network.getAutomationSystem();
-		final IProject project = system.getTypeEntry().getFile().getProject();
+
+		final EObject rootContainer = EcoreUtil.getRootContainer(network);
+		final IProject project = switch (rootContainer) {
+		case final Application app -> app.getAutomationSystem().getTypeLibrary().getProject();
+		case final AutomationSystem sys -> sys.getTypeLibrary().getProject();
+		case final FBType type -> type.getTypeLibrary().getProject();
+		default -> null;
+		};
+
 		final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
 		if (!folder.exists()) {
 			try {
@@ -82,7 +93,13 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
-		final IFile file = folder.getFile(system.getName() + "." + triggerEvent.getQualifiedName() + ".opsem"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final String systemName = switch (rootContainer) {
+		case final AutomationSystem system -> system.getName();
+		case final FBType type -> type.getName();
+		default -> ""; //$NON-NLS-1$
+		};
+		final IFile file = folder.getFile(systemName + "." + triggerEvent.getQualifiedName() + ".opsem"); //$NON-NLS-1$//$NON-NLS-2$
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
 		res.getContents().add(manager);
