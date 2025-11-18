@@ -8,12 +8,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Mario Kastner - initial API and implementation and/or initial documentation
  *******************************************************************************/
+
 package org.eclipse.fordiac.ide.systemmanagement.ui.marker.resolution;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -28,7 +33,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-public class MissingLibraryBuilderMarkerResolution extends WorkspaceMarkerResolution {
+public class WrongBuilderOrderMarkerResolution extends WorkspaceMarkerResolution {
 	@Override
 	protected void runInWorkspace(final IMarker[] markers, final IProgressMonitor monitor) throws CoreException {
 		final SubMonitor subMonitor = SubMonitor.convert(monitor, markers.length);
@@ -36,23 +41,25 @@ public class MissingLibraryBuilderMarkerResolution extends WorkspaceMarkerResolu
 			subMonitor.subTask(marker.getAttribute(IMarker.MESSAGE, "")); //$NON-NLS-1$
 			final IProject project = marker.getResource().getProject();
 			final IProjectDescription description = project.getDescription();
-			if (FordiacNature.configureLibraryBuilder(description)) {
-				project.setDescription(description, subMonitor.split(1));
-			} else {
-				subMonitor.split(1);
-			}
+
+			final List<ICommand> commands = new ArrayList<>(Arrays.asList(description.getBuildSpec()));
+			commands.sort((o1, o2) -> Integer.compare(FordiacNature.getBuilderPriority(o2.getBuilderName()),
+					FordiacNature.getBuilderPriority(o1.getBuilderName())));
+			description.setBuildSpec(commands.toArray(ICommand[]::new));
+			project.setDescription(description, subMonitor.split(1));
+
 			SystemManager.validateProjectNature(project);
 		}
 	}
 
 	@Override
 	public String getLabel() {
-		return Messages.MissingLibraryBuilderMarkerResolution_Label;
+		return Messages.WrongBuilderOrderMarkerResolution_Label;
 	}
 
 	@Override
 	public String getDescription() {
-		return Messages.MissingLibraryBuilderMarkerResolution_Description;
+		return Messages.WrongBuilderOrderMarkerResolution_Description;
 	}
 
 	@Override
@@ -64,7 +71,7 @@ public class MissingLibraryBuilderMarkerResolution extends WorkspaceMarkerResolu
 	public IMarker[] findOtherMarkers(final IMarker[] markers) {
 		return Stream.of(markers)
 				.filter(other -> FordiacNature.class.getName().equals(FordiacErrorMarker.getSource(other))
-						&& FordiacNature.MISSING_LIBRARY_BUILDER == FordiacErrorMarker.getCode(other))
+						&& FordiacNature.WRONG_BUILDER_ORDER == FordiacErrorMarker.getCode(other))
 				.toArray(IMarker[]::new);
 	}
 }
