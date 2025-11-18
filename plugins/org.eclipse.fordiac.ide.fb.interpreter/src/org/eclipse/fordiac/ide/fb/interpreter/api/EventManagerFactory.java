@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -29,29 +30,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public final class EventManagerFactory {
-	public static EventManager createFrom(final List<? extends Transaction> trans) {
+	public static EventManager createFrom(final List<? extends Transaction> transactions) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions().addAll(trans);
+		eventManager.getTransactions().addAll(transactions);
 		return eventManager;
 	}
 
 	public static EventManager createFrom(final List<Event> events, final FBType fbtype) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions().addAll(TransactionFactory.createFrom(events, RuntimeFactory.createFrom(fbtype)));
-		return eventManager;
+		final List<FBTransaction> transactions = TransactionFactory.createFrom(events,
+				RuntimeFactory.createFrom(fbtype));
+		return createFrom(transactions);
 	}
 
 	public static EventManager createFrom(final List<Event> events, final FBNetwork network) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions()
-				.addAll(TransactionFactory.createFrom(events, RuntimeFactory.createFrom(network)));
-		return eventManager;
+		final List<FBTransaction> transactions = TransactionFactory.createFrom(events,
+				RuntimeFactory.createFrom(network));
+		return createFrom(transactions);
 	}
 
 	public static EventManager createFrom(final Event event, final FBNetwork network) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions().add(TransactionFactory.createFrom(event, RuntimeFactory.createFrom(network)));
-		return eventManager;
+		return createFrom(Arrays.asList(event), network);
 	}
 
 	public static EventManager createEventManager(final FBType fbType, final List<Event> events, final boolean random,

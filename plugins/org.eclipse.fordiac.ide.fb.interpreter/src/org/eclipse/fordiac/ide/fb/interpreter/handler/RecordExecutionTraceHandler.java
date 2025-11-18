@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.ui.SelectAdapterEventDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -59,7 +60,17 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// user should have selected an event pin of an FB
 		var selectedPin = getSelectedPin(selection);
-		final FBNetwork network = selectedPin.getBlockFBNetworkElement().getFbNetwork();
+
+		// identify the FB network associated with this pin
+		final FBNetwork network;
+		if (selectedPin.getBlockFBNetworkElement() != null) {
+			network = selectedPin.getBlockFBNetworkElement().getFbNetwork();
+		} else if (selectedPin.getInterfaceList().eContainer() instanceof final CompositeFBType fbt) {
+			network = fbt.getFBNetwork();
+		} else {
+			network = HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class);
+		}
+
 		if (selectedPin instanceof final AdapterDeclaration aDecl) {
 			selectedPin = handleAdapterSelection(aDecl, event);
 		}

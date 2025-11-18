@@ -456,12 +456,10 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			networkRT = innerRT;
 			copyTransferDataToInnerRuntime(outerRT, innerRT, fbTypeRuntime);
 		} else {
-			outputs = ConnectionUtils
-					.getOutputConnections(fbTypeRuntime.getFbElement().getInterface().getEvent(eventName));
 			networkRT = outerRT;
 			copyTransferDataToOuter(outerRT, innerRT, fbTypeRuntime);
 		}
-		return switchNetwork(outputs, networkRT);
+		return switchNetwork(fbTypeRuntime.getFbElement().getInterface().getEvent(eventName), networkRT);
 	}
 
 	private void copyTransferDataToInnerRuntime(final FBNetworkRuntime outer, final FBNetworkRuntime inner,
@@ -519,6 +517,10 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runFBNetwork(final FBNetworkRuntime fBNetworkRuntime) {
+		if (eventOccurrence.getParentFB() == null) {
+			// we are probably at the interface of a composite fb type or subapp type
+			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
+		}
 		if (eventOccurrence.getParentFB() instanceof final UntypedSubApp uSubApp) {
 			FBNetworkRuntime runtime;
 			if (InterfacePinUtils.isInput(eventOccurrence.getEvent())) { // we are entering the inner SubApp networks
@@ -532,11 +534,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			} else { // we are leaving the inner SubApp network
 				runtime = fBNetworkRuntime.getOuterNetworkRuntime();
 			}
-			return switchNetwork(eventOccurrence.getEvent().getOutputConnections(), runtime);
+			return switchNetwork(eventOccurrence.getEvent(), runtime);
 		}
 		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
 		if (!InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
-			return switchNetwork(eventOccurrence.getEvent().getOutputConnections(), EcoreUtil.copy(fBNetworkRuntime));
+			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
 
 		// run FB Type to get the output events for the instance in the network
@@ -575,7 +577,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return typeOutputEos;
 	}
 
-	private EList<EventOccurrence> switchNetwork(final List<Connection> outputs, final FBNetworkRuntime runtime) {
+	private EList<EventOccurrence> switchNetwork(final Event event, final FBNetworkRuntime runtime) {
+		final EList<Connection> outputs = ConnectionUtils.getOutputConnections(event);
 		final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
 		for (final Connection conn : outputs) {
 			// add transactions

@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -153,6 +154,10 @@ public class InterfacePinUtils {
 			return !pin.isIsInput(); // adapter outputs are FB inputs!
 		}
 		return pin.isIsInput();
+	}
+
+	public static boolean isCompositeTypeInterfacePin(final IInterfaceElement pin) {
+		return pin.getInterfaceList().eContainer() instanceof CompositeFBType;
 	}
 
 	private InterfacePinUtils() {

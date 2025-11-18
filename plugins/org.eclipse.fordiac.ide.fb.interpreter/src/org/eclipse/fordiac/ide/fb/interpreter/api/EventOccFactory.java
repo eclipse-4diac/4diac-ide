@@ -42,6 +42,7 @@ public final class EventOccFactory {
 	private static BlockFBNetworkElement getParentFbOfEvent(final Event event) {
 		final var aDecl = InterfacePinUtils.getContainingAdapterDecl(event);
 		if (aDecl != null) {
+			// event was contained in an adapter
 			return aDecl.getBlockFBNetworkElement();
 		}
 		return event.getBlockFBNetworkElement();
