@@ -483,7 +483,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final IInterfaceElement varPin = compRT.getCompositeFBType().getInterfaceList().getInput(varDec.getName());
 			final List<Connection> dataOutputs = ConnectionUtils.getOutputConnections(varPin);
 			for (final Connection output : dataOutputs) {
-				inner.getTransferData().put(output, value);
+				inner.getTransferData().put(output, EcoreUtil.copy(value));
 			}
 		}
 	}
