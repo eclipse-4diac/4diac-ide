@@ -13,6 +13,8 @@
 
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -49,7 +51,7 @@ public class InterfacePinUtils {
 	}
 
 	public static IInterfaceElement getContainedPin(final AdapterDeclaration aDecl, final String pinName) {
-		return aDecl.getAdapterFB().getInterface().getInterfaceElement(pinName);
+		return aDecl.getAdapterFB().getInterface().getInterfaceElement(List.of(pinName));
 	}
 
 	public static AdapterType getContainingAdapterType(final IInterfaceElement event) {
@@ -100,7 +102,7 @@ public class InterfacePinUtils {
 	}
 
 	private static IInterfaceElement findPinInInterface(final FBType fbType, final String pinName) {
-		IInterfaceElement foundEvent = fbType.getInterfaceList().getInterfaceElement(pinName);
+		IInterfaceElement foundEvent = fbType.getInterfaceList().getInterfaceElement(List.of(pinName));
 		if (foundEvent == null && pinName.contains(".")) { //$NON-NLS-1$
 			// event is part of an adapter
 			final String[] path = pinName.split("\\."); //$NON-NLS-1$
@@ -118,7 +120,7 @@ public class InterfacePinUtils {
 			// pin is part of an adapter
 			final String sourceAdapter = getContainingAdapterDecl(iel).getName();
 			final AdapterDeclaration adapter = fbType.getInterfaceList().getAdapter(sourceAdapter);
-			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel.getName());
+			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel);
 		}
 		return foundPin;
 	}

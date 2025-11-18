@@ -19,13 +19,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -33,25 +32,43 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 final class InterfaceListAnnotations {
 
-	// *** InterfaceList ***
-	public static Stream<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
+	public static Stream<IInterfaceElement> getAllInputs(final InterfaceList il) {
 		// Users of getAllInterfaceElements expect to get all elements for ui and
 		// connection checks. Therefore we need to deliver also the member access pins
 		// as well as the mapped output side of var_in_outs here
 		// @formatter:off
 		return Stream.concat(
-				Stream.of(il.getEventInputs(),
-						il.getEventOutputs(),
-						il.getInOutVars(),
-						il.getOutMappedInOutVars(),
-						il.getSockets(),
-						il.getPlugs(),
-						il.getErrorMarker())
-					.flatMap(List::stream),
-				Stream.of(il.getInputVars(), il.getOutputVars())
-					.flatMap(List::stream)
-					.flatMap(InterfaceListAnnotations::flattenAccessPins));
+				Stream.concat(
+					Stream.of(il.getEventInputs(),
+							il.getInOutVars(),
+							il.getSockets())
+						.flatMap(List::stream),
+					il.getInputVars().stream().flatMap(InterfaceListAnnotations::flattenAccessPins)),
+				il.getErrorMarker().stream().filter(ErrorMarkerInterface::isIsInput)
+			);
 		// @formatter:on
+	}
+
+	public static Stream<IInterfaceElement> getAllOutputs(final InterfaceList il) {
+		// Users of getAllInterfaceElements expect to get all elements for ui and
+		// connection checks. Therefore we need to deliver also the member access pins
+		// as well as the mapped output side of var_in_outs here
+		// @formatter:off
+		return Stream.concat(
+				Stream.concat(
+					Stream.of(il.getEventOutputs(),
+						il.getOutMappedInOutVars(),
+						il.getPlugs())
+					.flatMap(List::stream),
+					il.getOutputVars().stream().flatMap(InterfaceListAnnotations::flattenAccessPins)),
+				il.getErrorMarker().stream().filter(em -> !em.isIsInput())
+			);
+		// @formatter:on
+	}
+
+	// *** InterfaceList ***
+	public static Stream<IInterfaceElement> getAllInterfaceElements(final InterfaceList il) {
+		return Stream.concat(getAllInputs(il), getAllOutputs(il));
 	}
 
 	private static Stream<IInterfaceElement> flattenAccessPins(final IInterfaceElement ie) {
@@ -95,20 +112,28 @@ final class InterfaceListAnnotations {
 		return null;
 	}
 
-	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final String name) {
-		IInterfaceElement element = il.getEvent(name);
-		if (element == null) {
-			element = il.getVariable(name);
-		}
-		if (element == null) {
-			element = il.getAdapter(name);
+	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final List<String> path) {
+		return getInterfaceElement(il, path, false);
+	}
+
+	public static IInterfaceElement getInput(final InterfaceList il, final List<String> path) {
+		final IInterfaceElement ie = getRootInput(il, path.get(0));
+
+		if (path.size() == 1) {
+			return ie;
 		}
 
-		if (element == null) {
-			element = il.getErrorMarker().stream().filter(e -> e.getName().equals(name)).findAny().orElse(null);
+		return handleMemberAccess(ie, path, false);
+	}
+
+	public static IInterfaceElement getOutput(final InterfaceList il, final List<String> path) {
+		final IInterfaceElement ie = getRootOutput(il, path.get(0));
+
+		if (path.size() == 1) {
+			return ie;
 		}
 
-		return element;
+		return handleMemberAccess(ie, path, false);
 	}
 
 	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final IInterfaceElement refElement) {
@@ -116,36 +141,31 @@ final class InterfaceListAnnotations {
 			return refElement;
 		}
 
-		final BlockFBNetworkElement refbfbne = refElement.getBlockFBNetworkElement();
-		final String refName = (refbfbne != null) ? refElement.getRelativeName(refbfbne) : refElement.getName();
-		final String[] nameList = refName.split("\\."); //$NON-NLS-1$
-
-		final IInterfaceElement ie = (refElement.isIsInput()) ? il.getInput(nameList[0]) : il.getOutput(nameList[0]);
-
-		if (nameList.length == 1) {
-			return ie;
-		}
-
-		if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
-			return null;
-		}
-		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), false);
+		final List<String> path = refElement.getBlockRelativePath();
+		return (refElement.isIsInput()) ? getInput(il, path) : getOutput(il, path);
 	}
 
-	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final String path,
+	public static IInterfaceElement getInterfaceElement(final InterfaceList il, final List<String> path,
 			final boolean demandCreate) {
-		final String[] nameList = path.split("\\."); //$NON-NLS-1$
+		if (path.isEmpty()) {
+			return null;
+		}
 
-		final IInterfaceElement ie = il.getInterfaceElement(nameList[0]);
+		final IInterfaceElement ie = getRootIInterfaceElement(il, path.get(0));
 
-		if (nameList.length == 1) {
+		if (path.size() == 1) {
 			return ie;
 		}
 
+		return handleMemberAccess(ie, path, demandCreate);
+	}
+
+	private static IInterfaceElement handleMemberAccess(final IInterfaceElement ie, final List<String> path,
+			final boolean demandCreate) {
 		if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
 			return null;
 		}
-		return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), demandCreate);
+		return contVarDecl.getCachedMember(path.subList(1, path.size()), demandCreate);
 	}
 
 	public static AdapterDeclaration getAdapter(final InterfaceList il, final String name) {
@@ -162,14 +182,30 @@ final class InterfaceListAnnotations {
 		return null;
 	}
 
-	public static Stream<IInterfaceElement> getInputs(final InterfaceList il) {
-		return Stream.concat(Stream.concat(il.getEventInputs().stream(), il.getInputVars().stream()),
-				Stream.concat(il.getInOutVars().stream(), il.getSockets().stream()));
+	private static Stream<IInterfaceElement> getRootInputs(final InterfaceList il) {
+		return Stream.of(il.getEventInputs(), il.getInputVars(), il.getInOutVars(), il.getSockets())
+				.flatMap(List::stream);
 	}
 
-	public static Stream<IInterfaceElement> getOutputs(final InterfaceList il) {
-		return Stream.concat(Stream.concat(il.getEventOutputs().stream(), il.getOutputVars().stream()),
-				Stream.concat(il.getOutMappedInOutVars().stream(), il.getPlugs().stream()));
+	private static Stream<IInterfaceElement> getRootOutputs(final InterfaceList il) {
+		return Stream.of(il.getEventOutputs(), il.getOutputVars(), il.getOutMappedInOutVars(), il.getPlugs())
+				.flatMap(List::stream);
+	}
+
+	private static Stream<IInterfaceElement> getRootInterfaceElements(final InterfaceList il) {
+		return Stream.concat(getRootInputs(il), getRootOutputs(il));
+	}
+
+	private static IInterfaceElement getRootInput(final InterfaceList il, final String name) {
+		return getRootInputs(il).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	}
+
+	private static IInterfaceElement getRootOutput(final InterfaceList il, final String name) {
+		return getRootOutputs(il).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	}
+
+	private static IInterfaceElement getRootIInterfaceElement(final InterfaceList il, final String name) {
+		return getRootInterfaceElements(il).filter(ie -> ie.getName().equals(name)).findFirst().orElse(null);
 	}
 
 	private InterfaceListAnnotations() {

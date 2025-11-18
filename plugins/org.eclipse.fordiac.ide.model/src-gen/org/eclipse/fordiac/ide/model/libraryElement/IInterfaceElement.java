@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.List;
 import java.util.Map;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
@@ -153,5 +154,13 @@ public interface IInterfaceElement extends ITypedElement, ConfigurableObject, Hi
 	 * @generated
 	 */
 	IInterfaceElement findInTypeInterface();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.StringList" required="true"
+	 * @generated
+	 */
+	List<String> getBlockRelativePath();
 
 } // IInterfaceElement

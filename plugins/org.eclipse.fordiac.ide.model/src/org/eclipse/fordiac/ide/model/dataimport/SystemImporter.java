@@ -502,7 +502,7 @@ public class SystemImporter extends CommonElementImporter {
 		for (final BlockFBNetworkElement fbnEl : mappedFBs) {
 			final BlockFBNetworkElement srcResFb = fbnEl.getOpposite();
 			final Resource res = fbnEl.getResource();
-			fbnEl.getInterface().getOutputs().flatMap(SystemImporter::flattenAccessPins)
+			fbnEl.getInterface().getAllOutputs().flatMap(SystemImporter::flattenAccessPins)
 					.flatMap(ie -> ie.getOutputConnections().stream()) //
 					.filter(con -> con.getDestinationElement().getResource() == res) //
 					.forEach(con -> res.getFBNetwork().addConnection(createResourceCon(srcResFb, con)));

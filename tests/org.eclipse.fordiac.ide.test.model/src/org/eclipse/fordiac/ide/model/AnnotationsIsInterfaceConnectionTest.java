@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -50,26 +52,26 @@ class AnnotationsIsInterfaceConnectionTest {
 		final var subapp = createSubappBusOutside(struct, muxblock, demuxblock);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
-				demuxblock.getInterfaceElement(DEMUX_IN), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_INPUT_NAME)), //
+				demuxblock.getInterface().getInterfaceElement(List.of(DEMUX_IN)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				muxblock.getInterfaceElement(MUX_OUT), //
-				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
+				muxblock.getInterface().getInterfaceElement(List.of(MUX_OUT)), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_OUTPUT_NAME)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
-				muxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
+				demuxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_1)), //
+				muxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_1)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
-				muxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
+				demuxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_2)), //
+				muxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_2)), //
 				true //
 		);
 
@@ -121,32 +123,32 @@ class AnnotationsIsInterfaceConnectionTest {
 		final var subapp = createSubappBusInside(muxblock, demuxblock);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
-				muxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_INPUT_NAME)), //
+				muxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_1)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				subapp.getInterfaceElement(SUBAPP_INPUT_NAME), //
-				muxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_INPUT_NAME)), //
+				muxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_2)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_1), //
-				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
+				demuxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_1)), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_OUTPUT_NAME)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				demuxblock.getInterfaceElement(STRUCT_ELEMENT_2), //
-				subapp.getInterfaceElement(SUBAPP_OUTPUT_NAME), //
+				demuxblock.getInterface().getInterfaceElement(List.of(STRUCT_ELEMENT_2)), //
+				subapp.getInterface().getInterfaceElement(List.of(SUBAPP_OUTPUT_NAME)), //
 				true //
 		);
 
 		addVerifyConnection(subapp, //
-				muxblock.getInterfaceElement(MUX_OUT), //
-				demuxblock.getInterfaceElement(DEMUX_IN), //
+				muxblock.getInterface().getInterfaceElement(List.of(MUX_OUT)), //
+				demuxblock.getInterface().getInterfaceElement(List.of(DEMUX_IN)), //
 				true //
 		);
 

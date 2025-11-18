@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFolder;
@@ -86,7 +87,7 @@ public class ReferenceExamplesTest {
 		final BlockFBNetworkElement initialFb = (BlockFBNetworkElement) testCase.getSubAppNetwork()
 				.getElementNamed(request[3]);
 		// fifth element: pin to trigger
-		final Event eventPin = (Event) initialFb.getInterfaceElement(request[4]);
+		final Event eventPin = (Event) initialFb.getInterface().getInterfaceElement(List.of(request[4]));
 		// sixth element must be opsem
 		assertTrue(request[5].equals(FILE_EXTENSION)); // $NON-NLS-1$
 

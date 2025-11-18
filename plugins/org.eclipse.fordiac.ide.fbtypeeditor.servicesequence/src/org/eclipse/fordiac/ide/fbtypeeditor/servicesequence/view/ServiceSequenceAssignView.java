@@ -424,7 +424,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 	}
 
 	private static Event findEvent(final FBType fbType, final String eventName) {
-		final Event event = (Event) fbType.getInterfaceList().getInterfaceElement(eventName);
+		final Event event = (Event) fbType.getInterfaceList().getInterfaceElement(List.of(eventName));
 		if ((event == null) || !event.isIsInput()) {
 			throw new IllegalArgumentException("input primitive: event " + eventName + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 		}

@@ -325,12 +325,13 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final String name) {
-		return InterfaceListAnnotations.getInterfaceElement(this, name);
+	public IInterfaceElement getInterfaceElement(final List<String> path) {
+		return InterfaceListAnnotations.getInterfaceElement(this, path);
 	}
 
 	/**
@@ -375,8 +376,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public Stream<IInterfaceElement> getInputs() {
-		return InterfaceListAnnotations.getInputs(this);
+	public Stream<IInterfaceElement> getAllInputs() {
+		return InterfaceListAnnotations.getAllInputs(this);
 	}
 
 	/**
@@ -385,8 +386,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public Stream<IInterfaceElement> getOutputs() {
-		return InterfaceListAnnotations.getOutputs(this);
+	public Stream<IInterfaceElement> getAllOutputs() {
+		return InterfaceListAnnotations.getAllOutputs(this);
 	}
 
 	/**
@@ -395,8 +396,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInput(final String name) {
-		return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	public IInterfaceElement getInput(final List<String> path) {
+		return InterfaceListAnnotations.getInput(this, path);
 	}
 
 	/**
@@ -405,8 +406,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getOutput(final String name) {
-		return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	public IInterfaceElement getOutput(final List<String> path) {
+		return InterfaceListAnnotations.getOutput(this, path);
 	}
 
 	/**
@@ -425,7 +426,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final String path, final boolean demandCreate) {
+	public IInterfaceElement getInterfaceElement(final List<String> path, final boolean demandCreate) {
 		return InterfaceListAnnotations.getInterfaceElement(this, path, demandCreate);
 	}
 

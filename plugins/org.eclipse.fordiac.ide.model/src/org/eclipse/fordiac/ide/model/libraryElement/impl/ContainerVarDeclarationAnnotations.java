@@ -16,6 +16,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
@@ -23,14 +25,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ContainerVarDeclarationAnnotations {
 
-	static VarDeclaration getCachedMember(final ContainerVarDeclaration contVarDeclaration, final String[] path,
+	static VarDeclaration getCachedMember(final ContainerVarDeclaration contVarDeclaration, final List<String> path,
 			final boolean demandCreate) {
 		VarDeclaration visibleMember = contVarDeclaration;
 
-		for (int i = 0; i < path.length; i++) {
-			visibleMember = getCachedMember((ContainerVarDeclaration) visibleMember, path[i], demandCreate);
+		for (int i = 0; i < path.size(); i++) {
+			visibleMember = getCachedMember((ContainerVarDeclaration) visibleMember, path.get(i), demandCreate);
 			if (visibleMember == null
-					|| (i != path.length - 1 && !(visibleMember instanceof final ContainerVarDeclaration))) {
+					|| (i != path.size() - 1 && !(visibleMember instanceof final ContainerVarDeclaration))) {
 				return null;
 			}
 		}

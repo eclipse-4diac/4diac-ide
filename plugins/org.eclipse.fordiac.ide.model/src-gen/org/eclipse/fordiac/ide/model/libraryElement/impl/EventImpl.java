@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
@@ -496,6 +497,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	@Override
 	public IInterfaceElement findInTypeInterface() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<String> getBlockRelativePath() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
 	}
 
 	/**

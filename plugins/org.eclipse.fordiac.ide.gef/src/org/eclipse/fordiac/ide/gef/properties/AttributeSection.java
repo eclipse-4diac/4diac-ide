@@ -224,7 +224,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 		if (copy instanceof final IInterfaceElement interfaceElement
 				&& getTypeElement(interfaceElement.getBlockFBNetworkElement()) instanceof final FBType fbType) {
-			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
+			return fbType.getInterfaceList().getInterfaceElement(interfaceElement);
 		}
 
 		return null;

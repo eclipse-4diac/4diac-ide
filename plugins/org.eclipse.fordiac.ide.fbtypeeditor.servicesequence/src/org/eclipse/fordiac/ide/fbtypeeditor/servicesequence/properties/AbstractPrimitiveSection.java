@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
@@ -195,7 +196,7 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 		setDataQualifyingDropdown();
 
 		final IInterfaceElement qiData = getType().getService().getFBType().getInterfaceList()
-				.getInterfaceElement("QI"); //$NON-NLS-1$
+				.getInterfaceElement(List.of("QI")); //$NON-NLS-1$
 
 		dataQualifyingCombo.setEnabled(qiData != null && !checkBox.getSelection());
 		customEventText.setEnabled(checkBox.getSelection());

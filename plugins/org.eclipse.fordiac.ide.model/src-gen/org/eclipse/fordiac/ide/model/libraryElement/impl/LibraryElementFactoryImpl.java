@@ -307,6 +307,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createBlockFBNWElementStreamFromString(eDataType, initialValue);
 			case LibraryElementPackage.STRING_ARRAY:
 				return createStringArrayFromString(eDataType, initialValue);
+			case LibraryElementPackage.STRING_LIST:
+				return createStringListFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -344,6 +346,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertBlockFBNWElementStreamToString(eDataType, instanceValue);
 			case LibraryElementPackage.STRING_ARRAY:
 				return convertStringArrayToString(eDataType, instanceValue);
+			case LibraryElementPackage.STRING_LIST:
+				return convertStringListToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1569,6 +1573,25 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertStringArrayToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> createStringListFromString(EDataType eDataType, String initialValue) {
+		return (List<String>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertStringListToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

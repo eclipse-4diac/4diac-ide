@@ -761,6 +761,8 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateBlockFBNWElementStream((Stream<BlockFBNetworkElement>)value, diagnostics, context);
 			case LibraryElementPackage.STRING_ARRAY:
 				return validateStringArray((String[])value, diagnostics, context);
+			case LibraryElementPackage.STRING_LIST:
+				return validateStringList((List<String>)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -3138,6 +3140,15 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateStringArray(String[] stringArray, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateStringList(List<String> stringList, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

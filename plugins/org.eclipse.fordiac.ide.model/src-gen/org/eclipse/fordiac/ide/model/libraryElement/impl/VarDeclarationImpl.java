@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
@@ -723,6 +724,16 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<String> getBlockRelativePath() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
 	}
 
 	/**

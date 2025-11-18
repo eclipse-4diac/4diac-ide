@@ -44,7 +44,7 @@ public enum AttributeInheritMode {
 
 		if (newElement instanceof final BlockFBNetworkElement fbne && typeElement instanceof final FBType fbType) {
 			fbType.getInterfaceList().getAllInterfaceElements().forEach(typeInterfaceElement -> {
-				final var newInterface = fbne.getInterfaceElement(typeInterfaceElement.getName());
+				final var newInterface = fbne.getInterface().getInterfaceElement(typeInterfaceElement);
 				AttributeInheritMode.copyAttributes(newInterface, typeInterfaceElement.getAttributes());
 			});
 		} else if (newElement instanceof final Device device && typeElement instanceof final DeviceType deviceType) {

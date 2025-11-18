@@ -100,7 +100,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	}
 
 	private VirtualIO createVirtualIOElement(final BlockFBNetworkElement fbNetworkelement, final String name) {
-		final IInterfaceElement ie = fbNetworkelement.getInterfaceElement(name);
+		final IInterfaceElement ie = fbNetworkelement.getInterface().getInterfaceElement(List.of(name));
 		if ((null != ie) && (virtualIOMapping.get(ie) == null)) {
 			final VirtualIO vIO = new VirtualIO(ie);
 			virtualIOMapping.put(ie, vIO);

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.handler;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -130,7 +131,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				adapter);
 		final int returnCode = dialog.open();
 		if (returnCode != -1) {
-			return adapter.getAdapterFB().getInterface().getInterfaceElement(dialog.getSelectedEvent());
+			return adapter.getAdapterFB().getInterface().getInterfaceElement(List.of(dialog.getSelectedEvent()));
 		}
 		return null;
 	}
