@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.List;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -58,9 +59,9 @@ public interface ContainerVarDeclaration extends VarDeclaration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringArray" demandCreateDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @model pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringList" demandCreateDataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
-	VarDeclaration getCachedMember(String[] path, boolean demandCreate);
+	VarDeclaration getCachedMember(List<String> path, boolean demandCreate);
 
 } // ContainerVarDeclaration

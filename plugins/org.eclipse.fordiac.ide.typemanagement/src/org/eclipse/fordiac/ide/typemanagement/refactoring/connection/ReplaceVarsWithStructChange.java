@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.connection;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.core.runtime.CoreException;
@@ -76,8 +77,8 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 		vars.forEach(varName -> {
-			if (isInput && element.getInterfaceList().getInput(varName) == null
-					|| !isInput && element.getInterfaceList().getOutput(varName) == null) {
+			if (isInput && element.getInterfaceList().getInput(List.of(varName)) == null
+					|| !isInput && element.getInterfaceList().getOutput(List.of(varName)) == null) {
 				status.merge(RefactoringStatus.createFatalErrorStatus(
 						varName + Messages.ReplaceVarsWithStructChange_NotContained + this.getElementURI()));
 			}

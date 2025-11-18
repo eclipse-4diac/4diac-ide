@@ -65,14 +65,6 @@ public interface BlockFBNetworkElement extends FBNetworkElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model required="true" nameRequired="true"
-	 * @generated
-	 */
-	IInterfaceElement getInterfaceElement(String name);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */

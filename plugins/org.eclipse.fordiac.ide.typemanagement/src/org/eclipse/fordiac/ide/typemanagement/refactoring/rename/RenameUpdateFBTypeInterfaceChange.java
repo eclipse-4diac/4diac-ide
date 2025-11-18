@@ -90,7 +90,7 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 		final CompoundCommand cmd = new CompoundCommand();
 
 		for (final String varName : affectedVarNames) {
-			final IInterfaceElement iie = type.getInterfaceList().getInterfaceElement(varName);
+			final IInterfaceElement iie = type.getInterfaceList().getInterfaceElement(List.of(varName));
 			if (iie instanceof final VarDeclaration vd) {
 				cmd.add(ChangeDataTypeCommand.forTypeName(vd, newTypeName));
 			}

@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -102,7 +103,7 @@ public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements C
 	 * @generated
 	 */
 	@Override
-	public VarDeclaration getCachedMember(final String[] path, final boolean demandCreate) {
+	public VarDeclaration getCachedMember(final List<String> path, final boolean demandCreate) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getCachedMember(this, path, demandCreate);
 	}
 

@@ -45,9 +45,9 @@ public class SequenceMatcher {
 	}
 
 	private Optional<String> matchEvent(final String eventName, final boolean isInput) {
-		final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(eventName);
+		final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(List.of(eventName));
 		if (!(el instanceof Event)) {
-			return Optional.of("Event " + eventName + " not present in FB interface");  //$NON-NLS-1$//$NON-NLS-2$
+			return Optional.of("Event " + eventName + " not present in FB interface"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		if (el.isIsInput() != isInput) {
 			return Optional.of("Event pin " + eventName + " is not at the correct interface (input or output"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -72,7 +72,7 @@ public class SequenceMatcher {
 		// parse the assumption of the form XY:=UINT#0
 		final List<String> str = ServiceSequenceUtils.splitParameter(assumption);
 		if (str.size() == 2) {
-			final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(str.get(0));
+			final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(List.of(str.get(0)));
 			if (!(el instanceof VarDeclaration) || (el.isIsInput() != isInput)) {
 				return Optional.of("No matching data pin with name " + str.get(0)); //$NON-NLS-1$
 			}

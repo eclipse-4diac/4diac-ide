@@ -8495,6 +8495,17 @@ public interface LibraryElementPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>String List</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.util.List
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringList()
+	 * @generated
+	 */
+	int STRING_LIST = 122;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection <em>Adapter Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12024,6 +12035,17 @@ public interface LibraryElementPackage extends EPackage {
 	EDataType getStringArray();
 
 	/**
+	 * Returns the meta object for data type '{@link java.util.List <em>String List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>String List</em>'.
+	 * @see java.util.List
+	 * @model instanceClass="java.util.List&lt;java.lang.String&gt;"
+	 * @generated
+	 */
+	EDataType getStringList();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -14935,6 +14957,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType STRING_ARRAY = eINSTANCE.getStringArray();
+
+		/**
+		 * The meta object literal for the '<em>String List</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.util.List
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getStringList()
+		 * @generated
+		 */
+		EDataType STRING_LIST = eINSTANCE.getStringList();
 
 	}
 

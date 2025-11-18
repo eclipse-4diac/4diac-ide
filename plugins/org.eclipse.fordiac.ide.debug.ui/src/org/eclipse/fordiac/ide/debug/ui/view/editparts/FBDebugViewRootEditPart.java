@@ -216,7 +216,7 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 		final EvaluatorDebugTarget debugTarget = (EvaluatorDebugTarget) getModel().getAdapter(IDebugTarget.class);
 		getFBEvaluator().getContext().getMembers().entrySet().forEach(entry -> {
 			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
-					.getInterfaceElement(entry.getKey());
+					.getInterfaceElement(List.of(entry.getKey()));
 			if (interfaceElement != null) {
 				interfaceValues.put(entry.getValue(),
 						new InterfaceValueEntity(interfaceElement, entry.getValue(), debugTarget));
@@ -225,7 +225,7 @@ public class FBDebugViewRootEditPart extends AbstractGraphicalEditPart {
 		if (getFBEvaluator() instanceof final SamplingFBEvaluator samplingEvaluator) {
 			samplingEvaluator.getDelegate().getContext().getMembers().entrySet().forEach(entry -> {
 				final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
-						.getInterfaceElement(entry.getKey());
+						.getInterfaceElement(List.of(entry.getKey()));
 				if (interfaceElement != null) {
 					interfaceValues.put(entry.getValue(),
 							new InnerValueEntity(interfaceElement, entry.getValue(), debugTarget));

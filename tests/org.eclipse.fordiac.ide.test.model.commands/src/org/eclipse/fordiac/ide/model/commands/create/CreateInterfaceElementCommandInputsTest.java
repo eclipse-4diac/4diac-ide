@@ -43,8 +43,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		t.test(interfacelist.getOutputVars().isEmpty());
 		t.test(interfacelist.getEventInputs().isEmpty());
 		t.test(interfacelist.getEventOutputs().isEmpty());
-		t.test(interfacelist.getInterfaceElement(element));
-		t.test(interfacelist.getInterfaceElement(element).getTypeName(), type);
+		t.test(interfacelist.getInterfaceElement(List.of(element)));
+		t.test(interfacelist.getInterfaceElement(List.of(element)).getTypeName(), type);
 	}
 
 	private static void verifyStateInputWithoutName(final State state, final State oldState, final TestFunction t) {
@@ -79,7 +79,8 @@ public class CreateInterfaceElementCommandInputsTest extends CreateInterfaceElem
 		tester.get().test(state.getCommand() instanceof CreateInterfaceElementCommand);
 		final CreateInterfaceElementCommand c = ((CreateInterfaceElementCommand) state.getCommand());
 		tester.get().test(c.getInterfaceList(), getTypeInterfaceList(state));
-		tester.get().test(getTypeInterfaceList(state).getInterfaceElement(ELEMENT3_NAME), c.getCreatedElement());
+		tester.get().test(getTypeInterfaceList(state).getInterfaceElement(List.of(ELEMENT3_NAME)),
+				c.getCreatedElement());
 		tester.get().test(c.getCreatedElement(), c.getCreatedElement());
 
 		return result;

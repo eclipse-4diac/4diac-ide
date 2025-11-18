@@ -104,7 +104,7 @@ public final class EventManagerUtils {
 
 	private static void setInputVariable(final VarDeclaration inputVar, final FBType type) {
 		if (null != inputVar) {
-			final var pin = type.getInterfaceList().getInterfaceElement(inputVar.getName());
+			final var pin = type.getInterfaceList().getInterfaceElement(List.of(inputVar.getName()));
 			if ((pin instanceof final VarDeclaration datapin) && pin.isIsInput()) {
 				final Value sampledValue = LibraryElementFactory.eINSTANCE.createValue();
 				datapin.setValue(sampledValue);

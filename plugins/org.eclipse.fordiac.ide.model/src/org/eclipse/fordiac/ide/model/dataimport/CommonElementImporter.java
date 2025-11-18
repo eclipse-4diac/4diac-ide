@@ -512,7 +512,7 @@ public abstract class CommonElementImporter {
 	protected void parsePinVisibilityAttribute(final BlockFBNetworkElement block) {
 		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
-		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
+		final IInterfaceElement ie = block.getInterface().getInterfaceElement(List.of(temp[0]));
 		if (ie != null) {
 			ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
 		}
@@ -667,7 +667,7 @@ public abstract class CommonElementImporter {
 			final int splitPos = value.indexOf(':');
 			if (splitPos != -1) {
 				final String name = value.substring(0, splitPos);
-				final IInterfaceElement ie = block.getInterfaceElement(name);
+				final IInterfaceElement ie = block.getInterface().getInterfaceElement(List.of(name));
 				if (ie != null) {
 					final String comment = value.substring(splitPos + 1);
 					ie.setComment(comment);
@@ -848,7 +848,7 @@ public abstract class CommonElementImporter {
 
 	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
-		IInterfaceElement ie = block.getInterface().getInterfaceElement(name, true);
+		IInterfaceElement ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
 
 		if (null == ie) {
 			ie = createParameterErrorMarker(block, name, val);

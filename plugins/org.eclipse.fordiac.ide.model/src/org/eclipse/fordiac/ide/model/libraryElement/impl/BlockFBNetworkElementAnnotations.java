@@ -24,7 +24,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public final class BlockFBNetworkElementAnnotations {
 
@@ -33,13 +32,6 @@ public final class BlockFBNetworkElementAnnotations {
 			element.getInputConnections().forEach(Connection::checkIfConnectionBroken);
 			element.getOutputConnections().forEach(Connection::checkIfConnectionBroken);
 		});
-	}
-
-	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement bfbne, final String name) {
-		if (bfbne.getInterface() != null) {
-			return bfbne.getInterface().getInterfaceElement(name);
-		}
-		return null;
 	}
 
 	private BlockFBNetworkElementAnnotations() {

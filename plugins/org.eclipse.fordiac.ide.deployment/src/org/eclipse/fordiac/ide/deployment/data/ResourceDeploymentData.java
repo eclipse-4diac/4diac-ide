@@ -137,7 +137,7 @@ public class ResourceDeploymentData {
 		for (final VarDeclaration inoutVar : fb.getInterface().getInOutVars()) {
 			addInputParam(subAppHierarchy, prefix, inoutVar);
 		}
-		fb.getInterface().getInputs().forEach(input -> addInputConnections(subAppHierarchy, prefix, input));
+		fb.getInterface().getAllInputs().forEach(input -> addInputConnections(subAppHierarchy, prefix, input));
 	}
 
 	private void addInputParam(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
@@ -249,8 +249,7 @@ public class ResourceDeploymentData {
 		} else {
 			return element;
 		}
-		return element.isIsInput() ? interfaceList.getInput(element.getName())
-				: interfaceList.getOutput(element.getName());
+		return interfaceList.getInterfaceElement(element);
 	}
 
 	private static IInterfaceElement getSubAppExternalElement(final IInterfaceElement element, final SubApp subApp) {

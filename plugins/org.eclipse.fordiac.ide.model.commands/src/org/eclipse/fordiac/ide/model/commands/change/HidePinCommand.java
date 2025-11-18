@@ -72,9 +72,8 @@ public class HidePinCommand extends Command implements ScopedCommand {
 	private static boolean isConnectedInsideSubApp(final IInterfaceElement element) {
 		if (element instanceof final VarDeclaration varDecl && element.isIsInput()
 				&& element.eContainer().eContainer() instanceof final SubAppType sat) {
-			final String name = varDecl.getName();
 			return sat.getFBNetwork().getBlockFBNetworkElements().anyMatch(fb -> {
-				final IInterfaceElement internal = fb.getInterfaceElement(name);
+				final IInterfaceElement internal = fb.getInterface().getInterfaceElement(varDecl);
 				return (internal != null && !internal.getInputConnections().isEmpty());
 			});
 		}

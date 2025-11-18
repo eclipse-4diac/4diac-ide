@@ -205,10 +205,10 @@ public interface InterfaceList extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model required="true" nameRequired="true"
+	 * @model required="true" pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringList" pathRequired="true"
 	 * @generated
 	 */
-	IInterfaceElement getInterfaceElement(String name);
+	IInterfaceElement getInterfaceElement(List<String> path);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -248,7 +248,7 @@ public interface InterfaceList extends EObject {
 	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream"
 	 * @generated
 	 */
-	Stream<IInterfaceElement> getInputs();
+	Stream<IInterfaceElement> getAllInputs();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -256,23 +256,23 @@ public interface InterfaceList extends EObject {
 	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream"
 	 * @generated
 	 */
-	Stream<IInterfaceElement> getOutputs();
+	Stream<IInterfaceElement> getAllOutputs();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model
+	 * @model pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringList"
 	 * @generated
 	 */
-	IInterfaceElement getInput(String name);
+	IInterfaceElement getInput(List<String> path);
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model
+	 * @model pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringList"
 	 * @generated
 	 */
-	IInterfaceElement getOutput(String name);
+	IInterfaceElement getOutput(List<String> path);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -285,10 +285,10 @@ public interface InterfaceList extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model required="true" pathRequired="true" demandCreateDataType="org.eclipse.emf.ecore.xml.type.Boolean" demandCreateRequired="true"
+	 * @model required="true" pathDataType="org.eclipse.fordiac.ide.model.libraryElement.StringList" pathRequired="true" demandCreateDataType="org.eclipse.emf.ecore.xml.type.Boolean" demandCreateRequired="true"
 	 * @generated
 	 */
-	IInterfaceElement getInterfaceElement(String path, boolean demandCreate);
+	IInterfaceElement getInterfaceElement(List<String> path, boolean demandCreate);
 
 	/**
 	 * Returns the value of the '<em><b>Out Mapped In Out Vars</b></em>' containment reference list.

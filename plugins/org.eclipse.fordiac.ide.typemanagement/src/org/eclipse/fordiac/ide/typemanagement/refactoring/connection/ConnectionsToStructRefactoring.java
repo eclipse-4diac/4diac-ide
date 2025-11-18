@@ -88,8 +88,9 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		this.destinationURI = EcoreUtil.getURI(Objects.requireNonNull(destinationType));
 		this.replaceableConMap = Objects.requireNonNull(replacableConMap);
 
-		vars = sourceType.getInterfaceList().getOutputs().filter(port -> replacableConMap.containsKey(port.getName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
+		vars = sourceType.getInterfaceList().getAllOutputs()
+				.filter(port -> replacableConMap.containsKey(port.getName())).filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast).toList();
 
 		lib = sourceType.getTypeLibrary();
 	}
@@ -308,7 +309,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		destinationSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
 
 			// Collect all correct connections
-			final List<Connection> cons = instance.getInterface().getInputs()
+			final List<Connection> cons = instance.getInterface().getAllInputs()
 					.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
 					.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
 							&& replaceableConMap.get(con.getSource().getName()).equals(con.getDestination().getName())
@@ -339,14 +340,15 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		final Map<AutomationSystem, List<URI>> repairDestinationMap = new HashMap<>();
 		destinationSearch.stream().map(BlockFBNetworkElement.class::cast)
 				.filter(instance -> !correctConnectionMap.containsKey(instance)).forEach(instance -> {
-					if (instance.getInterface().getInputs()
+					if (instance.getInterface().getAllInputs()
 							.filter(input -> replaceableConMap.containsValue(input.getName()))
 							.map(IInterfaceElement::getInputConnections).flatMap(EList::stream).findAny().isPresent()) {
 						addToMap(repairDestinationMap, instance);
 					}
 				});
 		sourceSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
-			if (instance.getInterface().getOutputs().filter(output -> replaceableConMap.containsKey(output.getName()))
+			if (instance.getInterface().getAllOutputs()
+					.filter(output -> replaceableConMap.containsKey(output.getName()))
 					.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
 					.anyMatch(con -> !correctConnectionMap.containsKey(con.getDestinationElement()))) {
 				addToMap(repairSourceMap, instance);

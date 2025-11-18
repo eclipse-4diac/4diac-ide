@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -36,7 +37,7 @@ public final class FBNetworkTestRunner {
 			throw new IllegalArgumentException("FB to trigger does not exist"); //$NON-NLS-1$
 		}
 
-		final Event event = (Event) initialFb.getInterfaceElement(pinName);
+		final Event event = (Event) initialFb.getInterface().getInterfaceElement(List.of(pinName));
 		if (event == null) {
 			throw new IllegalArgumentException("Event pin does not exist"); //$NON-NLS-1$
 		}

@@ -122,7 +122,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 	}
 
 	private IInterfaceElement getExecutionChainEnd() {
-		final Optional<IInterfaceElement> saEventOutput = subApp.getInterface().getOutputs()
+		final Optional<IInterfaceElement> saEventOutput = subApp.getInterface().getAllOutputs()
 				.filter(ie -> !ie.getInputConnections().isEmpty()).findFirst();
 		if (saEventOutput.isPresent() && !saEventOutput.get().getInputConnections().isEmpty()) {
 			return saEventOutput.get().getInputConnections().getFirst().getSource();

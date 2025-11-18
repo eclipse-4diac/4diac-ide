@@ -82,8 +82,9 @@ public class ReplaceVarsWithStructCommand extends Command {
 				.map(with -> ((Event) with.eContainer()).getName()).distinct().toList();
 
 		// Delete old Vars
-		vars.forEach(varName -> editFBsCommand.add(isInput ? new DeleteInterfaceCommand(interfacelist.getInput(varName))
-				: new DeleteInterfaceCommand(interfacelist.getOutput(varName))));
+		vars.forEach(varName -> editFBsCommand
+				.add(isInput ? new DeleteInterfaceCommand(interfacelist.getInput(List.of(varName)))
+						: new DeleteInterfaceCommand(interfacelist.getOutput(List.of(varName)))));
 		// Create Struct Vars
 		createStruct = new CreateInterfaceElementCommand(struct, name, interfacelist, isInput, position);
 		editFBsCommand.add(createStruct);

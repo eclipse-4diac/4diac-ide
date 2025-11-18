@@ -338,7 +338,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				} else {
 					srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
 				}
-				final IInterfaceElement srcIE = srcFB.getInterfaceElement(src[src.length - 1]);
+				final IInterfaceElement srcIE = srcFB.getInterface().getInterfaceElement(List.of(src[src.length - 1]));
 
 				final String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
 				final FB dstFB;
@@ -350,7 +350,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				} else {
 					dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
 				}
-				final IInterfaceElement dstIE = dstFB.getInterfaceElement(dst[dst.length - 1]);
+				final IInterfaceElement dstIE = dstFB.getInterface().getInterfaceElement(List.of(dst[dst.length - 1]));
 				createConnectionCommand(srcIE, dstIE);
 			}
 		}

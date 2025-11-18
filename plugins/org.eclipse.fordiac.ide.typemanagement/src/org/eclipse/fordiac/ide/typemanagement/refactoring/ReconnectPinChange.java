@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -93,8 +94,8 @@ class ReconnectPinByName extends Command {
 
 	@Override
 	public void execute() {
-		final IInterfaceElement interfaceElement = element.getInterfaceElement(newName);
-		final IInterfaceElement oldinterfaceElement = element.getInterfaceElement(oldName);
+		final IInterfaceElement interfaceElement = element.getInterface().getInterfaceElement(List.of(newName));
+		final IInterfaceElement oldinterfaceElement = element.getInterface().getInterfaceElement(List.of(oldName));
 
 		if (interfaceElement != null
 				&& oldinterfaceElement instanceof final ErrorMarkerInterface errorMarkerInterface) {

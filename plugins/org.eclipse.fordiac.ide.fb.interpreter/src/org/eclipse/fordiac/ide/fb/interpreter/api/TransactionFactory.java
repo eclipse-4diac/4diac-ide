@@ -104,7 +104,7 @@ public final class TransactionFactory {
 			for (final List<String> parameter : paramList) {
 				if (parameter.size() == 2) {
 					final IInterfaceElement el = EcoreUtil
-							.copy(fb.getInterfaceList().getInterfaceElement(parameter.get(0).strip()));
+							.copy(fb.getInterfaceList().getInterfaceElement(List.of(parameter.get(0).strip())));
 
 					VariableUtils.setVariable((VarDeclaration) el, parameter.get(1));
 					transaction.getInputVariables().add((VarDeclaration) el);

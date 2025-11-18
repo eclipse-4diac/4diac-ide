@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -35,7 +37,7 @@ public final class VariableUtils {
 	}
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
-		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
+		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(List.of(name.strip()));
 		if (!(el instanceof VarDeclaration)) {
 			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
 		}

@@ -30,6 +30,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//InterfaceTypeEntry"/>
     <genDataTypes ecoreDataType="lib.ecore#//BlockFBNWElementStream"/>
     <genDataTypes ecoreDataType="lib.ecore#//StringArray"/>
+    <genDataTypes ecoreDataType="lib.ecore#//StringList"/>
     <genClasses ecoreClass="lib.ecore#//AdapterConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterConnection/fBNetwork"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
@@ -129,10 +130,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BlockFBNetworkElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BlockFBNetworkElement/interface"/>
-      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getInterfaceElement"
-          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/getInterfaceElement/name"/>
-      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/getTypeInterface"
           body="if(getTypeEntry() != null) {&#xA;&#x9;return getTypeEntry().getInterface();&#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/checkConnections"
@@ -589,6 +586,8 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/findInTypeInterface"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getBlockRelativePath"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Import">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Import/importedNamespace"/>
@@ -634,8 +633,8 @@
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getVariable/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInterfaceElement"
-          body="return InterfaceListAnnotations.getInterfaceElement(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement/name"/>
+          body="return InterfaceListAnnotations.getInterfaceElement(this, path);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInterfaceElement/path"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAdapter" body="return InterfaceListAnnotations.getAdapter(this, name);">
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
@@ -645,13 +644,13 @@
           body="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
           body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInputs" body="return InterfaceListAnnotations.getInputs(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutputs" body="return InterfaceListAnnotations.getOutputs(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInput" body="return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);">
-        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInput/name"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInputs" body="return InterfaceListAnnotations.getAllInputs(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllOutputs" body="return InterfaceListAnnotations.getAllOutputs(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInput" body="return InterfaceListAnnotations.getInput(this, path);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getInput/path"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutput" body="return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);">
-        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getOutput/name"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getOutput" body="return InterfaceListAnnotations.getOutput(this, path);">
+        <genParameters ecoreParameter="lib.ecore#//InterfaceList/getOutput/path"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInterfaceElement.1"
           body="return InterfaceListAnnotations.getInterfaceElement(this, refElement);">

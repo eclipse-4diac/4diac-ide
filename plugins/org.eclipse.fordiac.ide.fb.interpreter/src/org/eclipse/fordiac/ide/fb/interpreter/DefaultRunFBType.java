@@ -480,7 +480,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			}
 
 			// write value to inner network transfer data
-			final IInterfaceElement varPin = compRT.getCompositeFBType().getInterfaceList().getInput(varDec.getName());
+			final IInterfaceElement varPin = compRT.getCompositeFBType().getInterfaceList()
+					.getInput(List.of(varDec.getName()));
 			final List<Connection> dataOutputs = ConnectionUtils.getOutputConnections(varPin);
 			for (final Connection output : dataOutputs) {
 				inner.getTransferData().put(output, EcoreUtil.copy(value));
@@ -492,7 +493,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final CompositeFBTypeRuntime compRT) {
 		for (final VarDeclaration varDec : getAssociatedDataPins(this.eventOccurrence, outer)) {
 			Value value;
-			final var inputs = compRT.getCompositeFBType().getInterfaceList().getOutput(varDec.getName())
+			final var inputs = compRT.getCompositeFBType().getInterfaceList().getOutput(List.of(varDec.getName()))
 					.getInputConnections();
 			if (inputs.isEmpty()) {
 				// Input parameter
@@ -507,7 +508,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			}
 
 			// write value to outer network transfer data
-			final IInterfaceElement varPin = compRT.getFbElement().getInterface().getOutput(varDec.getName());
+			final IInterfaceElement varPin = compRT.getFbElement().getInterface().getOutput(List.of(varDec.getName()));
 			final List<Connection> dataOutputs = ConnectionUtils.getOutputConnections(varPin);
 			for (final Connection output : dataOutputs) {
 				outer.getTransferData().put(output, value);

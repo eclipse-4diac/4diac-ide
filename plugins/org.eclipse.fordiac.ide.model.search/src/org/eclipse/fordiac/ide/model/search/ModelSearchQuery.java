@@ -290,7 +290,7 @@ public class ModelSearchQuery implements ISearchQuery {
 	private void searchTypeInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
 		// @formatter:off
 		Stream.of(
-	            interfaceList.getInputs(),
+	            interfaceList.getAllInputs(),
 	            interfaceList.getOutputVars().stream(),
 	            interfaceList.getEventOutputs().stream(),
 	            interfaceList.getPlugs().stream()
@@ -317,7 +317,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 		// @formatter:off
 		final Stream<IInterfaceElement> searchableElements = Stream.of(
-	            interfaceList.getInputs(),
+	            interfaceList.getAllInputs(),
 	            interfaceList.getOutputVars().stream(),
 	            interfaceList.getEventOutputs().stream(),
 	            interfaceList.getPlugs().stream()

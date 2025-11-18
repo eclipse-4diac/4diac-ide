@@ -76,10 +76,10 @@ public class RepairBrokenConnectionCommand extends Command {
 	private IInterfaceElement getPort() {
 		Optional<IInterfaceElement> port;
 		if (isSourceReconnect) {
-			port = connection.getSourceElement().getInterface().getOutputs()
+			port = connection.getSourceElement().getInterface().getAllOutputs()
 					.filter(output -> output.getType().equals(structType)).findAny();
 		} else {
-			port = connection.getDestinationElement().getInterface().getInputs()
+			port = connection.getDestinationElement().getInterface().getAllInputs()
 					.filter(input -> input.getType().equals(structType)).findAny();
 		}
 
@@ -167,7 +167,9 @@ public class RepairBrokenConnectionCommand extends Command {
 		});
 
 		eventConnectionCommand.add(new ReconnectDataConnectionCommand(connection, isSourceReconnect,
-				isSourceReconnect ? mux.getInterface().getOutput(varName) : mux.getInterface().getInput(varName), fbn));
+				isSourceReconnect ? mux.getInterface().getOutput(List.of(varName))
+						: mux.getInterface().getInput(List.of(varName)),
+				fbn));
 		eventConnectionCommand.execute();
 
 	}

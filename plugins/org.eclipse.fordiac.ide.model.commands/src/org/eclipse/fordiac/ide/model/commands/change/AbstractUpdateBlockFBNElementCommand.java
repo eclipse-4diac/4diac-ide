@@ -194,7 +194,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 		// update methods
 		getOldElement().getInterface().getAllInterfaceElements()
 				.filter(ie -> ie.eContainer() instanceof IInterfaceElement) //
-				.forEach(ie -> newInterface.getInterfaceElement(ie.getRelativeName(getOldElement()), true));
+				.forEach(ie -> newInterface.getInterfaceElement(ie.getBlockRelativePath(), true));
 	}
 
 	@Override

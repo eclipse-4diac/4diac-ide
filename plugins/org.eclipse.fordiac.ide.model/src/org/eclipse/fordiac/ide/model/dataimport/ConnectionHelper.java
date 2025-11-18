@@ -15,8 +15,8 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
@@ -419,16 +419,16 @@ public final class ConnectionHelper {
 
 		private IInterfaceElement getMemberAccessPin(final InterfaceList ieList, final String pinName,
 				final boolean isInput) {
-			final String[] nameList = pinName.split("\\."); //$NON-NLS-1$
+			final List<String> path = List.of(pinName.split("\\.")); //$NON-NLS-1$
 
-			final IInterfaceElement ie = FBNetworkImporter.getInterfaceElement(ieList, nameList[0], connection.eClass(),
+			final IInterfaceElement ie = FBNetworkImporter.getInterfaceElement(ieList, path.get(0), connection.eClass(),
 					isInput);
 
 			if (!(ie instanceof final ContainerVarDeclaration contVarDecl)) {
 				return null;
 			}
 
-			return contVarDecl.getCachedMember(Arrays.copyOfRange(nameList, 1, nameList.length), false);
+			return contVarDecl.getCachedMember(path.subList(1, path.size()), false);
 		}
 	}
 

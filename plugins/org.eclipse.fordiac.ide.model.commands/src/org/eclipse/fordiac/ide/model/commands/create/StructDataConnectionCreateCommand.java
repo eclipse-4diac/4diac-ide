@@ -57,9 +57,9 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 						: new ChangeStructCommand((StructManipulator) source.getBlockFBNetworkElement(), targetVar);
 				changeStructCommand.execute();
 				if (source.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
-					setSource(changeStructCommand.getNewElement().getInterfaceElement(getSource().getName()));
+					setSource(changeStructCommand.getNewElement().getInterface().getInterfaceElement(getSource()));
 				} else {
-					setSource(changeStructCommand.getNewMux().getInterfaceElement(getSource().getName()));
+					setSource(changeStructCommand.getNewMux().getInterface().getInterfaceElement(getSource()));
 				}
 			} else if (isUnconfiguredStructManipulatorDefPin(target)
 					&& source.getType() instanceof final StructuredType sourceVar) {
@@ -68,9 +68,11 @@ public class StructDataConnectionCreateCommand extends DataConnectionCreateComma
 						: new ChangeStructCommand((StructManipulator) target.getBlockFBNetworkElement(), sourceVar);
 				changeStructCommand.execute();
 				if (target.getBlockFBNetworkElement() instanceof ConfigurableMoveFB) {
-					setDestination(changeStructCommand.getNewElement().getInterfaceElement(getDestination().getName()));
+					setDestination(
+							changeStructCommand.getNewElement().getInterface().getInterfaceElement(getDestination()));
 				} else {
-					setDestination(changeStructCommand.getNewMux().getInterfaceElement(getDestination().getName()));
+					setDestination(
+							changeStructCommand.getNewMux().getInterface().getInterfaceElement(getDestination()));
 				}
 			}
 		}
