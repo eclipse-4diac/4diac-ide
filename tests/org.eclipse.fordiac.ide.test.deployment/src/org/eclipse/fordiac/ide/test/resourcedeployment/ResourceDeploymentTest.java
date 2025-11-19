@@ -77,13 +77,15 @@ class ResourceDeploymentTest {
 	@TestFactory
 	Stream<DynamicTest> dynamicNumberOfParametersTest() {
 		return generateDynamicTests("Test Number of Params in: ", //$NON-NLS-1$
-				(nw, dep) -> assertEquals(nw.expectedNumParameters(), dep.getParams().size()));
+				(nw, dep) -> assertEquals(nw.expectedNumParameters(), dep.getParams().size(),
+						() -> dep.getParams().toString()));
 	}
 
 	@TestFactory
 	Stream<DynamicTest> dynamicNumberOfConnectionsTest() {
 		return generateDynamicTests("Test Connection Count in: ", //$NON-NLS-1$
-				(nw, dep) -> assertEquals(nw.expectedNumConnections(), dep.getConnections().size()));
+				(nw, dep) -> assertEquals(nw.expectedNumConnections(), dep.getConnections().size(),
+						() -> dep.getConnections().toString()));
 	}
 
 	private Stream<DynamicTest> generateDynamicTests(final String testNamePrefix,
