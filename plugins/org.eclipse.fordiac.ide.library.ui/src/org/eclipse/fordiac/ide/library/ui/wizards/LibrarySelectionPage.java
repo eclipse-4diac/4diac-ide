@@ -60,8 +60,8 @@ public class LibrarySelectionPage extends WizardPage {
 	private final List<LibraryRecord> libraries = new ArrayList<>();
 	private CheckboxTreeViewer treeViewer;
 	private Button libraryNameSort;
-	private boolean showStandard;
-	private boolean showWorkspace;
+	private final boolean showStandard;
+	private final boolean showWorkspace;
 	private VersionRange range;
 	private SelectionAdapter listener;
 
@@ -450,23 +450,5 @@ public class LibrarySelectionPage extends WizardPage {
 				return ""; //$NON-NLS-1$
 			}
 		});
-	}
-
-	public boolean isShowStandard() {
-		return showStandard;
-	}
-
-	public void setShowStandard(final boolean showStandard) {
-		this.showStandard = showStandard;
-		findLibs();
-	}
-
-	public boolean isShowWorkspace() {
-		return showWorkspace;
-	}
-
-	public void setShowWorkspace(final boolean showWorkspace) {
-		this.showWorkspace = showWorkspace;
-		findLibs();
 	}
 }
