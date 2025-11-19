@@ -84,7 +84,7 @@ public final class DeploymentHelper {
 
 	private static boolean equalsTypeValue(final Value value, final VarDeclaration variable) {
 		final VarDeclaration typeVariable = variable.findInTypeInterface();
-		if (typeVariable == null) {
+		if (typeVariable == null || GenericTypes.isAnyType(typeVariable.getType())) {
 			return false;
 		}
 		final Value destinationTypeValue = VariableOperations.newVariable(typeVariable).getValue();
