@@ -38,6 +38,10 @@
           id="org.eclipse.fordiac.ide.model.search.typeReferences"
           name="References">
     </command>
+    <command id="org.eclipse.fordiac.ide.model.search.searchPinReference"
+          defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.SearchPinReferenceHandler"
+    	  name="%SearchPinReference_Name"
+          description="%SearchPinReference_Description" />
  </extension>
  <extension
        point="org.eclipse.ui.menus">
