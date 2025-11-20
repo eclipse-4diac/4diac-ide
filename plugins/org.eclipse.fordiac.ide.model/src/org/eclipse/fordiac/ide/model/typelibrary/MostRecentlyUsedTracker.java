@@ -11,7 +11,7 @@
  *     Wolfgang Schedl - initial API and implementation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.gef.utilities;
+package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -82,14 +82,20 @@ public class MostRecentlyUsedTracker {
 	 * Record that a FB type was used (created/inserted). Moves the type to the
 	 * front of the MRU list.
 	 *
-	 * @param fbTypeName the full type name (e.g., "E_CYCLE", "E_SWITCH")
+	 * @param typeEntry the type entry that was used
 	 */
-	public synchronized void recordUsage(final String fbTypeName) {
-		if (disposed || fbTypeName == null || fbTypeName.isEmpty()) {
+	public synchronized void recordUsage(final TypeEntry typeEntry) {
+		if (disposed || typeEntry == null) {
 			return;
 		}
 
 		if (currentProject == null || !currentProject.exists()) {
+			return;
+		}
+
+		final String fbTypeName = typeEntry.getFullTypeName();
+
+		if (fbTypeName == null || fbTypeName.isEmpty()) {
 			return;
 		}
 
