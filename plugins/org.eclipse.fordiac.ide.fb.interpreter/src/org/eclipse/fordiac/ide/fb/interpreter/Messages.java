@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * Copyright (c) 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -20,10 +20,10 @@ public class Messages extends NLS {
 	public static String RecordExecutionTraceHandler_Incorrect_Selection;
 	public static String RecordExecutionTraceHandler_Select_FB_input_event;
 	public static String CreateRuntimeTestFunctionBlockHandler_Select_Service_Model;
-	public static String SelectAdapterEventDialog_0;
-	public static String SelectAdapterEventDialog_1;
-	public static String SelectAdapterEventDialog_2;
-	public static String SelectAdapterEventDialog_3;
+	public static String SelectAdapterEventDialog_Select_Event_Contained_In_Selected_Adapter;
+	public static String SelectAdapterEventDialog_Choose_Event_From_List;
+	public static String SelectAdapterEventDialog_Start_Execution;
+	public static String SelectAdapterEventDialog_Specify_Event;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
