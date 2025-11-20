@@ -15,9 +15,16 @@ package org.eclipse.fordiac.ide.model.search.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.search.ModelQuerySpec;
+import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.model.search.ModelSearchQuery;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -27,6 +34,28 @@ public class SearchPinReferenceHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 		final IInterfaceElement ie = getElementFromSelection(selection);
+
+		if (ie != null && EcoreUtil.getRootContainer(ie) instanceof final LibraryElement libElement) {
+			final TypeEntry typeEntry = libElement.getTypeEntry();
+			// @formatter:off
+			final ModelQuerySpec searchSpec = new ModelQuerySpec(
+					ie.getQualifiedName(),
+					false,
+					true,
+					true,
+					false,
+					false,
+					true,
+					false,
+					SearchScope.FILE,
+					typeEntry.getFile(),
+					null
+				);
+			// @formatter:on
+
+			final ModelSearchQuery query = new ModelSearchQuery(searchSpec);
+			NewSearchUI.runQueryInBackground(query, NewSearchUI.getSearchResultView());
+		}
 
 		return null;
 	}
