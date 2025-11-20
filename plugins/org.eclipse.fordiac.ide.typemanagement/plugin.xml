@@ -730,14 +730,29 @@
 				style="push"> 
 		</command>
 	  </menuContribution>
-       <menuContribution
+      <menuContribution
       		allPopups="false"
       		locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
            <command
-                   commandId="org.eclipse.fordiac.ide.application.commands.searchReference"
-                   icon="platform:/plugin/org.eclipse.search/icons/full/etool16/search.png"
-                   style="push">
+                   commandId="org.eclipse.fordiac.ide.model.search.searchPinReference"
+                   icon="platform:/plugin/org.eclipse.search/icons/full/etool16/search.png" >
            </command>
+	  </menuContribution>
+	  <menuContribution
+         locationURI="popup:org.eclipse.ui.popup.any?after=org.eclipse.gef.group.find">
+         <command 
+            commandId="org.eclipse.fordiac.ide.model.search.searchPinReference" />
+            <visibleWhen>
+			   <with variable="selection">
+			      <count value="1"/>
+			      <iterate>
+			         <or>
+		                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement"/>
+		                <instanceof value="org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart"/>
+            		 </or>
+			      </iterate>
+			   </with>
+			</visibleWhen>
 	  </menuContribution>
       <menuContribution
 			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
