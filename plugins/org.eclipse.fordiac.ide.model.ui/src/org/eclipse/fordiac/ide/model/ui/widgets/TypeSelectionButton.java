@@ -30,9 +30,10 @@ import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
 import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -116,9 +117,7 @@ public class TypeSelectionButton extends TextCellEditor {
 
 	@Override
 	protected Text createEditorControl(final Composite parent, final int style) {
-		focusListener = new FocusAdapter() {
-			// remove focus Listener for button popup
-		};
+		focusListener = new ButtonFocusListener();
 		return super.createEditorControl(parent, style);
 	}
 
@@ -133,5 +132,16 @@ public class TypeSelectionButton extends TextCellEditor {
 	public void close() {
 		super.close();
 		button.dispose();
+	}
+
+	protected class ButtonFocusListener extends InlineFocusListener {
+		@Override
+		public void focusLost(final FocusEvent e) {
+			final Point cursorLocation = Display.getDefault().getCursorLocation();
+			final Point relativeCursorLocation = button.getParent().toControl(cursorLocation);
+			if (!button.getBounds().contains(relativeCursorLocation)) {
+				super.focusLost(e);
+			} 
+		}
 	}
 }

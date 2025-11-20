@@ -14,6 +14,8 @@
  *   Martin Erich Jobst
  *     - add configure and deconfigure implementation
  *     - add validation
+ *   Mario Kastner
+ *     - add validation for builder order
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.nature;
 
@@ -21,6 +23,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -43,6 +46,12 @@ public class FordiacNature implements IProjectNature {
 	public static final int MISSING_XTEXT_NATURE = 1;
 	public static final int MISSING_EXPORT_BUILDER = 2;
 	public static final int MISSING_LIBRARY_BUILDER = 3;
+	public static final int WRONG_BUILDER_ORDER = 4;
+
+	private static final Map<String, Integer> builderPriorities = Map.of( //
+			SystemManager.FORDIAC_LIBRARY_BUILDER_ID, Integer.valueOf(30), //
+			XtextProjectHelper.BUILDER_ID, Integer.valueOf(20), //
+			SystemManager.FORDIAC_EXPORT_BUILDER_ID, Integer.valueOf(10));
 
 	/** The project. */
 	private IProject project;
@@ -162,6 +171,15 @@ public class FordiacNature implements IProjectNature {
 					.setCode(MISSING_EXPORT_BUILDER));
 		}
 
+		if (!validateBuilderOrder()) {
+			builders.add(ErrorMarkerBuilder
+					.createErrorMarkerBuilder(
+							MessageFormat.format(Messages.FordiacNature_WrongBuilderOrder, project.getName()))
+					.setType(FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER)
+					.setLocation(Messages.FordiacNature_Location).setSource(getClass().getName())
+					.setCode(WRONG_BUILDER_ORDER));
+		}
+
 		FordiacMarkerHelper.updateMarkers(project, FordiacErrorMarker.PROJECT_CONFIGURATION_MARKER, builders, true);
 	}
 
@@ -179,6 +197,27 @@ public class FordiacNature implements IProjectNature {
 
 	protected static boolean isLibraryBuilderCommand(final ICommand command) {
 		return SystemManager.FORDIAC_LIBRARY_BUILDER_ID.equals(command.getBuilderName());
+	}
+
+	public static int getBuilderPriority(final String name) {
+		final Integer prio = builderPriorities.get(name);
+		if (prio == null) {
+			return Integer.MIN_VALUE;
+		}
+		return prio.intValue();
+	}
+
+	protected boolean validateBuilderOrder() throws CoreException {
+		final int[] priorities = Stream.of(project.getDescription().getBuildSpec()).map(ICommand::getBuilderName)
+				.mapToInt(FordiacNature::getBuilderPriority).toArray();
+		int lastPriority = Integer.MAX_VALUE;
+		for (final int current : priorities) {
+			if (lastPriority < current) {
+				return false;
+			}
+			lastPriority = current;
+		}
+		return true;
 	}
 
 	/**

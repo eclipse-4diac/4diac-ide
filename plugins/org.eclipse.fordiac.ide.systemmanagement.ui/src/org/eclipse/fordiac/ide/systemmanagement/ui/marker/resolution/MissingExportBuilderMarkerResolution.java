@@ -42,10 +42,7 @@ public class MissingExportBuilderMarkerResolution extends WorkspaceMarkerResolut
 			} else {
 				subMonitor.split(1);
 			}
-			if (project
-					.getNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) instanceof final FordiacNature fordiacNature) {
-				fordiacNature.validate();
-			}
+			SystemManager.validateProjectNature(project);
 		}
 	}
 

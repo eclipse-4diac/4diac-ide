@@ -76,6 +76,9 @@ public final class Messages extends NLS {
 
 	public static String SystemExplorerNewActionProvider_New;
 
+	public static String WrongBuilderOrderMarkerResolution_Description;
+	public static String WrongBuilderOrderMarkerResolution_Label;
+
 	public static String BulkEditorDirty;
 	public static String Continue;
 	public static String Cancel;
