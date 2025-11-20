@@ -32,6 +32,7 @@ public final class Messages extends NLS {
 	public static String FordiacResourceChangeListener_CopyConflictBody;
 	public static String FordiacSystemManagement_ErrorLoadingProjectNature;
 	public static String ValidateTypeLibrary;
+	public static String FordiacNature_WrongBuilderOrder;
 
 	static {
 		// initialize resource bundle
