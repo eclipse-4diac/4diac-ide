@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -109,8 +110,12 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private List<ISearchContext> getSearchContexts() {
-		if (modelQuerySpec.scope() == SearchScope.PROJECT && modelQuerySpec.project() != null) {
-			return Arrays.asList(new LiveSearchContext(modelQuerySpec.project()));
+		if (modelQuerySpec.scope() == SearchScope.FILE && modelQuerySpec.source() instanceof final IFile file) {
+			return Arrays.asList(new FileSearchContext(file));
+		}
+		if (modelQuerySpec.scope() == SearchScope.PROJECT
+				&& modelQuerySpec.source() instanceof final IProject project) {
+			return Arrays.asList(new LiveSearchContext(project));
 		}
 		// workspace scope
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
