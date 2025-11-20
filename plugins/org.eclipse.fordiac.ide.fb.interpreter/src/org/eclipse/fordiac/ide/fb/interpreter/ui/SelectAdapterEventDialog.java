@@ -34,9 +34,9 @@ public class SelectAdapterEventDialog extends MessageDialog {
 	private final AdapterDeclaration aDecl;
 
 	public SelectAdapterEventDialog(final Shell parentShell, final AdapterDeclaration aDecl) {
-		super(parentShell, Messages.SelectAdapterEventDialog_0, null,
-				Messages.SelectAdapterEventDialog_1, MessageDialog.INFORMATION, 0,
-				Messages.SelectAdapterEventDialog_2);
+		super(parentShell, Messages.SelectAdapterEventDialog_Select_Event_Contained_In_Selected_Adapter, null,
+				Messages.SelectAdapterEventDialog_Choose_Event_From_List, MessageDialog.INFORMATION, 0,
+				Messages.SelectAdapterEventDialog_Start_Execution);
 		this.aDecl = aDecl;
 	}
 
@@ -48,7 +48,7 @@ public class SelectAdapterEventDialog extends MessageDialog {
 		final GridLayout layout = new GridLayout(2, false);
 		dialogArea.setLayout(layout);
 		final Label label = new Label(dialogArea, SWT.None);
-		label.setText(Messages.SelectAdapterEventDialog_3);
+		label.setText(Messages.SelectAdapterEventDialog_Specify_Event);
 		inputEventCombo = ComboBoxWidgetFactory.createCombo(dialogArea);
 
 		final String[] eventLabels = aDecl.getAdapterFB().getInterface().getEventOutputs().stream().map(Event::getName)
