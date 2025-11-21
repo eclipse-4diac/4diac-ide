@@ -63,6 +63,7 @@ public final class Messages extends NLS {
 	public static String STCoreContentAssistPreferencePage_ContentAssist;
 	public static String STCoreContentAssistPreferencePage_AutoActivationTriggers;
 	public static String STCoreContentAssistPreferencePage_ChangedSettingsEffect;
+	public static String STCoreCopyResourceParticipant_Name;
 	public static String STCoreCustomValidatorConfigurationBlock_CodingStyle;
 	public static String STCoreCustomValidatorConfigurationBlock_ForControlVariableNonTemporary;
 	public static String STCoreCustomValidatorConfigurationBlock_LiteralImplicitConversion;
@@ -121,6 +122,8 @@ public final class Messages extends NLS {
 	public static String STCoreLabelProvider_VarTempDeclarationBlockText;
 	public static String STCoreOutlineTreeProvider_MissingHeadingText;
 	public static String STCoreRenameElementRefactoringParticpant_Name;
+	public static String STCoreResourceRelocationProcessor_CancelationMessage;
+	public static String STCoreResourceRelocationProcessor_TaskName;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
 	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;
 	public static String STCoreSyncUtil_Building;
