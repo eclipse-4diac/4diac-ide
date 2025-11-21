@@ -273,12 +273,10 @@ public class STCoreChangeConverter extends ChangeConverter {
 		}
 	}
 
-	private IMarker[] findMarkers(final IFile file) {
+	private static IMarker[] findMarkers(final IFile file) {
 		try {
 			return file.findMarkers(MarkerTypes.ANY_VALIDATION, true, 0);
 		} catch (final CoreException e) {
-			issues.add(RefactoringIssueAcceptor.Severity.FATAL, "Cannot retrieve markers for " + file.getFullPath(), e, //$NON-NLS-1$
-					LOG);
 			return new IMarker[0];
 		}
 	}
