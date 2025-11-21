@@ -68,7 +68,8 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 				handleWatchChanged(watch, add, changed);
 			case final DeploymentDebugStackFrame stackFrame when event.getKind() == DebugEvent.CHANGE ->
 				handleWatchesChanged(stackFrame, add, remove, changed);
-			case final DeploymentDebugTarget debugTarget when event.getKind() == DebugEvent.TERMINATE -> reload();
+			case final DeploymentDebugTarget debugTarget when event.getKind() == DebugEvent.TERMINATE ->
+				handleTerminated();
 			default -> {
 				return;
 			}
@@ -141,6 +142,10 @@ public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider
 	protected boolean isRelevant(final DebugEvent event) {
 		return event.getSource() instanceof final DeploymentDebugElement element
 				&& element.getDebugTarget().getSystem().getTypeEntry().getFile().equals(model.getResource());
+	}
+
+	private void handleTerminated() {
+		model.removeAnnotationIf(WatchValueAnnotation.class::isInstance);
 	}
 
 	@Override
