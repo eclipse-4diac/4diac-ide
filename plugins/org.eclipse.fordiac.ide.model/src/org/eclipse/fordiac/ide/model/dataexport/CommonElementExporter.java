@@ -506,9 +506,8 @@ public class CommonElementExporter {
 
 				if (varDecl.getAttribute(InternalAttributeDeclarations.VISIBLE.getName()) == null) {
 					// if the visible attribute is not in the attribute list add it
-					addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
-					addTypeAttribute(InternalAttributeDeclarations.VISIBLE);
-					getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, Boolean.TRUE.toString());
+					addAttributeElement(InternalAttributeDeclarations.VISIBLE.getName(), null, Boolean.TRUE.toString(),
+							null);
 				}
 
 				if (hasNonTrivialAttributes(varDecl)) {
