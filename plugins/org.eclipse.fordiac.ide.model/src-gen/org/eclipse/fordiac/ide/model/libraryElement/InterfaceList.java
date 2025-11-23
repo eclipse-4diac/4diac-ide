@@ -229,22 +229,6 @@ public interface InterfaceList extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.VarDeclList" required="true"
-	 * @generated
-	 */
-	List<VarDeclaration> getVisibleInputVars();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.VarDeclList" required="true"
-	 * @generated
-	 */
-	List<VarDeclaration> getVisibleOutputVars();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.InterfaceElementStream"
 	 * @generated
 	 */

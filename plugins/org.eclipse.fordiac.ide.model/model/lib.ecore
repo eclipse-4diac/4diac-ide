@@ -1652,16 +1652,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getVisibleInputVars" lowerBound="1" eType="#//VarDeclList">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getVisibleOutputVars" lowerBound="1" eType="#//VarDeclList">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getAllInputs" eType="#//InterfaceElementStream">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return InterfaceListAnnotations.getAllInputs(this);"/>

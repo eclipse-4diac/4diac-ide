@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -31,10 +32,12 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -139,7 +142,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements()).forEach(element -> {
 			final InterfaceList fbIinterface = element.getInterface();
-			fbIinterface.getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
+			getVisibleInputVars(fbIinterface).filter(di -> (di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
 			fbIinterface.getInOutVars().stream().filter(di -> (di.isVisible() && di.getValue() != null))
 					.forEach(di -> valueElements.add(di.getValue()));
@@ -147,6 +150,19 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 					.forEach(er -> valueElements.add(er.getValue()));
 		});
 		return valueElements;
+	}
+
+	private static Stream<VarDeclaration> getVisibleInputVars(final InterfaceList fbIinterface) {
+		return fbIinterface.getInputVars().stream().flatMap(AbstractFBNetworkEditPart::flattenVarMemAccessPins)
+				.filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible);
+	}
+
+	private static Stream<VarDeclaration> flattenVarMemAccessPins(final VarDeclaration ie) {
+		if (ie instanceof final ContainerVarDeclaration contVarDecl) {
+			return Stream.concat(Stream.of(ie), contVarDecl.getCachedMembers().stream()
+					.flatMap(AbstractFBNetworkEditPart::flattenVarMemAccessPins));
+		}
+		return Stream.of(ie);
 	}
 
 	private List<IChildrenProvider> getChildrenProviders() {
