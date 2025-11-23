@@ -268,7 +268,8 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			if (labelText.length() > maxWidth) {
 				if (getModel().eContainer() instanceof VarDeclaration) {
 					// is member access label truncate on front
-					return getTruncationString() + labelText.substring(1, maxWidth);
+					return getTruncationString()
+							+ labelText.substring(labelText.length() - maxWidth + 1, labelText.length());
 				}
 				return labelText.substring(0, maxWidth - 1) + getTruncationString();
 			}
