@@ -640,10 +640,6 @@
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/copy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleInputVars"
-          body="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
-          body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInputs" body="return InterfaceListAnnotations.getAllInputs(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllOutputs" body="return InterfaceListAnnotations.getAllOutputs(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInput" body="return InterfaceListAnnotations.getInput(this, path);">
