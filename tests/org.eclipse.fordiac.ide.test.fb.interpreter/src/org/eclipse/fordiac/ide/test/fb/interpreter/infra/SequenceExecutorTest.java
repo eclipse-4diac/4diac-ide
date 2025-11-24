@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.SequenceExecutor;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SequenceExecutorTest {
 

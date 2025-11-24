@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator;
 import org.eclipse.xtext.diagnostics.Diagnostic;
+import org.eclipse.xtext.ui.editor.model.edit.ICompositeModification;
 import org.eclipse.xtext.ui.editor.quickfix.Fix;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
 import org.eclipse.xtext.validation.Issue;
@@ -40,11 +41,11 @@ public class STFunctionQuickfixProvider extends STCoreQuickfixProvider {
 	public void fixFunctionNameMatchesTypeName(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STFunctionQuickfixProvider_RenameFunction,
-				Messages.STFunctionQuickfixProvider_RenameFunction, null, (element, context) -> {
+				Messages.STFunctionQuickfixProvider_RenameFunction, null,
+				(ICompositeModification<STFunction>) (element, context) -> {
 					context.setUpdateCrossReferences(true);
 					context.setUpdateRelatedFiles(true);
-					context.addModification(element,
-							(final STFunction function) -> function.setName(issue.getData()[1]));
+					context.addModification(element, function -> function.setName(issue.getData()[1]));
 				});
 	}
 

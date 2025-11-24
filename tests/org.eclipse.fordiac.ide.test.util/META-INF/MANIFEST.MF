@@ -7,5 +7,5 @@ Fragment-Host: org.eclipse.fordiac.ide.util
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.util
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: Eclipse 4diac
-Import-Package: org.junit.jupiter.api,
+Import-Package: org.junit.jupiter.api;version="[5.1.0,6.0.0)",
  org.opentest4j

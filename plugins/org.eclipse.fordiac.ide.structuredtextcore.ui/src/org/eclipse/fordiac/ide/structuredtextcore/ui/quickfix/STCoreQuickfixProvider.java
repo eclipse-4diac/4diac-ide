@@ -87,6 +87,7 @@ import org.eclipse.xtext.resource.impl.AliasedEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.editor.model.edit.ICompositeModification;
 import org.eclipse.xtext.ui.editor.model.edit.IModification;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider;
@@ -147,11 +148,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreLabel,
-				Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_RemoveTrailingUnderscoreDescription, null,
+				(ICompositeModification<INamedElement>) (element, context) -> {
 					context.setUpdateCrossReferences(true);
 					context.setUpdateRelatedFiles(true);
-					context.addModification(element, (final INamedElement namedElement) -> namedElement
-							.setName(namedElement.getName().replaceAll("_+$", ""))); //$NON-NLS-1$ //$NON-NLS-2$
+					context.addModification(element,
+							namedElement -> namedElement.setName(namedElement.getName().replaceAll("_+$", ""))); //$NON-NLS-1$ //$NON-NLS-2$
 				});
 	}
 
@@ -159,11 +161,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixConsecutiveUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresLabel,
-				Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_RemoveConsecutiveUnderscoresDescription, null,
+				(ICompositeModification<INamedElement>) (element, context) -> {
 					context.setUpdateCrossReferences(true);
 					context.setUpdateRelatedFiles(true);
-					context.addModification(element, (final INamedElement namedElement) -> namedElement
-							.setName(namedElement.getName().replaceAll("_{2,}", "_"))); //$NON-NLS-1$ //$NON-NLS-2$
+					context.addModification(element,
+							namedElement -> namedElement.setName(namedElement.getName().replaceAll("_{2,}", "_"))); //$NON-NLS-1$ //$NON-NLS-2$
 				});
 	}
 
@@ -193,10 +196,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixVariableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredLabel,
-				Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_ChangeVariableCaseAsDeclaredDescription, null,
+				(ICompositeModification<STFeatureExpression>) (element, context) -> {
 					context.setUpdateCrossReferences(false);
 					context.setUpdateRelatedFiles(false);
-					context.addModification(element, (final STFeatureExpression expression) -> {
+					context.addModification(element, expression -> {
 						final ITextRegionDiffBuilder textRegionDiffBuilder = context
 								.getModifiableDocument((XtextResource) expression.eResource());
 						if (textRegionDiffBuilder != null) {
@@ -218,10 +222,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixUnnecessaryConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionLabel,
-				Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_RemoveUnnecessaryConversionDescription, null,
+				(ICompositeModification<STFeatureExpression>) (element, context) -> {
 					context.setUpdateCrossReferences(false);
 					context.setUpdateRelatedFiles(false);
-					context.addModification(element, (final STFeatureExpression expression) -> {
+					context.addModification(element, expression -> {
 						final ITextRegionDiffBuilder textRegionDiffBuilder = context
 								.getModifiableDocument((XtextResource) expression.eResource());
 						if (textRegionDiffBuilder != null) {
@@ -249,10 +254,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixUnnecessaryNarrowOrWideConversion(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangeConversionLabel,
-				Messages.STCoreQuickfixProvider_ChangeConversionDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_ChangeConversionDescription, null,
+				(ICompositeModification<STFeatureExpression>) (element, context) -> {
 					context.setUpdateCrossReferences(false);
 					context.setUpdateRelatedFiles(false);
-					context.addModification(element, (final STFeatureExpression expression) -> {
+					context.addModification(element, expression -> {
 						final ITextRegionDiffBuilder textRegionDiffBuilder = context
 								.getModifiableDocument((XtextResource) expression.eResource());
 						if (textRegionDiffBuilder != null) {
@@ -291,11 +297,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixPackageNameMismatch(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_ChangePackage,
-				Messages.STCoreQuickfixProvider_ChangePackage, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_ChangePackage, null,
+				(ICompositeModification<STSource>) (element, context) -> {
 					context.setUpdateCrossReferences(true);
 					context.setUpdateRelatedFiles(true);
-					context.addModification(element,
-							(final STSource source) -> setPackageName(source, issue.getData()[0]));
+					context.addModification(element, source -> setPackageName(source, issue.getData()[0]));
 				});
 	}
 
@@ -303,10 +309,11 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	public static void fixRemoveImport(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		// multi resolutions need to have identical label, description, and image
 		acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_RemoveImportLabel,
-				Messages.STCoreQuickfixProvider_RemoveImportDescription, null, (element, context) -> {
+				Messages.STCoreQuickfixProvider_RemoveImportDescription, null,
+				(ICompositeModification<STImport>) (element, context) -> {
 					context.setUpdateCrossReferences(false);
 					context.setUpdateRelatedFiles(false);
-					context.addModification(element, (final STImport imp) -> {
+					context.addModification(element, imp -> {
 						final ITextRegionDiffBuilder textRegionDiffBuilder = context
 								.getModifiableDocument((XtextResource) imp.eResource());
 						if (textRegionDiffBuilder != null) {
@@ -327,11 +334,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		if (!hasSyntaxErrors(issue)) {
 			// multi resolutions need to have identical label, description, and image
 			acceptor.acceptMulti(issue, Messages.STCoreQuickfixProvider_OrganizeImports,
-					Messages.STCoreQuickfixProvider_OrganizeImports, null, (element, context) -> {
+					Messages.STCoreQuickfixProvider_OrganizeImports, null,
+					(ICompositeModification<STImport>) (element, context) -> {
 						context.setUpdateCrossReferences(false);
 						context.setUpdateRelatedFiles(false);
-						context.addModification(element, (final STImport imp) -> organizeImports(
-								EcoreUtil2.getContainerOfType(imp, STSource.class)));
+						context.addModification(element,
+								imp -> organizeImports(EcoreUtil2.getContainerOfType(imp, STSource.class)));
 					});
 		}
 	}

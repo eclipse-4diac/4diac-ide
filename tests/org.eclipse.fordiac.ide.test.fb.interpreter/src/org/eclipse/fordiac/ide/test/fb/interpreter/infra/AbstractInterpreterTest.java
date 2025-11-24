@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,7 +45,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup;
 import org.eclipse.fordiac.ide.test.model.FordiacProjectLoader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;
 
 public abstract class AbstractInterpreterTest {

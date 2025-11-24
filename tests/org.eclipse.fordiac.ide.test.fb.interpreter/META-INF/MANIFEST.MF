@@ -3,17 +3,17 @@ Bundle-ManifestVersion: 2
 Bundle-Name: FB Interpreter
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-Version: 3.1.0.qualifier
+Import-Package: org.junit.jupiter.api;version="[5.1.0,6.0.0)",
+ org.junit.jupiter.params;version="[5.1.0,6.0.0)",
+ org.junit.jupiter.params.provider;version="[5.1.0,6.0.0)"
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.fordiac.ide.fb.interpreter,
  org.eclipse.fordiac.ide.model,
- org.junit,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.core.resources,
  org.eclipse.emf.compare,
- junit-jupiter-api,
- junit-jupiter-params,
  org.eclipse.fordiac.ide.test.model,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.model.eval,

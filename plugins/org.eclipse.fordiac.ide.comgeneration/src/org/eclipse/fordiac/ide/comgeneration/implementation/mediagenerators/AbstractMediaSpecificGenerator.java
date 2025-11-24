@@ -24,19 +24,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
-	private static final String[] PALETTE_ENTRY_SOURCE_LOCAL = { "PUBL_0", "PUBL_1", "PUBL_2", "PUBL_3", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-	"PUBL_4" }; //$NON-NLS-1$
-	private static final String[] PALETTE_ENTRY_DESTINATION_LOCAL = { "SUBL_0", "SUBL_1", "SUBL_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"net/SUBL_3", "net/SUBL_4" }; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final String[] PALETTE_ENTRY_SOURCE = { "PUBLISH_0", "PUBLISH_1", "PUBLISH_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"PUBLISH_3", "PUBLISH_4" }; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final String[] PALETTE_ENTRY_DESTINATION = { "SUBSCRIBE_0", "SUBSCRIBE_1", "SUBSCRIBE_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			"SUBSCRIBE_3", "SUBSCRIBE_4" }; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final String PALETTE_ENTRY_SOURCE_LOCAL = "iec61499::net::PUBL_"; //$NON-NLS-1$
+	private static final String PALETTE_ENTRY_DESTINATION_LOCAL = "iec61499::net::SUBL_"; //$NON-NLS-1$
+	private static final String PALETTE_ENTRY_SOURCE = "iec61499::net::PUBLISH_"; //$NON-NLS-1$
+	private static final String PALETTE_ENTRY_DESTINATION = "iec61499::net::SUBSCRIBE_"; //$NON-NLS-1$
 
 	private final TypeLibrary typeLib;
 
 	protected AbstractMediaSpecificGenerator(final TypeLibrary typeLib) {
-		super();
 		this.typeLib = typeLib;
 	}
 
@@ -46,19 +41,20 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 
 	@Override
 	public FBTypeEntry getPaletteType(final ChannelEnd end, final int numDataPorts, final boolean local) {
-		String[] paletteEntries;
+		String commTypeName;
 
 		if (local) {
-			paletteEntries = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE_LOCAL : PALETTE_ENTRY_DESTINATION_LOCAL;
+			commTypeName = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE_LOCAL : PALETTE_ENTRY_DESTINATION_LOCAL;
 		} else {
-			paletteEntries = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE : PALETTE_ENTRY_DESTINATION;
+			commTypeName = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE : PALETTE_ENTRY_DESTINATION;
 		}
 
-		final FBTypeEntry entry = getTypeLibrary().getFBTypeEntry(paletteEntries[numDataPorts]);
+		commTypeName += Integer.toString(numDataPorts);
 
-		if (null == entry) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypeEntryNotFound,
-					paletteEntries[numDataPorts]));
+		final FBTypeEntry entry = getTypeLibrary().getFBTypeEntry(commTypeName);
+
+		if (entry == null) {
+			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypeEntryNotFound, commTypeName));
 		}
 		return entry;
 	}
