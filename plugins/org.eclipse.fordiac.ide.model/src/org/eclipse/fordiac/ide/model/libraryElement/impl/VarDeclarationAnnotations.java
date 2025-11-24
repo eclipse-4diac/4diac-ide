@@ -19,7 +19,9 @@ import java.util.Map;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -254,6 +256,29 @@ public class VarDeclarationAnnotations {
 		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
 		return !varDeclaration.getOutputConnections().isEmpty()
 				|| (typeIE != null && !typeIE.getOutputConnections().isEmpty());
+	}
+
+	static void setVisible(final VarDeclaration varDecl, final boolean visible) {
+		if (varDecl.eContainer() instanceof VarDeclaration) {
+			// member access pins treat the visible attribute in opposite to HiddenElements
+			if (visible) {
+				HiddenElementAnnotations.setVisible(varDecl, Boolean.toString(visible));
+			} else {
+				// if we are not visible the attribute can be removed
+				varDecl.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
+			}
+		} else {
+			HiddenElementAnnotations.setVisible(varDecl, visible);
+		}
+	}
+
+	public static boolean isVisible(final VarDeclaration varDecl) {
+		if (varDecl.eContainer() instanceof VarDeclaration) {
+			// member access pins treat the visible attribute in opposite to HiddenElements
+			final String visibleAttribute = varDecl.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
+			return "true".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
+		}
+		return HiddenElementAnnotations.isVisible(varDecl);
 	}
 
 	private VarDeclarationAnnotations() {

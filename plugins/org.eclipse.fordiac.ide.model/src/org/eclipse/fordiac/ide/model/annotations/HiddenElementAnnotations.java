@@ -27,7 +27,7 @@ public final class HiddenElementAnnotations {
 		}
 	}
 
-	private static void setVisible(final HiddenElement connection, final String visible) {
+	public static void setVisible(final HiddenElement connection, final String visible) {
 		connection.setAttribute(InternalAttributeDeclarations.VISIBLE, visible, ""); //$NON-NLS-1$
 	}
 

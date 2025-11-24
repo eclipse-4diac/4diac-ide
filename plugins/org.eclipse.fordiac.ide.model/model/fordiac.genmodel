@@ -992,6 +992,10 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/findInTypeInterface"
           body="return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVisible" body="org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.setVisible(this, visible);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVisible/visible"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isVisible" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.isVisible(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>
