@@ -29,7 +29,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.AfterClass;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +53,7 @@ public class New4diacProjectTest {
 		SWTBotPreferences.TIMEOUT = 10000;
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void afterClass() {
 		bot.resetWorkbench();
 	}
