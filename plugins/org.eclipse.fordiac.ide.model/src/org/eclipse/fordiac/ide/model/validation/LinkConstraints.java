@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -105,6 +106,10 @@ public final class LinkConstraints {
 		if (!hasAlreadyInputConnectionsCheck(source, target, con)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat
 					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, target.getName()));
+			return false;
+		}
+
+		if (!checkMemberAccessConnection(target)) {
 			return false;
 		}
 
@@ -225,6 +230,38 @@ public final class LinkConstraints {
 			return target.getInputConnections().stream().noneMatch(connection -> (!connection.equals(con)));
 		}
 		return true;
+	}
+
+	private static boolean checkMemberAccessConnection(final IInterfaceElement target) {
+		if (target instanceof final ContainerVarDeclaration contVarDecl && isAnyChildInputConnected(contVarDecl)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_ChildHasInputConnection, target.getName()));
+			return false;
+		}
+		if (target.eContainer() instanceof final VarDeclaration parent && isAnyParentInputConnected(parent)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_ParentHasInputConnection, target.getName()));
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean isAnyChildInputConnected(final ContainerVarDeclaration contVarDecl) {
+		for (final VarDeclaration mem : contVarDecl.getCachedMembers()) {
+			if (!mem.getInputConnections().isEmpty()) {
+				return true;
+			}
+			if (mem instanceof final ContainerVarDeclaration memContVarDecl
+					&& isAnyChildInputConnected(memContVarDecl)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isAnyParentInputConnected(final IInterfaceElement ie) {
+		return (!ie.getInputConnections().isEmpty()
+				|| (ie.eContainer() instanceof final VarDeclaration parent && isAnyParentInputConnected(parent)));
 	}
 
 	public static boolean isSwapNeeded(final IInterfaceElement source, final FBNetwork parent) {
