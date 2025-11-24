@@ -113,6 +113,8 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_ConnectingIncompatibleInterfaceTypes;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
+	public static String LinkConstraints_STATUSMessage_ChildHasInputConnection;
+	public static String LinkConstraints_STATUSMessage_ParentHasInputConnection;
 	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
 	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
