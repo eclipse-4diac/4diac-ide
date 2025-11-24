@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -194,6 +195,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (final IOException e) {
+			FordiacLogHelper.logWarning(
+					"Could not send request.\nDestionation: " + resource.getName() + "\nRequest:\n" + request //$NON-NLS-1$ //$NON-NLS-2$
+							+ "\nPin: " + varDecl.getQualifiedName()); //$NON-NLS-1$
 			throw new DeploymentException(MessageFormat.format(Messages.DeploymentExecutor_WriteFBParameterFailed,
 					resource.getName(), varDecl.getName()), e);
 		}

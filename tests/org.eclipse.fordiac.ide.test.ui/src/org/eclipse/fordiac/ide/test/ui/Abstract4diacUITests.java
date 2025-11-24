@@ -40,7 +40,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -248,7 +247,7 @@ public class Abstract4diacUITests {
 	/**
 	 * Resets the workbench after
 	 */
-	@AfterClass
+	@AfterAll
 	protected static void afterClass() {
 		bot.resetWorkbench();
 	}
