@@ -18,6 +18,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
+	public static String AbstractLibraryElementProvider_CannotHandleInput;
 	public static String AutoReloadError_PathNotFound_Title;
 	public static String AutoReloadError_PathNotFound;
 
@@ -65,6 +66,8 @@ public final class Messages extends NLS {
 	public static String DataTypeDialog_IncompatibleType;
 	public static String DataTypeDialog_Selected;
 
+	public static String FileLibraryElementProvider_LibraryElementCannotBeLoaded;
+	public static String FileLibraryElementProvider_LibraryElementDoesNotExist;
 	public static String ValidationJob_RefreshJobName;
 	public static String ValidationJob_ReloadJobName;
 	public static String ValidationJob_UpdateJobName;
