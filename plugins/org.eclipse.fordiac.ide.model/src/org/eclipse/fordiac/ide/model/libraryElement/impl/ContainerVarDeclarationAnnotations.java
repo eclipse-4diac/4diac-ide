@@ -59,12 +59,6 @@ public class ContainerVarDeclarationAnnotations {
 		}
 
 		final VarDeclaration newVisibleMember = VarDeclarationFactory.createVarDecl(memVar.getType());
-		if (newVisibleMember instanceof ContainerVarDeclaration) {
-			// intermediate container access pins are created per default invisible as they
-			// may be only needed to store visible children of them
-			// if they are visible commands or the parser will set them visible
-			newVisibleMember.setVisible(false);
-		}
 		newVisibleMember.setName(memberName);
 		newVisibleMember.setType(memVar.getType());
 		setArraySize(newVisibleMember, getArraySize(memVar));

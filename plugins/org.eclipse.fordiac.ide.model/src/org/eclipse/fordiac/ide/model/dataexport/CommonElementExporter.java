@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -469,7 +470,8 @@ public class CommonElementExporter {
 			return;
 		}
 
-		addNameAttribute(ie.getName());
+		final BlockFBNetworkElement block = ie.getBlockFBNetworkElement();
+		addNameAttribute(block != null ? ie.getRelativeName(block) : ie.getName());
 		String value = ""; //$NON-NLS-1$
 		if (hasInitalValue) {
 			value = ((VarDeclaration) ie).getValue().getValue();
@@ -495,26 +497,7 @@ public class CommonElementExporter {
 	private void addVisibleChildrenOfStructVar(final ContainerVarDeclaration structVar) throws XMLStreamException {
 		for (final VarDeclaration varDecl : structVar.getCachedMembers()) {
 			if (varDecl.isVisible()) {
-				addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-				addNameAttribute(varDecl.getRelativeName(varDecl.getBlockFBNetworkElement()));
-				String value = ""; //$NON-NLS-1$
-				if (hasInitialValue(varDecl)) {
-					value = varDecl.getValue().getValue();
-				}
-				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
-				addCommentAttribute(varDecl.getComment());
-
-				if (varDecl.getAttribute(InternalAttributeDeclarations.VISIBLE.getName()) == null) {
-					// if the visible attribute is not in the attribute list add it
-					addAttributeElement(InternalAttributeDeclarations.VISIBLE.getName(), null, Boolean.TRUE.toString(),
-							null);
-				}
-
-				if (hasNonTrivialAttributes(varDecl)) {
-					addAttributes(varDecl.getAttributes());
-				}
-
-				addEndElement();
+				addParam(varDecl);
 			}
 			if (varDecl instanceof final ContainerVarDeclaration structMemVar) {
 				addVisibleChildrenOfStructVar(structMemVar);

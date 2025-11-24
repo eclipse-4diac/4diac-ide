@@ -235,4 +235,20 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	VarDeclaration findInTypeInterface();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model visibleDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	void setVisible(boolean visible);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	boolean isVisible();
+
 } // VarDeclaration
