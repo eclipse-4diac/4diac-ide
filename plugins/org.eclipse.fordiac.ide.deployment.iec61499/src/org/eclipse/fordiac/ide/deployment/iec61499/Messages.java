@@ -60,9 +60,11 @@ public final class Messages extends NLS {
 	public static String DynamicTypeLoadDeploymentExecutor_LUAScriptForAdapterTypeNotExecuted;
 
 	public static String EthernetDeviceManagementCommunicationHandler_CouldNotConnectToDevice;
+	public static String EthernetDeviceManagementCommunicationHandler_MaxRequestSizeExceeded;
 
 	public static String EthernetComHandler_InvalidMgmtID;
 
+	public static String HoloblocDeploymentPreferencePage_MaxRequestSize;
 	public static String HoloblocDeploymentPreferences_PreferencePageDescription;
 	public static String HoloblocDeploymentPreferences_ConnectionTimout;
 
