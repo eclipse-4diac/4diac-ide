@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.ConfigurableMoveFBEditPart;
 import org.eclipse.fordiac.ide.application.properties.memberaccess.MemberAccessContentProvider;
@@ -69,6 +72,18 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 
 	private TreeViewer inputDataMemberAccessViewer;
 	private TreeViewer outputDataMemberAccessViewer;
+
+	// this needs to be a content adapter so that we get changes from all hierarchy
+	// levelss
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (!notification.isTouch()) {
+				updateVisibility();
+			}
+		}
+	};
 
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
@@ -232,7 +247,30 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 	}
 
 	@Override
+	protected void setType(final Object input) {
+		removeInterfaceAdapter();
+		super.setType(input);
+		addInterfaceAdapter();
+	}
+
+	private void addInterfaceAdapter() {
+		final ConfigurableMoveFB typeCache = getType();
+		if ((null != typeCache) && !typeCache.getInterface().eAdapters().contains(interfaceAdapter)) {
+			typeCache.getInterface().eAdapters().add(interfaceAdapter);
+		}
+	}
+
+	private void removeInterfaceAdapter() {
+		final ConfigurableMoveFB typeCache = getType();
+		if ((typeCache != null) && typeCache.getInterface().eAdapters().contains(interfaceAdapter)) {
+			typeCache.getInterface().eAdapters().remove(interfaceAdapter);
+		}
+
+	}
+
+	@Override
 	public void dispose() {
+		removeInterfaceAdapter();
 		super.dispose();
 		if (getCurrentCommandStack() != null) {
 			getCurrentCommandStack().removeCommandStackEventListener(this);
@@ -281,14 +319,19 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 			inputDataMemberAccessViewer
 					.setInput(new MemberAccessTree(getType(), getType().getInterface().getInputVars()));
 		}
-		updateVisibility(inputDataMemberAccessViewer, getType().getInterface().getAllInterfaceElements()
-				.filter(ie -> ie instanceof final VarDeclaration vardecl && ie.isIsInput() && !vardecl.isInOutVar()));
 
 		if (!(outputDataMemberAccessViewer.getInput() instanceof final MemberAccessTree memAccessTree)
 				|| memAccessTree.getBlockFBNetworkElement() != getType()) {
 			outputDataMemberAccessViewer
 					.setInput(new MemberAccessTree(getType(), getType().getInterface().getOutputVars()));
 		}
+
+		updateVisibility();
+	}
+
+	private void updateVisibility() {
+		updateVisibility(inputDataMemberAccessViewer, getType().getInterface().getAllInterfaceElements()
+				.filter(ie -> ie instanceof final VarDeclaration vardecl && ie.isIsInput() && !vardecl.isInOutVar()));
 		updateVisibility(outputDataMemberAccessViewer, getType().getInterface().getAllInterfaceElements()
 				.filter(ie -> ie instanceof final VarDeclaration vardecl && !ie.isIsInput() && !vardecl.isInOutVar()));
 	}
