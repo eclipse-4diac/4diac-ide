@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 /**
  * Helper class for methods that will be - accessed from the model
@@ -46,6 +47,11 @@ public final class ConfigurableFBManagement {
 	public static final String MEMBER_VAR_SEPARATOR = "%"; //$NON-NLS-1$
 
 	static void updateFbConfiguration(final ConfigurableFB fb) {
+		if (fb.getTypeEntry() instanceof ErrorTypeEntry) {
+			// if we are missing our type we can not configure it correctly
+			return;
+		}
+
 		if (fb instanceof ConfigurableMoveFB) {
 			updateMoveFbConfiguration(fb);
 		} else if (fb instanceof final StructManipulator sm) {
