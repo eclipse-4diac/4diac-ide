@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -59,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -225,7 +227,13 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 	}
 
 	protected void setInterface() {
-		final InterfaceList typeInterface = newElement.getTypeInterface();
+		InterfaceList typeInterface = newElement.getTypeInterface();
+		if (newElement instanceof final AdapterFB adapterFB
+				&& adapterFB.getTypeEntry() instanceof final AdapterTypeEntry adapterTypeEntry) {
+			final AdapterType adpType = adapterTypeEntry.getType();
+			typeInterface = (adapterFB.isPlug() ? adpType.getPlugType().getInterfaceList()
+					: adpType.getInterfaceList());
+		}
 		if (typeInterface != null) {
 			newElement.setInterface(typeInterface.copy());
 		} else {
