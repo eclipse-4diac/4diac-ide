@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -45,11 +44,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
@@ -123,36 +120,21 @@ public class SystemImporter extends CommonElementImporter {
 		final SystemConfiguration sysConf = getElement().getSystemConfiguration();
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.APPLICATION_ELEMENT:
-				parseApplication(getElement());
-				break;
-			case LibraryElementTags.DEVICE_ELEMENT:
-				sysConf.getDevices().add(parseDevice());
-				break;
-			case LibraryElementTags.MAPPING_ELEMENT:
-				parseMapping();
-				break;
-			case LibraryElementTags.SEGMENT_ELEMENT:
-				sysConf.getSegments().add(parseSegment());
-				break;
-			case LibraryElementTags.LINK_ELEMENT:
-				parseLink(sysConf);
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.APPLICATION_ELEMENT -> parseApplication(getElement());
+			case LibraryElementTags.DEVICE_ELEMENT -> sysConf.getDevices().add(parseDevice());
+			case LibraryElementTags.MAPPING_ELEMENT -> parseMapping();
+			case LibraryElementTags.SEGMENT_ELEMENT -> sysConf.getSegments().add(parseSegment());
+			case LibraryElementTags.LINK_ELEMENT -> parseLink(sysConf);
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};
@@ -472,17 +454,18 @@ public class SystemImporter extends CommonElementImporter {
 
 		processChildren(LibraryElementTags.APPLICATION_ELEMENT, name -> {
 			switch (name) {
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(application);
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+			}
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
 				final SubAppNetworkImporter supAppImporter = new SubAppNetworkImporter(this);
 				application.setFBNetwork(supAppImporter.getFbNetwork());
 				supAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		});
@@ -502,19 +485,10 @@ public class SystemImporter extends CommonElementImporter {
 		for (final BlockFBNetworkElement fbnEl : mappedFBs) {
 			final BlockFBNetworkElement srcResFb = fbnEl.getOpposite();
 			final Resource res = fbnEl.getResource();
-			fbnEl.getInterface().getAllOutputs().flatMap(SystemImporter::flattenAccessPins)
-					.flatMap(ie -> ie.getOutputConnections().stream()) //
+			fbnEl.getInterface().getAllOutputs().flatMap(ie -> ie.getOutputConnections().stream()) //
 					.filter(con -> con.getDestinationElement().getResource() == res) //
 					.forEach(con -> res.getFBNetwork().addConnection(createResourceCon(srcResFb, con)));
 		}
-	}
-
-	private static Stream<IInterfaceElement> flattenAccessPins(final IInterfaceElement ie) {
-		if (ie instanceof final ContainerVarDeclaration contVarDecl) {
-			return Stream.concat(Stream.of(ie),
-					contVarDecl.getCachedMembers().stream().flatMap(SystemImporter::flattenAccessPins));
-		}
-		return Stream.of(ie);
 	}
 
 	/*
