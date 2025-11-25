@@ -117,7 +117,12 @@ public class CommonElementExporter {
 
 		@Override
 		public int available() throws IOException {
-			return currentDataBuffer.remaining();
+			int remaining = currentDataBuffer.remaining();
+			if ((remaining == 0) && bufferIterator.hasNext()) {
+				currentDataBuffer = bufferIterator.next();
+				remaining = currentDataBuffer.remaining();
+			}
+			return remaining;
 		}
 
 		@Override
