@@ -48,19 +48,26 @@ public final class BlockInstanceFactory {
 		if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
 			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
-		if (LibraryElementTags.TYPENAME_MUX.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_MUX.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_MUXERS)) {
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
 		}
-		if (LibraryElementTags.TYPENAME_DEMUX.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_DEMUX.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_MUXERS)) {
 			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_FMOVE)) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
 		if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}
 		return LibraryElementFactory.eINSTANCE.createFB();
+	}
+
+	private static boolean matchesPackageName(final TypeEntry entry, final String packageName) {
+		return entry.getPackageName().isEmpty() || entry.getPackageName().equals(packageName);
 	}
 
 	private BlockInstanceFactory() {
