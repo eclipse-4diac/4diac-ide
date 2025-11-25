@@ -52,10 +52,11 @@ final class STAlgorithmEmbeddedEditorUtil {
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,
 		Collection<? extends EObject> additionalContent, LibraryElement expectedType) {
-		editor.updateEditor(uri, type, additionalContent, #{STResource.OPTION_EXPECTED_TYPE -> expectedType})
+		editor.updateEditor(uri, type, expectedType, additionalContent,
+			#{STResource.OPTION_EXPECTED_TYPE -> expectedType})
 	}
 
-	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type,
+	def static void updateEditor(EmbeddedEditor editor, URI uri, LibraryElement type, LibraryElement expectedType,
 		Collection<? extends EObject> additionalContent, Map<?, ?> loadOptions) {
 		editor.document?.internalModify [ resource |
 			if (uri !== null) {
@@ -66,6 +67,7 @@ final class STAlgorithmEmbeddedEditorUtil {
 			if (resource instanceof STAlgorithmResource) {
 				resource.libraryElement = type
 				resource.includeInternalLibraryElement = type instanceof BaseFBType
+				resource.expectedType = expectedType
 				resource.additionalContent.clear
 				if (additionalContent !== null) {
 					resource.additionalContent.addAll(additionalContent)
