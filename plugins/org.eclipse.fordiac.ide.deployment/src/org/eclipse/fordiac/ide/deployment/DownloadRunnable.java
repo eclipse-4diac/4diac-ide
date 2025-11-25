@@ -383,7 +383,7 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 
 	private void handleDeploymentException(final Device device, final DeploymentException e) {
 		result = Status.error(MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
-				DeploymentHelper.getMgrIDSafe(device), e.getMessage()), e);
+				DeploymentHelper.getMgrIDSafe(device), e.getMessage()), e.getCause());
 	}
 
 	public IStatus getResult() {
