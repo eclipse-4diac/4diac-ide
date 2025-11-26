@@ -69,7 +69,7 @@ public class STCoreLabelProvider extends DefaultEObjectLabelProvider {
 
 	public String text(final STVarDeclaration element) {
 		return MessageFormat.format(Messages.STCoreLabelProvider_VarDeclarationText, element.getName(),
-				element.getType() != null ? element.getType().getName() : null);
+				element.getFullTypeName());
 	}
 
 	public String text(final STVarPlainDeclarationBlock element) {
