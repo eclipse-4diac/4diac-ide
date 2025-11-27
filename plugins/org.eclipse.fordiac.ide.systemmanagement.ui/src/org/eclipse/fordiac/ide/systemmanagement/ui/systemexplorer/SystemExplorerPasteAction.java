@@ -88,7 +88,6 @@ import org.eclipse.ui.part.ResourceTransfer;
 		setToolTipText(WorkbenchNavigatorMessages.PasteAction_Paste_selected_resource_s_);
 		setId(SystemExplorerPasteAction.ID);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, "HelpId"); //$NON-NLS-1$
-		// TODO INavigatorHelpContextIds.PASTE_ACTION);
 	}
 
 	/**
@@ -108,7 +107,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 		}
 
 		for (IResource resource : selectedResources) {
-			if (resource instanceof IProject && !((IProject) resource).isOpen()) {
+			if (resource instanceof final IProject proj && !proj.isOpen()) {
 				return null;
 			}
 			if (resource.getType() == IResource.FILE) {
@@ -243,7 +242,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 			return true;
 		}
 
-		if (getSelectedNonResources().size() > 0) {
+		if (!getSelectedNonResources().isEmpty()) {
 			return false;
 		}
 
@@ -269,11 +268,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 		}
 		if (resourceData != null) {
 			// linked resources can only be pasted into projects
-			if (isLinked(resourceData) && targetResource.getType() != IResource.PROJECT
-					&& targetResource.getType() != IResource.FOLDER) {
-				return false;
-			}
-			return true;
+			return !(isLinked(resourceData) && targetResource.getType() != IResource.PROJECT
+					&& targetResource.getType() != IResource.FOLDER);
 		}
 		final TransferData[] transfers = clipboard.getAvailableTypes();
 		final FileTransfer fileTransfer = FileTransfer.getInstance();

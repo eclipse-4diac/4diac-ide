@@ -100,15 +100,11 @@ public class GitIssueCreator {
 	}
 
 	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
-		try {
-			final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
-					URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
-					URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
-			openLinkInBrowser(reportingURI);
-			return Optional.empty(); // no issue created yet...
-		} catch (final Exception e) {
-			return Optional.empty();
-		}
+		final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
+				URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
+				URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
+		openLinkInBrowser(reportingURI);
+		return Optional.empty(); // no issue created yet...
 	}
 
 	private static Optional<String> createGitLabIssue(final IssueInfo info) {
@@ -169,7 +165,10 @@ public class GitIssueCreator {
 				return Optional.of(response.body());
 			}
 			return Optional.empty();
-		} catch (IOException | InterruptedException e) {
+		} catch (final IOException e) {
+			return Optional.empty();
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
 			return Optional.empty();
 		}
 	}
