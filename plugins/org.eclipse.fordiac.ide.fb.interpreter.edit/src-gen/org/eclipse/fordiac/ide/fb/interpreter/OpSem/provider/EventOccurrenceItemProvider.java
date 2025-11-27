@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /**
@@ -52,7 +53,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	public EventOccurrenceItemProvider(AdapterFactory adapterFactory) {
+	public EventOccurrenceItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,7 +64,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -84,7 +85,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addEventPropertyDescriptor(Object object) {
+	protected void addEventPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_event_feature"), //$NON-NLS-1$
@@ -99,7 +100,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addActivePropertyDescriptor(Object object) {
+	protected void addActivePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_active_feature"), //$NON-NLS-1$
@@ -115,7 +116,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addIgnoredPropertyDescriptor(Object object) {
+	protected void addIgnoredPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_ignored_feature"), //$NON-NLS-1$
@@ -131,7 +132,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addFbRuntimePropertyDescriptor(Object object) {
+	protected void addFbRuntimePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_fbRuntime_feature"), //$NON-NLS-1$
@@ -147,7 +148,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addCreatedTransactionsPropertyDescriptor(Object object) {
+	protected void addCreatedTransactionsPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_createdTransactions_feature"), //$NON-NLS-1$
@@ -163,7 +164,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addParentFBPropertyDescriptor(Object object) {
+	protected void addParentFBPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_EventOccurrence_parentFB_feature"), //$NON-NLS-1$
@@ -178,7 +179,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 *
 	 * @generated
 	 */
-	protected void addStartTimePropertyDescriptor(Object object) {
+	protected void addStartTimePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_EventOccurrence_startTime_feature"), //$NON-NLS-1$
@@ -213,7 +214,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to
 		// use for
 		// adding (see {@link AddCommand}) it as a child.
@@ -248,8 +249,13 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	@Override
 	public String getText(final Object object) {
 		final EventOccurrence eventOccurrence = (EventOccurrence) object;
-		if ((eventOccurrence.getEvent() != null) && (eventOccurrence.getParentFB() != null)) {
-			return getString("_UI_EventOccurrence_type") + " " + eventOccurrence.getParentFB().getName() + "." //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (eventOccurrence.getEvent() != null) {
+			if (eventOccurrence.getParentFB() != null) {
+				return getString("_UI_EventOccurrence_type") + " " //$NON-NLS-1$ //$NON-NLS-2$
+						+ FBNetworkHelper.getFullHierarchicalName(eventOccurrence.getParentFB()) + "." //$NON-NLS-1$
+						+ eventOccurrence.getEvent().getName();
+			}
+			return getString("_UI_EventOccurrence_type") + " at interface: " //$NON-NLS-1$ //$NON-NLS-2$
 					+ eventOccurrence.getEvent().getName();
 		}
 		return getString("_UI_EventOccurrence_type"); //$NON-NLS-1$
@@ -263,7 +269,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(EventOccurrence.class)) {
@@ -289,7 +295,7 @@ public class EventOccurrenceItemProvider extends ItemProviderAdapter implements 
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

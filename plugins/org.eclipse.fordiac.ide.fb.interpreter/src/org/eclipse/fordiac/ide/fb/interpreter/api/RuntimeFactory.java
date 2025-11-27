@@ -95,6 +95,8 @@ public final class RuntimeFactory {
 	private static CompositeFBTypeRuntime createFrom(final CompositeFBType fb) {
 		final CompositeFBTypeRuntime compositeRT = OperationalSemanticsFactory.eINSTANCE.createCompositeFBTypeRuntime();
 		compositeRT.setCompositeFBType(fb);
+		final var innerRT = RuntimeFactory.createFrom(fb.getFBNetwork());
+		compositeRT.setNetworkRuntime(innerRT);
 		return compositeRT;
 	}
 
