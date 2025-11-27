@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class InterfacePinUtils {
@@ -115,25 +116,24 @@ public class InterfacePinUtils {
 	}
 
 	public static IInterfaceElement findPinInInterface(final FBType fbType, final IInterfaceElement iel) {
-		IInterfaceElement foundPin = fbType.getInterfaceList().getInterfaceElement(iel);
-		if (foundPin == null && isContainedInAdapter(iel)) {
-			// pin is part of an adapter
-			final String sourceAdapter = getContainingAdapterDecl(iel).getName();
-			final AdapterDeclaration adapter = fbType.getInterfaceList().getAdapter(sourceAdapter);
-			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel);
-		}
-		return foundPin;
+		return findPinInInterfaceList(fbType.getInterfaceList(), iel);
 	}
 
 	public static IInterfaceElement findPinInInterface(final BlockFBNetworkElement fb, final IInterfaceElement iel) {
-		IInterfaceElement foundPin = fb.getInterface().getInterfaceElement(iel);
+		return findPinInInterfaceList(fb.getInterface(), iel);
+	}
+
+	private static IInterfaceElement findPinInInterfaceList(final InterfaceList interfaceList,
+			final IInterfaceElement iel) {
+		IInterfaceElement foundPin = interfaceList.getInterfaceElement(iel);
 		if (foundPin == null && isContainedInAdapter(iel)) {
 			// pin is part of an adapter
 			final String sourceAdapter = getContainingAdapterDecl(iel).getName();
-			final AdapterDeclaration adapter = fb.getInterface().getAdapter(sourceAdapter);
+			final AdapterDeclaration adapter = interfaceList.getAdapter(sourceAdapter);
 			foundPin = adapter.getAdapterFB().getInterface().getInterfaceElement(iel);
 		}
 		return foundPin;
+
 	}
 
 	public static VarDeclaration findVariableInInterface(final BlockFBNetworkElement instance,

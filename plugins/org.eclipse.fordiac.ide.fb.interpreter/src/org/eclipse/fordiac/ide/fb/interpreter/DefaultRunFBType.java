@@ -84,6 +84,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -342,6 +343,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		case final BasicFBTypeRuntime b -> b.setBasicfbtype((BasicFBType) copyFBType);
 		case final SimpleFBTypeRuntime s -> s.setSimpleFBType((SimpleFBType) copyFBType);
 		case final FunctionFBTypeRuntime f -> f.setFunctionFBType((FunctionFBType) copyFBType);
+		case final ServiceInterfaceFBTypeRuntime si -> si.setServiceFBType((ServiceInterfaceFBType) copyFBType);
 		default -> throw new UnsupportedOperationException();
 		}
 
@@ -537,18 +539,17 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 		// sampling input & writing output is special for composite types
 		if (runtime instanceof final CompositeFBTypeRuntime compTypeRT) {
-			if (compTypeRT.getNetworkRuntime() == null) {
-				final FBNetworkRuntime rt = RuntimeFactory.createFrom(compTypeRT.getCompositeFBType().getFBNetwork());
-				rt.setOuterNetworkRuntime(fBNetworkRuntime);
+			if (compTypeRT.getNetworkRuntime().getOuterNetworkRuntime() == null) {
+				compTypeRT.getNetworkRuntime().setOuterNetworkRuntime(fBNetworkRuntime);
 				// put the composite runtime into the inner network, so we will find our way
 				// back to the outer network
-				rt.getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
-				compTypeRT.setNetworkRuntime(rt);
+				compTypeRT.getNetworkRuntime().getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
 			}
 			return runFBType(runtime, eventOccurrence);
 		}
 
-		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
+		// handle initial triggers at outputs of FBs (e.g., for SIFBs, but not for
+		// Composite Types)
 		if (!InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
 			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
@@ -596,7 +597,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			// add transactions
 			final EventConnection eventConn = (EventConnection) conn;
 			final EventOccurrence inputEO = EventOccFactory.createFrom(eventConn.getEventDestination());
-			inputEO.setResultFBRuntime(runtime);
+			inputEO.setFbRuntime(EcoreUtil.copy(runtime));
 			final FBTransaction fbTrans = TransactionFactory.createFrom(inputEO);
 			outputEO.getCreatedTransactions().add(fbTrans);
 		}
@@ -674,7 +675,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	// type
 	private static Event getEquivalentEventTypePin(final EventOccurrence sourceEventOccurrence) {
 		final BlockFBNetworkElement fbElem = sourceEventOccurrence.getParentFB();
-		return InterfacePinUtils.findEventInInterface(fbElem, sourceEventOccurrence.getEvent());
+		if (fbElem != null) {
+			return InterfacePinUtils.findEventInInterface(fbElem, sourceEventOccurrence.getEvent());
+		}
+		// otherwise it might be an interpretation of a composite fb type, where we
+		// reuse this code
+		if (sourceEventOccurrence.getFbRuntime() instanceof CompositeFBTypeRuntime) {
+			return sourceEventOccurrence.getEvent();
+		}
+		return null;
 	}
 
 	private static List<FBTransaction> processEventConns(final FBNetworkRuntime fBNetworkRuntime,
@@ -762,6 +771,13 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	@Override
 	public EList<EventOccurrence> runServiceInterfaceFBType(final ServiceInterfaceFBTypeRuntime fbTypeRuntime) {
+		// TODO this should probably be replaced by an extensible structure with
+		// simulators to also cover other SIFB functionalities.
+		if (this.eventOccurrence.getEvent().getName().equals("INIT")) { //$NON-NLS-1$
+			final var outputEvent = InterfacePinUtils.findEventInInterface(fbTypeRuntime.getModel(), "INITO"); //$NON-NLS-1$
+			return ECollections
+					.asEList(createOutputEventOccurrence(fbTypeRuntime, outputEvent, fbTypeRuntime.getModel()));
+		}
 		// not supported
 		return ECollections.emptyEList();
 	}
