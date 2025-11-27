@@ -306,6 +306,11 @@ public final class Messages extends NLS {
 
 	public static String AttributeInherit_InheritAttribute;
 
+	public static String ChangeTypeNameToFile_QuickfixLabel;
+	public static String ChangeTypeNameToFile_QuickfixDesc;
+	public static String ChangeFileNameToType_QuickfixLabel;
+	public static String ChangeFileNameToType_QuickfixDesc;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
