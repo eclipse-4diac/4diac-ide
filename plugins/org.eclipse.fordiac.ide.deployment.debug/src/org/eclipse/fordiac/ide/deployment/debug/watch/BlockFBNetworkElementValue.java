@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -79,10 +78,9 @@ public class BlockFBNetworkElementValue extends DeploymentDebugElement implement
 		return switch (element) {
 		case final FB fb when fb.getType() instanceof final BaseFBType baseFBType ->
 			Stream.concat(baseFBType.getInternalVars().stream(), baseFBType.getInternalFbs().stream());
-		case final Group group -> group.getGroupElements().stream();
-		case final SubApp subapp -> subapp.loadSubAppNetwork().getNetworkElements().stream();
-		case final CFBInstance cfbInstance -> cfbInstance.loadCFBNetwork().getNetworkElements().stream()
-				.filter(Predicate.not(AdapterFB.class::isInstance));
+		case final SubApp subapp -> subapp.loadSubAppNetwork().getBlockFBNetworkElements();
+		case final CFBInstance cfbInstance ->
+			cfbInstance.loadCFBNetwork().getBlockFBNetworkElements().filter(Predicate.not(AdapterFB.class::isInstance));
 		default -> Stream.empty();
 		};
 	}
