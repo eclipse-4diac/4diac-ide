@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWTError;
@@ -82,7 +83,6 @@ import org.eclipse.ui.part.ResourceTransfer;
 		setToolTipText(WorkbenchNavigatorMessages.CopyAction_Copy_selected_resource_s_);
 		setId(SystemExplorerCopyAction.ID);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, "CopyHelpId"); //$NON-NLS-1$
-		// TODO INavigatorHelpContextIds.COPY_ACTION);
 	}
 
 	/**
@@ -94,7 +94,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 	 *
 	 * @since 2.0
 	 */
-	public SystemExplorerCopyAction(final Shell shell, final Clipboard clipboard, final SystemExplorerPasteAction pasteAction) {
+	public SystemExplorerCopyAction(final Shell shell, final Clipboard clipboard,
+			final SystemExplorerPasteAction pasteAction) {
 		this(shell, clipboard);
 		this.pasteAction = pasteAction;
 	}
@@ -161,9 +162,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 			if (e.code != DND.ERROR_CANNOT_SET_CLIPBOARD) {
 				throw e;
 			}
-			if (MessageDialog.openQuestion(shell, "Problem with copy title", // TODO //$NON-NLS-1$
-																				// ResourceNavigatorMessages.CopyToClipboardProblemDialog_title,
-					"Problem with copy.")) { //$NON-NLS-1$
+			if (MessageDialog.openQuestion(shell, Messages.CopyActionErrorRetryTitle,
+					Messages.CopyActionErrorRetryMessage)) {
 				setClipboard(resources, fileNames, names);
 			}
 		}
@@ -180,7 +180,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 			return false;
 		}
 
-		if (getSelectedNonResources().size() > 0) {
+		if (!getSelectedNonResources().isEmpty()) {
 			return false;
 		}
 

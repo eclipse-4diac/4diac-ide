@@ -252,7 +252,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 			@Override
 			public void mouseDoubleClick(final MouseEvent e) {
 				final FileDialog dialog = new FileDialog(parentShell, SWT.SAVE);
-				dialog.setFilterExtensions(new String[] { "*.svg", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
+				dialog.setFilterExtensions("*.svg", "*.*"); //$NON-NLS-1$ //$NON-NLS-2$
 				dialog.setFileName("result.svg"); //$NON-NLS-1$
 				final String fname = dialog.open();
 				if (fname == null) {
@@ -344,7 +344,7 @@ public class DynamicCheckResultDialog extends ContractCheckResultDialog {
 		final double unitScale = Utils.getInNs(1, displayUnit);
 		final long lowest = Math.round(displayRange.getLowerBound() / stepSizeNs) * stepSizeNs;
 		for (int i = 0; i < nTicks; i++) {
-			final int xPos = ns2Pixel(lowest + i * stepSizeNs);
+			final int xPos = ns2Pixel((double) lowest + i * stepSizeNs);
 			painter.setForeground(AXIS_LIGHT_COLOR);
 			painter.drawLine(xPos, diagramArea.height, xPos, LINE_HEIGHT);
 			painter.setForeground(AXIS_COLOR);
