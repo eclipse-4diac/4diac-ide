@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 
 public final class EnumValue implements AnyDerivedValue {
 	private final EnumeratedValue value;
@@ -56,7 +57,7 @@ public final class EnumValue implements AnyDerivedValue {
 
 	@Override
 	public String toString() {
-		return getType().getName() + '#' + value.getName();
+		return PackageNameHelper.getFullTypeName(getType()) + '#' + value.getName();
 	}
 
 	public EnumeratedValue getValue() {
