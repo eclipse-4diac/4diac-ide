@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.ui.parts.GraphicalEditor;

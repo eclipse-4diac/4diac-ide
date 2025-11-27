@@ -1162,7 +1162,7 @@
 		</style>
 	</extension>
 	<extension
-		point="org.eclipse.fordiac.ide.gef.graphicalAnnotationProvider">
+		point="org.eclipse.fordiac.ide.model.ui.graphicalAnnotationProvider">
 		<provider
 			class="org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotationProvider">
 			<enablement>

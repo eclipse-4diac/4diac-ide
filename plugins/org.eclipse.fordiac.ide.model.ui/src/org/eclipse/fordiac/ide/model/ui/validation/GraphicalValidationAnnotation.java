@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.validation;
+package org.eclipse.fordiac.ide.model.ui.validation;
 
 import java.util.Map;
 import java.util.Objects;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 
 public class GraphicalValidationAnnotation extends GraphicalAnnotation {
 

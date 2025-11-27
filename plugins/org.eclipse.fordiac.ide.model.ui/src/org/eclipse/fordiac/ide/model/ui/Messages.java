@@ -64,6 +64,11 @@ public final class Messages extends NLS {
 	public static String DataTypeDialog_InvalidSelection;
 	public static String DataTypeDialog_Selected;
 
+	public static String ValidationJob_RefreshJobName;
+	public static String ValidationJob_ReloadJobName;
+	public static String ValidationJob_UpdateJobName;
+	public static String ValidationJob_ValidationJobName;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
