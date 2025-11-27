@@ -294,6 +294,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		}
 
 		getCommandStack().markSaveLocation();
+		validationJob.reset();
 	}
 
 	/**
@@ -457,6 +458,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			}
 
 			commandStack.setUndoContext(new ObjectUndoContext(newType));
+			validationJob.reload();
 			getEditorPages().forEach(ITypeEditorPage::reloadType);
 
 			final var active = getActiveEditor();
@@ -507,7 +509,8 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				// we have a type
 				annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
 						typeEditorInput::getContent);
-				validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+				validationJob = new ValidationJob(getPartName(), new ObjectUndoContext(typeEditorInput.getContent()),
+						annotationModel);
 				if (getEditorPages() != null) {
 					getEditorPages().forEach(e -> e.setInput(typeEditorInput));
 				}

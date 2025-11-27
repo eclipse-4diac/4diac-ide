@@ -26,6 +26,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -39,13 +44,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.progress.UIJob;
@@ -54,18 +54,18 @@ public class ValidationJob extends UIJob {
 
 	private static final long DELAY = 500; // in milliseconds
 
-	private final CommandStack commandStack;
+	private final IUndoContext undoContext;
 	private final GraphicalAnnotationModel annotationModel;
-	private final ValidationCommandStackEventListener commandStackEventListener = new ValidationCommandStackEventListener();
+	private final ValidationOperationHistoryListener listener = new ValidationOperationHistoryListener();
 	private final BlockingQueue<EObject> queue = new LinkedBlockingQueue<>();
 	private boolean enabled = true;
 
-	public ValidationJob(final String name, final CommandStack commandStack,
+	public ValidationJob(final String name, final IUndoContext undoContext,
 			final GraphicalAnnotationModel annotationModel) {
 		super(MessageFormat.format(Messages.ValidationJob_ValidationJobName, name));
-		this.commandStack = commandStack;
+		this.undoContext = undoContext;
 		this.annotationModel = annotationModel;
-		commandStackEventListener.install(commandStack);
+		listener.install();
 		reload();
 	}
 
@@ -132,11 +132,9 @@ public class ValidationJob extends UIJob {
 		}
 	}
 
-	protected void handleCommand(final Command command) {
-		if (command instanceof final CompoundCommand compoundCommand) {
-			compoundCommand.getCommands().forEach(this::handleCommand);
-		} else if (command instanceof final ScopedCommand scopedCommand) {
-			elementsChanged(scopedCommand.getAffectedObjects());
+	protected void handleOperation(final IUndoableOperation operation) {
+		if (operation instanceof final ScopedOperation scopedOperation) {
+			elementsChanged(scopedOperation.getAffectedObjects());
 		}
 	}
 
@@ -158,7 +156,7 @@ public class ValidationJob extends UIJob {
 	}
 
 	public void dispose() {
-		commandStackEventListener.uninstall(commandStack);
+		listener.uninstall();
 		setEnabled(false);
 		clear();
 	}
@@ -171,29 +169,28 @@ public class ValidationJob extends UIJob {
 		this.enabled = enabled;
 	}
 
-	protected class ValidationCommandStackEventListener implements CommandStackEventListener {
+	protected class ValidationOperationHistoryListener implements IOperationHistoryListener {
 
 		@Override
-		public void stackChanged(final CommandStackEvent event) {
-			if (event.isPostChangeEvent()) {
-				switch (event.getDetail()) {
-				case CommandStack.POST_EXECUTE, CommandStack.POST_UNDO, CommandStack.POST_REDO ->
-					handleCommand(event.getCommand());
-				case CommandStack.POST_MARK_SAVE -> reset();
-				case CommandStack.POST_FLUSH -> reload();
-				default -> {
-					// empty
-				}
-				}
+		public void historyNotification(final OperationHistoryEvent event) {
+			if (!event.getOperation().hasContext(undoContext)) {
+				return;
+			}
+			switch (event.getEventType()) {
+			case OperationHistoryEvent.DONE, OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE ->
+				handleOperation(event.getOperation());
+			default -> {
+				// ignore
+			}
 			}
 		}
 
-		public void install(final CommandStack commandStack) {
-			commandStack.addCommandStackEventListener(this);
+		public void install() {
+			OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(this);
 		}
 
-		public void uninstall(final CommandStack commandStack) {
-			commandStack.removeCommandStackEventListener(this);
+		public void uninstall() {
+			OperationHistoryFactory.getOperationHistory().removeOperationHistoryListener(this);
 		}
 	}
 }

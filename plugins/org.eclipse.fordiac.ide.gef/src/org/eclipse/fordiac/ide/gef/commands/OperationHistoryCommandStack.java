@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.gef.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -28,11 +30,15 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CommandStackListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.swt.widgets.Display;
 
@@ -213,7 +219,7 @@ public class OperationHistoryCommandStack extends CommandStack {
 		}
 	}
 
-	private static class CommandWrapper extends AbstractOperation {
+	private static class CommandWrapper extends AbstractOperation implements ScopedOperation {
 
 		private final Command cmd;
 
@@ -259,6 +265,18 @@ public class OperationHistoryCommandStack extends CommandStack {
 			return Status.OK_STATUS;
 		}
 
+		@Override
+		public Set<EObject> getAffectedObjects() {
+			if (cmd instanceof final ScopedCommand scopedCommand) {
+				return scopedCommand.getAffectedObjects();
+			}
+			if (cmd instanceof final CompoundCommand compoundCommand) {
+				return compoundCommand.getCommands().stream().filter(ScopedCommand.class::isInstance)
+						.map(ScopedCommand.class::cast).map(ScopedCommand::getAffectedObjects).flatMap(Set::stream)
+						.collect(Collectors.toUnmodifiableSet());
+			}
+			return Set.of();
+		}
 	}
 
 	private class OperationHistoryListener implements IOperationHistoryListener {
