@@ -294,6 +294,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				typeEntryAdapter.setBlockUpdates(false);
 			}
 			getCommandStack().markSaveLocation();
+			validationJob.reset();
 		}
 
 	}
@@ -478,6 +479,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		}
 
 		getCommandStack().setUndoContext(new ObjectUndoContext(system));
+		validationJob.reload();
 		setPartName(system.getName());
 
 		final String path = getBreadcrumb().serializePath();
@@ -521,7 +523,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile(), () -> system);
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
+			validationJob = new ValidationJob(getPartName(), new ObjectUndoContext(system), annotationModel);
 			// inform child editors about the new file and that they should update the
 			// annotation model. Currently we use for simplicity their existing editor input
 			pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
