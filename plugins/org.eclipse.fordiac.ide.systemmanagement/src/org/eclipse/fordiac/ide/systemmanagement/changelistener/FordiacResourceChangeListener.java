@@ -113,10 +113,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		case IResourceDelta.REMOVED:
 			return handleResourceRemoved(delta);
 		case IResourceDelta.ADDED:
-			if (testFlags(delta, IResourceDelta.MOVED_FROM)) {
-				return handleResourceMovedFrom(delta);
-			}
-			return handleResourceCopy(delta);
+			return handleResourceAdded(delta);
 		default:
 			break;
 		}
@@ -183,19 +180,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private static boolean handleResourceMovedFrom(final IResourceDelta delta) {
-		// move/rename of files is handled by participants
-		if (delta.getResource().getType() == IResource.PROJECT) {
-			handleProjectRename(delta);
-		}
-		return false;
-	}
-
-	private boolean handleResourceCopy(final IResourceDelta delta) {
+	private boolean handleResourceAdded(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 
 		if (delta.getResource().getType() == IResource.PROJECT) {
-			SystemManager.validateProjectNature(project);
+			if (testFlags(delta, IResourceDelta.MOVED_FROM)) {
+				handleProjectRename(delta);
+			} else {
+				SystemManager.validateProjectNature(project);
+			}
 		}
 
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
@@ -248,7 +241,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					// the file name this happens when a type is copied into a new project or when a
 					// project is opened or imported
 					updateTypeEntry(file, entry);
-					return;
 				}
 			} else if (!file.equals(typeEntryForFile.getFile())) {
 				// After a file has been copied and the copied file is not the same as the
@@ -334,7 +326,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (entry == null) { // change to Assert ?
 			return;
 		}
-		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
 
 		if (!Objects.equals(newFile, entry.getFile())) {
 			final TypeLibrary typeLibrary = entry.getTypeLibrary();
@@ -345,15 +336,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (typeLibrary != null) {
 				typeLibrary.addTypeEntry(entry);
 			}
-		}
-
-		final LibraryElement type = entry.getTypeEditable();
-		if ((null != type) && // this means we couldn't load the type seems
-		// like a problem in the type's XML file
-		// TODO report on error
-				(!newTypeName.equals(type.getName()))) {
-			type.setName(newTypeName);
-			saveEntryWithWorkspaceJob(type, entry);
 		}
 	}
 
