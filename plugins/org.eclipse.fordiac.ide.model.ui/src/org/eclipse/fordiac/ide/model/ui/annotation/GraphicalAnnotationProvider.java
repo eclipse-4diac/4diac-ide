@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.annotation;
+package org.eclipse.fordiac.ide.model.ui.annotation;
 
 public interface GraphicalAnnotationProvider {
 

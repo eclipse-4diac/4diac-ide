@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.gef.GraphicalViewer;
 
 public class FordiacAnnotationModelEventDispatcher extends GraphicalViewerAnnotationModelEventDispatcher {

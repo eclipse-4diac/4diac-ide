@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.annotation;
+package org.eclipse.fordiac.ide.model.ui.annotation;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.SafeRunner;
 
 public class GraphicalAnnotationModelManager {
 
-	private static final String GRAPHICAL_ANNOTATION_PROVIDER_EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.gef.graphicalAnnotationProvider"; //$NON-NLS-1$
+	private static final String GRAPHICAL_ANNOTATION_PROVIDER_EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.model.ui.graphicalAnnotationProvider"; //$NON-NLS-1$
 
 	private static final GraphicalAnnotationModelManager INSTANCE = new GraphicalAnnotationModelManager();
 

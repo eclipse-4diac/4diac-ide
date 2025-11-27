@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gef.annotation;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;

@@ -16,10 +16,10 @@ import java.util.Map;
 
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IInterfaceElementWatch;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 
 public class WatchValueAnnotation extends GraphicalAnnotation {
 

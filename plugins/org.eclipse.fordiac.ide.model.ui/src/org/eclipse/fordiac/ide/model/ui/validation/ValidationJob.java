@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.validation;
+package org.eclipse.fordiac.ide.model.ui.validation;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ import org.eclipse.core.runtime.jobs.ProgressProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.progress.UIJob;

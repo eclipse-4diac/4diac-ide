@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.fordiac.ide.gef" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.fordiac.ide.model.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.fordiac.ide.gef" id="graphicalAnnotationProvider" name="Graphical Annotation Provider"/>
+         <meta.schema plugin="org.eclipse.fordiac.ide.model.ui" id="graphicalAnnotationProvider" name="Graphical Annotation Provider"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -60,7 +60,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationProvider"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationProvider"/>
                </appInfo>
             </annotation>
          </attribute>

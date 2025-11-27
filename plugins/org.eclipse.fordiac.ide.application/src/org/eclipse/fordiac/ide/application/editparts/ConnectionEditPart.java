@@ -48,7 +48,6 @@ import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker
 import org.eclipse.fordiac.ide.application.widgets.OppositeSelectionDialog;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
@@ -67,6 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;

@@ -100,14 +100,6 @@ public final class Messages extends NLS {
 	public static String UtilityMarker_Predecessor;
 	public static String UtilityMarker_ConnectionSource;
 
-	public static String ValidationJob_RefreshJobName;
-
-	public static String ValidationJob_ReloadJobName;
-
-	public static String ValidationJob_UpdateJobName;
-
-	public static String ValidationJob_ValidationJobName;
-
 	public static String VariableDialog_DefaultTitle;
 
 	public static String VariableDialog_ValueError;
