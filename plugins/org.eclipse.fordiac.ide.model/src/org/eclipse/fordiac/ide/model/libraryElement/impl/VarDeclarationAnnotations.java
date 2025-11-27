@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
@@ -267,9 +268,22 @@ public class VarDeclarationAnnotations {
 				// if we are not visible the attribute can be removed
 				varDecl.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
 			}
-		} else {
-			HiddenElementAnnotations.setVisible(varDecl, visible);
+			return;
 		}
+
+		if (varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			// varDecl is the mapped VarInOut-Output
+			final VarDeclaration varInOutOriginal = varDecl.getInOutVarOpposite();
+			if (visible) {
+				varInOutOriginal.deleteAttribute(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
+			} else {
+				varInOutOriginal.setAttribute(InternalAttributeDeclarations.INOUT_VISIBLE_OUT,
+						Boolean.toString(visible), ""); //$NON-NLS-1$
+			}
+			return;
+		}
+
+		HiddenElementAnnotations.setVisible(varDecl, visible);
 	}
 
 	public static boolean isVisible(final VarDeclaration varDecl) {
@@ -278,6 +292,14 @@ public class VarDeclarationAnnotations {
 			final String visibleAttribute = varDecl.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
 			return "true".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
 		}
+
+		if (varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			// varDecl is the mapped VarInOut-Output
+			final String visibleAttribute = varDecl.getInOutVarOpposite()
+					.getAttributeValue(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
+			return !"false".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
+		}
+
 		return HiddenElementAnnotations.isVisible(varDecl);
 	}
 
