@@ -167,7 +167,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor) throws CoreException {
 		for (final IResourceDelta delta : rootDelta
-				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED)) {
+				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED)) {
 			if (!isExportCanceled(monitor)) {
 				if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
 					exportElement(monitor, file);
