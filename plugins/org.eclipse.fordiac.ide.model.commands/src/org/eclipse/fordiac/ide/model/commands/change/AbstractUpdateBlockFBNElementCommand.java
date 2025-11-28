@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -170,16 +171,43 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	protected void handleConfigurableFB() {
 		// for the configurable fb we have to transfer the data type
-		if (newElement instanceof final ConfigurableFB configFb
-				&& oldElement instanceof final ConfigurableFB oldConfigFb) {
-			configFb.setDataType(oldConfigFb.getDataType());
+		if (newElement instanceof final ConfigurableFB configFb) {
+			if (oldElement instanceof final ConfigurableFB oldConfigFb) {
+				configFb.setDataType(oldConfigFb.getDataType());
 
-			if (configFb instanceof final Demultiplexer newDemux && oldConfigFb instanceof final Demultiplexer oldDemux
-					&& oldDemux.isIsConfigured()) {
-				newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
-						ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
+				if (configFb instanceof final Demultiplexer newDemux
+						&& oldConfigFb instanceof final Demultiplexer oldDemux && oldDemux.isIsConfigured()) {
+					newDemux.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN,
+							ConfigurableFBManagement.buildVisibleChildrenString(oldDemux.getMemberVars()));
+				} else {
+					configFb.updateConfiguration();
+				}
 			} else {
-				configFb.updateConfiguration();
+				// transfer data from error marker
+				handleConFBUpdateFromErrorMarker(configFb);
+			}
+		}
+	}
+
+	private void handleConFBUpdateFromErrorMarker(final ConfigurableFB configFb) {
+		if (configFb instanceof ConfigurableMoveFB) {
+			final String dataTypeName = oldElement.getAttributeValue(LibraryElementTags.F_MOVE_CONFIG);
+			if (dataTypeName != null) {
+				configFb.loadConfiguration(LibraryElementTags.F_MOVE_CONFIG, dataTypeName);
+			}
+		} else {
+			// we are a struct muxer
+			final String dataTypeName = oldElement.getAttributeValue(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
+			if (dataTypeName != null) {
+				configFb.loadConfiguration(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, dataTypeName);
+
+				if (configFb instanceof Demultiplexer) {
+					final String visibleChildren = oldElement
+							.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
+					if (visibleChildren != null) {
+						configFb.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, visibleChildren);
+					}
+				}
 			}
 		}
 	}
