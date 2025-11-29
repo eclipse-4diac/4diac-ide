@@ -102,6 +102,7 @@ public final class Messages extends NLS {
 	public static String STCoreHoverProvider_EventKind;
 	public static String STCoreHoverProvider_FBKind;
 	public static String STCoreHoverProvider_FBTypeKind;
+	public static String STCoreHoverProvider_FunctionFBTypeKind;
 	public static String STCoreHoverProvider_StructKind;
 	public static String STCoreHoverProvider_VarInOutKind;
 	public static String STCoreHoverProvider_VarInputKind;

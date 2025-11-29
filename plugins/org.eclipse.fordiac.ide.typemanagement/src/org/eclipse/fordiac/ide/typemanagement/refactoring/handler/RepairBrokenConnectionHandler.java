@@ -27,7 +27,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -77,16 +77,13 @@ public class RepairBrokenConnectionHandler extends AbstractHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		setBaseEnabled(isRepairable());
+		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		setBaseEnabled(isRepairable(selection));
 	}
 
-	private static boolean isRepairable() {
-		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (window != null) {
-			final IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
-			return selection.size() == 1 && selection.getFirstElement() instanceof final EditPart part
-					&& part.getModel() instanceof ErrorMarkerInterface;
-		}
-		return false;
+	private static boolean isRepairable(final Object selection) {
+		return selection instanceof final IStructuredSelection structSel && structSel.size() == 1
+				&& structSel.getFirstElement() instanceof final EditPart part
+				&& part.getModel() instanceof ErrorMarkerInterface;
 	}
 }

@@ -144,6 +144,10 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 
 		if (topItemPath != null) {
 			Display.getDefault().asyncExec(() -> {
+				if (memberViewerTree.isDisposed()) {
+					return;
+				}
+
 				// Force tree refresh
 				memberViewerTree.update();
 				memberViewerTree.redraw();

@@ -22,16 +22,14 @@ import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
-
-	protected final FocusListener compositeFocusListener = new CompositeFocusListener();
 
 	private Composite composite;
 	private StyledText textControl;
@@ -62,23 +60,18 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 		dialogButton.setText("\u2026"); //$NON-NLS-1$
 		dialogButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> openDialog()));
 		GridDataFactory.swtDefaults().applyTo(dialogButton);
+		focusListener = new CompositeFocusListener();
 		return textControl;
 	}
 
 	protected void openDialog() {
 		try {
-			if (focusListener instanceof final InlineFocusListener inlineFL) {
-				inlineFL.handleFocusChanges = false;
-			}
 			final String initialValue = FordiacMessages.ValueTooLarge.equals(getEditorValue()) ? null
 					: getEditorValue();
 			VariableDialog.open(composite.getShell(), getRowObject(), initialValue).ifPresent(this::setEditorValue);
 		} finally {
 			if (textControl != null && !textControl.isDisposed()) {
 				textControl.forceFocus();
-			}
-			if (focusListener instanceof final InlineFocusListener inlineFL) {
-				inlineFL.handleFocusChanges = true;
 			}
 		}
 	}
@@ -88,10 +81,10 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 		super.addEditorControlListeners();
 		if (editMode == EditModeEnum.INLINE) {
 			if (textControl != null && !textControl.isDisposed()) {
-				textControl.addFocusListener(compositeFocusListener);
+				textControl.addFocusListener(focusListener);
 			}
 			if (dialogButton != null && !dialogButton.isDisposed()) {
-				dialogButton.addFocusListener(compositeFocusListener);
+				dialogButton.addFocusListener(focusListener);
 			}
 		}
 	}
@@ -100,10 +93,10 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 	public void removeEditorControlListeners() {
 		super.removeEditorControlListeners();
 		if (textControl != null && !textControl.isDisposed()) {
-			textControl.removeFocusListener(compositeFocusListener);
+			textControl.removeFocusListener(focusListener);
 		}
 		if (dialogButton != null && !dialogButton.isDisposed()) {
-			dialogButton.removeFocusListener(compositeFocusListener);
+			dialogButton.removeFocusListener(focusListener);
 		}
 	}
 
@@ -112,24 +105,15 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 		return composite;
 	}
 
-	protected class CompositeFocusListener implements FocusListener {
-
-		private boolean hasFocus;
-
-		@Override
-		public void focusGained(final FocusEvent e) {
-			hasFocus = true;
-			focusListener.focusGained(e);
-		}
+	protected class CompositeFocusListener extends InlineFocusListener {
 
 		@Override
 		public void focusLost(final FocusEvent e) {
-			hasFocus = false;
-			Display.getCurrent().timerExec(100, () -> {
-				if (!hasFocus) {
-					focusListener.focusLost(e);
-				}
-			});
+			final Point cursorLocation = Display.getDefault().getCursorLocation();
+			final Point relativeCursorLocation = dialogButton.getParent().toControl(cursorLocation);
+			if (!dialogButton.getBounds().contains(relativeCursorLocation)) {
+				super.focusLost(e);
+			}
 		}
 	}
 }

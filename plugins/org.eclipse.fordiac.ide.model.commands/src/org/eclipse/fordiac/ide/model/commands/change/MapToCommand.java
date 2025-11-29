@@ -199,7 +199,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 						&& varDeclaration.isIsInput()) {
 					source = varDeclaration.getInOutVarOpposite();
 				}
-				addConnectionCreateCommand(source, destination, connection.isVisible());
+				addConnectionCreateCommand(source, destination, connection);
 			}
 		});
 	}
@@ -229,7 +229,7 @@ public class MapToCommand extends Command implements ScopedCommand {
 						&& varDeclaration.isIsInput()) {
 					source = varDeclaration.getInOutVarOpposite();
 				}
-				addConnectionCreateCommand(source, destination, connection.isVisible());
+				addConnectionCreateCommand(source, destination, connection);
 				if ((destination instanceof AdapterDeclaration) || (destination instanceof VarDeclaration)) {
 					checkForDeleteConnections(destination);
 				}
@@ -242,12 +242,13 @@ public class MapToCommand extends Command implements ScopedCommand {
 	}
 
 	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination,
-			final boolean visible) {
+			final Connection refCon) {
 		final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(source);
 		if (null != cmd) {
 			cmd.setSource(source);
 			cmd.setDestination(destination);
-			cmd.setVisible(visible);
+			cmd.setVisible(refCon.isVisible());
+			cmd.setAttributes(refCon.getAttributes());
 			// as we are creating the connection as part of the mapping command we don't
 			// need to perform a mapping check
 			cmd.setPerformMappingCheck(false);
