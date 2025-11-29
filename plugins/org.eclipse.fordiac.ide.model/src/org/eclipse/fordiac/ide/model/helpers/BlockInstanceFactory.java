@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -41,22 +42,32 @@ public final class BlockInstanceFactory {
 	}
 
 	public static FB createFBInstanceForTypeEntry(final FBTypeEntry entry) {
+		if (entry instanceof ErrorTypeEntry) {
+			return LibraryElementFactory.eINSTANCE.createFB();
+		}
 		if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
 			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
-		if (LibraryElementTags.TYPENAME_MUX.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_MUX.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_MUXERS)) {
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
 		}
-		if (LibraryElementTags.TYPENAME_DEMUX.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_DEMUX.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_MUXERS)) {
 			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())) {
+		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_FMOVE)) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
 		if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		}
 		return LibraryElementFactory.eINSTANCE.createFB();
+	}
+
+	private static boolean matchesPackageName(final TypeEntry entry, final String packageName) {
+		return entry.getPackageName().isEmpty() || entry.getPackageName().equals(packageName);
 	}
 
 	private BlockInstanceFactory() {

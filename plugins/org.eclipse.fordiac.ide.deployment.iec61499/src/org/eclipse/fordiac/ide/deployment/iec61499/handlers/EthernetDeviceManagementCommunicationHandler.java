@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2018 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2013, 2025 fortiss GmbH, Johannes Kepler University
+ *                          Martin Erich Jobst
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl, Florian Noack, Monika Wenger - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Martin Erich Jobst - add maximum request size
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499.handlers;
 
@@ -36,6 +39,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 	private Socket socket;
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
+	private final int maxRequestSize = IEC61499PreferenceConstants.getMaxRequestSize();
 	private static final int LOWER_INVALID_PORT = 1023;
 	private static final int UPPER_INVALID_PORT = 65536;
 	private static final long MS_SLEEP_IN_DISCONNECT = 50;
@@ -82,7 +86,7 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 		} catch (final IOException e) {
 			throw new DeploymentException(Messages.DeploymentExecutor_DisconnectFailed, e);
 		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
@@ -108,6 +112,12 @@ public class EthernetDeviceManagementCommunicationHandler implements IDeviceMana
 
 	@Override
 	public String sendREQ(final String destination, final String request) throws IOException {
+		final int totalSize = destination.length() + request.length() + 6;
+		if (totalSize > maxRequestSize) {
+			throw new IOException(
+					MessageFormat.format(Messages.EthernetDeviceManagementCommunicationHandler_MaxRequestSizeExceeded,
+							Integer.valueOf(totalSize), Integer.valueOf(maxRequestSize)));
+		}
 		String response = ""; //$NON-NLS-1$
 		if (outputStream != null && inputStream != null) {
 			outputStream.writeByte(ASN1_TAG_IECSTRING);

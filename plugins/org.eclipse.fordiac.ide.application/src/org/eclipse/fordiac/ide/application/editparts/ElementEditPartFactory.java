@@ -20,7 +20,6 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
-import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
@@ -115,8 +114,14 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (element instanceof ConfigurableMoveFB) {
 			return new ConfigurableMoveFBEditPart();
 		}
-		if (element instanceof final FB fb) {
-			return getPartForFBInstances(fb);
+		if (element instanceof Multiplexer) {
+			return new MultiplexerEditPart();
+		}
+		if (element instanceof Demultiplexer) {
+			return new DemultiplexerEditPart();
+		}
+		if (element instanceof FB) {
+			return new FBEditPart();
 		}
 		if (element instanceof SubApp) {
 			return new SubAppForFBNetworkEditPart();
@@ -129,19 +134,6 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 
 		throw createEditpartCreationException(context, element);
-	}
-
-	protected static EditPart getPartForFBInstances(final FB fb) {
-		if (fb.getTypeEntry() != null && fb.getTypeEntry().getTypeName() != null) {
-			final String typeName = fb.getTypeEntry().getTypeName();
-			if (typeName.contentEquals(LibraryElementTags.TYPENAME_MUX)) {
-				return new MultiplexerEditPart();
-			}
-			if (typeName.contentEquals(LibraryElementTags.TYPENAME_DEMUX)) {
-				return new DemultiplexerEditPart();
-			}
-		}
-		return new FBEditPart();
 	}
 
 	@SuppressWarnings("static-method") // not static to allow subclasses to provide own elements

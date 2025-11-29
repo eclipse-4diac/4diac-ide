@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -45,6 +46,7 @@ public class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 		case final STVarDeclaration stVarDeclaration -> getKind(stVarDeclaration);
 		case final Event event -> Messages.STCoreHoverProvider_EventKind;
 		case final FB fb -> Messages.STCoreHoverProvider_FBKind;
+		case final FunctionFBType functionFBType -> Messages.STCoreHoverProvider_FunctionFBTypeKind;
 		case final FBType fbType -> Messages.STCoreHoverProvider_FBTypeKind;
 		case final StructuredType struct -> Messages.STCoreHoverProvider_StructKind;
 		default -> null;

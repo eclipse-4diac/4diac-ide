@@ -69,7 +69,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 			ElementaryTypes.LDATE_AND_TIME);
 
 	private static final String TYPE_PREFIX_FORMAT = "%s#%s"; //$NON-NLS-1$
-	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("\\G([_a-zA-Z]\\w*+)#"); //$NON-NLS-1$
+	private static final Pattern TYPE_PREFIX_PATTERN = Pattern.compile("\\G([_a-zA-Z][a-zA-Z_0-9:]*+)#"); //$NON-NLS-1$
 
 	private static final String TIME_SHORT_FORM = "T"; //$NON-NLS-1$
 	private static final String LTIME_SHORT_FORM = "LT"; //$NON-NLS-1$

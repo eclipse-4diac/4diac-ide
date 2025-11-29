@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -66,7 +67,11 @@ class AdapterFBCreateCommand extends FBCreateCommand {
 
 	@Override
 	protected InterfaceList createInterfaceList() {
-		return getAdapterFB().getType().getInterfaceList().copy();
+		final AdapterType type = (AdapterType) getTypeEntry().getType();
+		final InterfaceList src = (adapterDecl != null && !adapterDecl.isIsInput())
+				? type.getPlugType().getInterfaceList()
+				: type.getInterfaceList();
+		return src.copy();
 	}
 
 }

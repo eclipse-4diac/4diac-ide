@@ -24,7 +24,9 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -242,18 +244,45 @@ public class VarDeclarationAnnotations {
 		if (varDeclaration == null) {
 			return false;
 		}
-		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
-		return !varDeclaration.getInputConnections().isEmpty()
-				|| (typeIE != null && !typeIE.getInputConnections().isEmpty());
+		if (!varDeclaration.getInputConnections().isEmpty()) {
+			return true;
+		}
+		final VarDeclaration typeIE = findInTypeNetwork(varDeclaration);
+		return typeIE != null && !typeIE.getInputConnections().isEmpty();
 	}
 
 	static boolean hasAnyOutputConnections(final VarDeclaration varDeclaration) {
 		if (varDeclaration == null) {
 			return false;
 		}
-		final VarDeclaration typeIE = varDeclaration.findInTypeInterface();
-		return !varDeclaration.getOutputConnections().isEmpty()
-				|| (typeIE != null && !typeIE.getOutputConnections().isEmpty());
+		if (!varDeclaration.getOutputConnections().isEmpty()) {
+			return true;
+		}
+		final VarDeclaration typeIE = findInTypeNetwork(varDeclaration);
+		return typeIE != null && !typeIE.getOutputConnections().isEmpty();
+	}
+
+	static VarDeclaration findInTypeNetwork(final VarDeclaration element) {
+		final BlockFBNetworkElement blockFbnEl = element.getBlockFBNetworkElement();
+		if (blockFbnEl == null) {
+			return null;
+		}
+
+		// we need the _full_ type here, since we need to check the input/output
+		// connections of the inner network
+		final FBType type = blockFbnEl.getType();
+		if (type == null) {
+			return null;
+		}
+
+		final VarDeclaration typeIE = type.getInterfaceList().getVariable(element.getName());
+		if (typeIE.isInOutVar() && !element.isIsInput()) {
+			// if the type pin is a varinout and the searched element is an output we need
+			// to get the output opposite
+			return typeIE.getInOutVarOpposite();
+		}
+
+		return typeIE;
 	}
 
 	private VarDeclarationAnnotations() {
