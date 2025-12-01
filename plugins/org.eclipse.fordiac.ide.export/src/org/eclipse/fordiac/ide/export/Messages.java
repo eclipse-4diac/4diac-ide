@@ -26,7 +26,11 @@ public final class Messages extends NLS {
 
 	public static String ExportBuilder_Build;
 
+	public static String ExportBuilder_CMakeListExportFailed;
+
 	public static String ExportBuilder_Clean;
+
+	public static String ExportBuilder_CouldntExportFile;
 
 	public static String ExportTemplate_ExportTemplate;
 
