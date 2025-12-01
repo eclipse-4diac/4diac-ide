@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ChangeFileNameMarkerResolution extends ChangeNameMarkerResolution {
 
@@ -39,22 +38,20 @@ public class ChangeFileNameMarkerResolution extends ChangeNameMarkerResolution {
 	}
 
 	@Override
-	public void run(final IMarker marker) {
+	protected void runInWorkspace(final IMarker marker) throws CoreException {
 		if (!(marker.getResource() instanceof final IFile file)) {
-			return;
+			throw createExceptionForMarker(Messages.ChangeName_NoFileError, marker);
 		}
-		final TypeEntry te = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		final String newName = te.getTypeName() + "." + marker.getResource().getFileExtension(); //$NON-NLS-1$
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntry == null) {
+			throw createExceptionForMarker(Messages.ChangeName_NoTypeEntryError, marker);
+		}
 		// remove type entry, new one will be created on resource move
-		te.getTypeLibrary().removeTypeEntry(te);
+		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
 
 		final IPath path = marker.getResource().getFullPath();
-		final IPath newPath = path.removeLastSegments(1).append(newName);
-
-		try {
-			marker.getResource().move(newPath, false, new NullProgressMonitor());
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Could not perform quickfix file rename", e); //$NON-NLS-1$
-		}
+		final IPath newPath = path.removeLastSegments(1).append(typeEntry.getTypeName())
+				.addFileExtension(typeEntry.getFileExtension());
+		marker.getResource().move(newPath, false, new NullProgressMonitor());
 	}
 }
