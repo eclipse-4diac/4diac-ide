@@ -20,10 +20,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -43,8 +39,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFileEditorInput;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
-
-	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
 
 	@Override
 	public void resourceChanged(final IResourceChangeEvent event) {
@@ -149,7 +143,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 
 		if (delta.getResource().getType() == IResource.FILE) {
-			handleFileCopy(delta);
+			handleFileAdded(delta);
 		}
 		return true;
 	}
@@ -168,7 +162,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private static void handleFileCopy(final IResourceDelta delta) {
+	private static void handleFileAdded(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
 			return;
@@ -178,13 +172,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 
 			if (null == typeEntryForFile) {
-				final TypeEntry entry = typeLib.createTypeEntry(file);
-				if (null != entry && containedTypeNameIsDifferent(file)) {
-					// we only need to update the type entry if the file content is different from
-					// the file name this happens when a type is copied into a new project or when a
-					// project is opened or imported
-					updateTypeEntry(file, entry);
-				}
+				typeLib.createTypeEntry(file);
 			}
 		}
 	}
@@ -224,23 +212,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
-		if (entry == null) { // change to Assert ?
-			return;
-		}
-
-		if (!Objects.equals(newFile, entry.getFile())) {
-			final TypeLibrary typeLibrary = entry.getTypeLibrary();
-			if (typeLibrary != null) {
-				typeLibrary.removeTypeEntry(entry);
-			}
-			entry.setFile(newFile);
-			if (typeLibrary != null) {
-				typeLibrary.addTypeEntry(entry);
-			}
-		}
-	}
-
 	private static void handleProjectRemove(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		closeAllProjectRelatedEditors(project);
@@ -260,19 +231,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				.asyncExec(() -> EditorUtils.closeEditorsFiltered(
 						editor -> ((editor.getEditorInput() instanceof final IFileEditorInput fileEditorInput)
 								&& (file.equals(fileEditorInput.getFile())))));
-	}
-
-	private static boolean containedTypeNameIsDifferent(final IFile file) {
-		try (Scanner scanner = new Scanner(file.getContents())) {
-			if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
-				final String name = scanner.match().group(1);
-				final String typeName = TypeEntry.getTypeNameFromFile(file);
-				return !typeName.equals(name);
-			}
-		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-		return true;
 	}
 
 	private static boolean testFlags(final IResourceDelta delta, final int flags) {
