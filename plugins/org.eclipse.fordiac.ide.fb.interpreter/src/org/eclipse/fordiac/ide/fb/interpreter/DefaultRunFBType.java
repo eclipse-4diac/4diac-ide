@@ -448,18 +448,19 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		final FBNetworkRuntime innerRT = fbTypeRuntime.getNetworkRuntime();
 		final FBNetworkRuntime outerRT = innerRT.getOuterNetworkRuntime();
 		final String eventName = eventOccurrence.getEvent().getName();
-		final EList<Connection> outputs;
+		final Event output;
 		final FBNetworkRuntime networkRT;
 
 		if (InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
-			outputs = ConnectionUtils.getOutputConnections(compType.getInterfaceList().getEvent(eventName));
+			output = compType.getInterfaceList().getEvent(eventName);
 			networkRT = innerRT;
 			copyTransferDataToInnerRuntime(outerRT, innerRT, fbTypeRuntime);
 		} else {
+			output = fbTypeRuntime.getFbElement().getInterface().getEvent(eventName);
 			networkRT = outerRT;
 			copyTransferDataToOuter(outerRT, innerRT, fbTypeRuntime);
 		}
-		return switchNetwork(fbTypeRuntime.getFbElement().getInterface().getEvent(eventName), networkRT);
+		return switchNetwork(output, networkRT);
 	}
 
 	private void copyTransferDataToInnerRuntime(final FBNetworkRuntime outer, final FBNetworkRuntime inner,
@@ -523,23 +524,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
 		if (eventOccurrence.getParentFB() instanceof final UntypedSubApp uSubApp) {
-			FBNetworkRuntime runtime;
-			if (InterfacePinUtils.isInput(eventOccurrence.getEvent())) { // we are entering the inner SubApp networks
-				// try to get existing network runtime for this SubApp or create new
-				runtime = (FBNetworkRuntime) fBNetworkRuntime.getTypeRuntimes().get(uSubApp);
-				if (runtime == null) {
-					runtime = RuntimeFactory.createFrom(uSubApp.getSubAppNetwork());
-					runtime.setOuterNetworkRuntime(fBNetworkRuntime);
-					fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
-				}
-			} else { // we are leaving the inner SubApp network
-				runtime = fBNetworkRuntime.getOuterNetworkRuntime();
-			}
-			return switchNetwork(eventOccurrence.getEvent(), runtime);
-		}
-		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
-		if (!InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
-			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
+			return runUntypedSubApp(fBNetworkRuntime, uSubApp);
 		}
 
 		// run FB Type to get the output events for the instance in the network
@@ -563,6 +548,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			return runFBType(runtime, eventOccurrence);
 		}
 
+		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
+		if (!InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
+			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
+		}
+
 		// sample Data Input
 		sampleDataInput(runtime, fBNetworkRuntime);
 
@@ -578,6 +568,27 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return typeOutputEos;
 	}
 
+	private EList<EventOccurrence> runUntypedSubApp(final FBNetworkRuntime fBNetworkRuntime,
+			final UntypedSubApp uSubApp) {
+		FBNetworkRuntime runtime;
+		if (InterfacePinUtils.isInput(eventOccurrence.getEvent())) { // we are entering the inner SubApp network
+			// try to get existing network runtime for this SubApp or create new
+			runtime = (FBNetworkRuntime) fBNetworkRuntime.getTypeRuntimes().get(uSubApp);
+			if (runtime == null) {
+				runtime = RuntimeFactory.createFrom(uSubApp.getSubAppNetwork());
+				runtime.setOuterNetworkRuntime(fBNetworkRuntime);
+				fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
+			}
+		} else { // we are leaving the inner SubApp network
+			runtime = fBNetworkRuntime.getOuterNetworkRuntime();
+			// can still be null if we started the trace in the inner network
+			if (runtime == null) {
+				runtime = RuntimeFactory.createFrom(uSubApp.getFbNetwork());
+			}
+		}
+		return switchNetwork(eventOccurrence.getEvent(), runtime);
+	}
+
 	private EList<EventOccurrence> switchNetwork(final Event event, final FBNetworkRuntime runtime) {
 		final EList<Connection> outputs = ConnectionUtils.getOutputConnections(event);
 		final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
@@ -588,7 +599,6 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			inputEO.setResultFBRuntime(runtime);
 			final FBTransaction fbTrans = TransactionFactory.createFrom(inputEO);
 			outputEO.getCreatedTransactions().add(fbTrans);
-
 		}
 		return ECollections.asEList(outputEO);
 	}
@@ -676,7 +686,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		} else {
 			// Find the Original Pins for all connected FBs
 			for (final Connection conn : ConnectionUtils.getOutputConnections(outputEo.getEvent())) {
-				generatedT.add(createNewTransaction(conn.getDestination(), outputEo, fBNetworkRuntime));
+				generatedT.add(createNewTransaction(conn.getDestination(), outputEo));
 			}
 		}
 		return generatedT;
@@ -690,12 +700,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return TransactionFactory.createFrom(destinationEventOccurence);
 	}
 
-	private static FBTransaction createNewTransaction(IInterfaceElement dest, final EventOccurrence sourceEO,
-			final FBNetworkRuntime fbNetworkRuntime) {
+	private static FBTransaction createNewTransaction(IInterfaceElement dest, final EventOccurrence sourceEO) {
 		if (dest instanceof final AdapterDeclaration aDecl) {
 			dest = InterfacePinUtils.getContainedPin(aDecl, sourceEO.getEvent().getName());
 		}
-		if (!(dest instanceof Event && InterfacePinUtils.isInput(dest))) {
+		if (!(dest instanceof Event)) {
 			throw new IllegalArgumentException("cannot trigger FB with pin " + dest.getName()); //$NON-NLS-1$
 		}
 		final EventOccurrence destEO = EventOccFactory.createFrom((Event) dest, null);
