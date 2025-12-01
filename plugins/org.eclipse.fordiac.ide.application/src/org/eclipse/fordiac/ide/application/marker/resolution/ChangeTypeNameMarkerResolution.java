@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ChangeTypeNameMarkerResolution extends ChangeNameMarkerResolution {
 
@@ -38,16 +37,19 @@ public class ChangeTypeNameMarkerResolution extends ChangeNameMarkerResolution {
 	}
 
 	@Override
-	public void run(final IMarker marker) {
-		if (marker.getResource() instanceof final IFile file) {
-			final TypeEntry te = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-			final LibraryElement type = te.getType();
-			type.setName(TypeEntry.getTypeNameFromFile(file));
-			try {
-				te.save(type);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not perform quickfix type rename", e); //$NON-NLS-1$
-			}
+	protected void runInWorkspace(final IMarker marker) throws CoreException {
+		if (!(marker.getResource() instanceof final IFile file)) {
+			throw createExceptionForMarker(Messages.ChangeName_NoFileError, marker);
 		}
+		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntry == null) {
+			throw createExceptionForMarker(Messages.ChangeName_NoTypeEntryError, marker);
+		}
+		final LibraryElement type = typeEntry.getType();
+		if (type == null) {
+			throw createExceptionForMarker(Messages.ChangeName_NoTypeError, marker);
+		}
+		type.setName(TypeEntry.getTypeNameFromFile(file));
+		typeEntry.save(type);
 	}
 }

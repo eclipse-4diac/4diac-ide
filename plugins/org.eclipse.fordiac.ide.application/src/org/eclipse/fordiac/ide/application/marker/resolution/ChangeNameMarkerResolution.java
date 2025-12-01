@@ -12,13 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.marker.resolution;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 public abstract class ChangeNameMarkerResolution extends WorkbenchMarkerResolution {
@@ -28,6 +37,29 @@ public abstract class ChangeNameMarkerResolution extends WorkbenchMarkerResoluti
 	protected ChangeNameMarkerResolution(final IMarker marker) {
 		this.marker = marker;
 	}
+
+	@Override
+	public void run(final IMarker marker) {
+		try {
+			new WorkspaceModifyOperation() {
+				@Override
+				protected void execute(final IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException, InterruptedException {
+					runInWorkspace(marker);
+				}
+			}.run(new NullProgressMonitor());
+		} catch (final InvocationTargetException e) {
+			if (e.getCause() instanceof final CoreException ce) {
+				ErrorDialog.openError(null, null, null, ce.getStatus());
+			} else {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	protected abstract void runInWorkspace(IMarker marker) throws CoreException;
 
 	@Override
 	public Image getImage() {
@@ -45,5 +77,9 @@ public abstract class ChangeNameMarkerResolution extends WorkbenchMarkerResoluti
 	protected boolean isApplicable(final IMarker other) {
 		return FordiacErrorMarker.getCode(marker) == FordiacErrorMarker.getCode(other)
 				&& Arrays.equals(FordiacErrorMarker.getData(other), FordiacErrorMarker.getData(marker));
+	}
+
+	protected static CoreException createExceptionForMarker(final String pattern, final IMarker marker) {
+		return new CoreException(Status.error(MessageFormat.format(pattern, marker.getResource().getFullPath())));
 	}
 }
