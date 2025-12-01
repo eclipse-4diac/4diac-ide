@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class ChangeFileNameMarkerResolution extends ChangeNameMarkerResolution {
@@ -47,11 +48,15 @@ public class ChangeFileNameMarkerResolution extends ChangeNameMarkerResolution {
 			throw createExceptionForMarker(Messages.ChangeName_NoTypeEntryError, marker);
 		}
 		// remove type entry, new one will be created on resource move
-		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
+		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+		typeLibrary.removeTypeEntry(typeEntry);
 
 		final IPath path = marker.getResource().getFullPath();
 		final IPath newPath = path.removeLastSegments(1).append(typeEntry.getTypeName())
 				.addFileExtension(typeEntry.getFileExtension());
 		marker.getResource().move(newPath, false, new NullProgressMonitor());
+
+		typeEntry.setFile(file.getWorkspace().getRoot().getFile(newPath));
+		typeLibrary.addTypeEntry(typeEntry);
 	}
 }
