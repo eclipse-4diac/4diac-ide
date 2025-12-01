@@ -194,18 +194,22 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 			final String dataTypeName = oldElement.getAttributeValue(LibraryElementTags.F_MOVE_CONFIG);
 			if (dataTypeName != null) {
 				configFb.loadConfiguration(LibraryElementTags.F_MOVE_CONFIG, dataTypeName);
+				// make sure we don't copy the attribute into the attributeList
+				oldElement.deleteAttribute(LibraryElementTags.F_MOVE_CONFIG);
 			}
 		} else {
 			// we are a struct muxer
 			final String dataTypeName = oldElement.getAttributeValue(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
 			if (dataTypeName != null) {
 				configFb.loadConfiguration(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG, dataTypeName);
+				oldElement.deleteAttribute(LibraryElementTags.STRUCT_MANIPULATOR_CONFIG);
 
 				if (configFb instanceof Demultiplexer) {
 					final String visibleChildren = oldElement
 							.getAttributeValue(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
 					if (visibleChildren != null) {
 						configFb.loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, visibleChildren);
+						oldElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
 					}
 				}
 			}
