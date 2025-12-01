@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.export.builder;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.Messages;
 import org.eclipse.fordiac.ide.export.preferences.PreferenceConstants;
@@ -61,9 +61,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
 			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
-	private String outputDirectory;
-	private IExportFilter filter;
-	private MultiStatus status;
+	private static record BuildContext(String outputDirectory, IExportFilter filter, MultiStatus status) {
+	}
 
 	@Override
 	protected IProject[] build(final int kind, final Map<String, String> args, final IProgressMonitor monitor)
@@ -73,9 +72,9 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			return new IProject[0];
 		}
 
-		performSetup();
+		final BuildContext context = createBuildContext();
 
-		if (filter == null || !ExportFilterUtil.validateExportPath(outputDirectory, getProject())) {
+		if (context.filter == null || !ExportFilterUtil.validateExportPath(context.outputDirectory, getProject())) {
 			return new IProject[0];
 		}
 
@@ -84,29 +83,29 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 		switch (kind) {
 		case FULL_BUILD:
-			fullBuild(progress.split(1));
+			fullBuild(progress.split(1), context);
 			break;
 		case INCREMENTAL_BUILD, AUTO_BUILD:
 			final IResourceDelta root = getDelta(getProject());
 			if (root != null) {
-				incrementalBuild(root, progress.split(1));
+				incrementalBuild(root, progress.split(1), context);
 			}
 			break;
 		default:
 			break;
 		}
 
-		exportCmakeLists(progress.split(1));
+		exportCmakeLists(progress.split(1), context);
 
-		filter.getErrors().forEach(e -> status.add(new Status(IStatus.ERROR, getClass(), e)));
+		context.filter.getErrors().forEach(e -> context.status.add(new Status(IStatus.ERROR, getClass(), e)));
 
-		if (status.matches(IStatus.ERROR)) {
-			throw new CoreException(status);
+		if (context.status.matches(IStatus.ERROR)) {
+			throw new CoreException(context.status);
 		}
 		return new IProject[0];
 	}
 
-	private void fullBuild(final SubMonitor monitor) throws CoreException {
+	private void fullBuild(final SubMonitor monitor, final BuildContext context) throws CoreException {
 		final SubMonitor progress = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 
 		final List<SourceFolder> buildPathFolders = getExportableFoldersFromBuildpath();
@@ -114,7 +113,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			BuildpathUtil.acceptMatches(folder, getProject(), (IResourceVisitor) resource -> {
 				if (!isExportCanceled(progress)) {
 					if ((resource instanceof final IFile file) && isExportableFileType(file)) {
-						exportElement(progress, file);
+						exportElement(progress, file, context);
 					} else if (resource instanceof IFolder || resource instanceof IProject) {
 						return true;
 					}
@@ -124,15 +123,17 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private void exportElement(final SubMonitor monitor, final IFile file) throws CoreException {
+	private void exportElement(final SubMonitor monitor, final IFile file, final BuildContext context) {
 		try {
 			if (!hasRelevantErrorMarker(file)) {
 				monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, file.getName()));
-				filter.export(file, getProject().getLocation().append(new Path(outputDirectory)).toString(), true);
+				context.filter.export(file,
+						getProject().getLocation().append(new Path(context.outputDirectory)).toString(), true);
 				monitor.split(1);
 			}
-		} catch (final ExportException e) {
-			status.add(new Status(IStatus.ERROR, getClass(), e.getMessage()));
+		} catch (final Exception e) {
+			context.status.add(new Status(IStatus.ERROR, getClass(),
+					MessageFormat.format(Messages.ExportBuilder_CouldntExportFile, file.getName()), e));
 		}
 	}
 
@@ -142,7 +143,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			return;
 		}
 
-		performSetup();
+		final String outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
+				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
 
 		final SubMonitor progress = SubMonitor.convert(monitor, 1);
 		progress.setTaskName(Messages.ExportBuilder_Clean);
@@ -155,24 +157,26 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private void performSetup() {
-		this.outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
+	private BuildContext createBuildContext() {
+		final String outputDirectory = getProjectPreferenceNode().get(PreferenceConstants.OUTPUT_FOLDER,
 				PreferenceConstants.DEFAULT_OUTPUT_FOLDER_NAME);
 		final String exportFilterID = getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, ""); //$NON-NLS-1$
 		final Optional<IConfigurationElement> filterConfig = ExportFilterUtil.getExportFilter(exportFilterID);
-		this.filter = filterConfig.isPresent() ? ExportFilterUtil.createExportFilter(filterConfig) : null;
-		this.status = new MultiStatus(getClass(), IStatus.OK, "Export Builder Status"); //$NON-NLS-1$
-
+		final IExportFilter filter = filterConfig.isPresent() ? ExportFilterUtil.createExportFilter(filterConfig)
+				: null;
+		final MultiStatus status = new MultiStatus(getClass(), IStatus.OK, "Export Builder Status"); //$NON-NLS-1$
+		return new BuildContext(outputDirectory, filter, status);
 	}
 
-	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor) throws CoreException {
+	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor, final BuildContext context)
+			throws CoreException {
 		for (final IResourceDelta delta : rootDelta
 				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED)) {
 			if (!isExportCanceled(monitor)) {
 				if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
-					exportElement(monitor, file);
+					exportElement(monitor, file, context);
 				} else if (delta.getResource() instanceof IFolder) {
-					incrementalBuild(delta, monitor);
+					incrementalBuild(delta, monitor, context);
 				}
 			}
 		}
@@ -213,28 +217,25 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		return !attributeValue.isEmpty() && Boolean.parseBoolean(attributeValue);
 	}
 
-	private void exportCmakeLists(final IProgressMonitor monitor) {
+	private void exportCmakeLists(final IProgressMonitor monitor, final BuildContext context) {
 		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID) //$NON-NLS-1$
 				&& !isExportCanceled(monitor)) {
-			final IPath location = getProject().getLocation().append(new Path(outputDirectory));
+			final IPath location = getProject().getLocation().append(new Path(context.outputDirectory));
 			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath());
 			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, marker.getName()));
 			try {
-				filter.export(null, location.toString(), true, marker);
+				context.filter.export(null, location.toString(), true, marker);
 				monitor.worked(1);
-			} catch (final ExportException e) {
-				status.add(new Status(IStatus.ERROR, getClass(), e.getMessage()));
+			} catch (final Exception e) {
+				context.status.add(new Status(IStatus.ERROR, getClass(),
+						MessageFormat.format(Messages.ExportBuilder_CMakeListExportFailed, location.toOSString()), e));
 			}
 		}
 	}
 
 	private static boolean hasRelevantErrorMarker(final IFile file) throws CoreException {
-		for (final IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-			if (FordiacErrorMarker.isModelMarkerType(marker.getType())) {
-				return true;
-			}
-		}
-		return false;
+		return Arrays.stream(file.findMarkers(FordiacErrorMarker.PROBLEM_MARKER, true, IResource.DEPTH_INFINITE))
+				.anyMatch(m -> m.getAttribute(IMarker.SEVERITY, -1) == IMarker.SEVERITY_ERROR);
 	}
 
 	private boolean isExportCanceled(final IProgressMonitor monitor) {
