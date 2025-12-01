@@ -47,6 +47,11 @@ public class AttributeFilter implements IFilter {
 		case final ConfigurableObject configurableObject -> configurableObject;
 		case final FBNetwork fbNetwork -> parseObject(fbNetwork.eContainer());
 		case final EditPart editpart -> parseObject(editpart.getModel());
+		// handle exception: typefield of interface elements of functions
+		case final IAdaptable adaptable when adaptable
+				.getAdapter(ConfigurableObject.class) instanceof final IInterfaceElement ie
+				&& ie.getFBType() instanceof FunctionFBType ->
+			null;
 		case final IAdaptable adaptable -> adaptable.getAdapter(ConfigurableObject.class);
 		case final TextSelection textSel -> getConfObjectFromActiveEditor();
 		case null, default -> null;
