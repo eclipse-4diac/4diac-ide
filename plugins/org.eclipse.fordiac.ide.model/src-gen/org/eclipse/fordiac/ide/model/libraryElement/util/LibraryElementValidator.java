@@ -383,6 +383,14 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int LIBRARY_ELEMENT__VALIDATE_NAME = 26;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Package' of 'Library Element'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int LIBRARY_ELEMENT__VALIDATE_PACKAGE = 26;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'Typed Configureable Object'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -862,6 +870,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(adapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(adapterType, diagnostics, context);
 		return result;
 	}
 
@@ -970,6 +979,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(attributeDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateINamedElement_validateName(attributeDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateITypedElement_validateType(attributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(attributeDeclaration, diagnostics, context);
 		return result;
 	}
 
@@ -989,6 +999,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(automationSystem, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(automationSystem, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(automationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(automationSystem, diagnostics, context);
 		return result;
 	}
 
@@ -1008,6 +1019,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(baseFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(baseFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(baseFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(baseFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1027,6 +1039,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(basicFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(basicFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(basicFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1210,6 +1223,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(compositeFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(compositeFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(compositeFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(compositeFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1550,6 +1564,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(deviceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(deviceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(deviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(deviceType, diagnostics, context);
 		return result;
 	}
 
@@ -1615,6 +1630,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorMarkerDataType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorMarkerDataType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorMarkerDataType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorMarkerDataType, diagnostics, context);
 		return result;
 	}
 
@@ -1835,6 +1851,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(fbType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(fbType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(fbType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(fbType, diagnostics, context);
 		return result;
 	}
 
@@ -1882,6 +1899,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(functionFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(functionFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(functionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(functionFBType, diagnostics, context);
 		return result;
 	}
 
@@ -1901,6 +1919,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(globalConstants, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(globalConstants, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(globalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(globalConstants, diagnostics, context);
 		return result;
 	}
 
@@ -2113,6 +2132,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(libraryElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(libraryElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(libraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(libraryElement, diagnostics, context);
 		return result;
 	}
 
@@ -2124,6 +2144,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateLibraryElement_validateName(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return libraryElement.validateName(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validatePackage constraint of '<em>Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateLibraryElement_validatePackage(LibraryElement libraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return libraryElement.validatePackage(diagnostics, context);
 	}
 
 	/**
@@ -2401,6 +2431,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(resourceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(resourceType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(resourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(resourceType, diagnostics, context);
 		return result;
 	}
 
@@ -2460,6 +2491,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(segmentType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(segmentType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(segmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(segmentType, diagnostics, context);
 		return result;
 	}
 
@@ -2535,6 +2567,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(serviceInterfaceFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(serviceInterfaceFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(serviceInterfaceFBType, diagnostics, context);
 		return result;
 	}
 
@@ -2582,6 +2615,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(simpleFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(simpleFBType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(simpleFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(simpleFBType, diagnostics, context);
 		return result;
 	}
 
@@ -2708,6 +2742,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(subAppType, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(subAppType, diagnostics, context);
 		if (result || diagnostics != null) result &= validateLibraryElement_validateName(subAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(subAppType, diagnostics, context);
 		return result;
 	}
 
