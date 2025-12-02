@@ -315,28 +315,4 @@
           name="LIB">
     </attribute>
  </extension>
- 
-  <extension
-       id="predecessor"
-       name="Event Predecessor Marker"
-       point="org.eclipse.core.resources.markers">
-    <super
-          type="org.eclipse.core.resources.marker">
-    </super>
-    <persistent
-          value="false">
-    </persistent>
- </extension>
-   <extension
-       id="connectionSource"
-       name="Connection Source Marker"
-       point="org.eclipse.core.resources.markers">
-    <super
-          type="org.eclipse.core.resources.marker">
-    </super>
-    <persistent
-          value="false">
-    </persistent>
- </extension>
- 
 </plugin>

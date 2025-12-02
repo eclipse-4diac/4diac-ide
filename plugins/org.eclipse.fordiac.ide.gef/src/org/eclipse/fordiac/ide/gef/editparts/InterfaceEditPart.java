@@ -23,9 +23,11 @@ package org.eclipse.fordiac.ide.gef.editparts;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
@@ -39,6 +41,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
@@ -59,17 +63,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -211,6 +215,72 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 		return false;
 	}
 
+	private final class InterfaceEditPartMouseListener implements MouseListener {
+		private static final int MASK = SWT.SHIFT | SWT.CTRL;
+		private static final String COMMAND_ID = "org.eclipse.fordiac.ide.application.commands.markConnectionSource"; //$NON-NLS-1$
+
+		@Override
+		public void mouseReleased(final MouseEvent me) {
+			// do nothing
+		}
+
+		@Override
+		public void mousePressed(final MouseEvent me) {
+			// CTRL + SHIFT + CLICK
+			if ((me.getState() & MASK) == MASK) {
+				invokeMarkConnectionSourceHandler(new org.eclipse.swt.widgets.Event());
+				return;
+			}
+
+			// LEFT CLICK
+			if (hasMarker()) {
+				invokeMarkConnectionSourceHandler(null);
+			}
+		}
+
+		private boolean hasMarker() {
+			final EObject rootContainer = EcoreUtil.getRootContainer(InterfaceEditPart.this.getModel());
+			if (!(rootContainer instanceof final LibraryElement libEl) || libEl.getTypeEntry() == null) {
+				return false;
+			}
+			final IResource resource = libEl.getTypeEntry().getFile();
+			try {
+				return Stream.of(
+						resource.findMarkers(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID, true, IResource.DEPTH_ZERO))
+						.findAny().isPresent();
+			} catch (final CoreException e) {
+				FordiacLogHelper.logWarning("Cannot fetch marker", e); //$NON-NLS-1$
+			}
+			return false;
+		}
+
+		@Override
+		public void mouseDoubleClicked(final MouseEvent me) {
+			// do nothing
+		}
+
+		private void invokeMarkConnectionSourceHandler(final org.eclipse.swt.widgets.Event event) {
+			try {
+				getViewer().select(InterfaceEditPart.this);
+				getViewer().reveal(InterfaceEditPart.this);
+				if (isCommandHandled()) {
+					HandlerHelper.getHandlerService().executeCommand(COMMAND_ID, event);
+				}
+			} catch (final Exception e) {
+				FordiacLogHelper.logError("commands.markConnectionSource not found", e); //$NON-NLS-1$
+			}
+		}
+
+		private boolean isCommandHandled() {
+			final ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+			if (commandService != null) {
+				final Command command = commandService.getCommand(COMMAND_ID);
+				return command != null && command.isEnabled();
+			}
+			return false;
+		}
+	}
+
 	public class InterfaceFigure extends SetableAlphaLabel {
 
 		public InterfaceFigure() {
@@ -325,66 +395,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	protected IFigure createFigure() {
 		final InterfaceFigure figure = new InterfaceFigure();
 		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
-
-		figure.addMouseListener(new MouseListener() {
-			private static final int MASK = SWT.SHIFT | SWT.CTRL;
-			private static final String COMMAND_ID = "org.eclipse.fordiac.ide.application.commands.markConnectionSource"; //$NON-NLS-1$
-
-			@Override
-			public void mouseReleased(final MouseEvent me) {
-				// do nothing
-			}
-
-			@Override
-			public void mousePressed(final MouseEvent me) {
-				// CTRL + SHIFT + CLICK
-				if ((me.getState() & MASK) == MASK) {
-					invokeMarkConnectionSourceHandler(new org.eclipse.swt.widgets.Event());
-					return;
-				}
-
-				// LEFT CLICK
-				if (UtilityMarkerHelper.hasMarker(MarkerDescriptor.CONNECTION_SOURCE, getRootResource())) {
-					invokeMarkConnectionSourceHandler(null);
-				}
-			}
-
-			protected IResource getRootResource() {
-				if (InterfaceEditPart.this.getModel() instanceof final IInterfaceElement elem
-						&& elem.getBlockFBNetworkElement() != null && elem.getBlockFBNetworkElement().getFbNetwork()
-								.getAutomationSystem().getTypeEntry().getFile() instanceof final IResource res) {
-					return res;
-				}
-				return null;
-			}
-
-			@Override
-			public void mouseDoubleClicked(final MouseEvent me) {
-				// do nothing
-			}
-
-			private void invokeMarkConnectionSourceHandler(final org.eclipse.swt.widgets.Event event) {
-				try {
-					getViewer().select(InterfaceEditPart.this);
-					getViewer().reveal(InterfaceEditPart.this);
-					if (isCommandHandled()) {
-						HandlerHelper.getHandlerService().executeCommand(COMMAND_ID, event);
-					}
-				} catch (final Exception e) {
-					FordiacLogHelper.logError("commands.markConnectionSource not found", e); //$NON-NLS-1$
-				}
-			}
-
-			private boolean isCommandHandled() {
-				final ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-				if (commandService != null) {
-					final Command command = commandService.getCommand(COMMAND_ID);
-					return command != null && command.isEnabled();
-				}
-				return false;
-			}
-
-		});
+		figure.addMouseListener(new InterfaceEditPartMouseListener());
 		return figure;
 	}
 
@@ -503,27 +514,23 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	@Override
 	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
-					.getStoreProvider();
-			storeProvider.addPropertyChangeListener(preferenceListener);
-			pinLabelStyle = storeProvider.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
-			getModel().eAdapters().add(getContentAdapter());
-			addSourcePinAdapter();
-		}
+		super.activate();
+		final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+				.getStoreProvider();
+		storeProvider.addPropertyChangeListener(preferenceListener);
+		pinLabelStyle = storeProvider.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
+		getModel().eAdapters().add(getContentAdapter());
+		addSourcePinAdapter();
 	}
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
-			((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
-					.removePropertyChangeListener(preferenceListener);
-			getModel().eAdapters().remove(getContentAdapter());
-			removeSourcePinAdapter();
-		}
+		super.deactivate();
+		getModel().eAdapters().remove(getContentAdapter());
+		((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+				.removePropertyChangeListener(preferenceListener);
+		getModel().eAdapters().remove(getContentAdapter());
+		removeSourcePinAdapter();
 	}
 
 	private ConnectionAnchor sourceConAnchor = null;

@@ -23,13 +23,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -44,57 +40,23 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
-		final GraphicalEditPart selectedElement = getValidSelectedElement(selection);
+		final EObject selectedElement = getValidSelectedElement(getSelectedElement(selection));
 
 		if (selectedElement != null) {
 			if (isMarked(selectedElement)) {
-				removeElementMarker(selectedElement);
+				UtilityMarkerHelper.deleteElementMarker(getMarkerId(), getRootResource(selectedElement));
 			} else {
-				if (getDescriptor().isUnique()) {
-					// remove old element
-					removeElementMarker(selectedElement);
-				}
-				markElement(selectedElement);
+				UtilityMarkerHelper.setMarkedElement(getMarkerId(), selectedElement);
 			}
 		}
 		return null;
 	}
 
-	protected abstract MarkerDescriptor getDescriptor();
+	protected abstract String getMarkerId();
 
-	protected abstract GraphicalEditPart getValidSelectedElement(final ISelection selection);
+	protected abstract String getMarkerName();
 
-	protected void markElement(final GraphicalEditPart ep) {
-		if (ep.getModel() instanceof final EObject target) {
-			UtilityMarkerHelper.addElementMarker(getDescriptor(), getRootResource(ep), target);
-		}
-	}
-
-	protected void removeElementMarker(final GraphicalEditPart ep) {
-		UtilityMarkerHelper.deleteElementMarker(getDescriptor(), getRootResource(ep));
-	}
-
-	protected static IResource getRootResource(final GraphicalEditPart ep) {
-		if ((ep.getModel() instanceof final FBNetworkElement fbne) && (fbne.getFbNetwork().getAutomationSystem()
-				.getTypeEntry().getFile() instanceof final IResource res)) {
-			return res;
-		}
-		if (ep.getModel() instanceof final IInterfaceElement elem && elem.getBlockFBNetworkElement() != null
-				&& elem.getBlockFBNetworkElement().getFbNetwork().getAutomationSystem().getTypeEntry()
-						.getFile() instanceof final IResource res) {
-			return res;
-		}
-		return null;
-	}
-
-	protected boolean isMarked(final GraphicalEditPart ep) {
-		final IResource resource = getRootResource(ep);
-		if (resource == null) {
-			return false;
-		}
-		final EObject markedElement = UtilityMarkerHelper.getMarkedElement(getDescriptor(), resource);
-		return markedElement != null && EcoreUtil.equals(markedElement, (EObject) ep.getModel());
-	}
+	protected abstract EObject getValidSelectedElement(final Object selectedObject);
 
 	@Override
 	public void updateElement(final UIElement element, final Map parameters) {
@@ -105,13 +67,13 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 				return;
 			}
 
-			final EditPart editPart = viewer.getSelectedEditParts().getFirst();
+			final EObject selectedElement = getValidSelectedElement(viewer.getSelectedEditParts().getFirst());
 
-			if ((editPart instanceof final GraphicalEditPart gep)) {
-				if (isMarked(gep)) {
-					element.setText(MessageFormat.format(Messages.FBMarker_RemoveMarker, getDescriptor().name()));
+			if (selectedElement != null) {
+				if (isMarked(selectedElement)) {
+					element.setText(MessageFormat.format(Messages.FBMarker_RemoveMarker, getMarkerName()));
 				} else {
-					element.setText(MessageFormat.format(Messages.FBMarker_MarkAs, getDescriptor().name()));
+					element.setText(MessageFormat.format(Messages.FBMarker_MarkAs, getMarkerName()));
 				}
 			}
 		}
@@ -124,10 +86,29 @@ public abstract class AbstractMarkerHandler extends AbstractHandler implements I
 		if (editor != null) {
 			final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 					ISources.ACTIVE_CURRENT_SELECTION_NAME);
-			setBaseEnabled(getValidSelectedElement(selection) != null);
+			setBaseEnabled(getValidSelectedElement(getSelectedElement(selection)) != null);
 		} else {
 			setBaseEnabled(false);
 		}
+	}
+
+	private static Object getSelectedElement(final ISelection selection) {
+		return (selection instanceof final IStructuredSelection structSel && !structSel.isEmpty())
+				? structSel.getFirstElement()
+				: null;
+	}
+
+	private static IResource getRootResource(final EObject target) {
+		final EObject rootContainer = EcoreUtil.getRootContainer(target);
+		if (rootContainer instanceof final LibraryElement libEl && libEl.getTypeEntry() != null) {
+			return libEl.getTypeEntry().getFile();
+		}
+		return null;
+	}
+
+	private boolean isMarked(final EObject target) {
+		final EObject markedElement = UtilityMarkerHelper.getMarkedElement(getMarkerId(), target);
+		return markedElement != null && markedElement == target;
 	}
 
 }

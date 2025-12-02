@@ -297,4 +297,19 @@
           styler="org.eclipse.fordiac.ide.gef.annotation.UtilityMarkerAnnotationStyler">
     </style>
  </extension>
+ <extension
+          point="org.eclipse.ui.themes">
+    <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"
+             label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
+             value="99, 179, 31">
+    </colorDefinition>
+    <colorDefinition
+           categoryId="org.eclipse.fordiac.ide.themeCategory"
+           id="org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"
+           label="%FordiacPreferencePage_LABEL_ConnectionSourceMarkerColor"
+           value="99, 179, 31">
+     </colorDefinition>      
+  </extension>
 </plugin>

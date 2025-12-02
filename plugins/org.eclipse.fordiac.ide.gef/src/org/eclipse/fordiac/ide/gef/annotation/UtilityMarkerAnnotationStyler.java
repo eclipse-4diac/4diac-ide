@@ -13,20 +13,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
-import java.text.MessageFormat;
-
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.StatusLineContributionItem;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.PlatformUI;
 
 public class UtilityMarkerAnnotationStyler implements GraphicalAnnotationStyler {
+
+	private static final String COLOR_PREDECESSOR = "org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"; //$NON-NLS-1$
+	private static final String COLOR_CONNECTION_SRC = "org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"; //$NON-NLS-1$
+
+	public static final String TYPE_UTIL_PREDECESSOR = "org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"; //$NON-NLS-1$
+	public static final String TYPE_UTIL_CONNECTION_SRC = "org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"; //$NON-NLS-1$
 
 	@Override
 	public void applyStyles(final IFigure figure, final GraphicalAnnotation annotation) {
@@ -34,70 +32,20 @@ public class UtilityMarkerAnnotationStyler implements GraphicalAnnotationStyler 
 		if (annotationColor != null) {
 			GraphicalAnnotationStyles.setAnnotationFeedbackBorder(figure, annotationColor);
 		}
-		final IContributionItem statusLineItem = getStatusLineContributionItem(annotation);
-		if (statusLineItem != null) {
-			getStatusLineManager().add(statusLineItem);
-			getStatusLineManager().update(true);
-		}
 	}
 
 	@Override
 	public void removeStyles(final IFigure figure, final GraphicalAnnotation annotation) {
 		GraphicalAnnotationStyles.removeAnnotationBorders(figure);
-		switch (annotation.getType()) {
-		case GraphicalAnnotation.TYPE_UTIL_PREDECESSOR:
-			getStatusLineManager().remove(MarkerDescriptor.PREDECESSOR.ID());
-			break;
-		case GraphicalAnnotation.TYPE_UTIL_CONNECTION_SRC:
-			getStatusLineManager().remove(MarkerDescriptor.CONNECTION_SOURCE.ID());
-			break;
-		default:
-			break;
-		}
-		getStatusLineManager().update(true);
 	}
 
 	@Override
 	public Color getColor(final GraphicalAnnotation annotation) {
 		return switch (annotation.getType()) {
-		case GraphicalAnnotation.TYPE_UTIL_PREDECESSOR -> MarkerDescriptor.PREDECESSOR.color();
-		case GraphicalAnnotation.TYPE_UTIL_CONNECTION_SRC -> MarkerDescriptor.CONNECTION_SOURCE.color();
+		case TYPE_UTIL_PREDECESSOR -> getPredecessorColor();
+		case TYPE_UTIL_CONNECTION_SRC -> getConnectionSourceColor();
 		default -> null;
 		};
-	}
-
-	private static IContributionItem getStatusLineContributionItem(final GraphicalAnnotation annotation) {
-		switch (annotation.getType()) {
-		case GraphicalAnnotation.TYPE_UTIL_PREDECESSOR:
-			if (annotation.getTarget() instanceof final INamedElement elem) {
-				final String text = MessageFormat.format(Messages.UtilityMarker_ActiveMarker,
-						MarkerDescriptor.PREDECESSOR.name(), elem.getQualifiedName());
-				return createStatusLineItem(MarkerDescriptor.PREDECESSOR.ID(), text);
-			}
-			break;
-		case GraphicalAnnotation.TYPE_UTIL_CONNECTION_SRC:
-			if (annotation.getTarget() instanceof final INamedElement elem) {
-				final String text = MessageFormat.format(Messages.UtilityMarker_ActiveMarker,
-						MarkerDescriptor.CONNECTION_SOURCE.name(), elem.getQualifiedName());
-				return createStatusLineItem(MarkerDescriptor.CONNECTION_SOURCE.ID(), text);
-			}
-			break;
-		default:
-			break;
-		}
-		return null;
-	}
-
-	private static IContributionItem createStatusLineItem(final String id, final String text) {
-		final StatusLineContributionItem item = new StatusLineContributionItem("", text.length()); //$NON-NLS-1$
-		item.setId(id);
-		item.setText(text);
-		return item;
-	}
-
-	private static IStatusLineManager getStatusLineManager() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite()
-				.getActionBars().getStatusLineManager();
 	}
 
 	@Override
@@ -108,6 +56,14 @@ public class UtilityMarkerAnnotationStyler implements GraphicalAnnotationStyler 
 	@Override
 	public Image getOverlayImage(final GraphicalAnnotation annotation) {
 		return null;
+	}
+
+	private static Color getPredecessorColor() {
+		return JFaceResources.getColorRegistry().get(COLOR_PREDECESSOR);
+	}
+
+	private static Color getConnectionSourceColor() {
+		return JFaceResources.getColorRegistry().get(COLOR_CONNECTION_SRC);
 	}
 
 }

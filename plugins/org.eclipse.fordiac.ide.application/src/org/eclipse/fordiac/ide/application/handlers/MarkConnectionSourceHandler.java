@@ -16,14 +16,12 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -38,35 +36,42 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 		}
 
 		// establish connection : triggered by handler service
-		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
-		final InterfaceEditPart connectionTarget = (selection instanceof final IStructuredSelection sel
-				&& sel.getFirstElement() instanceof final InterfaceEditPart ep) ? ep : null;
+		final IInterfaceElement conTarget = getConnectionTarget(event);
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
-		if (connectionTarget == null || !connectionTarget.isInput() || editor == null) {
+		if (conTarget == null || !conTarget.isIsInput() || editor == null) {
 			return null;
 		}
 
-		if (UtilityMarkerHelper.getMarkedElement(getDescriptor(),
-				getRootResource(connectionTarget)) instanceof final IInterfaceElement connectionSource) {
+		if (UtilityMarkerHelper.getMarkedElement(getMarkerId(),
+				conTarget) instanceof final IInterfaceElement connectionSource) {
 			HandlerHelper.getCommandStack(editor).execute(CreateSubAppCrossingConnectionsCommand
-					.createProcessBorderCrossingConnection(connectionSource, connectionTarget.getModel()));
+					.createProcessBorderCrossingConnection(connectionSource, conTarget));
 		}
 		return null;
 	}
 
-	@Override
-	protected MarkerDescriptor getDescriptor() {
-		return MarkerDescriptor.CONNECTION_SOURCE;
+	private static IInterfaceElement getConnectionTarget(final ExecutionEvent event) {
+		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
+		return (selection instanceof final IStructuredSelection sel
+				&& sel.getFirstElement() instanceof final InterfaceEditPart ep) ? ep.getModel() : null;
 	}
 
 	@Override
-	protected GraphicalEditPart getValidSelectedElement(final ISelection selection) {
-		if (selection instanceof final IStructuredSelection structSel
-				&& structSel.getFirstElement() instanceof final InterfaceEditPart iep) {
-			return iep;
-		}
-		return null;
+	protected String getMarkerId() {
+		return UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID;
+	}
+
+	@Override
+	protected String getMarkerName() {
+		// explicitly use the full class name for this Message as it is pulled in from
+		// another plugin
+		return org.eclipse.fordiac.ide.gef.Messages.UtilityMarker_ConnectionSource;
+	}
+
+	@Override
+	protected EObject getValidSelectedElement(final Object selectedObject) {
+		return (selectedObject instanceof final InterfaceEditPart iep) ? iep.getModel() : null;
 	}
 
 }
