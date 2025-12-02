@@ -2,9 +2,9 @@ name: 4diac IDE verification build
 
 on:
   push:
-    branches: [ "release", "develop", "freeze", "3.0.x"]
+    branches: [ "release", "develop", "3.0.x", "3.1.x"]
   pull_request:
-    branches: [ "release", "develop", "freeze", "3.0.x"]
+    branches: [ "release", "develop", "3.0.x", "3.1.x"]
 
 permissions: {}	
 
