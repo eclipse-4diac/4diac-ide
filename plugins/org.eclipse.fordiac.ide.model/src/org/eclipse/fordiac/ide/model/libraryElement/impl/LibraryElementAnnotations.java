@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 final class LibraryElementAnnotations {
 
@@ -74,8 +75,9 @@ final class LibraryElementAnnotations {
 
 			if (!Objects.equals(typeEntry.getPackageName(), getExpectedPackageName(typeEntry))) {
 				if (diagnostics != null) {
-					// TODO use severity from prefs
-					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+					final int severity = ValidationPreferences.getDiagnosticSeverity(
+							ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER, Diagnostic.OK, element.eResource());
+					diagnostics.add(new BasicDiagnostic(severity, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 							LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE,
 							Messages.IdentifierVerifier_PackageNameMismatch, FordiacMarkerHelper.getDiagnosticData(
 									element, LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
