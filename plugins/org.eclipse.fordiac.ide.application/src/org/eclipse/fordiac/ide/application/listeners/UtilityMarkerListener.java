@@ -17,16 +17,23 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.commands.QualNameChange;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListener;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 
 public class UtilityMarkerListener extends QualNameChangeListener {
 
@@ -73,9 +80,9 @@ public class UtilityMarkerListener extends QualNameChangeListener {
 	private static void removeInvalidMarkers(final List<QualNameChange> qualNameChange) {
 		final Set<String> oldQualNames = new HashSet<>();
 		qualNameChange.stream().map(QualNameChange::oldQualName).forEach(oldQualNames::add);
-		UtilityMarkerHelper.getAllUtilityMarkers().filter(m -> oldQualNames.contains(getLocation(m))).forEach(m -> {
+		getAllUtilityMarkers().filter(m -> oldQualNames.contains(getLocation(m))).forEach(m -> {
 			try {
-				m.delete();
+				UtilityMarkerHelper.deleteElementMarker(m.getType(), m.getResource());
 			} catch (final CoreException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
@@ -83,11 +90,33 @@ public class UtilityMarkerListener extends QualNameChangeListener {
 
 	}
 
+	private static Stream<IMarker> getAllUtilityMarkers() {
+		final LibraryElement libElement = EditorUtils.getCurrentActiveEditor().getAdapter(LibraryElement.class);
+		if (utilityMarkerTargetLibraryElement(libElement)) {
+			try {
+				final IFile file = libElement.getTypeEntry().getFile();
+				return Stream.concat(
+						Stream.of(file.findMarkers(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID, false,
+								IResource.DEPTH_ZERO)),
+						Stream.of(file.findMarkers(UtilityMarkerHelper.PREDECESSOR_MARKER_ID, false,
+								IResource.DEPTH_ZERO)));
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Cannot fetch marker", e); //$NON-NLS-1$
+			}
+		}
+		return Stream.empty();
+	}
+
+	private static boolean utilityMarkerTargetLibraryElement(final LibraryElement libElement) {
+		return libElement instanceof AutomationSystem || libElement instanceof SubAppType
+				|| libElement instanceof CompositeFBType;
+	}
+
 	public static String getLocation(final IMarker m) {
 		if (m != null) {
 			try {
-				if (m.getType().equals(MarkerDescriptor.CONNECTION_SOURCE.ID())) {
-					final String containerLocation = m.getAttribute(IMarker.LOCATION, "");
+				if (m.getType().equals(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID)) {
+					final String containerLocation = m.getAttribute(IMarker.LOCATION, ""); //$NON-NLS-1$
 					final int lastDot = containerLocation.lastIndexOf('.');
 					if (lastDot != -1) {
 						return containerLocation.substring(0, lastDot);

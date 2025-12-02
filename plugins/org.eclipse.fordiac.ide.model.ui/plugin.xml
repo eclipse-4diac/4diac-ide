@@ -41,15 +41,13 @@
       </type>
       <type
             markerSeverity="0"
-            markerType="org.eclipse.fordiac.ide.model.predecessor"
-            name="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"
-            super="org.eclipse.ui.workbench.texteditor.info">
+            markerType="org.eclipse.fordiac.ide.model.ui.predecessor"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor">
       </type>
       <type
             markerSeverity="0"
-            markerType="org.eclipse.fordiac.ide.model.connectionSource"
-            name="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"
-            super="org.eclipse.ui.workbench.texteditor.info">
+            markerType="org.eclipse.fordiac.ide.model.ui.connectionSource"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource">
       </type>
    </extension>
    <extension
@@ -103,4 +101,26 @@
          </enabledWhen>
       </page>
    </extension>
+  <extension
+       id="predecessor"
+       name="Event Predecessor Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.marker">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+  </extension>
+  <extension
+       id="connectionSource"
+       name="Connection Source Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.marker">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+  </extension>
 </plugin>

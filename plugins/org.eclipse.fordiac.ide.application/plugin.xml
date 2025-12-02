@@ -435,13 +435,13 @@
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
              description="Mark FB as predecessor"
              id="org.eclipse.fordiac.ide.application.commands.markAsPredecessor"
-             name="%FBMarker_MarkAsPredecessor">
+             name="%command.markAsPredecessor">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
              description="Mark as Connection Source"
              id="org.eclipse.fordiac.ide.application.commands.markConnectionSource"
-             name="Mark as Connection Source">
+             name="%command.markAsConnectionSource">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
@@ -713,22 +713,6 @@
     </handler>    
     <handler class="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.updateFBType">
-      <activeWhen>
-        <with variable="selection">
-          <iterate ifEmpty="false">
-            <or>
-              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
-              </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
-              </instanceof>
-            </or>
-          </iterate>
-        </with>
-      </activeWhen>
-    </handler>
-    
-     <handler class="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
-             commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
       <activeWhen>
         <with variable="selection">
           <iterate ifEmpty="false">
@@ -1058,7 +1042,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
-      	<visibleWhen checkEnabled="false">
+      	<visibleWhen>
           <and>
 	        <with variable="activeEditor">
 	          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
@@ -1293,14 +1277,7 @@
       </command>
       
       <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
-        <visibleWhen>
-          <and>
-            <with variable="activeEditor">
-              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-            </with>
-            <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
-          </and>
-        </visibleWhen>
+        <visibleWhen checkEnabled="true"/>
       </command>
       
       <command commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">

@@ -24,16 +24,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.util.marker.MarkerDescriptor;
-import org.eclipse.fordiac.util.marker.UtilityMarkerHelper;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -47,7 +44,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 	public InsertFBIntoExecutionChainCommand(final SubApp subApp, final FB insertedFB) {
 		this.subApp = subApp;
 		this.insertedFB = insertedFB;
-		this.predecessorOutputPin = getPredecessorEventOutput(getCurrentPredecessor());
+		this.predecessorOutputPin = getPredecessorEventOutput(getCurrentPredecessor(subApp));
 	}
 
 	@Override
@@ -102,8 +99,7 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 	private static Command getCreateConnectionCommand(final FBNetwork network, final IInterfaceElement source,
 			final IInterfaceElement target) {
-		if (!EcoreUtil.equals(source.getBlockFBNetworkElement().getFbNetwork(),
-				target.getBlockFBNetworkElement().getFbNetwork())) {
+		if (source.getBlockFBNetworkElement().getFbNetwork() != target.getBlockFBNetworkElement().getFbNetwork()) {
 			return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, target);
 		}
 		final AbstractConnectionCreateCommand createConnectionCommand = AbstractConnectionCreateCommand
@@ -113,18 +109,10 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return createConnectionCommand;
 	}
 
-	private static BlockFBNetworkElement getCurrentPredecessor() {
-		if (UtilityMarkerHelper.getMarkedElement(MarkerDescriptor.PREDECESSOR,
-				getResource()) instanceof final BlockFBNetworkElement block) {
+	private static BlockFBNetworkElement getCurrentPredecessor(final SubApp subApp) {
+		if (UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.PREDECESSOR_MARKER_ID,
+				subApp) instanceof final BlockFBNetworkElement block) {
 			return block;
-		}
-		return null;
-	}
-
-	private static IResource getResource() {
-		if (EditorUtils.getCurrentActiveEditor().getAdapter(LibraryElement.class) instanceof final AutomationSystem sys
-				&& sys.getTypeEntry().getFile() instanceof final IResource res) {
-			return res;
 		}
 		return null;
 	}
@@ -152,42 +140,49 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 		private final BlockFBNetworkElement predecessor;
 		private BlockFBNetworkElement oldPredecessor;
+		private final IResource resource;
 
 		public SetPredecessorCommand(final BlockFBNetworkElement predecessor) {
 			this.predecessor = predecessor;
+			resource = getResource(predecessor);
 		}
 
 		@Override
 		public boolean canExecute() {
-			return predecessor != null;
+			return resource != null && predecessor != null;
 		}
 
 		@Override
 		public void execute() {
-			final IResource resource = getResource();
-			if ((resource != null) && (UtilityMarkerHelper.getMarkedElement(MarkerDescriptor.PREDECESSOR,
-					resource) instanceof final BlockFBNetworkElement elem)) {
+			if (UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.PREDECESSOR_MARKER_ID,
+					predecessor) instanceof final BlockFBNetworkElement elem) {
 				oldPredecessor = elem;
-				UtilityMarkerHelper.deleteElementMarker(MarkerDescriptor.PREDECESSOR, resource);
-				UtilityMarkerHelper.addElementMarker(MarkerDescriptor.PREDECESSOR, resource, predecessor);
+				setMarkedElement(predecessor);
 			}
 		}
 
 		@Override
 		public void undo() {
-			UtilityMarkerHelper.deleteElementMarker(MarkerDescriptor.PREDECESSOR, getResource());
-			UtilityMarkerHelper.addElementMarker(MarkerDescriptor.PREDECESSOR, getResource(), oldPredecessor);
+			if (oldPredecessor != null) {
+				setMarkedElement(oldPredecessor);
+			} else {
+				UtilityMarkerHelper.deleteElementMarker(UtilityMarkerHelper.PREDECESSOR_MARKER_ID, resource);
+			}
 		}
 
 		@Override
 		public void redo() {
-			execute();
+			setMarkedElement(predecessor);
 		}
 
-		private IResource getResource() {
-			if (predecessor.getFbNetwork().getAutomationSystem().getTypeEntry()
-					.getFile() instanceof final IResource res) {
-				return res;
+		private void setMarkedElement(final BlockFBNetworkElement element) {
+			UtilityMarkerHelper.setMarkedElement(UtilityMarkerHelper.PREDECESSOR_MARKER_ID, element);
+		}
+
+		private static IResource getResource(final BlockFBNetworkElement predecessor) {
+			final EObject rootContainer = EcoreUtil.getRootContainer(predecessor);
+			if (rootContainer instanceof final LibraryElement libEl && libEl.getTypeEntry() != null) {
+				return libEl.getTypeEntry().getFile();
 			}
 			return null;
 		}
