@@ -691,6 +691,10 @@
         <genParameters ecoreParameter="lib.ecore#//LibraryElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//LibraryElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/validatePackage" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.validatePackage(this, diagnostics);">
+        <genParameters ecoreParameter="lib.ecore#//LibraryElement/validatePackage/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//LibraryElement/validatePackage/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
