@@ -60,9 +60,9 @@ public final class FormatterUtil {
 	public static void configureCommentWhitespace(final IHiddenRegionFormatting leading,
 			final IHiddenRegionFormatting trailing) {
 		// transfer indentation increase before comment
-		if (trailing.getIndentationDecrease() != null) {
-			leading.setIndentationDecrease(merge(leading.getIndentationDecrease(), trailing.getIndentationDecrease()));
-			trailing.setIndentationDecrease(null);
+		if (trailing.getIndentationIncrease() != null) {
+			leading.setIndentationIncrease(merge(leading.getIndentationIncrease(), trailing.getIndentationIncrease()));
+			trailing.setIndentationIncrease(null);
 		}
 		// transfer indentation decrease after comment
 		if (leading.getIndentationDecrease() != null) {
