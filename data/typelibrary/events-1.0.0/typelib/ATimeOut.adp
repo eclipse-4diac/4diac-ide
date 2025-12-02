@@ -40,4 +40,5 @@
       </ServiceTransaction>
     </ServiceSequence>
   </Service>
+	<Attribute Name="TypeHash" Value="''"/>
 </AdapterType>
