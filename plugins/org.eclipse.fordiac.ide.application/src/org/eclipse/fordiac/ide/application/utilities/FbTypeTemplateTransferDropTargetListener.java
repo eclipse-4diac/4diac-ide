@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -22,10 +22,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -55,32 +56,22 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 	@Override
 	protected void handleDragOver() {
 		super.handleDragOver();
+
 		getCurrentEvent().feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_EXPAND;
-		final Object template = TemplateTransfer.getInstance().getTemplate();
-		if (template == null) {
-			getCurrentEvent().detail = DND.DROP_NONE;
-			getCurrentEvent().operations = DND.DROP_NONE;
+		getCurrentEvent().detail = DND.DROP_NONE;
+		getCurrentEvent().operations = DND.DROP_NONE;
 
-		} else if (template instanceof FBTypeEntry) {
-			final FBTypeEntry entry = (FBTypeEntry) TemplateTransfer.getInstance().getTemplate();
-			final IProject srcProject = entry.getFile().getProject();
-
-			// Only allow drag from the same project
-			if ((null != targetProject) && (targetProject.equals(srcProject))) {
-				getCurrentEvent().detail = DND.DROP_COPY;
-			} else {
-				getCurrentEvent().detail = DND.DROP_NONE;
-				getCurrentEvent().operations = DND.DROP_NONE;
-			}
-		} else if (TemplateTransfer.getInstance().getTemplate() instanceof final DataTypeEntry dataTypeEntry
-				&& dataTypeEntry.getType() instanceof StructuredType && null != getTargetEditPart()) {
-			final Object model = getTargetEditPart().getModel();
-			if (model instanceof StructManipulator || model instanceof ConfigurableFB) {
-				getCurrentEvent().detail = DND.DROP_COPY;
-			} else {
-				getCurrentEvent().detail = DND.DROP_NONE;
-				getCurrentEvent().operations = DND.DROP_NONE;
-			}
+		switch (TemplateTransfer.getInstance().getTemplate()) {
+		// adapter type entries need to be checked before FBTypeEntry
+		case final AdapterTypeEntry adpTypeEntry -> {
+			// currently we do not allow the drop of AdapterTypeEntries therefore nothing to
+			// be done here
+		}
+		case final FBTypeEntry fbEntry -> handleFBDragOver(fbEntry);
+		case final DataTypeEntry dataTypeEntry -> handleDataTypeDragOver(dataTypeEntry);
+		default -> {
+			// nothing to be done in the default case
+		}
 		}
 	}
 
@@ -101,6 +92,24 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		TemplateTransfer.getInstance().setTemplate(null);
 	}
 
+	private void handleFBDragOver(final FBTypeEntry fbEntry) {
+		// Only allow drag from the same project
+		if (isFromSameProject(fbEntry)) {
+			getCurrentEvent().detail = DND.DROP_COPY;
+		}
+	}
+
+	private void handleDataTypeDragOver(final DataTypeEntry dataTypeEntry) {
+		if (!isFromSameProject(dataTypeEntry)) {
+			return;
+		}
+
+		if (dataTypeEntry.getType() instanceof StructuredType && getTargetEditPart() != null
+				&& getTargetEditPart().getModel() instanceof ConfigurableFB) {
+			getCurrentEvent().detail = DND.DROP_COPY;
+		}
+	}
+
 	@Override
 	protected CreationFactory getFactory(final Object template) {
 		getCurrentEvent().detail = DND.DROP_COPY;
@@ -111,6 +120,11 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 			return new FBTypeTemplateCreationFactory(template);
 		}
 		return null;
+	}
+
+	private boolean isFromSameProject(final TypeEntry entry) {
+		final IProject srcProject = entry.getFile().getProject();
+		return (targetProject != null && targetProject.equals(srcProject));
 	}
 
 }
