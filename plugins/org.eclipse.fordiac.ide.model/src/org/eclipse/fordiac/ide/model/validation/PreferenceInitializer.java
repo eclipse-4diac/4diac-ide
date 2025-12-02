@@ -25,6 +25,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		preferences.put(ValidationPreferences.COLLISION_SEVERITY, ValidationPreferences.SEVERITY_WARNING);
 		preferences.put(ValidationPreferences.RIGHT_INTERFACE_BAR_COLLISION_SEVERITY,
 				ValidationPreferences.SEVERITY_WARNING);
+		preferences.put(ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER, ValidationPreferences.SEVERITY_IGNORE);
 	}
 
 }

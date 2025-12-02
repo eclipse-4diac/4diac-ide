@@ -53,8 +53,11 @@ public final class Messages extends NLS {
 	public static String Validation_IgnoreLabel;
 	public static String Validation_InterfaceCollisionSeverityLabel;
 	public static String Validation_InfoLabel;
-	public static String Validation_SeverityLabel;
 	public static String Validation_WarningLabel;
+	public static String Validation_Section_Collision;
+	public static String Validation_Section_TypeManagement;
+	public static String Validation_Severity_Info;
+	public static String Validation_PackagenameMismatchFolder;
 
 	static {
 		// initialize resource bundle
