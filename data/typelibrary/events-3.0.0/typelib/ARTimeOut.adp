@@ -43,4 +43,5 @@
       </ServiceTransaction>
     </ServiceSequence>
   </Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </AdapterType>
