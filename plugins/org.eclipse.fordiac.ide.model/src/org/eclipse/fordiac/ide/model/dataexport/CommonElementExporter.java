@@ -503,8 +503,7 @@ public class CommonElementExporter {
 		for (final VarDeclaration varDecl : structVar.getCachedMembers()) {
 			if (varDecl.isVisible()) {
 				addParam(varDecl);
-			}
-			if (varDecl instanceof final ContainerVarDeclaration structMemVar) {
+			} else if (varDecl instanceof final ContainerVarDeclaration structMemVar) {
 				addVisibleChildrenOfStructVar(structMemVar);
 			}
 		}
