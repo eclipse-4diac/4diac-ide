@@ -85,7 +85,8 @@ public class Constants {
 	public static final String READ_TRACES = "<Request Action=\"READ TRACES\"><Connection Destination=\"{0}\" Source=\"{1}\" /></Request>"; //$NON-NLS-1$
 	public static final String REPLAY_NEXT_EVENT = "<Request Action=\"REPLAY NEXT EVENT\"><Connection Destination=\"{0}\"/></Request>"; //$NON-NLS-1$
 
-	public static final String RESPONSE = "<Response Reason=\"{0}\" />\n"; //$NON-NLS-1$
+	public static final String RESPONSE = "<Response Reason=\"{0}\"/>"; //$NON-NLS-1$
+	public static final String RESPONSE_WITH_ARGUMENT = "<Response Reason=\"{0}\">{1}</Response>"; //$NON-NLS-1$
 
 	public static final String WATCHES_RESPONSE = "<Response>\n  <Watches>\n    {0}\n  </Watches>\n</Response>"; //$NON-NLS-1$
 	public static final String QUERY_RESPONSE = "<Response>\n  <FBList>\n    {0}\n  </FBList>\n</Response>"; //$NON-NLS-1$
