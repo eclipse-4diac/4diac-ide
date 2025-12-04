@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -324,6 +325,16 @@ public final class FordiacErrorMarker {
 	 */
 	public static boolean markerTargetsValue(final IMarker marker) {
 		return isTargetOfType(marker, LibraryElementPackage.eINSTANCE.getValue());
+	}
+
+	/**
+	 * Test whether the marker originates from a {@link Attribute}.
+	 *
+	 * @param marker The marker
+	 * @return true if yes, false otherwise
+	 */
+	public static boolean markerTargetsAttribute(final IMarker marker) {
+		return isTargetOfType(marker, LibraryElementPackage.eINSTANCE.getAttribute());
 	}
 
 	/**
