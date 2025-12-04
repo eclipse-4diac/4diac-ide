@@ -24,6 +24,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.InterfaceElementSelectionLayoutPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.PlugContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.SocketContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayoutEditPolicy;
@@ -78,6 +79,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void createEditPolicies() {
 		if (!isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new InterfaceElementSelectionLayoutPolicy());
 			return;
 		}
 
