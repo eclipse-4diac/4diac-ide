@@ -18,8 +18,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.ui.dialogs.SearchPattern;
 
@@ -39,11 +41,17 @@ public class PaletteFilter {
 	}
 
 	private Stream<TypeEntry> getTypeStream() {
-		if (hostNetwork != null && hostNetwork.eContainer() instanceof CompositeFBType
-				&& !(hostNetwork.eContainer() instanceof SubAppType)) {
-			return typeLib.getFbTypes().stream().map(TypeEntry.class::cast);
+		if (hostNetwork == null) {
+			return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
 		}
-		return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+
+		final EObject host = hostNetwork.eContainer();
+		final Stream<TypeEntry> stream = host instanceof CompositeFBType && !(host instanceof SubAppType)
+				? typeLib.getFbTypes().stream().map(TypeEntry.class::cast)
+				: Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+
+		final TypeEntry selfEntry = ((LibraryElement) host).getTypeEntry();
+		return stream.filter(te -> te != selfEntry);
 	}
 
 	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
