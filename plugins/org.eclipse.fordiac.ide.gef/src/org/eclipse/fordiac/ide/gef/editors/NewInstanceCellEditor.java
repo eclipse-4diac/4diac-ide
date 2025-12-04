@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.CellEditorLayoutFactory;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -48,10 +49,6 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	private static final int NUM_COLUMNS = 2;
 
-	// if NewInstanceCellEditor is used inside a TableCell = true
-	// if not for example like in main editor for creating new FBs = false(default)
-	private boolean insideCell;
-
 	private Composite container;
 	private Button menuButton;
 	protected Shell popupShell;
@@ -63,28 +60,16 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 	private ResultListLabelProvider resultListLabelProvider;
 
-	public NewInstanceCellEditor() {
-	}
-
 	public NewInstanceCellEditor(final Composite parent) {
-		this(parent, SWT.NONE);
-	}
-
-	public NewInstanceCellEditor(final Composite parent, final int style) {
-		this(parent, style, false);
-	}
-
-	public NewInstanceCellEditor(final Composite parent, final int style, final boolean insideCell) {
-		super(parent, style | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
-		this.insideCell = insideCell;
+		super(parent, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
 	}
 
 	public Button getMenuButton() {
 		return menuButton;
 	}
 
-	public void setTypeLibrary(final TypeLibrary typeLib) {
-		paletteFilter = new PaletteFilter(typeLib);
+	public void setTypeLibrary(final TypeLibrary typeLib, final FBNetwork hostNetwork) {
+		paletteFilter = new PaletteFilter(typeLib, hostNetwork);
 	}
 
 	@Override
@@ -153,12 +138,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			public void setBounds(final int x, final int y, final int width, final int height) {
 				super.setBounds(x, y, width, height);
 
-				final Point screenPos;
-				if (insideCell) {
-					screenPos = new Point(x, y);
-				} else {
-					screenPos = getParent().toDisplay(getLocation());
-				}
+				final Point screenPos = getParent().toDisplay(getLocation());
 				final Rectangle compositeBounds = getBounds();
 				popupShell.setBounds(screenPos.x, screenPos.y + compositeBounds.height, compositeBounds.width, 150);
 				if (!popupShell.isVisible()) {

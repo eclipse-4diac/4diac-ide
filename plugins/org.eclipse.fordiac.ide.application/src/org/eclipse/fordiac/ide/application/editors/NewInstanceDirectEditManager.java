@@ -18,6 +18,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editors.NewInstanceCellEditor;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -104,7 +105,8 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, event -> showFBInsertPopUpMenu());
-		getCellEditor().setTypeLibrary(typeLib);
+		getCellEditor().setTypeLibrary(typeLib, getEditPart().getModel() instanceof final FBNetwork fbn ? fbn : null);
+
 		super.initCellEditor();
 		if (null != initialValue) {
 			getCellEditor().setValue(initialValue);
