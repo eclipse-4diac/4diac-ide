@@ -180,6 +180,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String UNNECESSARY_NARROW_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryNarrowConversion"; //$NON-NLS-1$
 	public static final String UNNECESSARY_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "unnecessaryLiteralConversion"; //$NON-NLS-1$
 	public static final String TRUNCATING_LITERAL_CONVERSION = ISSUE_CODE_PREFIX + "truncatingLiteralConversion"; //$NON-NLS-1$
+	public static final String NO_SIDE_EFFECTS = ISSUE_CODE_PREFIX + "noSideEffects"; //$NON-NLS-1$
 	public static final String NON_CONSTANT_DECLARATION = ISSUE_CODE_PREFIX + "nonConstantInInitializer"; //$NON-NLS-1$
 	public static final String MAYBE_NOT_INITIALIZED = ISSUE_CODE_PREFIX + "maybeNotInitialized"; //$NON-NLS-1$
 	public static final String FOR_CONTROL_VARIABLE_MODIFICATION = ISSUE_CODE_PREFIX + "forControlVariableModification"; //$NON-NLS-1$
@@ -531,6 +532,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 		final String castName = argumentDataType.getName() + "_TO_" + expectedReturnDataType.getName(); //$NON-NLS-1$
 		return standardFunctionProvider.find(castName, List.of(argumentDataType)).isPresent();
+	}
+
+	@Check
+	public void checkNoSideEffects(final STExpression expression) {
+		if (!STCoreUtil.hasSideEffects(expression)) {
+			addIssue(Messages.STCoreValidator_NoSideEffects, getCurrentObject(), null, NO_SIDE_EFFECTS);
+		}
 	}
 
 	@Check
