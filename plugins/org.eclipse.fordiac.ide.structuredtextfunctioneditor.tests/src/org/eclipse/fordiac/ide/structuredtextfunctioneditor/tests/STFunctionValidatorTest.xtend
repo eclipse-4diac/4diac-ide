@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 import com.google.inject.Inject
 import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyStringType
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -1821,6 +1820,18 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
 			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to CHAR")
+	}
+
+	@Test
+	def void testNoSideEffects() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+			END_VAR
+			INT_VAR = 17;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.NO_SIDE_EFFECTS)
 	}
 
 	@Test

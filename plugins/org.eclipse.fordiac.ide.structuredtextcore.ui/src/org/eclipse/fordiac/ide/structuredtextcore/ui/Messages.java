@@ -67,6 +67,7 @@ public final class Messages extends NLS {
 	public static String STCoreCustomValidatorConfigurationBlock_ForControlVariableNonTemporary;
 	public static String STCoreCustomValidatorConfigurationBlock_LiteralImplicitConversion;
 	public static String STCoreCustomValidatorConfigurationBlock_Literals;
+	public static String STCoreCustomValidatorConfigurationBlock_NoSideEffects;
 	public static String STCoreCustomValidatorConfigurationBlock_PackageNameMismatch;
 	public static String STCoreCustomValidatorConfigurationBlock_PotentialProgrammingProblems;
 	public static String STCoreCustomValidatorConfigurationBlock_StringIndexOutOfBounds;
