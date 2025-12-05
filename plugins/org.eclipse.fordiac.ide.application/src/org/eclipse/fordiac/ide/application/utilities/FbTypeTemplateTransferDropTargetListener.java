@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPartViewer;
@@ -67,7 +68,11 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 			// currently we do not allow the drop of AdapterTypeEntries therefore nothing to
 			// be done here
 		}
+		case final InterfaceTypeEntry ifTypeEntry when ifTypeEntry instanceof FBTypeEntry
+				|| ifTypeEntry instanceof SubAppTypeEntry ->
+			handleFBDragOver(ifTypeEntry);
 		case final FBTypeEntry fbEntry -> handleFBDragOver(fbEntry);
+		case final SubAppTypeEntry fbEntry -> handleFBDragOver(fbEntry);
 		case final DataTypeEntry dataTypeEntry -> handleDataTypeDragOver(dataTypeEntry);
 		default -> {
 			// nothing to be done in the default case
@@ -92,7 +97,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 		TemplateTransfer.getInstance().setTemplate(null);
 	}
 
-	private void handleFBDragOver(final FBTypeEntry fbEntry) {
+	private void handleFBDragOver(final TypeEntry fbEntry) {
 		// Only allow drag from the same project
 		if (isFromSameProject(fbEntry)) {
 			getCurrentEvent().detail = DND.DROP_COPY;
