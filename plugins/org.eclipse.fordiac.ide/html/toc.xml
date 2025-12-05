@@ -62,7 +62,7 @@
         	</topic>
         </topic>
         <topic href="html/installation/installation.html#forteOtherPlatforms" label="Building 4diac FORTE for Other Platforms">
-	        <topic href="html/installation/legoMindstormEv3.html" label="4diac FORTE for Lego Mindstorms EV3"/>
+	        <topic href="html/installation/legomindstormsev3.html" label="4diac FORTE for Lego Mindstorms EV3"/>
         	<topic href="html/installation/raspi.html" label="4diac FORTE for RaspberryPi"/>
         	<topic href="html/installation/wago.html" label="4diac FORTE for WagoPFCs"/>
         	<topic href="html/installation/freertos_lwip.html" label="4diac FORTE for freeRTOS + LwIP"/>
@@ -75,6 +75,8 @@
           <topic href="html/installation/mingw.html" label="Windows - MinGW-w64 compiler"/>
         </topic>
         <topic href="html/installation/docker.html" label="4diac FORTE as docker">
+        </topic>
+        <topic href="html/installation/bootwithforte.html" label="Start 4diac FORTE after boot on Linux based systems">
         </topic>
     </topic>
 
@@ -189,6 +191,10 @@
          </topic>
          <topic href="html/tutorials/advancedfeatures.html" label="Subapplications (NOT READY YET)">
          </topic>
+         <topic href="html/tutorials/replaydebugger.html" label="Replay Debugger">
+         </topic>
+         <topic href="html/tutorials/gitissuereporting.html" label="Git Issue Reporting">
+         </topic>
       </topic>
       <topic href="html/tutorials/dynamictypeloader.html" label="Step 7 - Deploying new FBs with the Dynamic Type Loader">
          <topic href="html/tutorials/dynamictypeloader.html#getCCompiler" label="Downloading the Compiler">
@@ -219,7 +225,8 @@
 
 <!--********************************************************************************************-->
  
-    <topic href="html/io_config/io_config.html" label="Use I/O From Different Platforms">
+    <topic label="Use I/O From Different Platforms">
+      <topic href="html/io_config/io_config.html#ParameterBased" label="Parameter Based I/Os">
       <topic href="html/io_config/sysfs.html" label="SysFs">
       </topic>
       <topic href="html/io_config/odroid.html" label="Odroid">
@@ -230,15 +237,22 @@
       </topic>
       <topic href="html/io_config/mlpi.html" label="Bosch Rexroth PLC (MLPI)">
       </topic>
-      <topic href="html/io_config/plc01a1.html" label="PLC01A1">
-      </topic>
       <topic href="html/io_config/ev3.html" label="Lego Mindstorms EV3">
         <topic href="html/io_config/ev3.html#ev3_standard_io_config" label="Standard Access">
         </topic>
         <topic href="html/io_config/ev3.html#ev3_cheatsheet" label="I/O Cheat sheet">
         </topic>
-        <topic href="html/io_config/ev3.html#ev3_custom_io_config" label="Custom Access">
+        <topic href="html/io_config/ev3.html#ev3_custom_parameters" label="Custom Access">
         </topic>
+      </topic>
+      </topic>
+      <topic href="html/io_config/io_config.html#IO_CONFIGBased" label="IO_CONFIG Based I/Os">
+         <topic href="html/io_config/plc01a1.html" label="PLC01A1">
+         </topic>
+         <topic href="html/io_config/revolutionpi.html" label="Revolution Pi">
+         </topic>
+         <topic href="html/io_config/wago_pfc200.html" label="Wago PFC200">
+         </topic>
       </topic>
     </topic>
    
@@ -255,7 +269,7 @@
     </topic>
 	 <topic href="html/communication/http.html" label="HTTP">
 	 </topic>
-    <topic label="MQTT with Eclipse Paho" href="html/communication/mqttPaho.html"/>
+    <topic label="MQTT with Eclipse Paho" href="html/communication/mqttpaho.html"/>
     <topic href="html/communication/simulation.html" label="Communicating with Simulation Tools">
        <topic href="html/communication/simulation.html#fmi" label="FMI">
        </topic>
@@ -270,7 +284,7 @@
        </topic>
     </topic>
     <topic label="Modbus" href="html/communication/modbus.html"/>
-    <topic label="OPC DA" href="html/communication/opcda.html"/>
+    <topic label="OPC DA" href="html/communication/opcDA.html"/>
     <topic href="html/communication/openpowerlink.html" label="openPOWERLINK">
     </topic>
     <topic href="html/communication/xqueries.html" label="Access BaseX Database with XQuery">
