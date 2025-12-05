@@ -546,17 +546,6 @@
 		</codeMiningProvider>
 	</extension>
 	<!-- register the Xtext UI language services to Xtext's registry -->
-	<extension
-		point="org.eclipse.xtext.extension_resourceServiceProvider">
-		<resourceServiceProvider
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.xtext.ui.resource.generic.EmfResourceUIServiceProvider"
-			uriExtension="dtp">
-		</resourceServiceProvider>
-		<resourceServiceProvider
-			class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.xtext.ui.resource.generic.EmfResourceUIServiceProvider"
-			uriExtension="DTP">
-		</resourceServiceProvider>
-	</extension>
  <extension
        point="org.eclipse.ui.preferencePages">
     <page
@@ -642,11 +631,5 @@
           </adapt>
        </enablement>
     </moveParticipant>
- </extension>
- <extension
-       point="org.eclipse.xtext.ui.resourceRelocationStrategy">
-    <strategy
-          class="org.eclipse.fordiac.ide.structuredtextcore.ui.DTPExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.LibraryElementResourceRelocationStrategy">
-    </strategy>
  </extension>
 </plugin>
