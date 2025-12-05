@@ -105,6 +105,14 @@ public class XMIExportAdapterFactory extends AdapterFactoryImpl {
 				return createXMIExportTypeDeclarationAdapter();
 			}
 			@Override
+			public Adapter caseXMIExportLiteralTypes(XMIExportLiteralTypes object) {
+				return createXMIExportLiteralTypesAdapter();
+			}
+			@Override
+			public Adapter caseXMIExportLiteralType(XMIExportLiteralType object) {
+				return createXMIExportLiteralTypeAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -205,6 +213,34 @@ public class XMIExportAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createXMIExportTypeDeclarationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes <em>Literal Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes
+	 * @generated
+	 */
+	public Adapter createXMIExportLiteralTypesAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType <em>Literal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType
+	 * @generated
+	 */
+	public Adapter createXMIExportLiteralTypeAdapter() {
 		return null;
 	}
 

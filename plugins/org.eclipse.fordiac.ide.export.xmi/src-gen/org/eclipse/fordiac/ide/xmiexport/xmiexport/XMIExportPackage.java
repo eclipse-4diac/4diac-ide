@@ -292,6 +292,71 @@ public interface XMIExportPackage extends EPackage {
 	int XMI_EXPORT_TYPE_DECLARATION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypesImpl <em>Literal Types</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypesImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportLiteralTypes()
+	 * @generated
+	 */
+	int XMI_EXPORT_LITERAL_TYPES = 6;
+
+	/**
+	 * The feature id for the '<em><b>Literal Types</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_LITERAL_TYPES__LITERAL_TYPES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Literal Types</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_LITERAL_TYPES_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypeImpl <em>Literal Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypeImpl
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportLiteralType()
+	 * @generated
+	 */
+	int XMI_EXPORT_LITERAL_TYPE = 7;
+
+	/**
+	 * The feature id for the '<em><b>Literal</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_LITERAL_TYPE__LITERAL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_LITERAL_TYPE__TYPE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Literal Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int XMI_EXPORT_LITERAL_TYPE_FEATURE_COUNT = 2;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues <em>Attribute Values</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -484,6 +549,59 @@ public interface XMIExportPackage extends EPackage {
 	EReference getXMIExportTypeDeclaration_ResultType();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes <em>Literal Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Literal Types</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes
+	 * @generated
+	 */
+	EClass getXMIExportLiteralTypes();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes#getLiteralTypes <em>Literal Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Literal Types</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes#getLiteralTypes()
+	 * @see #getXMIExportLiteralTypes()
+	 * @generated
+	 */
+	EReference getXMIExportLiteralTypes_LiteralTypes();
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType <em>Literal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Literal Type</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType
+	 * @generated
+	 */
+	EClass getXMIExportLiteralType();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType#getLiteral <em>Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Literal</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType#getLiteral()
+	 * @see #getXMIExportLiteralType()
+	 * @generated
+	 */
+	EReference getXMIExportLiteralType_Literal();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Type</em>'.
+	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType#getType()
+	 * @see #getXMIExportLiteralType()
+	 * @generated
+	 */
+	EReference getXMIExportLiteralType_Type();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -660,6 +778,50 @@ public interface XMIExportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE = eINSTANCE.getXMIExportTypeDeclaration_ResultType();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypesImpl <em>Literal Types</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypesImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportLiteralTypes()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_LITERAL_TYPES = eINSTANCE.getXMIExportLiteralTypes();
+
+		/**
+		 * The meta object literal for the '<em><b>Literal Types</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_LITERAL_TYPES__LITERAL_TYPES = eINSTANCE.getXMIExportLiteralTypes_LiteralTypes();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypeImpl <em>Literal Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportLiteralTypeImpl
+		 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportPackageImpl#getXMIExportLiteralType()
+		 * @generated
+		 */
+		EClass XMI_EXPORT_LITERAL_TYPE = eINSTANCE.getXMIExportLiteralType();
+
+		/**
+		 * The meta object literal for the '<em><b>Literal</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_LITERAL_TYPE__LITERAL = eINSTANCE.getXMIExportLiteralType_Literal();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference XMI_EXPORT_LITERAL_TYPE__TYPE = eINSTANCE.getXMIExportLiteralType_Type();
 
 	}
 

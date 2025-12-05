@@ -32,6 +32,8 @@ import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations;
@@ -84,6 +86,20 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 	 * @generated
 	 */
 	private EClass xmiExportTypeDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass xmiExportLiteralTypesEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass xmiExportLiteralTypeEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -336,6 +352,56 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getXMIExportLiteralTypes() {
+		return xmiExportLiteralTypesEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportLiteralTypes_LiteralTypes() {
+		return (EReference)xmiExportLiteralTypesEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getXMIExportLiteralType() {
+		return xmiExportLiteralTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportLiteralType_Literal() {
+		return (EReference)xmiExportLiteralTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getXMIExportLiteralType_Type() {
+		return (EReference)xmiExportLiteralTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public XMIExportFactory getXMIExportFactory() {
 		return (XMIExportFactory)getEFactoryInstance();
 	}
@@ -382,6 +448,13 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		createEReference(xmiExportTypeDeclarationEClass, XMI_EXPORT_TYPE_DECLARATION__VARIABLE);
 		createEReference(xmiExportTypeDeclarationEClass, XMI_EXPORT_TYPE_DECLARATION__TYPE_DECLARATION);
 		createEReference(xmiExportTypeDeclarationEClass, XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE);
+
+		xmiExportLiteralTypesEClass = createEClass(XMI_EXPORT_LITERAL_TYPES);
+		createEReference(xmiExportLiteralTypesEClass, XMI_EXPORT_LITERAL_TYPES__LITERAL_TYPES);
+
+		xmiExportLiteralTypeEClass = createEClass(XMI_EXPORT_LITERAL_TYPE);
+		createEReference(xmiExportLiteralTypeEClass, XMI_EXPORT_LITERAL_TYPE__LITERAL);
+		createEReference(xmiExportLiteralTypeEClass, XMI_EXPORT_LITERAL_TYPE__TYPE);
 	}
 
 	/**
@@ -440,7 +513,14 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		initEClass(xmiExportTypeDeclarationEClass, XMIExportTypeDeclaration.class, "XMIExportTypeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getXMIExportTypeDeclaration_Variable(), theLibraryElementPackage.getVarDeclaration(), null, "variable", null, 0, 1, XMIExportTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getXMIExportTypeDeclaration_TypeDeclaration(), theSTCorePackage.getSTTypeDeclaration(), null, "typeDeclaration", null, 0, 1, XMIExportTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getXMIExportTypeDeclaration_ResultType(), theLibraryElementPackage.getINamedElement(), null, "resultType", null, 0, 1, XMIExportTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getXMIExportTypeDeclaration_ResultType(), theLibraryElementPackage.getLibraryElement(), null, "resultType", null, 0, 1, XMIExportTypeDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(xmiExportLiteralTypesEClass, XMIExportLiteralTypes.class, "XMIExportLiteralTypes", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getXMIExportLiteralTypes_LiteralTypes(), this.getXMIExportLiteralType(), null, "literalTypes", null, 0, -1, XMIExportLiteralTypes.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(xmiExportLiteralTypeEClass, XMIExportLiteralType.class, "XMIExportLiteralType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getXMIExportLiteralType_Literal(), theSTCorePackage.getSTExpression(), null, "literal", null, 0, 1, XMIExportLiteralType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getXMIExportLiteralType_Type(), theLibraryElementPackage.getLibraryElement(), null, "type", null, 0, 1, XMIExportLiteralType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
