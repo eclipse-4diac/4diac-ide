@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -183,13 +184,17 @@ final class InterfaceListAnnotations {
 	}
 
 	private static Stream<IInterfaceElement> getRootInputs(final InterfaceList il) {
-		return Stream.of(il.getEventInputs(), il.getInputVars(), il.getInOutVars(), il.getSockets())
-				.flatMap(List::stream);
+		return Stream.concat(//
+				Stream.of(il.getEventInputs(), il.getInputVars(), il.getInOutVars(), il.getSockets())
+						.flatMap(List::stream),
+				il.getErrorMarker().stream().filter(IInterfaceElement::isIsInput));
 	}
 
 	private static Stream<IInterfaceElement> getRootOutputs(final InterfaceList il) {
-		return Stream.of(il.getEventOutputs(), il.getOutputVars(), il.getOutMappedInOutVars(), il.getPlugs())
-				.flatMap(List::stream);
+		return Stream.concat(//
+				Stream.of(il.getEventOutputs(), il.getOutputVars(), il.getOutMappedInOutVars(), il.getPlugs())
+						.flatMap(List::stream),
+				il.getErrorMarker().stream().filter(Predicate.not(IInterfaceElement::isIsInput)));
 	}
 
 	private static Stream<IInterfaceElement> getRootInterfaceElements(final InterfaceList il) {
