@@ -75,6 +75,8 @@ public class XMIExportFactoryImpl extends EFactoryImpl implements XMIExportFacto
 			case XMIExportPackage.XMI_EXPORT_INITIAL_VALUE: return createXMIExportInitialValue();
 			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATIONS: return createXMIExportTypeDeclarations();
 			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION: return createXMIExportTypeDeclaration();
+			case XMIExportPackage.XMI_EXPORT_LITERAL_TYPES: return createXMIExportLiteralTypes();
+			case XMIExportPackage.XMI_EXPORT_LITERAL_TYPE: return createXMIExportLiteralType();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -144,6 +146,28 @@ public class XMIExportFactoryImpl extends EFactoryImpl implements XMIExportFacto
 	public XMIExportTypeDeclaration createXMIExportTypeDeclaration() {
 		XMIExportTypeDeclarationImpl xmiExportTypeDeclaration = new XMIExportTypeDeclarationImpl();
 		return xmiExportTypeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public XMIExportLiteralTypes createXMIExportLiteralTypes() {
+		XMIExportLiteralTypesImpl xmiExportLiteralTypes = new XMIExportLiteralTypesImpl();
+		return xmiExportLiteralTypes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public XMIExportLiteralType createXMIExportLiteralType() {
+		XMIExportLiteralTypeImpl xmiExportLiteralType = new XMIExportLiteralTypeImpl();
+		return xmiExportLiteralType;
 	}
 
 	/**

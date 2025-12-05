@@ -17,11 +17,13 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -35,12 +37,13 @@ import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
@@ -51,6 +54,8 @@ import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportAttributeValues;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralType;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportLiteralTypes;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration;
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclarations;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -61,6 +66,11 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 
 public class XMIExportFilter extends ExportFilter {
 	public static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
+
+	private static final Set<EClass> LITERAL_CLASSES = Set.of(STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL,
+			STCorePackage.Literals.ST_DATE_LITERAL, STCorePackage.Literals.ST_ENUM_LITERAL,
+			STCorePackage.Literals.ST_NUMERIC_LITERAL, STCorePackage.Literals.ST_STRING_LITERAL,
+			STCorePackage.Literals.ST_TIME_LITERAL, STCorePackage.Literals.ST_TIME_OF_DAY_LITERAL);
 
 	@Override
 	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite)
@@ -99,6 +109,7 @@ public class XMIExportFilter extends ExportFilter {
 		resource.getContents().add(createInitialValues(resource));
 		resource.getContents().add(createTypeDeclarations(resource));
 		resource.getContents().add(createAttributeValues(resource));
+		resource.getContents().add(createLiteralTypes(resource));
 
 		final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
@@ -231,7 +242,7 @@ public class XMIExportFilter extends ExportFilter {
 		return StructuredTextParseUtil.parseType(varDeclaration, getErrors(), getWarnings(), getInfos());
 	}
 
-	protected INamedElement evaluateResultType(final VarDeclaration varDeclaration) {
+	protected LibraryElement evaluateResultType(final VarDeclaration varDeclaration) {
 		try {
 			return VariableOperations.evaluateResultType(varDeclaration);
 		} catch (final Exception e) {
@@ -282,5 +293,31 @@ public class XMIExportFilter extends ExportFilter {
 	protected static boolean hasAttributeValue(final Attribute attribute) {
 		return attribute.getType() instanceof AnyType && attribute.getValue() != null
 				&& !attribute.getValue().isBlank();
+	}
+
+	protected XMIExportLiteralTypes createLiteralTypes(final Resource resource) {
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportLiteralTypes();
+		StreamSupport
+				.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+				.filter(STExpression.class::isInstance).map(STExpression.class::cast).filter(XMIExportFilter::isLiteral)
+				.map(this::createLiteralType).flatMap(Optional::stream).forEachOrdered(result.getLiteralTypes()::add);
+		return result;
+	}
+
+	protected Optional<XMIExportLiteralType> createLiteralType(final STExpression expression) {
+		final LibraryElement resultType = expression.getResultType();
+		if (resultType == null) {
+			getWarnings().add(MessageFormat.format(Messages.XMIExportFilter_LiteralTypeError,
+					EcoreUtil.getURI(expression).fragment()));
+			return Optional.empty();
+		}
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportLiteralType();
+		result.setLiteral(expression);
+		result.setType(EcoreUtil.copy(resultType));
+		return Optional.of(result);
+	}
+
+	protected static boolean isLiteral(final STExpression expression) {
+		return LITERAL_CLASSES.contains(expression.eClass());
 	}
 }
