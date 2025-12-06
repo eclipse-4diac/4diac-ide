@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -45,13 +46,16 @@ public class PaletteFilter {
 			return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
 		}
 
-		final EObject host = hostNetwork.eContainer();
+		final EObject host = EcoreUtil.getRootContainer(hostNetwork.eContainer());
 		final Stream<TypeEntry> stream = host instanceof CompositeFBType && !(host instanceof SubAppType)
 				? typeLib.getFbTypes().stream().map(TypeEntry.class::cast)
 				: Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
 
-		final TypeEntry selfEntry = ((LibraryElement) host).getTypeEntry();
-		return stream.filter(te -> te != selfEntry);
+		if (host instanceof final LibraryElement le) {
+			final TypeEntry selfEntry = le.getTypeEntry();
+			return stream.filter(te -> te != selfEntry);
+		}
+		return stream;
 	}
 
 	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
