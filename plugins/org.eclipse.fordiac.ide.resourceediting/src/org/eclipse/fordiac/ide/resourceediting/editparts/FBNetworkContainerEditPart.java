@@ -26,16 +26,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.graphics.Point;
 
 /**
@@ -108,30 +103,6 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 			return vIO;
 		}
 		return null;
-	}
-
-	@Override
-	protected void createEditPolicies() {
-		super.createEditPolicies();
-
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef
-	 * .Request)
-	 */
-	@Override
-	public void performRequest(final Request req) {
-		final Command cmd = getCommand(req);
-		if ((cmd != null) && cmd.canExecute()) {
-			getViewer().getEditDomain().getCommandStack().execute(cmd);
-		}
-		super.performRequest(req);
 	}
 
 	@Override
