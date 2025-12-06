@@ -46,8 +46,11 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 	@Override
 	public void execute() {
 		updateCreatePosition(posSizeRef.getTopLeft());
-		getElement().setWidth(posSizeRef.width);
-		getElement().setHeight(posSizeRef.height);
+		if (!addElements.getElementsToAdd().isEmpty()) {
+			// only use the size ref when not empty. Otherwise the default size is fine.
+			getElement().setWidth(posSizeRef.width);
+			getElement().setHeight(posSizeRef.height);
+		}
 		super.execute();
 		addElements.execute();
 	}
