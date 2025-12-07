@@ -38,8 +38,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		preferences.putInt(ModelPreferenceConstants.MAX_PIN_LABEL_SIZE, 12);
 		preferences.putInt(ModelPreferenceConstants.MAX_INTERFACE_BAR_SIZE, DEFAULT_MAX_INTERFACE_BAR_SIZE);
-		preferences.putInt(ModelPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 40);
-		preferences.putInt(ModelPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 60);
+		preferences.putInt(ModelPreferenceConstants.MIN_INTERFACE_BAR_SIZE, 0);
+		preferences.putInt(ModelPreferenceConstants.MAX_HIDDEN_CONNECTION_LABEL_SIZE, 15);
 		preferences.putInt(ModelPreferenceConstants.MAX_TYPE_LABEL_SIZE, 15);
 	}
 }
