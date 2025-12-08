@@ -169,4 +169,20 @@ public interface LibraryElementProvider {
 	 * @return The annotation model or {@code null} if none is currently connected
 	 */
 	GraphicalAnnotationModel getAnnotationModel(IEditorInput input);
+
+	/**
+	 * Adds the given library element state listener to this provider.
+	 *
+	 * @param listener the listener
+	 * @apiNote This has no effect if an identical listener is already registered.
+	 */
+	void addLibraryElementStateListener(LibraryElementStateListener listener);
+
+	/**
+	 * Removes the given library element state listener from this provider.
+	 *
+	 * @param listener the listener
+	 * @apiNote This has no effect if an identical listener is already registered.
+	 */
+	void removeLibraryElementStateListener(LibraryElementStateListener listener);
 }
