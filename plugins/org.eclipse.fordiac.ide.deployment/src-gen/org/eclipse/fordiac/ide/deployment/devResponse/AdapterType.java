@@ -20,40 +20,42 @@ package org.eclipse.fordiac.ide.deployment.devResponse;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>FB
- * Type</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Adapter Type</b></em>'.
+ * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.AdapterType#getName <em>Name</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getFBType()
+ * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getAdapterType()
  * @model
  * @generated
  */
-public interface FBType extends EObject {
+public interface AdapterType extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getFBType_Name()
-	 * @model
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getAdapterType_Name()
+	 * @model extendedMetaData="name='Name' kind='attribute'"
 	 * @generated
 	 */
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.AdapterType#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
 	void setName(String value);
 
-} // FBType
+} // AdapterType
