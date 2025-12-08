@@ -34,17 +34,15 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl#getResources
- * <em>Resources</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.WatchesImpl#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class WatchesImpl extends EObjectImpl implements Watches {
 	/**
-	 * The cached value of the '{@link #getResources() <em>Resources</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getResources() <em>Resources</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getResources()
 	 * @generated
 	 * @ordered
@@ -53,15 +51,14 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected WatchesImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -71,76 +68,76 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Resource> getResources() {
 		if (resources == null) {
-			resources = new EObjectResolvingEList<>(Resource.class, this,
-					DevResponsePackage.WATCHES__RESOURCES);
+			resources = new EObjectResolvingEList<>(Resource.class, this, DevResponsePackage.WATCHES__RESOURCES);
 		}
 		return resources;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
-		return switch (featureID) {
-		case DevResponsePackage.WATCHES__RESOURCES -> getResources();
-		default -> super.eGet(featureID, resolve, coreType);
-		};
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+			case DevResponsePackage.WATCHES__RESOURCES:
+				return getResources();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DevResponsePackage.WATCHES__RESOURCES:
-			getResources().clear();
-			getResources().addAll((Collection<? extends Resource>) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
+			case DevResponsePackage.WATCHES__RESOURCES:
+				getResources().clear();
+				getResources().addAll((Collection<? extends Resource>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DevResponsePackage.WATCHES__RESOURCES:
-			getResources().clear();
-			return;
-		default:
-			super.eUnset(featureID);
+			case DevResponsePackage.WATCHES__RESOURCES:
+				getResources().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
-		return switch (featureID) {
-		case DevResponsePackage.WATCHES__RESOURCES -> resources != null && !resources.isEmpty();
-		default -> super.eIsSet(featureID);
-		};
+	public boolean eIsSet(int featureID) {
+		switch (featureID) {
+			case DevResponsePackage.WATCHES__RESOURCES:
+				return resources != null && !resources.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
 	}
 
 } // WatchesImpl
