@@ -16,11 +16,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -34,6 +37,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		implements LibraryElementProvider {
 
 	private final Map<IEditorInput, T> infos = new ConcurrentHashMap<>();
+	private final Set<LibraryElementStateListener> listeners = ConcurrentHashMap.newKeySet();
 
 	protected AbstractLibraryElementProvider() {
 	}
@@ -45,6 +49,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		if (info == null) {
 			info = Objects.requireNonNull(createLibraryElementInfo(input));
 			infos.put(info.getEditorInput(), info);
+			fireLibraryElementStateChange(listener -> listener.elementConnected(input));
 		}
 		info.connect();
 	}
@@ -55,6 +60,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		final T info = getLibraryElementInfo(input);
 		if (info != null && info.disconnect()) {
 			infos.remove(info.getEditorInput(), info);
+			fireLibraryElementStateChange(listener -> listener.elementDisconnected(input));
 			info.dispose();
 		}
 	}
@@ -148,6 +154,20 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		return info != null ? info.getAnnotationModel() : null;
 	}
 
+	@Override
+	public void addLibraryElementStateListener(final LibraryElementStateListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeLibraryElementStateListener(final LibraryElementStateListener listener) {
+		listeners.remove(listener);
+	}
+
+	protected void fireLibraryElementStateChange(final Consumer<LibraryElementStateListener> consumer) {
+		listeners.forEach(listener -> SafeRunner.run(() -> consumer.accept(listener)));
+	}
+
 	protected T createLibraryElementInfo(final IEditorInput input) throws CoreException {
 		throw new CoreException(Status.error(MessageFormat
 				.format(Messages.AbstractLibraryElementProvider_CannotHandleInput, input.getToolTipText())));
@@ -236,7 +256,10 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		}
 
 		protected void setDirty(final boolean dirty) {
-			this.dirty = dirty;
+			if (this.dirty != dirty) {
+				this.dirty = dirty;
+				fireLibraryElementStateChange(listener -> listener.elementDirtyStateChanged(input, dirty));
+			}
 		}
 	}
 
