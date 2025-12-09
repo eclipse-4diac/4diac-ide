@@ -49,9 +49,9 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	@Override
 	public String getLabel() {
 		if (results.size() == 1) {
-			return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " result"; //$NON-NLS-1$
+			return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " result"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " results"; //$NON-NLS-1$
+		return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " results"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

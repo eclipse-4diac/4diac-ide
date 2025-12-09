@@ -199,7 +199,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
 		}
 		if (conflictResolution
-				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) {
+				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) { //$NON-NLS-1$ //$NON-NLS-2$
 			status.merge(RefactoringStatus
 					.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_MissingStructManipulator));
 		}

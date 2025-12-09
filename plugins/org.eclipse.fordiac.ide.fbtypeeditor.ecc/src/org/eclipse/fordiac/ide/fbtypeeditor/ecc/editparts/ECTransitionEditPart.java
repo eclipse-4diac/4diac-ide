@@ -208,7 +208,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 
 						final CompoundCommand commands = new CompoundCommand();
 						commands.add(new ChangeConditionExpressionCommand(getModel(), values[1]));
-						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1"));
+						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1")); //$NON-NLS-1$
 
 						return commands;
 					}

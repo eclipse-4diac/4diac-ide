@@ -32,6 +32,7 @@ public class FontComboContributionItem extends WorkbenchWindowControlContributio
 
 	private Combo combo;
 	private FontRegistry fontRegistry;
+	@SuppressWarnings("nls")
 	private final String[] options = new String[] { "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24",
 			"26", "28", "36", "48", "72" };
 	private final IPropertyChangeListener propertyChangeListener = event -> {

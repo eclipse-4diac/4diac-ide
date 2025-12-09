@@ -82,7 +82,7 @@ public class Utils {
 	private static void collectAllPorts(final InterfaceList interfaceList, final Map<String, Set<String>> result) {
 		final String deviceName = interfaceList.getBlockFBNetworkElement().getResource().getDevice().getName();
 		final String resourceName = interfaceList.getBlockFBNetworkElement().getResource().getName();
-		final String prefix = deviceName + "." + resourceName + ".";
+		final String prefix = deviceName + "." + resourceName + "."; //$NON-NLS-1$ //$NON-NLS-2$
 		for (final Event event : interfaceList.getEventInputs()) {
 			addElementToResult(event, result.get(resourceName), prefix);
 		}

@@ -89,7 +89,7 @@ public final class ValidationHelper {
 					final String contextName = (context.getType().getName());
 					if (contextName.equals(objectName)) {
 						subMonitor.setTaskName(
-								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName()));
+								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName())); //$NON-NLS-1$
 						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
 							final ConstraintHelper properties = new ConstraintHelper(constraint.getName());
 							addValidationMarker(iresource, properties.getMessage(), properties.getSeverity(),
