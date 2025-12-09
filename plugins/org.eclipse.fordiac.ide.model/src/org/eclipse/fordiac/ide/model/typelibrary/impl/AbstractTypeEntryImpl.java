@@ -438,7 +438,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 		final Attribute typeHashAttribute = getTypeHashAttribute(type);
 		if (typeHashAttribute != null) {
-			return StringValueConverter.INSTANCE.toValue(typeHashAttribute.getValue());
+			final String value = typeHashAttribute.getValue();
+			if (value.isEmpty()) {
+				return value;
+			}
+			return StringValueConverter.INSTANCE.toValue(value);
 		}
 		return LibraryElementHasher.hash(type);
 	}

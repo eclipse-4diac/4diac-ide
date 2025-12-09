@@ -22,14 +22,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.fordiac.ide.deployment.devResponse.AdapterType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DataType;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
+import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -38,24 +41,23 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
  * end-user-doc -->
- *
  * @generated
  */
 public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseFactory {
 	/**
-	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @generated
 	 */
 	public static DevResponseFactory init() {
 		try {
-			final DevResponseFactory theDevResponseFactory = (DevResponseFactory) EPackage.Registry.INSTANCE
-					.getEFactory(DevResponsePackage.eNS_URI);
+			DevResponseFactory theDevResponseFactory = (DevResponseFactory)EPackage.Registry.INSTANCE.getEFactory(DevResponsePackage.eNS_URI);
 			if (theDevResponseFactory != null) {
 				return theDevResponseFactory;
 			}
-		} catch (final Exception exception) {
+		}
+		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new DevResponseFactoryImpl();
@@ -68,143 +70,178 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * @generated
 	 */
 	public DevResponseFactoryImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public EObject create(final EClass eClass) {
-		return switch (eClass.getClassifierID()) {
-		case DevResponsePackage.RESOURCE -> createResource();
-		case DevResponsePackage.FB -> createFB();
-		case DevResponsePackage.FB_TYPE -> createFBType();
-		case DevResponsePackage.PORT -> createPort();
-		case DevResponsePackage.DATA -> createData();
-		case DevResponsePackage.RESPONSE -> createResponse();
-		case DevResponsePackage.WATCHES -> createWatches();
-		case DevResponsePackage.FB_LIST -> createFBList();
-		case DevResponsePackage.ENDPOINT_LIST -> createEndpointList();
-		case DevResponsePackage.CONNECTION -> createConnection();
-		default -> throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		};
+	public EObject create(EClass eClass) {
+		switch (eClass.getClassifierID()) {
+			case DevResponsePackage.ADAPTER_TYPE: return createAdapterType();
+			case DevResponsePackage.DATA_TYPE: return createDataType();
+			case DevResponsePackage.RESOURCE: return createResource();
+			case DevResponsePackage.FB: return createFB();
+			case DevResponsePackage.FB_TYPE: return createFBType();
+			case DevResponsePackage.GLOBAL_CONST_TYPE: return createGlobalConstType();
+			case DevResponsePackage.PORT: return createPort();
+			case DevResponsePackage.DATA: return createData();
+			case DevResponsePackage.RESPONSE: return createResponse();
+			case DevResponsePackage.WATCHES: return createWatches();
+			case DevResponsePackage.FB_LIST: return createFBList();
+			case DevResponsePackage.ENDPOINT_LIST: return createEndpointList();
+			case DevResponsePackage.CONNECTION: return createConnection();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterType createAdapterType() {
+		AdapterTypeImpl adapterType = new AdapterTypeImpl();
+		return adapterType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataType createDataType() {
+		DataTypeImpl dataType = new DataTypeImpl();
+		return dataType;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Resource createResource() {
-		return new ResourceImpl();
+		ResourceImpl resource = new ResourceImpl();
+		return resource;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public FB createFB() {
-		return new FBImpl();
+		FBImpl fb = new FBImpl();
+		return fb;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public FBType createFBType() {
-		return new FBTypeImpl();
+		FBTypeImpl fbType = new FBTypeImpl();
+		return fbType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GlobalConstType createGlobalConstType() {
+		GlobalConstTypeImpl globalConstType = new GlobalConstTypeImpl();
+		return globalConstType;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Port createPort() {
-		return new PortImpl();
+		PortImpl port = new PortImpl();
+		return port;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Data createData() {
-		return new DataImpl();
+		DataImpl data = new DataImpl();
+		return data;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Response createResponse() {
-		return new ResponseImpl();
+		ResponseImpl response = new ResponseImpl();
+		return response;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Watches createWatches() {
-		return new WatchesImpl();
+		WatchesImpl watches = new WatchesImpl();
+		return watches;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public FBList createFBList() {
-		return new FBListImpl();
+		FBListImpl fbList = new FBListImpl();
+		return fbList;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EndpointList createEndpointList() {
-		return new EndpointListImpl();
+		EndpointListImpl endpointList = new EndpointListImpl();
+		return endpointList;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public Connection createConnection() {
-		return new ConnectionImpl();
+		ConnectionImpl connection = new ConnectionImpl();
+		return connection;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public DevResponsePackage getDevResponsePackage() {
-		return (DevResponsePackage) getEPackage();
+		return (DevResponsePackage)getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @deprecated
 	 * @generated
 	 */

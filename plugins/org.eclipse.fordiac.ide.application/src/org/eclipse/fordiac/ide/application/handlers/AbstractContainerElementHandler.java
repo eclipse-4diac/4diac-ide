@@ -174,7 +174,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		final org.eclipse.swt.graphics.Point point = Optional
 				.ofNullable(((FBNetworkContextMenuProvider) viewer.getContextMenu()).getPoint())
 				.orElse(new org.eclipse.swt.graphics.Point(0, 0));
-		selectionExtend = new Rectangle(point.x, point.y, 200, 100);
+		selectionExtend = new Rectangle(point.x, point.y, 0, 0);
 		final GraphicalEditPart gep = getTargetEP(event, viewer, network);
 		final IFigure targetFigure = gep.getFigure();
 		targetFigure.translateToRelative(selectionExtend);

@@ -65,8 +65,10 @@ public record DynamicCheckResult(ContractSystem system, List<RuleData> rules) {
 				slidingWindow = null;
 			}
 
-			if (rule.getType() == Type.REACTION || rule.getType() == Type.AGE) {
+			if (rule.getType() == Type.REACTION) {
 				triggerSet = new boolean[rule.getInputs().size()];
+			} else if (rule.getType() == Type.AGE) {
+				triggerSet = new boolean[rule.getOutputs().size()];
 			}
 
 			if (rule.getType() == Type.CAUSAL_REACTION || rule.getType() == Type.CAUSAL_AGE) {

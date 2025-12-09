@@ -18,21 +18,44 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.ui.dialogs.SearchPattern;
 
 public class PaletteFilter {
 
 	private final TypeLibrary typeLib;
+	private final FBNetwork hostNetwork;
 	private final SearchPattern matcher = new SearchPattern();
 
-	public PaletteFilter(final TypeLibrary typeLib) {
+	public PaletteFilter(final TypeLibrary typeLib, final FBNetwork hostNetwork) {
 		this.typeLib = typeLib;
-
+		this.hostNetwork = hostNetwork;
 	}
 
 	public List<TypeEntry> findFBAndSubappTypes(final String searchString) {
-		return sortResultsByBestMatch(searchString, findTypes(searchString,
-				Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream()))).toList();
+		return sortResultsByBestMatch(searchString, findTypes(searchString, getTypeStream())).toList();
+	}
+
+	private Stream<TypeEntry> getTypeStream() {
+		if (hostNetwork == null) {
+			return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+		}
+
+		final EObject host = EcoreUtil.getRootContainer(hostNetwork.eContainer());
+		final Stream<TypeEntry> stream = host instanceof CompositeFBType && !(host instanceof SubAppType)
+				? typeLib.getFbTypes().stream().map(TypeEntry.class::cast)
+				: Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+
+		if (host instanceof final LibraryElement le) {
+			final TypeEntry selfEntry = le.getTypeEntry();
+			return stream.filter(te -> te != selfEntry);
+		}
+		return stream;
 	}
 
 	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
