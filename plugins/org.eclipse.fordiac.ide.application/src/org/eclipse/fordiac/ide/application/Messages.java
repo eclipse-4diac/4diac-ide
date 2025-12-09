@@ -310,6 +310,7 @@ public final class Messages extends NLS {
 	public static String ChangeTypeNameToFile_QuickfixDesc;
 	public static String ChangeFileNameToType_QuickfixLabel;
 	public static String ChangeFileNameToType_QuickfixDesc;
+	public static String ChangePackageName_QuickfixLabel;
 	public static String ChangeName_NoFileError;
 	public static String ChangeName_NoTypeEntryError;
 	public static String ChangeName_NoTypeError;

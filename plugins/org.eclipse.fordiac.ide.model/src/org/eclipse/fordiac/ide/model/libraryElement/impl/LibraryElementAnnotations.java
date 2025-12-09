@@ -15,16 +15,12 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -71,9 +67,9 @@ final class LibraryElementAnnotations {
 
 	public static boolean validatePackage(final LibraryElement element, final DiagnosticChain diagnostics) {
 		if (element.eContainer() == null && element.getTypeEntry() != null) {
-			final TypeEntry typeEntry = element.getTypeEntry();
+			final TypeEntry entry = element.getTypeEntry();
 
-			if (!Objects.equals(typeEntry.getPackageName(), getExpectedPackageName(typeEntry))) {
+			if (!Objects.equals(entry.getPackageName(), PackageNameHelper.getPackageNameFromFile(entry.getFile()))) {
 				if (diagnostics != null) {
 					final int severity = ValidationPreferences.getDiagnosticSeverity(
 							ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER, Diagnostic.OK, element.eResource());
@@ -86,13 +82,6 @@ final class LibraryElementAnnotations {
 			}
 		}
 		return true;
-	}
-
-	private static String getExpectedPackageName(final TypeEntry entry) {
-		final IPath relativePath = BuildpathUtil
-				.findRelativePath(entry.getTypeLibrary().getBuildpath(), entry.getFile().getParent())
-				.orElse(entry.getFile().getParent().getFullPath());
-		return Stream.of(relativePath.segments()).collect(Collectors.joining(PackageNameHelper.PACKAGE_NAME_DELIMITER));
 	}
 
 	private LibraryElementAnnotations() {
