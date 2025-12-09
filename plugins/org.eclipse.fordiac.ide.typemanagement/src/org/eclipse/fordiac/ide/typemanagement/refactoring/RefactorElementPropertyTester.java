@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -42,6 +43,9 @@ public class RefactorElementPropertyTester extends PropertyTester {
 		}
 
 		if (element instanceof final IInterfaceElement ie && !(ie instanceof ErrorMarkerInterface)) {
+			if (ie.getFBType() instanceof FunctionFBType) {
+				return false;
+			}
 			if (ie.getBlockFBNetworkElement() != null) {
 				return isEditableTypeEntry(ie.getBlockFBNetworkElement().getTypeEntry());
 			}

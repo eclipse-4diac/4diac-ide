@@ -20,13 +20,16 @@ package org.eclipse.fordiac.ide.deployment.devResponse.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.eclipse.fordiac.ide.deployment.devResponse.AdapterType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DataType;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
+import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
@@ -39,14 +42,13 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  * starting with the actual class of the object and proceeding up the
  * inheritance hierarchy until a non-null result is returned, which is the
  * result of the switch. <!-- end-user-doc -->
- *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage
  * @generated
  */
 public class DevResponseSwitch<T> extends Switch<T> {
 	/**
-	 * The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached model package
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected static DevResponsePackage modelPackage;
@@ -64,281 +66,326 @@ public class DevResponseSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Checks whether this is a switch for the given package. <!-- begin-user-doc
+	 * Checks whether this is a switch for the given package.
+	 * <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
 	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
 	@Override
-	protected boolean isSwitchFor(final EPackage ePackage) {
+	protected boolean isSwitchFor(EPackage ePackage) {
 		return ePackage == modelPackage;
 	}
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a
-	 * non null result; it yields that result. <!-- begin-user-doc --> <!--
+	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(final int classifierID, final EObject theEObject) {
+	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-		case DevResponsePackage.RESOURCE: {
-			final Resource resource = (Resource) theEObject;
-			T result = caseResource(resource);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.ADAPTER_TYPE: {
+				AdapterType adapterType = (AdapterType)theEObject;
+				T result = caseAdapterType(adapterType);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.FB: {
-			final FB fb = (FB) theEObject;
-			T result = caseFB(fb);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.DATA_TYPE: {
+				DataType dataType = (DataType)theEObject;
+				T result = caseDataType(dataType);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.FB_TYPE: {
-			final FBType fbType = (FBType) theEObject;
-			T result = caseFBType(fbType);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.RESOURCE: {
+				Resource resource = (Resource)theEObject;
+				T result = caseResource(resource);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.PORT: {
-			final Port port = (Port) theEObject;
-			T result = casePort(port);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.FB: {
+				FB fb = (FB)theEObject;
+				T result = caseFB(fb);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.DATA: {
-			final Data data = (Data) theEObject;
-			T result = caseData(data);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.FB_TYPE: {
+				FBType fbType = (FBType)theEObject;
+				T result = caseFBType(fbType);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.RESPONSE: {
-			final Response response = (Response) theEObject;
-			T result = caseResponse(response);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.GLOBAL_CONST_TYPE: {
+				GlobalConstType globalConstType = (GlobalConstType)theEObject;
+				T result = caseGlobalConstType(globalConstType);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.WATCHES: {
-			final Watches watches = (Watches) theEObject;
-			T result = caseWatches(watches);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.PORT: {
+				Port port = (Port)theEObject;
+				T result = casePort(port);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.FB_LIST: {
-			final FBList fbList = (FBList) theEObject;
-			T result = caseFBList(fbList);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.DATA: {
+				Data data = (Data)theEObject;
+				T result = caseData(data);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.ENDPOINT_LIST: {
-			final EndpointList endpointList = (EndpointList) theEObject;
-			T result = caseEndpointList(endpointList);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.RESPONSE: {
+				Response response = (Response)theEObject;
+				T result = caseResponse(response);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		case DevResponsePackage.CONNECTION: {
-			final Connection connection = (Connection) theEObject;
-			T result = caseConnection(connection);
-			if (result == null) {
-				result = defaultCase(theEObject);
+			case DevResponsePackage.WATCHES: {
+				Watches watches = (Watches)theEObject;
+				T result = caseWatches(watches);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
 			}
-			return result;
-		}
-		default:
-			return defaultCase(theEObject);
+			case DevResponsePackage.FB_LIST: {
+				FBList fbList = (FBList)theEObject;
+				T result = caseFBList(fbList);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
+			}
+			case DevResponsePackage.ENDPOINT_LIST: {
+				EndpointList endpointList = (EndpointList)theEObject;
+				T result = caseEndpointList(endpointList);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
+			}
+			case DevResponsePackage.CONNECTION: {
+				Connection connection = (Connection)theEObject;
+				T result = caseConnection(connection);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
+			}
+			default: return defaultCase(theEObject);
 		}
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Resource</em>'. <!-- begin-user-doc --> This implementation returns
+	 * Returns the result of interpreting the object as an instance of '<em>Adapter Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adapter Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdapterType(AdapterType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Data Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDataType(DataType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource</em>'.
+	 * <!-- begin-user-doc --> This implementation returns
 	 * null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Resource</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Resource</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResource(final Resource object) {
+	public T caseResource(Resource object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>FB</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>FB</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>FB</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FB</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFB(final FB object) {
+	public T caseFB(FB object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>FB
-	 * Type</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>FB Type</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>FB
-	 *         Type</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFBType(final FBType object) {
+	public T caseFBType(FBType object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Port</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>Global Const Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Global Const Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGlobalConstType(GlobalConstType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Port</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Port</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Port</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePort(final Port object) {
+	public T casePort(Port object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Data</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>Data</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Data</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Data</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseData(final Data object) {
+	public T caseData(Data object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Response</em>'. <!-- begin-user-doc --> This implementation returns
+	 * Returns the result of interpreting the object as an instance of '<em>Response</em>'.
+	 * <!-- begin-user-doc --> This implementation returns
 	 * null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Response</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Response</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResponse(final Response object) {
+	public T caseResponse(Response object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Watches</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>Watches</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Watches</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Watches</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseWatches(final Watches object) {
+	public T caseWatches(Watches object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>FB
-	 * List</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>FB List</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>FB
-	 *         List</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FB List</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFBList(final FBList object) {
+	public T caseFBList(FBList object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Endpoint
-	 * List</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>Endpoint List</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Endpoint
-	 *         List</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Endpoint List</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEndpointList(final EndpointList object) {
+	public T caseEndpointList(EndpointList object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>Connection</em>'. <!-- begin-user-doc --> This implementation returns
+	 * Returns the result of interpreting the object as an instance of '<em>Connection</em>'.
+	 * <!-- begin-user-doc --> This implementation returns
 	 * null; returning a non-null result will terminate the switch. <!--
 	 * end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>Connection</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Connection</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseConnection(final Connection object) {
+	public T caseConnection(Connection object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of
-	 * '<em>EObject</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
+	 * <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last
 	 * case anyway. <!-- end-user-doc -->
-	 *
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of
-	 *         '<em>EObject</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(final EObject object) {
+	public T defaultCase(EObject object) {
 		return null;
 	}
 

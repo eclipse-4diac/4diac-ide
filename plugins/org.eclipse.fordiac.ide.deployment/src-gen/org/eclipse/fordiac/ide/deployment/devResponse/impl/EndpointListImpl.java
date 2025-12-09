@@ -34,17 +34,15 @@ import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl#getConnection
- * <em>Connection</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.EndpointListImpl#getConnection <em>Connection</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class EndpointListImpl extends EObjectImpl implements EndpointList {
 	/**
-	 * The cached value of the '{@link #getConnection() <em>Connection</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getConnection() <em>Connection</em>}' reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getConnection()
 	 * @generated
 	 * @ordered
@@ -53,15 +51,14 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected EndpointListImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -71,76 +68,76 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getConnection() {
 		if (connection == null) {
-			connection = new EObjectResolvingEList<>(Connection.class, this,
-					DevResponsePackage.ENDPOINT_LIST__CONNECTION);
+			connection = new EObjectResolvingEList<>(Connection.class, this, DevResponsePackage.ENDPOINT_LIST__CONNECTION);
 		}
 		return connection;
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
-		return switch (featureID) {
-		case DevResponsePackage.ENDPOINT_LIST__CONNECTION -> getConnection();
-		default -> super.eGet(featureID, resolve, coreType);
-		};
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
+				return getConnection();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
-			getConnection().clear();
-			getConnection().addAll((Collection<? extends Connection>) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
+			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
+				getConnection().clear();
+				getConnection().addAll((Collection<? extends Connection>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
-			getConnection().clear();
-			return;
-		default:
-			super.eUnset(featureID);
+			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
+				getConnection().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
-		return switch (featureID) {
-		case DevResponsePackage.ENDPOINT_LIST__CONNECTION -> connection != null && !connection.isEmpty();
-		default -> super.eIsSet(featureID);
-		};
+	public boolean eIsSet(int featureID) {
+		switch (featureID) {
+			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
+				return connection != null && !connection.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
 	}
 
 } // EndpointListImpl

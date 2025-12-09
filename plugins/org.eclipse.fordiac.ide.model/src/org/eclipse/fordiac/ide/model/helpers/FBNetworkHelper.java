@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
@@ -271,9 +272,14 @@ public final class FBNetworkHelper {
 		}
 		final FBType editorType = getRootType(element);
 		if (editorType != null) {
-			if (type.equals(editorType)) {
+			if (type.getTypeEntry().equals(editorType.getTypeEntry())) {
 				ErrorMessenger
 						.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+				return false;
+			}
+			if (editorType instanceof CompositeFBType && !(editorType instanceof SubAppType)
+					&& type instanceof SubAppType) {
+				ErrorMessenger.popUpErrorMessage(Messages.Error_TSAinCFB);
 				return false;
 			}
 			if (containsType(editorType, getChildFBNElements(type))) {

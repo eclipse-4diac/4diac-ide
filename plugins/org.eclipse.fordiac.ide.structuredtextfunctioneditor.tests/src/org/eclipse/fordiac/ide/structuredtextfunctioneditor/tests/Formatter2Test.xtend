@@ -1148,7 +1148,7 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				                                                               // labore et dolore magna aliqua.
+					                                                           // labore et dolore magna aliqua.
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1173,8 +1173,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				                                                               // labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-				                                                               // nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+					                                                           // labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+					                                                           // nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1248,9 +1248,9 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF int1 < int2 THEN (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				                     * labore et dolore magna aliqua.
-				                     * Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-				                     * commodo consequat. Duis aute irure dolor in reprehenderit *)
+					                 * labore et dolore magna aliqua.
+					                 * Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+					                 * commodo consequat. Duis aute irure dolor in reprehenderit *)
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1353,8 +1353,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF int1 < int2 THEN (* This piece of code demonstrates the formatting of bulleted lists
-				                     * - While the preceding line does not reach the 120 character limit, the linebreak persists
-				                     * -Though, indentation is ignored for now *)
+					                 * - While the preceding line does not reach the 120 character limit, the linebreak persists
+					                 * -Though, indentation is ignored for now *)
 					bol1 := TRUE;
 				END_IF;
 				
@@ -1596,6 +1596,21 @@ class Formatter2Test {
 			 * unindented, wrapped comment because the comment is too long to fit in a single line so it is
 			 * wrapped at the end
 			 *)
+			END_FUNCTION
+		'''
+		assertFormatted[
+			toBeFormatted = text
+			expectation = text
+		]
+	}
+
+	@Test
+	def void commentStabilityTestSLAfterWrap() {
+		val text = '''
+			FUNCTION hubert
+			Test(langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
+				AND langerVariablenBezeichner);
+			// test comment
 			END_FUNCTION
 		'''
 		assertFormatted[

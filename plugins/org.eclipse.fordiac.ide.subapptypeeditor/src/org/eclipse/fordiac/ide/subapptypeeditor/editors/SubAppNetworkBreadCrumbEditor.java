@@ -228,7 +228,8 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	public boolean isMarkerTarget(final IMarker marker) {
 		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
 				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
-				|| FordiacErrorMarker.markerTargetsConnection(marker) || FordiacErrorMarker.markerTargetsValue(marker);
+				|| FordiacErrorMarker.markerTargetsConnection(marker) || FordiacErrorMarker.markerTargetsValue(marker)
+				|| FordiacErrorMarker.markerTargetsAttribute(marker);
 	}
 
 	@Override

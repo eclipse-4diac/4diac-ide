@@ -262,6 +262,10 @@
 		</resourceServiceProvider>
 		<resourceServiceProvider
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="dtp">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="FBT">
 		</resourceServiceProvider>
 		<resourceServiceProvider
@@ -291,6 +295,10 @@
 		<resourceServiceProvider
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="SEG">
+		</resourceServiceProvider>
+		<resourceServiceProvider
+			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="DTP">
 		</resourceServiceProvider>
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
@@ -617,6 +625,9 @@
        point="org.eclipse.xtext.ui.resourceRelocationStrategy">
     <strategy
           class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceRelocationStrategy">
+    </strategy>
+    <strategy
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.LibraryElementResourceRelocationStrategy">
     </strategy>
  </extension>
 </plugin>

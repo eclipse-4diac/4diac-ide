@@ -199,7 +199,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final CallMethodRequest request, final String message) {
 		return client.call(request).thenCompose(result -> {
 			if (!result.getStatusCode().isGood()) {
-				displayCommand(result.getStatusCode(), destination, message);
+				displayCommand(result, destination, message);
 			}
 			return CompletableFuture.completedFuture(result);
 		});
@@ -558,11 +558,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		try {
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_RESPONSE);
-			if (response != Constants.EMPTY_RESPONSE) {
-				return getQueryElements(response);
+			if (response == Constants.EMPTY_RESPONSE) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryResources,
+						getIEC61499Status(result.getStatusCode())));
 			}
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryResources,
-					getIEC61499Status(result.getStatusCode())));
+			return getQueryElements(response);
 		} catch (final IOException | ExecutionException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryResourcesFailed, e);
 		} catch (final InterruptedException e) {
@@ -582,12 +582,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final String message = MessageFormat.format(Constants.QUERY_FB_TYPE, hashedFBType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
-			if (response != Constants.EMPTY_RESPONSE) {
-				return response;
+			if (response == Constants.EMPTY_RESPONSE) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+						getIEC61499Status(result.getStatusCode())));
 			}
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryFBType,
-					getIEC61499Status(result.getStatusCode())));
-
+			return response;
 		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryFBTypeFailed, e);
 		} catch (final InterruptedException e) {
@@ -607,12 +606,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final String message = MessageFormat.format(Constants.QUERY_DATA_TYPE, hashedDataType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
-			if (response != Constants.EMPTY_RESPONSE) {
-				return response;
+			if (response == Constants.EMPTY_RESPONSE) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+						getIEC61499Status(result.getStatusCode())));
 			}
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
-					getIEC61499Status(result.getStatusCode())));
-
+			return response;
 		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryDataTypeFailed, e);
 		} catch (final InterruptedException e) {
@@ -632,12 +630,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			final String message = MessageFormat.format(Constants.QUERY_GLOBAL_CONST_TYPE, hashedGlobalConstType);
 			final CallMethodResult result = sendREQ("", request, message).get(); //$NON-NLS-1$
 			final Response response = parseResponse(result, Constants.QUERY_TYPE_RESPONSE);
-			if (response != Constants.EMPTY_RESPONSE) {
-				return response;
+			if (response == Constants.EMPTY_RESPONSE) {
+				FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryDataType,
+						getIEC61499Status(result.getStatusCode())));
 			}
-			FordiacLogHelper.logError(MessageFormat.format(Messages.OPCUADeploymentExecutor_ErrorOnQueryGlobalConstType,
-					getIEC61499Status(result.getStatusCode())));
-
+			return response;
 		} catch (final IOException | ExecutionException | LibraryElementHashException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_QueryGlobalConstTypeFailed, e);
 		} catch (final InterruptedException e) {
@@ -952,12 +949,11 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}).toList();
 	}
 
-	private Response parseResponse(final CallMethodResult result, final String responseType) throws IOException {
-		if ((result != null && result.getStatusCode().isGood())
-				&& (result.getOutputArguments()[0].getValue() instanceof final String response)) {
-			return parseXMLResponse(MessageFormat.format(responseType, response));
+	private Response parseResponse(final CallMethodResult result, final String responseTyp) throws IOException {
+		if (result == null || !(result.getOutputArguments()[0].getValue() instanceof final String response)) {
+			return Constants.EMPTY_RESPONSE;
 		}
-		return Constants.EMPTY_RESPONSE;
+		return parseXMLResponse(MessageFormat.format(responseTyp, response));
 	}
 
 	private Response parseXMLResponse(final String encodedResponse) throws IOException {
@@ -996,28 +992,36 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		}
 		for (int i = 0; i < results.size(); i++) {
 			final CallMethodResult result = results.get(i);
-			final StatusCode opcuaStatus = result.getStatusCode();
-			if (!opcuaStatus.isGood()) {
+			if (!result.getStatusCode().isGood()) {
 				final String message = requestMessages.get(i);
-				displayCommand(opcuaStatus, destination, message);
+				displayCommand(result, destination, message);
 			}
 		}
 		return results;
 	}
 
-	private void displayCommand(final StatusCode opcuaStatus, final String destination, final String message) {
+	private void displayCommand(final CallMethodResult result, final String destination, final String requestMessage) {
 		final String info = getDestinationInfo(destination);
-		final String responseMessage = MessageFormat.format(Constants.RESPONSE, getIEC61499Status(opcuaStatus));
+		final String responseMessage = getMessagFromResult(result);
 		for (final IDeploymentListener listener : listeners) {
-			listener.postCommandSent(info, destination, message);
+			listener.postCommandSent(info, destination, requestMessage);
 		}
 		for (final IDeploymentListener listener : listeners) {
 			if (listener instanceof final IDeploymentListener2 listener2) {
-				listener2.postResponseReceived(info, message, responseMessage, destination);
+				listener2.postResponseReceived(info, requestMessage, responseMessage, destination);
 			} else {
 				listener.postResponseReceived(responseMessage, destination);
 			}
 		}
+	}
+
+	private static String getMessagFromResult(final CallMethodResult result) {
+		final Variant outArg = result.getOutputArguments()[0];
+		if (outArg != null && outArg.getValue() instanceof final String response) {
+			return MessageFormat.format(Constants.RESPONSE_WITH_ARGUMENT, getIEC61499Status(result.getStatusCode()),
+					response);
+		}
+		return MessageFormat.format(Constants.RESPONSE, getIEC61499Status(result.getStatusCode()));
 	}
 
 	private static void logResponseStatus(final StatusCode opcuaStatus, final String resourceName,

@@ -39,12 +39,9 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Port;
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getName
- * <em>Name</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getType
- * <em>Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getPorts
- * <em>Ports</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getPorts <em>Ports</em>}</li>
  * </ul>
  *
  * @generated
@@ -91,9 +88,8 @@ public class FBImpl extends EObjectImpl implements FB {
 	protected String type = TYPE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPorts()
 	 * @generated
 	 * @ordered
@@ -102,15 +98,14 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	protected FBImpl() {
+		super();
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -120,7 +115,6 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -130,12 +124,11 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setName(final String newName) {
-		final String oldName = name;
+	public void setName(String newName) {
+		String oldName = name;
 		name = newName;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.FB__NAME, oldName, name));
@@ -144,7 +137,6 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -154,12 +146,11 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void setType(final String newType) {
-		final String oldType = type;
+	public void setType(String newType) {
+		String oldType = type;
 		type = newType;
 		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.FB__TYPE, oldType, type));
@@ -168,7 +159,6 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -181,97 +171,102 @@ public class FBImpl extends EObjectImpl implements FB {
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
-		return switch (featureID) {
-		case DevResponsePackage.FB__PORTS -> ((InternalEList<?>) getPorts()).basicRemove(otherEnd, msgs);
-		default -> super.eInverseRemove(otherEnd, featureID, msgs);
-		};
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case DevResponsePackage.FB__PORTS:
+				return ((InternalEList<?>)getPorts()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
-		return switch (featureID) {
-		case DevResponsePackage.FB__NAME -> getName();
-		case DevResponsePackage.FB__TYPE -> getType();
-		case DevResponsePackage.FB__PORTS -> getPorts();
-		default -> super.eGet(featureID, resolve, coreType);
-		};
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+			case DevResponsePackage.FB__NAME:
+				return getName();
+			case DevResponsePackage.FB__TYPE:
+				return getType();
+			case DevResponsePackage.FB__PORTS:
+				return getPorts();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case DevResponsePackage.FB__NAME:
-			setName((String) newValue);
-			return;
-		case DevResponsePackage.FB__TYPE:
-			setType((String) newValue);
-			return;
-		case DevResponsePackage.FB__PORTS:
-			getPorts().clear();
-			getPorts().addAll((Collection<? extends Port>) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
+			case DevResponsePackage.FB__NAME:
+				setName((String)newValue);
+				return;
+			case DevResponsePackage.FB__TYPE:
+				setType((String)newValue);
+				return;
+			case DevResponsePackage.FB__PORTS:
+				getPorts().clear();
+				getPorts().addAll((Collection<? extends Port>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
-		case DevResponsePackage.FB__NAME:
-			setName(NAME_EDEFAULT);
-			return;
-		case DevResponsePackage.FB__TYPE:
-			setType(TYPE_EDEFAULT);
-			return;
-		case DevResponsePackage.FB__PORTS:
-			getPorts().clear();
-			return;
-		default:
-			super.eUnset(featureID);
+			case DevResponsePackage.FB__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case DevResponsePackage.FB__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
+			case DevResponsePackage.FB__PORTS:
+				getPorts().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
-		return switch (featureID) {
-		case DevResponsePackage.FB__NAME -> NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-		case DevResponsePackage.FB__TYPE -> TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
-		case DevResponsePackage.FB__PORTS -> ports != null && !ports.isEmpty();
-		default -> super.eIsSet(featureID);
-		};
+	public boolean eIsSet(int featureID) {
+		switch (featureID) {
+			case DevResponsePackage.FB__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case DevResponsePackage.FB__TYPE:
+				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+			case DevResponsePackage.FB__PORTS:
+				return ports != null && !ports.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
 	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
 	 * @generated
 	 */
 	@Override
@@ -280,7 +275,7 @@ public class FBImpl extends EObjectImpl implements FB {
 			return super.toString();
 		}
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", type: "); //$NON-NLS-1$

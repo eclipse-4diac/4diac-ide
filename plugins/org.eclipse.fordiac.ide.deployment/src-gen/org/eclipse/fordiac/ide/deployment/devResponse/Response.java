@@ -27,20 +27,13 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID
- * <em>ID</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches
- * <em>Watches</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason
- * <em>Reason</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist
- * <em>Fblist</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType
- * <em>Fb Type</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist
- * <em>Endpointlist</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection
- * <em>Connection</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType <em>Fb Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection <em>Connection</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse()
@@ -49,14 +42,14 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Response extends EObject {
 	/**
-	 * Returns the value of the '<em><b>ID</b></em>' attribute. <!-- begin-user-doc
+	 * Returns the value of the '<em><b>ID</b></em>' attribute.
+	 * <!-- begin-user-doc
 	 * -->
 	 * <p>
 	 * If the meaning of the '<em>ID</em>' attribute isn't clear, there really
 	 * should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the value of the '<em>ID</em>' attribute.
 	 * @see #setID(String)
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_ID()
@@ -66,10 +59,8 @@ public interface Response extends EObject {
 	String getID();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID
-	 * <em>ID</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getID <em>ID</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>ID</em>' attribute.
 	 * @see #getID()
 	 * @generated
@@ -94,10 +85,8 @@ public interface Response extends EObject {
 	Watches getWatches();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches
-	 * <em>Watches</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Watches</em>' reference.
 	 * @see #getWatches()
 	 * @generated
@@ -122,10 +111,8 @@ public interface Response extends EObject {
 	String getReason();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason
-	 * <em>Reason</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Reason</em>' attribute.
 	 * @see #getReason()
 	 * @generated
@@ -150,10 +137,8 @@ public interface Response extends EObject {
 	FBList getFblist();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist
-	 * <em>Fblist</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fblist</em>' reference.
 	 * @see #getFblist()
 	 * @generated
@@ -173,10 +158,8 @@ public interface Response extends EObject {
 	FBType getFbType();
 
 	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType
-	 * <em>Fb Type</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType <em>Fb Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fb Type</em>' reference.
 	 * @see #getFbType()
 	 * @generated

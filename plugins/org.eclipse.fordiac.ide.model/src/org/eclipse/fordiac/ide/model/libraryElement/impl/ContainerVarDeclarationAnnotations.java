@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class ContainerVarDeclarationAnnotations {
@@ -67,6 +68,9 @@ public class ContainerVarDeclarationAnnotations {
 		setArraySize(newVisibleMember, getArraySize(memVar));
 		newVisibleMember.setIsInput(contVarDeclaration.isIsInput());
 		insertNewVisibleMember(contVarDeclaration, newVisibleMember);
+		if (newVisibleMember.isIsInput()) {
+			newVisibleMember.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		}
 		return newVisibleMember;
 	}
 
