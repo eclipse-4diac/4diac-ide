@@ -25,15 +25,27 @@ public final class FBNetworkElementAnnotations {
 
 	public static boolean validateName(final FBNetworkElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (isErrorMarkerOrComment(element)) {
-			return true; // do not check error markers or comments
+		if (isErrorMarkerOrComment(element) || isMappedFromApplication(element)) {
+			return true; // do not check error markers, comments, or mapped elements in resource network
 		}
 		return NamedElementAnnotations.validateName(element, diagnostics, context)
 				&& NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY);
 	}
 
+	public static boolean validateType(final FBNetworkElement element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		if (isMappedFromApplication(element)) {
+			return true; // do not check mapped elements in resource network
+		}
+		return TypedConfigureableObjectAnnotations.validateType(element, diagnostics, context);
+	}
+
 	static boolean isErrorMarkerOrComment(final FBNetworkElement element) {
 		return element instanceof ErrorMarkerFBNElement || element instanceof Comment;
+	}
+
+	static boolean isMappedFromApplication(final FBNetworkElement element) {
+		return element.isMapped() && element.getMapping().getTo() == element;
 	}
 
 	private FBNetworkElementAnnotations() {
@@ -50,7 +62,7 @@ public final class FBNetworkElementAnnotations {
 	}
 
 	private static String getFBNetworkElementName(final FBNetworkElement element) {
-		if (element.isMapped() && element.getMapping().getTo() == element) {
+		if (isMappedFromApplication(element)) {
 			// we are mapped and this FBNetworkelement is the resource mirror, return the
 			// opposites full qualified name (e.g., App1.Subapp1.FBName)
 			return element.getOpposite().getQualifiedName();
