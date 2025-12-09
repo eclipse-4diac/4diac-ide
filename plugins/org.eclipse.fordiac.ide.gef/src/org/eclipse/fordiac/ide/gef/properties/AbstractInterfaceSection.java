@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH, Profactor GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2025 fortiss GmbH, Profactor GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,12 +18,11 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -43,6 +42,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -56,7 +56,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractInterfaceSection extends AbstractSection {
+public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSection {
 	protected Text nameText;
 	protected Text commentText;
 	private TableViewer inputViewer;
@@ -69,24 +69,21 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 	@Override
 	protected INamedElement getType() {
-		if (type instanceof FBNetworkElement) {
-			return (FBNetworkElement) type;
+		if (type instanceof final BlockFBNetworkElement fbnEl) {
+			return fbnEl;
 		}
-		if (type instanceof Device) {
-			return (Device) type;
+		if (type instanceof final Device dev) {
+			return dev;
 		}
-		if (type instanceof Resource) {
-			return (Resource) type;
+		if (type instanceof final Resource res) {
+			return res;
 		}
 		return null;
 	}
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createFBInfoGroup(parent);
 		createInputInfoGroup(parent);
 	}
@@ -99,11 +96,16 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		nameText = createGroupText(composite, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(getRenameCommand(nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(composite, true);
+
+		final CLabel commentLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
+		commentLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		commentText = createGroupText(composite, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		final GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
+		gridData.heightHint = 3 * commentText.getLineHeight();
+		commentText.setLayoutData(gridData);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -150,8 +152,8 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
 		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) {
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) {
 			disableAllFields();
 		}
 		setType(input);
@@ -163,32 +165,21 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 		inputViewer.setCellModifier(null);
 	}
 
-
 	@Override
-	public void refresh() {
-		if (null != type) {
-			Display.getDefault().asyncExec(() -> {
-				if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-					final CommandStack commandStackBuffer = commandStack;
-					commandStack = null;
-					if (type instanceof AdapterFB) {
-						nameText.setEnabled(false);
-					}
-					nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-					commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-					inputViewer.setInput(getType());
-					commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		Display.getDefault().asyncExec(() -> {
+			if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
+				final CommandStack commandStackBuffer = getCurrentCommandStack();
+				setCurrentCommandStack(null);
+				if (type instanceof AdapterFB) {
+					nameText.setEnabled(false);
 				}
-			});
-		}
-	}
-
-	private ChangeNameCommand getRenameCommand(final String newValue) {
-		final INamedElement element = getType();
-		if (element instanceof FBNetworkElement) {
-			return new ChangeFBNetworkElementName((FBNetworkElement) element, newValue);
-		}
-		return new ChangeNameCommand(getType(), nameText.getText());
+				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+				inputViewer.setInput(getType());
+				setCurrentCommandStack(commandStackBuffer);
+			}
+		});
 	}
 
 	private class ValueCommentCellModifier implements ICellModifier {
@@ -199,14 +190,12 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case VALUE_PROPERTY:
-				return getVarDeclarationValue((VarDeclaration) element);
-			case COMMENT_PROPERTY:
-				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
-			default:
-				return null;
-			}
+			return switch (property) {
+			case VALUE_PROPERTY -> getVarDeclarationValue((VarDeclaration) element);
+			case COMMENT_PROPERTY ->
+				((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
+			default -> null;
+			};
 		}
 
 		@Override
@@ -224,7 +213,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 			default:
 				break;
 			}
-			if ((null != cmd) && (null != commandStack)) {
+			if ((null != cmd) && (null != getCurrentCommandStack())) {
 				executeCommand(cmd);
 				inputViewer.refresh(data);
 			}
@@ -235,14 +224,14 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 	public static class InputContentProvider implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof FBNetworkElement) {
-				return ((FBNetworkElement) inputElement).getInterface().getInputVars().toArray();
+			if (inputElement instanceof final BlockFBNetworkElement fbnEl) {
+				return fbnEl.getInterface().getInputVars().toArray();
 			}
-			if (inputElement instanceof Device) {
-				return ((Device) inputElement).getVarDeclarations().toArray();
+			if (inputElement instanceof final Device dev) {
+				return dev.getVarDeclarations().toArray();
 			}
-			if (inputElement instanceof Resource) {
-				return ((Resource) inputElement).getVarDeclarations().toArray();
+			if (inputElement instanceof final Resource res) {
+				return res.getVarDeclarations().toArray();
 			}
 			return new Object[] {};
 		}
@@ -256,15 +245,14 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof VarDeclaration) {
+			if (element instanceof final VarDeclaration varDecl) {
 				switch (columnIndex) {
 				case 0:
-					return ((VarDeclaration) element).getName();
+					return varDecl.getName();
 				case 1:
-					return getVarDeclarationValue((VarDeclaration) element);
+					return getVarDeclarationValue(varDecl);
 				case 2:
-					return ((VarDeclaration) element).getComment() != null ? ((VarDeclaration) element).getComment()
-							: ""; //$NON-NLS-1$
+					return varDecl.getComment() != null ? varDecl.getComment() : ""; //$NON-NLS-1$
 				default:
 					break;
 				}

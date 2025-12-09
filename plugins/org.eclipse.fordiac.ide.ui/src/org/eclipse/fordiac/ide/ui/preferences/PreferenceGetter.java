@@ -15,14 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.preferences;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 
 /**
  * This class implements some static methods for returning different preference
@@ -34,54 +27,27 @@ import org.eclipse.swt.graphics.RGB;
 
 public final class PreferenceGetter {
 
-	/** The used colors. */
-	private static final Map<RGB, Color> usedColors = new HashMap<>();
-
-	/**
-	 * Returns the color for the specified preference.
-	 *
-	 * @param pref The preference.
-	 *
-	 * @return the color
-	 */
-	public static Color getColor(final String pref) {
-		return getColor(UIPlugin.getDefault().getPreferenceStore(), pref);
-	}
-
-	/**
-	 * Returns the color for the specified preference.
-	 *
-	 * @param pref  The preference.
-	 * @param store the store
-	 *
-	 * @return the color
-	 */
-	public static Color getColor(final IPreferenceStore store, final String pref) {
-		final RGB rgb = PreferenceConverter.getColor(store, pref);
-		return usedColors.computeIfAbsent(rgb, rgbCol -> new Color(null, rgbCol));
-	}
-
 	public static Color getDataColor(final String dataType) {
 		if ("BOOL".equals(dataType)) { //$NON-NLS-1$
-			return getColor(PreferenceConstants.P_BOOL_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getBoolConnectorColor();
 		}
 		if (isAnyBit(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyBitConnectorColor();
 		}
 		if (isAnyInt(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_INT_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyIntConnectorColor();
 		}
 		if (isAnyReal(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyRealConnectorColor();
 		}
 		if (isAnyString(dataType)) {
-			return getColor(PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR);
+			return UIPreferenceConstants.getAnyStringConnectorColor();
 		}
 		return getDefaultDataColor();
 	}
 
 	public static Color getDefaultDataColor() {
-		return getColor(PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR);
+		return UIPreferenceConstants.getRemainingDataConnectorColor();
 	}
 
 	private static boolean isAnyBit(final String dataType) {

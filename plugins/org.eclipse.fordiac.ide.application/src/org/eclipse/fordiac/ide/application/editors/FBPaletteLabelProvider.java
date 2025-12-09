@@ -15,8 +15,12 @@
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -31,20 +35,22 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public class FBPaletteLabelProvider extends LabelProvider {
 
 	private final WorkbenchLabelProvider wbLabelProvider = new WorkbenchLabelProvider();
+	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof IFile) {
+		if (element instanceof final IFile file) {
 			// we want to hide the extension of the fb type
-			return TypeLibrary.getTypeNameFromFile((IFile) element);
+			return TypeEntry.getTypeNameFromFile(file);
 		}
 		return wbLabelProvider.getText(element);
 	}
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IFile) {
-			return FBTypeLabelProvider.getImageForFile((IFile) element);
+		if (element instanceof final IFile file) {
+			final ImageDescriptor imageDescriptor = FBTypeLabelProvider.getImageForFile(file);
+			return resourceManager.get(imageDescriptor);
 		}
 		return wbLabelProvider.getImage(element);
 	}

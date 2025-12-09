@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, fortiss GmbH
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *  						Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,17 +18,29 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -40,6 +52,53 @@ import org.eclipse.ui.IEditorPart;
  * editors
  */
 public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
+
+	public static class VarInputConnAnchor extends FixedAnchor {
+
+		private final InterfaceEditPartForFBNetwork ieEP;
+		private IFigure valueFigure;
+
+		public VarInputConnAnchor(final InterfaceEditPartForFBNetwork ieEP) {
+			super(ieEP.getFigure(), true);
+			this.ieEP = ieEP;
+		}
+
+		@Override
+		public Point getLocation(final Point reference) {
+			if (valueHasAnnotation()) {
+				final IFigure fig = getValueFigure();
+				if (fig != null) {
+					final Rectangle bounds = fig.getBounds().getCopy();
+					fig.translateToAbsolute(bounds);
+					return bounds.getLeft();
+				}
+			}
+			return super.getLocation(reference);
+		}
+
+		private boolean valueHasAnnotation() {
+			final IFigure fig = getValueFigure();
+			if (fig != null) {
+				return fig.getBorder() instanceof AnnotationBorder;
+			}
+			return false;
+		}
+
+		private Value getValue() {
+			return ((VarDeclaration) ieEP.getModel()).getValue();
+		}
+
+		IFigure getValueFigure() {
+			if (valueFigure == null) {
+				final EditPart ep = ieEP.getViewer().getEditPartForModel(getValue());
+				if (ep instanceof final GraphicalEditPart graphicalEditPart) {
+					valueFigure = graphicalEditPart.getFigure();
+				}
+			}
+			return valueFigure;
+		}
+	}
+
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		if (isEvent()) {
@@ -89,14 +148,14 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	private boolean canGoInto() {
-		final FBNetworkElement element = getModel().getFBNetworkElement();
+		final FBNetworkElement element = getModel().getBlockFBNetworkElement();
 		return ((element instanceof SubApp) || (element instanceof CFBInstance));
 	}
 
 	protected void goInto() {
-		FBNetworkElement element = getModel().getFBNetworkElement();
+		BlockFBNetworkElement element = getModel().getBlockFBNetworkElement();
 		IInterfaceElement selectionElement = getModel();
-		if ((element instanceof SubApp) && (needsOppositeSubapp((SubApp) element))) {
+		if ((element instanceof final SubApp subApp) && (needsOppositeSubapp(subApp))) {
 			// we are mapped and the mirrored subapp located in the resource, get the one
 			// from the application
 			element = element.getOpposite();
@@ -108,19 +167,34 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	}
 
 	private static boolean needsOppositeSubapp(final SubApp subapp) {
-		//if a subapp is mapped and we are at the resource side we would like to get the opposite subapp
+		// if a subapp is mapped and we are at the resource side we would like to get
+		// the opposite subapp
 		return (subapp.isMapped() && EcoreUtil.isAncestor(subapp.getResource(), subapp));
 	}
 
 	protected boolean isUnfoldedSubapp() {
-		if (getModel().getFBNetworkElement() instanceof SubApp) {
-			final SubApp subapp = (SubApp) getModel().getFBNetworkElement();
-			if (subapp.isUnfolded()) {
-				return true;
-			}
-		}
-		return false;
+		return (getModel().getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded());
 	}
 
+	@Override
+	protected FixedAnchor createTargetConAnchor() {
+		if (getModel() instanceof VarDeclaration && getModel().isIsInput()) {
+			return new VarInputConnAnchor(this);
+		}
+		return super.createTargetConAnchor();
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final Adapter a = getContentAdapter();
+			if (a.getTarget() instanceof final VarDeclaration vd
+					&& vd.getType() instanceof final ErrorMarkerDataTypeImpl em) {
+				return key.cast(em);
+			}
+		}
+
+		return super.getAdapter(key);
+	}
 
 }

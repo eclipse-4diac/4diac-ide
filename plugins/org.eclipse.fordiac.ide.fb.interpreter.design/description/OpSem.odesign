@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" name="OpSem" version="12.0.0.2017041100">
+  <ownedViewpoints name="OpSem Viewpoint" modelFileExtension="opsem xmi">
+    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="OpSem" domainClass="OpSem::EventManager" enablePopupBars="true">
+      <metamodel href="http://OperationalSemantics/1.0#/"/>
+      <metamodel href="org.eclipse.fordiac.ide.model.libraryElement#/"/>
+      <defaultLayer name="Default">
+        <nodeMappings name="Transaction" semanticCandidatesExpression="aql:diagram.target.transactions" domainClass="OpSem::Transaction">
+          <style xsi:type="style:SquareDescription" borderColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']" labelSize="12" showIcon="false" labelExpression="service:self.transactionName()" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" labelPosition="node" resizeKind="NSEW" color="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']"/>
+        </nodeMappings>
+        <nodeMappings name="InitNode" semanticCandidatesExpression="aql:diagram.target" domainClass="OpSem::EventManager">
+          <style xsi:type="style:DotDescription" labelSize="12" showIcon="false" labelExpression="" labelPosition="node" resizeKind="NSEW">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+          </style>
+        </nodeMappings>
+        <edgeMappings name="TransactionToTransaction" sourceMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']" targetMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']" targetFinderExpression="aql:self.outputEventOccurrences->collect(t | t.createdTransactions)">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <centerLabelStyleDescription labelSize="12" showIcon="false" labelExpression="aql:view.oclAsType(diagram::DEdge).targetNode.oclAsType(diagram::DDiagramElement).target.oclAsType(OpSem::FBTransaction).inputEventOccurrence.parentFB.name.concat('.'+view.oclAsType(diagram::DEdge).targetNode.oclAsType(diagram::DDiagramElement).target.oclAsType(OpSem::FBTransaction).inputEventOccurrence.event.name) ">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="InitToInitialTransaction" sourceMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']" targetMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']" targetFinderExpression="aql:self.transactions->first()">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <centerLabelStyleDescription labelSize="12" showIcon="false" labelExpression="aql:view.oclAsType(diagram::DEdge).targetNode.oclAsType(diagram::DDiagramElement).target.oclAsType(OpSem::FBTransaction).inputEventOccurrence.parentFB.name.concat('.'+view.oclAsType(diagram::DEdge).targetNode.oclAsType(diagram::DDiagramElement).target.oclAsType(OpSem::FBTransaction).inputEventOccurrence.event.name) ">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+      </defaultLayer>
+      <additionalLayers name="DataConnectionsLayer">
+        <edgeMappings name="TransactionToConnectionValues" sourceMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']" targetMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@additionalLayers[name='DataConnectionsLayer']/@containerMappings[name='GridContainerDataConnectionsValues']" targetFinderExpression="aql:self.inputEventOccurrence.resultFBRuntime">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <containerMappings name="GridContainerDataConnectionsValues" preconditionExpression="aql:self.transferData->size() &lt;> 0" semanticCandidatesExpression="aql:diagram.target.transactions->collect(t | t.inputEventOccurrence.resultFBRuntime)->select(fbRuntime | fbRuntime.oclIsKindOf(OpSem::FBNetworkRuntime))" domainClass="OpSem::FBNetworkRuntime" childrenPresentation="VerticalStack">
+          <subContainerMappings name="Header" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime" childrenPresentation="HorizontalStack">
+            <subContainerMappings name="SourceColumn" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="Source" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" widthComputationExpression="20" backgroundColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelFormat>bold</labelFormat>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="DestinationColumn" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="Destination" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" widthComputationExpression="20" backgroundColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelFormat>bold</labelFormat>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="ValueColumn" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="Value" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" widthComputationExpression="20" backgroundColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelFormat>bold</labelFormat>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="" hideLabelByDefault="true">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            </style>
+          </subContainerMappings>
+          <subContainerMappings name="RowConnectionToValueMap" semanticCandidatesExpression="feature:transferData" domainClass="OpSem::ConnectionToValueMap" childrenPresentation="HorizontalStack">
+            <subContainerMappings name="Source" semanticCandidatesExpression="aql:self" domainClass="OpSem::ConnectionToValueMap" childrenPresentation="HorizontalStack">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="service:getConnectionSource()" widthComputationExpression="20">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="Destination" semanticCandidatesExpression="aql:self" domainClass="OpSem::ConnectionToValueMap" childrenPresentation="HorizontalStack">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="service:getConnectionDestination()" widthComputationExpression="20">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="Value" semanticCandidatesExpression="aql:self" domainClass="OpSem::ConnectionToValueMap" childrenPresentation="HorizontalStack">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="service:getConnectionValue()" widthComputationExpression="20">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="" hideLabelByDefault="true">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            </style>
+          </subContainerMappings>
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" labelExpression="Data Connection Values">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
+      </additionalLayers>
+      <additionalLayers name="DataValuesLayer">
+        <edgeMappings name="TransactionToDataValues" sourceMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']" targetMapping="//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@additionalLayers[name='DataValuesLayer']/@containerMappings[name='GridContainerDataValues']" targetFinderExpression="aql:self.inputEventOccurrence.resultFBRuntime">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <containerMappings name="GridContainerDataValues" preconditionExpression="aql:self.getAllOutputVariables()->size() &lt;> 0" semanticCandidatesExpression="aql:diagram.target.transactions->collect(t | t.inputEventOccurrence.resultFBRuntime)->select(fbRuntime | fbRuntime.oclIsKindOf(OpSem::FBNetworkRuntime))" domainClass="OpSem::FBNetworkRuntime" childrenPresentation="VerticalStack">
+          <subContainerMappings name="Header" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime" childrenPresentation="HorizontalStack">
+            <subContainerMappings name="NameColumn" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="Name" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" widthComputationExpression="20" backgroundColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelFormat>bold</labelFormat>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="ValueColumn" semanticCandidatesExpression="aql:self" domainClass="OpSem::FBNetworkRuntime">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="Value" labelColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='TitleTransaction']" widthComputationExpression="20" backgroundColor="//@userColorsPalettes[name='FordiacPalette']/@entries[name='BackgroundGrey']">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelFormat>bold</labelFormat>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" labelExpression="" hideLabelByDefault="true">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            </style>
+          </subContainerMappings>
+          <subContainerMappings name="RowValueMap" semanticCandidatesExpression="service:self.getAllOutputVariables()" domainClass="libraryElement::VarDeclaration" childrenPresentation="HorizontalStack">
+            <subContainerMappings name="Name" semanticCandidatesExpression="aql:self" domainClass="libraryElement::VarDeclaration" childrenPresentation="HorizontalStack">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="aql:self.name" widthComputationExpression="20">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <subContainerMappings name="Value" semanticCandidatesExpression="aql:self" domainClass="libraryElement::VarDeclaration" childrenPresentation="HorizontalStack">
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="aql:self.value.value" widthComputationExpression="20">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="" hideLabelByDefault="true">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            </style>
+          </subContainerMappings>
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" labelExpression="Output Variables">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
+      </additionalLayers>
+      <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+    </ownedRepresentations>
+    <ownedJavaExtensions qualifiedClassName="org.eclipse.fordiac.ide.fb.interpreter.design.Services"/>
+  </ownedViewpoints>
+  <userColorsPalettes name="FordiacPalette">
+    <entries xsi:type="description:UserFixedColor" red="0" green="120" blue="215" name="TitleTransaction"/>
+    <entries xsi:type="description:UserFixedColor" red="234" green="234" blue="234" name="BackgroundGrey"/>
+  </userColorsPalettes>
+</description:Group>

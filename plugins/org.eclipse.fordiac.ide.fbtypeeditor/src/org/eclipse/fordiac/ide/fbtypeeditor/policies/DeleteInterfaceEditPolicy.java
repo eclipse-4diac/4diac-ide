@@ -23,8 +23,8 @@ public class DeleteInterfaceEditPolicy extends ComponentEditPolicy {
 
 	@Override
 	protected Command getDeleteCommand(final GroupRequest request) {
-		if (getHost().getModel() instanceof IInterfaceElement) {
-			return new DeleteInterfaceCommand((IInterfaceElement) getHost().getModel());
+		if (getHost().getModel() instanceof final IInterfaceElement ie) {
+			return new DeleteInterfaceCommand(ie);
 		}
 		return super.getDeleteCommand(request);
 	}

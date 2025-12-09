@@ -38,7 +38,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public SegmentItemProvider(AdapterFactory adapterFactory) {
+	public SegmentItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -46,7 +46,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -60,7 +60,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	/** This adds a property descriptor for the Position feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	protected void addPositionPropertyDescriptor(Object object) {
+	protected void addPositionPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
 				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_PositionableElement_position_feature"), //$NON-NLS-1$
@@ -72,7 +72,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	/** This adds a property descriptor for the Width feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */
-	protected void addWidthPropertyDescriptor(Object object) {
+	protected void addWidthPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Segment_width_feature"), //$NON-NLS-1$
@@ -85,7 +85,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	/** This adds a property descriptor for the Out Connections feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addOutConnectionsPropertyDescriptor(Object object) {
+	protected void addOutConnectionsPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_Segment_outConnections_feature"), //$NON-NLS-1$
@@ -94,17 +94,19 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 						LibraryElementPackage.Literals.SEGMENT__OUT_CONNECTIONS, true, false, true, null, null, null));
 	}
 
-	/** This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated */
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS);
+			childrenFeatures.add(LibraryElementPackage.Literals.SEGMENT__COMMUNICATION);
 		}
 		return childrenFeatures;
 	}
@@ -113,7 +115,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 * 
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -124,7 +126,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 * 
 	 * @generated NOT */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_SEGMENT.getImage());
 	}
 
@@ -132,8 +134,8 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 *
 	 * @generated not */
 	@Override
-	public String getText(Object object) {
-		String label = ((Segment) object).getName();
+	public String getText(final Object object) {
+		final String label = ((Segment) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_Segment_type") : label; //$NON-NLS-1$
 	}
 
@@ -143,7 +145,7 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 * 
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Segment.class)) {
@@ -165,20 +167,11 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 	 * 
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.COLORIZABLE_ELEMENT__COLOR,
 				LibraryElementFactory.eINSTANCE.createColor()));
-
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createVarDeclaration()));
-
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createAdapterDeclaration()));
-
-		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.SEGMENT__VAR_DECLARATIONS,
-				LibraryElementFactory.eINSTANCE.createLocalVariable()));
 	}
 
 }

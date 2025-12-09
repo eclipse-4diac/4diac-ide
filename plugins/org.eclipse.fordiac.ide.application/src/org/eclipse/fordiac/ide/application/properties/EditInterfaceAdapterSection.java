@@ -15,51 +15,44 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
+import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.commands.Command;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
 		final int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
-				getType().getInterface(), isInput, pos);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(last,
+				getCreationName(interfaceElement), getType().getInterface(), isInput, pos);
+		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput, final int index) {
-		return new CreateSubAppInterfaceElementCommand(interfaceElement, isInput, getType().getInterface(),
-				index);
+	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
+			final int index) {
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
+				isInput, getType().getInterface(), index);
+		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
 	}
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		if (input instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) input).getModel();
-		}
-		if (input instanceof UISubAppNetworkEditPart) {
-			return ((UISubAppNetworkEditPart) input).getSubApp();
-		}
-		if (input instanceof SubApp) {
-			return (SubApp) input;
-		}
-		return null;
+		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override
@@ -73,13 +66,24 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeSubAppIETypeCommand(data, newType);
+	protected SubApp getType() {
+		return (SubApp) type;
 	}
 
 	@Override
-	protected SubApp getType() {
-		return (SubApp) type;
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterface() : null;
+	}
+
+	@Override
+	public Command onNameChange(final IInterfaceElement ie, final String newValue) {
+		final ChangeNameCommand nameChangeCmd = ChangeNameCommand.forName(ie, newValue);
+		if (getType().isUnfolded()) {
+			return new ResizeGroupOrSubappCommand(
+					GetEditPartFromGraficalViewerHelper.findAbstractContainerContentEditFromInterfaceElement(ie),
+					nameChangeCmd);
+		}
+		return nameChangeCmd;
 	}
 
 }

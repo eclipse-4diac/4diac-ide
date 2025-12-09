@@ -16,21 +16,13 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.requests.ReconnectRequest;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 /** A command for reconnecting event connections. */
 public class ReconnectEventConnectionCommand extends AbstractReconnectConnectionCommand {
-
-	/** A command for reconnecting event connection.
-	 *
-	 * @param request the request */
-	public ReconnectEventConnectionCommand(final ReconnectRequest request, final FBNetwork parent) {
-		super(Messages.ReconnectEventConnectionCommand_LABEL, request, parent);
-	}
 
 	public ReconnectEventConnectionCommand(final Connection connection, final boolean isSourceReconnect,
 			final IInterfaceElement newTarget, final FBNetwork parent) {

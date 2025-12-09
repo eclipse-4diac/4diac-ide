@@ -37,8 +37,8 @@ public final class ServiceConstants {
 	private static final int MIDDLE_SECTION_PERCENT = 16;
 	private static final int RIGHT_LEFT_SECTION_PERCENT = 42;
 
-	private static final int NAME_WIDTH_PERCENT = 22;
-	private static final int PARAMETER_WIDTH_PERCENT = 10;
+	private static final int NAME_WIDTH_PERCENT = 17;
+	private static final int PARAMETER_WIDTH_PERCENT = 15;
 	private static final int ARROW_WIDTH_PERCENT = 10;
 	private static final int EMPTY_SPACE_WIDTH_PERCENT = 32;
 
@@ -55,7 +55,7 @@ public final class ServiceConstants {
 	}
 
 	public static int getNameLabelWidth() {
-		return ((WHOLE_WIDTH * NAME_WIDTH_PERCENT) / 100);
+		return ((WHOLE_WIDTH * NAME_WIDTH_PERCENT) / 100) + 32;
 	}
 
 	public static int getArrowWidth() {
@@ -63,7 +63,7 @@ public final class ServiceConstants {
 	}
 
 	public static int getEmptyLabelWidth() {
-		return ((WHOLE_WIDTH * EMPTY_SPACE_WIDTH_PERCENT) / 100);
+		return ((WHOLE_WIDTH * EMPTY_SPACE_WIDTH_PERCENT) / 100) + 27;
 	}
 
 	private ServiceConstants() {

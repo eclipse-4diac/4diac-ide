@@ -15,8 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import java.text.MessageFormat;
-
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -27,18 +25,16 @@ import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
+import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
+import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 
-/**
- * The Class FBTooltipFigure.
- */
+/** The Class FBTooltipFigure. */
 public class FBNetworkElementTooltipFigure extends Figure {
 
 	/**
@@ -49,37 +45,39 @@ public class FBNetworkElementTooltipFigure extends Figure {
 	public FBNetworkElementTooltipFigure(final FBNetworkElement element) {
 		setLayoutManager(new GridLayout());
 
-		Label instanceNameLabel = new Label(element.getName());
+		final Label instanceNameLabel = new Label(element.getName());
 		add(instanceNameLabel);
 		setConstraint(instanceNameLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		craeteTypeAndVersionLabel(element);
+		createTypeAndVersionLabel(element);
 
-		Figure line = new VerticalLineCompartmentFigure();
+		createPackageLabel(element);
+
+		final Figure line = new VerticalLineCompartmentFigure();
 		add(line);
 		setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		if (element.getComment() != null && element.getComment().length() > 0) {
-			FlowPage fp = new FlowPage();
-			TextFlow content = new TextFlow(element.getComment());
+		if (CommentHelper.hasComment(element)) {
+			final FlowPage fp = new FlowPage();
+			final TextFlow content = new TextFlow(element.getComment());
 			content.setLayoutManager(new ParagraphTextLayout(content, ParagraphTextLayout.WORD_WRAP_HARD));
 			fp.add(content);
 			line.add(fp);
 			line.setConstraint(fp, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, false, true));
 		}
 
-		FBNetwork fbNetwork = (FBNetwork) element.eContainer();
+		final FBNetwork fbNetwork = element.getFbNetwork();
 
-		Application app = (null != fbNetwork) ? (fbNetwork.getApplication()) : null;
-		if (app != null && app.eContainer() instanceof org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem) {
+		final Application app = (null != fbNetwork) ? (fbNetwork.getApplication()) : null;
+		if (app != null && app
+				.eContainer() instanceof final org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem automationSystem) {
 
-			Label system = new Label(
-					Messages.FBTooltipFigure_LABEL_System + ((AutomationSystem) app.eContainer()).getName());
+			final Label system = new Label(Messages.FBTooltipFigure_LABEL_System + automationSystem.getName());
 			line.add(system);
 			line.setConstraint(system, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 		}
 		if (app != null) {
-			Label application = new Label(Messages.FBTooltipFigure_LABEL_Application + app.getName());
+			final Label application = new Label(Messages.FBTooltipFigure_LABEL_Application + app.getName());
 			line.add(application);
 			line.setConstraint(application,
 					new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
@@ -90,35 +88,40 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		}
 	}
 
-	private static void createMappingInfo(final FBNetworkElement element, Figure parent) {
-		Figure line = new VerticalLineCompartmentFigure();
+	private static void createMappingInfo(final FBNetworkElement element, final Figure parent) {
+		final Figure line = new VerticalLineCompartmentFigure();
 		parent.add(line);
 		parent.setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		Resource res = element.getResource();
-		Device dev = res.getDevice();
-
-		Label mappingLabel = new Label(
-				MessageFormat.format(Messages.FBTooltipFigure_LABEL_MappedTo, dev.getName(), res.getName()));
+		final Label mappingLabel = new Label(MappingAnnotations.getHierarchicalName(element));
 		line.add(mappingLabel);
 		line.setConstraint(mappingLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 	}
 
-	private void craeteTypeAndVersionLabel(FBNetworkElement element) {
+	private void createTypeAndVersionLabel(final FBNetworkElement element) {
 		String labelText = org.eclipse.fordiac.ide.gef.Messages.FBFigure_TYPE_NOT_SET;
 
-		LibraryElement type = element.getType();
+		final LibraryElement type = element.getType();
 		if (type != null) {
 			labelText = type.getName();
 			if (!type.getVersionInfo().isEmpty() && null != type.getVersionInfo().get(0)) {
-				VersionInfo versionInfo = type.getVersionInfo().get(0);
+				final VersionInfo versionInfo = type.getVersionInfo().get(0);
 				labelText += Messages.FBNetworkElementTooltipFigure_VersionLabel + versionInfo.getVersion();
 			}
 		}
 
-		Label typeVersionLabel = new Label(labelText);
+		final Label typeVersionLabel = new Label(labelText);
 		add(typeVersionLabel);
 		setConstraint(typeVersionLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
+	}
+
+	private void createPackageLabel(final FBNetworkElement element) {
+		final LibraryElement type = element.getType();
+		if (!PackageNameHelper.getPackageName(type).isBlank()) {
+			final Label packageLabel = new Label(PackageNameHelper.getPackageName(type));
+			add(packageLabel);
+			setConstraint(packageLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
+		}
 	}
 }

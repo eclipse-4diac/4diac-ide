@@ -25,6 +25,7 @@ public class CommentTypeField {
 	private final TypeField typeField;
 
 	static class CommentTypeSeparator {
+		@SuppressWarnings("static-method")
 		String getLabel() {
 			return "    -    "; //$NON-NLS-1$
 		}
@@ -44,13 +45,6 @@ public class CommentTypeField {
 		this.commentField = new CommentField(referencedElement);
 		this.separator = new CommentTypeSeparator();
 		this.typeField = new TypeField(referencedElement);
-	}
-
-	public String getLabel() {
-		if (getReferencedElement().isIsInput()) {
-			return commentField.getLabel() + separator.getLabel() + typeField.getArrayLabel();
-		}
-		return typeField.getArrayLabel() + separator.getLabel() + commentField.getLabel();
 	}
 
 	@SuppressWarnings("rawtypes")

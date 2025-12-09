@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,43 +13,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.EditPart;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
-	protected FBNetworkElement getInputType(final Object input) {
-		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
-			return (FBNetworkElement) ((EditPart) input).getModel();
-		}
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
-		}
-		return null;
+	protected BlockFBNetworkElement getInputType(final Object input) {
+		return ShowInterfaceAdapterSection.getFBNetworkElementFromInput(input);
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		return null;
 	}
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return null;
 	}
 
@@ -64,41 +50,23 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createButtons = false;
-		super.createControls(parent, tabbedPropertySheetPage);
-		getInputsViewer().setCellModifier(new CellImmutableModifier());
-		final Table inputTable = (Table) getInputsViewer().getControl();
-		inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		getOutputsViewer().setCellModifier(new CellImmutableModifier());
-		final Table outputTable = (Table) getOutputsViewer().getControl();
-		outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+	protected BlockFBNetworkElement getType() {
+		return (BlockFBNetworkElement) type;
 	}
 
 	@Override
-	protected FBNetworkElement getType() {
-		return (FBNetworkElement) type;
+	public boolean isEditable() {
+		return false;
 	}
 
-	static class CellImmutableModifier implements ICellModifier {
+	@Override
+	public boolean isShowTableEditButtons() {
+		return false;
+	}
 
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return false;
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			return null;
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			// nothing to be done here
-		}
-
+	@Override
+	protected InterfaceList getInterface() {
+		return getType().getTypeInterface();
 	}
 
 }

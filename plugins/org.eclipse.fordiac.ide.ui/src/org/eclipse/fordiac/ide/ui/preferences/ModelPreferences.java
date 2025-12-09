@@ -35,16 +35,16 @@ public class ModelPreferences extends FieldEditorPreferencePage implements IWork
 	 */
 	@Override
 	public void createFieldEditors() {
-		IntegerFieldEditor allocationSize = new IntegerFieldEditor(PreferenceConstants.P_ALLOCATION_SIZE,
+		final IntegerFieldEditor allocationSize = new IntegerFieldEditor(UIPreferenceConstants.P_ALLOCATION_SIZE,
 				"Allocation block size in MiB", getFieldEditorParent(),
-				PreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
-		allocationSize.setValidRange(PreferenceConstants.P_ALLOCATION_SIZE_MIN_VALUE,
-				PreferenceConstants.P_ALLOCATION_SIZE_MAX_VALUE);
+				UIPreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE);
+		allocationSize.setValidRange(UIPreferenceConstants.P_ALLOCATION_SIZE_MIN_VALUE,
+				UIPreferenceConstants.P_ALLOCATION_SIZE_MAX_VALUE);
 		addField(allocationSize);
 	}
 
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 		// nothing todo here
 	}
 

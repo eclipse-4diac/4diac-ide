@@ -3,6 +3,8 @@
 <plugin>
    <extension-point id="ConnectionRouterProvider" name="ConnectionRouterProvider" schema="schema/ConnectionRouterProvider.exsd"/>
    <extension-point id="ChildrenProvider" name="ChildrenProvider" schema="schema/ChildrenProvider.exsd"/>
+   <extension-point id="graphicalAnnotationStyle" name="Graphical Annotation Style" schema="schema/graphicalAnnotationStyle.exsd"/>
+   <extension-point id="graphicalAnnotationProvider" name="Graphical Annotation Provider" schema="schema/graphicalAnnotationProvider.exsd"/>
     <extension point="org.eclipse.ui.themes">
         <themeElementCategory
             id="org.eclipse.fordiac.ide.themeCategory"
@@ -13,21 +15,76 @@
         </themeElementCategory>
         <fontDefinition
                 label="Diagram Font"
-                defaultsTo="org.eclipse.jface.textfont"
                 categoryId="org.eclipse.fordiac.ide.themeCategory"
                 id="org.eclipse.fordiac.ide.preferences.diagramFontDefinition">
             <description>
                 Font to be used in all 4diac IDE graphical editors and diagrams
             </description>
+            <!--These font values are based on the current setting for Eclipse Platform JFace Text Editor Font-->
+            <fontValue
+               	os="linux"
+               	value="Monospace-regular-10"
+               	ws="gtk">
+			</fontValue>
+	        <fontValue
+	        	os="win32"
+	        	value="Consolas-regular-10">
+	        </fontValue>
+	        <fontValue
+	        	os="macosx"
+	            value="Menlo-regular-12">
+	         </fontValue>
         </fontDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.errorColor"
+              label="Error Color"
+              value="255,0,128">
+        </colorDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.warningColor"
+              label="Warning Color"
+              value="244,200,45">
+        </colorDefinition>
+        <colorDefinition
+              categoryId="org.eclipse.fordiac.ide.themeCategory"
+              id="org.eclipse.fordiac.ide.gef.infoColor"
+              label="Info Color"
+              value="130,160,190">
+        </colorDefinition>
     </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
+            class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
             id="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"
-            name="Diagram Preferences">
+            name="Diagram">
+      </page>
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.gef.preferences.GridPreferencePage"
+            id="org.eclipse.fordiac.ide.gef.preferences.GridPreferences"
+            name="Grid">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.gef.preferences.DiagramPreferencePage"
+            id="org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"
+            name="Diagram">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
       </page>
    </extension>
    <extension
@@ -51,4 +108,183 @@
             name="Adjustable Router (no Jumplinks)">
       </ConnectionRouterFactory>
    </extension>
+	<extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.gef.zoom100"
+            name="Zoom to 100%">
+      </command>
+      <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            id="org.eclipse.fordiac.ide.gef.zoomfitpage"
+            name="Zoom fit Page">
+      </command>
+	</extension> 
+	<extension
+    		point="org.eclipse.ui.handlers">
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomInHandler"
+        		commandId="org.eclipse.ui.edit.text.zoomIn">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomOutHandler"
+        		commandId="org.eclipse.ui.edit.text.zoomOut">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.Zoom100Handler"
+        		commandId="org.eclipse.fordiac.ide.gef.zoom100">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
+    	<handler class="org.eclipse.fordiac.ide.gef.handlers.ZoomFitPageHandler"
+        		commandId="org.eclipse.fordiac.ide.gef.zoomfitpage">
+        	<activeWhen>
+         		<or> 
+         	 		<with variable="activeEditor">
+                   		<adapt type="org.eclipse.gef.editparts.ZoomManager" />
+            		</with>
+           		</or>                  
+         	</activeWhen>
+		</handler>    
+	</extension>
+	<extension
+		point="org.eclipse.ui.contexts">
+		<context
+			id="org.eclipse.fordiac.ide.gef"
+			description="%context.graphicalEditing.description"
+			name="%context.graphicalEditing.name"
+			parentId="org.eclipse.ui.contexts.window">
+		</context>
+	</extension>  
+	<extension
+			point="org.eclipse.ui.bindings">
+		<key
+        	commandId="org.eclipse.fordiac.ide.gef.zoom100"
+            contextId="org.eclipse.fordiac.ide.gef"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+0"/>
+		<key
+        	commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
+            contextId="org.eclipse.fordiac.ide.gef"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+0"/>
+        <key
+	        commandId="org.eclipse.ui.edit.text.zoomIn"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1+="/>    
+      	<key
+	        commandId="org.eclipse.ui.edit.text.zoomIn"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1++"/>
+	  	<key
+	        commandId="org.eclipse.ui.edit.text.zoomOut"
+	        contextId="org.eclipse.fordiac.ide.gef"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+	        sequence="M1+-"/>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=org.eclipse.ui.workbench.navigate">
+			<toolbar id="org.eclipse.fordiac.ide.toolbars.zoomToolbar">
+				<command
+	            		commandId="org.eclipse.ui.edit.text.zoomOut"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"/>
+	            <control class="org.eclipse.fordiac.ide.gef.handlers.FontComboContributionItem"
+              			id="org.eclipse.fordiac.ide.toolbars.fontToolbarComboBox">
+              		<visibleWhen>
+         				<or> 
+         					<with variable="activeEditor">
+                   				<adapt type="org.eclipse.ui.editors.text.TextEditor"/>
+            				</with>
+           				</or>                 
+         			</visibleWhen>
+        		</control>
+	            <control class="org.eclipse.fordiac.ide.gef.handlers.ZoomComboContributionItem"
+              			id="org.eclipse.fordiac.ide.toolbars.zoomToolbarComboBox">
+              		<visibleWhen>
+         				 <or> 
+         	 				<with variable="activeEditor">
+                   				<adapt type="org.eclipse.gef.editparts.ZoomManager"/>
+            				</with>
+           				</or> 
+         			</visibleWhen>
+        		</control>
+				<command
+	            		commandId="org.eclipse.ui.edit.text.zoomIn"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"/>
+				<command
+	            		commandId="org.eclipse.fordiac.ide.gef.zoom100"
+	                  	icon="fordiacimage://ICON_ZOOM_100"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Set zoom level to 100%">
+	            </command>
+				<command
+	            		commandId="org.eclipse.fordiac.ide.gef.zoomfitpage"
+	                  	icon="fordiacimage://ICON_ZOOM_PAGE"
+	                  	id="org.eclipse.fordiac.ide.toolbars.zoomToolbar"
+	                  	tooltip="Set zoom level to fit the page">
+	            </command>
+			</toolbar>
+		</menuContribution>	
+	</extension>
+	<extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="property.contributor.fb">
+         <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalVarsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.propertysection.ivars"
+               tab="property.tab.ivars">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalConstVarsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.propertysection.icvars"
+               tab="property.tab.icvars">
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalFbsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.section.ifbs"
+               tab="property.tab.ifbs">
+         </propertySection>
+         </propertySections>         
+   </extension>
+ <extension
+       point="org.eclipse.fordiac.ide.gef.graphicalAnnotationStyle">
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.info"
+          layer="10"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.warning"
+          layer="20"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.error"
+          layer="30"
+          styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
+    </style>
+ </extension>
 </plugin>

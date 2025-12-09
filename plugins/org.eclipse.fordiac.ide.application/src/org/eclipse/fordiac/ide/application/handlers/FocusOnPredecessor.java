@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2011, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,9 +25,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -42,7 +42,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 	private static final int NON_TRANSPARENT = 255;
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final Set<ConfigurableObject> elementToHighlight = new HashSet<>();
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
@@ -52,45 +52,44 @@ public class FocusOnPredecessor extends AbstractHandler {
 			final Object obj = entry.getKey();
 			final Object editPartAsObject = entry.getValue();
 			final int transparency = (elementToHighlight.contains(obj)) ? NON_TRANSPARENT : HALF_TRANSPERENT;
-			if (editPartAsObject instanceof AbstractViewEditPart) {
-				((AbstractViewEditPart) editPartAsObject).setTransparency(transparency);
-			} else if (editPartAsObject instanceof ConnectionEditPart) {
-				((ConnectionEditPart) editPartAsObject).setTransparency(transparency);
+			if (editPartAsObject instanceof final AbstractViewEditPart aViewAP) {
+				aViewAP.setTransparency(transparency);
+			} else if (editPartAsObject instanceof final ConnectionEditPart connEP) {
+				connEP.setTransparency(transparency);
 			}
 		}
 		return null;
 	}
 
-	private static void getPredecessorFBNetworkElements(FBNetworkElement element,
-			Set<ConfigurableObject> elementToHighlight) {
-		if (null != element) {
-			elementToHighlight.add(element);
-			for (final VarDeclaration inVar : element.getInterface().getInputVars()) {
-				for (final Connection con : inVar.getInputConnections()) {
-					final IInterfaceElement source = con.getSource();
-					if (source != null) {
-						final FBNetworkElement sourceElement = source.getFBNetworkElement();
-						if (null != sourceElement) {
-							elementToHighlight.add(con);
-							if (!elementToHighlight.contains(sourceElement)) {
-								getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
-							}
-						}
+	private static void getPredecessorFBNetworkElements(final BlockFBNetworkElement element,
+			final Set<ConfigurableObject> elementToHighlight) {
+		if (null == element) {
+			return;
+		}
+		elementToHighlight.add(element);
+		for (final VarDeclaration inVar : element.getInterface().getInputVars()) {
+			for (final Connection con : inVar.getInputConnections()) {
+				final IInterfaceElement source = con.getSource();
+				if (source != null && source.getBlockFBNetworkElement() != null) {
+					final BlockFBNetworkElement sourceElement = source.getBlockFBNetworkElement();
+					elementToHighlight.add(con);
+					if (!elementToHighlight.contains(sourceElement)) {
+						getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
 					}
 				}
 			}
 		}
 	}
 
-	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
+	private static BlockFBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
-			if (selObj instanceof EditPart) {
-				selObj = ((EditPart) selObj).getModel();
+		if (selection instanceof final StructuredSelection structSel) {
+			Object selObj = structSel.getFirstElement();
+			if (selObj instanceof final EditPart ep) {
+				selObj = ep.getModel();
 			}
-			if (selObj instanceof FBNetworkElement) {
-				return (FBNetworkElement) selObj;
+			if (selObj instanceof final BlockFBNetworkElement fbne) {
+				return fbne;
 			}
 		}
 		return null;

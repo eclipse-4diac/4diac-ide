@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, AIT, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, AIT, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,127 +18,35 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
-	private final Adapter contentAdapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			switch (notification.getEventType()) {
-			case Notification.ADD:
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
-				refreshChildren();
-				break;
-			case Notification.SET:
-				refreshVisuals();
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
-	private final Adapter subAppInterfaceAdapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			switch (notification.getEventType()) {
-			case Notification.ADD:
-				if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
-						.equals(notification.getFeature())) {
-					refreshVisuals();
-					break;
-				}
-				//$FALL-THROUGH$
-			case Notification.ADD_MANY:
-			case Notification.MOVE:
-			case Notification.REMOVE:
-			case Notification.REMOVE_MANY:
-				refreshChildren();
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
-	@Override
-	public void activate() {
-		super.activate();
-		if ((null != getModel()) && !getModel().eAdapters().contains(contentAdapter)) {
-			getModel().eAdapters().add(contentAdapter);
-			if ((null != getSubApp()) && !getSubApp().getInterface().eAdapters().contains(subAppInterfaceAdapter)) {
-				getSubApp().getInterface().eAdapters().add(subAppInterfaceAdapter);
-			}
-		}
-	}
-
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		if (null != getModel()) {
-			getModel().eAdapters().remove(contentAdapter);
-			if (null != getSubApp()) {
-				getSubApp().getInterface().eAdapters().remove(subAppInterfaceAdapter);
-			}
-		}
-	}
 
 	public SubApp getSubApp() {
 		return (SubApp) getModel().eContainer();
 	}
 
 	@Override
-	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.add(child);
-			} else { // if layer does not exist use default layer
-				super.addChildVisual(childEditPart, index);
-			}
-		} else {
-			super.addChildVisual(childEditPart, index);
+	protected List<?> getModelChildren() {
+		@SuppressWarnings("unchecked")
+		final List<Object> modelChildren = (List<Object>) super.getModelChildren();
+		if (getModel() != null) {
+			final InterfaceList ifList = getInterfaceList();
+			modelChildren.addAll(ifList.getInOutVars());
+			modelChildren.addAll(ifList.getOutMappedInOutVars());
 		}
-	}
-
-	@Override
-	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.remove(child);
-			} else { // if layer does not exist use default layer
-				super.removeChildVisual(childEditPart);
-			}
-		} else {
-			super.removeChildVisual(childEditPart);
-		}
+		return modelChildren;
 	}
 
 	@Override
 	protected void createEditPolicies() {
+		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes (e.g. moving and/or resizing) of model
 		// elements and creation of new model elements

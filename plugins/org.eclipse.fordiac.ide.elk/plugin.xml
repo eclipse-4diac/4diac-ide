@@ -1,82 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-  <extension point="org.eclipse.ui.commands">
-    <command
-        id="org.eclipse.fordiac.ide.elk.layout"
-        name="Layout with ELK">
-    </command>
-</extension>
-<extension point="org.eclipse.ui.handlers">
-    <handler
-        class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler"
-        commandId="org.eclipse.fordiac.ide.elk.layout">
-    </handler>
-</extension>
-<extension point="org.eclipse.ui.menus">
-   <menuContribution
-         allPopups="false"
-         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
-      <separator name="layouting stuff" visible="true"/>
-      <command
-            commandId="org.eclipse.fordiac.ide.elk.layout"
-            label="Auto Layouting"
-            style="push">
-            <visibleWhen checkEnabled="false">
-            	<with variable="selection">
-            	<and>
-            		<or>
-            			<count value="0" />
-            			<and>
-            				<count value="1" />
-            				<iterate>
-            					<or>
-            						<instanceof
-                       					value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
-            						</instanceof>
-            						<instanceof
-                       					value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart">
-            						</instanceof>
-            					</or>
-            				</iterate>
-            			</and>
-            		</or>
-            		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-            	</and>
-            	</with>
-            </visibleWhen>
-               </command>
-	</menuContribution> 
-	<menuContribution
-         allPopups="false"
-         locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
-      <separator name="layouting stuff" visible="true"/>
-      <command
-            commandId="org.eclipse.fordiac.ide.elk.layout"
-            label="Auto Layouting"
-            style="push">
-            <visibleWhen checkEnabled="false">
-            	<with variable="selection">
-            		<and>
-            			<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
-            		</and>
-            	</with>
-            </visibleWhen>
-               </command>
-	</menuContribution> 
-   </extension>
- 	<extension point="org.eclipse.elk.core.service.layoutConnectors">
- 		<setup
-         	class="org.eclipse.fordiac.ide.elk.FordiacLayoutSetup">
- 		</setup>
+
+	<!-- Command Definitions -->
+	<extension point="org.eclipse.ui.commands">
+		<command id="org.eclipse.fordiac.ide.elk.layout" name="Layout with ELK"/>
+		<command id="org.eclipse.fordiac.ide.elk.connectionLayout" name="Layout with ELK"/>
+		<command id="org.eclipse.fordiac.ide.elk.connectionLayoutMule" name="Return layout command"/>
+		<command categoryId="org.eclipse.fordiac.ide.commands.category" id="org.eclipse.fordiac.ide.elk.systemExplorerLayout" name="Connection Layouting..."/>
 	</extension>
+
+	<!-- Handlers for Commands -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler" commandId="org.eclipse.fordiac.ide.elk.layout"/>
+		<handler class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandler" commandId="org.eclipse.fordiac.ide.elk.connectionLayout"/>
+		<handler class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandlerMule" commandId="org.eclipse.fordiac.ide.elk.connectionLayoutMule"/>
+		<handler class="org.eclipse.fordiac.ide.elk.handlers.SystemLayoutHandler" commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout"/>
+	</extension>
+
+	<!-- Menu Contributions -->
+	<extension point="org.eclipse.ui.menus">
+		<!-- System Layout Menu -->
+		<menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
+			<command commandId="org.eclipse.fordiac.ide.elk.systemExplorerLayout" style="push" tooltip="Layout the entire system.">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<iterate ifEmpty="false">
+							<or>
+								<adapt type="org.eclipse.core.resources.IProject"/>
+								<adapt type="org.eclipse.core.resources.IFile">
+									<or>
+										<test property="org.eclipse.core.resources.extension" value="sys"/>
+										<test property="org.eclipse.core.resources.extension" value="sub"/>
+										<test property="org.eclipse.fordiac.ide.application.utilities.isCFBFile"/>
+									</or>
+								</adapt>
+								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application"/>
+								<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+							</or>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+
+		<!-- Layout Commands in Popup Menus -->
+		<menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+			<separator name="layouting stuff" visible="true"/>
+			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="Auto Layouting" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<and>
+							<or>
+								<count value="0"/>
+								<and>
+									<count value="1"/>
+									<iterate>
+										<or>
+											<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+											<instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+										</or>
+									</iterate>
+								</and>
+							</or>
+							<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+						</and>
+					</with>
+				</visibleWhen>
+			</command>
+
+			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="Connection Layouting" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<and>
+							<or>
+								<count value="0"/>
+								<and>
+									<count value="1"/>
+									<iterate>
+										<or>
+											<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+											<instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+										</or>
+									</iterate>
+								</and>
+							</or>
+							<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+						</and>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+
+		<!-- Additional Menu Contributions -->
+		<menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">
+			<separator name="layouting stuff" visible="true"/>
+			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="Auto Layouting" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+					</with>
+				</visibleWhen>
+			</command>
+
+			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="Connection Layouting" style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+
+	<!-- Property Testers -->
 	<extension point="org.eclipse.core.expressions.propertyTesters">
-    	<propertyTester
-          class="org.eclipse.fordiac.ide.application.utilities.ViewerPropertyTester"
-          id="org.eclipse.fordiac.ide.application.utilities.viewerPropertyTester"
-          namespace="org.eclipse.fordiac.ide.application.utilities"
-          properties="isViewer"
-          type="java.lang.Object">
-    	</propertyTester>
- </extension> 
+		<propertyTester class="org.eclipse.fordiac.ide.application.utilities.ViewerPropertyTester"
+						id="org.eclipse.fordiac.ide.application.utilities.viewerPropertyTester"
+						namespace="org.eclipse.fordiac.ide.application.utilities"
+						properties="isViewer"
+						type="java.lang.Object"/>
+		<propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsExpandedSubappPropertyTester"
+						id="org.eclipse.fordiac.ide.application.utilities.isExpandedSubappPropertyTester"
+						namespace="org.eclipse.fordiac.ide.application.utilities"
+						properties="isExpandedSubapp"
+						type="java.lang.Object"/>
+		<propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsCFBFilePropertyTester"
+						id="org.eclipse.fordiac.ide.application.utilities.isCFBFilePropertyTester"
+						namespace="org.eclipse.fordiac.ide.application.utilities"
+						properties="isCFBFile"
+						type="java.lang.Object"/>
+	</extension>
+
+	<!-- Preferences -->
+	<extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.elk.preferences.LayoutPreferencePage"
+            id="org.eclipse.fordiac.ide.elk.layoutPreferences"
+            name="Layout">
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.elk.preferences.ElkPreferenceInitializer">
+      </initializer>
+   </extension>
+
 </plugin>

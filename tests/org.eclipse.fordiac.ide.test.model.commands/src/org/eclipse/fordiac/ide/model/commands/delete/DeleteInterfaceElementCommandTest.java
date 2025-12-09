@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.insert.CopyInterfaceElementCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -29,32 +30,28 @@ import org.junit.jupiter.params.provider.Arguments;
 public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 
 	public static State executeCommandDeleteInput(final State state) {
-		final IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
-				.getInterface().getInputVars().get(0);
+		final IInterfaceElement interfaceElement = getFB(state).getInterface().getInputVars().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
 
 		return commandExecution(state);
 	}
 
 	public static State executeCommandDeleteOutput(final State state) {
-		final IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
-				.getInterface().getOutputVars().get(0);
+		final IInterfaceElement interfaceElement = getFB(state).getInterface().getOutputVars().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
 
 		return commandExecution(state);
 	}
 
 	public static State executeCommandDeleteEventInput(final State state) {
-		final IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
-				.getInterface().getEventInputs().get(0);
+		final IInterfaceElement interfaceElement = getFB(state).getInterface().getEventInputs().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
 
 		return commandExecution(state);
 	}
 
 	public static State executeCommandDeleteEventOutput(final State state) {
-		final IInterfaceElement interfaceElement = state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME)
-				.getInterface().getEventOutputs().get(0);
+		final IInterfaceElement interfaceElement = getFB(state).getInterface().getEventOutputs().get(0);
 		state.setCommand(new DeleteInterfaceCommand(interfaceElement));
 
 		return commandExecution(state);
@@ -104,7 +101,7 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 							CopyInterfaceElementCommandTest.verifyStateNoEventInput(s, t);
 							CopyInterfaceElementCommandTest.verifyStateNoEventOutput(s, t);
 						}) //
-				);
+		);
 
 		final Collection<Arguments> commands = new ArrayList<>();
 
@@ -117,9 +114,13 @@ public class DeleteInterfaceElementCommandTest extends FBNetworkTestBase {
 					CopyInterfaceElementCommandTest.verifyStateHasEventOutput(s, t);
 				}, //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
+	}
+
+	private static BlockFBNetworkElement getFB(final State state) {
+		return (BlockFBNetworkElement) state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME);
 	}
 
 }

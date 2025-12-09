@@ -29,7 +29,8 @@ import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -55,17 +55,25 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		public void notifyChanged(final Notification msg) {
 			super.notifyChanged(msg);
 			final Object feature = msg.getFeature();
-			if ((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_PaletteEntry().equals(feature))
-					&& (fbNetworkElement.getType() == null)) {
-				// the subapp/cfb was detached from the type
+			if (((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
+					&& (fbNetworkElement.getTypeEntry() == null)) || isSubAppToggledToCollapsed(msg)) {
+				// the subapp/cfb was detached from the type or subapp is being collapsed
 				closeEditor();
 			}
 		}
+
+		private boolean isSubAppToggledToCollapsed(final Notification msg) {
+			return msg.getNewValue() == null && msg.getOldValue() instanceof final Attribute attr
+					&& attr.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
+					&& "true".equals(attr.getValue()); //$NON-NLS-1$
+		}
+
 	};
 
 	private Adapter fbNetworkAdapter;
 
-	// subclasses need to override this method and return the fbnetwork contained in fbNetworkElement
+	// subclasses need to override this method and return the fbnetwork contained in
+	// fbNetworkElement
 	@Override
 	public abstract FBNetwork getModel();
 
@@ -74,9 +82,14 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	protected String getContextId() {
+		return "org.eclipse.fordiac.ide.fbnetwork"; //$NON-NLS-1$
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (FBNetworkElement.class == adapter) {
-			return getFbNetworkElement();
+			return adapter.cast(getFbNetworkElement());
 		}
 		return super.getAdapter(adapter);
 	}
@@ -87,21 +100,23 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		if (fbNetworkElement != null) {
 			viewer.setContents(getModel());
 		}
+		addAnnotationModelDispatcher();
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
-		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-
-		if (input instanceof CompositeAndSubAppInstanceViewerInput) {
-			final CompositeAndSubAppInstanceViewerInput untypedInput = (CompositeAndSubAppInstanceViewerInput) input;
-			fbNetworkElement = untypedInput.getContent();
+	public void setInput(final IEditorInput input) {
+		if (!(input instanceof final CompositeAndSubAppInstanceViewerInput viewerEI)) {
+			throw new IllegalArgumentException(
+					"Network viewers only accept CompositeAndSubAppInstanceViewerInput as valid inputs!"); //$NON-NLS-1$
+		}
+		if (getEditorInput() == null) {
+			// basic viewer setup that should be done only the first time the viewer is
+			// getting an input
+			fbNetworkElement = viewerEI.getContent();
 			final String name = getNameHierarchy();
 			setPartName(name);
 			// the tooltip will show the whole name when hovering
-			untypedInput.setName(name);
+			viewerEI.setName(name);
 			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
 			final EObject container = fbNetworkElement.eContainer();
 			if (container != null) {
@@ -109,6 +124,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				container.eAdapters().add(fbNetworkAdapter);
 			}
 		}
+		super.setInput(input);
 	}
 
 	@Override
@@ -158,22 +174,20 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		// TODO mabye a nice helper function to be put into the fb model
 		final StringBuilder retVal = new StringBuilder(fbNetworkElement.getName());
 		final EObject cont = fbNetworkElement.eContainer().eContainer();
-		if (cont instanceof INamedElement) {
-			retVal.insert(0, ((INamedElement) cont).getName() + "."); //$NON-NLS-1$
+		if (cont instanceof final INamedElement namedEl) {
+			retVal.insert(0, namedEl.getName() + "."); //$NON-NLS-1$
 		}
 		return retVal.toString();
 	}
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new FBNetworkRootEditPart(getModel(), null, // viewers don't need a palette to simplify things just set
-				// it null
-				getSite(), getActionRegistry()) {
+		return new FBNetworkRootEditPart(getModel(), getSite(), getActionRegistry()) {
 			@Override
 			protected IFigure createFigure() {
 				final IFigure viewPort = super.createFigure();
-				final IFigure backGround = (IFigure) viewPort.getChildren().get(0);
-				final IFigure drawingAreaContainer = (IFigure) backGround.getChildren().get(0);
+				final IFigure backGround = viewPort.getChildren().get(0);
+				final IFigure drawingAreaContainer = backGround.getChildren().get(0);
 				final Color backGroundColor = backGround.getBackgroundColor();
 				backGround.setBackgroundColor(ColorHelper.lighter(backGroundColor));
 				drawingAreaContainer.setBackgroundColor(backGroundColor);

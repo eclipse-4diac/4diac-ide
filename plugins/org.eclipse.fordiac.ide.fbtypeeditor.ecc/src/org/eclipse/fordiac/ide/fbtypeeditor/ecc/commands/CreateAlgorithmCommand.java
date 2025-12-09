@@ -23,9 +23,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateAlgorithmCommand extends Command implements CreationCommand {
+public class CreateAlgorithmCommand extends CreationCommand {
 	private static final String DEFAULT_ALGORITHM_NAME = "ALG1"; //$NON-NLS-1$
 
 	private final BasicFBType fbType;
@@ -36,7 +35,7 @@ public class CreateAlgorithmCommand extends Command implements CreationCommand {
 	private final String name;
 
 	public CreateAlgorithmCommand(final BasicFBType fbType) {
-		this(fbType, fbType.getAlgorithm().size() - 1, null);
+		this(fbType, fbType.getCallables().size() - 1, null);
 	}
 
 	public CreateAlgorithmCommand(final BasicFBType fbType, final ECAction action) {
@@ -68,7 +67,7 @@ public class CreateAlgorithmCommand extends Command implements CreationCommand {
 		if (null != action) {
 			action.setAlgorithm(oldAlgorithm);
 		}
-		fbType.getAlgorithm().remove(newAlgorithm);
+		fbType.getCallables().remove(newAlgorithm);
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class CreateAlgorithmCommand extends Command implements CreationCommand {
 		if (null != action) {
 			action.setAlgorithm(newAlgorithm);
 		}
-		fbType.getAlgorithm().add(index, newAlgorithm);
+		fbType.getCallables().add(index, newAlgorithm);
 	}
 
 	@Override

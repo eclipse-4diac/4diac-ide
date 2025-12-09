@@ -1,0 +1,190 @@
+/*******************************************************************************
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Mario Kastner
+ *     - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+
+package org.eclipse.fordiac.ide.typemanagement.refactoring.move;
+
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Optional;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
+import org.eclipse.ltk.core.refactoring.participants.MoveParticipant;
+
+public class MoveTypeRefactoringParticipant extends MoveParticipant {
+
+	private String oldPackageName;
+	private String newPackageName;
+	private TypeEntry type;
+	private IFile destinationFile;
+	private IFile currentFile;
+
+	@Override
+	protected boolean initialize(final Object element) {
+		if (element instanceof final IFile file) {
+			this.currentFile = file;
+			this.type = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			this.oldPackageName = type.getPackageName();
+			if (getArguments().getDestination() instanceof final IResource folder) {
+				final URI destinationURI = URI.createPlatformResourceURI(folder.getFullPath().toString(), true)
+						.appendSegment(type.getURI().lastSegment());
+				this.destinationFile = getFileFromURI(destinationURI);
+				this.newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public String getName() {
+		return MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName);
+	}
+
+	@Override
+	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
+			throws OperationCanceledException {
+		final RefactoringStatus status = new RefactoringStatus();
+		if (oldPackageName.contentEquals(newPackageName)) {
+			status.addWarning(Messages.MoveTypeToPackage_PackageNameIsTheSame);
+		}
+		if (!(getArguments().getDestination() instanceof IResource)) {
+			status.addError(Messages.MoveTypeToPackage_InvalidDestination);
+		}
+		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(newPackageName);
+		if (errorMessage.isPresent()) {
+			status.addFatalError(errorMessage.get());
+		}
+		return status;
+	}
+
+	@Override
+	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
+		parentChange.add(new MoveTypeChange(newPackageName, getName(), this.type.getURI()));
+		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
+		return parentChange;
+	}
+
+	@Override
+	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		if (type instanceof final DataTypeEntry dtEntry) {
+			return getDataTypeInstanceChanges(dtEntry);
+		}
+		return getInstanceChanges(type);
+	}
+
+	static IFile getFileFromURI(final URI uri) {
+		if (uri.isPlatformResource()) {
+			final Path filePath = new Path(uri.toPlatformString(true));
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+		}
+		return null;
+	}
+
+	private CompositeChange getDataTypeInstanceChanges(final DataTypeEntry dtEntry) {
+		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
+
+		for (final EObject eObject : searchResult) {
+			if (eObject instanceof final VarDeclaration varDecl
+					&& !(varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB)) { // configurable fb pins are
+																							// updated below
+				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
+						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
+			}
+			if (eObject instanceof final BlockFBNetworkElement elem) {
+				change.add(new UpdateInstanceChange(elem, dtEntry));
+			}
+		}
+
+		return change;
+	}
+
+	private static CompositeChange getInstanceChanges(final TypeEntry typeEntry) {
+		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
+
+		for (final EObject eObject : result) {
+			if (eObject instanceof final BlockFBNetworkElement elem) {
+				change.add(new UpdateFBInstanceChange(elem, typeEntry));
+			}
+		}
+		return change;
+	}
+
+	private String getNewTypeDeclaration(final VarDeclaration varDeclaration) {
+		final StringBuilder typeDeclaration = new StringBuilder(varDeclaration.getFullTypeName());
+		final int packageNameEnd = typeDeclaration.lastIndexOf(PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		if (packageNameEnd == -1) {
+			typeDeclaration.insert(typeDeclaration.indexOf(varDeclaration.getTypeName()),
+					newPackageName + PackageNameHelper.PACKAGE_NAME_DELIMITER);
+		} else {
+			typeDeclaration.replace(packageNameEnd - oldPackageName.length(), packageNameEnd, newPackageName);
+		}
+		return typeDeclaration.toString();
+	}
+
+	class UpdateInstanceChange extends UpdateFBInstanceChange {
+		final String visibleChildrenString;
+
+		public UpdateInstanceChange(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
+			super(instance, typeEntry);
+			visibleChildrenString = (instance instanceof final StructManipulator structManipulator)
+					? ConfigurableFBManagement.buildVisibleChildrenString(structManipulator.getMemberVars())
+					: ""; //$NON-NLS-1$
+		}
+
+		@Override
+		protected Command createCommand(final BlockFBNetworkElement element) {
+			if (element instanceof final StructManipulator demux
+					&& typeEntry.getType() instanceof final StructuredType structuredType) {
+				return new ChangeStructCommand(demux, structuredType, visibleChildrenString, true);
+			}
+			return super.createCommand(element);
+		}
+
+	}
+
+}

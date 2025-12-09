@@ -15,9 +15,7 @@
 package org.eclipse.fordiac.ide.subapptypeeditor;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -34,8 +32,11 @@ public class SubAppTypeEditor extends FBTypeEditor {
 
 	private static final int SUBAPP_NETWORL_EDITOR_INDEX = 1;
 
-	/** reworked FormEditorSelection provider allowing to change the current multipage editor see
-	 * {@link org.eclipse.ui.forms.editor.FormEditor.FormEditorSelectionProvider} */
+	/**
+	 * reworked FormEditorSelection provider allowing to change the current
+	 * multipage editor see
+	 * {@link org.eclipse.ui.forms.editor.FormEditor.FormEditorSelectionProvider}
+	 */
 	private static class SubAppTypeEditorSelectionProvider extends MultiPageSelectionProvider {
 		private ISelection globalSelection;
 
@@ -93,40 +94,30 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	}
 
 	@Override
-	protected FBType getFBType(final PaletteEntry paletteEntry) {
-		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return ((SubApplicationTypePaletteEntry) paletteEntry).getSubApplicationType();
-		}
-		return null;
-	}
-
-	@Override
-	protected boolean checkTypeEditorType(final FBType fbType, final String editorType) {
-		return (("ForAllTypes".equals(editorType)) || //$NON-NLS-1$
-				("subapp".equals(editorType))); //$NON-NLS-1$
-	}
-
-	@Override
-	protected boolean checkTypeSaveAble() {
-		// no additional checks are needed
-		return true;
-	}
-
-	@Override
 	protected void pageChange(final int newPageIndex) {
 		if ((SUBAPP_NETWORL_EDITOR_INDEX == getCurrentPage()) && (newPageIndex != SUBAPP_NETWORL_EDITOR_INDEX)) {
-			// the SubAppNetworkBreadCrumbEditor is open restore our editor as the selection editor
+			// the SubAppNetworkBreadCrumbEditor is open restore our editor as the selection
+			// editor
 			getSelectionProvider().setMultiPageEditor(this);
 		} else if ((SUBAPP_NETWORL_EDITOR_INDEX != getCurrentPage()) && (newPageIndex == SUBAPP_NETWORL_EDITOR_INDEX)) {
-			// the SubAppNetworkBreadCrumbEditor is about to open set the subappnetwork editor as multipage editor
+			// the SubAppNetworkBreadCrumbEditor is about to open set the subappnetwork
+			// editor as multipage editor
 			getSelectionProvider()
-			.setMultiPageEditor((SubAppNetworkBreadCrumbEditor) getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
+					.setMultiPageEditor((SubAppNetworkBreadCrumbEditor) getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
 		}
 		super.pageChange(newPageIndex);
 	}
 
 	private SubAppTypeEditorSelectionProvider getSelectionProvider() {
 		return (SubAppTypeEditorSelectionProvider) getSite().getSelectionProvider();
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == AbstractBreadCrumbEditor.class) {
+			return key.cast(getEditor(SUBAPP_NETWORL_EDITOR_INDEX));
+		}
+		return super.getAdapter(key);
 	}
 
 }

@@ -16,16 +16,15 @@ package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.deployment.Activator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * Factory for loading DeviceManagementInteractors and handle related data
@@ -36,6 +35,7 @@ public enum DeviceManagementInteractorFactory {
 
 	INSTANCE;
 
+	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.deployment"; //$NON-NLS-1$
 	private List<IDeviceManagementInteractorProvider> deviceManagementInteractorProviders = null;
 
 	/**
@@ -71,7 +71,7 @@ public enum DeviceManagementInteractorFactory {
 	 */
 	public List<String> getAvailableProfileNames() {
 		return getDeviceManagementInteractorList().stream().map(IDeviceManagementInteractorProvider::getProfileName)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private List<IDeviceManagementInteractorProvider> getDeviceManagementInteractorList() {
@@ -83,17 +83,17 @@ public enum DeviceManagementInteractorFactory {
 
 	private static List<IDeviceManagementInteractorProvider> loadDeviceManagmentInteractors() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(Activator.PLUGIN_ID,
+		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID,
 				"devicemanagementinteractor"); //$NON-NLS-1$
 		final ArrayList<IDeviceManagementInteractorProvider> interactors = new ArrayList<>(elems.length);
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IDeviceManagementInteractorProvider) {
-					interactors.add((IDeviceManagementInteractorProvider) object);
+				if (object instanceof final IDeviceManagementInteractorProvider iDeviceManagementInteractorProvider) {
+					interactors.add(iDeviceManagementInteractorProvider);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault().logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
+				FordiacLogHelper.logError(Messages.DeploymentCoordinator_ERROR_Message, corex);
 			}
 		}
 		return interactors;

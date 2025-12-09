@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,86 +13,122 @@
  *   Alois Zoitl, Gerhard Ebenhofer
  *       - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed issues in adapter update
+ *               - moved adapter type handling to own adapter command
+ *   Martin Jobst - add value validation
+ *                - resolve imports
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeDataTypeCommand extends Command {
-	private final VarDeclaration interfaceElement;
+public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
+	private static final Pattern ARRAY_TYPE_DECLARATION_PATTERN = Pattern.compile("ARRAY\\s*\\[(.*)\\]\\s*OF\\s+(.+)", //$NON-NLS-1$
+			Pattern.CASE_INSENSITIVE);
+
 	private final DataType dataType;
 	private DataType oldDataType;
-	private UpdateFBTypeCommand updateTypeCmd = null;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeDataTypeCommand(final VarDeclaration interfaceElement, final DataType dataType) {
-		super();
-		this.interfaceElement = interfaceElement;
+	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
+		super(interfaceElement);
 		this.dataType = dataType;
 	}
 
+	public static ChangeDataTypeCommand forTypeName(final IInterfaceElement interfaceElement, final String typeName) {
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(interfaceElement);
+		final DataType dataType;
+		if (interfaceElement instanceof Event) {
+			dataType = ImportHelper.resolveImport(typeName, interfaceElement, EventTypeLibrary.getInstance()::getType,
+					name -> {
+						throw new NoSuchElementException(name);
+					});
+		} else if (interfaceElement instanceof AdapterDeclaration) {
+			dataType = ImportHelper
+					.resolveImport(typeName, interfaceElement, typeLibrary::getAdapterTypeEntry, name -> {
+						throw new NoSuchElementException(name);
+					}).getType();
+		} else {
+			dataType = ImportHelper.resolveImport(typeName, interfaceElement,
+					typeLibrary.getDataTypeLibrary()::getTypeIfExists, typeLibrary.getDataTypeLibrary()::getType);
+		}
+		return ChangeDataTypeCommand.forDataType(interfaceElement, dataType);
+	}
+
+	public static ChangeDataTypeCommand forDataType(final IInterfaceElement interfaceElement, final DataType dataType) {
+		final ChangeDataTypeCommand result = new ChangeDataTypeCommand(interfaceElement, dataType);
+		if (interfaceElement != null && interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp
+				&& subApp.isMapped()) {
+			result.getAdditionalCommands().add(new ChangeDataTypeCommand(
+					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));
+		}
+		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration
+				&& interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType
+				&& !(compositeFBType instanceof SubAppType)) {
+			result.getAdditionalCommands().add(new ChangeAdapterFBCommand(adapterDeclaration));
+		}
+		return result;
+	}
+
+	public static ChangeDataTypeCommand forTypeDeclaration(final IInterfaceElement interfaceElement,
+			final String typeDeclaration) {
+		if (interfaceElement instanceof final VarDeclaration varDeclaration) {
+			final Matcher matcher = ARRAY_TYPE_DECLARATION_PATTERN.matcher(typeDeclaration.trim());
+			final String arraySize;
+			final String dataTypeName;
+			if (matcher.matches()) {
+				arraySize = matcher.group(1);
+				dataTypeName = matcher.group(2);
+			} else {
+				arraySize = null;
+				dataTypeName = typeDeclaration;
+			}
+			final ChangeDataTypeCommand result = ChangeDataTypeCommand.forTypeName(varDeclaration, dataTypeName);
+			result.getAdditionalCommands().add(ChangeArraySizeCommand.forArraySize(varDeclaration, arraySize));
+			return result;
+		}
+		return forTypeName(interfaceElement, typeDeclaration);
+	}
+
 	@Override
-	public void execute() {
-		oldDataType = interfaceElement.getType();
+	protected void doExecute() {
+		oldDataType = getInterfaceElement().getType();
 		setNewType();
-		handleAdapter();
-	}
-
-	public void handleAdapter() {
-		if ((dataType instanceof AdapterType) && (interfaceElement.eContainer().eContainer() instanceof CompositeFBType)
-				&& (!(interfaceElement.eContainer().eContainer() instanceof SubAppType))) {
-			updateTypeCmd = new ChangeAdapterFBCommand((AdapterDeclaration) interfaceElement);
-			updateTypeCmd.execute();
-		}
+		additionalCommands.execute();
 	}
 
 	@Override
-	public void undo() {
-		interfaceElement.setType(oldDataType);
-		interfaceElement.setTypeName(oldDataType.getName());
-		if (null != updateTypeCmd) {
-			updateTypeCmd.undo();
-		}
+	protected void doUndo() {
+		additionalCommands.undo();
+		getInterfaceElement().setType(oldDataType);
 	}
 
 	@Override
-	public void redo() {
+	protected void doRedo() {
 		setNewType();
-		if (null != updateTypeCmd) {
-			updateTypeCmd.redo();
-		}
+		additionalCommands.redo();
 	}
 
 	private void setNewType() {
-		interfaceElement.setType(dataType);
-		interfaceElement.setTypeName(dataType.getName());
+		getInterfaceElement().setType(dataType);
 	}
 
-	private static final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
-
-		public ChangeAdapterFBCommand(AdapterDeclaration adpDecl) {
-			super(adpDecl.getAdapterFB(), null);
-			setEntry(adpDecl.getType().getPaletteEntry());
-		}
-
-		@Override
-		protected FBNetworkElement createCopiedFBEntry(FBNetworkElement srcElement) {
-			AdapterFB copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
-			if (null == getEntry()) {
-				copy.setPaletteEntry(srcElement.getPaletteEntry());
-			} else {
-				copy.setPaletteEntry(getEntry());
-			}
-			copy.setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
-			return copy;
-		}
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
 }

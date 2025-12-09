@@ -12,15 +12,17 @@
 package org.eclipse.fordiac.ide.gef.editparts;
 
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
 
 public abstract class AbstractPositionableElementEditPart extends AbstractViewEditPart {
 
@@ -43,13 +45,15 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 
 	protected void refreshPosition() {
 		if (getParent() != null) {
-			PositionableElement positionableElement = getPositionableElement();
-			Position position = positionableElement.getPosition();
-			Point asPoint = position.asPoint();
-			final Rectangle bounds = new Rectangle(asPoint,
-					new Dimension(-1, -1));
+			final Position position = getPositionableElement().getPosition();
+			final Rectangle bounds = new Rectangle(position.toScreenPoint(), new Dimension(-1, -1));
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
+	}
+
+	@Override
+	public DragTracker getDragTracker(final Request request) {
+		return new ScrollingDragEditPartsTracker(this);
 	}
 
 	protected abstract PositionableElement getPositionableElement();

@@ -17,7 +17,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
@@ -25,11 +24,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.resourceediting.editparts.ResourceDiagramEditPartFactory;
 import org.eclipse.fordiac.ide.util.ColorManager;
-import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
-import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 
@@ -63,6 +59,14 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 		}
 	};
 
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == Resource.class) {
+			return adapter.cast(getResource());
+		}
+		return super.getAdapter(adapter);
+	}
+
 	private Resource getResource() {
 		return (Resource) getModel().eContainer();
 	}
@@ -79,21 +83,17 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
-			final ZoomManager zoomManager) {
-		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
-	}
-
-	@Override
-	protected void setModel(final IEditorInput input) {
-		if (input instanceof ResourceEditorInput) {
-			final ResourceEditorInput resInput = (ResourceEditorInput) input;
+	public void setInput(final IEditorInput input) {
+		if (!(input instanceof final ResourceEditorInput resInput)) {
+			throw new IllegalArgumentException("Resource editors only accept ResourceEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+		if (getEditorInput() == null) {
 			final Resource res = resInput.getContent();
 			setModel(res.getFBNetwork());
 			getResource().eAdapters().add(resourceAdapter);
 			getResource().getDevice().eAdapters().add(colorChangeListener);
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override

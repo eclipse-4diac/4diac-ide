@@ -34,10 +34,10 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 		}
 
 		public State() {
-			subapp = LibraryElementFactory.eINSTANCE.createSubApp();
+			subapp = LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 		}
 
-		public State(State s) {
+		public State(final State s) {
 			subapp = EcoreUtil.copy(s.getSubApp());
 		}
 
@@ -47,23 +47,24 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description,
+			final StateInitializer<?> initializer, final StateVerifier<?> initialVerifier,
+			final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getSubApp());
 		t.test(!state.getSubApp().isUnfolded());
 	}
 
-	protected static void verifyUnfolded(State state, State oldState, TestFunction t) {
+	protected static void verifyUnfolded(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getSubApp());
 		t.test(state.getSubApp().isUnfolded());
 	}
 
-	private static State toggleFolding(State state) {
+	private static State toggleFolding(final State state) {
 		state.setCommand(new ToggleSubAppRepresentationCommand(state.getSubApp()));
 
 		return commandExecution(state);
@@ -71,8 +72,8 @@ public class ToggleSubappRepresentationTest extends CommandTestBase<State> {
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static List<Arguments> createCommands(List<ExecutionDescription<?>> executionDescriptions) {
-		List<Arguments> commands = new ArrayList<>();
+	protected static List<Arguments> createCommands(final List<ExecutionDescription<?>> executionDescriptions) {
+		final List<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Toggling Attribute", // //$NON-NLS-1$
 				State::new, //

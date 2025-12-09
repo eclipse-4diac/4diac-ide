@@ -21,6 +21,7 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.ResourceContainerLayoutEditPolicy;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -71,7 +72,7 @@ public class ResourceContainerEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<Resource> getModelChildren() {
 		return getModel().getDevice().getResource();
 	}
 

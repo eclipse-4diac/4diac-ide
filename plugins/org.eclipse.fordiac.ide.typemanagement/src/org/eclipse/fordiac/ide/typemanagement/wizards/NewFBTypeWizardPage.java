@@ -26,20 +26,34 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EMap;
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
+import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -58,7 +72,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
 
 public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private static final Pattern NAME_PATTERN = Pattern.compile("Name=\"\\w+\""); //$NON-NLS-1$
@@ -67,6 +83,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	private Button openTypeCheckbox;
 	private int openTypeParentHeight = -1;
 	private boolean openType = true;
+	private Text packageNameText;
 	private TableViewer templateTableViewer;
 
 	private static class TemplateInfo {
@@ -82,6 +99,39 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private TemplateInfo[] templateList;
+	private FilteredArrayContentProvider templateProvider;
+
+	private class FilteredArrayContentProvider extends ArrayContentProvider {
+		private FileFilter templateFilter;
+
+		public FilteredArrayContentProvider(final FileFilter filter) {
+			templateFilter = filter;
+		}
+
+		public void setFileFilter(final FileFilter filter) {
+			this.templateFilter = filter;
+		}
+
+		public FileFilter getFileFilter() {
+			return templateFilter;
+		}
+
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			final Object[] fullList = super.getElements(inputElement);
+			if (templateFilter == null) {
+				return fullList;
+			}
+			//@formatter:off
+			return Arrays.asList(fullList)
+					.stream()
+					.filter(TemplateInfo.class::isInstance)
+					.map(TemplateInfo.class::cast)
+					.filter(t -> templateFilter.accept(t.templateFile))
+					.toArray();
+			//@formatter:on
+		}
+	}
 
 	private static class TypeTemplatesLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -92,12 +142,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof TemplateInfo) {
+			if (element instanceof final TemplateInfo info) {
 				switch (columnIndex) {
 				case 0:
-					return ((TemplateInfo) element).templateName;
+					return info.templateName;
 				case 1:
-					return ((TemplateInfo) element).templateDescription;
+					return info.templateDescription;
 				default:
 					break;
 				}
@@ -127,18 +177,25 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	@Override
 	protected boolean validatePage() {
 		if ((null == templateList) || (0 == templateList.length)) {
-			setErrorMessage(Messages.NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory);
+			setErrorMessage(
+					MessageFormat.format(Messages.NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory,
+							getTypeTemplatesFolder().toString()));
 			return false;
 		}
-		if (super.getFileName().isEmpty()) {
+		if (getTypeName().isEmpty()) {
 			setErrorMessage(Messages.NewFBTypeWizardPage_EmptyTypenameIsNotValid);
 			return false;
 		}
 
-		// use super.getFileName here to get the type name without extension
-		final String errorMessage = IdentifierVerifyer.isValidIdentifierWithErrorMessage(super.getFileName());
-		if (null != errorMessage) {
-			setErrorMessage(errorMessage);
+		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(getTypeName());
+		if (errorMessage.isPresent()) {
+			setErrorMessage(errorMessage.get());
+			return false;
+		}
+
+		final Optional<String> packageNameErrorMessage = IdentifierVerifier.verifyPackageName(getPackageName());
+		if (packageNameErrorMessage.isPresent()) {
+			setErrorMessage(packageNameErrorMessage.get());
 			return false;
 		}
 
@@ -147,9 +204,13 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 			return false;
 		}
 
-		// Check for duplicates in typelib if a project is selected
-		if (null != getContainerFullPath() && isDuplicate()) {
-			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFileName()));
+		if (isDuplicate()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_TypeAlreadyExists, getFullTypeName()));
+			return false;
+		}
+
+		if (fileExists()) {
+			setErrorMessage(MessageFormat.format(Messages.NewFBTypeWizardPage_FileAlreadyExists, getFileName()));
 			return false;
 		}
 
@@ -157,48 +218,61 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isDuplicate() {
-		// here: getContainerFullPath().segment(0) --> name of the selected project
-		final TypeLibrary lib = TypeLibrary
-				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
-
-		final String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
-		final String fileExtension = s[s.length - 1].toUpperCase();
-		if (fileExtension.equals(TypeLibraryTags.DATA_TYPE_FILE_ENDING)) {
-			return isDtpDuplicate(lib);
+		final TypeLibrary typeLibrary = getTypeLibrary();
+		if (typeLibrary == null) {
+			return false;
 		}
-		return isSubFbtAdpDuplicate(lib, fileExtension);
+
+		final String fullTypeName = getFullTypeName();
+		final String fileExtension = IPath.fromFile(getTemplate()).getFileExtension();
+		return switch (fileExtension.toUpperCase()) {
+		case TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING -> typeLibrary.getAttributeTypeEntry(fullTypeName) != null;
+		case TypeLibraryTags.GLOBAL_CONST_FILE_ENDING -> typeLibrary.getGlobalConstantsEntry(fullTypeName) != null;
+		default -> typeLibrary.find(fullTypeName) != null;
+		};
 	}
 
-	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {
-		EMap<String, ?> map = null;
-
-		switch (fileExtension) {
-		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getSubAppTypes();
-			break;
-		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getFbTypes();
-			break;
-		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getAdapterTypes();
-			break;
-		default:
-			break;
+	private boolean fileExists() {
+		final String fileName = getFileName().toLowerCase();
+		final IPath containerPath = getContainerFullPath();
+		if (containerPath == null || containerPath.segmentCount() < 2) {
+			return false;
 		}
-		return (null != map) && (map.containsKey(super.getFileName()));
-	}
-
-	private boolean isDtpDuplicate(final TypeLibrary lib) {
-		final Map<String, ?> map = lib.getDataTypeLibrary().getDerivedDataTypes();
-		return map.containsKey(super.getFileName());
+		final IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath);
+		if (!folder.exists()) {
+			return false;
+		}
+		try {
+			for (final IResource member : folder.members()) {
+				if (fileName.equalsIgnoreCase(member.getName())) {
+					return true;
+				}
+			}
+		} catch (final CoreException e) {
+			return false;
+		}
+		return false;
 	}
 
 	public File getTemplate() {
 		if (templateTableViewer.getSelection() instanceof StructuredSelection) {
 			final Object selection = templateTableViewer.getStructuredSelection().getFirstElement();
-			return (selection instanceof TemplateInfo) ? ((TemplateInfo) selection).templateFile : null;
+			return selection instanceof final TemplateInfo info ? info.templateFile : null;
 		}
 		return null;
+	}
+
+	public void setTemplateFileFilter(final FileFilter filter) {
+		templateProvider.setFileFilter(filter);
+		templateTableViewer.refresh();
+	}
+
+	public FileFilter getTemplateFileFilter() {
+		return templateProvider.getFileFilter();
+	}
+
+	public TableViewer getTemplateViewer() {
+		return templateTableViewer;
 	}
 
 	@Override
@@ -218,14 +292,48 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return retval;
 	}
 
+	public String getTypeName() {
+		// use super.getFileName here to get the type name without extension
+		return super.getFileName();
+	}
+
+	public String getFullTypeName() {
+		final String packageName = getPackageName();
+		if (!packageName.isBlank()) {
+			return packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + getTypeName();
+		}
+		return getTypeName();
+	}
+
 	public boolean getOpenType() {
 		return openType;
 	}
 
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
+		createPackageNameSelection(parent);
 		createTemplateTypeSelection(parent);
 		super.createAdvancedControls(parent);
+	}
+
+	private void createPackageNameSelection(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(composite);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+
+		final Label packageNameLabel = new Label(composite, SWT.NONE);
+		packageNameLabel.setText(FordiacMessages.Package + ":"); //$NON-NLS-1$
+		packageNameLabel.setFont(parent.getFont());
+
+		packageNameText = new Text(composite, SWT.BORDER);
+		packageNameText.setText(getInitialPackageName());
+		packageNameText.addListener(SWT.Modify, this);
+		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).hint(250, SWT.DEFAULT)
+				.applyTo(packageNameText);
+
+		final ContentAssistCommandAdapter packageNameProposalAdapter = new ContentAssistCommandAdapter(packageNameText,
+				new TextContentAdapter(), new PackageSelectionProposalProvider(this::getTypeLibrary), null, null, true);
+		packageNameProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 	}
 
 	private void createTemplateTypeSelection(final Composite parent) {
@@ -236,7 +344,8 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		templateTableViewer = TableWidgetFactory.createPropertyTableViewer(parent, SWT.SINGLE);
 		configureTypeTableLayout(templateTableViewer.getTable());
 
-		templateTableViewer.setContentProvider(new ArrayContentProvider());
+		templateProvider = new FilteredArrayContentProvider(createTemplatesFileFilter());
+		templateTableViewer.setContentProvider(templateProvider);
 		templateTableViewer.setLabelProvider(new TypeTemplatesLabelProvider());
 
 		templateTableViewer.setInput(templateList);
@@ -262,8 +371,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private void loadTypeTemplates() {
-		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
-		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+		final File templateFolder = getTypeTemplatesFolder();
 		final FileFilter ff = createTemplatesFileFilter();
 		if (templateFolder.isDirectory()) {
 			final File[] files = templateFolder.listFiles(ff);
@@ -277,12 +385,20 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		}
 	}
 
+	private static File getTypeTemplatesFolder() {
+		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
+		return new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+	}
+
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
 	protected FileFilter createTemplatesFileFilter() {
 		return pathname -> pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING_WITH_DOT)
 				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
-				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT);
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING_WITH_DOT)
+				|| pathname.getName().toUpperCase().endsWith(TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT);
 	}
 
 	private static TemplateInfo createTemplateFileInfo(final File f) {
@@ -300,7 +416,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				description = description.substring(9, description.length() - 1);
 			}
 		} catch (final FileNotFoundException e) {
-			Activator.getDefault().logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
+			FordiacLogHelper.logError(Messages.NewFBTypeWizardPage_CouldNotFindTemplateFiles, e);
 		}
 		return new TemplateInfo(f, name, description);
 	}
@@ -335,4 +451,41 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		return openTypeCheckbox;
 	}
 
+	public String getInitialPackageName() {
+		final IContainer container = getSelectedContainer();
+		if (container != null) {
+			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+			final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), container)
+					.orElse(container.getFullPath());
+			return Stream.of(relativePath.segments())
+					.collect(Collectors.joining(PackageNameHelper.PACKAGE_NAME_DELIMITER));
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	public TypeLibrary getTypeLibrary() {
+		final IContainer container = getSelectedContainer();
+		if (container != null) {
+			return TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+		}
+		return null;
+	}
+
+	public IContainer getSelectedContainer() {
+		final IPath containerFullPath = getContainerFullPath();
+		if (containerFullPath != null && containerFullPath.segmentCount() > 0) {
+			return containerFullPath.segmentCount() == 1
+					? ResourcesPlugin.getWorkspace().getRoot().getProject(containerFullPath.segment(0))
+					: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerFullPath);
+		}
+		return null;
+	}
+
+	public void setPackageName(final String packageName) {
+		packageNameText.setText(packageName);
+	}
+
+	public String getPackageName() {
+		return packageNameText.getText();
+	}
 }

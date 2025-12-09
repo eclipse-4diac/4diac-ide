@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BasicCalcEmpty" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-07-26">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="INT" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="CALC" Comment="" x="1673.3333333333335" y="373.33333333333337">
+				<ECAction Algorithm="calc" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CALC" Condition="REQ" Comment="" x="1286.6666666666667" y="386.6666666666667"/>
+			<ECTransition Source="CALC" Destination="START" Condition="1" Comment="" x="1220.0" y="600.0"/>
+		</ECC>
+		<Algorithm Name="calc" Comment="">
+			<ST><![CDATA[ALGORITHM calc
+	OUT:=1;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

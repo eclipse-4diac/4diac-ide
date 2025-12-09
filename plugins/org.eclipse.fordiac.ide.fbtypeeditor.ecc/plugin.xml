@@ -3,34 +3,16 @@
 <plugin>
    <extension-point id="algorithmEditor" name="algorithmEditor" schema="schema/algorithmEditor.exsd"/>
    <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
             class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ECCEditor"
-            sortIndex="40"
-            type="basic">
-      </editor>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor">
-      <algorithmEditor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.TextEditorCreator"
-            language="AnyText">
-      </algorithmEditor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.ECCEditorPreferencePage"
-            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.ECCEditorPreferencePage"
-            name="ECC Editor Preferences">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceInitializer">
-      </initializer>
+            sortIndex="40">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
+            </instanceof>
+         </enablement>
+      </editorPage>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
@@ -61,13 +43,19 @@
                afterTab="property.tab.algorithms"
                category="ecc"
                id="property.tab.ivars"
-               label="Internal Vars">
+               label="Var Internals">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.ivars"
                category="ecc"
+               id="property.tab.icvars"
+               label="Constants">
+         </propertyTab>
+         <propertyTab
+               afterTab="property.tab.icvars"
+               category="ecc"
                id="property.tab.ifbs"
-               label="Internal FBs">
+               label="Function Blocks">
          </propertyTab>
       </propertyTabs>
    </extension>
@@ -80,52 +68,70 @@
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECStateFilter"
                id="property.section.state"
                tab="property.tab.state">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ActionSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECActionFilter"
                id="property.section.action"
                tab="property.tab.action">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.ECAction">
-            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.AlgorithmsSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
                id="property.section.algorithms"
                tab="property.tab.algorithms">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalVarsSectionBasic"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
-               id="property.section.ivars"
-               tab="property.tab.ivars">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.InternalFbsSectionBasic"
-               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECCFilter"
-               id="property.section.ifbs"
-               tab="property.tab.ifbs">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart">
-            </input>
-         </propertySection>
+               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.TransitionSection"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECTransitionFilter"
+               id="property.section.transition"
+               tab="property.tab.transition">            
+         </propertySection> 
       </propertySections>
+   </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCStateColor"
+            value="184, 182, 206">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCStateTextColor"
+            value="21, 17, 72">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmColor"
+            value="235, 242, 179">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCAlgorithmTextColor"
+            value="91, 101, 11">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCEventColor"
+            value="245, 181, 183">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCEventTextColor"
+            value="141, 45, 47">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.eclipse.fordiac.ide.themeCategory"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor"
+            label="%FordiacECCPreferencePage_LABEL_ECCTransitionColor"
+            value="68, 64, 121">
+      </colorDefinition>
    </extension>
 </plugin>

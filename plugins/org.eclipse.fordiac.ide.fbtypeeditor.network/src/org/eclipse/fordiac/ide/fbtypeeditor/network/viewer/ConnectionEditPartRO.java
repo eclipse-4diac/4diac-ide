@@ -13,16 +13,16 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
-import org.eclipse.fordiac.ide.gef.policies.FeedbackConnectionEndpointEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 public class ConnectionEditPartRO extends ConnectionEditPart {
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FeedbackConnectionEndpointEditPolicy() {
+		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new FBNConnectionEndpointPolicy() {
 			@Override
-			protected void showConnectionMoveFeedback(ReconnectRequest request) {
+			protected void showConnectionMoveFeedback(final ReconnectRequest request) {
 				// we do not want to allow moving viewer connections
 			}
 		});

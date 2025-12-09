@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2019 fortiss GmbH,
- * 				 2019 - 2020 Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *	 Bianca Wiesmayr - consistent dropdown menu edit#
  *   Alois Zoitl - fixed issues during deletion of actions
+ *               - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
@@ -32,9 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -73,18 +71,18 @@ public class ActionSection extends AbstractSection {
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
-		if (input instanceof ECActionAlgorithmEditPart) {
-			return ((ECActionAlgorithmEditPart) input).getAction();
+	protected Object getInputType(final Object input) {
+		if (input instanceof final ECActionAlgorithmEditPart aaEP) {
+			return aaEP.getAction();
 		}
-		if (input instanceof ECActionAlgorithm) {
-			return ((ECActionAlgorithm) input).getAction();
+		if (input instanceof final ECActionAlgorithm aa) {
+			return aa.getAction();
 		}
-		if (input instanceof ECActionOutputEventEditPart) {
-			return ((ECActionOutputEventEditPart) input).getAction();
+		if (input instanceof final ECActionOutputEventEditPart oeEP) {
+			return oeEP.getAction();
 		}
-		if (input instanceof ECActionOutputEvent) {
-			return ((ECActionOutputEvent) input).getAction();
+		if (input instanceof final ECActionOutputEvent oe) {
+			return oe.getAction();
 		}
 		if (input instanceof ECAction) {
 			return input;
@@ -94,21 +92,19 @@ public class ActionSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(3, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createActionCombos(parent);
 		algorithmGroup.createControls(parent, getWidgetFactory());
 		createAlgorithmView(parent);
 	}
 
-	private void createActionCombos(Composite parent) {
+	private void createActionCombos(final Composite parent) {
 		actionComposite = getWidgetFactory().createComposite(parent);
-		GridData actionCompositeLayoutData = new GridData(GridData.FILL, 0, true, false);
+		final GridData actionCompositeLayoutData = new GridData(GridData.FILL, 0, true, false);
 		actionCompositeLayoutData.horizontalSpan = 3;
 		actionComposite.setLayoutData(actionCompositeLayoutData);
-		RowLayout layout = new RowLayout();
+		final RowLayout layout = new RowLayout();
 		layout.fill = true;
 		actionComposite.setLayout(layout);
 
@@ -127,8 +123,8 @@ public class ActionSection extends AbstractSection {
 		outputEventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		outputEventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
-			List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
-			int selItem = outputEventCombo.getSelectionIndex();
+			final List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
+			final int selItem = outputEventCombo.getSelectionIndex();
 			executeCommand(new ChangeOutputCommand(getType(),
 					(selItem < outputEvents.size()) ? outputEvents.get(selItem) : null));
 			addContentAdapter();
@@ -136,8 +132,8 @@ public class ActionSection extends AbstractSection {
 
 	}
 
-	private void createAlgorithmView(Composite parent) {
-		Group algorithmComposite = getWidgetFactory().createGroup(parent, Messages.ActionSection_AllAlgorithms);
+	private void createAlgorithmView(final Composite parent) {
+		final Group algorithmComposite = getWidgetFactory().createGroup(parent, Messages.ActionSection_AllAlgorithms);
 		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());
@@ -146,9 +142,9 @@ public class ActionSection extends AbstractSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
-		if (null == commandStack) { // disable all fields
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
+		setCurrentCommandStack(part, input);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			outputEventCombo.removeAll();
 			outputEventCombo.setEnabled(false);
 			algorithmCombo.removeAll();
@@ -158,34 +154,41 @@ public class ActionSection extends AbstractSection {
 		if (null != getFBType()) {
 			// during delete phases it can be that the input (i.e., Action) is not attached
 			// to its type anymore
-			algorithmGroup.initialize(getFBType(), commandStack);
-			algorithmList.initialize(getFBType(), commandStack);
+			algorithmList.initialize(getFBType());
 		}
 	}
 
 	@Override
-	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if ((null != type) && (null != getFBType())) {
+	protected void performRefresh() {
+		if (getFBType() != null) {
 			// during delete phases it can be that the input (i.e., Action) is not attached
 			// to its type anymore. Therefore also the check if getFBType() is not null
-			setDropdown(outputEventCombo, getType().getOutput(),
-					ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
-			setDropdown(algorithmCombo, getAlgorithm(), ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
+			updateDropdown(outputEventCombo, ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
+			selectOutputEvent(getType().getOutput());
+
+			updateDropdown(algorithmCombo, ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
+			selectAlgorithm(getAlgorithm());
+
 			actionComposite.layout();
 
 			algorithmGroup.setAlgorithm(getAlgorithm());
 			algorithmList.refresh();
 		}
-		commandStack = commandStackBuffer;
 	}
 
-	private static void setDropdown(CCombo comboBox, INamedElement el, List<String> names) {
+	private static void updateDropdown(final CCombo comboBox, final List<String> names) {
 		comboBox.removeAll();
 		names.forEach(comboBox::add);
-		// pre-selects the elements that are now in the action:
-		comboBox.select((null == el) ? names.size() - 1 : comboBox.indexOf(el.getName()));
+	}
+
+	private void selectOutputEvent(final Event eo) {
+		outputEventCombo.select((null == eo) ? outputEventCombo.getItemCount() - 1
+				: outputEventCombo.indexOf(ECCContentAndLabelProvider.getEventName(eo)));
+	}
+
+	private void selectAlgorithm(final Algorithm alg) {
+		algorithmCombo
+				.select((null == alg) ? algorithmCombo.getItemCount() - 1 : algorithmCombo.indexOf(alg.getName()));
 	}
 
 	@Override

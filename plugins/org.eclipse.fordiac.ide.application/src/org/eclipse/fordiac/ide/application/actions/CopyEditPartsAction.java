@@ -24,22 +24,24 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-/**
- * The Class CopyEditPartsAction.
- */
+/** The Class CopyEditPartsAction. */
 public class CopyEditPartsAction extends SelectionAction {
 
 	/** The templates. */
@@ -61,11 +63,8 @@ public class CopyEditPartsAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				final Object model = ((EditPart) obj).getModel();
-				if (model instanceof FBNetworkElement) {
-					return true;
-				}
+			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof FBNetworkElement)) {
+				return true;
 			}
 		}
 		return false;
@@ -73,31 +72,47 @@ public class CopyEditPartsAction extends SelectionAction {
 
 	@Override
 	public void run() {
-		final List<Object> templates = getSelectedTemplates();
-
-		final CopyPasteMessage info = new CopyPasteMessage(CopyStatus.COPY, templates);
-		Clipboard.getDefault().setContents(info);
+		FordiacClipboard.INSTANCE.setGraphicalContents(getSelectedTemplates());
 	}
 
-	protected List<Object> getSelectedTemplates() {
+	protected CopyPasteData getSelectedTemplates() {
+		final CopyPasteData copyPasteData = new CopyPasteData(getWorkbenchPart().getAdapter(FBNetwork.class));
 		final Set<Connection> connectionSet = new HashSet<>();
-		final List<Object> templates = new ArrayList<>();
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				final Object model = ((EditPart) obj).getModel();
-				if (model instanceof FBNetworkElement) {
-					templates.add(model);
-					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model, connectionSet));
+			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbne)) {
+				copyPasteData.elements().add(fbne);
+				if (fbne instanceof final BlockFBNetworkElement bfbne) {
+					copyPasteData.conns().addAll(getAllFBNElementConnections(bfbne, connectionSet));
+				}
+				if (fbne instanceof final Group group) {
+
+					FBNetworkHelper.getBlockFBNetworkElementsFromList(group.getGroupElements())
+							.forEach(groupElement -> copyPasteData.conns()
+									.addAll(getAllFBNElementConnections(groupElement, connectionSet)));
 				}
 			}
 		}
-		return templates;
+		removeDuplicateElements(copyPasteData);
+		return copyPasteData;
 	}
 
-	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,
+	/*
+	 * Remove elements, if they are already inside a selected top-level subapp. This
+	 * is especially important for Cut otherwise elements would be removed and
+	 * inserted wrongly.
+	 */
+	private static void removeDuplicateElements(final CopyPasteData copyPasteData) {
+		copyPasteData.elements()
+				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
+						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
+						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream().filter(Group.class::isInstance)
+				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
+	}
+
+	private static Collection<ConnectionReference> getAllFBNElementConnections(final BlockFBNetworkElement model,
 			final Set<Connection> connectionSet) {
 		final List<ConnectionReference> connections = new ArrayList<>();
-
 		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
 			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
 				connectionSet.add(conn);

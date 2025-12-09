@@ -52,11 +52,9 @@ public class InterfaceEditPartForResourceFBs extends InterfaceEditPartForFBNetwo
 		if (parent != null) {
 			final FBNetworkContainerEditPart fbcep = (FBNetworkContainerEditPart) parent;
 			final VirtualIO referencedElement = fbcep.getVirtualIOElement(getModel());
-			if (referencedElement != null) {
-				final Object o = getViewer().getEditPartRegistry().get(referencedElement);
-				if (o instanceof VirtualInOutputEditPart) {
-					((VirtualInOutputEditPart) o).updatePos(this);
-				}
+			if ((referencedElement != null) && (getViewer()
+					.getEditPartForModel(referencedElement) instanceof final VirtualInOutputEditPart virtIOEP)) {
+				virtIOEP.updatePos(this);
 			}
 		}
 	}

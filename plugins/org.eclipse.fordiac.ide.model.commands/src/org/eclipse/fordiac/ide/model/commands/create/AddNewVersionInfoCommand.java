@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2012, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,12 +23,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class AddNewVersionInfoCommand.
  */
-public class AddNewVersionInfoCommand extends Command implements CreationCommand {
+public class AddNewVersionInfoCommand extends CreationCommand {
 
 	/** The format. */
 	private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
@@ -47,7 +45,6 @@ public class AddNewVersionInfoCommand extends Command implements CreationCommand
 	 * @param comment          the comment
 	 */
 	public AddNewVersionInfoCommand(final LibraryElement type) {
-		super();
 		this.type = type;
 	}
 
@@ -84,7 +81,7 @@ public class AddNewVersionInfoCommand extends Command implements CreationCommand
 	 */
 	@Override
 	public void redo() {
-		type.getVersionInfo().add(info);
+		type.getVersionInfo().add(0, info);
 	}
 
 	@Override

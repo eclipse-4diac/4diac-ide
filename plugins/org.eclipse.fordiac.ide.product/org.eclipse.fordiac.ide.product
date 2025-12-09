@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="3.0.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -17,29 +17,31 @@
       <programArgs>-nl en
 --launcher.appendVmargs
       </programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.11
+      <vmArgs>-Dosgi.requiredJavaVersion=21
 -Dosgi.instance.area.default=@user.home/4diacIDE-workspace
+-Dosgi.dataAreaRequiresExplicitInit=true
+-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true
+-Declipse.e4.inject.javax.warning=false
+-Dorg.slf4j.simpleLogger.defaultLogLevel=off
+-Dswt.autoScale=quarter
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
--Dosgi.dataAreaRequiresExplicitInit=true
 -Xmn512m
--Xms1024m
--Xmx5120m
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.fordiac.ide/icons/fordiac16.png" i32="/org.eclipse.fordiac.ide/icons/fordiac32.png" i48="/org.eclipse.fordiac.ide/icons/fordiac48.png" i256="/org.eclipse.fordiac.ide/icons/fordiac256.png"/>
+   <windowImages i16="/org.eclipse.fordiac.ide/icons/4diac16.png" i32="/org.eclipse.fordiac.ide/icons/4diac32.png" i48="/org.eclipse.fordiac.ide/icons/4diac48.png" i64="/org.eclipse.fordiac.ide/icons/4diac64.png" i128="/org.eclipse.fordiac.ide/icons/4diac128.png" i256="/org.eclipse.fordiac.ide/icons/4diac256.png"/>
 
    <splash
       location="org.eclipse.fordiac.ide"
       startupProgressRect="375,375,172,4" />
    <launcher name="4diac-ide">
-      <linux icon="/icons/fordiac.xpm"/>
-      <macosx icon="/icons/fordiac.icns"/>
+      <linux icon="/icons/4diac.xpm"/>
+      <macosx icon="/icons/4diac.icns"/>
       <win useIco="true">
-         <ico path="icons/fordiac.ico"/>
+         <ico path="/icons/4diac.ico"/>
          <bmp/>
       </win>
    </launcher>
@@ -54,6 +56,13 @@
 
    <features>
       <feature id="org.eclipse.fordiac.ide.comgeneration.feature"/>
+      <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
+      <feature id="org.eclipse.fordiac.ide.export.feature"/>
+      <feature id="org.eclipse.fordiac.ide.interpreter.feature"/>
+      <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
+      <feature id="org.eclipse.fordiac.ide.structuredtext.feature"/>
+      <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
+      <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
       <feature id="org.eclipse.equinox.p2.user.ui"/>
       <feature id="org.eclipse.equinox.p2.extras.feature"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
@@ -71,28 +80,9 @@
       <feature id="org.eclipse.emf.edit.ui"/>
       <feature id="org.eclipse.emf.mapping"/>
       <feature id="org.eclipse.emf.mapping.ecore"/>
-      <feature id="org.eclipse.emf.mapping.ecore.editor"/>
-      <feature id="org.eclipse.emf.mapping.ui"/>
       <feature id="org.eclipse.emf.common.ui"/>
       <feature id="org.eclipse.emf.ecore.editor"/>
-      <feature id="org.eclipse.ecf.core.feature"/>
-      <feature id="org.eclipse.ecf.core.ssl.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclient45.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
-      <feature id="org.eclipse.xtext.ui"/>
       <feature id="org.eclipse.emf.databinding"/>
-      <feature id="org.eclipse.xtext.redist"/>
-      <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
-      <feature id="org.eclipse.fordiac.ide.export.feature"/>
-      <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
-      <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
-      <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
-      <feature id="org.eclipse.xtext.xbase.lib"/>
-      <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
-      <feature id="org.eclipse.xtext.runtime"/>
-      <feature id="org.eclipse.xtext.xbase"/>
-      <feature id="org.eclipse.jdt"/>
       <feature id="org.eclipse.egit" installMode="root"/>
       <feature id="org.eclipse.jgit" installMode="root"/>
       <feature id="org.eclipse.jgit.http.apache" installMode="root"/>
@@ -101,16 +91,25 @@
       <feature id="org.eclipse.elk.feature" installMode="root"/>
       <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
       <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
-      <feature id="org.eclipse.elk.algorithms.feature" installMode="root"/>
+      <feature id="org.eclipse.elk.algorithms.feature"/>
+      <feature id="org.eclipse.nebula.widgets.richtext.feature"/>
+      <feature id="org.eclipse.emf.compare"/>
+      <feature id="org.eclipse.emf.compare.ide.ui"/>
+      <feature id="org.eclipse.emf.compare.rcp.ui"/>
+      <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
+      <feature id="org.eclipse.emf.compare.egit" installMode="root"/>
+      <feature id="org.eclipse.fordiac.ide.milo" installMode="root"/>
    </features>
 
    <configurations>
+      <plugin id="org.apache.aries.spifly.dynamic.bundle" autoStart="true" startLevel="2" />
       <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <property name="eclipse.buildId" value="${project.artifactId}_${unqualifiedVersion}.${buildQualifier}" />
    </configurations>
 
    <preferencesInfo>

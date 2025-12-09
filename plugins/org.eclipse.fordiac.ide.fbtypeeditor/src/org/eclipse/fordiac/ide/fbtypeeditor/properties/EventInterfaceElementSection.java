@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,22 +17,22 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
 
-import org.eclipse.core.runtime.Assert;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarDeclarationLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -44,7 +43,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class EventInterfaceElementSection extends AdapterInterfaceElementSection {
@@ -100,48 +98,43 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		// hide with part for sub app type events
-		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if (null == commandStack) { // disable all field
+	protected void setInputInit() {
+		super.setInputInit();
+		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 		}
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != getType()) {
+	protected void performRefresh() {
+		super.performRefresh();
+		final EObject container = getType().eContainer();
+		if (container != null && !(container.eContainer() instanceof SubAppType)) {
+			eventComposite.setVisible(true);
 			withEventsViewer.setInput(getType());
+			withEventsViewer.getTable().setEnabled(isEditable());
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
 			getType().getWith().stream().filter(with -> (with.getVariables() != null))
-			.map(with -> withEventsViewer.testFindItem(with.getVariables()))
-			.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+					.map(with -> withEventsViewer.testFindItem(with.getVariables())).filter(TableItem.class::isInstance)
+					.forEach(item -> ((TableItem) item).setChecked(true));
+		} else {
+			eventComposite.setVisible(false);
 		}
-		commandStack = commandStackBuffer;
-	}
-
-	@Override
-	public void setTypeDropdown() {
-		typeCombo.removeAll();
-		typeCombo.add(FordiacMessages.Event);
-		typeCombo.select(0);
-	}
-
-	@Override
-	protected DataType getTypeForSelection(final String text) {
-		// currently we only have one kind of data type therefore we will return null
-		// here so that it is not changed
-		return null;
 	}
 
 	@Override
 	protected Event getType() {
 		return (Event) super.getType();
+	}
+
+	@Override
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return EventTypeSelectionContentProvider.INSTANCE;
+	}
+
+	@Override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return EventTypeSelectionTreeContentProvider.INSTANCE;
 	}
 }

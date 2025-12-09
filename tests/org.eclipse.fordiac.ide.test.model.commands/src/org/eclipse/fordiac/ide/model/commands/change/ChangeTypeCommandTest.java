@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,35 +19,38 @@ import java.util.List;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class ChangeTypeCommandTest extends FBNetworkTestBase {
 
-	private static State changeDataInputType(State state) {
-		final InterfaceList fb = state.getFunctionblock().getFBType().getInterfaceList();
-		
-		state.setCommand(new ChangeDataTypeCommand(fb.getInputVars().get(0), getDatatypelib().getType(FordiacKeywords.LWORD)));
+	private static State changeDataInputType(final State state) {
+		final InterfaceList fb = state.getFunctionblock().getInterface();
+
+		state.setCommand(ChangeDataTypeCommand.forDataType(fb.getInputVars().get(0),
+				getDatatypelib().getType(FordiacKeywords.LWORD)));
 		return commandExecution(state);
 	}
 
-	private static void validateDataInputType(State state, State oldState, TestFunction t) {
-		final InterfaceList fb = state.getFunctionblock().getFBType().getInterfaceList();
+	private static void validateDataInputType(final State state, final State oldState, final TestFunction t) {
+		final InterfaceList fb = state.getFunctionblock().getInterface();
 		t.test(fb.getInputVars().get(0).getTypeName(), FordiacKeywords.LWORD);
 		t.test(fb.getInputVars().get(0).getType(), getDatatypelib().getType(FordiacKeywords.LWORD));
 	}
 
-	private static void validateDataInputTypeNetworkElements(State state, State oldState, TestFunction t) {
-		final InterfaceList fb = state.getFunctionblock().getFBType().getInterfaceList();
-		final InterfaceList fb1 = state.getFbNetwork().getNetworkElements().get(0).getInterface();
-		final InterfaceList fb2 = state.getFbNetwork().getNetworkElements().get(1).getInterface();
+	private static void validateDataInputTypeNetworkElements(final State state, final State oldState,
+			final TestFunction t) {
+		final InterfaceList fb = state.getFunctionblock().getInterface();
+		final InterfaceList fb1 = getFBInstance(state, 0).getInterface();
+		final InterfaceList fb2 = getFBInstance(state, 1).getInterface();
 
 		t.test(fb1.getInputVars().get(0).getTypeName(), fb.getInputVars().get(0).getTypeName());
 		t.test(fb2.getInputVars().get(0).getTypeName(), fb.getInputVars().get(0).getTypeName());
 		t.test(fb1.getInputVars().get(0).getType(), fb.getInputVars().get(0).getType());
 		t.test(fb2.getInputVars().get(0).getType(), fb.getInputVars().get(0).getType());
 	}
-	
+
 	// parameter creation function
 	public static Collection<Arguments> data() {
 		final List<ExecutionDescription<?>> executionDescriptions = List.of( //
@@ -65,6 +68,10 @@ public class ChangeTypeCommandTest extends FBNetworkTestBase {
 				) //
 		);
 		return createCommands(executionDescriptions);
+	}
+
+	private static BlockFBNetworkElement getFBInstance(final State state, final int instanceIndex) {
+		return (BlockFBNetworkElement) state.getFbNetwork().getNetworkElements().get(instanceIndex);
 	}
 
 }

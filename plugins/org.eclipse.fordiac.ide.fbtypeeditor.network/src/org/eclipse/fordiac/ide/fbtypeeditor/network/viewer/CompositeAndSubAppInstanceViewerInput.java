@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.network.viewer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.util.UntypedEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 public class CompositeAndSubAppInstanceViewerInput extends UntypedEditorInput {

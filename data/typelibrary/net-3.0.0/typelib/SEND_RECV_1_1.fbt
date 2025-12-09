@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SEND_RECV_1_1" Comment="Send and receive on a duplex communication channel">
+	<Identification Standard="61499-2" Description="Copyright (c) 2025 Martin Erich Jobst&#10;&#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Martin Erich Jobst" Date="2025-07-11" Remarks="initial implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::net">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="ID"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Send Request">
+				<With Var="QI"/>
+				<With Var="SD_1"/>
+			</Event>
+			<Event Name="RSP" Type="Event" Comment="Receive Request">
+				<With Var="QI"/>
+				<With Var="SD_1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Send Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="RD_1"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Receive Indication">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="RD_1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="ID" Type="WSTRING" Comment="Channel Identifier"/>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Data to Send"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Channel Status"/>
+			<VarDeclaration Name="RD_1" Type="ANY" Comment="Received Data"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_SEND_RECV'"/>
+</FBType>

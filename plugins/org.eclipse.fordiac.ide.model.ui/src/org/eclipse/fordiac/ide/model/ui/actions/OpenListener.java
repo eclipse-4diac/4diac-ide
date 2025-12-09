@@ -17,18 +17,24 @@
 package org.eclipse.fordiac.ide.model.ui.actions;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 
 /**
  * Helper class for reducing the effort to implement open listeners
@@ -64,38 +70,54 @@ public abstract class OpenListener implements IOpenListener {
 		final IEditorPart openedEditor = getOpenedEditor();
 		if (null != openedEditor) {
 			final AbstractBreadCrumbEditor breadCrumbEditor = getBreadCrumbEditor(openedEditor);
-			if (null != breadCrumbEditor) {
-				breadCrumbEditor.getBreadcrumb().setInput(element);
+			final EObject elementToOpen = getElementToOpen(openedEditor, element);
+			if (breadCrumbEditor != null && elementToOpen != null) {
+				if (sameLevelAsParent(elementToOpen)) {
+					breadCrumbEditor.getBreadcrumb().setInput(elementToOpen.eContainer().eContainer());
+					HandlerHelper.selectElement(elementToOpen, openedEditor);
+				} else {
+					breadCrumbEditor.getBreadcrumb().setInput(elementToOpen);
+				}
 			}
 		}
 	}
 
 	protected void openInSubappTypeEditor(final SubAppType root, final EObject element) {
-		openInBreadCrumbEditor(root.getPaletteEntry().getFile(), SUBAPP_TYPE_EDITOR, element);
+		openInBreadCrumbEditor(root.getTypeEntry().getFile(), SUBAPP_TYPE_EDITOR, element);
 	}
 
 	protected void openInFBTypeEditor(final FBType root, final EObject element) {
-		openInBreadCrumbEditor(root.getPaletteEntry().getFile(), FB_TYPE_EDITOR, element);
+		openInBreadCrumbEditor(root.getTypeEntry().getFile(), FB_TYPE_EDITOR, element);
 	}
 
-	private static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
-		AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
-		if ((breadCrumbEditor == null) && (openedEditor instanceof FormEditor)) {
-			breadCrumbEditor = getBreadCrumbFromMultiPageEditor((FormEditor) openedEditor);
+	public static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
+		final AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
+		if ((breadCrumbEditor != null)
+				&& (breadCrumbEditor.getEditorSite() instanceof final MultiPageEditorSite multiPageEditorSite)) {
+			final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
+			if (multiPageEditor.getSelectedPage() != breadCrumbEditor) {
+				multiPageEditor.setActiveEditor(breadCrumbEditor);
+			}
 		}
 		return breadCrumbEditor;
 	}
 
-	private static AbstractBreadCrumbEditor getBreadCrumbFromMultiPageEditor(final FormEditor openedEditor) {
-		final IEditorInput input = openedEditor.getActiveEditor().getEditorInput();
+	private static boolean sameLevelAsParent(final Object element) {
+		return element instanceof Group;
+	}
 
-		for (final IEditorPart subEditor : openedEditor.findEditors(input)) {
-			if (subEditor instanceof AbstractBreadCrumbEditor) {
-				openedEditor.setActiveEditor(subEditor);
-				return (AbstractBreadCrumbEditor) subEditor;
-			}
+	public static EObject getElementToOpen(final IEditorPart openedEditor, final EObject element) {
+		final LibraryElement editorLibElement = openedEditor.getAdapter(LibraryElement.class);
+		if (editorLibElement == null) {
+			return null;
 		}
-		return null;
+
+		if (editorLibElement == EcoreUtil.getRootContainer(element)) {
+			// we are in the same model we can safely use element
+			return element;
+		}
+		final URI elementURI = EcoreUtil.getURI(element);
+		return editorLibElement.eResource().getEObject(elementURI.fragment());
 	}
 
 }

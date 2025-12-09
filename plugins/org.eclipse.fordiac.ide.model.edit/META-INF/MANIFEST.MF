@@ -3,13 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.edit;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.edit
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: org.eclipse.fordiac.ide.model.data.provider,
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: org.eclipse.fordiac.ide.model.buildpath.provider,
+ org.eclipse.fordiac.ide.model.data.provider,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.fordiac.ide.model.edit.helper,
  org.eclipse.fordiac.ide.model.edit.providers,
  org.eclipse.fordiac.ide.model.libraryElement.provider
 Require-Bundle: org.eclipse.core.runtime,
@@ -21,5 +24,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.jface,
- org.eclipse.emf.edit.ui
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide,
+ org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.gef
 Bundle-ActivationPolicy: lazy

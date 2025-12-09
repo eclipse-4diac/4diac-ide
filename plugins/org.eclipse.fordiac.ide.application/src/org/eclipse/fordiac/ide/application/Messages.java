@@ -19,15 +19,29 @@ package org.eclipse.fordiac.ide.application;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
+
+	public static String AbstractCommandMarkerResolution_CannotCreateCommand;
+
+	public static String AbstractCommandMarkerResolution_CannotExecuteCommand;
+
+	public static String AbstractCommandMarkerResolution_CommitTask;
+
+	public static String AbstractCommandMarkerResolution_NoSuchElement;
+
+	public static String AbstractCommandMarkerResolution_PerformTask;
 
 	public static String AddFBBookMark_AddBookmark;
 
 	public static String AddFBBookMark_AddBookMarkTitle;
 
 	public static String AddFBBookMark_EnterBookmarkName;
+
+	public static String CommentPropertySection_DataInputs;
+
+	public static String CommentPropertySection_DataOutputs;
 
 	public static String ConnectionConstraintsPrefernecePage_Description;
 
@@ -43,14 +57,20 @@ public final class Messages extends NLS {
 
 	public static String ConvertToStructHandler_Title;
 
+	public static String ConfigurableMoveFBSection_DataType;
+
 	public static String CopyEditPartsAction_Text;
 
 	public static String CreateConnectionSection_CreateConnection;
+
+	public static String CreateGroupPasteCommand;
 
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 
 	public static String CutEditPartsAction_Text;
+
+	public static String EnterPackageName_Text;
 
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 
@@ -77,6 +97,16 @@ public final class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
+	public static String FBMarker_ActivePredecessor;
+
+	public static String FBMarker_MarkAsPredecessor;
+
+	public static String FBMarker_RemovePredecessorMarker;
+
+	public static String FunctionBlock;
+
+	public static String HandlerPreferenceSafeError;
+
 	public static String InstanceCommentEditPart_EMPTY_COMMENT;
 
 	public static String InterfaceElementSection_ConnectionGroup;
@@ -100,11 +130,15 @@ public final class Messages extends NLS {
 
 	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
 
+	public static String MapToDialog_Message;
+
+	public static String MapToDialog_Title;
+
 	public static String MonitoringEditPart_Not_Available;
 
-	public static String MonitoringEditPart_Forced_ValueDisplay;
+	public static String MoveElementDialogTitle;
 
-	public static String NewInstanceCellEditor_SearchForType;
+	public static String SubAppHierarchyDialogTitle;
 
 	/** The New sub application action_ new subapplication text. */
 	public static String NewSubApplicationAction_NewSubapplicationText;
@@ -114,12 +148,18 @@ public final class Messages extends NLS {
 
 	public static String OpenApplicationEditorAction_Name;
 
-	/** The Open sub application editor action_ erro r_ open subapplication editor. */
+	/**
+	 * The Open sub application editor action_ erro r_ open subapplication editor.
+	 */
 	public static String OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor;
 
 	public static String OpenSubApplicationEditorAction_Name;
 
 	public static String PasteEditPartsAction_Text;
+
+	public static String SaveAsStructTypeWizard_WindowTitle;
+
+	public static String SaveAsStructTypeWizard_WizardPageName;
 
 	public static String SaveAsStructWizard_WizardPageName;
 
@@ -153,6 +193,14 @@ public final class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
 
+	public static String SaveAsWizardPage_SaveAsStructType_Description;
+
+	public static String SaveAsWizardPage_SaveAsStructType_PageName;
+
+	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
+
+	public static String SearchStringProperties;
+
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
@@ -163,12 +211,24 @@ public final class Messages extends NLS {
 
 	public static String StructManipulatorSection_Contained_variables;
 
+	public static String ToggleSegments;
+
+	public static String ToggleSegments_3;
+
+	public static String ToggleSegments_5;
+
+	public static String TransferInstanceComments_WizardTitle;
+
+	public static String TransferInstanceComments_TransferLabel;
+
 	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
 	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
 
 	public static String UIFBNetworkContextMenuProvider_InsertFB;
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
+
+	public static String Untyped;
 
 	public static String UpdateFBTypeAction_Text;
 
@@ -177,6 +237,70 @@ public final class Messages extends NLS {
 	public static String ToggleSubAppRepresentation_Collapse;
 
 	public static String ToggleSubAppRepresentation_Expand;
+
+	public static String ToggleConnections_Show;
+
+	public static String ToggleConnections_Hide;
+
+	public static String ToggleConnections_Singular_Hide;
+
+	public static String ToggleConnections_Singular_Show;
+
+	public static String ToggleConnections_Target_Show;
+
+	public static String VarConfigurationSection_VarConfigs;
+
+	public static String InfoPropertySection_SystemInfo;
+
+	public static String InfoPropertySection_Number_Of_Connections_Label;
+
+	public static String InfoPropertySection_Number_Of_Used_Types_Label;
+
+	public static String InfoPropertySection_Number_Of_Untyped_SubApps_Label;
+
+	public static String InfoPropertySection_Number_Of_All_Instances_Label;
+
+	public static String InfoPropertySection_CheckBox_Label;
+
+	public static String InfoPropertySection_All_Types_And_Counts_Label;
+
+	public static String InfoPropertySection_Combo_Text_SortBy;
+
+	public static String InfoPropertySection_Combo_Text_Name;
+
+	public static String InfoPropertySection_Combo_Text_CountASC;
+
+	public static String InfoPropertySection_Combo_Text_CountDESC;
+
+	public static String QuickFixDialog_Title;
+
+	public static String QuickFixDialog_NoResolutionsFound;
+
+	public static String QuickFixDialog_NoResolutionsFoundForMultiSelection;
+
+	public static String QuickFixDialog_Message;
+
+	public static String QuickFixDialog_SelectAll;
+
+	public static String QuickFixDialog_DeselectAll;
+
+	public static String QuickFixDialog_Resolutions_List_Title;
+
+	public static String QuickFixDialog_Problems_List_Title;
+
+	public static String QuickFixDialog_Problems_List_Location;
+
+	public static String QuickFixDialog_Problems_List_Resource;
+
+	public static String Connection_Negate;
+
+	public static String Connection_Unnegate;
+
+	public static String AttributeInherit_SectionTitle;
+
+	public static String AttributeInherit_CopyAttribute;
+
+	public static String AttributeInherit_InheritAttribute;
 
 	static {
 		// initialize resource bundle

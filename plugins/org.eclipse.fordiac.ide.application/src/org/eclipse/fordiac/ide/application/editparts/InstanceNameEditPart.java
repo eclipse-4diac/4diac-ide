@@ -18,12 +18,18 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -36,10 +42,11 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.IEditorPart;
 
-public class InstanceNameEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
+public class InstanceNameEditPart extends AbstractGraphicalEditPart
+		implements NodeEditPart, AnnotableGraphicalEditPart {
 
-	private DirectEditManager manager;
 	private DiagramFontChangeListener fontChangeListener;
 
 	@Override
@@ -54,9 +61,6 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		super.deactivate();
 		getModel().getRefElement().eAdapters().remove(contentAdapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
-		if (manager != null) {
-			manager = null;
-		}
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
@@ -82,6 +86,12 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 	}
 
 	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel().getRefElement(), event,
+				FordiacAnnotationUtil::showOnTargetName, FordiacAnnotationUtil::showOnTargetPosition);
+	}
+
+	@Override
 	public void refresh() {
 		super.refresh();
 		refreshValue();
@@ -92,7 +102,6 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		return (InstanceNameFigure) super.getFigure();
 	}
 
-
 	@Override
 	protected void createEditPolicies() {
 		// FBNetwork elements need a special rename command therefore we remove the
@@ -101,8 +110,8 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractViewRenameEditPolicy() {
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof InstanceNameEditPart) {
-					return new ChangeFBNetworkElementName(((InstanceNameEditPart) getHost()).getModel().getRefElement(),
+				if (getHost() instanceof final InstanceNameEditPart instanceNameEditPart) {
+					return ChangeNameCommand.forName(instanceNameEditPart.getModel().getRefElement(),
 							(String) request.getCellEditor().getValue());
 				}
 				return null;
@@ -129,8 +138,11 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		if (!getModel().getRefElement().isContainedInTypedInstance() && (request.getType() == RequestConstants.REQ_DIRECT_EDIT
-				|| request.getType() == RequestConstants.REQ_OPEN)) {
+		final IEditorPart editor = EditorUtils.getCurrentActiveEditor();
+
+		if (!getModel().getRefElement().isContainedInTypedInstance() && editor.getAdapter(FBNetwork.class) != null
+				&& (request.getType() == RequestConstants.REQ_DIRECT_EDIT
+						|| request.getType() == RequestConstants.REQ_OPEN)) {
 			performDirectEdit();
 
 		} else {
@@ -138,23 +150,16 @@ public class InstanceNameEditPart extends AbstractGraphicalEditPart implements N
 		}
 	}
 
-	private DirectEditManager getManager() {
-		if (null == manager) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
 	private DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	private void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
 	private boolean isResoruceTypeFBNElement() {
-		return ((getModel().getRefElement() instanceof FB) && (((FB) getModel().getRefElement()).isResourceTypeFB()));
+		return getModel().getRefElement() instanceof final FB fb && fb.isResourceTypeFB();
 	}
 
 	@Override

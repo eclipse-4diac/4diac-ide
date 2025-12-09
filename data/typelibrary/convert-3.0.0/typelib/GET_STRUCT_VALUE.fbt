@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<FBType Comment="Service Interface Function Block Type" Name="GET_STRUCT_VALUE">
+  <Identification Description="Copyright (c) 2018 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-2"/>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Author="Jose Cabral" Date="2018-10-16" Version="1.0"/>
+	<CompilerInfo packageName="eclipse4diac::convert">
+	</CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Get Value out of structure" Name="REQ" Type="Event">
+        <With Var="member"/>
+        <With Var="in_struct"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="REQ event finished" Name="CNF" Type="Event">
+        <With Var="QO"/>
+        <With Var="output"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Structure to look into" Name="in_struct" Type="ANY"/>
+      <VarDeclaration Comment="Member of the strucuture to retrieve. Inner members are access using the dot (.) operator" Name="member" Type="STRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="TRUE if no errors ocurred, FALSE otherwise" Name="QO" Type="BOOL"/>
+      <VarDeclaration Comment="Selected member if QO = TRUE, remains unchanged otherwise" Name="output" Type="ANY"/>
+    </OutputVars>
+  </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

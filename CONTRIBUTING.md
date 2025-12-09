@@ -35,7 +35,6 @@ It is also recommended to [add SSH public keys to your GitHub account](https://g
 
 ## Creating a Development Environment
 
-
 For compiling 4diac IDE  you need at least a version 17 Java JRE. 
 Higher version JREs are supported, but may require additional Eclipse IDE configuration.
 

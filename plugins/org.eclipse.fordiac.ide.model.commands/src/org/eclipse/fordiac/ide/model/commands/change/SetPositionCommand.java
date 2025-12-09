@@ -15,62 +15,85 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class SetPositionCommand extends Command {
-	private final Rectangle newBounds;
-	private Rectangle oldBounds;
-	private final ChangeBoundsRequest request;
 	private final PositionableElement positionableElement;
+//	private final double dx;
+//	private final double dy;
+	private Position oldPos;
+	private Position newPos;
 
 	public PositionableElement getPositionableElement() {
 		return positionableElement;
 	}
 
-	public SetPositionCommand(final PositionableElement positionableElement, final ChangeBoundsRequest req,
-			final Rectangle newBounds) {
+	private SetPositionCommand(final PositionableElement positionableElement) {
 		this.positionableElement = positionableElement;
-		this.request = req;
-		this.newBounds = newBounds.getCopy();
 		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
+	}
+
+	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
+		this(positionableElement);
+		if (positionableElement != null) {
+			oldPos = getPositionableElement().getPosition();
+			newPos = createNewPosition(oldPos, dx, dy);
+		}
+	}
+
+	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
+		this(positionableElement);
+		if (positionableElement != null) {
+			oldPos = getPositionableElement().getPosition();
+			newPos = createNewPosition(oldPos, dx, dy);
+		}
 	}
 
 	@Override
 	public boolean canExecute() {
-		final Object type = request.getType();
-		// make sure the Request is of a type we support: (Move or
-		// Move_Children)
-		// e.g. a FB moves within an application
-		return RequestConstants.REQ_MOVE.equals(type) || RequestConstants.REQ_MOVE_CHILDREN.equals(type)
-				|| RequestConstants.REQ_ALIGN_CHILDREN.equals(type);
+		return positionableElement != null;
 	}
 
-	/**
-	 * Sets the new Position of the affected UIFB.
-	 */
 	@Override
 	public void execute() {
-		oldBounds = new Rectangle(positionableElement.getPosition().getX(), positionableElement.getPosition().getY(),
-				-1, -1);
-		setPosition(newBounds);
+		setPosition(newPos);
 	}
 
 	@Override
 	public void redo() {
-		setPosition(newBounds);
+		setPosition(newPos);
 	}
 
 	@Override
 	public void undo() {
-		setPosition(oldBounds);
+		setPosition(oldPos);
 	}
 
-	protected void setPosition(final Rectangle bounds) {
-		positionableElement.updatePosition(bounds.getTopLeft());
+	private static Position createNewPosition(final Position oldPos, final double dx, final double dy) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(oldPos.getX() + dx);
+		pos.setY(oldPos.getY() + dy);
+		return pos;
+	}
+
+	private static Position createNewPosition(final Position oldPos, final int dx, final int dy) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(newPosFromScreenDelta(dx, oldPos.getX()));
+		pos.setY(newPosFromScreenDelta(dy, oldPos.getY()));
+		return pos;
+	}
+
+	private static double newPosFromScreenDelta(final int delta, final double oldPos) {
+		final int oldPosScreen = CoordinateConverter.INSTANCE.iec61499ToScreen(oldPos);
+		return CoordinateConverter.INSTANCE.screenToIEC61499(oldPosScreen + delta);
+	}
+
+	protected void setPosition(final Position pos) {
+		positionableElement.setPosition(pos);
 	}
 }

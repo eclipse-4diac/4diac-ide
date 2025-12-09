@@ -33,11 +33,11 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
  * begin-user-doc --> <!-- end-user-doc -->
  *
  * @generated */
-public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
+public class DeviceTypeItemProvider extends LibraryElementItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public DeviceTypeItemProvider(AdapterFactory adapterFactory) {
+	public DeviceTypeItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -45,7 +45,7 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -55,9 +55,9 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/** This adds a property descriptor for the Profile feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
-	protected void addProfilePropertyDescriptor(Object object) {
+	protected void addProfilePropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_DeviceType_profile_feature"), //$NON-NLS-1$
@@ -71,10 +71,10 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(LibraryElementPackage.Literals.DEVICE_TYPE__RESOURCE_TYPE_NAME);
@@ -86,10 +86,10 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -100,16 +100,16 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	 *
 	 * @generated not */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
 		return overlayImage(object, FordiacImage.ICON_DEVICE.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public String getText(Object object) {
-		String label = ((DeviceType) object).getName();
+	public String getText(final Object object) {
+		final String label = ((DeviceType) object).getName();
 		return label == null || label.length() == 0 ? getString("_UI_DeviceType_type") : //$NON-NLS-1$
 				getString("_UI_DeviceType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -117,10 +117,10 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
 	 * creating a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(DeviceType.class)) {
@@ -142,10 +142,10 @@ public class DeviceTypeItemProvider extends CompilableTypeItemProvider {
 
 	/** This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
 	 * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(LibraryElementPackage.Literals.DEVICE_TYPE__VAR_DECLARATION,

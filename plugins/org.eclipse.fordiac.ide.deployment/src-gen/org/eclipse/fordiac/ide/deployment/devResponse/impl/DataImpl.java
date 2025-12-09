@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -25,15 +25,13 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Data;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Data</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Data</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getTime <em>Time</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataImpl#getForced <em>Forced</em>}</li>
  * </ul>
  *
@@ -41,9 +39,9 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
  */
 public class DataImpl extends EObjectImpl implements Data {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -51,9 +49,9 @@ public class DataImpl extends EObjectImpl implements Data {
 	protected static final String VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getValue()
 	 * @generated
 	 * @ordered
@@ -61,29 +59,8 @@ public class DataImpl extends EObjectImpl implements Data {
 	protected String value = VALUE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String TIME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTime() <em>Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected String time = TIME_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getForced() <em>Forced</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getForced()
 	 * @generated
 	 * @ordered
@@ -92,8 +69,7 @@ public class DataImpl extends EObjectImpl implements Data {
 
 	/**
 	 * The cached value of the '{@link #getForced() <em>Forced</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getForced()
 	 * @generated
 	 * @ordered
@@ -101,8 +77,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	protected String forced = FORCED_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected DataImpl() {
@@ -110,8 +85,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -120,8 +94,7 @@ public class DataImpl extends EObjectImpl implements Data {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -130,44 +103,20 @@ public class DataImpl extends EObjectImpl implements Data {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setValue(String newValue) {
 		String oldValue = value;
 		value = newValue;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__VALUE, oldValue, value));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getTime() {
-		return time;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTime(String newTime) {
-		String oldTime = time;
-		time = newTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__TIME, oldTime, time));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -176,21 +125,20 @@ public class DataImpl extends EObjectImpl implements Data {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setForced(String newForced) {
 		String oldForced = forced;
 		forced = newForced;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.DATA__FORCED, oldForced, forced));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -198,17 +146,15 @@ public class DataImpl extends EObjectImpl implements Data {
 		switch (featureID) {
 			case DevResponsePackage.DATA__VALUE:
 				return getValue();
-			case DevResponsePackage.DATA__TIME:
-				return getTime();
 			case DevResponsePackage.DATA__FORCED:
 				return getForced();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -217,19 +163,17 @@ public class DataImpl extends EObjectImpl implements Data {
 			case DevResponsePackage.DATA__VALUE:
 				setValue((String)newValue);
 				return;
-			case DevResponsePackage.DATA__TIME:
-				setTime((String)newValue);
-				return;
 			case DevResponsePackage.DATA__FORCED:
 				setForced((String)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -238,19 +182,17 @@ public class DataImpl extends EObjectImpl implements Data {
 			case DevResponsePackage.DATA__VALUE:
 				setValue(VALUE_EDEFAULT);
 				return;
-			case DevResponsePackage.DATA__TIME:
-				setTime(TIME_EDEFAULT);
-				return;
 			case DevResponsePackage.DATA__FORCED:
 				setForced(FORCED_EDEFAULT);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -258,32 +200,30 @@ public class DataImpl extends EObjectImpl implements Data {
 		switch (featureID) {
 			case DevResponsePackage.DATA__VALUE:
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			case DevResponsePackage.DATA__TIME:
-				return TIME_EDEFAULT == null ? time != null : !TIME_EDEFAULT.equals(time);
 			case DevResponsePackage.DATA__FORCED:
 				return FORCED_EDEFAULT == null ? forced != null : !FORCED_EDEFAULT.equals(forced);
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
-		result.append(", time: "); //$NON-NLS-1$
-		result.append(time);
 		result.append(", forced: "); //$NON-NLS-1$
 		result.append(forced);
 		result.append(')');
 		return result.toString();
 	}
 
-} //DataImpl
+} // DataImpl

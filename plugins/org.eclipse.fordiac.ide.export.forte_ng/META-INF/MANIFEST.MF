@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FORTE Export for FORTE V1.0.x New Generation
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export.forte_ng;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.export.forte_ng
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Bundle-Activator: org.eclipse.fordiac.ide.export.forte_ng.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
@@ -17,6 +16,10 @@ Require-Bundle: com.google.guava,
  org.eclipse.xtext,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.model.xtext.fbt
+ org.eclipse.fordiac.ide.library,
+ org.eclipse.fordiac.ide.library.model
+Export-Package: org.eclipse.fordiac.ide.export.forte_ng,
+ org.eclipse.fordiac.ide.export.forte_ng.algorithm,
+ org.eclipse.fordiac.ide.export.forte_ng.util

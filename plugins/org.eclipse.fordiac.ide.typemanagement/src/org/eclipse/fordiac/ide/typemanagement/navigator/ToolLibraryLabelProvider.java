@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011 - 2024 TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -44,13 +44,10 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IProject) {
+		if (element instanceof IProject || (element instanceof final IFolder folder && folder.isLinked())) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
-		} else if (element instanceof IFolder && ((IFolder) element).isLinked()) {
-			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override

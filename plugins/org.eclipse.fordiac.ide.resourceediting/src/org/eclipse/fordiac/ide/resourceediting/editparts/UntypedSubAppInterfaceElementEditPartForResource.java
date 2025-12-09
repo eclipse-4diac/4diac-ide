@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 							 Johannes Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -53,11 +53,9 @@ public class UntypedSubAppInterfaceElementEditPartForResource extends UntypedSub
 		if (parent != null) {
 			final FBNetworkContainerEditPart fbcep = (FBNetworkContainerEditPart) parent;
 			final VirtualIO referencedElement = fbcep.getVirtualIOElement(getModel());
-			if (referencedElement != null) {
-				final Object o = getViewer().getEditPartRegistry().get(referencedElement);
-				if (o instanceof VirtualInOutputEditPart) {
-					((VirtualInOutputEditPart) o).updatePos(this);
-				}
+			if ((referencedElement != null) && (getViewer()
+					.getEditPartForModel(referencedElement) instanceof final VirtualInOutputEditPart virtIOEP)) {
+				virtIOEP.updatePos(this);
 			}
 		}
 	}

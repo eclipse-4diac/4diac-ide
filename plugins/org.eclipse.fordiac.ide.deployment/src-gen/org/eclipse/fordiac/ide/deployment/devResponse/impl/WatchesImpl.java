@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -28,9 +28,8 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Watches</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Watches</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -43,8 +42,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 public class WatchesImpl extends EObjectImpl implements Watches {
 	/**
 	 * The cached value of the '{@link #getResources() <em>Resources</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getResources()
 	 * @generated
 	 * @ordered
@@ -52,8 +50,7 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 	protected EList<Resource> resources;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected WatchesImpl() {
@@ -61,8 +58,7 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -71,21 +67,19 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EList<Resource> getResources() {
 		if (resources == null) {
-			resources = new EObjectResolvingEList<Resource>(Resource.class, this, DevResponsePackage.WATCHES__RESOURCES);
+			resources = new EObjectResolvingEList<>(Resource.class, this, DevResponsePackage.WATCHES__RESOURCES);
 		}
 		return resources;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -93,13 +87,13 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 		switch (featureID) {
 			case DevResponsePackage.WATCHES__RESOURCES:
 				return getResources();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -110,13 +104,14 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 				getResources().clear();
 				getResources().addAll((Collection<? extends Resource>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -125,13 +120,14 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 			case DevResponsePackage.WATCHES__RESOURCES:
 				getResources().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -139,8 +135,9 @@ public class WatchesImpl extends EObjectImpl implements Watches {
 		switch (featureID) {
 			case DevResponsePackage.WATCHES__RESOURCES:
 				return resources != null && !resources.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
-} //WatchesImpl
+} // WatchesImpl

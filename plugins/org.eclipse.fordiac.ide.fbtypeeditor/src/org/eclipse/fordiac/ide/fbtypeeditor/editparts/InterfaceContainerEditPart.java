@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,48 +16,45 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.TextUtilities;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.EventOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.InterfaceElementSelectionLayoutPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.PlugContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.SocketContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutInputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.fbtypeeditor.policies.VarInOutOutputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableInputContainerLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.VariableOutputContainerLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
-	public class InterfaceContainerFigure extends Figure {
+	public static class InterfaceContainerFigure extends Figure {
 		public InterfaceContainerFigure() {
-			final FlowLayout layout = new FlowLayout();
-			layout.setMajorSpacing(0);
-			layout.setMinorSpacing(0);
+			final ToolbarLayout layout = new ToolbarLayout();
+			layout.setSpacing(0);
 			layout.setHorizontal(false);
 			layout.setStretchMinorAxis(true);
-			if (getModel() instanceof VariableInputContainer || getModel() instanceof SocketContainer) {
-				layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-			}
 			setLayoutManager(layout);
 			setPreferredSize(30, 10);
 		}
 	}
 
-	private final Adapter econtentAdapter = new EContentAdapter() {
+	private final Adapter econtentAdapter = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			refresh();
-			if (getParent() != null && getParent().getParent() != null) {
-				getParent().getParent().refresh();
-			}
 			super.notifyChanged(notification);
 		}
 	};
@@ -81,6 +78,11 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
+		if (!isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new InterfaceElementSelectionLayoutPolicy());
+			return;
+		}
+
 		if (getModel() instanceof EventInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new EventInputContainerLayoutEditPolicy());
 		}
@@ -90,11 +92,17 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 		if (getModel() instanceof VariableInputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableInputContainerLayoutEditPolicy());
 		}
+		if (getModel() instanceof VarInOutInputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutInputContainerLayoutEditPolicy());
+		}
 		if (getModel() instanceof SocketContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new SocketContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof VariableOutputContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableOutputContainerLayoutEditPolicy());
+		}
+		if (getModel() instanceof VarInOutOutputContainer) {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new VarInOutOutputContainerLayoutEditPolicy());
 		}
 		if (getModel() instanceof PlugContainer) {
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new PlugContainerLayoutEditPolicy());
@@ -107,7 +115,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<? extends IInterfaceElement> getModelChildren() {
 		return getModel().getChildren();
 	}
 
@@ -128,5 +136,9 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			dim.height = (int) (dim.height * 0.66);
 			getContentPane().setPreferredSize(dim);
 		}
+	}
+
+	public boolean isInterfaceEditable() {
+		return !(getModel().getFbType() instanceof FunctionFBType);
 	}
 }

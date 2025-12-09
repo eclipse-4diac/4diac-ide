@@ -16,15 +16,16 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.router.RouterUtil;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.CompoundSnapToHelper;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.SnapToGrid;
@@ -32,7 +33,9 @@ import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.SnapFeedbackPolicy;
 import org.eclipse.gef.rulers.RulerProvider;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * The Class AbstractDiagramEditPart.
@@ -40,6 +43,11 @@ import org.eclipse.jface.util.IPropertyChangeListener;
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart {
+	private final IPreferenceStore preferenceStore;
+
+	protected AbstractDiagramEditPart() {
+		preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, GefPreferenceConstants.GEF_PREFERENCES_ID);
+	}
 
 	/**
 	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
@@ -55,7 +63,8 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		newFigure.setLayoutManager(new FreeformLayout());
 		newFigure.setOpaque(false);
 
-		updateRouter(newFigure);
+		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
+		connLayer.setConnectionRouter(createConnectionRouter(newFigure));
 
 		return newFigure;
 	}
@@ -68,14 +77,13 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	@Override
 	public void refresh() {
 		super.refresh();
-		updateGrid();
 		showGrid();
 		updateRuler();
 	}
 
 	private void updateRuler() {
-		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY, Boolean
-				.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_RULERS)));
+		getViewer().setProperty(RulerProvider.PROPERTY_RULER_VISIBILITY,
+				Boolean.valueOf(preferenceStore.getBoolean(GefPreferenceConstants.SHOW_RULERS)));
 	}
 
 	/*
@@ -88,7 +96,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (!isActive()) {
 			super.activate();
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
+				preferenceStore.addPropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
@@ -103,14 +111,14 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 		if (isActive()) {
 			super.deactivate();
 			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
+				preferenceStore.removePropertyChangeListener(getPreferenceChangeListener());
 			}
 		}
 	}
 
 	protected void showGrid() {
 		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_VISIBLE,
-				Boolean.valueOf(Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_GRID)));
+				Boolean.valueOf(preferenceStore.getBoolean(GefPreferenceConstants.SHOW_GRID)));
 	}
 
 	private IPropertyChangeListener listener;
@@ -123,32 +131,20 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = event -> {
-				if (event.getProperty().equals(DiagramPreferences.SHOW_GRID)) {
+				if (event.getProperty().equals(GefPreferenceConstants.SHOW_GRID)) {
 					showGrid();
 				}
-				if (event.getProperty().equals(DiagramPreferences.GRID_SPACING)) {
-					updateGrid();
-				}
-				if (event.getProperty().equals(DiagramPreferences.SHOW_RULERS)) {
+				if (event.getProperty().equals(GefPreferenceConstants.SHOW_RULERS)) {
 					updateRuler();
-				}
-				if (event.getProperty().equals(DiagramPreferences.CONNECTION_ROUTER)) {
-					updateRouter(getFigure());
 				}
 			};
 		}
 		return listener;
 	}
 
-	protected void updateRouter(final IFigure figure) {
-		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(RouterUtil.getConnectionRouter(figure));
-	}
-
-	protected void updateGrid() {
-		final int gridSpacing = Activator.getDefault().getPreferenceStore().getInt(DiagramPreferences.GRID_SPACING);
-
-		getViewer().setProperty(SnapToGrid.PROPERTY_GRID_SPACING, new Dimension(gridSpacing, gridSpacing));
+	@SuppressWarnings("static-method") // allow children to overwrite and create a different router
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new BendpointConnectionRouter();
 	}
 
 	/*
@@ -158,10 +154,10 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	 * .Class)
 	 */
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == SnapToHelper.class) {
 			final List<SnapToGrid> snapStrategies = new ArrayList<>();
-			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
+			if (((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().isSnapToGrid()) {
 				snapStrategies.add(new SnapToGrid(this));
 			}
 
@@ -169,12 +165,12 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 				return null;
 			}
 			if (snapStrategies.size() == 1) {
-				return snapStrategies.get(0);
+				return key.cast(snapStrategies.get(0));
 			}
 
 			final SnapToHelper[] ss = new SnapToHelper[snapStrategies.size()];
 			snapStrategies.toArray(ss);
-			return new CompoundSnapToHelper(ss);
+			return key.cast(new CompoundSnapToHelper(ss));
 		}
 		return super.getAdapter(key);
 	}

@@ -17,8 +17,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.internal;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -26,40 +31,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
 /**
  * abstract command to add a variable to a list of a LibraryElement
  *
  */
-public abstract class CreateVariableCommand extends Command implements CreationCommand {
+public abstract class CreateVariableCommand extends CreationCommand implements ScopedCommand {
 	/** The type that the variable is added to */
 	private final LibraryElement type;
 
-	/** The new variable declaration */
-	private VarDeclaration varDecl;
-	private DataType dataType;
-	private String name;
+	private final DataType dataType;
+	private final String name;
 	private final int index;
 
-	/**
-	 * Instantiates a new create variable command.
-	 *
-	 * @param dataType the data type
-	 * @param type     the library element the new variable is added to
-	 */
-	protected CreateVariableCommand(final LibraryElement type) {
-		this(type, 0, null, null);
-	}
+	/** The new variable declaration */
+	private VarDeclaration varDecl;
 
-	protected CreateVariableCommand(final LibraryElement type, final int index, final String name, final DataType dataType) {
-		this.dataType = dataType;
-		if (null == this.dataType) {
-			this.dataType = IecTypes.ElementaryTypes.BOOL;
-		}
-		this.name = name;
+	protected CreateVariableCommand(final LibraryElement type, final int index, final String name,
+			final DataType dataType) {
+		this.type = Objects.requireNonNull(type);
+		this.dataType = Objects.requireNonNullElse(dataType, IecTypes.ElementaryTypes.BOOL);
+		this.name = Objects.requireNonNullElse(name, getDefaultVarName());
 		this.index = index;
-		this.type = type;
 	}
 
 	/**
@@ -84,15 +77,9 @@ public abstract class CreateVariableCommand extends Command implements CreationC
 	 */
 	@Override
 	public void execute() {
-		if (null == name) {
-			// if we haven't got a name proposal create a name now.
-			name = getDefaultVarName();
-		}
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(dataType);
-		varDecl.setTypeName(dataType.getName());
 		varDecl.setComment(""); //$NON-NLS-1$
-		varDecl.setArraySize(0);
 		final Value value = LibraryElementFactory.eINSTANCE.createValue();
 		value.setValue(""); //$NON-NLS-1$
 		varDecl.setValue(value);
@@ -125,11 +112,20 @@ public abstract class CreateVariableCommand extends Command implements CreationC
 	 */
 	@Override
 	public void redo() {
-		getVariableList().add(index, varDecl);
+		if (index >= 0) {
+			getVariableList().add(index, varDecl);
+		} else {
+			getVariableList().add(varDecl);
+		}
 	}
 
 	@Override
 	public Object getCreatedElement() {
 		return getVarDeclaration();
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(type);
 	}
 }

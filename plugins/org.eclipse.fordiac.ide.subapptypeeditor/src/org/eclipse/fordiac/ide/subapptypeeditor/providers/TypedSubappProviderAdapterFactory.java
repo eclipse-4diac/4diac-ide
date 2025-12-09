@@ -13,25 +13,42 @@
 package org.eclipse.fordiac.ide.subapptypeeditor.providers;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.fordiac.ide.model.edit.providers.CFBInstanceItemProviderForSystem;
+import org.eclipse.fordiac.ide.model.edit.providers.UntypedSubAppItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 
 public class TypedSubappProviderAdapterFactory extends LibraryElementItemProviderAdapterFactory {
 
-
 	@Override
 	public Adapter createSubAppTypeAdapter() {
 		if (subAppTypeItemProvider == null) {
-			subAppTypeItemProvider = new TypedSubAppItemProvider(this);
+			subAppTypeItemProvider = new EditorSubAppTypeItemProvider(this);
 		}
 		return subAppTypeItemProvider;
 	}
 
 	@Override
-	public Adapter createSubAppAdapter() {
-		if (subAppItemProvider == null) {
-			subAppItemProvider = new SubAppItemProviderForTypedSubapps(this);
+	public Adapter createTypedSubAppAdapter() {
+		if (typedSubAppItemProvider == null) {
+			typedSubAppItemProvider = new SubAppItemProviderForTypedSubapps(this);
 		}
-		return subAppItemProvider;
+		return typedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createUntypedSubAppAdapter() {
+		if (untypedSubAppItemProvider == null) {
+			untypedSubAppItemProvider = new UntypedSubAppItemProviderForSystem(this);
+		}
+		return untypedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createCFBInstanceAdapter() {
+		if (cfbInstanceItemProvider == null) {
+			cfbInstanceItemProvider = new CFBInstanceItemProviderForSystem(this);
+		}
+		return cfbInstanceItemProvider;
 	}
 
 }

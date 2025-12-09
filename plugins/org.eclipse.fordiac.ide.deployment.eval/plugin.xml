@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.model.eval.factory">
+      <factory
+            class="org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorFactory">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
+         </source>
+      </factory>
+      <factory
+            class="org.eclipse.fordiac.ide.deployment.eval.DeploymentEvaluatorFactory"
+            variant="deployment">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.BasicFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.SubAppType">
+         </source>
+      </factory>
+   </extension>
+
+</plugin>

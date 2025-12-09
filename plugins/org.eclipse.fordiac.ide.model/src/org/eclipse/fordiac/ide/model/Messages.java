@@ -1,5 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010  Profactor GmbH, TU Wien ACIN
+ * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
+ * 								   Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,252 +11,218 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
+ *  Sebastian Hollersbacher
+ *	  - externalized translatable strings
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+/** The Class Messages. */
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
 
-	/** The Common element importer_ erro r_ missing_ organization. */
-	public static String CommonElementImporter_ERROR_Missing_Organization;
+	public static String ArrayValueConverter_IllegalElementValue;
 
-	/** The Common element importer_ erro r_ missing author info. */
+	public static String ArrayValueConverter_InvalidRepeatSyntax;
+
+	public static String CommonElementImporter_ERROR_DeclarationNotSet;
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
-
-	/** The Common element importer_ erro r_ missing version info. */
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
-
-	/** The Compilable element importer_ erro r_ language not defined. */
-	public static String CompilableElementImporter_ERROR_LanguageNotDefined;
-
-	/** The Compilable element importer_ erro r_ product not set. */
+	public static String CommonElementImporter_ReservedAttributesValidation;
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
-
-	/** The Compilable element importer_ erro r_ unsupported language. */
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
-
-	/** The Compilable element importer_ erro r_ vendor not set. */
 	public static String CompilableElementImporter_ERROR_VendorNotSet;
-
-	/** The Compilable element importer_ erro r_ version not set. */
 	public static String CompilableElementImporter_ERROR_VersionNotSet;
+	public static String ConnectionAnnotations_DestinationElementMissing;
+	public static String ConnectionAnnotations_DestinationEndpointMissing;
+	public static String ConnectionAnnotations_DuplicateConnection;
 
+	public static String ConnectionAnnotations_GenericEndpoints;
+	public static String ConnectionAnnotations_SourceElementMissing;
+	public static String ConnectionAnnotations_SourceEndpointMissing;
+	public static String ConnectionAnnotations_TypeMismatch;
+
+	public static String ConnectionAnnotations_TypeMismatchInOut;
+
+	public static String ConnectionAnnotations_TypeMismatchInOutIntermediate;
+
+	public static String ConnectionAnnotations_TypeMismatchInOutSeparator;
+
+	public static String ConnectionAnnotations_TypeMismatchInOutVia;
+	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
+	public static String ConnectionHelper_ErrorMarker_Source_Missing;
+	public static String ConnectionHelper_pin_not_found;
+	public static String ConnectionValidator_OutputsCannotBeConnectedToVarInOuts;
+	public static String ConnectionValidator_VarInOutArraySizeMismatch;
+	public static String ConnectionValidator_VarInOutConnectionCrossesResourceBoundaries;
+	public static String ConnectionValidator_VarInOutConnectionsIsALoop;
+	public static String ConnectionValidator_VarInOutInputSideHasNoWith;
+	public static String ConnectionValidator_VarInOutOutputSideHasNoWith;
+	public static String ConnectionValidator_VarInOutSourceNotWellDefined;
+	public static String ConnectionValidator_VarInOutStringSizeMismatch;
+	public static String ConnectionValidator_NegatedConnectionIsNotValid;
 	public static String DataTypeExporter_UNSUPPORTED_DATA_TYPE;
-
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
+	public static String DataTypeLibrary_InvalidMaxLengthInStringType;
+	public static String DataTypeLibrary_MissingDatatype;
+	public static String EnumValueConverter_NoSuchValue;
 
-	/** The device importer_ erro r_ resource name has to be set. */
-	public static String DEVImporter_ERROR_ResourceNameHasToBeSet;
+	public static String Error_RecursiveType;
+	public static String Error_SelfInsertion;
+	public static String Error_TSAinCFB;
+	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForAttribute;
+	public static String AttributeAnnotations_MissingAttributeDeclaration;
 
-	/** The device importer_ erro r_ resource type has to be set. */
-	public static String DEVImporter_ERROR_ResourceTypeHasToBeSet;
+	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+	public static String FBNetworkAnnotations_CollisionMessage;
+	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
-	/** The FBT importer_ adapte r_ connectio n_ sourc e_ exception. */
-	public static String FBTImporter_ADAPTER_CONNECTION_SOURCE_EXCEPTION;
-
-	/** The FBT importer_ adapte r_ declaratio n_ typ e_ exception. */
 	public static String FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION;
-
-	/** The FBT importer_ adapterconnectio n_ des t_ exception. */
-	public static String FBTImporter_ADAPTERCONNECTION_DEST_EXCEPTION;
-
-	/** The FBT importer_ adapterdeclaratio n_ nam e_ exception. */
-	public static String FBTImporter_ADAPTERDECLARATION_NAME_EXCEPTION;
-
-	/** The FBT importer_ dat a_ connectio n_ destinatio n_ exception. */
-	public static String FBTImporter_DATA_CONNECTION_DESTINATION_EXCEPTION;
-
-	/** The FBT importer_ dat a_ connectio n_ sourc e_ exception. */
-	public static String FBTImporter_DATA_CONNECTION_SOURCE_EXCEPTION;
-
-	/** The FBT importer_ ecstat e_ nam e_ exception. */
-	public static String FBTImporter_ECSTATE_NAME_EXCEPTION;
-
-	/** The FBT importer_ ectranasitio n_ conditio n_ exception. */
 	public static String FBTImporter_ECTRANASITION_CONDITION_EXCEPTION;
-
-	/** The FBT importer_ ectransitio n_ des t_ exception. */
 	public static String FBTImporter_ECTRANSITION_DEST_EXCEPTION;
-
-	/** The FBT importer_ ectransitio n_ sourc e_ exception. */
 	public static String FBTImporter_ECTRANSITION_SOURCE_EXCEPTION;
-
-	/** The FBT importer_ even t_ connectio n_ des t_ exception. */
-	public static String FBTImporter_EVENT_CONNECTION_DEST_EXCEPTION;
-
-	/** The FBT importer_ even t_ connectio n_ sourc e_ excepti on. */
-	public static String FBTImporter_EVENT_CONNECTION_SOURCE_EXCEPTIOn;
-
-	/** The FBT importer_ f b_ typ e_ exception. */
-	public static String FBTImporter_FB_TYPE_EXCEPTION;
-
-	/** The FBT importer_ inpu t_ primitiv e_ even t_ exception. */
-	public static String FBTImporter_INPUT_PRIMITIVE_EVENT_EXCEPTION;
-
-	/** The FBT importer_ inpu t_ primitiv e_ exception. */
-	public static String FBTImporter_INPUT_PRIMITIVE_EXCEPTION;
-
-	/** The FBT importer_ instancenam e_ exception. */
-	public static String FBTImporter_INSTANCENAME_EXCEPTION;
-
-	/** The FBT importer_ othe r_ al g_ missin g_ lan g_ exception. */
 	public static String FBTImporter_OTHER_ALG_MISSING_LANG_EXCEPTION;
-
-	/** The FBT importer_ othe r_ al g_ missin g_ tex t_ exception. */
-	public static String FBTImporter_OTHER_ALG_MISSING_TEXT_EXCEPTION;
-
-	/** The FBT importer_ outpu t_ primitiv e_ even t_ exception. */
+	public static String FBTImporter_OTHER_METHOD_MISSING_LANG_EXCEPTION;
 	public static String FBTImporter_OUTPUT_PRIMITIVE_EVENT_EXCEPTION;
-
-	/** The FBT importer_ outpu t_ primitiv e_ exception. */
 	public static String FBTImporter_OUTPUT_PRIMITIVE_EXCEPTION;
-
-	/** The FBT importer_ pars e_ fbtyp e_ parseexception. */
-	public static String FBTImporter_PARSE_FBTYPE_PARSEEXCEPTION;
-
-	/** The FBT importer_ positio n_ exception. */
 	public static String FBTImporter_POSITION_EXCEPTION;
-
-	public static String FBTImporter_POSITION_X_WRONG;
-
-	public static String FBTImporter_POSITION_Y_WRONG;
-
-	/** The FBT importer_ require d_ f b_ typ e_ exception. */
-	public static String FBTImporter_REQUIRED_FB_TYPE_EXCEPTION;
-
-	/** The FBT importer_ run g_ expressio n_ exception. */
-	public static String FBTImporter_RUNG_EXPRESSION_EXCEPTION;
-
-	/** The FBT importer_ run g_ outpu t_ exception. */
-	public static String FBTImporter_RUNG_OUTPUT_EXCEPTION;
-
-	/** The FBT importer_ run g_ outputnam e_ exception. */
-	public static String FBTImporter_RUNG_OUTPUTNAME_EXCEPTION;
-
-	/** The FBT importer_ servic e_ interfac e_ leftinterfac e_ exception. */
 	public static String FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION;
-
-	/** The FBT importer_ servic e_ interfac e_ rightinterfac e_ exception. */
 	public static String FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION;
-
-	/** The FBT importer_ servic e_ sequenc e_ nam e_ exception. */
-	public static String FBTImporter_SERVICE_SEQUENCE_NAME_EXCEPTION;
-
-	/** The FBT importer_ s t_ textnotse t_ exception. */
-	public static String FBTImporter_ST_TEXTNOTSET_EXCEPTION;
-
-	/** The Sub app t importer_ error. */
-	public static String SubAppTImporter_ERROR;
-
-	/** The Sub app t importer_ erro r_ sub app type. */
-	public static String SubAppTImporter_ERROR_SubAppType;
-
-	/** The Sub app t importer_ erro r_ sub app type name. */
-	public static String SubAppTImporter_ERROR_SUBAppTypeName;
-
-	/** The FB type library_ erro r_ not imported. */
-	public static String FBTypeLibrary_ERROR_NotImported;
-
-	/** The FB type library_ erro r_ not supported. */
-	public static String FBTypeLibrary_ERROR_NotSupported;
-
-	public static String FordiacMarkerHelper_RemoveErrorMarkersFromFile;
-
-	/** Identifier has length zero */
-	public static String IdentifierVerifyer_ERROR_IdentifierLengthZero;
-
-	/** Identifier has invalid starting symbol */
-	public static String IdentifierVerifyer_ERROR_InvalidStartSymbol;
-
-	/** Invalid symbol used in identifier */
-	public static String IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer;
-
-	/** Identifier pattern does not match for unknown reasons */
-	public static String IdentifierVerifyer_ERROR_UnkownExpressionError;
-
-	/** The Import utils_ erro r_ arraysize_ number format. */
-	public static String Import_ERROR_ArraySize_NumberFormat;
-
-	public static String Import_ERROR_NameNotDefined;
-
-	/** The Import utils_ erro r_ input variable type not defined. */
+	public static String FordiacTypeResource_LoadFromUnsupportedURI;
+	public static String FordiacTypeResource_NotInWorkspace;
+	public static String FordiacTypeResource_SaveToUnsupportedURI;
+	public static String FordiacTypeResource_TypeImportError;
+	public static String FordiacTypeResource_UnsupportedFileType;
+	public static String FordiacTypeResource_UnsupportedContent;
+	public static String FordiacTypeResource_XMLError;
+	public static String IdentifierVerifier_NameConsecutiveUnderscore;
+	public static String IdentifierVerifier_NameNotAValidIdentifier;
+	public static String IdentifierVerifier_NameReservedKeyWord;
+	public static String IdentifierVerifier_NameTrailingUnderscore;
+	public static String IdentifierVerifier_PackageNameMessage;
+	public static String IdentifierVerifier_QualifiedNameNotValid;
+	public static String IdentifierVerifier_NotMatchingWithFilename;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
-
-	/** The Import utils_ erro r_ parameter not set. */
+	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;
-
-	/** The Import utils_ erro r_ parameter value not set. */
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
-
+	public static String InterfaceElementAnnotations_DuplicateName;
+	public static String InterfaceElementAnnotations_MemberNameCollidesWithDataType;
+	public static String LinkConstraints_ClassLinkconstraintsShouldNotBeCreated;
+	public static String LinkConstraints_ConnectingIncompatibleInterfaceTypes;
+	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
+	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
+	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
+	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
+	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String NameRepository_NameAlreadyExists;
+	public static String StructValueConverter_IllegalMemberValue;
 
-	public static String NameRepository_NameNotAValidIdentifier;
+	public static String StructValueConverter_InvalidStructLiteral;
 
-	public static String NameRepository_NameReservedKeyWord;
-
-	public static String TypeLibrary_ImportDataTypeFileDialogTitle;
-
-	public static String TypeLibrary_LoadReferencedFile_DialogTitle;
-
-	public static String TypeLibrary_OverwriteMessage;
-
-	public static String TypeLibrary_ImportAbortByUser;
-
-	public static String TypeLibrary_FBTImportException;
-
-	public static String TypeLibrary_ERROR_ReferencedDataTypeNotFound;
-
-	public static String TypeLibrary_ERROR_ReferencedTypeNotFound;
-
-	public static String FBNetworkImporter_ConnectionDestinationMissing;
-	public static String FBNetworkImporter_ConnectionDestinationNotFound;
-	public static String FBNetworkImporter_ConnectionSourceMissing;
-	public static String FBNetworkImporter_ConnectionSourceNotFound;
-
-	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
-	public static String VALIDATOR_BASE_SPECIFIER_IS_INVALID_FOR;
+	public static String StructValueConverter_NoValueConverter;
+	public static String TypedElementAnnotations_TypeNotFound;
+	public static String TypedElementAnnotations_TypeNotSet;
+	public static String TypeLibrary_TypeExists;
+	public static String VALIDATOR_ARRAY_MISSES_BRACKETS;
+	public static String VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE;
+	public static String VALIDATOR_DatatypeRequiresTypeSpecifier;
+	public static String VALIDATOR_IllegalEscapeInStringLiteral;
+	public static String VALIDATOR_IllegalStringLiteral;
 	public static String VALIDATOR_INVALID_BOOL_LITERAL;
-	public static String VALIDATOR_NO_BASE_SPECIFIER_FOR_BOOL;
-	public static String VALIDATOR_VALID_SIGNED_NUMBER_CLAUSE;
-	public static String VALIDATOR_VALID_HEXADECIMAL_NUMBER_CLAUSE;
-	public static String VALIDATOR_VALID_OCTAL_NUMBER_CLAUSE;
-	public static String VALIDATOR_VALID_BINARY_NUMBER_CLAUSE;
-	public static String VALIDATOR_VALID_UNSIGNED_VALUE_CLAUSE;
-	public static String VALIDATOR_VALID_REAL_VALUE;
-	public static String VALIDATOR_INVALID_BASE_SPECIFIER;
-	public static String VALIDATOR_ST_TIME_LITERAL_ERROR_UNSIGNED_EXPECTED;
-	public static String VALIDATOR_ST_TIME_LITERAL_OVERFLOW_ERROR;
-	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
-	public static String VALIDATOR_BASE_SPECIFIER_INVALID_FOR_TYPE;
 	public static String VALIDATOR_INVALID_DATE_AND_TIME_FORMAT;
 	public static String VALIDATOR_INVALID_DATE_FORMAT;
-	public static String VALIDATOR_WSTRING_QUOTES_HAVE_NOT_TO_BE_ESCAPED;
-	public static String VALIDATOR_INVALID_STRING_CHAR_LITERAL;
-	public static String VALIDATOR_EMPTY_CHARACTERS_ARE_NOT_ALLOWED;
-	public static String VALIDATOR_SECONDS_VALUE_CANT_BE_LARGER_THAN_60;
-	public static String VALIDATOR_MINUTE_VALUE_CANT_BE_LARGER_THAN_60;
-	public static String VALIDATOR_HOURS_VALUE_CANT_BE_24;
-	public static String VALIDATOR_INVALID_FORMAT_TOD_LITERAL;
-	public static String VALIDATOR_UNKOWN_LITERAL_ERROR_PLEASE_CHECK_SANENESS_OF_LITERAL;
-	public static String VALIDATOR_W_STRING_DOLLAR_IS_ESCAPE_SYMBOL;
-	public static String VALIDATOR_STRING_QUOTE_DOES_NOT_NEED_ESCAPE_SYMBOL;
-	public static String VALIDATOR_INVALID_WSTRING_WCHAR_LITERAL;
+	public static String VALIDATOR_INVALID_NUMBER_LITERAL;
 	public static String VALIDATOR_INVALID_TIME_LITERAL;
-	public static String VALIDATOR_TOO_MANY_TIME_DEFINITIONS_FOUND;
-	public static String VALIDATOR_CONCRETE_TYPE_SPECIFIER_MANDATORY_FOR_ANYS;
+	public static String VALIDATOR_InvalidTimeOfDayLiteral;
+	public static String VALIDATOR_InvalidTimeUnit;
+	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
+	public static String VALIDATOR_TypeNotSupported;
+	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
+	public static String VALIDATOR_UNKNOWN_LITERAL_TYPE;
+	public static String VarDeclarationAnnotations_IllegalVariableLengthArray;
 
-	public static String Error_SelfInsertion;
-	public static String Error_RecursiveType;
+	public static String VarDeclarationAnnotations_MultipleInputConnections;
 
-	public static String ConnectionHelper_ErrorMarker_Source_Missing;
-	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
-	public static String ConnectionHelper_pin_not_found;
+	public static String VarDeclarationAnnotations_MustNotSpecifyValueForVariableWithVariableArrayBounds;
+
+	public static String VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType;
+
+	public static String VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance;
+
+	public static String VarDeclarationAnnotations_ValueOverriddenBySubAppInput;
+
+	public static String VarDeclarationAnnotations_VarInOutLeftNotConnected;
+
+	public static String VarDeclarationAnnotations_VarInOutRightNotConnected;
+
+	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
+
+	// === AttributeTarget Groups ===
+	public static String AttributeTarget_General_group;
+	public static String AttributeTarget_Types_group;
+	public static String AttributeTarget_Instances_group;
+	public static String AttributeTarget_InstancePins_group;
+	public static String AttributeTarget_TypePins_group;
+	public static String AttributeTarget_UntypedSubAppPins_group;
+	// === AttributeTarget Display Names ===
+	public static String AttributeTarget_FunctionBlock_display;
+	public static String AttributeTarget_SubApp_display;
+	public static String AttributeTarget_DataTypes_display;
+	public static String AttributeTarget_DataTypeMember_display;
+	public static String AttributeTarget_AttributeTypes_display;
+	public static String AttributeTarget_TypedSubApp_display;
+	public static String AttributeTarget_UntypedSubApp_display;
+	public static String AttributeTarget_Device_display;
+	public static String AttributeTarget_Resource_display;
+	public static String AttributeTarget_Segment_display;
+	public static String AttributeTarget_Adapter_display;
+	public static String AttributeTarget_Event_display;
+	public static String AttributeTarget_Data_display;
+	public static String AttributeTarget_Systems_display;
+	public static String AttributeTarget_Applications_display;
+	public static String AttributeTarget_GlobalConstants_display;
+	public static String AttributeTarget_Connections_display;
+	public static String AttributeTarget_Comments_display;
+	public static String AttributeTarget_Groups_display;
+	public static String AttributeTarget_Link_display;
+	public static String AttributeTarget_ServiceSequence_display;
+	// === AttributeTarget Tooltips ===
+	public static String AttributeTarget_FBTypes_tooltip;
+	public static String AttributeTarget_SubAppTypes_tooltip;
+	public static String AttributeTarget_DeviceType_tooltip;
+	public static String AttributeTarget_ResourceType_tooltip;
+	public static String AttributeTarget_SegmentType_tooltip;
+	public static String AttributeTarget_DataTypes_tooltip;
+	public static String AttributeTarget_DataTypeMember_tooltip;
+	public static String AttributeTarget_AttributeTypes_tooltip;
+	public static String AttributeTarget_FBInstances_tooltip;
+	public static String AttributeTarget_TypedSubApps_tooltip;
+	public static String AttributeTarget_UntypedSubApps_tooltip;
+	public static String AttributeTarget_DeviceInstances_tooltip;
+	public static String AttributeTarget_ResourceInstances_tooltip;
+	public static String AttributeTarget_SegmentInstances_tooltip;
+	public static String AttributeTarget_InstanceAdapter_tooltip;
+	public static String AttributeTarget_InstanceEvent_tooltip;
+	public static String AttributeTarget_InstanceData_tooltip;
+	public static String AttributeTarget_TypeAdapter_tooltip;
+	public static String AttributeTarget_TypeEvent_tooltip;
+	public static String AttributeTarget_TypeData_tooltip;
+	public static String AttributeTarget_UntypedSubAppAdapter_tooltip;
+	public static String AttributeTarget_UntypedSubAppEvent_tooltip;
+	public static String AttributeTarget_UntypedSubAppData_tooltip;
+	public static String AttributeTarget_Systems_tooltip;
+	public static String AttributeTarget_Applications_tooltip;
+	public static String AttributeTarget_GlobalConstants_tooltip;
+	public static String AttributeTarget_Connections_tooltip;
+	public static String AttributeTarget_Comments_tooltip;
+	public static String AttributeTarget_Groups_tooltip;
+	public static String AttributeTarget_Links_tooltip;
+	public static String AttributeTarget_ServiceSequences_tooltip;
+
+	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
 
 	static {
 		// initialize resource bundle

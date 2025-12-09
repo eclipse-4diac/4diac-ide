@@ -56,9 +56,7 @@ public class Perspective implements IPerspectiveFactory {
 	private static void createBottomEntries(final IPageLayout layout) {
 		final IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.78f, layout.getEditorArea()); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROP_SHEET);
-		bottom.addView("org.eclipse.fordiac.ide.systemconfiguration.virtualDNS"); //$NON-NLS-1$
-		bottom.addView("org.eclipse.fordiac.ide.deployment.ui.views.Output"); //$NON-NLS-1$
-		bottom.addView("org.eclipse.ui.views.ProblemView");  //$NON-NLS-1$
+		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 	}
 
 	private void addPerspectiveShortcuts() {
@@ -67,9 +65,8 @@ public class Perspective implements IPerspectiveFactory {
 
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"); //$NON-NLS-1$
-		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"); //$NON-NLS-1$
 		factory.addNewWizardShortcut("org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard"); //$NON-NLS-1$
-		factory.addPerspectiveShortcut(PERSPECTIVE_ID);
-		factory.addPerspectiveShortcut("org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective"); //$NON-NLS-1$
+
+		factory.addPerspectiveShortcut("org.eclipse.debug.ui.DebugPerspective"); //$NON-NLS-1$
 	}
 }

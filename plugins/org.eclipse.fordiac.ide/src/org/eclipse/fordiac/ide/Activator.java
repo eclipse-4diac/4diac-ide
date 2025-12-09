@@ -74,16 +74,22 @@ public class Activator extends AbstractUIPlugin {
 		// instance to initialize the toollib and resource change listener.
 		// The variable is not needed therefore the suppress warning
 		@SuppressWarnings("unused")
-		final
-		SystemManager mgr = SystemManager.INSTANCE;
+		final SystemManager mgr = SystemManager.INSTANCE;
 	}
 
-	// enables the file auto refresh, for detecting changes necessary for egit
 	private static void setPreferences() {
-		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("org.eclipse.core.resources"); //$NON-NLS-1$
-		prefs.putBoolean("refresh.enabled", true); //$NON-NLS-1$
+		// enable the file auto refresh, for detecting changes necessary for egit
+		final IEclipsePreferences resourcePrefs = InstanceScope.INSTANCE.getNode("org.eclipse.core.resources"); //$NON-NLS-1$
+		resourcePrefs.putBoolean("refresh.enabled", true); //$NON-NLS-1$
+
+		// enable workspace refresh on startup to avoid hard coded refresh in ui thread
+		// and correctly trigger builders
+		final IEclipsePreferences eclipseUIPrefs = InstanceScope.INSTANCE.getNode("org.eclipse.ui.ide"); //$NON-NLS-1$
+		eclipseUIPrefs.putBoolean("REFRESH_WORKSPACE_ON_STARTUP", true); //$NON-NLS-1$
+
 		try {
-			prefs.flush();
+			resourcePrefs.flush();
+			eclipseUIPrefs.flush();
 		} catch (final BackingStoreException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		}

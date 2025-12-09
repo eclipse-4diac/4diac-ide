@@ -36,18 +36,18 @@
  *     - Change from BasicFB to SimpleFB tag
  *******************************************************************************/
  -->
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<FBType Name="TemplateSimple" Comment="Example for a Simple Function Block Type" >
+
+<FBType Name="TemplateSimple" Comment="Example for a Simple Function Block Type">
   <Identification Standard="61499-1" />
   <VersionInfo Organization="TU Wien/ACIN" Version="0.0" Author="Peter Gsellmann" Date="2018-10-15" />
   <InterfaceList>
     <EventInputs>
-      <Event Name="REQ" Comment="Normal Execution Request" >
+      <Event Name="REQ" Type="Event" Comment="Normal Execution Request">
         <With Var="IN" />
       </Event>
     </EventInputs>
     <EventOutputs>
-      <Event Name="CNF" Comment="Execution Confirmation" >
+      <Event Name="CNF" Type="Event" Comment="Execution Confirmation">
         <With Var="OUT" />
       </Event>
     </EventOutputs>
@@ -59,8 +59,11 @@
     </OutputVars>
   </InterfaceList>
   <SimpleFB>
-  <Algorithm Name="REQ" Comment="Executed algorithm" >
-    <ST Text="OUT := IN;&#10;" />
-  </Algorithm>
+    <ECState Name="REQ" Comment="">
+      <ECAction Algorithm="REQ" Output="CNF"/>
+    </ECState>
+    <Algorithm Name="REQ" Comment="Executed algorithm">
+      <ST Text="OUT := IN;&#10;" />
+    </Algorithm>
   </SimpleFB>
 </FBType>

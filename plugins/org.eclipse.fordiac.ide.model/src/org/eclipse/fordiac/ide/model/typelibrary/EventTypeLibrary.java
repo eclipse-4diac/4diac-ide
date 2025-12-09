@@ -14,63 +14,60 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 
 public final class EventTypeLibrary {
-	private static final String EVENT = "Event"; //$NON-NLS-1$
-	private Map<String, DataType> typeMap;
-	private static EventTypeLibrary instance;
+	public static final String EVENT = "Event"; //$NON-NLS-1$
+	public static final String EINIT = "EInit"; //$NON-NLS-1$
+
+	private static final EventTypeLibrary INSTANCE = new EventTypeLibrary();
+
+	private final Map<String, EventType> typeMap = new ConcurrentHashMap<>();
 
 	private EventTypeLibrary() {
-		typeMap = new HashMap<>();
 		initElementaryTypes();
 	}
 
 	public static EventTypeLibrary getInstance() {
-		if (instance == null) {
-			instance = new EventTypeLibrary();
-		}
-		return instance;
+		return INSTANCE;
 	}
 
 	private void initElementaryTypes() {
-		if (typeMap == null) {
-			typeMap = new HashMap<>();
-		}
-		final EventType type = DataFactory.eINSTANCE.createEventType();
-		type.setName(EVENT);
-		typeMap.put(EVENT, type);
+		getType(EVENT);
+		getType(EINIT);
 	}
 
-	public Collection<DataType> getEventTypes() {
-		return typeMap.values();
+	public Collection<EventType> getEventTypes() {
+		return Collections.unmodifiableCollection(typeMap.values());
 	}
 
-	/**
-	 * FIXME only return type if it really exists! --> after parsing/importing of
-	 * types is implemented --> planned for V0.3
-	 *
-	 * @param name the name
-	 *
-	 * @return the type
-	 */
-	public DataType getType(final String name) {
+	public static boolean isGenericEventType(final DataType type) {
+		return type instanceof EventType && EventTypeLibrary.EVENT.equalsIgnoreCase(type.getName());
+	}
+
+	public EventType getType(final String name) {
 		if (name == null) {
-			return typeMap.get(EVENT);
+			return getType(EVENT);
 		}
-		final Object value = typeMap.get(name.toUpperCase());
-		if (value != null) {
-			return (DataType) value;
-		}
+		return typeMap.computeIfAbsent(name, this::createEventType);
+	}
+
+	private EventType createEventType(final String name) {
 		final EventType type = DataFactory.eINSTANCE.createEventType();
 		type.setName(name);
-		typeMap.put(name, type);
+		encloseInResource(type);
 		return type;
 	}
 
+	private static void encloseInResource(final EventType type) {
+		new ResourceImpl(URI.createFileURI(type.getName() + ".eventlib.dtp")).getContents().add(type); //$NON-NLS-1$
+	}
 }

@@ -5,7 +5,6 @@
  This program and the accompanying materials are made available under the
  terms of the Eclipse Public License 2.0 which is available at
  http://www.eclipse.org/legal/epl-2.0.
-
  SPDX-License-Identifier: EPL-2.0
  
  Contributors:
@@ -15,9 +14,9 @@
 <!-- Schema file written by PDE -->
 <schema targetNamespace="org.eclipse.fordiac.ide.gef" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appinfo>
+      <appInfo>
          <meta.schema plugin="org.eclipse.fordiac.ide.gef" id="ConnectionRouterProvider" name="ConnectionRouterProvider"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          Plug-ins implementing this Extension Point can provide an connection router which can be used by various graphical editors.
       </documentation>
@@ -25,9 +24,9 @@
 
    <element name="extension">
       <annotation>
-         <appinfo>
-            <meta.element />
-         </appinfo>
+         <appInfo>
+            <meta.element deprecated="true" />
+         </appInfo>
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
@@ -52,9 +51,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute translatable="true"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -67,9 +66,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.fordiac.ide.gef.router.IConnectionRouterFactory"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
@@ -83,36 +82,36 @@
    </element>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="since"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          Version 0.3
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="examples"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          see AdjustableConnectionRouterNoJumplinksFactory in org.eclipse.fordiac.ide.gef.router
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="apiinfo"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="implementation"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter information about supplied implementation of this extension point.]
       </documentation>

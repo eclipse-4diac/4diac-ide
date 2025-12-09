@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Johannes Kepler University, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,12 +9,11 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,12 +21,11 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.ApplicationPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -47,18 +45,17 @@ public class AddFBBookMark extends AbstractHandler {
 		final FBNetworkElement element = getSelectedFBElement(event);
 		if (null != element) {
 			final String description = getDescription(element, event);
-			if (null != description) {
-				final Map<String, Object> attrs = new HashMap<>();
-				attrs.put(IMarker.MESSAGE, description);
-				FordiacMarkerHelper.addTargetIdentifier(element, attrs);
-				FordiacMarkerHelper.addLocation(element, attrs);
-				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, attrs, getFile(element),
-						Messages.AddFBBookMark_AddBookmark);
+			final IResource file = ModelHelper.getFileFromContextChecked(element);
+			if (description != null) {
+				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK,
+						ErrorMarkerBuilder.createErrorMarkerBuilder(description).setSeverity(IMarker.SEVERITY_INFO)
+								.setPriority(IMarker.PRIORITY_NORMAL).setTarget(element).getAttributes(),
+						file, Messages.AddFBBookMark_AddBookmark);
 				try {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,
 							WorkspaceUndoUtil.getUIInfoAdapter(HandlerUtil.getActiveShell(event)));
 				} catch (final ExecutionException e) {
-					ApplicationPlugin.getDefault().logError("Could not create bookmark", e); //$NON-NLS-1$
+					FordiacLogHelper.logError("Could not create bookmark", e); //$NON-NLS-1$
 				}
 				return Status.OK_STATUS;
 			}
@@ -90,24 +87,15 @@ public class AddFBBookMark extends AbstractHandler {
 		return null;
 	}
 
-	private static IResource getFile(final FBNetworkElement element) {
-		final EObject container = element.eContainer().eContainer();
-		if (container instanceof FBType) {
-			return ((FBType) container).getPaletteEntry().getFile();
-		}
-		// if we are here we are in a app or subapp
-		return element.getFbNetwork().getAutomationSystem().getSystemFile();
-	}
-
 	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			Object selObj = ((StructuredSelection) selection).getFirstElement();
-			if (selObj instanceof EditPart) {
-				selObj = ((EditPart) selObj).getModel();
+		if (selection instanceof final StructuredSelection structSel) {
+			Object selObj = structSel.getFirstElement();
+			if (selObj instanceof final EditPart ep) {
+				selObj = ep.getModel();
 			}
-			if (selObj instanceof FBNetworkElement) {
-				return (FBNetworkElement) selObj;
+			if (selObj instanceof final FBNetworkElement fbne) {
+				return fbne;
 			}
 		}
 		return null;

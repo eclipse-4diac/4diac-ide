@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2012, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Austria GmbH
+ *                          Primetals Technologies Austria GmbH,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,18 +15,18 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - New Project Explorer layout
  *               - Fixed handing of project renameing
+ *   Martin Erich Jobst
+ *     - fix handling of delta flags, file reload, and project open/close
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.changelistener;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -36,41 +37,59 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class FordiacResourceChangeListener implements IResourceChangeListener {
 
-	/** The instance. */
-	private final SystemManager systemManager;
-	private final Collection<PaletteEntry> changedFiles;
+	private static final boolean ENABLE_COPY_DIALOG = false;
 
-	public FordiacResourceChangeListener(final SystemManager systemManager) {
-		this.systemManager = systemManager;
-		this.changedFiles = new HashSet<>();
+	private static class FileToRenameEntry {
+
+		private final IFile filetoRename;
+		private final TypeEntry existingTypeEntry;
+
+		public FileToRenameEntry(final IFile filetoRename, final TypeEntry existingTypeEntry) {
+			this.filetoRename = filetoRename;
+			this.existingTypeEntry = existingTypeEntry;
+		}
+
+		public TypeEntry getTypeEntry() {
+			return existingTypeEntry;
+		}
+
+		public IFile getFile() {
+			return filetoRename;
+		}
+	}
+
+	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
+
+	private final Collection<FileToRenameEntry> filesToRename;
+
+	public FordiacResourceChangeListener() {
+		this.filesToRename = new HashSet<>();
 	}
 
 	@Override
@@ -80,96 +99,18 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			final IResourceDelta rootDelta = event.getDelta();
 			try {
 				rootDelta.accept(visitor);
-				if (!changedFiles.isEmpty()) {
-					handleChangedFiles();
+				if (!filesToRename.isEmpty()) {
+					handleFilesToRename();
 				}
-
 			} catch (final CoreException e) {
-				Activator.getDefault().logError("Couldn't process resource delta", e); //$NON-NLS-1$
+				FordiacLogHelper.logError("Couldn't process resource delta", e); //$NON-NLS-1$
 			}
 		}
 	}
 
-	private void handleChangedFiles() {
-		Display.getDefault().syncExec(() -> {
-			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors();
-			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
-					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
-					.collect(Collectors.toList());
-			changedFiles.clear();
-			handleFileRefreshWIzards(editorListener);
-		});
-
-	}
-
-	private static void handleFileRefreshWIzards(final List<IEditorFileChangeListener> editorListener) {
-		int code = IEditorFileChangeListener.INIT;
-		for (final IEditorFileChangeListener editor : editorListener) {
-
-			if (!((IEditorPart) editor).isDirty()) {
-				editor.reloadFile();
-				continue;
-			}
-
-			if (code == IEditorFileChangeListener.INIT) {
-				code = openFileChangedDialog(editor);
-			}
-
-			switch (code) {
-			case IEditorFileChangeListener.YES:
-				editor.reloadFile();
-				code = IEditorFileChangeListener.INIT;
-				break;
-			case IEditorFileChangeListener.YES_TO_ALL:
-				editor.reloadFile();
-				break;
-			case IEditorFileChangeListener.NO:
-				code = IEditorFileChangeListener.INIT;
-				break;
-			case IEditorFileChangeListener.NO_TO_ALL:
-				return;
-			default:
-				Activator.getDefault().logError(code + " is not a valid dialog output"); //$NON-NLS-1$
-				break;
-			}
-		}
-	}
-
-	public static int openFileChangedDialog(final IEditorFileChangeListener editor) {
-		final IFile file = editor.getFile();
-		final String info = MessageFormat.format(Messages.AutomationSystemEditor_Info, file.getFullPath().toOSString());
-		final MessageDialog dialog = new MessageDialog(((IEditorPart) editor).getSite().getShell(),
-				Messages.AutomationSystemEditor_Title, null, info, MessageDialog.INFORMATION,
-				new String[] { Messages.FordiacResourceChangeListener_0, Messages.FordiacResourceChangeListener_1,
-						Messages.FordiacResourceChangeListener_2, Messages.FordiacResourceChangeListener_3 },
-				0);
-		return dialog.open();
-	}
-
-	private List<IEditorPart> collectOpenedEditors() {
-		final List<IEditorPart> changedOpenedDirtyEditors = new ArrayList<>();
-		IEditorPart activeEditor = null;
-
-		for (final PaletteEntry entry : changedFiles) {
-			IEditorPart findEditor = EditorUtils
-					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
-							&& ((FileEditorInput) editor.getEditorInput()).getFile().equals(entry.getFile()));
-
-			if (findEditor == EditorUtils.getCurrentActiveEditor()) {
-				activeEditor = findEditor;
-				findEditor = null;
-			}
-
-			if (findEditor != null) {
-				changedOpenedDirtyEditors.add(findEditor);
-			}
-		}
-
-		if (activeEditor != null) {
-			changedOpenedDirtyEditors.add(0, activeEditor); // we should add the active editor in front so that always
-			// the current opened editor has the corresponding popup
-		}
-		return changedOpenedDirtyEditors;
+	private void handleFilesToRename() {
+		filesToRename.forEach(FordiacResourceChangeListener::autoRenameExistingType);
+		filesToRename.clear();
 	}
 
 	IResourceDeltaVisitor visitor = delta -> {
@@ -179,7 +120,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		case IResourceDelta.REMOVED:
 			return handleResourceRemoved(delta);
 		case IResourceDelta.ADDED:
-			if (IResourceDelta.MOVED_FROM == (delta.getFlags() & IResourceDelta.MOVED_FROM)) {
+			if (testFlags(delta, IResourceDelta.MOVED_FROM)) {
 				return handleResourceMovedFrom(delta);
 			}
 			return handleResourceCopy(delta);
@@ -189,60 +130,48 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	};
 
-	private static boolean isSystemFile(final IFile file) {
-		return SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(file.getFileExtension());
-	}
-
-	private boolean handleResourceChanged(final IResourceDelta delta) {
-
-		if (isFileChange(delta)) {
-			collectPaletteEntries(delta);
-		} else if (IResourceDelta.OPEN == delta.getFlags()) {
-			// project is opened oder closed
-			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
-				systemManager.notifyListeners();
-			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
-				handleProjectRemove(delta);
+	private static boolean handleResourceChanged(final IResourceDelta delta) {
+		switch (delta.getResource().getType()) {
+		case IResource.FILE:
+			if (testFlags(delta, IResourceDelta.CONTENT)) {
+				refreshTypeEntry(delta);
+			}
+			break;
+		case IResource.PROJECT:
+			if (testFlags(delta, IResourceDelta.DESCRIPTION)) {
+				// the .project file changed (metadata, natures, builders)
+				SystemManager.validateProjectNature(delta.getResource().getProject());
+			}
+			if (testFlags(delta, IResourceDelta.OPEN)) {
+				if (delta.getResource().isAccessible()) {
+					// refresh type library when opening project
+					TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject()).refresh();
+					SystemManager.validateProjectNature(delta.getResource().getProject());
+				} else {
+					// this is the odd way of Eclipse Platform telling us a project was closed
+					handleProjectRemove(delta);
+				}
 				return false;
 			}
-		} else if (delta.getResource().getType() == IResource.PROJECT) {
-			return checkForErrorMarkerChanges(delta);
-		}
-
-
-
-		return true;
-	}
-
-	public boolean checkForErrorMarkerChanges(final IResourceDelta delta) {
-		for (final IResourceDelta d : delta.getAffectedChildren()) {
-			if (IResourceDelta.MARKERS == (d.getFlags() & IResourceDelta.MARKERS)) {
-				systemManager.notifyListeners();
-				return false;
-			}
+			break;
+		default:
+			break;
 		}
 		return true;
 	}
 
-	private void collectPaletteEntries(final IResourceDelta delta) {
+	private static void refreshTypeEntry(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
-		PaletteEntry paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(file);
-		if (paletteEntryForFile == null) {
-			paletteEntryForFile = systemManager.getPaletteEntry(file);
+		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntryForFile != null) {
+			typeEntryForFile.refresh();
 		}
-		if (paletteEntryForFile != null
-				&& paletteEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
-			changedFiles.add(paletteEntryForFile);
-		}
-	}
-
-	private static boolean isFileChange(final IResourceDelta delta) {
-		return delta.getResource().getType() == IResource.FILE && delta.getFlags() != IResourceDelta.MARKERS;
 	}
 
 	private boolean handleResourceRemoved(final IResourceDelta delta) {
-		if (delta.getFlags() == IResourceDelta.MOVED_TO) {
+		final IProject project = delta.getResource().getProject();
+		if (testFlags(delta, IResourceDelta.MOVED_TO) || !TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
 			// we will handle movement only on the add side
 			return false;
 		}
@@ -260,101 +189,150 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private boolean handleResourceMovedFrom(final IResourceDelta delta) {
-		switch (delta.getResource().getType()) {
-		case IResource.FILE:
-			handleFileMove(delta);
-			break;
-		case IResource.PROJECT:
+	private static boolean handleResourceMovedFrom(final IResourceDelta delta) {
+		// move/rename of files is handled by participants
+		if (delta.getResource().getType() == IResource.PROJECT) {
 			handleProjectRename(delta);
-			break;
-		default:
-			break;
-		}
-		return true;
-	}
-
-	private boolean handleResourceCopy(final IResourceDelta delta) {
-		switch (delta.getResource().getType()) {
-		case IResource.FILE:
-			handleFileCopy(delta);
-			break;
-		case IResource.FOLDER:
-			// if a folder has been moved we need to update the IFile of the children
-			return true;
-		case IResource.PROJECT:
-			return true;
-		default:
-			break;
 		}
 		return false;
 	}
 
-	private void handleFileDelete(final IResourceDelta delta) {
-		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
+	private boolean handleResourceCopy(final IResourceDelta delta) {
+		final IProject project = delta.getResource().getProject();
 
-		if (isSystemFile(file)) {
-			systemManager.removeSystem(file);
-		} else {
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-			if (null != entry) {
-				closeAllEditorsForFile(file);
-				typeLib.removePaletteEntry(entry);
+		if (delta.getResource().getType() == IResource.PROJECT) {
+			SystemManager.validateProjectNature(project);
+		}
+
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(project)) {
+			return false;
+		}
+
+		if (delta.getResource().getType() == IResource.FILE) {
+			handleFileCopy(delta);
+		}
+		return true;
+	}
+
+	private void handleFileDelete(final IResourceDelta delta) {
+		final IFile file = (IFile) delta.getResource();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
+			return;
+		}
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+
+		final TypeEntry entry = typeLib.getTypeEntry(file);
+		if (null != entry) {
+			closeAllEditorsForFile(file);
+			final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
+			typeLib.removeTypeEntry(entry);
+			if (rnEntry != null) {
+				entry.setFile(rnEntry.getFile());
+				typeLib.addTypeEntry(entry);
+				filesToRename.remove(rnEntry);
 			}
 		}
+	}
+
+	private FileToRenameEntry getFileRenameEntry(final TypeEntry palEntry) {
+		return filesToRename.stream().filter(entry -> entry.getTypeEntry().equals(palEntry)).findAny().orElse(null);
 	}
 
 	private void handleFileCopy(final IResourceDelta delta) {
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
+		final IFile file = (IFile) delta.getResource();
+		if (!TypeLibraryManager.INSTANCE.hasTypeLibrary(file.getProject())) {
+			return;
+		}
 		if (file.getProject().isOpen() && delta.getFlags() != IResourceDelta.MARKERS) {
+			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+			final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 
-			if (isSystemFile(file)) {
-				// in case of a copied system file we just need to fix the name in the root XML
-				// node
-				renameSystemFileCopy(file);
-			} else {
-				final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-				final PaletteEntry paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(file);
-				if (paletteEntryForFile == null) {
-					final PaletteEntry entry = typeLib.createPaletteEntry(file);
-					if (null != entry) {
-						updatePaletteEntry(file, entry);
-					}
-				} else if (!file.equals(paletteEntryForFile.getFile())) {
-					// After a file has been copied and the copied file is not the same as the founded palette entry
-					// the file and the resulting type must be renamed with a unique name
-					autoRenameExistingType(file, paletteEntryForFile);
+			if (null == typeEntryForFile) {
+				final TypeEntry entry = typeLib.createTypeEntry(file);
+				if (null != entry && containedTypeNameIsDifferent(file)) {
+					// we only need to update the type entry if the file content is different from
+					// the file name this happens when a type is copied into a new project or when a
+					// project is opened or imported
+					updateTypeEntry(file, entry);
+					return;
 				}
-
+				if (ENABLE_COPY_DIALOG && fileExists(file, delta)) {
+					Display.getDefault().syncExec(() -> openRenameDialog(file, entry));
+					return;
+				}
+			} else if (!file.equals(typeEntryForFile.getFile())) {
+				// After a file has been copied and the copied file is not the same as the
+				// founded type entry the file and the resulting type must be renamed with a
+				// unique name put it in the rename list
+				filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 			}
 		}
 	}
 
-	protected static void autoRenameExistingType(final IFile file, final PaletteEntry paletteEntryForFile) {
+	private static void openRenameDialog(final IFile file, final TypeEntry entry) {
+		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		final InputDialog renameDialog = new InputDialog(shell,
+				Messages.FordiacResourceChangeListener_CopyConflictTitle,
+				Messages.FordiacResourceChangeListener_CopyConflictBody + file.getName() + "'", //$NON-NLS-1$
+				file.getName(), null);
+		if (renameDialog.open() == Window.OK && !renameDialog.getValue().equals(file.getName())) {
+			final String newFileName = renameDialog.getValue();
+			final IFile newFile = file.getParent().getFile(new Path(newFileName));
 
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_4 + file.getName()) {
+			try {
+				file.move(newFile.getFullPath(), true, new NullProgressMonitor());
+				updateTypeEntryByRename(newFile, entry);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		} else {
+			try {
+				file.delete(true, new NullProgressMonitor());
+			} catch (final CoreException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static boolean fileExists(final IFile file, final IResourceDelta delta) {
+		final IPath filePath = file.getProjectRelativePath();
+		if ((!filePath.toString().endsWith(".fbt") && !filePath.toString().endsWith(".sys") //$NON-NLS-1$//$NON-NLS-2$
+				&& !filePath.toString().endsWith(".sub") && !filePath.toString().endsWith(".atp") //$NON-NLS-1$//$NON-NLS-2$
+				&& !filePath.toString().endsWith(".dtp")) || (ExcludedElements.contains(filePath.toOSString()))) { //$NON-NLS-1$
+			return false;
+		}
+		return delta.getResource().getName().equals(file.getName());
+	}
+
+	private static void autoRenameExistingType(final FileToRenameEntry entry) {
+
+		final WorkspaceJob job = new WorkspaceJob(
+				Messages.FordiacResourceChangeListener_4 + entry.getFile().getName()) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				final LibraryElement type = paletteEntryForFile.getType();
+				final LibraryElement type = entry.getTypeEntry().getType();
 				final String oldName = type.getName();
 				final String newName = NameRepository.createUniqueTypeName(type);
 				if (newName == null || newName.equals(oldName)) {
 					return Status.CANCEL_STATUS;
 				}
-				final String oldPath = file.getFullPath().toOSString();
+				final String oldPath = entry.getFile().getFullPath().toOSString();
 				final String newPath = replaceLast(oldPath, oldName, newName);
 
-				try {// this will trigger handleFileMove() and further handleFileRename(). file.move() is a workaround
-					// to rename a file
-					file.move(new Path(newPath), true, new NullProgressMonitor());
+				try {// this will trigger handleFileMove() and further handleFileRename().
+						// file.move() is a workaround
+						// to rename a file
+					entry.getFile().move(new Path(newPath), true, new NullProgressMonitor());
 				} catch (final CoreException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 				return Status.OK_STATUS;
 			}
 		};
-		job.setRule(file.getProject());
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		job.setRule(entry.getFile().getProject());
 		job.schedule();
 	}
 
@@ -362,225 +340,158 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	static final Pattern systemNamePattern = Pattern
-			.compile("\\<System\\p{javaWhitespace}+(Comment=\".*\"\\p{javaWhitespace}+)?Name=\"([^\"]*)"); //$NON-NLS-1$
+	private static final IResourceDeltaVisitor projRenameVisitor = delta -> {
+		if (delta.getKind() == IResourceDelta.ADDED && delta.getResource().getType() == IResource.FILE
+				&& testFlags(delta, IResourceDelta.MOVED_FROM)) {
+			final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
+			final IFile dst = (IFile) delta.getResource();
+			handleFileAfterProjectRename(src, dst);
+		}
+		return true;
+	};
 
-	private void renameSystemFileCopy(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_5 + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				boolean wrongName = false;
-				final String newTypeName = TypeLibrary.getTypeNameFromFile(file);
-				try (Scanner scanner = new Scanner(file.getContents())) {
-					final String name = scanner.findWithinHorizon(systemNamePattern, 0);
-					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName)); //$NON-NLS-1$
-				} catch (final Exception e) {
-					Activator.getDefault().logError(e.getMessage(), e);
-				}
-				if (wrongName) {
-					final AutomationSystem system = systemManager.getSystem(file);
-					if ((null != system) && (!newTypeName.equals(system.getName()))) {
-						system.setName(TypeLibrary.getTypeNameFromFile(file));
-						SystemManager.saveSystem(system);
-					}
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(file.getProject());
-		job.schedule();
-	}
-
-	private void handleProjectRename(final IResourceDelta delta) {
+	private static void handleProjectRename(final IResourceDelta delta) {
 		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(delta.getMovedFromPath().lastSegment());
 		final IProject newProject = delta.getResource().getProject();
-		TypeLibrary.renameProject(oldProject, newProject);
-		systemManager.renameProject(oldProject, newProject);
-	}
-
-	private void handleFileMove(final IResourceDelta delta) {
-		final IFile src = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getMovedFromPath());
-
-		if (src.getParent().equals(delta.getResource().getParent())) {
-			handleFileRename(delta, src);
-		} else {
-			final IFile dst = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath());
-			if (!src.getProject().equals(dst.getProject())) {
-				if (src.getProject().exists()) {
-					handleFileMoveBetweenProjects(src, dst);
-				} else {
-					handleFileAfterProjectRename(src, dst);
-				}
-			} else {
-				// file was moved update pallette entry
-				final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
-				if (null != entry) {
-					entry.setFile(dst);
-				}
-			}
-			updateEditorInput(src, dst);
+		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
+		try {
+			delta.accept(projRenameVisitor);
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Couldn't handle project rename", e); //$NON-NLS-1$
 		}
 	}
 
-	private void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.moveSystemToNewProject(src, dst);
+	private static void handleFileAfterProjectRename(final IFile src, final IFile dst) {
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
+		final TypeEntry entry = typeLib.getTypeEntry(src);
+		if (entry == null) {
+			// we have to create the entry
+			typeLib.createTypeEntry(dst);
 		} else {
-			final TypeLibrary srcTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
-			final PaletteEntry entry = srcTypeLib.getPaletteEntry(src);
-			if (null != entry) {
-				srcTypeLib.removePaletteEntry(entry);
-				entry.setFile(dst);
-				final TypeLibrary dstTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
-				dstTypeLib.addPaletteEntry(entry);
-			}
+			typeLib.removeTypeEntry(entry);
+			entry.setFile(dst);
+			typeLib.addTypeEntry(entry);
 		}
 	}
 
-	private void handleFileAfterProjectRename(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.updateSystemFile(dst.getProject(), src, dst);  // if loaded the system should already be in
-			// the list of the new project
-		} else {
-			final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(dst.getProject());
-			final PaletteEntry entry = typeLib.getPaletteEntry(src);
-			if (entry == null) {
-				// we have to create the entry
-				typeLib.createPaletteEntry(dst);
-			} else {
-				entry.setFile(dst);
+	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
+		if (entry == null) { // change to Assert ?
+			return;
+		}
+		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
+
+		if (!Objects.equals(newFile, entry.getFile())) {
+			final TypeLibrary typeLibrary = entry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(entry);
+			}
+			entry.setFile(newFile);
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(entry);
 			}
 		}
 
-	}
-
-	private void handleFileRename(final IResourceDelta delta, final IFile src) {
-		final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(delta.getResource().getFullPath()); // targetFile
-		if (isSystemFile(file)) {
-			renameSystemFile(file);
-		} else {
-			handleTypeRename(delta, src, file);
-		}
-		systemManager.notifyListeners();
-	}
-
-	private static void handleTypeRename(final IResourceDelta delta, final IFile src, final IFile file) {
-		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(src);
-		if (src.equals(entry.getFile())) {
-			updatePaletteEntry(file, entry);
-		} else {
-			updatePaletteEntry(file, typeLibrary.createPaletteEntry(file));
+		final LibraryElement type = entry.getTypeEditable();
+		if ((null != type) && // this means we couldn't load the type seems
+		// like a problem in the type's XML file
+		// TODO report on error
+				(!newTypeName.equals(type.getName()))) {
+			type.setName(newTypeName);
+			saveEntryWithWorkspaceJob(type, entry);
 		}
 	}
 
-	private void renameSystemFile(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_7 + file.getName()) {
+	public static void updateTypeEntryByRename(final IFile newFile, final TypeEntry entry) {
+		if (entry == null) { // change to Assert ?
+			return;
+		}
+		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
+
+		if (!Objects.equals(newFile, entry.getFile())) {
+			final TypeLibrary typeLibrary = entry.getTypeLibrary();
+			if (typeLibrary != null) {
+				typeLibrary.removeTypeEntry(entry);
+			}
+			entry.setFile(newFile);
+
+			// update type and typeEditable names
+			LibraryElement type = entry.getTypeEditable();
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+			type = entry.getType();
+			if ((null != type)) {
+				type.setName(newTypeName);
+			}
+
+			if (typeLibrary != null) {
+				typeLibrary.addTypeEntry(entry);
+			}
+			saveEntryWithWorkspaceJob(type, entry);
+		}
+	}
+
+	private static void saveEntryWithWorkspaceJob(final LibraryElement type, final TypeEntry entry) {
+		final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
 			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				final AutomationSystem system = systemManager.getSystem(file);
-				if (null != system) {
-					final String newTypeName = TypeLibrary.getTypeNameFromFile(file);
-					if (!newTypeName.equals(system.getName())) {
-						system.setName(TypeLibrary.getTypeNameFromFile(file));
-						SystemManager.saveSystem(system);
-					}
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				try {
+					entry.save(type, monitor);
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+					return Status.CANCEL_STATUS;
 				}
 				return Status.OK_STATUS;
 			}
 		};
-		job.setRule(file.getProject());
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
+		IContainer parent = entry.getFile().getParent();
+		while (parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+		final ISchedulingRule rule = (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
+		job.setRule(rule);
 		job.schedule();
 	}
 
-	private static void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
-		if (null != entry) {
-			final String newTypeName = TypeLibrary.getTypeNameFromFile(newFile);
-			entry.getTypeLibrary().removePaletteEntry(entry);
-			entry.setLabel(newTypeName);
-			entry.setFile(newFile);
-			entry.getTypeLibrary().addPaletteEntry(entry);
-
-			final WorkspaceJob job = new WorkspaceJob("Save Renamed type: " + entry.getLabel()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					// do the actual work in here
-					final LibraryElement type = entry.getType();
-					if ((null != type) && // this means we couldn't load the type seems
-							// like a problem in the type's XML file
-							// TODO report on error
-							(!newTypeName.equals(type.getName()))) {
-						type.setName(newTypeName);
-						saveType(entry);
-					}
-					return Status.OK_STATUS;
-				}
-
-				private void saveType(final PaletteEntry entry) {
-					AbstractTypeExporter.saveType(entry);
-				}
-			};
-			job.setRule(newFile.getProject());
-			job.schedule();
-		}
-	}
-
-	private void handleProjectRemove(final IResourceDelta delta) {
+	private static void handleProjectRemove(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
 		closeAllProjectRelatedEditors(project);
-		systemManager.removeProject(project);
-		TypeLibrary.removeProject(project);
+		TypeLibraryManager.INSTANCE.removeProject(project);
 	}
 
 	private static void closeAllProjectRelatedEditors(final IProject project) {
-		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
-			final IEditorInput input = editor.getEditorInput();
-			if ((input instanceof FileEditorInput)
-					&& (project.equals(((FileEditorInput) input).getFile().getProject()))) {
-				return true;
-			}
-			if (editor instanceof ISystemEditor) {
-				final AutomationSystem system = ((ISystemEditor) editor).getSystem();
-				return project.equals(system.getSystemFile().getProject());
-			}
-			return false;
-		}));
+		Display.getDefault()
+				.asyncExec(() -> EditorUtils.closeEditorsFiltered(
+						editor -> ((editor.getEditorInput() instanceof final IFileEditorInput fileEditorInput)
+								&& (project.equals(fileEditorInput.getFile().getProject())))));
 	}
 
 	private static void closeAllEditorsForFile(final IFile file) {
 		// display related stuff needs to run in a display thread
-		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
-			final IEditorInput input = editor.getEditorInput();
-			return (input instanceof FileEditorInput) && (file.equals(((FileEditorInput) input).getFile()));
-		}));
+		Display.getDefault()
+				.asyncExec(() -> EditorUtils.closeEditorsFiltered(
+						editor -> ((editor.getEditorInput() instanceof final IFileEditorInput fileEditorInput)
+								&& (file.equals(fileEditorInput.getFile())))));
 	}
 
-	private static FordiacEditorMatchingStrategy editorMatching = new FordiacEditorMatchingStrategy();
-
-	private static void updateEditorInput(final IFile src, final IFile dst) {
-		Display.getDefault().syncExec(() -> {
-			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			final IEditorReference[] editorReferences = activePage.getEditorReferences();
-
-			for (final IEditorReference editorReference : editorReferences) {
-				final IEditorPart editor = editorReference.getEditor(false);
-				if (null != editor) {
-					//the editor is loaded check if it is ours and if yes update it
-					final IEditorInput input = editor.getEditorInput();
-					if((src.equals(((FileEditorInput) input).getFile()) && editor instanceof IEditorFileChangeListener)) {
-						((IEditorFileChangeListener)editor).updateEditorInput(new FileEditorInput(dst));
-					}
-				} else {
-					// the editor is not yet loaded check if it may be ours. We can not load it as the file it is referring
-					// to is not existing anymore, therefore we can only close it
-					if (editorMatching.matches(editorReference, new FileEditorInput(src))) {
-						activePage.closeEditors(new IEditorReference[] { editorReference }, false);
-
-					}
-				}
+	private static boolean containedTypeNameIsDifferent(final IFile file) {
+		try (Scanner scanner = new Scanner(file.getContents())) {
+			if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
+				final String name = scanner.match().group(1);
+				final String typeName = TypeEntry.getTypeNameFromFile(file);
+				return !typeName.equals(name);
 			}
-		});
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+		return true;
 	}
 
+	private static boolean testFlags(final IResourceDelta delta, final int flags) {
+		return (delta.getFlags() & flags) == flags;
+	}
 }

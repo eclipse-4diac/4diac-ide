@@ -20,9 +20,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractCreateElementCommand<T> extends Command implements CreationCommand {
+public abstract class AbstractCreateElementCommand<T> extends CreationCommand {
 	private T newElement;
 	private final EList<T> list;
 	private int index;

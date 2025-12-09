@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="DualHysteresis" Comment="2-way conversion of Analog to Digital with Hysteresis">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0 ">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2023-06-06">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Initialization Request">
+				<With Var="QI"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="QI"/>
+				<With Var="MI"/>
+				<With Var="DEAD"/>
+				<With Var="INPUT"/>
+				<With Var="HYSTERESIS"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="DO_UP"/>
+				<With Var="DO_DOWN"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier" />
+			<VarDeclaration Name="MI" Type="REAL" Comment="MID Setting can e.g. be 0.5 meaning 50%"  InitialValue="0.5"/>
+			<VarDeclaration Name="DEAD" Type="REAL" Comment="Deadband around MID can be e.g. 0.1 meaning 10%"  InitialValue="0.1"/>
+			<VarDeclaration Name="HYSTERESIS" Type="REAL" Comment="Hysteresis can be 0.1 meaning 10%"  InitialValue="0.1"/>
+			<VarDeclaration Name="INPUT" Type="REAL" Comment="Value" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="DO_UP" Type="BOOL" Comment=" UP" />
+			<VarDeclaration Name="DO_DOWN" Type="BOOL" Comment="DOWN" />
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="840" y="2460">
+			</ECState>
+			<ECState Name="Init" Comment="Initialization"  x="1600" y="2000">
+				<ECAction Algorithm="initialize" Output="INITO"/>
+			</ECState>
+			<ECState Name="UP" Comment="Normal execution"  x="6666.67" y="1066.67">
+				<ECAction Algorithm="alUp" Output="CNF"/>
+			</ECState>
+			<ECState Name="Neutral" x="2266.67" y="2480">
+				<ECAction Algorithm="alNeutral" Output="CNF"/>
+			</ECState>
+			<ECState Name="DeInit" x="1506.67" y="2860">
+				<ECAction Algorithm="deInitialize" Output="INITO"/>
+			</ECState>
+			<ECState Name="DOWN" x="6666.67" y="3466.67">
+				<ECAction Algorithm="alDown" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="Init" Condition="INIT[TRUE = QI]" Comment="" x="1206.67" y="2260"/>
+			<ECTransition Source="Init" Destination="Neutral" Condition="REQ" Comment="" x="2026.67" y="2313.33"/>
+			<ECTransition Source="Neutral" Destination="DeInit" Condition="INIT[FALSE = QI]" Comment="" x="2053.33" y="2680"/>
+			<ECTransition Source="Neutral" Destination="UP" Condition="REQ[INPUT &gt;= MI + DEAD + HYSTERESIS]" Comment="" x="5040" y="1173.33"/>
+			<ECTransition Source="DeInit" Destination="START" Condition="1" Comment="" x="1306.67" y="2780"/>
+			<ECTransition Source="Neutral" Destination="DOWN" Condition="REQ[INPUT &lt;= MI - DEAD - HYSTERESIS]" Comment="" x="5513.33" y="3013.33"/>
+			<ECTransition Source="DOWN" Destination="Neutral" Condition="REQ[INPUT &gt; MI - DEAD]" Comment="" x="5173.33" y="3480"/>
+			<ECTransition Source="UP" Destination="Neutral" Condition="REQ[INPUT &lt; MI + DEAD]" Comment="" x="5173.33" y="2026.67"/>
+		</ECC>
+		<Algorithm Name="initialize">
+			<ST><![CDATA[ALGORITHM initialize
+
+QO := QI;
+(* in any case go safe State *)
+DO_UP := BOOL#FALSE;
+DO_DOWN := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="deInitialize">
+			<ST><![CDATA[
+
+ALGORITHM deInitialize
+
+QO := BOOL#FALSE;
+(* in any case go safe State *)
+DO_UP := BOOL#FALSE;
+DO_DOWN := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="alNeutral">
+			<ST><![CDATA[
+
+ALGORITHM alNeutral
+QO := QI;
+(* in any case go safe State *)
+DO_UP := BOOL#FALSE;
+DO_DOWN := BOOL#FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="alUp">
+			<ST><![CDATA[
+
+ALGORITHM alUp
+QO := QI;
+IF TRUE = QI THEN
+	(* only perform normal operation of QI is true *)
+	DO_UP := BOOL#TRUE;
+	DO_DOWN := BOOL#FALSE;
+END_IF;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="alDown">
+			<ST><![CDATA[
+
+ALGORITHM alDown
+QO := QI;
+IF TRUE = QI THEN
+	(* only perform normal operation of QI is true *)
+	DO_UP := BOOL#FALSE;
+	DO_DOWN := BOOL#TRUE;
+END_IF;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

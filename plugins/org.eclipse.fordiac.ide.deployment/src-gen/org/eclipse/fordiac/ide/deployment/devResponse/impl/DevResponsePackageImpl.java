@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,30 +13,35 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
+
+import static org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage.RESOURCE;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.eclipse.fordiac.ide.deployment.devResponse.AdapterType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DataType;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
+import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Package</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
+ * end-user-doc -->
  * @generated
  */
 public class DevResponsePackageImpl extends EPackageImpl implements DevResponsePackage {
@@ -45,60 +50,78 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass resourceEClass = null;
+	private EClass adapterTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dataTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass fbEClass = null;
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fbTypeEClass = null;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass globalConstTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass portEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass dataEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass responseEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass watchesEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass fbListEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass endpointListEClass = null;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass connectionEClass = null;
@@ -111,8 +134,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#eNS_URI
 	 * @see #init()
@@ -123,8 +146,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -134,15 +156,17 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 *
 	 * <p>This method is used to initialize {@link DevResponsePackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static DevResponsePackage init() {
-		if (isInited) return (DevResponsePackage)EPackage.Registry.INSTANCE.getEPackage(DevResponsePackage.eNS_URI);
+		if (isInited) {
+			return (DevResponsePackage)EPackage.Registry.INSTANCE.getEPackage(DevResponsePackage.eNS_URI);
+		}
 
 		// Obtain or create and register package
 		Object registeredDevResponsePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
@@ -170,13 +194,51 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
-	public EClass getResource() {
-		return resourceEClass;
+	public EClass getAdapterType() {
+		return adapterTypeEClass;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getAdapterType_Name() {
+		return (EAttribute)adapterTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getDataType() {
+		return dataTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDataType_Name() {
+		return (EAttribute)dataTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getResource() {
+		return resourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -185,8 +247,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -195,8 +256,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -205,8 +265,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -215,8 +274,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -225,8 +283,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -235,8 +292,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -245,8 +301,45 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getFBType() {
+		return fbTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFBType_Name() {
+		return (EAttribute)fbTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getGlobalConstType() {
+		return globalConstTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getGlobalConstType_Name() {
+		return (EAttribute)globalConstTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -255,8 +348,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -265,8 +357,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -275,8 +366,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -285,8 +375,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -295,28 +384,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getData_Time() {
-		return (EAttribute)dataEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EAttribute getData_Forced() {
-		return (EAttribute)dataEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)dataEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -325,8 +402,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -335,8 +411,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -345,8 +420,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -355,8 +429,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -365,28 +438,34 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EReference getResponse_Endpointlist() {
+	public EReference getResponse_FbType() {
 		return (EReference)responseEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EReference getResponse_Connection() {
+	public EReference getResponse_Endpointlist() {
 		return (EReference)responseEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getResponse_Connection() {
+		return (EReference)responseEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -395,8 +474,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -405,8 +483,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -415,8 +492,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -425,8 +501,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -435,8 +510,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -445,8 +519,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -455,8 +528,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -465,8 +537,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -475,8 +546,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -485,8 +555,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private boolean isCreated = false;
@@ -494,15 +563,23 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	/**
 	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) return;
+		if (isCreated) {
+			return;
+		}
 		isCreated = true;
 
 		// Create classes and their features
+		adapterTypeEClass = createEClass(ADAPTER_TYPE);
+		createEAttribute(adapterTypeEClass, ADAPTER_TYPE__NAME);
+
+		dataTypeEClass = createEClass(DATA_TYPE);
+		createEAttribute(dataTypeEClass, DATA_TYPE__NAME);
+
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__NAME);
 		createEAttribute(resourceEClass, RESOURCE__TYPE);
@@ -513,13 +590,18 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEAttribute(fbEClass, FB__TYPE);
 		createEReference(fbEClass, FB__PORTS);
 
+		fbTypeEClass = createEClass(FB_TYPE);
+		createEAttribute(fbTypeEClass, FB_TYPE__NAME);
+
+		globalConstTypeEClass = createEClass(GLOBAL_CONST_TYPE);
+		createEAttribute(globalConstTypeEClass, GLOBAL_CONST_TYPE__NAME);
+
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__NAME);
 		createEReference(portEClass, PORT__DATA_VALUES);
 
 		dataEClass = createEClass(DATA);
 		createEAttribute(dataEClass, DATA__VALUE);
-		createEAttribute(dataEClass, DATA__TIME);
 		createEAttribute(dataEClass, DATA__FORCED);
 
 		responseEClass = createEClass(RESPONSE);
@@ -527,6 +609,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEReference(responseEClass, RESPONSE__WATCHES);
 		createEAttribute(responseEClass, RESPONSE__REASON);
 		createEReference(responseEClass, RESPONSE__FBLIST);
+		createEReference(responseEClass, RESPONSE__FB_TYPE);
 		createEReference(responseEClass, RESPONSE__ENDPOINTLIST);
 		createEReference(responseEClass, RESPONSE__CONNECTION);
 
@@ -545,21 +628,22 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model.  This
-	 * method is guarded to have no affect on any invocation but its first.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Complete the initialization of the package and its meta-model. This method is
+	 * guarded to have no affect on any invocation but its first. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) return;
+		if (isInitialized) {
+			return;
+		}
 		isInitialized = true;
 
 		// Initialize package
@@ -574,6 +658,12 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		// Add supertypes to classes
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(adapterTypeEClass, AdapterType.class, "AdapterType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getAdapterType_Name(), ecorePackage.getEString(), "name", null, 0, 1, AdapterType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(dataTypeEClass, DataType.class, "DataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getDataType_Name(), ecorePackage.getEString(), "name", null, 0, 1, DataType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getResource_Name(), ecorePackage.getEString(), "name", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getResource_Type(), ecorePackage.getEString(), "type", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -584,13 +674,18 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEAttribute(getFB_Type(), ecorePackage.getEString(), "type", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getFBType_Name(), ecorePackage.getEString(), "name", null, 0, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(globalConstTypeEClass, GlobalConstType.class, "GlobalConstType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getGlobalConstType_Name(), ecorePackage.getEString(), "name", null, 0, 1, GlobalConstType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getPort_DataValues(), this.getData(), null, "dataValues", null, 0, -1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(dataEClass, Data.class, "Data", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getData_Value(), ecorePackage.getEString(), "value", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getData_Time(), ecorePackage.getEString(), "time", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getData_Forced(), ecorePackage.getEString(), "forced", null, 0, 1, Data.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(responseEClass, Response.class, "Response", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -598,6 +693,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEReference(getResponse_Watches(), this.getWatches(), null, "Watches", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getResponse_Reason(), ecorePackage.getEString(), "Reason", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Fblist(), this.getFBList(), null, "fblist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getResponse_FbType(), this.getFBType(), null, "fbType", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Endpointlist(), this.getEndpointList(), null, "endpointlist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Connection(), this.getConnection(), null, "connection", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -616,6 +712,56 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+		createExtendedMetaDataAnnotations();
 	}
 
-} //DevResponsePackageImpl
+	/**
+	 * Initializes the annotations for
+	 * <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	protected void createExtendedMetaDataAnnotations() {
+		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		addAnnotation
+		  (getAdapterType_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getDataType_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getFBType_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getGlobalConstType_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getResponse_FbType(),
+		   source,
+		   new String[] {
+			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+			   "name", "FBType" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+	}
+
+} // DevResponsePackageImpl

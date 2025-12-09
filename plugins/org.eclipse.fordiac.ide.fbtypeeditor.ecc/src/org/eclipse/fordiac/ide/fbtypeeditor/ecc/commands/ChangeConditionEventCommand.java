@@ -16,21 +16,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider.ONE_CONDITION;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.Command;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider.*;
 
-public class ChangeConditionEventCommand extends Command {
+public class ChangeConditionEventCommand extends Command implements ScopedCommand {
 
 	private final ECTransition transition;
 	private final List<Event> eventList = new ArrayList<>();
-	private String conditionEvent;
+	private final String conditionEvent;
 	private String oldConditionEvent;
 
 	// if the string is 1 we need to set capture the condition expression
@@ -45,25 +50,22 @@ public class ChangeConditionEventCommand extends Command {
 	 *                      always true.
 	 */
 	public ChangeConditionEventCommand(final ECTransition transition, final String conditionEvent) {
-		super();
-		this.transition = transition;
+		this.transition = Objects.requireNonNull(transition);
 		this.conditionEvent = conditionEvent;
 
-		BasicFBType fb = (null != transition) ? transition.getECC().getBasicFBType() : null;
+		final BasicFBType fb = (null != transition) ? transition.getECC().getBasicFBType() : null;
 		eventList.addAll(ECCContentAndLabelProvider.getInputEvents(fb));
 	}
 
 	@Override
 	public boolean canExecute() {
 		return conditionEvent.equals(ECCContentAndLabelProvider.EMPTY_FIELD)
-				|| conditionEvent.contentEquals(ONE_CONDITION)
-				|| !eventList.isEmpty();
+				|| conditionEvent.contentEquals(ONE_CONDITION) || !eventList.isEmpty();
 	}
 
 	@Override
 	public void execute() {
-		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName()
-				: ""; //$NON-NLS-1$
+		oldConditionEvent = transition.getConditionEvent() != null ? transition.getConditionEvent().getName() : ""; //$NON-NLS-1$
 		if (ONE_CONDITION.equals(conditionEvent)) {
 			oldConditionExpression = transition.getConditionExpression();
 		}
@@ -93,12 +95,17 @@ public class ChangeConditionEventCommand extends Command {
 		}
 	}
 
-	private Event getEvent(String event) {
-		for (Event e : eventList) {
-			if (e.getName().equals(event)) {
+	private Event getEvent(final String eventName) {
+		for (final Event e : eventList) {
+			if (ECCContentAndLabelProvider.getEventName(e).equals(eventName)) {
 				return e;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(transition);
 	}
 }

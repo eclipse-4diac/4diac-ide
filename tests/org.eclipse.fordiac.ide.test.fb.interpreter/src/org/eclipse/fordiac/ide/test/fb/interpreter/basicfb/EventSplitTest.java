@@ -8,36 +8,33 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventSplitTest extends AbstractInterpreterTest {
 
-	public EventSplitTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
-		final BasicFBType fb = loadFBType("E_SPLIT"); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SPLIT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		final String[] arr = { "EO1", "EO2" }; //$NON-NLS-1$ //$NON-NLS-2$
 		final List<String> outputEvents = Arrays.asList(arr);
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
-		runTest(fb, seq);
+		addTransaction(seq, new FBTransactionBuilder("EI", outputEvents)); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI", outputEvents)); //$NON-NLS-1$
+		runFBTest(fb, seq);
 	}
 
 }

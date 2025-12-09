@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,30 +18,28 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.FreeformViewport;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.RangeModel;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -56,32 +54,21 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements IFBTEditorPart {
-
-	private CommandStack commandStack;
-	private FBType fbType;
 
 	private PaletteRoot paletteRoot;
 	private TypeLibrary typeLib;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setInput(input);
-		if (input instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
-			fbType = untypedInput.getContent();
-			typeLib = untypedInput.getPaletteEntry().getTypeLibrary();
+		if (input instanceof final TypeEditorInput untypedInput) {
+			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
 		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
-	}
-
-	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}
 
 	@Override
@@ -99,9 +86,23 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected PaletteRoot getPaletteRoot() {
 		if (null == paletteRoot) {
-			paletteRoot = FBInterfacePaletteFactory.createPalette(typeLib);
+			paletteRoot = FBInterfacePaletteFactory.createPalette(typeLib, !(getType() instanceof AdapterType));
 		}
 		return paletteRoot;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> type) {
+		if (type == IContentOutlinePage.class) {
+			return null; // use outline page from FBTypeEditor
+		}
+		if (type == InterfaceList.class) {
+			return type.cast(getModel().getInterfaceList());
+		}
+		if (type == SubAppType.class) {
+			return getType() instanceof final SubAppType subApp ? type.cast(subApp) : null;
+		}
+		return super.getAdapter(type);
 	}
 
 	protected TypeLibrary getTypeLib() {
@@ -115,18 +116,13 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public boolean outlineSelectionChanged(final Object selectedElement) {
-		final Object editpart = getGraphicalViewer().getEditPartRegistry().get(selectedElement);
+		final EditPart ep = getGraphicalViewer().getEditPartForModel(selectedElement);
 		getGraphicalViewer().flush();
-		if (editpart instanceof EditPart && ((EditPart) editpart).isSelectable()) {
-			getGraphicalViewer().select((EditPart) editpart);
+		if (ep != null && ep.isSelectable()) {
+			getGraphicalViewer().select(ep);
 			return true;
 		}
 		return (selectedElement instanceof InterfaceList);
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
 	}
 
 	@Override
@@ -151,11 +147,12 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public FBType getModel() {
-		return fbType;
+		return getType();
 	}
 
 	@Override
-	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer, final ZoomManager zoomManager) {
+	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
+			final ZoomManager zoomManager) {
 		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
 	}
 
@@ -163,11 +160,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		// we don't need an additional transferdroptarget listener
 		return null;
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null; // this is currently needed as the base class is targeted for system editors
 	}
 
 	@Override
@@ -187,15 +179,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		fbType = type;
-		try {
-			init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
-		} catch (final PartInitException e) {
-			org.eclipse.fordiac.ide.fbtypeeditor.Activator.getDefault().logError(PROPERTY_CONTRIBUTOR_ID, e);
-		}
-		getGraphicalViewer().setContents(fbType);
-
+	public void reloadType() {
+		getGraphicalViewer().setContents(getType());
 	}
 
 	@Override
@@ -225,27 +210,25 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected Point getInitialScrollPos() {
-		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-				.getRootEditPart();
-
-		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
-
-		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
-				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
-	}
-
-	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
-		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
-		return center - rangeModel.getExtent() / 2;
+	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
+		final Point figureCanvasSize = getViewer().getFigureCanvasSize();
+		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
+		final org.eclipse.draw2d.geometry.Point center = drawingAreaBounds.getCenter();
+		return new Point(center.x - figureCanvasSize.x / 2, center.y - figureCanvasSize.y / 2);
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		if (getGraphicalViewer() == null) {
 			return null;
 		}
-		return getGraphicalViewer().getEditPartRegistry().get(fbType);
+		return getGraphicalViewer().getEditPartForModel(getType());
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
+		checkEditorInput(input);
+		super.setInput(input);
 	}
 
 }

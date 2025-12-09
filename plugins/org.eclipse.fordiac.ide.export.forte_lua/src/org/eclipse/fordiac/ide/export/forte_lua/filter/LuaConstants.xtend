@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 fortiss GmbH
- * 				 2019 Jan Holzweber
+ * Copyright (c) 2015, 2025 fortiss GmbH, Jan Holzweber
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,7 +19,7 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -30,8 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils.*
@@ -48,6 +45,8 @@ class LuaConstants {
 	static final int FB_ADI_FLAG = 167772160; // 2^27 | 2^25
 	static final int FB_ADO_FLAG = 201326592; // 2^27 | 2^26
 	static final int FB_IN_FLAG = 268435456; // 2^28
+	
+	static final int WITH_DELIMITER = 65535;
 
 	def static luaTypeName(FBType type) '''FORTE_«type.name»'''
 
@@ -58,10 +57,10 @@ class LuaConstants {
 	def static luaStateName(ECState state) '''ECC_«state.name»'''
 
 	def static luaInputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEI_«event.name.replace('.','_')»«ELSE»EI_«event.name»«ENDIF»'''
+		Event event) '''«IF event.blockFBNetworkElement instanceof AdapterFB»AEI_«event.blockFBNetworkElement.name»_«event.name»«ELSE»EI_«event.name»«ENDIF»'''
 
 	def static luaOutputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEO_«event.name.replace('.','_')»«ELSE»EO_«event.name»«ENDIF»'''
+		Event event) '''«IF event.blockFBNetworkElement instanceof AdapterFB»AEO_«event.blockFBNetworkElement.name»_«event.name»«ELSE»EO_«event.name»«ENDIF»'''
 
 	def static luaAdapterInputEventName(Event event, String adapterName) '''AEI_«adapterName»_«event.name»'''
 
@@ -137,8 +136,8 @@ class LuaConstants {
 
 	def static getAdapterInterfaceList(AdapterDeclaration adapter) {
 		if (adapter.isIsInput)
-			return adapter.type.plugType.interfaceList;
-		return adapter.type.socketType.interfaceList;
+			return adapter.getType.plugType.interfaceList;
+		return adapter.getType.interfaceList;
 	}
 
 	def static luaInternalConstants(BasicFBType type) '''
@@ -159,7 +158,7 @@ class LuaConstants {
 	def static luaFBStateVariable() '''fb[«luaFBStateVarName»]'''
 
 	def static luaFBVariable(VarDeclaration decl) {
-		val type = decl.rootContainer as FBType
+		val type = decl.rootContainer as FBType 
 		if (type.interfaceList.inputVars.contains(decl)) {
 			'''fb[«decl.luaFBInputVarName»]'''
 		} else if (type.interfaceList.outputVars.contains(decl)) {
@@ -185,43 +184,10 @@ class LuaConstants {
 		«ENDIF»
 	'''
 
-	def static luaFBAdapterVariablesPrefix(Iterable<AdapterVariable> variables) '''
-		«FOR av : variables»
-			«var index = variables.toList.indexOf(av)»
-			«var sublist = variables.toList.subList(0, index)»
-			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				«IF av.adapter.isIsInput»
-					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»]
-				«ELSE»
-					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
-				«ENDIF»
-			«ENDIF»
-		«ENDFOR»
-	'''
-
-	protected def static VarDeclaration getAdapter(AdapterVariable adapterVar) {
-		(adapterVar.curr as AdapterRoot).adapter
-	}
-
 	def static luaFBVariablesSuffix(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables.filter[!it.isIsInput]»
 			«variable.luaFBVariable» = «variable.luaVariable»
 		«ENDFOR»
-	'''
-
-	def static luaFBAdapterVariablesSuffix(Iterable<AdapterVariable> variables) '''	
-		«FOR av : variables»
-			«var index = variables.toList.indexOf(av)»
-			«var sublist = variables.toList.subList(0, index)»
-			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				«IF av.adapter.isIsInput»
-					fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
-				«ELSE»
-					fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
-				«ENDIF»
-			«ENDIF»
-			«ENDFOR»
-			
 	'''
 
 	def static luaSendOutputEvent(Event event) '''fb(«event.luaOutputEventName»)'''
@@ -236,7 +202,7 @@ class LuaConstants {
 		for (With w : event.with) {
 			with.add(vars.indexOf(w.variables))
 		}
-		with.add(255)
+		with.add(WITH_DELIMITER)
 		return index
 	}
 

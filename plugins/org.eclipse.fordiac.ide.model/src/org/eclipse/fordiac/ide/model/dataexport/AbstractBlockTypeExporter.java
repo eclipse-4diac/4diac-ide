@@ -24,9 +24,12 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -47,7 +50,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	}
 
 	@Override
-	protected FBType getType() {
+	public FBType getType() {
 		return (FBType) super.getType();
 	}
 
@@ -57,6 +60,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addInterfaceList(getType().getInterfaceList());
 		createBlockTypeSpecificXMLEntries();
 		addService(getType());
+		addAttributes(getType().getAttributes());
 	}
 
 	protected abstract void createBlockTypeSpecificXMLEntries() throws XMLStreamException;
@@ -75,6 +79,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addVarList(interfaceList.getOutputVars(), LibraryElementTags.OUTPUT_VARS_ELEMENT);
 		createAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT);
 		createAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT);
+		addVarList(interfaceList.getInOutVars(), LibraryElementTags.INOUT_VARS_ELEMENT);
 		addEndElement();
 	}
 
@@ -103,7 +108,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		}
 
 		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
-		if (null != adapterDecl.getAdapterFB()) {
+		if (adapterDecl.getAdapterFB().eContainer() instanceof FBNetwork) {
 			addXYAttributes(adapterDecl.getAdapterFB());
 		}
 
@@ -121,13 +126,12 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	 * @param elementName the name of the xml element holding the var list
 	 * @throws XMLStreamException
 	 */
-	protected void addVarList(final List<VarDeclaration> varList, final String elementName) throws XMLStreamException {
+	protected void addVarList(final List<? extends VarDeclaration> varList, final String elementName)
+			throws XMLStreamException {
 		if (!varList.isEmpty()) {
 			addStartElement(elementName);
 			for (final VarDeclaration varDecl : varList) {
-				if (!(varDecl instanceof AdapterDeclaration)) {
-					addVarDeclaration(varDecl);
-				}
+				addVarDeclaration(varDecl);
 			}
 			addEndElement();
 		}
@@ -146,9 +150,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		if (!varList.isEmpty() || !fbList.isEmpty()) {
 			addStartElement(elementName);
 			for (final VarDeclaration varDecl : varList) {
-				if (!(varDecl instanceof AdapterDeclaration)) {
-					addVarDeclaration(varDecl);
-				}
+				addVarDeclaration(varDecl);
 			}
 			for (final FB fb : fbList) {
 				addStartElement(LibraryElementTags.FB_ELEMENT);
@@ -156,7 +158,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 				if (null != fb.getType()) {
 					addTypeAttribute(fb.getType());
 				}
-				addCommentAttribute(fb);
+				addCommentAttribute(fb.getComment());
 
 				addAttributes(fb.getAttributes());
 				addEndElement();
@@ -202,8 +204,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 	private void addEvent(final Event event) throws XMLStreamException {
 		addStartElement(getEventElementName());
 		addNameAttribute(event.getName());
-		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, "Event"); //$NON-NLS-1$
-		addCommentAttribute(event);
+		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, event.getTypeName());
+		addCommentAttribute(event.getComment());
 		addWith(event);
 		addAttributes(event.getAttributes());
 		addEndElement();
@@ -245,7 +247,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 					sfb.getService().getRightInterface().getName());
 			getWriter().writeAttribute(LibraryElementTags.LEFT_INTERFACE_ATTRIBUTE,
 					sfb.getService().getLeftInterface().getName());
-			addCommentAttribute(sfb);
+			addCommentAttribute(sfb.getService().getComment());
 
 			addServiceSequences(sfb.getService().getServiceSequence());
 
@@ -263,8 +265,15 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		for (final ServiceSequence seq : sequences) {
 			addStartElement(LibraryElementTags.SERVICE_SEQUENCE_ELEMENT);
 
-			addNameAttribute(seq.getName());
-			addCommentAttribute(seq);
+			addNameAndCommentAttribute(seq);
+			if (seq.getStartState() != null) {
+				addAttributeElement(LibraryElementTags.START_STATE_ATTRIBUTE, IecTypes.ElementaryTypes.STRING,
+						seq.getStartState(), null);
+			}
+			if (!seq.getServiceSequenceType().equals(ServiceSequenceTypes.DEFAULT)) {
+				addAttributeElement(LibraryElementTags.SERVICE_SEQUENCE_TYPE_ATTRIBUTE, IecTypes.ElementaryTypes.STRING,
+						seq.getServiceSequenceType(), null);
+			}
 			addServiceTransactions(seq.getServiceTransaction());
 			addEndElement();
 		}
@@ -294,7 +303,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addEmptyStartElement(primNodeName);
 		getWriter().writeAttribute(LibraryElementTags.INTERFACE_ATTRIBUTE,
 				((null != prim.getInterface()) && (null != prim.getInterface().getName()))
-				? prim.getInterface().getName()
+						? prim.getInterface().getName()
 						: ""); //$NON-NLS-1$
 		getWriter().writeAttribute(LibraryElementTags.EVENT_ELEMENT, (null != prim.getEvent()) ? prim.getEvent() : ""); //$NON-NLS-1$
 		if ((null != prim.getParameters()) && (!prim.getParameters().equals(" "))) { //$NON-NLS-1$

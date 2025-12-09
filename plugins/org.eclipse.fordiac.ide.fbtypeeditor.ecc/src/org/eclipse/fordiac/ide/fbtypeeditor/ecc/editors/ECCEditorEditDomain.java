@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz, fortiss GmbH
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
@@ -24,20 +23,19 @@ import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProx
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SharedCursors;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
-import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.IEditorPart;
 
-final class ECCEditorEditDomain extends FBTypeEditDomain {
+final class ECCEditorEditDomain extends DefaultEditDomain {
 	private static class StateCreationTool extends CreationTool {
 
 		private final StateCreationFactory stateFactory = new StateCreationFactory();
@@ -76,27 +74,23 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	}
 
-	private static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool {
+	public static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool {
 		public Point getLastLocation() {
 			return ((LocationRequest) super.getTargetHoverRequest()).getLocation();
 		}
 
 		public void changeCursor() {
-			if (getDragTracker() instanceof ConnCreateDirectEditDragTrackerProxy) {
-				final ConnectionDragCreationTool tool = ((ConnCreateDirectEditDragTrackerProxy) getDragTracker())
-						.getConnectionTool();
-				tool.setDisabledCursor(SharedCursors.CURSOR_TREE_ADD);
+			if (getDragTracker() instanceof final ConnCreateDirectEditDragTrackerProxy ccdProxy) {
+				ccdProxy.getConnectionTool().setDisabledCursor(SharedCursors.CURSOR_TREE_ADD);
 			}
 		}
 	}
 
 	private static class TransitionStateCreationTool extends CreationTool {
-		private final ECC ecc;
 		private Point point;
 		private ECState sourceState;
 
-		public TransitionStateCreationTool(final ECC ecc) {
-			this.ecc = ecc;
+		public TransitionStateCreationTool() {
 			setFactory(new StateCreationFactory());
 			setUnloadWhenFinished(false);
 		}
@@ -112,26 +106,32 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 		public void performCreation() {
 			final ECState destState = (ECState) getFactory().getNewObject();
-			destState.updatePosition(point);
-			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, ecc);
-			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState, null);
+			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, getECC());
+			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
+					null);
+			createTransitionCommand.setDestinationLocation(point);
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);
 			setCurrentCommand(compCom);
 			performCreation(1);
 		}
+
+		private ECC getECC() {
+			if (sourceState != null) {
+				return sourceState.getECC();
+			}
+			return null;
+		}
 	}
 
 	private final StateCreationTool stateCreationTool = new StateCreationTool();
-	private final TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool(
-			((ECCEditor) getEditorPart()).getFbType().getECC());
+	private final TransitionStateCreationTool transitionStateCreationTool = new TransitionStateCreationTool();
 	private boolean transition = false;
 	private boolean createTransitionAndState = false;
 
-	ECCEditorEditDomain(final IEditorPart editorPart, final CommandStack commandStack) {
-		super(editorPart, commandStack);
-		setDefaultTool(new ECCPanningSelectionTool());
+	ECCEditorEditDomain(final IEditorPart editorPart) {
+		super(editorPart);
 	}
 
 	@Override
@@ -163,9 +163,9 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 	public void mouseDrag(final MouseEvent mouseEvent, final EditPartViewer viewer) {
 		if (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart() instanceof ECStateEditPart) {
 			transition = true;
-			transitionStateCreationTool
-			.setSourceState(((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool())
-					.getTargetEditPart())).getModel());
+			transitionStateCreationTool.setSourceState(
+					((ECStateEditPart) (((AdvancedPanningSelectionTool) getDefaultTool()).getTargetEditPart()))
+							.getModel());
 		}
 		super.mouseDrag(mouseEvent, viewer);
 	}
@@ -177,7 +177,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 			if (createTransitionAndState && ((AdvancedPanningSelectionTool) getDefaultTool())
 					.getTargetEditPart() instanceof FreeformGraphicalRootEditPart) {
 				transitionStateCreationTool
-				.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
+						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
 				setActiveTool(transitionStateCreationTool);
 				transitionStateCreationTool.performCreation();
 				setActiveTool(getDefaultTool());

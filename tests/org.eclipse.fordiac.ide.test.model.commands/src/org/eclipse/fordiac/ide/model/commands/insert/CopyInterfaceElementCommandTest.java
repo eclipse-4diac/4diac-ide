@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -39,10 +40,8 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		element.setIsInput(!isInput); // also test copying from inputs to outputs and vice-versa
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = getDatatypelib().getType(typeName);
-		element.setTypeName(typeName);
 		element.setType(type);
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return commandExecution(state);
 	}
@@ -50,11 +49,11 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 	public static State executeEventCommand(final State state, final boolean isInput) {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createEvent();
 		element.setName(INTERFACE_ELEMENT);
+		element.setType(EventTypeLibrary.getInstance().getType(EventTypeLibrary.EVENT));
 		final DataType type = EventTypeLibrary.getInstance().getType(null);
 		element.setType(type);
 		element.setIsInput(!isInput);
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return commandExecution(state);
 	}
@@ -63,13 +62,13 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
 
-		state.setCommand(new CreateInterfaceElementCommand(element, isInput,
-				state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getInterface(), 0));
+		state.setCommand(new CreateInterfaceElementCommand(element, isInput, getFB(state).getInterface(), 0));
 
 		return disabledCommandExecution(state);
 	}
 
-	public static State executeCommandWithoutInterfaceList(final State state, final String typeName, final boolean isInput) {
+	public static State executeCommandWithoutInterfaceList(final State state, final String typeName,
+			final boolean isInput) {
 		final IInterfaceElement element = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		element.setName(INTERFACE_ELEMENT);
 		final DataType type = getDatatypelib().getType(typeName);
@@ -160,7 +159,7 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 							verifyStateHasEventInput(s, t);
 							verifyStateHasEventOutput(s, t);
 						}) //
-				);
+		);
 
 		final Collection<Arguments> commands = new ArrayList<>();
 
@@ -174,26 +173,26 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 					verifyStateNoEventOutput(s, t);
 				}, //
 				executionDescriptions //
-				));
+		));
 
 		final List<ExecutionDescription<?>> unexecutableDescriptions = List.of( //
 				new ExecutionDescription<>("Add Interface Element without type", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutType(s, true), //
 						CommandTestBase::verifyNothing //
-						), //
+				), //
 				new ExecutionDescription<>("Add Interface Element without interface list", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, true), //
 						CommandTestBase::verifyNothing //
-						), //
+				), //
 				new ExecutionDescription<>("Add Interface Element without type", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutType(s, false), //
 						CommandTestBase::verifyNothing //
-						), //
+				), //
 				new ExecutionDescription<>("Add Interface Element without interface list", //$NON-NLS-1$
 						(final State s) -> executeCommandWithoutInterfaceList(s, FordiacKeywords.DWORD, false), //
 						CommandTestBase::verifyNothing //
-						) //
-				);
+				) //
+		);
 
 		commands.addAll(describeCommand("Start with Functionblock, disabled undo&redo", // //$NON-NLS-1$
 				() -> FBCreateCommandTest.executeCommand(new State()), //
@@ -201,9 +200,13 @@ public class CopyInterfaceElementCommandTest extends FBNetworkTestBase {
 				unexecutableDescriptions, //
 				CommandTestBase::disabledUndoCommand, //
 				CommandTestBase::disabledRedoCommand //
-				));
+		));
 
 		return commands;
+	}
+
+	private static BlockFBNetworkElement getFB(final State state) {
+		return (BlockFBNetworkElement) state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME);
 	}
 
 }

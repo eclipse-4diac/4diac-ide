@@ -32,9 +32,7 @@ public class ECCSelectAllAction extends SelectAllAction {
 		this.part = part;
 	}
 
-	/**
-	 * Selects all ECC State and Transition edit parts in the active workbench part.
-	 */
+	/** Selects all ECC State and Transition edit parts in the active workbench part. */
 	@Override
 	public void run() {
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
@@ -46,12 +44,12 @@ public class ECCSelectAllAction extends SelectAllAction {
 	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer) {
 		final List<EditPart> selectableChildren = new ArrayList<>();
 
-		final List<EditPart> children = viewer.getContents().getChildren();
+		final List<? extends EditPart> children = viewer.getContents().getChildren();
 
 		for (final EditPart child : children) {
-			if ((child instanceof ECStateEditPart) && child.isSelectable()) {
+			if ((child instanceof final ECStateEditPart ecSateEP) && child.isSelectable()) {
 				selectableChildren.add(child);
-				selectableChildren.addAll(((ECStateEditPart) child).getSourceConnections());
+				selectableChildren.addAll(ecSateEP.getSourceConnections());
 			}
 		}
 		return selectableChildren;

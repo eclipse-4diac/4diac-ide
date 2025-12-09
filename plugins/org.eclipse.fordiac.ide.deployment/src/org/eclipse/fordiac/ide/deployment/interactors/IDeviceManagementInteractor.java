@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2013, 2017, 2018 Profactor GmbH, fortiss GmbH,
- * 						Johanns Kepler University
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johanns Kepler University
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,20 +13,24 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
+ *   Martin Erich Jobst - rework monitoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.interactors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 
 /**
  * Interface for classes that allow deployment and monitoring to interact with a
@@ -118,6 +123,15 @@ public interface IDeviceManagementInteractor {
 	/**
 	 * Write fb parameter.
 	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void writeFBParameter(Resource resource, String name, String value) throws DeploymentException;
+
+	/**
+	 * Write fb parameter.
+	 *
 	 * @param resource the resource
 	 * @param value    the value
 	 * @param fb       the fb
@@ -156,6 +170,33 @@ public interface IDeviceManagementInteractor {
 	 * @throws StartException the start exception
 	 */
 	void startResource(Resource res) throws DeploymentException;
+
+	/**
+	 * Reset resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void resetResource(final String resName) throws DeploymentException;
+
+	/**
+	 * Kill resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void killResource(final String resName) throws DeploymentException;
+
+	/**
+	 * Stop resource.
+	 *
+	 * @param res the res
+	 *
+	 * @throws Exception the exception
+	 */
+	void stopResource(final Resource res) throws DeploymentException;
 
 	/**
 	 * Start device.
@@ -215,19 +256,92 @@ public interface IDeviceManagementInteractor {
 	 */
 	List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException;
 
+	Response queryFBType(FBTypeEntry entry) throws DeploymentException;
+
+	Response queryDataType(DataTypeEntry entry) throws DeploymentException;
+
+	Response queryGlobalConstType(GlobalConstantsEntry entry) throws DeploymentException;
+
 	/***********************
 	 * monitoring commands
 	 ****************************************************/
+
+	/**
+	 * Read watches from device
+	 *
+	 * @return The device response
+	 * @throws DeploymentException if an error occurred
+	 */
 	Response readWatches() throws DeploymentException;
 
-	void addWatch(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Add a watch
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @return true on success, false otherwise
+	 * @throws DeploymentException if an error occurred
+	 */
+	boolean addWatch(Resource resource, String name) throws DeploymentException;
 
-	void removeWatch(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Remove a watch
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @return true on success, false otherwise
+	 * @throws DeploymentException if an error occurred
+	 */
+	boolean removeWatch(Resource resource, String name) throws DeploymentException;
 
-	void triggerEvent(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Trigger an event
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void triggerEvent(Resource resource, String name) throws DeploymentException;
 
-	void forceValue(MonitoringBaseElement element, String value) throws DeploymentException;
+	/**
+	 * Force a watch value
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @param value    The value to force
+	 * @throws DeploymentException if an error occurred
+	 */
+	void forceValue(Resource resource, String name, String value) throws DeploymentException;
 
-	void clearForce(MonitoringBaseElement element) throws DeploymentException;
+	/**
+	 * Clear the force of a watch value
+	 *
+	 * @param resource The resource
+	 * @param name     The qualified name, relative to the resource
+	 * @throws DeploymentException if an error occurred
+	 */
+	void clearForce(Resource resource, String name) throws DeploymentException;
 
+	/********************************************************************************************
+	 * Replay Commands
+	 ********************************************************************************************/
+
+	/**
+	 * Read traces from a given path
+	 *
+	 * @param device The device where to execute the command
+	 * @param path   Path to the traces to load
+	 * @throws DeploymentException if an error occurred
+	 */
+	void readTraces(final Device device, final String path) throws DeploymentException;
+
+	/**
+	 * Replay the next event. It simulates the next event from the loaded traces
+	 *
+	 * @param resource The resource in which the event will be replayed
+	 * @return An optional containing the name of the event that was replayed, or
+	 *         empty if no more events are available to replay
+	 * @throws DeploymentException if an error occurred
+	 */
+	Optional<String> replayNextEvent(final Resource resource) throws DeploymentException;
 }

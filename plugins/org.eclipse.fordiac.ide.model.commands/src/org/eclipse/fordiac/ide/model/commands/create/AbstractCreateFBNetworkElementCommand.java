@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,77 +9,134 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo
+ *   Alois Zoitl      - initial API and implementation and/or initial documentation
+ *                    - removed editor check from canUndo
  *   Daniel Lindhuber - added recursive type handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Set;
+
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractCreateFBNetworkElementCommand extends Command {
+public abstract class AbstractCreateFBNetworkElementCommand extends Command
+		implements ConnectionLayoutTagger, ScopedCommand {
 
 	private final FBNetworkElement element;
 	private final FBNetwork fbNetwork;
-	private int x;
-	private int y;
+	private Position position;
+
+	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
+			final Position position) {
+		this.fbNetwork = fbNetwork;
+		this.element = element;
+		this.position = (position.eContainer() != null) ? // if we get a position that is currently used create a copy
+				EcoreUtil.copy(position) : position;
+	}
 
 	protected AbstractCreateFBNetworkElementCommand(final FBNetwork fbNetwork, final FBNetworkElement element,
 			final int x, final int y) {
-		this.fbNetwork = fbNetwork;
-		this.element = element;
-		this.x = x;
-		this.y = y;
+		this(fbNetwork, element, CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(x, y));
 	}
 
 	@Override
 	public boolean canExecute() {
-		if (FBNetworkHelper.isTypeInsertionSave(element.getType(), fbNetwork)) {
-			return fbNetwork != null;
-		}
-		return false;
+		return fbNetwork != null && element != null
+				&& FBNetworkHelper.isTypeInsertionSafe(element.getType(), fbNetwork);
 	}
 
 	@Override
 	public void execute() {
-		element.setInterface(getTypeInterfaceList().copy());
-		element.updatePosition(x, y);
-		fbNetwork.getNetworkElements().add(element); // as subclasses may not be able to
-		// run redo on execute we have to duplicate this here
-		element.setName(NameRepository.createUniqueName(element, getInitalInstanceName()));
+		if (element instanceof final BlockFBNetworkElement bfbEl) {
+			bfbEl.setInterface(createInterfaceList());
+		}
+		if (element.getTypeEntry() != null) {
+			AttributeInheritMode.copyAttributeValuesFromType(element);
+		}
+		element.setPosition(position);
+		insertFBNetworkElement();
+		checkName();
+	}
+
+	protected void checkName() {
+		element.setName(NameRepository.createUniqueName(element, getInitialInstanceName()));
 	}
 
 	@Override
 	public void redo() {
-		fbNetwork.getNetworkElements().add(element);
+		insertFBNetworkElement();
 	}
 
 	@Override
 	public void undo() {
-		fbNetwork.getNetworkElements().remove(element);
-	}
-
-	public void updateCreatePosition(final int x, final int y) {
-		this.x = x;
-		this.y = y;
+		removeFBNetworkElement();
 	}
 
 	public FBNetworkElement getElement() {
 		return element;
 	}
 
-	protected String getInitalInstanceName() {
+	protected String getInitialInstanceName() {
 		return element.getTypeName();
 	}
 
-	protected abstract InterfaceList getTypeInterfaceList();
+	/** Create the interfaceList to be inserted into the FBNtworkElement */
+	protected abstract InterfaceList createInterfaceList();
 
-	protected FBNetwork getFBNetwork() {
+	public FBNetwork getFBNetwork() {
 		return fbNetwork;
 	}
+
+	public static AbstractCreateFBNetworkElementCommand createCreateCommand(final TypeEntry typeEntry,
+			final FBNetwork fbNetwork, final int x, final int y) {
+		if (typeEntry instanceof final FBTypeEntry fbEntry) {
+			return new FBCreateCommand(fbEntry, fbNetwork, x, y);
+		}
+		if (typeEntry instanceof final SubAppTypeEntry subAppEntry) {
+			return new CreateSubAppInstanceCommand(subAppEntry, fbNetwork, x, y);
+		}
+		return null;
+	}
+
+	public void updateCreatePosition(final Point createPos) {
+		position = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(createPos.x, createPos.y);
+	}
+
+	private void insertFBNetworkElement() {
+		if (fbNetwork != null) {
+			fbNetwork.getNetworkElements().add(element);
+		}
+	}
+
+	private void removeFBNetworkElement() {
+		if (fbNetwork != null) {
+			fbNetwork.getNetworkElements().remove(element);
+		}
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (fbNetwork != null) {
+			return Set.of(fbNetwork);
+		}
+		return Set.of();
+	}
+
 }

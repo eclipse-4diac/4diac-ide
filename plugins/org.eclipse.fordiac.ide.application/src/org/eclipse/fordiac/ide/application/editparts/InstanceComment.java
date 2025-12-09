@@ -14,22 +14,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class InstanceComment {
 
-	private final FBNetworkElement refElement;
+	private final INamedElement refElement;
 
-	public InstanceComment(FBNetworkElement refElement) {
+	public InstanceComment(final INamedElement refElement) {
 		this.refElement = refElement;
 	}
 
-	public FBNetworkElement getRefElement() {
+	public INamedElement getRefElement() {
 		return refElement;
 	}
 
 	public String getInstanceComment() {
 		return getRefElement().getComment();
 	}
-
 }

@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
-Export-Package: org.eclipse.fordiac.ide.deployment.iec61499
+Export-Package: org.eclipse.fordiac.ide.deployment.iec61499,
+ org.eclipse.fordiac.ide.deployment.iec61499.executors,
+ org.eclipse.fordiac.ide.deployment.iec61499.handlers
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.model,
@@ -13,13 +15,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.core.resources,
  org.eclipse.gef,
- org.eclipse.fordiac.ide.systemconfiguration
+ org.eclipse.fordiac.ide.systemconfiguration,
+ org.eclipse.fordiac.ide.application
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: IEC 61499 Deployment
-Bundle-Activator: org.eclipse.fordiac.ide.deployment.iec61499.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499

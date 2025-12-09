@@ -17,14 +17,13 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 
 public class InterfaceEditPartForFBNetworkRO extends InterfaceEditPartForFBNetwork {
 
-	public InterfaceEditPartForFBNetworkRO() {
-		super();
-		setConnectable(false);
-	}
-
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
 		return null;
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
 }

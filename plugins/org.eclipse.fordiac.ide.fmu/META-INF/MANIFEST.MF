@@ -8,15 +8,14 @@ Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.console,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.fordiac.ide.deployment.ui,
+ org.eclipse.fordiac.ide.deployment.bootfile,
  org.eclipse.swt
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: FMU exporter
-Bundle-Activator: org.eclipse.fordiac.ide.fmu.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.fmu;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Import-Package: org.eclipse.fordiac.ide.systemmanagement
 Automatic-Module-Name: org.eclipse.fordiac.ide.fmu

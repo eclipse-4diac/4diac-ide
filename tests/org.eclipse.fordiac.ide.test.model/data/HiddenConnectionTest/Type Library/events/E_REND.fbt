@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Rendezvous (AND) of two events" Name="E_REND">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="first event to wait for" Name="EI1" Type="Event"/>
+      <Event Comment="second event to wait for" Name="EI2" Type="Event"/>
+      <Event Comment="reset the FB to inital state (i.e., wait again for both events)" Name="R" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="triggered when both EI1 and EI2 occured at least once" Name="EO" Type="Event"/>
+    </EventOutputs>
+    <InputVars/>
+    <OutputVars/>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="400.0" y="1000.0"/>
+      <ECState Comment="EI1 occured at least once" Name="EI1" x="1155.0" y="340.0"/>
+      <ECState Comment="Both input events occured at least once send output event" Name="EO" x="1685.0" y="1010.0">
+        <ECAction Output="EO"/>
+      </ECState>
+      <ECState Comment="EI2 occured at least once" Name="EI2" x="1145.0" y="1585.0"/>
+      <ECTransition Comment="" Condition="EI2" Destination="EI2" Source="START" x="1020.0" y="1180.0"/>
+      <ECTransition Comment="" Condition="EI1" Destination="EI1" Source="START" x="1040.0" y="865.0"/>
+      <ECTransition Comment="" Condition="R" Destination="START" Source="EI2" x="655.0" y="1485.0"/>
+      <ECTransition Comment="" Condition="R" Destination="START" Source="EI1" x="800.0" y="695.0"/>
+      <ECTransition Comment="" Condition="EI2" Destination="EO" Source="EI1" x="1465.0" y="705.0"/>
+      <ECTransition Comment="" Condition="EI1" Destination="EO" Source="EI2" x="1440.0" y="1325.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="1165.0" y="1065.0"/>
+    </ECC>
+  </BasicFB>
+</FBType>

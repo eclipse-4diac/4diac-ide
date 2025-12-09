@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2021 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,43 +13,127 @@
  *   Alois Zoitl, Gerhard Ebenhofer
  *       - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - adapted ChangeTypeCommand for multiplexer use, sets struct
+ *   Daniel Lindhuber - struct update
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
+import java.text.MessageFormat;
+
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
-public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
+public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 
-	private final StructuredType newStruct;
+	private final TypeEntry newStructTypeEntry;
+	private final String newVisibleChildren;
+	private boolean reloadDatatype = true;
 
-	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
-		super(mux);
-		this.newStruct = newStruct;
-		entry = mux.getPaletteEntry();
+	public ChangeStructCommand(final BlockFBNetworkElement fb, final DataType newStruct) {
+		super(fb);
+		this.newStructTypeEntry = (newStruct != null) ? newStruct.getTypeEntry() : null;
+		this.entry = fb.getTypeEntry();
+		this.newVisibleChildren = null;
+	}
+
+	public ChangeStructCommand(final StructManipulator mux) {
+		this(mux, mux.getDataType(), getOldVisibleChildren(mux));
+	}
+
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct) {
+		this(mux, newStruct, getOldVisibleChildren(mux));
+	}
+
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final String visibleChildren,
+			final boolean doNotReload) {
+		this(mux, newStruct, visibleChildren);
+		reloadDatatype = !doNotReload;
+	}
+
+	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final boolean doNotReload) {
+		this(mux, newStruct, getOldVisibleChildren(mux));
+		reloadDatatype = !doNotReload;
+	}
+
+	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
+		this(demux, demux.getDataType(), newVisibleChildren);
+	}
+
+	// only to avoid code duplication, public constructors ensure correct set-up
+	private ChangeStructCommand(final StructManipulator demux, final DataType datatype,
+			final String newVisibleChildren) {
+		super(demux);
+		// use type entry to ensure that the latest version is loaded, for unconfigured
+		// datatype is null
+		newStructTypeEntry = (datatype != null) ? datatype.getTypeEntry() : null;
+		entry = demux.getTypeEntry();
+		this.newVisibleChildren = newVisibleChildren;
+	}
+
+	private static String getOldVisibleChildren(final StructManipulator mux) {
+		if (mux instanceof final Demultiplexer demux && demux.isIsConfigured()) {
+			return ConfigurableFBManagement.buildVisibleChildrenString(demux.getMemberVars());
+		}
+		return null;
 	}
 
 	@Override
-	protected void createNewFB() {
-		if (oldElement instanceof Multiplexer) {
-			newElement = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (oldElement instanceof Demultiplexer) {
-			newElement = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		}
-		newElement.setPaletteEntry(entry);
-		newElement.setInterface(EcoreUtil.copy(oldElement.getType().getInterfaceList()));
-		newElement.setName(oldElement.getName());
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
+		BlockFBNetworkElement copy = null;
 
-		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
-		newElement.deleteAttribute("VisibleChildren"); // TODO use constant
-		((StructManipulator) newElement).setStructTypeElementsAtInterface(newStruct);
-		createValues();
+		if (srcElement instanceof Multiplexer) {
+			copy = LibraryElementFactory.eINSTANCE.createMultiplexer();
+		} else if (srcElement instanceof Demultiplexer) {
+			copy = LibraryElementFactory.eINSTANCE.createDemultiplexer();
+		} else if (srcElement instanceof ConfigurableFB) {
+			copy = LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
+		}
+		if (copy != null) {
+			copy.setTypeEntry(entry);
+		}
+		return copy;
+	}
+
+	@Override
+	protected void handleConfigurableFB() {
+		if (newStructTypeEntry != null) {
+			if (getNewElement() instanceof StructManipulator) {
+				getNewMux().setDataType(getDataTypeFromTypeEntry());
+			} else if (getNewElement() instanceof ConfigurableFB) {
+				getNewMoveFB().setDataType(getDataTypeFromTypeEntry());
+			}
+
+		}
+		if (isDemuxConfiguration()) {
+			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
+		} else if (getNewElement() instanceof ConfigurableFB) {
+			getNewMoveFB().updateConfiguration();
+		} else {
+			getNewMux().updateConfiguration();
+		}
+	}
+
+	private boolean isDemuxConfiguration() {
+		if (newElement instanceof final Demultiplexer demux) {
+			return demux.isIsConfigured() || newVisibleChildren != null;
+		}
+		return false;
+	}
+
+	public ConfigurableFB getNewMoveFB() {
+		return (ConfigurableFB) newElement;
 	}
 
 	public StructManipulator getNewMux() {
@@ -57,5 +142,28 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 
 	public StructManipulator getOldMux() {
 		return (StructManipulator) oldElement;
+	}
+
+	private DataType getDataTypeFromTypeEntry() {
+		if (newStructTypeEntry == null) {
+			return IecTypes.GenericTypes.ANY_STRUCT;
+		}
+
+		LibraryElement type = newStructTypeEntry.getType();
+		if (reloadDatatype) {
+			final DataTypeLibrary datatypeLib = entry.getTypeLibrary().getDataTypeLibrary();
+			final TypeEntry reloadedTypeEntry = datatypeLib.getDerivedTypeEntry(newStructTypeEntry.getFullTypeName());
+			if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
+				if (reloadedTypeEntry != null && reloadedTypeEntry != newStructTypeEntry) {
+					// type exists now
+					type = reloadedTypeEntry.getType();
+				}
+			} else if (reloadedTypeEntry == null) {
+				// type was deleted, create error marker
+				type = datatypeLib.createErrorMarkerType(newStructTypeEntry.getFullTypeName(), MessageFormat
+						.format("Typeentry for StructManipulator `{0}` not available!", getOldMux().getName())); //$NON-NLS-1$
+			}
+		}
+		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
 	}
 }

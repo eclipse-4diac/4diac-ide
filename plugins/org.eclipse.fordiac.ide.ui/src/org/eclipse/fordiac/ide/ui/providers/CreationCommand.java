@@ -14,7 +14,9 @@
 
 package org.eclipse.fordiac.ide.ui.providers;
 
-public interface CreationCommand {
+import org.eclipse.gef.commands.Command;
 
-	Object getCreatedElement();
+public abstract class CreationCommand extends Command {
+
+	public abstract Object getCreatedElement();
 }

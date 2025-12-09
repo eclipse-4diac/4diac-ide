@@ -33,21 +33,18 @@ public class OpenResourceEditorAction extends AbstractOpenSystemElementListener 
 	@Override
 	public void run(final IAction action) {
 		if (null != res) {
-			openInSystemEditor(res.getAutomationSystem().getSystemFile(), res);
+			openInSystemEditor(res.getAutomationSystem().getTypeEntry().getFile(), res);
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		res = null;
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof Resource) {
-				res = (Resource) structuredSel.getFirstElement();
-			}
+		if (selection instanceof final IStructuredSelection structuredSel
+				&& structuredSel.getFirstElement() instanceof final Resource firstSel) {
+			res = firstSel;
 		}
 	}
-
 
 	@Override
 	public Class<? extends EObject> getHandledClass() {

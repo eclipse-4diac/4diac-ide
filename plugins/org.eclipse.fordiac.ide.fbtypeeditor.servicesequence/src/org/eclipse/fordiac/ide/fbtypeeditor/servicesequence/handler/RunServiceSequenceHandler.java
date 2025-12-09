@@ -13,16 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Activator;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.FBTestRunner;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -39,42 +43,49 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		for (final Object selected : selection.toList()) {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
-				try {
-					AbstractInterpreterTest.runTest((BasicFBType) seq.getService().getFBType(), seq);
-					MessageDialog.openInformation(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_Success,
-							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
-
-				} catch (final Exception e) {
-					Activator.getDefault().logError("Service Sequence was inconsistent"); //$NON-NLS-1$
-					MessageDialog.openError(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_InconsistencyDetected,
-							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC);
+				final FBType fbType = EcoreUtil.copy(seq.getService().getFBType());
+				Optional<String> result;
+				if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
+					result = FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
+				} else {
+					result = FBTestRunner.runFBTest(fbType, seq);
 				}
 
+				if (result.isEmpty()) {
+					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
+							Messages.RunServiceSequenceHandler_Success,
+							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
+				} else {
+					MessageDialog.openError(HandlerUtil.getActiveShell(event),
+							Messages.RunServiceSequenceHandler_InconsistencyDetected,
+							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC + ":\n" + result.get()); //$NON-NLS-1$
+				}
 			}
 		}
 		return Status.OK_STATUS;
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			Object selected = ((StructuredSelection) selection).getFirstElement();
-			if (selected instanceof EditPart) {
-				selected = ((EditPart) selected).getModel();
-			}
-			if (selected instanceof ServiceSequence) {
-				setBaseEnabled(((ServiceSequence) selected).getService().getFBType() instanceof BasicFBType);
-			}
-		}
+		setBaseEnabled(!getSelectedSequences(selection).isEmpty());
 	}
 
-	private static ServiceSequence getSequence(final Object selected) {
-		if (selected instanceof ServiceSequenceEditPart) {
-			return ((ServiceSequenceEditPart) selected).getModel();
-		} else if (selected instanceof ServiceSequence) {
-			return (ServiceSequence) selected;
+	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
+		if (selection instanceof final StructuredSelection structSel) {
+			return structSel.toList().stream().map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull)
+					.toList();
+		}
+		return Collections.emptyList();
+	}
+
+	private static ServiceSequence getSequence(Object selected) {
+		if (selected instanceof final EditPart ep) {
+			selected = ep.getModel();
+		}
+		if (selected instanceof final ServiceSequence serviceSeq) {
+			return serviceSeq;
 		}
 		return null;
 	}

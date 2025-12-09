@@ -14,14 +14,10 @@
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
-import org.eclipse.fordiac.ide.typemanagement.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -41,33 +37,15 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 	public Object[] getElements(final Object inputElement) {
 
 		if ((null == inputElement) || (inputElement instanceof IWorkspaceRoot)) {
-			// this content provider is only requried on the lowest level of the tree
+			// this content provider is only required on the lowest level of the tree
 			final IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-
-			final IFolder toolLibFolder = TypeLibrary.getToolLibFolder();
-
-			final IProject[] projects = myWorkspaceRoot.getProjects();
-
-			final Object[] retval = new Object[projects.length];
-
-			// tool library should be first
-			retval[0] = toolLibFolder;
-
-			int outputRunner = 1;
-			for (final IProject project : projects) {
-				if (!project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
-					retval[outputRunner] = project;
-					outputRunner++;
-				}
-			}
-
-			return retval;
+			return myWorkspaceRoot.getProjects();
 		}
-		if (inputElement instanceof IContainer) {
+		if (inputElement instanceof final IContainer container) {
 			try {
-				return ((IContainer) inputElement).members();
+				return container.members();
 			} catch (final CoreException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 

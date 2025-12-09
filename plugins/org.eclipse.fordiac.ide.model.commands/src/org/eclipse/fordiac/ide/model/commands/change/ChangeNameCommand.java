@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler Unviersity Linz,
+ *                          Primetals Technologies Austria GmbHy
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,69 +12,183 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - updated for new adapter FB handling
+ *   Fabio Gandolfi - added FBNewtork error marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeNameCommand extends Command {
+public class ChangeNameCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
-	private FBNetworkElement fbNetworkElement;
-	private AdapterDeclaration adapterDeclaration;
+	private final String oldQualName;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
+	private boolean validateName;
 
-	public ChangeNameCommand(final INamedElement element, final String name) {
-		super();
-		this.element = element;
+	private ChangeNameCommand(final INamedElement element, final String name) {
+		this(element, name, true);
+	}
+
+	private ChangeNameCommand(final INamedElement element, final String name, final boolean validateName) {
+
+		this.element = Objects.requireNonNull(element);
 		this.name = name;
+		this.validateName = validateName;
+		this.oldQualName = element.getQualifiedName();
+	}
+
+	public static ChangeNameCommand forName(final INamedElement element, final String name) {
+		INamedElement toRename = element;
+		if (element instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			toRename = varDecl.getInOutVarOpposite();
+		}
+		final ChangeNameCommand result = new ChangeNameCommand(toRename, name);
+		addAdditionalRenames(toRename, name, result);
+		return result;
+	}
+
+	private static void addAdditionalRenames(final INamedElement element, final String name,
+			final ChangeNameCommand result) {
+		if ((element instanceof final FBNetworkElement fbne) && fbne.isMapped()) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(fbne.getOpposite(), name));
+		}
+		if (element instanceof final IInterfaceElement interfaceElement
+				&& interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
+			result.getAdditionalCommands().add(
+					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
+		}
+		if (element instanceof final AdapterDeclaration adapterDeclaration) {
+			handleAdapterDeclarationRename(name, result, adapterDeclaration);
+		}
+		if (element instanceof final AdapterFB adapterFB) {
+			result.getAdditionalCommands().add(new ChangeNameCommand(adapterFB.getAdapterDecl(), name));
+		}
+		if (element instanceof final Attribute attribute) {
+			result.setValidateName(false); // do not validate attribute names (may contain FQN)
+			if (ChangeAttributeDeclarationCommand.attributeDeclarationChanged(attribute, name)) {
+				result.getAdditionalCommands().add(ChangeAttributeDeclarationCommand.forName(attribute, name));
+			}
+		}
+	}
+
+	private static void handleAdapterDeclarationRename(final String name, final ChangeNameCommand result,
+			final AdapterDeclaration adapterDeclaration) {
+		// only when the adapter fb is in a FBNetwork we need to perform a name check.
+		result.getAdditionalCommands().add(new ChangeNameCommand(adapterDeclaration.getAdapterFB(), name,
+				adapterDeclaration.getAdapterFB().eContainer() instanceof FBNetwork));
 	}
 
 	@Override
 	public boolean canExecute() {
-		return NameRepository.isValidName(element, name);
+		return (!isValidateName() || NameRepository.isValidName(element, name))
+				&& (additionalCommands.isEmpty() || additionalCommands.canExecute())
+				&& !(element instanceof final FBNetworkElement fbne && fbne.isContainedInTypedInstance());
+	}
+
+	@Override
+	public boolean canRedo() {
+		return super.canRedo() && Objects.equals(oldName, element.getName())
+				&& (additionalCommands.isEmpty() || additionalCommands.canRedo());
+	}
+
+	@Override
+	public boolean canUndo() {
+		return super.canUndo() && Objects.equals(name, element.getName())
+				&& (additionalCommands.isEmpty() || additionalCommands.canUndo());
 	}
 
 	@Override
 	public void execute() {
 		oldName = element.getName();
-		if ((element instanceof AdapterDeclaration) && (element.eContainer().eContainer() instanceof CompositeFBType)) {
-			fbNetworkElement = ((AdapterDeclaration) element).getAdapterFB();
-		}
-		if (element instanceof AdapterFB) {
-			adapterDeclaration = ((AdapterFB) element).getAdapterDecl();
-		}
 		setName(name);
+		additionalCommands.execute();
 	}
 
 	@Override
 	public void undo() {
+		additionalCommands.undo();
 		setName(oldName);
 	}
 
 	@Override
 	public void redo() {
 		setName(name);
+		additionalCommands.redo();
 	}
 
 	private void setName(final String name) {
 		element.setName(name);
-		if (null != fbNetworkElement) {
-			fbNetworkElement.setName(name);
-		}
-		if (null != adapterDeclaration) {
-			adapterDeclaration.setName(name);
-		}
 	}
 
-	protected INamedElement getElement() {
+	public INamedElement getElement() {
 		return element;
+	}
+
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
+	}
+
+	protected boolean isValidateName() {
+		return validateName;
+	}
+
+	protected void setValidateName(final boolean validateName) {
+		this.validateName = validateName;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		// changed name affects all siblings in named container
+		EObject container = element;
+		do {
+			container = container.eContainer();
+			if (container instanceof final INamedElement namedContainer) {
+				return Set.of(namedContainer);
+			}
+		} while (container != null);
+		return Set.of(element);
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return List.of(getElement());
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement elemt) {
+		if (elemt != element) {
+			return null;
+		}
+
+		return oldQualName;
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		if (element != this.element) {
+			return null;
+		}
+		return oldQualName.substring(0, oldQualName.length() - oldName.length()) + name;
 	}
 
 }

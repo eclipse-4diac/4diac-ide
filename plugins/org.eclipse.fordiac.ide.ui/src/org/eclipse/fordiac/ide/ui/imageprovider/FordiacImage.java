@@ -17,16 +17,14 @@ package org.eclipse.fordiac.ide.ui.imageprovider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ListResourceBundle;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -34,6 +32,8 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public enum FordiacImage {
 	// @formatter:off
@@ -42,28 +42,79 @@ public enum FordiacImage {
 	// Part Images
 
 	// Icon Images
-	ICON_4DIAC_16, ICON_4DIAC_32,
+	ICON_4DIAC_16,
+	ICON_4DIAC_32,
+	ICON_4DIAC_FORTE,
 	ICON_ADAPTER_LIST,
-	ICON_ADAPTER_TYPE, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION, ICON_BASIC_FB,
-	ICON_CLEAR_DEVICE, ICON_CLEAR_FORCE, ICON_COMPOSITE_FB, ICON_DATA, ICON_DATA_INPUT, ICON_DATA_TYPE,
-	ICON_DATA_OUTPUT, ICON_DELETE_RESOURCE, ICON_DEPLOYMENT_CONSOLE, ICON_DEPLOYMENT_PERSPECTIVE, ICON_DEVICE,
-	ICON_DISCOVER, ICON_DOWNLOAD, ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
+	ICON_ADAPTER_TYPE, ICON_ADD_STATE, ICON_ALGORITHM, ICON_APPLICATION,
+	ICON_ATTRIBUTE_DECLARATION,
+	ICON_BASIC_FB,
+	ICON_BUILD_FORTE,
+	ICON_BULK_EDITOR,
+	ICON_CLEAR_DEVICE,
+	ICON_CLEAR_FORCE,
+	ICON_CLEAR_FORCE_DISABLED,
+	ICON_COMPOSITE_FB,
+	ICON_DATA,
+	ICON_DATA_INPUT,
+	ICON_DATA_TYPE,
+	ICON_DATA_OUTPUT,
+	ICON_DELETE_RESOURCE,
+	ICON_DEVICE,
+	ICON_DEVICE_RESTART,
+	ICON_DISCOVER,
+	ICON_DOCUMENTATION_EDITOR,
+	ICON_EC_ACTION, ICON_ECC, ICON_EC_STATE,
 	ICON_EVENT, ICON_EVENT_INPUT, ICON_EVENT_OUTPUT, ICON_EXPAND_ALL, ICON_EXPORT, ICON_FB, ICON_FB_TYPE,
-	ICON_FB_NETWORK, ICON_FB_TESTER, ICON_FIRMWARE_RESOURCE, ICON_FMU, ICON_FORCE_VALUE, ICON_HIDE_DATA,
-	ICON_HIDE_EVENT, ICON_INTERFACE_EDITOR, ICON_INTERFACE_LIST, ICON_KILL_DEVICE, ICON_RUNTIME_LAUNCHER,
-	ICON_LEFT_INPUT_PRIMITIVE, ICON_LEFT_OUTPUT_PRIMITIVE, ICON_LINK_OUTPUT, ICON_LINK_INPUT, ICON_LOCKED_STATE,
-	ICON_MONITORING_DECORATOR, ICON_MONITORING_PERSPECTIVE, ICON_NEW_4DIAC_PROJECT, ICON_NEW_APPLICATION,
-	ICON_NEW_FUNCTIONBLOCK, ICON_NEW_SYSTEM, ICON_OK, ICON_PLUGS, ICON_PROPERTIES, ICON_REFRESH, ICON_REMOVE_WATCH,
-	ICON_RESOURCE, ICON_RIGHT_INPUT_PRIMITIVE, ICON_RIGHT_OUTPUT_PRIMITIVE, ICON_RUN_DEBUG, ICON_SEGMENT, ICON_SERVICE,
+	ICON_FB_NETWORK,
+	ICON_FIRMWARE_RESOURCE,
+	ICON_FMU,
+	ICON_FORCE_VALUE,
+	ICON_FUNCTION,
+	ICON_GLOBAL_CONST,
+	ICON_GROUP,
+	ICON_HIDE_DATA,
+	ICON_HIDE_EVENT,
+	ICON_INTERFACE_EDITOR,
+	ICON_INTERFACE_LIST,
+	ICON_KILL_DEVICE,
+	ICON_RUNTIME_LAUNCHER,
+	ICON_LAUNCH_CONFIG_OVERLAY,
+	ICON_LEFT_INPUT_PRIMITIVE,
+	ICON_LEFT_OUTPUT_PRIMITIVE,
+	ICON_LINKED_LIBRARY,
+	ICON_LINK_OUTPUT,
+	ICON_LINK_INPUT,
+	ICON_LOCKED_STATE,
+	ICON_MONITORING_DECORATOR,
+	ICON_NEW_4DIAC_PROJECT,
+	ICON_NEW_APPLICATION,
+	ICON_NEW_FUNCTIONBLOCK, ICON_NEW_SYSTEM,
+	ICON_PIN, ICON_PINNED, ICON_PLUGS, ICON_PROPERTIES, ICON_REFRESH, ICON_REMOVE_WATCH,
+	ICON_RESOURCE, ICON_RIGHT_INPUT_PRIMITIVE, ICON_RIGHT_OUTPUT_PRIMITIVE,
+	ICON_SEGMENT, ICON_SERVICE,
 	ICON_SERVICE_SEQUENCE, ICON_SIFB, ICON_SIMPLE_FB, ICON_SUB_APP, ICON_SUB_APP_TYPE, ICON_SOCKETS, ICON_START,
-	ICON_START_MONITORING, ICON_STOP, ICON_STRUCTURED_TEXT, ICON_SYSTEM, ICON_SYSTEM_CONFIGURATION,
+	ICON_START_MONITORING,
+	ICON_STOP,
+	ICON_STOP_FORTE,
+	ICON_SYSTEM,
+	ICON_SYSTEM_CONFIGURATION,
 	ICON_SYSTEM_EXPLORER,
 	ICON_SYSTEM_PERSPECTIVE,
 	ICON_TYPE_NAVIGATOR,
 	ICON_TRANSACTION,
 	ICON_TRIGGER_EVENT,
 	ICON_WATCHES_VIEW,
+	ICON_WATCHPOINT,
+	ICON_WATCHPOINT_DISABLED,
+	ICON_WATCHPOINT_DISABLED_OVERLAY,
+	ICON_WATCHPOINT_FORCE_DISABLED_OVERLAY,
+	ICON_WATCHPOINT_FORCE_OVERLAY,
+	ICON_WATCHPOINT_OVERLAY,
 	ICON_WATCH_INTERFACE_ELEMENTS,
+	ICON_WHOLE_WORD,
+	ICON_ZOOM_100,
+	ICON_ZOOM_PAGE,
 
 	// to be deleted with removing the tester
 	ICON_TesterTemplate,
@@ -75,13 +126,14 @@ public enum FordiacImage {
 
 	private static final String IMAGES_DIRECTORY = "images"; //$NON-NLS-1$
 	private static final String FORDIAC_IMAGE_PROPERTIES = "fordiacimages"; //$NON-NLS-1$
-	private static ResourceBundle foridacImageProperties = getFordiacImageProperties();
+	private static ResourceBundle fordiacImageProperties = getFordiacImageProperties();
+	private static Bundle bundle = null;
 
 	private static final ResourceBundle getFordiacImageProperties() {
 		try {
 			return ResourceBundle.getBundle(FORDIAC_IMAGE_PROPERTIES);
 		} catch (final MissingResourceException e) {
-			UIPlugin.getDefault().logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
+			FordiacLogHelper.logWarning("Unable to load fordiacimages.properties from image-fragment.", e); //$NON-NLS-1$
 			return new ListResourceBundle() {
 				@Override
 				protected Object[][] getContents() {
@@ -91,23 +143,11 @@ public enum FordiacImage {
 		}
 	}
 
-	private static Map<Image, Image> errorImages = new HashMap<>();
-	private static int count = 0;
-
-	// FIXME: find a better way to handle overlay images
-	public static Image getErrorOverlayImage(final Image image) {
-		if (image == null) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
+	private static synchronized Bundle getBundle() {
+		if (bundle == null) {
+			bundle = FrameworkUtil.getBundle(FordiacImage.class);
 		}
-
-		return errorImages.computeIfAbsent(image, img -> {
-			final DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
-					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
-					IDecoration.TOP_LEFT);
-			count++;
-			UIPlugin.getDefault().logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
-			return overlay.createImage();
-		});
+		return bundle;
 	}
 
 	FordiacImage() {
@@ -151,15 +191,15 @@ public enum FordiacImage {
 			final ImageDescriptor id = ImageDescriptor.createFromURL(fileLocation);
 			JFaceResources.getImageRegistry().put(name, id);
 		} catch (MissingResourceException | IllegalArgumentException e) {
+			FordiacLogHelper.logError("Could not load image", e); //$NON-NLS-1$
 			return false;
 		}
 		return true;
 	}
 
 	private static URL getImageURL(final String name) {
-		final String fileName = foridacImageProperties.getString(name);
-		return FileLocator.find(UIPlugin.getDefault().getBundle(),
-				new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
+		final String fileName = fordiacImageProperties.getString(name);
+		return FileLocator.find(getBundle(), new Path(IMAGES_DIRECTORY + IPath.SEPARATOR + fileName), null);
 	}
 
 	private static Image getErrorImage() {
@@ -176,7 +216,8 @@ public enum FordiacImage {
 		return createOverlayImage(image, imageDescriptor, IDecoration.TOP_LEFT);
 	}
 
-	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor, final int quadrant) {
+	public static DecorationOverlayIcon createOverlayImage(final Image image, final ImageDescriptor imageDescriptor,
+			final int quadrant) {
 		return new DecorationOverlayIcon(image, imageDescriptor, quadrant);
 	}
 }

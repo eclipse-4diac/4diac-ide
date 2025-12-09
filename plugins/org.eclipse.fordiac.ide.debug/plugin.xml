@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            allowPrototypes="true"
+            delegate="org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate"
+            delegateName="%fbLaunch.name"
+            id="org.eclipse.fordiac.ide.debug.fbLaunch"
+            modes="run, debug"
+            name="%fbLaunch.name"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="org.eclipse.fordiac.ide.debug.EvaluatorSourceLocator"
+            id="org.eclipse.fordiac.ide.debug.sourceLocator"
+            name="%sourceLocator.name">
+      </sourceLocator>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.watchExpressionDelegates">
+      <watchExpressionDelegate
+            debugModel="org.eclipse.fordiac.ide.debug.model"
+            delegateClass="org.eclipse.fordiac.ide.debug.EvaluatorWatchExpressionDelegate">
+      </watchExpressionDelegate>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferenceInitializer">
+      </initializer>
+   </extension> 
+</plugin>

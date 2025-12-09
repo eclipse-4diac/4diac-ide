@@ -28,9 +28,12 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 		val luaString = generateLuaString(functionBlock);
 
 		assertEquals('''
+			local STfunc = require "STfunc"
+			
 			local FB_STATE = 0
-			local ECC_START = 0
-			local ECC_State = 1
+			local ECC_INIT = 0
+			local ECC_START = 1
+			local ECC_State = 2
 			local EI_«EVENT_INPUT_NAME» = 0
 			local EO_«EVENT_OUTPUT_NAME» = 0
 			local DI_«DATA_INPUT_NAME» = 33554432
@@ -44,13 +47,21 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			local ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = 167772160
 			local ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = 201326592
 			
+			
 			local function alg_ALG1(fb)
-			  local VAR_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
-			  VAR_«DATA_OUTPUT_NAME» = 42
-			  fb[DO_«DATA_OUTPUT_NAME»] = VAR_«DATA_OUTPUT_NAME»
-			  	
+			  local ENV = {}
+			  ENV.fb_var_«DATA_INPUT_NAME» = fb[DI_«DATA_INPUT_NAME»]
+			  ENV.fb_var_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
+			  
+			  ENV.fb_var_«DATA_OUTPUT_NAME» = 42
+			  fb[DO_«DATA_OUTPUT_NAME»] = ENV.fb_var_«DATA_OUTPUT_NAME»
 			end
 			
+			
+			local function enterECC_INIT(fb)
+			  fb[FB_STATE] = ECC_INIT
+			  return true
+			end
 			
 			local function enterECC_START(fb)
 			  fb[FB_STATE] = ECC_START
@@ -73,7 +84,9 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			  local VAR_«ADAPTER_SOCKET_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = fb[ADI_«ADAPTER_SOCKET_NAME»_«ADAPTER_DATA_OUTPUT_NAME»]
 			  local VAR_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = fb[ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME»]
 			  local VAR_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = fb[ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME»]
-			  if ECC_START == STATE then
+			  if ECC_INIT == STATE then
+			  elseif 
+			  ECC_START == STATE then
 			  if true and true then return enterECC_State(fb)
 			  else return false
 			  end

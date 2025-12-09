@@ -20,14 +20,14 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
-import org.eclipse.fordiac.ide.comgeneration.plugin.Activator;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class ProtocolSelector {
 
 	private static final String CAN = "Can"; //$NON-NLS-1$
-	private static final String ETHERNET = "Ethernet"; //$NON-NLS-1$
+	private static final String ETH = "Ethernet"; //$NON-NLS-1$
 
 	public static void doAutomatedProtocolSelection(final CommunicationModel model) {
 		for (final CommunicationChannel channel : model.getChannels().values()) {
@@ -42,18 +42,7 @@ public final class ProtocolSelector {
 			while (destinationIterator.hasNext()) {
 				destination = destinationIterator.next();
 				final Iterator<Segment> segmentIterator = commonSegments.iterator();
-				while (segmentIterator.hasNext()) {
-					final Segment segment = segmentIterator.next();
-					boolean containsSegment = false;
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						if (mediaInfo.getSegment() == segment) {
-							containsSegment = true;
-						}
-					}
-					if (!containsSegment) {
-						segmentIterator.remove();
-					}
-				}
+				removeSegment(destination, segmentIterator);
 			}
 
 			Segment selectedCommonSegment = null;
@@ -63,40 +52,67 @@ public final class ProtocolSelector {
 			}
 
 			destinationIterator = channel.getDestinations().iterator();
-			while (destinationIterator.hasNext()) {
-				destination = destinationIterator.next();
+			processSegment(destinationIterator, selectedCommonSegment);
+		}
+	}
 
-				Segment selectedSegment = selectedCommonSegment;
+	private static void processSegment(Iterator<CommunicationChannelDestination> destinationIterator,
+			Segment selectedCommonSegment) {
+		CommunicationChannelDestination destination;
+		while (destinationIterator.hasNext()) {
+			destination = destinationIterator.next();
 
-				if (selectedSegment == null) {
-					final ArrayList<Segment> availableSegments = new ArrayList<>();
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						availableSegments.add(mediaInfo.getSegment());
-					}
-					sortSegments(availableSegments);
-					if (!availableSegments.isEmpty()) {
-						selectedSegment = availableSegments.get(0);
+			Segment selectedSegment = selectedCommonSegment;
+
+			if (selectedSegment == null) {
+				selectedSegment = createSegment(destination, selectedSegment);
+			}
+
+			if (selectedSegment != null) {
+				for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+					if (mediaInfo.getSegment() == selectedSegment) {
+						destination.setSelectedMedia(mediaInfo);
+						destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
+						break;
 					}
 				}
+			} else {
+				FordiacLogHelper.logError(Messages.ProtocolSelector_NoConnectionAvailable);
+			}
 
-				if (selectedSegment != null) {
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						if (mediaInfo.getSegment() == selectedSegment) {
-							destination.setSelectedMedia(mediaInfo);
-							destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
-							break;
-						}
-					}
-				} else {
-					Activator.getDefault().logError(Messages.ProtocolSelector_NoConnectionAvailable);
+		}
+	}
+
+	private static Segment createSegment(CommunicationChannelDestination destination, Segment selectedSegment) {
+		final ArrayList<Segment> availableSegments = new ArrayList<>();
+		for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+			availableSegments.add(mediaInfo.getSegment());
+		}
+		sortSegments(availableSegments);
+		if (!availableSegments.isEmpty()) {
+			selectedSegment = availableSegments.get(0);
+		}
+		return selectedSegment;
+	}
+
+	private static void removeSegment(CommunicationChannelDestination destination,
+			final Iterator<Segment> segmentIterator) {
+		while (segmentIterator.hasNext()) {
+			final Segment segment = segmentIterator.next();
+			boolean containsSegment = false;
+			for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+				if (mediaInfo.getSegment() == segment) {
+					containsSegment = true;
 				}
-
+			}
+			if (!containsSegment) {
+				segmentIterator.remove();
 			}
 		}
 	}
 
 	private static String getProtocolIdForMetiaType(final Segment segment) {
-		if (segment.getType().getName().equalsIgnoreCase(ETHERNET)) {
+		if (segment.getType().getName().equalsIgnoreCase(ETH)) {
 			return EthernetPubSubGenerator.PROTOCOL_ID;
 		} else if (segment.getType().getName().equalsIgnoreCase(CAN)) {
 			return CanPubSubGenerator.PROTOCOL_ID;
@@ -106,24 +122,30 @@ public final class ProtocolSelector {
 
 	private static void sortSegments(final List<Segment> segmentList) {
 		Collections.sort(segmentList, (final Segment o1, final Segment o2) -> {
-			final String name1 = o1.getType().getName();
-			final String name2 = o2.getType().getName();
-
-			if (name1.equalsIgnoreCase(CAN)) {
-				if (name2.equalsIgnoreCase(CAN)) {
-					return 0;
-				}
-				return -1;
-			} else if (name1.equalsIgnoreCase(ETHERNET)) {
-				if (name2.equalsIgnoreCase(CAN)) {
-					return 1;
-				} else if (name2.equalsIgnoreCase(ETHERNET)) {
-					return 0;
-				}
+			final String[] n = getName(o1, o2);
+			if (equalETH(n[0]) && equalCAN(n[1])) {
+				return 1;
+			}
+			if (!equalCAN(n[1]) && (equalCAN(n[0]) || (equalETH(n[0]) && !equalETH(n[1])))) {
 				return -1;
 			}
 			return 0;
 		});
+	}
+
+	private static boolean equalETH(final String str) {
+		return str.equalsIgnoreCase(ETH);
+	}
+
+	private static boolean equalCAN(final String str) {
+		return str.equalsIgnoreCase(CAN);
+	}
+
+	private static String[] getName(final Segment o1, final Segment o2) {
+		final String[] name = new String[2];
+		name[0] = o1.getType().getName();
+		name[1] = o2.getType().getName();
+		return name;
 	}
 
 	private ProtocolSelector() {

@@ -36,7 +36,7 @@ public class ErrorMessage {
 	public String getMessage() {
 		return message;
 	}
-	
+
 	public int getTimeout() {
 		return timeout;
 	}
@@ -51,23 +51,28 @@ public class ErrorMessage {
 	}
 
 	@Override
-	public boolean equals(Object obj) { // equals with side-effect: the object that checks for equality will update it's timestamp
-		if (this == obj)
+	public boolean equals(final Object obj) { // equals with side-effect: the object that checks for equality will
+												// update it's timestamp
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		ErrorMessage other = (ErrorMessage) obj;
+		}
+		final ErrorMessage other = (ErrorMessage) obj;
 		if (message == null) {
-			if (other.message != null)
+			if (other.message != null) {
 				return false;
-		} else if (!message.equals(other.message))
+			}
+		} else if (!message.equals(other.message)) {
 			return false;
+		}
 		this.updateEnabled();
 		((ErrorMessage) obj).updateEnabled();
 		return true;
 	}
-	
-	
+
 }

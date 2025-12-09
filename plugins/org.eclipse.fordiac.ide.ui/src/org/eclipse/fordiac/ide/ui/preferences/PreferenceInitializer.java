@@ -18,31 +18,22 @@
 package org.eclipse.fordiac.ide.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = UIPlugin.getDefault().getPreferenceStore();
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_EVENT_CONNECTOR_COLOR, new RGB(255, 0, 0));
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID);
 
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_BOOL_CONNECTOR_COLOR, new RGB(159, 164, 138));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_BIT_CONNECTOR_COLOR, new RGB(130, 163, 169));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_INT_CONNECTOR_COLOR, new RGB(24, 81, 158));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_REAL_CONNECTOR_COLOR, new RGB(219, 180, 24));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ANY_STRING_CONNECTOR_COLOR, new RGB(189, 134, 99));
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_REMAINING_DATA_CONNECTOR_COLOR, new RGB(0, 0, 255));
+		preferences.putBoolean(UIPreferenceConstants.P_HIDE_EVENT_CON, false);
+		preferences.putBoolean(UIPreferenceConstants.P_HIDE_DATA_CON, false);
 
-		PreferenceConverter.setDefault(store, PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR, new RGB(80, 200, 120));
+		preferences.put(UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
 
-		store.setDefault(PreferenceConstants.P_HIDE_EVENT_CON, false);
-		store.setDefault(PreferenceConstants.P_HIDE_DATA_CON, false);
-
-		store.setDefault(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
-
+		preferences.putBoolean(UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
+				UIPreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE);
 	}
 }

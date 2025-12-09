@@ -1,5 +1,8 @@
 Manifest-Version: 1.0
 Export-Package: org.eclipse.fordiac.ide.export,
+ org.eclipse.fordiac.ide.export.builder,
+ org.eclipse.fordiac.ide.export.language,
+ org.eclipse.fordiac.ide.export.preferences,
  org.eclipse.fordiac.ide.export.utils
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -9,10 +12,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.util
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Name: Export Utils
-Bundle-Activator: org.eclipse.fordiac.ide.export.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.export;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.export
+Bundle-Activator: org.eclipse.fordiac.ide.export.plugin.ExportPlugin

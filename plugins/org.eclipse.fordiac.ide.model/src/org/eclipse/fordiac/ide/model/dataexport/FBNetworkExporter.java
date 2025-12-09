@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014, 2017 Profactor GmbH, fortiss GmbH
- * 				 2018 - 2020 Johannes Keppler University, Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *  						Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,13 +18,19 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -32,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -39,6 +46,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
 
@@ -69,44 +78,148 @@ class FBNetworkExporter extends CommonElementExporter {
 			if (!isExportableErrorMarker(fbnElement)) {
 				continue;
 			}
-			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (null != nodeName) {
-				addStartElement(nodeName);
-				addNameAttribute(fbnElement.getName());
-				if (null != fbnElement.getType()) {
-					addTypeAttribute(fbnElement.getType());
-				}
-				addCommentAttribute(fbnElement);
-				addXYAttributes(fbnElement);
-
-				if (isUntypedSubapp(fbnElement)) {
-					// we have an untyped subapp therefore add the subapp contents to it
-					createUntypedSubAppContents((SubApp) fbnElement);
-				}
-
-				addAttributes(fbnElement.getAttributes());
-				if (!isUntypedSubapp(fbnElement)) {
-					// for untyped subapp initial values are stored in the vardeclarations
-					addParamsConfig(fbnElement.getInterface().getInputVars());
-				}
-				addEndElement();
+			if (fbnElement instanceof final Comment comment) {
+				addCommentElement(comment);
+			} else {
+				addFBNetworkElement(fbnElement);
 			}
 		}
 	}
 
+	protected void addFBNetworkElement(final FBNetworkElement fbnElement) throws XMLStreamException {
+		final String nodeName = getFBNElementNodeName(fbnElement);
+		if (nodeName != null) {
+			addStartElement(nodeName);
+			addFBNetworkElementXMLAttributes(fbnElement);
+			addFBNetworkElementChildren(fbnElement);
+			if (fbnElement instanceof final TypedSubApp tsa && !tsa.getVarConfigParams().isEmpty()) {
+				final EObject container = EcoreUtil.getRootContainer(tsa);
+				if (container instanceof AutomationSystem || container instanceof SubAppType) {
+					addParamsConfig(tsa.getVarConfigParams());
+				}
+			}
+			addEndElement();
+		}
+	}
+
+	private void addFBNetworkElementXMLAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
+		addNameAttribute(getFBNElementName(fbnElement));
+		if (fbnElement.getType() != null) {
+			addTypeAttribute(fbnElement.getType());
+		}
+		addCommentAttribute(fbnElement.getComment());
+		addXYAttributes(fbnElement);
+		if (fbnElement instanceof final Group group) {
+			addGroupAttributes(group);
+		}
+	}
+
+	@SuppressWarnings("static-method") // allow sub-classes to provide special implementations (e.g., full qualified
+										// names)
+	protected String getFBNElementName(final FBNetworkElement fbnElement) {
+		return fbnElement.getName();
+	}
+
+	private void addCommentElement(final Comment comment) throws XMLStreamException {
+		final boolean hasAttributes = !comment.getAttributes().isEmpty();
+
+		if (comment.isInGroup() || hasAttributes) {
+			addStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		}
+
+		addCommentAttribute(comment.getComment());
+		addXYAttributes(comment);
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(comment.getHeight()));
+
+		if (comment.isInGroup()) {
+			addGroupAttribute(comment.getGroup());
+		}
+		if (hasAttributes) {
+			addAttributes(comment.getAttributes());
+		}
+
+		if (comment.isInGroup() || hasAttributes) {
+			addEndElement();
+		}
+	}
+
+	private void addGroupAttributes(final Group group) throws XMLStreamException {
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE, formatPosOrSizeVal(group.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE, formatPosOrSizeVal(group.getHeight()));
+		getWriter().writeAttribute(LibraryElementTags.LOCKED_ATTRIBUTE, Boolean.toString(group.isLocked()));
+	}
+
+	private void addFBNetworkElementChildren(final FBNetworkElement fbnElement) throws XMLStreamException {
+		if (isUntypedSubapp(fbnElement)) {
+			// we have an untyped subapp therefore add the subapp contents to it
+			createUntypedSubAppContents((SubApp) fbnElement);
+		}
+		if (fbnElement instanceof final ConfigurableFB configFb) {
+			addAttributes(configFb.getConfigurationAsAttributes());
+			addDependency(configFb.getDataType());
+		}
+		addAttributes(fbnElement.getAttributes());
+
+		if (!isUntypedSubapp(fbnElement) && fbnElement instanceof final BlockFBNetworkElement blockFbnEl) {
+			// for untyped subapp initial values are stored in the vardeclarations
+			addParamsConfig(blockFbnEl.getInterface());
+		}
+
+		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
+			addSubappHeightAndWidthAttributes(subApp);
+			if (subApp.isLocked()) {
+				// only add subapp locked attribute if it is set
+				addAttributeElement(LibraryElementTags.LOCKED_ATTRIBUTE, IecTypes.ElementaryTypes.BOOL,
+						Boolean.toString(subApp.isLocked()), null);
+			}
+		}
+
+		if (fbnElement.isInGroup()) {
+			addGroupAttribute(fbnElement.getGroup());
+		}
+	}
+
+	private void addParamsConfig(final InterfaceList il) throws XMLStreamException {
+		Stream<? extends IInterfaceElement> stream = il.getEventInputs().stream();
+		stream = Stream.concat(stream, il.getInputVars().stream());
+		stream = Stream.concat(stream, il.getInOutVars().stream());
+		stream = Stream.concat(stream, il.getSockets().stream());
+		stream = Stream.concat(stream, il.getEventOutputs().stream());
+		stream = Stream.concat(stream, il.getOutputVars().stream());
+		stream = Stream.concat(stream, il.getPlugs().stream());
+		stream = Stream.concat(stream, il.getErrorMarker().stream());
+
+		for (final IInterfaceElement ie : stream.toList()) {
+			addParam(ie);
+		}
+	}
+
+	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
+		if (subApp.getWidth() != 0) {
+			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
+					formatPosOrSizeVal(subApp.getWidth()), null);
+		}
+		if (subApp.getHeight() != 0) {
+			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL,
+					formatPosOrSizeVal(subApp.getHeight()), null);
+		}
+	}
+
 	private static boolean isUntypedSubapp(final FBNetworkElement fbnElement) {
-		return (fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped());
+		return (fbnElement instanceof final SubApp subApp) && (!subApp.isTyped());
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
-		if (!(fbnElement.getType() instanceof AdapterFBType)) {
-			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB))
-			{
+		if (!(fbnElement.getType() instanceof AdapterType)) {
+			if ((fbnElement instanceof FB) && !(fbnElement instanceof ResourceTypeFB)) {
 				return LibraryElementTags.FB_ELEMENT;
 			}
 
-			if(fbnElement instanceof ErrorMarkerFBNElement) {
-				if(fbnElement.getPaletteEntry() instanceof SubApplicationTypePaletteEntryImpl) {
+			if (fbnElement instanceof ErrorMarkerFBNElement) {
+				if (fbnElement.getTypeEntry() instanceof SubAppTypeEntryImpl) {
 					return LibraryElementTags.SUBAPP_ELEMENT;
 				}
 				return LibraryElementTags.FB_ELEMENT;
@@ -114,6 +227,10 @@ class FBNetworkExporter extends CommonElementExporter {
 
 			if (fbnElement instanceof SubApp) {
 				return LibraryElementTags.SUBAPP_ELEMENT;
+			}
+
+			if (fbnElement instanceof Group) {
+				return LibraryElementTags.GROUP_ELEMENT;
 			}
 		}
 		return null;
@@ -127,7 +244,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
-	private void addConnections(final List<? extends Connection> connections, final String connectionElementName,
+	protected void addConnections(final List<? extends Connection> connections, final String connectionElementName,
 			final FBNetwork fbNetwork) throws XMLStreamException {
 		if (!connections.isEmpty()) {
 			addStartElement(connectionElementName);
@@ -139,7 +256,14 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addConnection(final Connection connection, final FBNetwork fbNetwork) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+
+		final boolean hasAttributes = !connection.getAttributes().isEmpty();
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.CONNECTION_ELEMENT);
+		}
+
 		if (isExportableConnectionEndpoint(connection.getSource())) {
 			getWriter().writeAttribute(LibraryElementTags.SOURCE_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getSource(), fbNetwork));
@@ -149,25 +273,31 @@ class FBNetworkExporter extends CommonElementExporter {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
-		addCommentAttribute(connection);
+		addCommentAttribute(connection.getComment());
 		addConnectionCoordinates(connection);
+
+		if (hasAttributes) {
+			addAttributes(connection.getAttributes());
+			addEndElement();
+		}
+
 	}
 
 	private static boolean isExportableConnectionEndpoint(final IInterfaceElement endPoint) {
-		return (endPoint != null) && isExportableErrorMarker(endPoint.getFBNetworkElement())
-				&& (endPoint.eContainer() instanceof InterfaceList);
+		return (endPoint != null) && (endPoint.eContainer() instanceof InterfaceList);
 	}
 
 	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
-		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getPaletteEntry() == null));
+		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getTypeEntry() == null));
 	}
 
-	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {
+	private String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement,
+			final FBNetwork fbNetwork) {
 		String retVal = ""; //$NON-NLS-1$
-		if ((null != interfaceElement.getFBNetworkElement())
-				&& (interfaceElement.getFBNetworkElement().getFbNetwork() == fbNetwork)) {
+		if ((null != interfaceElement.getBlockFBNetworkElement())
+				&& (interfaceElement.getBlockFBNetworkElement().getFbNetwork() == fbNetwork)) {
 			// this is here to detect that interface elements of subapps
-			retVal = interfaceElement.getFBNetworkElement().getName() + "."; ////$NON-NLS-1$
+			retVal = getFBNElementName(interfaceElement.getBlockFBNetworkElement()) + "."; //$NON-NLS-1$
 		}
 
 		retVal += interfaceElement.getName();
@@ -176,18 +306,18 @@ class FBNetworkExporter extends CommonElementExporter {
 
 	private void addConnectionCoordinates(final Connection connection) throws XMLStreamException {
 		final ConnectionRoutingData routingData = connection.getRoutingData();
-		if (0 != routingData.getDx1()) {
+		if (routingData != null && !routingData.is1SegementData()) {
 			// only export connection routing information if not a straight line
-			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
-					CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx1()));
-			if (0 != routingData.getDx2()) {
+			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx1()));
+			if (routingData.is5SegementData()) {
 				// only export the second two if a five segment connection
-				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDx2()));
-				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE,
-						CoordinateConverter.INSTANCE.convertTo1499XML(routingData.getDy()));
+				getWriter().writeAttribute(LibraryElementTags.DX2_ATTRIBUTE, formatPosOrSizeVal(routingData.getDx2()));
+				getWriter().writeAttribute(LibraryElementTags.DY_ATTRIBUTE, formatPosOrSizeVal(routingData.getDy()));
 			}
 		}
 	}
 
+	private void addGroupAttribute(final Group group) throws XMLStreamException {
+		addAttributeElement(LibraryElementTags.GROUP_NAME, IecTypes.ElementaryTypes.STRING, group.getName(), null);
+	}
 }

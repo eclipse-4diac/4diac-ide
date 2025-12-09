@@ -36,8 +36,9 @@ public abstract class AbstractUntypedEditorInputFactory implements IElementFacto
 
 	protected static void saveAutomationSystem(final IMemento memento, final AutomationSystem system) {
 		if (null != system) {
-			memento.putString(TAG_AUTOMATION_SYSTEM, system.getSystemFile().getProjectRelativePath().toString());
-			memento.putString(TAG_PROJECT, system.getSystemFile().getProject().getName());
+			memento.putString(TAG_AUTOMATION_SYSTEM,
+					system.getTypeEntry().getFile().getProjectRelativePath().toString());
+			memento.putString(TAG_PROJECT, system.getTypeEntry().getFile().getProject().getName());
 		}
 	}
 

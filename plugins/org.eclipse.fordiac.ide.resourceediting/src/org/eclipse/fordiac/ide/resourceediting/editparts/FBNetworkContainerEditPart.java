@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 						2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
@@ -25,16 +26,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.graphics.Point;
 
 /**
@@ -54,9 +50,9 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		if (null == contentAdapter) {
 			contentAdapter = new AdapterImpl() {
 				@Override
-				public void notifyChanged(Notification notification) {
+				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
-					Object feature = notification.getFeature();
+					final Object feature = notification.getFeature();
 					if (LibraryElementPackage.eINSTANCE.getFBNetwork_NetworkElements().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 							|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections()
@@ -70,7 +66,7 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		return contentAdapter;
 	}
 
-	public VirtualIO getVirtualIOElement(IInterfaceElement element) {
+	public VirtualIO getVirtualIOElement(final IInterfaceElement element) {
 		return virtualIOMapping.get(element);
 	}
 
@@ -78,26 +74,19 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	@Override
 	protected List getModelChildren() {
 		virtualIOMapping.clear();
-		ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
-		ArrayList<Object> interfaceElements = new ArrayList<>();
+		final ArrayList<Object> children = new ArrayList<>(super.getModelChildren());
+		final ArrayList<Object> interfaceElements = new ArrayList<>();
 
-		for (Object object : children) {
-			if (object instanceof FBNetworkElement) {
-				FBNetworkElement fbNetworkelement = (FBNetworkElement) object;
-				if (fbNetworkelement.isMapped()) {
-					FBNetworkElement opposite = fbNetworkelement.getOpposite();
-					for (IInterfaceElement ie : opposite.getInterface().getAllInterfaceElements()) {
-						EList<Connection> connections = (ie.isIsInput()) ? ie.getInputConnections()
-								: ie.getOutputConnections();
-						for (Connection connection : connections) {
-							if (connection.isBrokenConnection()) {
-								VirtualIO vIO = createVirtualIOElement(fbNetworkelement, ie.getName());
-								if (null != vIO) {
-									interfaceElements.add(vIO);
-								}
-							}
-						}
-					}
+		for (final Object object : children) {
+			if (object instanceof final BlockFBNetworkElement fbNetworkelement && fbNetworkelement.isMapped()) {
+				for (final IInterfaceElement ie : fbNetworkelement.getOpposite().getInterface()
+						.getAllInterfaceElements()) {
+					final EList<Connection> connections = (ie.isIsInput()) ? ie.getInputConnections()
+							: ie.getOutputConnections();
+
+					connections.stream().filter(Connection::isBrokenConnection)
+							.map(con -> createVirtualIOElement(fbNetworkelement, ie.getName())).filter(Objects::nonNull)
+							.forEach(interfaceElements::add);
 				}
 			}
 		}
@@ -106,10 +95,10 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 		return children;
 	}
 
-	private VirtualIO createVirtualIOElement(FBNetworkElement fbNetworkelement, String name) {
-		IInterfaceElement ie = fbNetworkelement.getInterfaceElement(name);
+	private VirtualIO createVirtualIOElement(final BlockFBNetworkElement fbNetworkelement, final String name) {
+		final IInterfaceElement ie = fbNetworkelement.getInterfaceElement(name);
 		if ((null != ie) && (virtualIOMapping.get(ie) == null)) {
-			VirtualIO vIO = new VirtualIO(ie);
+			final VirtualIO vIO = new VirtualIO(ie);
 			virtualIOMapping.put(ie, vIO);
 			return vIO;
 		}
@@ -117,33 +106,9 @@ public class FBNetworkContainerEditPart extends FBNetworkEditPart {
 	}
 
 	@Override
-	protected void createEditPolicies() {
-		super.createEditPolicies();
-
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.gef.editparts.AbstractEditPart#performRequest(org.eclipse.gef
-	 * .Request)
-	 */
-	@Override
-	public void performRequest(final Request req) {
-		Command cmd = getCommand(req);
-		if ((cmd != null) && cmd.canExecute()) {
-			getViewer().getEditDomain().getCommandStack().execute(cmd);
-		}
-		super.performRequest(req);
-	}
-
-	@Override
 	protected void refreshVisuals() {
-		Point p = getParent().getViewer().getControl().getSize();
-		Rectangle rect = new Rectangle(0, 0, p.x, p.y);
+		final Point p = getParent().getViewer().getControl().getSize();
+		final Rectangle rect = new Rectangle(0, 0, p.x, p.y);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		super.refreshVisuals();
 	}

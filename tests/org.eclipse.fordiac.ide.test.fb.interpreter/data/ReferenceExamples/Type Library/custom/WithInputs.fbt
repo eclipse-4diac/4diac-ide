@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WithInputs" Comment="Only UPDATE updates the data inputs">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&#10;" >
+	</Identification>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-07" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+			<Event Name="UPDATE" Type="Event" Comment="">
+				<With Var="DI1"/>
+				<With Var="DI2"/>
+				<With Var="DI3"/>
+				<With Var="DI4"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO3"/>
+				<With Var="DO2"/>
+				<With Var="DO4"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="BOOL" Comment="" InitialValue="1"/>
+			<VarDeclaration Name="DI2" Type="INT" Comment="" InitialValue="-10"/>
+			<VarDeclaration Name="DI3" Type="UINT" Comment="" InitialValue="15"/>
+			<VarDeclaration Name="DI4" Type="REAL" Comment="" InitialValue="2.0"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="DO2" Type="INT" Comment=""/>
+			<VarDeclaration Name="DO3" Type="UINT" Comment=""/>
+			<VarDeclaration Name="DO4" Type="REAL" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="writeOutputs" Comment="" x="2086.666666666667" y="533.3333333333334">
+				<ECAction Algorithm="updateOutputs" Output="CNF"/>
+			</ECState>
+			<ECState Name="keepOutput" Comment="" x="1313.3333333333335" y="1046.6666666666667">
+				<ECAction Algorithm="updateOutputs" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="writeOutputs" Destination="START" Condition="1" Comment="" x="1400.0" y="713.3333333333334"/>
+			<ECTransition Source="START" Destination="writeOutputs" Condition="UPDATE" Comment="" x="1386.6666666666667" y="213.33333333333334"/>
+			<ECTransition Source="START" Destination="keepOutput" Condition="REQ" Comment="" x="793.3333333333334" y="986.6666666666667"/>
+			<ECTransition Source="keepOutput" Destination="START" Condition="1" Comment="" x="1146.6666666666667" y="860.0"/>
+		</ECC>
+		<Algorithm Name="updateOutputs" Comment="">
+			<ST><![CDATA[ALGORITHM updateOutputs
+
+DO1 := DI1;
+DO2 := DI2;
+DO3 := DI3;
+DO4 := DI4;
+
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

@@ -13,7 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -22,7 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
-public class WithCreateCommand extends Command {
+public class WithCreateCommand extends Command implements ScopedCommand {
 	private Event event;
 	private VarDeclaration varDeclaration;
 	private boolean forwardCreation;
@@ -95,5 +99,13 @@ public class WithCreateCommand extends Command {
 
 	public void setForwardCreation(final boolean forwardCreation) {
 		this.forwardCreation = forwardCreation;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (event != null && varDeclaration != null) {
+			return Set.of(event, varDeclaration);
+		}
+		return Set.of();
 	}
 }

@@ -15,16 +15,46 @@ package org.eclipse.fordiac.ide.model.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.ui.messages"; //$NON-NLS-1$
+	public static String AutoReloadError_PathNotFound_Title;
+	public static String AutoReloadError_PathNotFound;
+
+	public static String BlockSizePreferences_BlockMargins;
+	public static String BlockSizePreferences_TopBottom;
+	public static String BlockSizePreferences_LeftRight;
+
+	public static String BlockSizePreferences_LabelSize;
+	public static String BlockSizePreferences_MaximumValueLabelSize;
+	public static String BlockSizePreferences_MinimumPinLabelSize;
+	public static String BlockSizePreferences_MaximumPinLabelSize;
+	public static String BlockSizePreferences_MaximumHiddenConnectionLabelSize;
+	public static String BlockSizePreferences_MaximumTypeLabelSize;
+	public static String BlockSizePreferences_MaximumInterfaceBarSize;
+	public static String BlockSizePreferences_MinimumInterfaceBarSize;
+
+	public static String BlockSizePreferences_Refresh;
+
+	public static String DataTypeDropdown_Adapter_Types;
 	public static String DataTypeDropdown_Type_Selection;
 	public static String DataTypeDropdown_Select_Type;
 	public static String DataTypeDropdown_Elementary_Types;
+	public static String AttributeTypeDropdown_Attribute_Types;
 	public static String DataTypeDropdown_STRUCT_Types;
 	public static String OpenEditorAction_text;
 	public static String OpenEditorAction_viewertext;
 	public static String OpenEditorProvider_OpenWithMenu_label;
+	public static String DataTypeDropdown_FB_Types;
+	public static String DeviceTypeSelectionTreeContentProvider_DeviceTypes;
+	public static String ResourceTypeSelectionTreeContentProvider_ResourceTypes;
+	public static String Validation_CollisionSeverityLabel;
+	public static String Validation_ErrorLabel;
+	public static String Validation_IgnoreLabel;
+	public static String Validation_InterfaceCollisionSeverityLabel;
+	public static String Validation_InfoLabel;
+	public static String Validation_SeverityLabel;
+	public static String Validation_WarningLabel;
 
 	static {
 		// initialize resource bundle

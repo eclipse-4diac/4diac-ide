@@ -12,38 +12,57 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.ui.dialogs.SearchPattern;
 
 public class PaletteFilter {
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
+	private final FBNetwork hostNetwork;
 	private final SearchPattern matcher = new SearchPattern();
 
-	public PaletteFilter(final Palette palette) {
-		this.palette = palette;
-
+	public PaletteFilter(final TypeLibrary typeLib, final FBNetwork hostNetwork) {
+		this.typeLib = typeLib;
+		this.hostNetwork = hostNetwork;
 	}
 
-	public List<PaletteEntry> findFBAndSubappTypes(final String searchString) {
-		final Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(palette.getFbTypes().entrySet().stream(),
-				palette.getSubAppTypes().entrySet().stream());
-		return findTypes(searchString, stream);
+	public List<TypeEntry> findFBAndSubappTypes(final String searchString) {
+		return sortResultsByBestMatch(searchString, findTypes(searchString, getTypeStream())).toList();
 	}
 
-	public List<PaletteEntry> findTypes(final String searchString,
-			final Stream<Entry<String, ? extends PaletteEntry>> stream) {
+	private Stream<TypeEntry> getTypeStream() {
+		if (hostNetwork == null) {
+			return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+		}
+
+		final EObject host = EcoreUtil.getRootContainer(hostNetwork.eContainer());
+		final Stream<TypeEntry> stream = host instanceof CompositeFBType && !(host instanceof SubAppType)
+				? typeLib.getFbTypes().stream().map(TypeEntry.class::cast)
+				: Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+
+		if (host instanceof final LibraryElement le) {
+			final TypeEntry selfEntry = le.getTypeEntry();
+			return stream.filter(te -> te != selfEntry);
+		}
+		return stream;
+	}
+
+	private Stream<TypeEntry> findTypes(final String searchString, final Stream<TypeEntry> stream) {
 		setSearchPattern(searchString);
-		return stream.filter(entry -> matcher.matches(entry.getKey()))
-				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded
-				// correctly
-				map(Entry<String, ? extends PaletteEntry>::getValue).collect(Collectors.toList());
+		return stream.filter(entry -> matcher.matches(entry.getFullTypeName()))
+				// only forward types that can be loaded correctly
+				.filter(entry -> (null != entry.getType()));
 	}
 
 	private void setSearchPattern(final String searchString) {
@@ -55,5 +74,28 @@ public class PaletteFilter {
 		}
 		searchPattern = "*" + searchPattern; //$NON-NLS-1$
 		matcher.setPattern(searchPattern);
+	}
+
+	private Stream<TypeEntry> sortResultsByBestMatch(final String searchString, final Stream<TypeEntry> results) {
+		final String searchPattern = searchString;
+		final List<TypeEntry> sortedResults = results.sorted(Comparator.comparing(TypeEntry::getTypeName)).toList();
+		final List<TypeEntry> exact = new ArrayList<>();
+		final List<TypeEntry> right = new ArrayList<>();
+		final List<TypeEntry> rest = new ArrayList<>();
+
+		for (final TypeEntry entry : sortedResults) {
+			matcher.setPattern(searchPattern);
+			if (matcher.matches(entry.getTypeName())) {
+				exact.add(entry);
+			} else {
+				matcher.setPattern(searchPattern + "*"); //$NON-NLS-1$
+				if (matcher.matches(entry.getTypeName())) {
+					right.add(entry);
+				} else {
+					rest.add(entry);
+				}
+			}
+		}
+		return Stream.of(exact, right, rest).flatMap(Collection::stream);
 	}
 }

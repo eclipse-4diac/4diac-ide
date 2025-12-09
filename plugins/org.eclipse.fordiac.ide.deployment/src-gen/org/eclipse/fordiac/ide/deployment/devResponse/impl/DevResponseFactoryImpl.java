@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -22,29 +22,32 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.fordiac.ide.deployment.devResponse.AdapterType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.deployment.devResponse.DataType;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
+import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
  * @generated
  */
 public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseFactory {
 	/**
 	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	public static DevResponseFactory init() {
@@ -61,9 +64,9 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
 	 * @generated
 	 */
 	public DevResponseFactoryImpl() {
@@ -71,15 +74,18 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case DevResponsePackage.ADAPTER_TYPE: return createAdapterType();
+			case DevResponsePackage.DATA_TYPE: return createDataType();
 			case DevResponsePackage.RESOURCE: return createResource();
 			case DevResponsePackage.FB: return createFB();
+			case DevResponsePackage.FB_TYPE: return createFBType();
+			case DevResponsePackage.GLOBAL_CONST_TYPE: return createGlobalConstType();
 			case DevResponsePackage.PORT: return createPort();
 			case DevResponsePackage.DATA: return createData();
 			case DevResponsePackage.RESPONSE: return createResponse();
@@ -98,14 +104,34 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	 * @generated
 	 */
 	@Override
+	public AdapterType createAdapterType() {
+		AdapterTypeImpl adapterType = new AdapterTypeImpl();
+		return adapterType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataType createDataType() {
+		DataTypeImpl dataType = new DataTypeImpl();
+		return dataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Resource createResource() {
 		ResourceImpl resource = new ResourceImpl();
 		return resource;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -115,8 +141,28 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBType createFBType() {
+		FBTypeImpl fbType = new FBTypeImpl();
+		return fbType;
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GlobalConstType createGlobalConstType() {
+		GlobalConstTypeImpl globalConstType = new GlobalConstTypeImpl();
+		return globalConstType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -126,8 +172,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -137,8 +182,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -148,8 +192,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -159,8 +202,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -170,8 +212,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -181,8 +222,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -192,8 +232,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -202,8 +241,7 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @deprecated
 	 * @generated
 	 */
@@ -212,4 +250,4 @@ public class DevResponseFactoryImpl extends EFactoryImpl implements DevResponseF
 		return DevResponsePackage.eINSTANCE;
 	}
 
-} //DevResponseFactoryImpl
+} // DevResponseFactoryImpl

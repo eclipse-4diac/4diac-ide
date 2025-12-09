@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				 			Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added diagram font preference
  *               - extracted common FB shape for interface and fbn editors
+ *               - added containers for in out vars, cleaned container code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -24,47 +26,44 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.widgets.Display;
 
 public class FBTypeEditPart extends AbstractConnectableEditPart {
 
 	private ControlListener controlListener;
-	private EventInputContainer eic;
-	private EventOutputContainer eoc;
-	private VariableInputContainer vic;
-	private SocketContainer socketcont;
-	private VariableOutputContainer voc;
-	private PlugContainer plugcont;
+	final List<AbstractContainerElement> containerChildren = new ArrayList<>(6);
 	private DiagramFontChangeListener fontChangeListener;
 
-	private final Adapter adapter = new EContentAdapter() {
+	private final Adapter versionInfoAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if (Notification.REMOVING_ADAPTER != notification.getEventType()) {
-				final Object feature = notification.getFeature();
-				if ((LibraryElementPackage.eINSTANCE.getVersionInfo().equals(feature))
-						|| (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature))) {
-					getFigure().updateVersionInfoLabel();
-				}
+			final Object feature = notification.getFeature();
+			if (!notification.isTouch() && (LibraryElementPackage.eINSTANCE.getVersionInfo_Version().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getLibraryElement_VersionInfo().equals(feature))) {
+				getFigure().updateVersionInfoLabel();
+			}
+		}
 
-				Display.getDefault().syncExec(() -> {
-					if ((null != getParent()) && (null != getFigure()) && (getFigure().isShowing())) {
-						refresh();
-					}
-				});
+		@Override
+		protected void addAdapter(final Notifier notifier) {
+			// in addition to the root FBType we only want to get VersionInfo updates,
+			// therefore we limit the addAdapter to VersionInfos
+			if (notifier instanceof VersionInfo) {
+				super.addAdapter(notifier);
 			}
 		}
 	};
@@ -72,7 +71,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	@Override
 	public void activate() {
 		super.activate();
-		getModel().eAdapters().add(adapter);
+		getModel().eAdapters().add(versionInfoAdapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 		// position the FB at 0,0
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
@@ -84,9 +83,8 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (controlListener != null) {
 			getParent().getViewer().getControl().removeControlListener(controlListener);
 		}
-		getModel().eAdapters().remove(adapter);
+		getModel().eAdapters().remove(versionInfoAdapter);
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
-
 	}
 
 	private IPropertyChangeListener getFontChangeListener() {
@@ -101,10 +99,6 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		return (FBType) super.getModel();
 	}
 
-	FBTypeEditPart() {
-		super();
-	}
-
 	@Override
 	protected IFigure createFigure() {
 		return new FBTypeFigure(getModel());
@@ -116,39 +110,14 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	}
 
 	@Override
-	protected List<Object> getModelChildren() {
-		if (null == eic) {
-			eic = new EventInputContainer(getModel());
-		}
-		if (null == eoc) {
-			eoc = new EventOutputContainer(getModel());
-		}
-		if (null == vic) {
-			vic = new VariableInputContainer(getModel());
-		}
-		if (null == socketcont) {
-			socketcont = new SocketContainer(getModel());
-		}
-		if (null == voc) {
-			voc = new VariableOutputContainer(getModel());
-		}
-		if (null == plugcont) {
-			plugcont = new PlugContainer(getModel());
-		}
-		final ArrayList<Object> temp = new ArrayList<>(6);
-		temp.add(eic);
-		temp.add(eoc);
-		temp.add(vic);
-		if (!(getModel() instanceof AdapterFBType)) {
-			// adaptertypes cannot have sockets
-			temp.add(socketcont);
-		}
-		temp.add(voc);
-		if (!(getModel() instanceof AdapterFBType)) {
-			// adaptertypes cannot have plugs
-			temp.add(plugcont);
-		}
-		return temp;
+	public void setModel(final Object model) {
+		super.setModel(model);
+		createChildrenContainer();
+	}
+
+	@Override
+	protected List<AbstractContainerElement> getModelChildren() {
+		return containerChildren;
 	}
 
 	@Override
@@ -180,8 +149,14 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		if (childEditPart.getModel() instanceof VariableInputContainer) {
 			return getFigure().getDataInputs();
 		}
+		if (childEditPart.getModel() instanceof VarInOutInputContainer) {
+			return getFigure().getVarInOutInputs();
+		}
 		if (childEditPart.getModel() instanceof VariableOutputContainer) {
 			return getFigure().getDataOutputs();
+		}
+		if (childEditPart.getModel() instanceof VarInOutOutputContainer) {
+			return getFigure().getVarInOutOutputs();
 		}
 		if (childEditPart.getModel() instanceof SocketContainer) {
 			return getFigure().getSockets();
@@ -209,6 +184,21 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 	public void refresh() {
 		super.refresh();
 		getFigure().getTypeLabel().setText(getModel().getName());
+	}
+
+	private void createChildrenContainer() {
+		containerChildren.add(new EventInputContainer(getModel()));
+		containerChildren.add(new EventOutputContainer(getModel()));
+		containerChildren.add(new VariableInputContainer(getModel()));
+		containerChildren.add(new VarInOutInputContainer(getModel()));
+		containerChildren.add(new VariableOutputContainer(getModel()));
+		containerChildren.add(new VarInOutOutputContainer(getModel()));
+
+		// adapter types cannot have plugs or sockets
+		if (!(getModel() instanceof AdapterType)) {
+			containerChildren.add(new SocketContainer(getModel()));
+			containerChildren.add(new PlugContainer(getModel()));
+		}
 	}
 
 }

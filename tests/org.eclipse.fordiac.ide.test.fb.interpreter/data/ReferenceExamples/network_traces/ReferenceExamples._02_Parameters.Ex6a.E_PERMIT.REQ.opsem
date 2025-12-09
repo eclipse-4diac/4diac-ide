@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ASCII"?>
+<opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:data="org.eclipse.fordiac.ide.model.datatype" xmlns:libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:opsem="http://OperationalSemantics/1.0">
+  <transactions xsi:type="opsem:FBTransaction">
+    <inputEventOccurrence active="false">
+      <event href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.4/@subAppNetwork/@networkElements.0/@interface/@eventInputs.0"/>
+      <fbRuntime xsi:type="opsem:FBNetworkRuntime">
+        <fbnetwork>
+          <networkElements xsi:type="libraryElement:FB" name="E_PERMIT">
+            <position x="360.0"/>
+            <interface>
+              <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.1"/>
+              </eventInputs>
+              <eventOutputs name="CNF">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
+              </eventOutputs>
+              <inputVars name="IN1" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value value="INT#5"/>
+              </inputVars>
+              <inputVars name="IN2" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.1">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value value="UINT#8"/>
+              </inputVars>
+              <outputVars name="OUT" withs="//@transactions.0/@inputEventOccurrence/@fbRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value/>
+              </outputVars>
+            </interface>
+          </networkElements>
+        </fbnetwork>
+      </fbRuntime>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.4/@subAppNetwork/@networkElements.0"/>
+      <resultFBRuntime xsi:type="opsem:FBNetworkRuntime">
+        <fbnetwork>
+          <networkElements xsi:type="libraryElement:FB" name="E_PERMIT">
+            <position x="360.0"/>
+            <interface>
+              <eventInputs name="REQ" isInput="true">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.0"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@inputVars.1"/>
+              </eventInputs>
+              <eventOutputs name="CNF">
+                <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@outputVars.0"/>
+              </eventOutputs>
+              <inputVars name="IN1" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.0">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value value="INT#5"/>
+              </inputVars>
+              <inputVars name="IN2" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventInputs.0/@with.1">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value value="UINT#8"/>
+              </inputVars>
+              <outputVars name="OUT" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@fbnetwork/@networkElements.0/@interface/@eventOutputs.0/@with.0">
+                <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                <value value="13.0"/>
+              </outputVars>
+            </interface>
+          </networkElements>
+        </fbnetwork>
+        <typeRuntimes>
+          <key xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.4/@subAppNetwork/@networkElements.0"/>
+          <value xsi:type="opsem:SimpleFBTypeRuntime">
+            <simpleFBType name="F_ADD" comment="Adding two values">
+              <versionInfo author="Bianca Wiesmayr" date="2023-03-07" organization="Johannes Kepler University Linz" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+              <identification description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#xA;" standard="61499-1"/>
+              <interfaceList>
+                <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                  <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.0"/>
+                  <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@inputVars.1"/>
+                </eventInputs>
+                <eventOutputs name="CNF" comment="Execution Confirmation">
+                  <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+                  <with variables="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@outputVars.0"/>
+                </eventOutputs>
+                <inputVars name="IN1" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+                  <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                  <value value="5"/>
+                </inputVars>
+                <inputVars name="IN2" isInput="true" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0/@with.1">
+                  <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                  <value value="8"/>
+                </inputVars>
+                <outputVars name="OUT" withs="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+                  <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+                  <value value="13.0"/>
+                </outputVars>
+              </interfaceList>
+              <service/>
+              <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;VAR_TEMP&#xA;&#x9;X : LREAL;&#xA;&#x9;Y : LREAL;&#xA;END_VAR&#xA;&#x9;X := IN1;&#xA;&#x9;Y := IN2;&#xA;&#x9;OUT := X + Y;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+              <simpleECStates name="REQ" inputEvent="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventInputs.0">
+                <simpleECActions algorithm="REQ" output="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+              </simpleECStates>
+            </simpleFBType>
+          </value>
+        </typeRuntimes>
+      </resultFBRuntime>
+    </inputEventOccurrence>
+    <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@resultFBRuntime/@typeRuntimes.0/@value/@simpleFBType/@interfaceList/@eventOutputs.0">
+      <fbRuntime xsi:type="opsem:SimpleFBTypeRuntime">
+        <simpleFBType name="F_ADD" comment="Adding two values">
+          <versionInfo author="Bianca Wiesmayr" date="2023-03-07" organization="Johannes Kepler University Linz" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+          <identification description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#xA;" standard="61499-1"/>
+          <interfaceList>
+            <eventInputs name="REQ" comment="Normal Execution Request" isInput="true">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              <with variables="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@inputVars.0"/>
+              <with variables="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@inputVars.1"/>
+            </eventInputs>
+            <eventOutputs name="CNF" comment="Execution Confirmation">
+              <type xsi:type="data:EventType" href="Event.eventlib.dtp#/"/>
+              <with variables="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@outputVars.0"/>
+            </eventOutputs>
+            <inputVars name="IN1" isInput="true" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.0">
+              <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+              <value value="5"/>
+            </inputVars>
+            <inputVars name="IN2" isInput="true" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0/@with.1">
+              <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+              <value value="8"/>
+            </inputVars>
+            <outputVars name="OUT" withs="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0/@with.0">
+              <type xsi:type="data:AnyMagnitudeType" href="data.lib#/34"/>
+              <value value="13.0"/>
+            </outputVars>
+          </interfaceList>
+          <service/>
+          <callables xsi:type="libraryElement:STAlgorithm" name="REQ" text="ALGORITHM REQ&#xA;VAR_TEMP&#xA;&#x9;X : LREAL;&#xA;&#x9;Y : LREAL;&#xA;END_VAR&#xA;&#x9;X := IN1;&#xA;&#x9;Y := IN2;&#xA;&#x9;OUT := X + Y;&#xA;END_ALGORITHM&#xA;&#xA;"/>
+          <simpleECStates name="REQ" inputEvent="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventInputs.0">
+            <simpleECActions algorithm="REQ" output="//@transactions.0/@outputEventOccurrences.0/@fbRuntime/@simpleFBType/@interfaceList/@eventOutputs.0"/>
+          </simpleECStates>
+        </simpleFBType>
+      </fbRuntime>
+      <parentFB xsi:type="libraryElement:FB" href="../ReferenceExamples.sys#//@application.4/@fBNetwork/@networkElements.4/@subAppNetwork/@networkElements.0"/>
+    </outputEventOccurrences>
+  </transactions>
+</opsem:EventManager>

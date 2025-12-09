@@ -14,15 +14,18 @@ package org.eclipse.fordiac.ide.ui.preferences;
 
 public final class ConnectionPreferenceValues {
 
-	public static final int NORMAL_LINE_WIDTH = 1;
+	public static final int NORMAL_LINE_WIDTH = 2;
 
-	public static final int HIGHLIGTHED_LINE_WIDTH = 3;
+	public static final int HIGHLIGTHED_LINE_WIDTH = 5;
 
-	public static final int SELECTED_LINE_WIDTH = 5;
+	public static final int SELECTED_LINE_WIDTH = HIGHLIGTHED_LINE_WIDTH;
 
 	public static final int HANDLE_SIZE = 13;
 
 	public static final int MIN_HANDLE_SIZE = 5;
+
+	/** Diameter of the negated connection point indicator */
+	public static final int NEGATION_POINT_DIAMETER = 12;
 
 	private ConnectionPreferenceValues() {
 		throw new UnsupportedOperationException("ConnectionPreferenceValues utility class should not be instantiated!"); //$NON-NLS-1$

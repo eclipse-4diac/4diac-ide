@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -28,9 +28,8 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Endpoint List</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Endpoint List</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -43,8 +42,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 public class EndpointListImpl extends EObjectImpl implements EndpointList {
 	/**
 	 * The cached value of the '{@link #getConnection() <em>Connection</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getConnection()
 	 * @generated
 	 * @ordered
@@ -52,8 +50,7 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 	protected EList<Connection> connection;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected EndpointListImpl() {
@@ -61,8 +58,7 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -71,21 +67,19 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EList<Connection> getConnection() {
 		if (connection == null) {
-			connection = new EObjectResolvingEList<Connection>(Connection.class, this, DevResponsePackage.ENDPOINT_LIST__CONNECTION);
+			connection = new EObjectResolvingEList<>(Connection.class, this, DevResponsePackage.ENDPOINT_LIST__CONNECTION);
 		}
 		return connection;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -93,13 +87,13 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 		switch (featureID) {
 			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
 				return getConnection();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -110,13 +104,14 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 				getConnection().clear();
 				getConnection().addAll((Collection<? extends Connection>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -125,13 +120,14 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
 				getConnection().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -139,8 +135,9 @@ public class EndpointListImpl extends EObjectImpl implements EndpointList {
 		switch (featureID) {
 			case DevResponsePackage.ENDPOINT_LIST__CONNECTION:
 				return connection != null && !connection.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
-} //EndpointListImpl
+} // EndpointListImpl

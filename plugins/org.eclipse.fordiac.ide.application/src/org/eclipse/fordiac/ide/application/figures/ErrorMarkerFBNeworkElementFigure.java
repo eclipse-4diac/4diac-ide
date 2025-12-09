@@ -12,27 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
+import org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public class ErrorMarkerFBNeworkElementFigure extends FBNetworkElementFigure {
 
-	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
-		super(model, editPart);
+	public ErrorMarkerFBNeworkElementFigure(final FBNetworkElement model, final int maxTypeLabelSize) {
+		super(model, maxTypeLabelSize);
+		getFbFigureContainer()
+				.setBorder(new AnnotationFeedbackBorder(ProblemAnnotationStyler.getErrorAnnotationColor()));
 	}
 
 	public void setErrorMessage(final String text) {
 		changeTypeLabelText(text);
-	}
-
-	@Override
-	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
-		super.setupTypeNameAndVersion(type, container);
-		getMiddle().setOpaque(false);
-		getMiddle().setBackgroundColor(ColorConstants.red);
 	}
 
 }

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.typeeditor.feature"
       label="Function Block Type Editor"
-      version="2.0.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -168,110 +168,48 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.emf.edit.ui"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
-      <import plugin="org.eclipse.ui.views"/>
-      <import plugin="org.eclipse.text"/>
-      <import plugin="org.eclipse.xtext.ui"/>
-      <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.ui.navigator"/>
-      <import plugin="org.eclipse.ltk.core.refactoring"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.compare"/>
-      <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
-      <import plugin="org.antlr.runtime"/>
-      <import plugin="org.eclipse.xtext.ui.shared"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.xtext.util"/>
-      <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.eclipse.xtext"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
    </requires>
 
    <plugin
+         id="org.eclipse.fordiac.ide.typeeditor"
+         version="0.0.0"/>
+
+   <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.ecc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.network"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.model.structuredtext.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.subapptypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.model.structuredtext"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.model.xtext.fbt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.model.xtext.fbt.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.fbtypeeditor.simplefb"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.fordiac.ide.datatypeeditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fbtypeeditor.doc"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.attributetypeeditor"
+         version="0.0.0"/>
+         
+   <plugin
+         id="org.eclipse.fordiac.ide.bulkeditor"
+         version="0.0.0"/>
+  
 
 </feature>

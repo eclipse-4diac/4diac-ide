@@ -15,40 +15,36 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
+import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
 
-	@Override
-	protected IContentProvider getOutputsContentProvider() {
-		return new AdapterInterfaceContentProvider(false);
-	}
-
-	@Override
-	protected IContentProvider getInputsContentProvider() {
-		return new AdapterInterfaceContentProvider(true);
-	}
-
-	@Override
-	protected String[] fillTypeCombo() {
-		final List<String> list = new ArrayList<>();
-		if ((null != getType()) && (null != getPalette())) {
-			getPalette().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getLabel()));
-		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	protected AdapterType getLastUsedAdapterType(final InterfaceList interfaceList, final IInterfaceElement interfaceElement,
-			final boolean isInput) {
+	protected AdapterType getLastUsedAdapterType(final InterfaceList interfaceList,
+			final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
 			return (AdapterType) interfaceElement.getType();
 		}
@@ -56,14 +52,13 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (!adapterList.isEmpty()) {
 			return adapterList.get(adapterList.size() - 1).getType();
 		}
-		return getPalette().getAdapterTypes().get(0).getValue().getType();
+		return getTypeLibrary().getAdapterTypes().iterator().next().getType();
 	}
 
 	@Override
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
-			return getInsertingIndex(interfaceElement, getAdapterList(interfaceList, isInput));
+			return getInsertingIndex(interfaceElement, getAdapterList(interfaceElement.getInterfaceList(), isInput));
 		}
 		return -1;
 	}
@@ -73,33 +68,85 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if (entry instanceof AdapterDeclaration) {
-			cmd.add(newInsertCommand((AdapterDeclaration) entry, isInputsViewer(), index));
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
+		if (entry instanceof final AdapterDeclaration adapterDeclaration) {
+			cmd.add(newInsertCommand(adapterDeclaration, isInput, index));
 		}
 	}
 
-	protected static class AdapterInterfaceContentProvider extends InterfaceContentProvider {
-		public AdapterInterfaceContentProvider(final boolean inputs) {
-			super(inputs);
-		}
-
-		@Override
-		protected Object[] getInputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getSockets().toArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		protected Object[] getOutputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getPlugs().toArray();
-			}
-			return new Object[0];
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof final AdapterDeclaration adapterDeclaration) {
+			cmd.add(newDeleteCommand(adapterDeclaration));
 		}
 	}
+
+	@Override
+	public void setupOutputTable(final Group outputsGroup) {
+		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public Command createCommand(final AdapterDeclaration rowObject, final TypedElementTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
+			}
+		});
+		final DataLayer outputDataLayer = new DataLayer(outputProvider);
+		outputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(outputProvider, this::getAnnotationModel));
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
+				createTypeSelectionButton(), this, false);
+	}
+
+	@Override
+	public void setupInputTable(final Group inputsGroup) {
+		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public Command createCommand(final AdapterDeclaration rowObject, final TypedElementTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
+			}
+		});
+		final DataLayer inputDataLayer = new DataLayer(inputProvider);
+		inputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(inputProvider, this::getAnnotationModel));
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), getSectionEditableRule(),
+				createTypeSelectionButton(), this, true);
+	}
+
+	@Override
+	public void setTableInput(final InterfaceList il) {
+		inputProvider.setInput(il.getSockets());
+		outputProvider.setInput(il.getPlugs());
+	}
+
+	private TypeSelectionButton createTypeSelectionButton() {
+		return new TypeSelectionButton(this::getTypeLibrary, AdapterTypeSelectionContentProvider.INSTANCE,
+				AdapterTypeSelectionTreeContentProvider.INSTANCE, AdapterTreeNodeLabelProvider.INSTANCE);
+	}
+
+	public static class AdapterTreeNodeLabelProvider extends DataTypeTreeSelectionDialog.TreeNodeLabelProvider {
+
+		public static final AdapterTreeNodeLabelProvider INSTANCE = new AdapterTreeNodeLabelProvider();
+
+		@Override
+		public Image getImage(final Object element) {
+			if (element instanceof final TypeNode node && node.getType() != null) {
+				final LibraryElement type = node.getType();
+
+				if (type instanceof AdapterType) {
+					return FordiacImage.ICON_ADAPTER_TYPE.getImage();
+				}
+			}
+			return super.getImage(element);
+		}
+	}
+
 }

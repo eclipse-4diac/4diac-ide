@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="X20AT2402" Comment="Analog temperature inputs at the openPOWERLINK fieldbus">
+	<Identification Standard="61499-2" Description="Copyright (c) 2012 AIT&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="AIT" Version="1.0" Author="Filip Andren" Date="2012-03-06">
+	</VersionInfo>
+	<CompilerInfo packageName="powerlink">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="CNID"/>
+				<With Var="MODID"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="CNIDO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="STATUS"/>
+				<With Var="T01"/>
+				<With Var="T02"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="CNID" Type="USINT" Comment="Client Node ID"/>
+			<VarDeclaration Name="MODID" Type="UINT" Comment="Module ID"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="CNIDO" Type="USINT" Comment="Client Node ID out"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Network Status"/>
+			<VarDeclaration Name="T01" Type="REAL" Comment="Temperatur Input 01"/>
+			<VarDeclaration Name="T02" Type="REAL" Comment="Temperatur Input 02"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+		<ServiceSequence Name="normal_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+" Parameters="PARAMS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+" Parameters="RD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+" Parameters="SD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_response">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND+" Parameters="RD"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="RSP" Parameters="QI,SD"/>
+				<OutputPrimitive Interface="RESOURCE" Event="response" Parameters="QI,SD"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="indication_inhibited">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="indicate" Parameters="RD,QI=FALSE"/>
+				<OutputPrimitive Interface="RESOURCE" Event="inhibited"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="error_indication">
+			<ServiceTransaction>
+				<InputPrimitive Interface="RESOURCE" Event="error" Parameters="STATUS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="IND-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+	<Attribute Name="TypeHash" Value="''"/>
+</FBType>

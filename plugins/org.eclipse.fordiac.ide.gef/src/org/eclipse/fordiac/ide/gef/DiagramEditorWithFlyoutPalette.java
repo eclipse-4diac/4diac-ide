@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2016 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2019 Johannes Kepler University
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,39 +17,46 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import java.util.EventObject;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalViewerAnnotationModelEventDispatcher;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.handlers.AdvancedGraphicalViewerKeyHandler;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.FigureFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.util.UntypedEditorInput;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
+import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
-import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -72,11 +80,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
@@ -88,7 +99,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWithFlyoutPalette
-implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
+		implements ITabbedPropertySheetPageContributor, I4diacModelEditor, IReusableEditor {
 
 	/** The PROPERTY_CONTRIBUTOR_ID. */
 	public static final String PROPERTY_CONTRIBUTOR_ID = "org.eclipse.fordiac.ide.application.editors.DiagramEditor"; //$NON-NLS-1$
@@ -99,23 +110,8 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	/** The outline page. */
 	private DiagramOutlinePage outlinePage;
 
-	// needed for tabbed property sheets
-	@Override
-	public CommandStack getCommandStack() {
-		return super.getCommandStack();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#commandStackChanged(java.util
-	 * .EventObject)
-	 */
-	@Override
-	public void commandStackChanged(final EventObject event) {
-		firePropertyChange(IEditorPart.PROP_DIRTY);
-		super.commandStackChanged(event);
-	}
+	private GraphicalAnnotationModel annotationModel;
+	private GraphicalViewerAnnotationModelEventDispatcher annotationModelEventDispatcher;
 
 	/**
 	 * refresh all child editparts when editor gets focus.
@@ -123,10 +119,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		for (final Object element : getGraphicalViewer().getRootEditPart().getChildren()) {
-			final EditPart ep = (EditPart) element;
-			ep.refresh();
-		}
+		getGraphicalViewer().getRootEditPart().getChildren().forEach(EditPart::refresh);
 	}
 
 	private RulerComposite rulerComp;
@@ -137,27 +130,51 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 		final AdvancedScrollingGraphicalViewer viewer = getGraphicalViewer();
 		if (viewer.getControl() instanceof FigureCanvas) {
-			final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
-
-			Display.getDefault().asyncExec(() -> {
-				viewer.flush();
-				// if an editpart is selected then the viewer has bee created with something to be shown centered
-				// therefore we will not show the initial position
-				// do not use getSelection() here because it will return always at least one element
-				if (viewer.getSelectedEditParts().isEmpty()) {
-					final Point scrollPos = getInitialScrollPos();
-					canvas.scrollTo(scrollPos.x, scrollPos.y);
-				} else {
-					// if we have a selected edit part we want to show it in the middle
-					viewer.revealEditPart((EditPart) viewer.getSelectedEditParts().get(0));
-				}
-			});
+			performInitialsationScroll(viewer);
 		}
 	}
 
-	protected Point getInitialScrollPos() {
-		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) getGraphicalViewer()
-				.getRootEditPart();
+	protected void performInitialsationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		if (canvas != null && !canvas.isDisposed()) {
+			viewer.flush();
+			// if an editpart is selected then the viewer has bee created with something to
+			// be shown centered therefore we will not show the initial position
+			// do not use getSelection() here because it will return always at least one
+			// element
+			if (viewer.getSelectedEditParts().isEmpty()) {
+				performUnselectedInitialisationScroll(viewer);
+			} else {
+				// if we have a selected edit part we want to show it in the middle
+				viewer.revealEditPart(viewer.getSelectedEditParts().get(0));
+			}
+		}
+	}
+
+	private void performUnselectedInitialisationScroll(final AdvancedScrollingGraphicalViewer viewer) {
+		final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+		final GraphicalEditPart rootEditPart = (GraphicalEditPart) viewer.getRootEditPart();
+		final IFigure figure = rootEditPart.getFigure();
+
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (canvas != null && !canvas.isDisposed()) {
+					viewer.flush();
+					if (figure.isShowing() && !figure.getBounds().isEmpty()) {
+						final Point scrollPos = getInitialScrollPos(rootEditPart);
+						canvas.scrollTo(scrollPos.x, scrollPos.y);
+					} else {
+						// Retry until the figure is laid out
+						Display.getDefault().timerExec(50, this);
+					}
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override this method
+	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
 		final Rectangle drawingAreaBounds = rootEditPart.getContentPane().getBounds();
 		return new Point(drawingAreaBounds.x - DiagramEditor.INITIAL_SCROLL_OFFSET,
 				drawingAreaBounds.y - DiagramEditor.INITIAL_SCROLL_OFFSET);
@@ -167,7 +184,9 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	protected void createGraphicalViewer(final Composite parent) {
 		rulerComp = new FordiacRulerComposite(parent, SWT.NONE);
 
-		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer();
+		final var prefCache = getPreferenceConstantsCache();
+
+		final AdvancedScrollingGraphicalViewer viewer = new AdvancedScrollingGraphicalViewer(prefCache);
 		viewer.createControl(rulerComp);
 
 		setGraphicalViewer(viewer);
@@ -177,16 +196,28 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 
 		final IFontUpdateListener rootFigureListener = new FigureFontUpdateListener(
 				((ScalableFreeformRootEditPart) viewer.getRootEditPart()).getFigure(),
-				PreferenceConstants.DIAGRAM_FONT);
+				UIPreferenceConstants.DIAGRAM_FONT);
 		final IPropertyChangeListener fontChangeListener = new DiagramFontChangeListener(rootFigureListener);
 
 		rootFigureListener.updateFonts(); // ensure that root figure has the right font set
 
 		JFaceResources.getFontRegistry().addListener(fontChangeListener);
 		viewer.getControl()
-		.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
+				.addDisposeListener(e -> JFaceResources.getFontRegistry().removeListener(fontChangeListener));
 
 		rulerComp.setGraphicalViewer(getGraphicalViewer());
+	}
+
+	private GefPreferenceConstantsCache getPreferenceConstantsCache() {
+		IProject project = null;
+		final IEditorInput input = getEditorInput();
+		if (input instanceof final IContentEditorInput contentInput) {
+			project = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(contentInput.getContent()).getProject();
+		} else if (input instanceof final IFileEditorInput fileInput) {
+			project = fileInput.getFile().getProject();
+		}
+
+		return new GefPreferenceConstantsCache(project);
 	}
 
 	@Override
@@ -217,6 +248,8 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 					cmp, viewer);
 		}
 
+		root.getZoomManager().setScrollPolicy(new MouseLocationZoomScrollPolicy(viewer.getControl()));
+
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditPartFactory());
 
@@ -225,7 +258,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		viewer.setKeyHandler(keyHandler);
 
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
 	}
 
 	public ZoomManager getZoomManger() {
@@ -274,6 +306,21 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		// enable drag from palette
 		getGraphicalViewer().addDropTargetListener(new TemplateTransferDropTargetListener(getGraphicalViewer()));
 		viewer.addDropTargetListener(new ParameterDropTargetListener(getGraphicalViewer()));
+		addAnnotationModelDispatcher();
+	}
+
+	protected void addAnnotationModelDispatcher() {
+		if (annotationModel != null && getGraphicalViewer() != null) {
+			annotationModelEventDispatcher = new FordiacAnnotationModelEventDispatcher(getPartName(),
+					getGraphicalViewer(), annotationModel);
+		}
+	}
+
+	protected void removeAnnotationModelDispatcher() {
+		if (annotationModelEventDispatcher != null) {
+			annotationModelEventDispatcher.dispose();
+			annotationModelEventDispatcher = null;
+		}
 	}
 
 	/*
@@ -284,7 +331,6 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 */
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		setModel(input);
 		super.init(site, input);
 		setEditorPartName(input);
 		final ActionRegistry registry = getActionRegistry();
@@ -296,6 +342,13 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		id = ActionFactory.DELETE.getId();
 		bars.setGlobalActionHandler(id, registry.getAction(id));
 		bars.updateActionBars();
+		final IContextService cs = site.getService(IContextService.class);
+		cs.activateContext(getContextId());
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to provide refined context ids
+	protected String getContextId() {
+		return "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
 	}
 
 	protected void setEditorPartName(final IEditorInput input) {
@@ -315,46 +368,47 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 *
 	 * @param input the new model
 	 */
-	protected void setModel(final IEditorInput input) {
-
-		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(createDefaultTool());
-		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
-		// use one "System - Wide" command stack to avoid inconsistencies due to
-		// undo redo
-		if (null != getSystem()) {
-			getEditDomain().setCommandStack(getSystem().getCommandStack());
+	@Override
+	public void setInput(final IEditorInput input) {
+		if (!(input instanceof final IContentEditorInput contentEI)) {
+			throw new IllegalArgumentException("Diagram editors only accept IContentEditorInput as valid inputs!"); //$NON-NLS-1$
 		}
+
+		final IContentEditorInput currentEditorInput = (IContentEditorInput) getEditorInput();
+		if (currentEditorInput != null && currentEditorInput.getContent() != contentEI.getContent()) {
+			throw new IllegalArgumentException(
+					"Editor input with new content given to diagram editor. This is currently not supported!"); //$NON-NLS-1$
+		}
+		if (getEditorInput() == null) {
+			setupEditDomain();
+		}
+		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
+			removeAnnotationModelDispatcher();
+			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
+			addAnnotationModelDispatcher();
+		}
+		super.setInputWithNotify(input);
+	}
+
+	private void setupEditDomain() {
+		final CommandStack commandStack = (getSite() instanceof final MultiPageEditorSite multiPageEditorSite)
+				? multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class)
+				: new CommandStack();
+		final DefaultEditDomain editDomain = createEditDomain();
+		editDomain.setCommandStack(commandStack);
+		editDomain.setDefaultTool(createDefaultTool());
+		editDomain.setActiveTool(editDomain.getDefaultTool());
+		setEditDomain(editDomain);
+	}
+
+	protected DefaultEditDomain createEditDomain() {
+		return new DefaultEditDomain(this);
 	}
 
 	@SuppressWarnings("static-method")
 	protected AdvancedPanningSelectionTool createDefaultTool() {
 		return new AdvancedPanningSelectionTool();
 	}
-
-	/**
-	 * Gets the system.
-	 *
-	 * @return the system
-	 */
-	public abstract AutomationSystem getSystem();
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @seeorg.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.
-	 * IProgressMonitor)
-	 */
-	@Override
-	public abstract void doSave(final IProgressMonitor monitor);
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.ui.parts.GraphicalEditor#doSaveAs()
-	 */
-	@Override
-	public abstract void doSaveAs();
 
 	/*
 	 * (non-Javadoc)
@@ -389,18 +443,20 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * java.lang.Class)
 	 */
 	@Override
-	public Object getAdapter(final Class type) {
+	public <T> T getAdapter(final Class<T> type) {
 		if (type == ZoomManager.class) {
-			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+			return type.cast(getGraphicalViewer().getProperty(ZoomManager.class.toString()));
 		}
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new DiagramOutlinePage(getGraphicalViewer());
-			return outlinePage;
+			return type.cast(outlinePage);
 		}
 		if (type == IPropertySheetPage.class) {
-			return new TabbedPropertySheetPage(this);
+			return type.cast(new TabbedPropertySheetPage(this));
 		}
-
+		if (type == GraphicalAnnotationModel.class) {
+			return type.cast(annotationModel);
+		}
 		return super.getAdapter(type);
 	}
 
@@ -466,11 +522,12 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		updateActions(getSelectionActions());
 	}
 
-	/** Gets the selection actions list
+	/**
+	 * Gets the selection actions list
 	 *
-	 * @return the sel actions */
-	@SuppressWarnings("rawtypes")
-	public List getSelActions() {
+	 * @return the sel actions
+	 */
+	public List<String> getSelActions() {
 		return getSelectionActions();
 	}
 
@@ -482,6 +539,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	@Override
 	public void dispose() {
 		outlinePage = null;
+		removeAnnotationModelDispatcher();
 		super.dispose();
 	}
 

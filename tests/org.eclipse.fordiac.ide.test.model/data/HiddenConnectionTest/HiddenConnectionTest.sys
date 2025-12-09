@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="HiddenConnectionTest" Comment="">
+	<VersionInfo Version="1.0" Author="LukasWais" Date="2022-03-29">
+	</VersionInfo>
+	<Application Name="HiddenConnectionTestApp" Comment="">
+		<SubAppNetwork>
+			<FB Name="BOOL2BOOL" Type="BOOL2BOOL" Comment="" x="750.0" y="750.0">
+			</FB>
+			<FB Name="BOOL2BOOL_1" Type="BOOL2BOOL" Comment="" x="2918.75" y="1075.0">
+			</FB>
+			<DataConnections>
+				<Connection Source="BOOL2BOOL.OUT" Destination="BOOL2BOOL_1.IN" Comment="" dx1="718.75"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>

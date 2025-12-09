@@ -21,11 +21,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.ui.Activator;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
@@ -36,7 +38,7 @@ import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
 public class Open4DIACElementAction extends BaseSelectionListenerAction {
 
-	public static final String ID = Activator.PLUGIN_ID + ".OpenAction";//$NON-NLS-1$
+	public static final String ID = "org.eclipse.fordiac.ide.model.ui.OpenAction";//$NON-NLS-1$
 
 	public Open4DIACElementAction(final IWorkbenchPart part) {
 		super(Messages.OpenEditorAction_text);
@@ -70,37 +72,59 @@ public class Open4DIACElementAction extends BaseSelectionListenerAction {
 		Object selected = convertFromEditPart(getStructuredSelection().getFirstElement());
 
 		Object refObject = null;
-		if (!(selected instanceof FB) || isTypedComposite(selected)) {
-			if (selected instanceof Device) {
-				refObject = selected;
-				selected = ((Device) selected).getSystemConfiguration();
-			} else if (selected instanceof Segment) {
-				refObject = selected;
-				selected = ((Segment) refObject).eContainer();
+
+		if (selected instanceof final FBNetworkElement fbnElement) {
+			if (!isTypedComposite(selected)) {
+				if (selected instanceof FB || selected instanceof Group) {
+					refObject = selected;
+					selected = fbnElement.eContainer().eContainer();
+					if (selected instanceof FBType) {
+						selected = fbnElement.eContainer();
+					}
+				} else if (isExpandedSubapp(selected)) {
+					refObject = selected;
+				}
+				// For unfolded subapps find the next parent that is not expanded as refElement
+				while (isExpandedSubapp(selected)) {
+					selected = ((SubApp) selected).eContainer().eContainer();
+				}
 			}
+
+		} else if (selected instanceof final Device device) {
+			refObject = selected;
+			selected = device.getSystemConfiguration();
+		} else if (selected instanceof final Segment segment) {
+			refObject = selected;
+			selected = segment.eContainer();
 		}
+
 		final IEditorPart editor = OpenListenerManager.openEditor((EObject) selected);
-		HandlerHelper.selectElement(refObject, editor);
+		if (isExpandedSubapp(refObject) && editor != null) {
+			HandlerHelper.showExpandedSubapp((SubApp) refObject, editor);
+		} else {
+			HandlerHelper.selectElement(refObject, editor);
+		}
+	}
+
+	private static boolean isExpandedSubapp(final Object selected) {
+		return selected instanceof final SubApp subapp && subapp.isUnfolded();
 	}
 
 	private static boolean isTypedSubAppOrCFBInstance(final Object obj) {
-		if (obj instanceof SubApp) {
-			return ((SubApp) obj).isTyped() || ((SubApp) obj).isContainedInTypedInstance();
-		} else if (obj instanceof FB) {
-			return isTypedComposite(obj);
-		} else {
-			return false;
+		if (obj instanceof final SubApp subApp) {
+			return subApp.isTyped() || subApp.isContainedInTypedInstance();
 		}
+		if (obj instanceof FB) {
+			return isTypedComposite(obj);
+		}
+		return false;
 	}
 
 	private static boolean isTypedComposite(final Object obj) {
 		return (obj instanceof CFBInstance);
 	}
 
-	private static Object convertFromEditPart(Object model) {
-		if (model instanceof EditPart) {
-			model = ((EditPart) model).getModel();
-		}
-		return model;
+	private static Object convertFromEditPart(final Object model) {
+		return (model instanceof final EditPart ep) ? ep.getModel() : model;
 	}
 }

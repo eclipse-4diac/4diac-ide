@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
+ * Copyright (c) 2019, 2024 fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,17 +15,14 @@
 package org.eclipse.fordiac.ide.export.forte_ng.service
 
 import java.nio.file.Path
+import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
+class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate<ServiceInterfaceFBType> {
 
-	@Accessors(PROTECTED_GETTER) ServiceInterfaceFBType type
-
-	new(ServiceInterfaceFBType type, String name, Path prefix) {
-		super(name, prefix, "CFunctionBlock")
-		this.type = type
+	new(ServiceInterfaceFBType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, "CFunctionBlock", options)
 	}
 
 	override generate() '''
@@ -35,35 +33,30 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 		«generateHeaderIncludes»
 		
 		«generateFBClassHeader»
-		  «generateFBDeclaration»
+		      «generateFBDeclaration»
 		
-		private:
-		  «generateFBInterfaceDeclaration»
+		    private:
+		      «generateFBInterfaceDeclaration»
 		
-		  «generateFBInterfaceSpecDeclaration»
+		      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
 		
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
+		      «generateReadInputDataDeclaration»
+		      «generateWriteOutputDataDeclaration»
+		      «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDeclaration»
 		
-		  FORTE_FB_DATA_ARRAY(«type.interfaceList.eventOutputs.size», «type.interfaceList.inputVars.size», «type.interfaceList.outputVars.size», «type.interfaceList.sockets.size + type.interfaceList.plugs.size»);
+		    public:
+		      «FBClassName»(StringId paInstanceNameId, CFBContainer &paContainer);
 		
-		  void executeEvent(int pa_nEIID);
-		
-		public:
-		   «FBClassName»(const CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		       «baseClass»( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_anFBConnData, m_anFBVarsData) {
-		   };
-		
-		  virtual ~«FBClassName»() = default;
-		};
+		      «generateInterfaceDeclarations»
+		  };
+		}
 		
 		«generateIncludeGuardEnd»
 		
 	'''
 
 	override protected generateHeaderIncludes() '''
-		#include "funcbloc.h"
+		«generateDependencyInclude("forte/funcbloc.h")»
 		«super.generateHeaderIncludes»
 	'''
 }

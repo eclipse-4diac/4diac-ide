@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -26,7 +25,7 @@ public class PlugContainer extends AbstractContainerElement {
 	}
 
 	@Override
-	public List<IInterfaceElement> getChildren() {
-		return new ArrayList<>(getFbType().getInterfaceList().getPlugs());
+	public List<? extends IInterfaceElement> getChildren() {
+		return getFbType().getInterfaceList().getPlugs();
 	}
 }

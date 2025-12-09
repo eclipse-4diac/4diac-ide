@@ -1,0 +1,99 @@
+/*******************************************************************************
+ * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Melik Merkumians, Martin Jobst
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+module org.eclipse.fordiac.ide.structuredtext.mwe.GenerateSTFunction
+
+import org.eclipse.xtext.xtext.generator.*
+import org.eclipse.xtext.xtext.generator.model.project.*
+
+var rootPath = ".."
+
+Workflow {
+
+	component = XtextGenerator {
+		configuration = {
+			project = StandardProjectConfig {
+				baseName = "org.eclipse.fordiac.ide.structuredtextfunctioneditor"
+				rootPath = rootPath
+				runtimeTest = {
+					enabled = true
+				}
+				eclipsePlugin = {
+					enabled = true
+				}
+				eclipsePluginTest = {
+					enabled = true
+				}
+				createEclipseMetaData = true
+			}
+			code = {
+				encoding = "UTF-8"
+				lineDelimiter = "\n"
+				fileHeader = "/*******************************************************************************
+ * Copyright (c) 2021, 2023 Primetals Technologies GmbH, 
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Melik Merkumians, Martin Jobst
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/"
+				preferXtendStubs = false
+			}
+		}
+		language = StandardLanguage {
+			name = "org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
+			fileExtensions = "stfunc"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
+			referencedResource =
+			"platform:/resource/org.eclipse.fordiac.ide.structuredtextfunctioneditor.model/model/STFunction.genmodel"
+			serializer = {
+				generateStub = false
+			}
+			validator = {
+				generatePropertyPage = true
+			}
+			scopeProvider = {
+				ignoreCase = true
+			}
+			parserGenerator = {
+				options = {
+					ignoreCase = true
+				}
+			}
+			generator = {
+				generateXtendStub = true
+			}
+			renameRefactoring = {
+				useChangeSerializer = true
+			}
+			formatter = {
+				generateStub = true
+			}
+			junitSupport = {
+				junitVersion = "5"
+			}
+			fragment = ui.codemining.CodeMiningFragment {
+				generateStub = true
+				generateXtendStub = true
+			}
+		}
+	}
+}

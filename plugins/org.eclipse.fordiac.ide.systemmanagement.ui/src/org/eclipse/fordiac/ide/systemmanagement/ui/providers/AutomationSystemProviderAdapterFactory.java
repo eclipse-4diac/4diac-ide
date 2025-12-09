@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.fordiac.ide.model.edit.providers.CFBInstanceItemProviderForSystem;
+import org.eclipse.fordiac.ide.model.edit.providers.UntypedSubAppItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.AutomationSystemItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SystemConfigurationItemProvider;
@@ -45,11 +47,19 @@ public class AutomationSystemProviderAdapterFactory extends LibraryElementItemPr
 	}
 
 	@Override
-	public Adapter createSubAppAdapter() {
-		if (subAppItemProvider == null) {
-			subAppItemProvider = new SubAppItemProviderForSystem(this);
+	public Adapter createTypedSubAppAdapter() {
+		if (typedSubAppItemProvider == null) {
+			typedSubAppItemProvider = new TypedSubAppItemProviderForSystem(this);
 		}
-		return subAppItemProvider;
+		return typedSubAppItemProvider;
+	}
+
+	@Override
+	public Adapter createUntypedSubAppAdapter() {
+		if (untypedSubAppItemProvider == null) {
+			untypedSubAppItemProvider = new UntypedSubAppItemProviderForSystem(this);
+		}
+		return untypedSubAppItemProvider;
 	}
 
 	@Override

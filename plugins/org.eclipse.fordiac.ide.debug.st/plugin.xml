@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            allowPrototypes="true"
+            delegate="org.eclipse.fordiac.ide.debug.st.STLaunchConfigurationDelegate"
+            delegateName="%stFunctionLaunch.name"
+            id="org.eclipse.fordiac.ide.debug.stFunctionLaunch"
+            modes="run, debug"
+            name="%stFunctionLaunch.name"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         id="org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"
+         name="%stLineBreakpointMarker.name"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.debug.core.lineBreakpointMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            class="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint"
+            id="org.eclipse.fordiac.ide.debug.st.stLineBreakpoint"
+            markerType="org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"
+            name="%stLineBreakpoint.name">
+      </breakpoint>
+   </extension>
+
+</plugin>

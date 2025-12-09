@@ -9,11 +9,11 @@
             finalPerspective="org.eclipse.fordiac.ide.SystemPerspective"
             icon="fordiacimage://ICON_NEW_4DIAC_PROJECT"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard"
-            name="%wizard.name.0"
-            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.deployment.ui.perspectives.DeploymentPerspective, org.eclipse.fordiac.ide.monitoring.MonitoringPerspective"
+            name="%New4diacProjectWizard_WizardName"
+            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.typemanagement.perspective"
             project="true">
          <description>
-            %wizard.description.0
+            %New4diacProjectWizard_WizardDesc
          </description>
       </wizard>
       <wizard
@@ -21,21 +21,23 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
             icon="fordiacimage://ICON_NEW_SYSTEM"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard"
-            name="%newsystemwizard.name"
+            name="%NewSystemWizardPage_NewSystemName"
             project="false">
          <description>
-            %newsystemwizard.description
+            %NewSystemWizard.description
          </description>
       </wizard>
       <wizard
             category="org.eclipse.fordiac.ide.newWizard.category"
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
-            icon="fordiacimage://ICON_NEW_APPLICATION"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard"
-            name="%LABEL_NewApplicationWizard"
-            project="false">
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard"
+            finalPerspective="org.eclipse.fordiac.ide.SystemPerspective"
+            icon="fordiacimage://ICON_NEW_4DIAC_PROJECT"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard"
+            name="%New4diacExampleWizard_WizardName"
+            preferredPerspectives="org.eclipse.fordiac.ide.SystemPerspective, org.eclipse.fordiac.ide.typemanagement.perspective"
+            project="true">
          <description>
-            %wizard.description.1 
+            %New4diacExampleWizard_WizardDesc
          </description>
       </wizard>
       <category
@@ -57,11 +59,29 @@
             name="%SystemExplorer.name">
       </view>
    </extension>
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+	  <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.debug.ui.DebugView">
+         </view>
+	  </perspectiveExtension> 
+    </extension>     
+   <extension
+   		point="org.eclipse.core.contenttype.contentTypes">
+	  <content-type
+         	base-type="org.eclipse.4diac.ide.iec61499Content"
+         	file-extensions="sys,SYS"
+         	id="org.eclipse.4diac.ide.SystemContent"
+         	name="%IEC61499SystemFile" />
+   </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
             class="org.eclipse.fordiac.ide.systemmanagement.ui.editors.AutomationSystemEditor"
-            contributorClass="org.eclipse.fordiac.ide.gef.editors.GraphicalMultipageEditorContributor"
+            contributorClass="org.eclipse.fordiac.ide.typeeditor.TypeEditorContributor"
             default="true"
             extensions="sys"
             icon="fordiacimage://ICON_SYSTEM_PERSPECTIVE"
@@ -69,62 +89,12 @@
             matchingStrategy="org.eclipse.fordiac.ide.ui.editors.FordiacEditorMatchingStrategy"
             name="%SystemEditor.name">
       </editor>
+      <editorContentTypeBinding
+            contentTypeId="org.eclipse.4diac.ide.SystemContent" 
+            editorId="org.eclipse.fordiac.ide.editors.SystemEditor"/>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameApplication"
-            commandId="org.eclipse.ui.edit.rename">
-         <activeWhen>
-         	<with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
-		    </iterate>
-		   </with>           
-         </activeWhen>
-      </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteHandler"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-         	<with variable="selection">
-		    <iterate operator="and" ifEmpty="false">
-		     <or>
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Application" />
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Resource" />
-		     	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Device" />
-		     </or>
-		    </iterate>
-		   </with>           
-         </activeWhen>
-      </handler>      
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameSystem"
-            commandId="org.eclipse.ui.edit.rename">
-         <activeWhen>
-            <with variable="selection">
-		    <count value="1" />
-		    <iterate operator="and">
-		     <adapt type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem" />
-		    </iterate>
-		   </with>            
-         </activeWhen>
-      </handler>
-      <handler 
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.DeleteSystem"
-            commandId="org.eclipse.ui.edit.delete">
-         <activeWhen>
-            <with variable="selection">
-		    <iterate
-            operator="and">
-         <adapt
-               type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-         </adapt>
-      </iterate>
-		   </with>            
-         </activeWhen>
-      </handler>
       <handler 
             class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RefreshHandler"
             commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh">
@@ -147,102 +117,6 @@
       <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.rename"
-               tooltip="Rename selected application">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Application">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected application">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Application">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.rename"
-               tooltip="Rename selected automation system">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Automation System">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Resource">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?endof=group.edit">
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               tooltip="Delete selected Device">
-            <visibleWhen
-                  checkEnabled="false">
-               <iterate
-                     operator="or">
-                  <instanceof
-                        value="org.eclipse.fordiac.ide.model.libraryElement.Device">
-                  </instanceof>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
             locationURI="popup:org.eclipse.ui.popup.any?endof=group.reorganize">
          <command
                commandId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.refresh"
@@ -256,7 +130,19 @@
                </iterate>
             </visibleWhen>
          </command>
-      </menuContribution>            
+      </menuContribution>
+      <menuContribution
+			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
+        <command
+            commandId="org.eclipse.ui.newWizard"
+            label="%New4diacProjectWizard_WizardName"
+            tooltip="%New4diacProjectWizard_WizardDesc"
+            icon="fordiacimage://ICON_NEW_4DIAC_PROJECT">
+            <parameter
+                name="newWizardId"
+                value="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard" />
+        </command>
+      </menuContribution>
    </extension>
       <extension
             point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
@@ -273,71 +159,24 @@
                contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
             <propertyTab
                   category="systemInfo"
-                  id="property.tab.systeminfo"
-                  image="fordiacimage://ICON_SYSTEM"
-                  label="System Info">
-            </propertyTab>
-            <propertyTab
-                  category="systemInfo"
-                  id="property.tab.system.fbtypeinfo"
-                  image="fordiacimage://ICON_FB_TYPE"
-                  label="Type Info">
-            </propertyTab>
-            <propertyTab
-                  category="systemInfo"
-                  id="property.tab.system.deviceInfo"
-                  label="Instance">
-            </propertyTab>
-            <propertyTab
-                  afterTab="property.tab.system.deviceInfo"
-                  category="systemInfo"
-                  id="property.tab.system.attributeInfo"
-                  indented="true"
-                  label="Attributes">
-            </propertyTab>
-            <propertyTab
-                  afterTab="property.tab.system.attributeInfo"
-                  category="systemInfo"
                   id="property.tab.system.appearance"
                   label="Appearance">
             </propertyTab>
          </propertyTabs>
       </extension>
       <extension
-            point="org.eclipse.ui.views.properties.tabbed.propertySections">
-         <propertySections
-               contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">           
-            <propertySection
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.properties.SystemInfoSection"
-                  id="property.section.systemInfo"
-                  tab="property.tab.systeminfo">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
-               </input>
-            </propertySection>
-            <propertySection
-                  class="org.eclipse.fordiac.ide.gef.properties.AppearancePropertySection"
-                  id="org.eclipse.fordiac.ide.systemmanagement.properties.AppearancePropertySection"
-                  tab="property.tab.system.appearance">
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Device">
-               </input>
-               <input
-                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
-               </input>
-            </propertySection>
-         </propertySections>
-      </extension>
-      <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.handlers.RenameSystemParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
-            <instanceof 
-	                     value="org.eclipse.core.resources.IProject">
-	               </instanceof>   
+            <and>
+               <instanceof  value="org.eclipse.core.resources.IFile">
+               </instanceof>               
+               <test forcePluginActivation="true" property="org.eclipse.core.resources.extension" value="sys">
+               </test>
+            </and>
          </enablement>
       </renameParticipant>
    </extension>
@@ -358,9 +197,6 @@
                      pattern="org.eclipse.ui.navigator.resources.*">
                </actionExtension>
                <actionExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.SystemExplorerNewActionProvider">
-               </actionExtension>                     
-               <actionExtension
                      pattern="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
                </actionExtension>   
                <actionExtension
@@ -376,127 +212,159 @@
          <viewerContentBinding
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
-               <contentExtension isRoot="true"
-                    pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent">
-               	</contentExtension> 
+      		   <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"/> 
                <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
-              <!-- <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/> -->
-               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
-               		</contentExtension> 
-               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.typelib.systemexplorer">
-              		</contentExtension> 
-      		   <contentExtension
-                     pattern="org.eclipse.ui.navigator.resourceContent"/>             
-               <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.filters.*">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.linkHelper">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.workingSets">
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemConfigurationLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
-               </contentExtension>      
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.workingSet"/>
+               <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.closedProject"/>       
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.mux"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.fb"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.filters.comment"/>
+               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent"/> 
+               <contentExtension pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper" />
+               <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" />
             </includes>
          </viewerContentBinding>
          <viewer
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
          </viewer>
+      <dragAssistant
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorerDragAssistant"
+            viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
+      </dragAssistant>
+      <!-- The resource drag adpater assistent is needed for drag and drop of all file -->
+      <dragAssistant   
+            class="org.eclipse.ui.navigator.resources.ResourceDragAdapterAssistant"
+            viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
+      </dragAssistant>
       </extension>
       <extension
          point="org.eclipse.ui.navigator.navigatorContent">
         <navigatorContent
-            activeByDefault="true"
-            contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemContentProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemcontent"
-            labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
-            name="System Content"
-            priority="highest">
-            <possibleChildren>
-	           <or>         
-                 <instanceof value="org.eclipse.core.resources.IProject"/>
-                  <instanceof value="org.eclipse.core.resources.IResource"/>
-	              <instanceof value="org.eclipse.emf.ecore.EObject"/>
-	              <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
-	           </or>
-	        </possibleChildren> 
-            <triggerPoints>
-                <or>
-                    <instanceof value="org.eclipse.emf.ecore.EObject"/>
-                    <instanceof value="org.eclipse.core.resources.IFolder"/>
-                    <adapt type="org.eclipse.core.resources.IProject" >
-                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
-                    </adapt>
-                    <instanceof value="org.eclipse.core.resources.IWorkspaceRoot" />
-                    <and>
-                        <instanceof value="org.eclipse.core.resources.IFile" />
-                        <test
-                            forcePluginActivation="true"   
-                            property="org.eclipse.core.resources.extension"
-                            value="sys">
-                        </test>                   
-                    </and>
-                </or>
-            </triggerPoints>
-            <commonSorter
-                class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter"
-                id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter">
-                <parentExpression>
-                    <adapt type="org.eclipse.core.resources.IProject" >
-                        <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature"/>
-                    </adapt>
-                </parentExpression>
-            </commonSorter>
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter">
-               <parentExpression>
+              activeByDefault="true"
+              contentProvider="org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemContentProvider"
+              id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.automationsystemcontent"
+              labelProvider="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemLabelProvider"
+              name="Automation System Content"
+              priority="high">
+           <possibleChildren>
+              <or>
+                 <instanceof value="org.eclipse.emf.ecore.EObject" />
+                 <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter" />
+              </or>
+           </possibleChildren>
+           <triggerPoints>
+              <and>
+                 <instanceof value="org.eclipse.core.resources.IFile" />
+                 <test property="org.eclipse.core.resources.extension" value="sys" />
+              </and>
+           </triggerPoints>
+           <enablement>
+              <or>
+                 <and>
+	                 <instanceof value="org.eclipse.core.resources.IFile" />
+	                 <test property="org.eclipse.core.resources.extension" value="sys" />
+	              </and>
                   <and>
-                   <instanceof 
-                         value="org.eclipse.core.resources.IFile">
-                   </instanceof>
-                   <test
-                         forcePluginActivation="true"   
-                         property="org.eclipse.core.resources.extension"
-                         value="sys">
-                   </test>
-               </and>
-               </parentExpression>
-            </commonSorter>  
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
-                  id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
-               <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.model.libraryElement.Device">
-                     </instanceof>
-                  </or>
-               </parentExpression>
-            </commonSorter>
-            <commonSorter
-                  class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
-                  id="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter">
-               <parentExpression>
-                  <or>
-                     <instanceof
-                           value="org.eclipse.fordiac.ide.model.libraryElement.InterfaceList">
-                     </instanceof>
-                  </or>
-               </parentExpression>
-            </commonSorter>          
-       </navigatorContent>          
+	                 <instanceof value="org.eclipse.core.resources.IFolder"/>
+	                 <or>
+	                    <test property="org.eclipse.core.resources.name" value="Type Library"/>
+	                    <test property="org.eclipse.core.resources.name" value="Standard Libraries"/>
+	                    <test property="org.eclipse.core.resources.name" value="External Libraries"/>
+	                 </or>
+	               </and>
+                 <instanceof value="org.eclipse.emf.ecore.EObject" />
+                 <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter" />
+              </or>
+           </enablement>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemContentSorter">
+              <parentExpression>
+                 <and>
+                    <instanceof
+                          value="org.eclipse.core.resources.IFile">
+                    </instanceof>
+                    <test
+                          forcePluginActivation="true"
+                          property="org.eclipse.core.resources.extension"
+                          value="sys">
+                    </test>
+                 </and>
+              </parentExpression>
+           </commonSorter>
+        </navigatorContent>
+        <navigatorContent
+              activeByDefault="true"
+              id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.sortOnly"
+              name="System Sort Override"
+              priority="highest"
+              sortOnly="true">
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FordiacProjectSorter">
+              <parentExpression>
+                 <adapt
+                       type="org.eclipse.core.resources.IProject">
+                    <test
+                          property="org.eclipse.core.resources.projectNature"
+                          value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+                    </test>
+                 </adapt>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.typemanagement.navigator.KeepOrderContentSorter"
+                 id="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.InterfaceList">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.DeviceContentSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.jface.viewers.ViewerSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.IFolderSorter">
+              <parentExpression>
+                 <or>
+                    <instanceof
+                          value="org.eclipse.core.resources.IFolder">
+                    </instanceof>
+                 </or>
+              </parentExpression>
+           </commonSorter>
+           <commonSorter
+                 class="org.eclipse.fordiac.ide.model.edit.FBTypeSorter"
+                 id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.FBTypeContentSorter">
+              <parentExpression>
+                 <and>
+                    <instanceof value="org.eclipse.core.resources.IFile" />
+                    <or>
+	                  <test property="org.eclipse.core.resources.extension" value="adp"/>
+	                  <test property="org.eclipse.core.resources.extension" value="fbt"/>
+	                  <test property="org.eclipse.core.resources.extension" value="fct"/>
+	                  <test property="org.eclipse.core.resources.extension" value="sub"/>
+	               </or>
+                 </and>
+              </parentExpression>
+           </commonSorter>
+        </navigatorContent>          
       <commonWizard
             type="new"
             wizardId="org.eclipse.fordiac.ide.typemanagement.wizards.NewFBTypeWizard">
@@ -512,25 +380,6 @@
             wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewSystemWizard">
          <enablement></enablement>
       </commonWizard> 
-      <commonWizard
-            type="new"
-            wizardId="org.eclipse.fordiac.ide.systemmanagement.ui.wizard.NewApplicationWizard">
-         <enablement>
-            <adapt type="org.eclipse.core.resources.IFile" >
-                <test property="org.eclipse.core.resources.extension" value="sys"/>
-            </adapt>
-         </enablement>
-      </commonWizard>
-      <actionProvider
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.SystemExplorerNewActionProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.SystemExplorerNewActionProvider">
-            <enablement>
-            <or>
-               <instanceof value="org.eclipse.emf.ecore.EObject"> </instanceof>
-               
-            </or>
-         </enablement>
-      </actionProvider>
       <actionProvider
             class="org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
@@ -562,63 +411,62 @@
           </or>
 		</enablement>
       </actionProvider>
-      <actionProvider
-            class="org.eclipse.fordiac.ide.systemmanagement.ui.actions.CloseSystemActionProvider"
-            id="org.eclipse.fordiac.ide.systemmanagement.CloseProjectActionProvider">
-            <enablement>
-            <or>
-               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem"> </instanceof>               
-            </or>
-         </enablement>
-      </actionProvider>
+      <commonFilter
+            activeByDefault="false"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.mux"
+            name="Hide STRUCT_MUX &amp; STRUCT_DEMUX">
+         <filterExpression>
+         	<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.StructManipulator">
+            </instanceof>
+         </filterExpression>
+      </commonFilter>
+      <commonFilter
+            activeByDefault="false"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.fb"
+            name="Hide FB instances">
+         <filterExpression>
+         	<or>
+	         	<and>
+	         		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FB" />
+	         		<not><instanceof value="org.eclipse.fordiac.ide.model.libraryElement.StructManipulator" /></not>
+	            </and>
+	            <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement" />
+	        </or>    
+         </filterExpression>
+      </commonFilter>
+      <commonFilter
+            activeByDefault="false"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.filters.TypedSubappFilter"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"
+            name="Hide Subapplication instances">
+      </commonFilter>
+      <commonFilter
+            activeByDefault="true"
+            id="org.eclipse.fordiac.ide.systemmanagement.filters.comment"
+            name="Hide comments">
+         <filterExpression>
+         	<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Comment">
+            </instanceof>
+         </filterExpression>
+      </commonFilter>
   </extension>
-  <extension
-          point="org.eclipse.ui.navigator.linkHelper">
-       <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.ApplicationSubAppEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper">
-          <selectionEnablement>
-             <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application"/>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FB"/>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
-             </or>
-          </selectionEnablement>
-          <editorInputEnablement>
-             <or>
-             	<instanceof value="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput"/>
-             	<instanceof value="org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput"/>
-             </or>
-          </editorInputEnablement>
-       </linkHelper>
-  </extension>
-  <extension point="org.eclipse.ui.navigator.linkHelper">    
-       <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.ResourceEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper">
-          <selectionEnablement>
-             <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Resource"/>
-             </or>
-          </selectionEnablement>
-          <editorInputEnablement>
-             <instanceof value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput"/>
-          </editorInputEnablement>
-       </linkHelper>
-    </extension>
     <extension point="org.eclipse.ui.navigator.linkHelper">    
        <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemConfigurationEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemConfigurationLinkHelper">
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemExplorerLinkHelper"
+             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper">
           <selectionEnablement>
              <or>
+	            <instanceof value="org.eclipse.core.resources.IFile"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Resource"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Device"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Segment"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
              </or>
-          </selectionEnablement>
+          </selectionEnablement>   
           <editorInputEnablement>
-             <instanceof value="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput"/>
+             <instanceof value="org.eclipse.ui.IFileEditorInput"/>
           </editorInputEnablement>
        </linkHelper>
     </extension>
@@ -646,11 +494,23 @@
             lightweight="true"
             state="false">
             <enablement>
-                <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+            	<or>
+                	<objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
+                	<objectClass name="org.eclipse.fordiac.ide.model.libraryElement.Application" />
+               	</or>
             </enablement>
             <description>
                Show instance comment beside typed fbnetwork elements.
             </description>
       </decorator>
    </extension>
+    <extension
+          point="org.eclipse.ui.ide.markerResolution">
+       <markerResolutionGenerator
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.marker.resolution.FordiacNatureMarkerResolutionGenerator"
+             markerType="org.eclipse.fordiac.ide.model.projectConfiguration">
+       </markerResolutionGenerator>
+    </extension>
+
+   
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Profactor GbmH, Johannes Kepler University
+ * Copyright (c) 2019, 2024 Profactor GbmH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,8 +21,8 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PrintFigureOperation;
 import org.eclipse.draw2d.PrinterGraphics;
 import org.eclipse.draw2d.SWTGraphics;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.LayerManager;
@@ -55,7 +55,7 @@ import org.eclipse.swt.widgets.Text;
  */
 public class PrintPreview extends Dialog {
 
-	private static final String ONLY_DIGIT_REGEX = "^[0-9]*$"; //$NON-NLS-1$
+	private static final String ONLY_DIGIT_REGEX = "^\\d*$"; //$NON-NLS-1$
 	private static final Pattern ONLY_DIGIT_PATTERN = Pattern.compile(ONLY_DIGIT_REGEX, Pattern.MULTILINE);
 
 	/**
@@ -97,7 +97,7 @@ public class PrintPreview extends Dialog {
 	public PrintPreview(final Shell shell, final GraphicalViewer viewer, final String printName) {
 		super(shell);
 		this.printName = printName;
-		final LayerManager lm = (LayerManager) viewer.getEditPartRegistry().get(LayerManager.ID);
+		final LayerManager lm = (LayerManager) viewer.getEditPartForModel(LayerManager.ID);
 		figure = lm.getLayer(LayerConstants.PRINTABLE_LAYERS);
 	}
 
@@ -415,7 +415,7 @@ public class PrintPreview extends Dialog {
 	void print(final Printer printer) {
 
 		if (!printer.startJob(printName)) {
-			Activator.getDefault().logError(Messages.PrintPreview_ERROR_StartingPrintJob);
+			FordiacLogHelper.logError(Messages.PrintPreview_ERROR_StartingPrintJob);
 			return;
 		}
 
@@ -434,7 +434,7 @@ public class PrintPreview extends Dialog {
 
 		for (int i = 1; i <= numberOfPages; i++) {
 			if (!printer.startPage()) {
-				Activator.getDefault().logError(Messages.PrintPreview_ERROR_StartingNewPage);
+				FordiacLogHelper.logError(Messages.PrintPreview_ERROR_StartingNewPage);
 				return;
 			}
 			graphics.pushState();

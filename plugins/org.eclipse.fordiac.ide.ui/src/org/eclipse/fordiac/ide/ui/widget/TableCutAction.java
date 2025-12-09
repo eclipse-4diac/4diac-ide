@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple cells
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -18,7 +18,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -27,7 +28,7 @@ public class TableCutAction extends Action {
 
 	private final Object part;
 
-	public TableCutAction(Object part) {
+	public TableCutAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.CUT.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Cut);
@@ -39,19 +40,21 @@ public class TableCutAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
+
 		if (editor != null) {
-		for (final CellEditor cell : editor.getViewer().getCellEditors()) {
-			if (cell.isActivated()) {
-				cell.performCut();
-				return;
+			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
+				// cell can be null if column is not editable
+				if (cell != null && cell.isActivated()) {
+					cell.performCut();
+					return;
+				}
 			}
+			cutItems(editor);
 		}
-		cutItems(editor);
-	}
 	}
 
-	private static void cutItems(I4diacTableUtil editor) {
-		final Table table = editor.getViewer().getTable();
+	private static void cutItems(final I4diacTableUtil editor) {
+		final Grid table = ((GridTableViewer) editor.getViewer()).getGrid();
 		final int[] indices = table.getSelectionIndices();
 		if (indices.length != 0) {
 			final Object[] entries = new Object[indices.length];
@@ -63,5 +66,4 @@ public class TableCutAction extends Action {
 			Clipboard.getDefault().setContents(entries);
 		}
 	}
-
 }

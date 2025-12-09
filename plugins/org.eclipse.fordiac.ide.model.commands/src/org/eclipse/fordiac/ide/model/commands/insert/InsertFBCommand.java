@@ -14,48 +14,61 @@
 
 package org.eclipse.fordiac.ide.model.commands.insert;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
-public class InsertFBCommand extends Command {
+public class InsertFBCommand extends Command implements ScopedCommand {
 
-	private final FBType fbTypeEntry;
+	private final BaseFBType baseFBType;
+	private final FB fb;
 	private FB internalFB;
-	private final EList<FB> internalFbs;
 	private final int index;
 
-	public InsertFBCommand(final EList<FB> internalFbs, final FBType fbTypeEntry, final int index) {
-		this.internalFbs = internalFbs;
-		this.fbTypeEntry = fbTypeEntry;
+	public InsertFBCommand(final BaseFBType baseFBType, final FB fb, final int index) {
+		this.baseFBType = Objects.requireNonNull(baseFBType);
+		this.fb = Objects.requireNonNull(fb);
 		this.index = index;
 	}
 
 	@Override
 	public void execute() {
-		if (fbTypeEntry instanceof CompositeFBType) {
+		if (fb.getType() instanceof CompositeFBType) {
 			internalFB = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		}
-		internalFB.setPaletteEntry(fbTypeEntry.getPaletteEntry());
+		internalFB.setTypeEntry(fb.getTypeEntry());
+		internalFB.setInterface(fb.getInterface().copy());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
-		internalFB.setName(NameRepository.createUniqueName(internalFB, fbTypeEntry.getName()));
+		internalFB.setName(NameRepository.createUniqueName(internalFB, fb.getName()));
 	}
 
 	@Override
 	public void redo() {
-		internalFbs.add(index, internalFB);
+		if (index > baseFBType.getInternalFbs().size()) {
+			baseFBType.getInternalFbs().add(internalFB);
+		} else {
+			baseFBType.getInternalFbs().add(index, internalFB);
+		}
 	}
 
 	@Override
 	public void undo() {
-		internalFbs.remove(internalFB);
+		baseFBType.getInternalFbs().remove(internalFB);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(baseFBType);
+	}
 }

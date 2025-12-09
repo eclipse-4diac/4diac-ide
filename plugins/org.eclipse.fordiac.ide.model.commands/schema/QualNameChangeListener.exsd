@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.fordiac.ide.model.commands" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.fordiac.ide.model.commands" id="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener" name="Extension point for listening on changes of the full qualified name of an org.eclipse.fordiac.ide.model.libraryElement.INamedElement"/>
+      </appinfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <element name="listener">
+      <complexType>
+         <attribute name="class" type="java:org.eclipse.core.runtime.IExecutableExtension" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+</schema>

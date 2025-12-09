@@ -21,12 +21,15 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInternalInterfaceEditPartRO;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -37,11 +40,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfaceEditPartRO {
-
-	public CompositeInternalInterfaceEditPart() {
-		super();
-		setConnectable(true);
-	}
 
 	private DirectEditManager manager;
 
@@ -66,7 +64,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 			@Override
 			protected Command getDirectEditCommand(final DirectEditRequest request) {
 				if (getHost() instanceof CompositeInternalInterfaceEditPart) {
-					return new ChangeNameCommand(getModel(), (String) request.getCellEditor().getValue());
+					return ChangeNameCommand.forName(getModel(), (String) request.getCellEditor().getValue());
 				}
 				return null;
 			}
@@ -93,7 +91,7 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 	@Override
 	protected void refreshVisuals() {
 		getNameLabel().setText(getModel().getName());
-		getFigure().setToolTip(new ToolTipFigure(getModel()));
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		super.refreshVisuals();
 	}
 
@@ -132,6 +130,20 @@ public class CompositeInternalInterfaceEditPart extends CompositeInternalInterfa
 				super.notifyChanged(notification);
 			}
 		};
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == ErrorMarkerDataTypeImpl.class) {
+			final DataType marker = getModel().getType();
+			return marker instanceof ErrorMarkerDataTypeImpl ? key.cast(marker) : null;
+		}
+		return super.getAdapter(key);
 	}
 
 }

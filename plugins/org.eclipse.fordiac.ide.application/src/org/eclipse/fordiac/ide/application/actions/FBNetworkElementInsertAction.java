@@ -16,40 +16,48 @@
  *   Bianca Wiesmayr - correctly calculate position for inserting
  *   Alois Zoitl - reworked action to always create a new creation command
  *   Bianca Wiesmayr - updated for breadcrumb editor
+ *   Fabio Gandolfi - added inserting fbs to group & expanded subapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
+import org.eclipse.fordiac.ide.application.utilities.GetEditPartFromGraficalViewerHelper;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.SnapToHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
-	private final PaletteEntry paletteEntry;
+	private final TypeEntry typeEntry;
 	private final FBNetwork fbNetwork;
 
-	public FBNetworkElementInsertAction(IWorkbenchPart part, PaletteEntry paletteEntry, FBNetwork fbNetwork) {
+	public FBNetworkElementInsertAction(final IWorkbenchPart part, final TypeEntry entry, final FBNetwork fbNetwork) {
 		super(part);
-		this.paletteEntry = paletteEntry;
+		this.typeEntry = entry;
 		this.fbNetwork = fbNetwork;
 
-		setId(paletteEntry.getFile().getFullPath().toString());
-		setText(paletteEntry.getLabel());
+		setId(typeEntry.getFile().getFullPath().toString());
+		setText(typeEntry.getTypeName());
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return (null != paletteEntry) && (null != fbNetwork);
+		return (null != typeEntry) && (null != fbNetwork);
 	}
 
 	@Override
@@ -57,20 +65,50 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 		execute(createFBNetworkElementCreateCommand());
 	}
 
-	private AbstractCreateFBNetworkElementCommand createFBNetworkElementCreateCommand() {
-		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
-		if (paletteEntry instanceof FBTypePaletteEntry) {
-			return new FBCreateCommand((FBTypePaletteEntry) paletteEntry, fbNetwork, pt.x, pt.y);
-		} else if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) paletteEntry, fbNetwork, pt.x,
-					pt.y);
-		}
+	private Command createFBNetworkElementCreateCommand() {
+		Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
+		final AbstractContainerContentEditPart containerEP = GetEditPartFromGraficalViewerHelper
+				.findAbstractContainerContentEditPartAtPosition((IEditorPart) getWorkbenchPart(), pt, fbNetwork);
 
-		return null;
+		if (containerEP instanceof final GroupContentEditPart groupContentEP) {
+			pt = applySnapToGrid(pt, groupContentEP);
+			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
+			pt.translate(-topLeft.x, -topLeft.y);
+			return new ResizeGroupOrSubappCommand(containerEP,
+					new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(), pt.x, pt.y));
+		}
+		if (containerEP instanceof final UnfoldedSubappContentEditPart subappContentEP) {
+			pt = applySnapToGrid(pt, subappContentEP);
+			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
+			pt.translate(-topLeft.x, -topLeft.y);
+			return new ResizeGroupOrSubappCommand(containerEP,
+					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, subappContentEP.getModel(),
+							pt.x - containerEP.getFigure().getBounds().x,
+							pt.y - containerEP.getFigure().getBounds().y));
+		}
+		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
+		if (graphicalViewer != null && graphicalViewer
+				.getEditPartForModel(fbNetwork) instanceof final GraphicalEditPart graphicalEditPart) {
+			pt = applySnapToGrid(pt, graphicalEditPart);
+		}
+		return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, pt.x, pt.y);
 	}
 
-	private static Point getPositionInViewer(IEditorPart editor) {
+	private static Point getPositionInViewer(final IEditorPart editor) {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
+	}
+
+	private static Point applySnapToGrid(final Point refPoint, final GraphicalEditPart gep) {
+		final SnapToHelper helper = gep.getAdapter(SnapToHelper.class);
+		if (helper != null) {
+			gep.getFigure().translateToAbsolute(refPoint);
+			final PrecisionPoint preciseLocation = new PrecisionPoint(refPoint);
+			final PrecisionPoint result = new PrecisionPoint(refPoint);
+			helper.snapPoint(null, PositionConstants.HORIZONTAL | PositionConstants.VERTICAL, preciseLocation, result);
+			gep.getFigure().translateToRelative(result);
+			return result;
+		}
+		return refPoint;
 	}
 }

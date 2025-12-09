@@ -16,15 +16,19 @@ import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.gef.editors.NewInstanceCellEditor;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
@@ -35,12 +39,12 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	private static final AbstractBorder BORDER = new AbstractBorder() {
 
 		@Override
-		public Insets getInsets(IFigure figure) {
+		public Insets getInsets(final IFigure figure) {
 			return BORDER_INSETS;
 		}
 
 		@Override
-		public void paint(IFigure figure, Graphics graphics, Insets insets) {
+		public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 			// don't draw any border to make the direct editor smaller
 		}
 	};
@@ -49,15 +53,15 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		private Point refPoint = new Point(0, 0);
 
 		@Override
-		public void relocate(CellEditor celleditor) {
+		public void relocate(final CellEditor celleditor) {
 			if (null != celleditor) {
 				final Control control = celleditor.getControl();
 				final Point pref = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				control.setBounds(refPoint.x - 1, refPoint.y - 1, pref.x + 1, pref.y + 1);
+				control.setBounds(refPoint.x - 1, refPoint.y - 1, pref.x * 2 + 1, pref.y + 1);
 			}
 		}
 
-		public void setRefPoint(Point refPoint) {
+		public void setRefPoint(final Point refPoint) {
 			this.refPoint = refPoint;
 		}
 
@@ -66,14 +70,20 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		}
 	}
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 	private final boolean useChangeFBType;
 	private String initialValue;
 
-	public NewInstanceDirectEditManager(GraphicalEditPart source, Palette palette, boolean useChangeFBType) {
-		super(source, NewInstanceCellEditor.class, new NewInstanceCellEditorLocator());
-		this.palette = palette;
+	public NewInstanceDirectEditManager(final GraphicalEditPart source, final TypeLibrary typeLib,
+			final boolean useChangeFBType) {
+		super(source, new NewInstanceCellEditorLocator());
+		this.typeLib = typeLib;
 		this.useChangeFBType = useChangeFBType;
+	}
+
+	@Override
+	protected CellEditor createCellEditorOn(final Composite composite) {
+		return new NewInstanceCellEditor(composite);
 	}
 
 	@Override
@@ -82,12 +92,12 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		super.show();
 	}
 
-	public void show(String initialValue) {
+	public void show(final String initialValue) {
 		this.initialValue = initialValue;
 		super.show();
-		if (null != initialValue) {
+		if (initialValue != null) {
 			final Text text = getCellEditor().getText();
-			text.selectAll();
+			text.setSelection(text.getText().length());
 			setDirty(true);
 		}
 	}
@@ -95,7 +105,8 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, event -> showFBInsertPopUpMenu());
-		getCellEditor().setPalette(palette);
+		getCellEditor().setTypeLibrary(typeLib, getEditPart().getModel() instanceof final FBNetwork fbn ? fbn : null);
+
 		super.initCellEditor();
 		if (null != initialValue) {
 			getCellEditor().setValue(initialValue);
@@ -112,7 +123,14 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		return (NewInstanceCellEditor) super.getCellEditor();
 	}
 
-	public void updateRefPosition(Point refPoint) {
+	@Override
+	protected DirectEditRequest createDirectEditRequest() {
+		final DirectEditRequest directEditRequest = super.createDirectEditRequest();
+		directEditRequest.setLocation(new org.eclipse.draw2d.geometry.Point(getLocator().getRefPoint()));
+		return directEditRequest;
+	}
+
+	public void updateRefPosition(final Point refPoint) {
 		getLocator().setRefPoint(refPoint);
 	}
 

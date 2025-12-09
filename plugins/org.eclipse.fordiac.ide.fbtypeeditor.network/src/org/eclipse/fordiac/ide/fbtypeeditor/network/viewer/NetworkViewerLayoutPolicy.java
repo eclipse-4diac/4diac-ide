@@ -18,7 +18,6 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -28,13 +27,16 @@ import org.eclipse.gef.requests.CreateRequest;
 
 class NetworkViewerLayoutPolicy extends LayoutEditPolicy {
 
-	/** A simple selection edit policy which will show a rounded rectangle around the host */
+	/**
+	 * A simple selection edit policy which will show a rounded rectangle around the
+	 * host
+	 */
 	private static class NetworkViewerSelectionPolicy extends SelectionEditPolicy {
 		private ModifiedMoveHandle handle = null;
 
 		private ModifiedMoveHandle getHandle() {
 			if (null == handle) {
-				handle = new ModifiedMoveHandle((GraphicalEditPart) getHost(), new Insets(2), 14);
+				handle = new ModifiedMoveHandle(getHost(), new Insets(2), 14);
 			}
 			return handle;
 		}

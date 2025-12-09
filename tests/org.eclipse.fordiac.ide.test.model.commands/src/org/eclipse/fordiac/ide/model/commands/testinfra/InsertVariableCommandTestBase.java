@@ -23,6 +23,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -31,15 +33,18 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 	private static StructuredType struct = DataFactory.eINSTANCE.createStructuredType();
 
 	public static class State extends CommandTestBase.StateBase {
+		private final LibraryElement libraryElement;
 		private final EList<VarDeclaration> list;
 		private VarDeclaration varDec;
 
 		public State() {
+			libraryElement = LibraryElementFactory.eINSTANCE.createLibraryElement();
 			list = struct.getMemberVariables();
 			list.clear();
 		}
 
 		private State(final State s) {
+			libraryElement = EcoreUtil.copy(s.libraryElement);
 			list = new BasicEList<>();
 			ECollections.setEList(list, (List<VarDeclaration>) EcoreUtil.copyAll(s.list));
 			varDec = EcoreUtil.copy(s.varDec);
@@ -58,6 +63,10 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 			this.varDec = varDec;
 		}
 
+		public LibraryElement getLibraryElement() {
+			return libraryElement;
+		}
+
 		public EList<VarDeclaration> getList() {
 			return list;
 		}
@@ -71,13 +80,14 @@ public abstract class InsertVariableCommandTestBase extends CommandTestBase<Inse
 				State::new, //
 				(StateVerifier<State>) InsertVariableCommandTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
 	}
 
-	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
-			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description,
+			final StateInitializer<?> initializer, final StateVerifier<?> initialVerifier,
+			final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}

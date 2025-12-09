@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2024 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,12 +34,11 @@ public class ExpandServiceSequenceHandler extends AbstractHandler {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
 		for (final Object selected : selection.toList()) {
-			if (selected instanceof ServiceSequenceEditPart) {
-				final ServiceSequenceEditPart ep = (ServiceSequenceEditPart) selected;
+			if (selected instanceof final ServiceSequenceEditPart ep) {
 				ep.toggleExpanded();
 			} else if (selected instanceof ServiceSequence) {
 				final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
-				final ServiceSequenceEditPart ep = (ServiceSequenceEditPart) viewer.getEditPartRegistry().get(selected);
+				final ServiceSequenceEditPart ep = (ServiceSequenceEditPart) viewer.getEditPartForModel(selected);
 				ep.toggleExpanded();
 			}
 		}

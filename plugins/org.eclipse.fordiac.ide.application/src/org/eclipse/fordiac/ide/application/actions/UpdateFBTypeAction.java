@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2014, 2016 AIT, Profactor GmbH, fortiss GmbH
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2012, 2025 AIT, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,15 +10,15 @@
  *
  * Contributors:
  *   Filip Andren, Gerhard Ebenhofer, Alois Zoitl, Gerhard Ebenhofer
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked update fb type to accept also supapps
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
@@ -34,19 +34,19 @@ public class UpdateFBTypeAction extends SelectionAction {
 	public static final String ID = "UpdateFBTypeAction"; //$NON-NLS-1$
 
 	/** FB type */
-	private PaletteEntry entry;
+	private final TypeEntry entry;
 
-	public UpdateFBTypeAction(IWorkbenchPart part) {
+	public UpdateFBTypeAction(final IWorkbenchPart part) {
 		super(part);
 		setId(ID);
 		setText(Messages.UpdateFBTypeAction_Text);
 		entry = null;
 	}
 
-	public UpdateFBTypeAction(IWorkbenchPart part, PaletteEntry entry) {
+	public UpdateFBTypeAction(final IWorkbenchPart part, final TypeEntry entry) {
 		super(part);
 		setId(entry.getFile().getFullPath().toString().concat("_").concat(ID)); //$NON-NLS-1$
-		setText(entry.getLabel());
+		setText(entry.getTypeName());
 		this.entry = entry;
 	}
 
@@ -57,8 +57,8 @@ public class UpdateFBTypeAction extends SelectionAction {
 	 */
 	@Override
 	protected boolean calculateEnabled() {
-		for (Object selected : getSelectedObjects()) {
-			if (selected instanceof AbstractFBNElementEditPart) {
+		for (final Object selected : getSelectedObjects()) {
+			if (selected instanceof AbstractBlockFBNElementEditPart) {
 				return true;
 			}
 		}
@@ -72,10 +72,11 @@ public class UpdateFBTypeAction extends SelectionAction {
 	 */
 	@Override
 	public void run() {
-		CompoundCommand updateCmd = new CompoundCommand();
-		for (Object obj : getSelectedObjects()) {
-			if (obj instanceof AbstractFBNElementEditPart) {
-				UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(((AbstractFBNElementEditPart) obj).getModel(), entry);
+		final CompoundCommand updateCmd = new CompoundCommand();
+		for (final Object obj : getSelectedObjects()) {
+			if (obj instanceof AbstractBlockFBNElementEditPart) {
+				final UpdateFBTypeCommand cmd = new UpdateFBTypeCommand(
+						((AbstractBlockFBNElementEditPart) obj).getModel(), entry);
 				if (cmd.canExecute()) {
 					updateCmd.add(cmd);
 				}

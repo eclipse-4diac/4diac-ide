@@ -16,12 +16,12 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemconfiguration.Activator;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
@@ -58,9 +58,9 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 	 *
 	 * @param viewer the EditPartViewer
 	 */
-	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, AutomationSystem system) {
+	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, final AutomationSystem system) {
 		super(viewer);
-		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
+		targetProject = (null != system) ? system.getTypeLibrary().getProject() : null;
 	}
 
 	@Override
@@ -72,9 +72,9 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 			getCurrentEvent().operations = DND.DROP_NONE;
 
 		} else {
-			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
-				PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
-				IProject srcProject = entry.getFile().getProject();
+			if (TemplateTransfer.getInstance().getTemplate() instanceof TypeEntry) {
+				final TypeEntry entry = (TypeEntry) TemplateTransfer.getInstance().getTemplate();
+				final IProject srcProject = entry.getFile().getProject();
 
 				// If project is null it is an entry from the tool palette
 				if (isSysConfEditorType(TemplateTransfer.getInstance().getTemplate()) && (null != targetProject)
@@ -108,14 +108,14 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 		} else if (template instanceof TemplateCreationFactory) {
 			return super.getFactory(template);
 		} else {
-			Activator.getDefault().logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
+			FordiacLogHelper.logError("Type not in list: " + template.getClass().getName()); //$NON-NLS-1$
 		}
 		return null;
 	}
 
-	private static boolean isSysConfEditorType(Object template) {
-		return (template instanceof DeviceTypePaletteEntry) || (template instanceof ResourceTypeEntry)
-				|| (template instanceof SegmentTypePaletteEntry);
+	private static boolean isSysConfEditorType(final Object template) {
+		return (template instanceof DeviceTypeEntry) || (template instanceof ResourceTypeEntry)
+				|| (template instanceof SegmentTypeEntry);
 	}
 
 }

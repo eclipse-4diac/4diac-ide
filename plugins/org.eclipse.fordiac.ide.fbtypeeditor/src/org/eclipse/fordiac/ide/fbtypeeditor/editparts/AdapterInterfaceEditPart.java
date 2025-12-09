@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,39 +15,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterInterfaceEditPart extends InterfaceEditPart {
-	private final Palette systemPalette;
-
-	AdapterInterfaceEditPart(final Palette systemPalette) {
-		this.systemPalette = systemPalette;
-	}
 
 	private class AdapterInterfaceFigure extends UnderlineAlphaLabel {
 		public AdapterInterfaceFigure() {
-			super();
 			setOpaque(false);
 			setBorder(new ConnectorBorder(getCastedModel()));
 			setText(getINamedElement().getName());
@@ -92,10 +74,8 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 						if (!isDrawUnderline()) {
 							setDrawUnderline(true);
 						}
-					} else {
-						if (isDrawUnderline()) {
-							setDrawUnderline(false);
-						}
+					} else if (isDrawUnderline()) {
+						setDrawUnderline(false);
 					}
 				}
 			});
@@ -105,49 +85,19 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 	@Override
 	protected IFigure createFigure() {
 		final AdapterInterfaceFigure fig = new AdapterInterfaceFigure();
-		fig.addAncestorListener(new AncestorListener() {
-			@Override
-			public void ancestorRemoved(final IFigure ancestor) {
-				// Nothing to be done here
-			}
-
-			@Override
-			public void ancestorMoved(final IFigure ancestor) {
-				update();
-			}
-
-			@Override
-			public void ancestorAdded(final IFigure ancestor) {
-				update();
-			}
-
-		});
+		fig.addAncestorListener(createAncestorListener());
 		return fig;
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
-		// allow delete of a FB
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
-	}
-
-	@Override
-	public DragTracker getDragTracker(final Request request) {
-		if (request instanceof SelectionRequest) {
-			final SelectionRequest selRequest = (SelectionRequest) request;
-			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
-				// open the default editor for the adapter file
-				final PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
-				if (null != entry) {
-					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-							.getDefaultEditor(entry.getFile().getName());
-					EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-				}
-			}
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
 		}
-		return super.getDragTracker(request);
+		// allow delete of a FB
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		}
 	}
 
 	@Override
@@ -156,7 +106,4 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		super.refreshName();
 	}
 
-	private AdapterDeclaration getAdapter() {
-		return (AdapterDeclaration) getCastedModel();
-	}
 }

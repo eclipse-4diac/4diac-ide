@@ -1,0 +1,188 @@
+/*******************************************************************************
+ * Copyright (c) 2008, 2023 Profactor GbmH, fortiss GmbH
+ *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Gerhard Ebenhofer, Alois Zoitl, Jose Cabral
+ *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - added preference driven max width for value edit parts
+ *   Lisa Sonnleithner - deleted setting for corner dimensions, replaced with constant
+ *   				   - moved max label size into a group
+ *   				   - moved creating a group into a method
+ *   Prankur Agarwal - added a field to input maximum hidden connection label size
+ *   Martin Erich Jobst - added max default value length and externalized strings
+ *   Patrick Aigner - added group for Block margins
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.gef.preferences;
+
+import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.ui.preferences.FordiacPropertyPreferencePage;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.MessageBox;
+
+/** The Class DiagramPreferences. */
+public class DiagramPreferencePage extends FordiacPropertyPreferencePage {
+
+	private boolean changesOnLabelSize = false;
+
+	/** Instantiates a new diagram preferences. */
+	public DiagramPreferencePage() {
+		super(GRID, GefPreferenceConstants.GEF_PREFERENCES_ID);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+	 */
+	@Override
+	public void createFieldEditors() {
+
+		final Composite parent = getFieldEditorParent();
+
+		final BooleanFieldEditor snapToGrid = new BooleanFieldEditor(GefPreferenceConstants.SNAP_TO_GRID,
+				Messages.DiagramPreferences_FieldEditors_SnapToGrid, parent);
+		addField(snapToGrid);
+
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor(
+				GefPreferenceConstants.CONNECTION_AUTO_LAYOUT,
+				Messages.DiagramPreferences_LayoutConnectionsAutomatically, parent);
+		addField(connectionAutoLayout);
+
+		final IntegerFieldEditor integerFieldEditorValue = new IntegerFieldEditor(
+				GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, Messages.DiagramPreferences_MaximumDefaultValueSize,
+				parent);
+		integerFieldEditorValue.setValidRange(120, 100000);
+		addField(integerFieldEditorValue);
+
+		final BooleanFieldEditor manageConnections = new BooleanFieldEditor(
+				GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY,
+				Messages.DiagramPreferences_ManageConnectionOfEventsAutomatically, parent);
+		addField(manageConnections);
+
+		// Create a Group to hold the interface pin field
+		createGroupInterfacePins();
+
+		// Create a Group to hold the expanded interface fields
+		createExpandedInterfaceOptionsPins();
+	}
+
+	private Group createGroup(final String title) {
+		final Group group = new Group(getFieldEditorParent(), SWT.NONE);
+		group.setText(title);
+		return group;
+	}
+
+	private static void configGroup(final Group group) {
+		final GridLayout gridLayout = new GridLayout(2, false);
+		final GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+
+		gridData.horizontalSpan = 2;
+		group.setLayout(gridLayout);
+		group.setLayoutData(gridData);
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent event) {
+		if (event.getSource() instanceof FieldEditor && matchPreferenceName(event)) {
+			changesOnLabelSize = true;
+		}
+	}
+
+	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
+		final String sourcePrefName = ((FieldEditor) event.getSource()).getPreferenceName();
+		return sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.PIN_LABEL_STYLE)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP)
+				|| sourcePrefName.equalsIgnoreCase(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR);
+	}
+
+	@Override
+	public boolean performOk() {
+		super.performOk();
+		if (changesOnLabelSize) {
+			changesOnLabelSize = false;
+			showMessageBox();
+		}
+		return true;
+	}
+
+	private static void showMessageBox() {
+
+		final MessageBox msgBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.OK);
+		Display.getDefault().getActiveShell();
+		msgBox.setText("4diac IDE"); //$NON-NLS-1$
+		msgBox.setMessage(Messages.DiagramPreferences_Restart);
+
+		msgBox.open();
+	}
+
+	private void createGroupInterfacePins() {
+		addField(new RadioGroupFieldEditor(GefPreferenceConstants.PIN_LABEL_STYLE,
+				Messages.DiagramPreferences_PinLabelText, 1,
+				new String[][] {
+						{ Messages.DiagramPreferences_ShowPinName, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME },
+						{ Messages.DiagramPreferences_ShowPinComment,
+								GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT },
+						{ Messages.DiagramPreferences_ShowConnectedOutputPinName,
+								GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME } },
+				getFieldEditorParent(), true));
+	}
+
+	private void createExpandedInterfaceOptionsPins() {
+		final Group group = createGroup(Messages.DiagramPreferences_ExpandedInterfaceGroupText);
+		final BooleanFieldEditor direct = new BooleanFieldEditor(
+				GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR,
+				Messages.DiagramPreferences_ExpandedInterfaceStackPins, group);
+		final BooleanFieldEditor events = new BooleanFieldEditor(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP,
+				Messages.DiagramPreferences_ExpandedInterfaceEvents, group);
+		final BooleanFieldEditor transfer = new BooleanFieldEditor(
+				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				Messages.DiagramPreferences_DeactivateTransferingComments_DEMUX_to_MUX, group);
+
+		addField(direct);
+		addField(events);
+		addField(transfer);
+		configGroup(group);
+
+		events.setEnabled(
+				getPreferenceStore().getBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR), group);
+		direct.getDescriptionControl(group).addListener(SWT.Selection, event -> {
+			final var button = (Button) event.widget;
+			final boolean selection = button.getSelection();
+			final var eventsButton = (Button) events.getDescriptionControl(group);
+			events.setEnabled(selection, group);
+			eventsButton.setSelection(selection);
+		});
+	}
+
+	@Override
+	protected String getPreferencePageID() {
+		return "org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences"; //$NON-NLS-1$
+	}
+
+	@Override
+	protected String getPropertyPageID() {
+		return "org.eclipse.fordiac.ide.gef.properties.DiagramPreferences"; //$NON-NLS-1$
+	}
+}

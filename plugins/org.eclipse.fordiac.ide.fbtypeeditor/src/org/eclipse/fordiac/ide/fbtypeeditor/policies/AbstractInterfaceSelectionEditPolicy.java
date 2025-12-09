@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.gef.handles.PlusHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.handles.RelativeHandleLocator;
 
@@ -47,10 +48,9 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 		getInterfaceEditPart().setInOutConnectionsWith(2);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	protected List createSelectionHandles() {
-		final List list = super.createSelectionHandles();
+	protected List<Handle> createSelectionHandles() {
+		final List<Handle> list = super.createSelectionHandles();
 		final InterfaceEditPart part = getInterfaceEditPart();
 
 		final PlusHandle top = createHandle(part, PositionConstants.NORTH);
@@ -84,12 +84,12 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 
 			@Override
 			public void mouseReleased(final MouseEvent me) {
-				//Nothing to be done here
+				// Nothing to be done here
 			}
 
 			@Override
 			public void mouseDoubleClicked(final MouseEvent me) {
-				//Nothing to be done here
+				// Nothing to be done here
 			}
 		});
 		return list;
@@ -121,25 +121,19 @@ public abstract class AbstractInterfaceSelectionEditPolicy extends ModifiedNonRe
 			}
 
 			private int getYModifcation() {
-				switch (direction & PositionConstants.NORTH_SOUTH) {
-				case PositionConstants.NORTH:
-					return -1;
-				case PositionConstants.SOUTH:
-					return 1;
-				default:
-					return 0;
-				}
+				return switch (direction & PositionConstants.NORTH_SOUTH) {
+				case PositionConstants.NORTH -> -1;
+				case PositionConstants.SOUTH -> 1;
+				default -> 0;
+				};
 			}
 
 			private int getXModifcation() {
-				switch (direction & PositionConstants.EAST_WEST) {
-				case PositionConstants.WEST:
-					return -1;
-				case PositionConstants.EAST:
-					return 1;
-				default:
-					return 0;
-				}
+				return switch (direction & PositionConstants.EAST_WEST) {
+				case PositionConstants.WEST -> -1;
+				case PositionConstants.EAST -> 1;
+				default -> 0;
+				};
 			}
 		});
 	}

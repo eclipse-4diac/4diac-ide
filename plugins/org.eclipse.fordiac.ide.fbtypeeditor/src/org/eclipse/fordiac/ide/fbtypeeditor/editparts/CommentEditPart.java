@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -31,23 +32,30 @@ import org.eclipse.gef.requests.DirectEditRequest;
 
 public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
-	private Label comment;
-
 	@Override
 	public IInterfaceElement getCastedModel() {
-		return ((CommentField) getModel()).getReferencedElement();
+		return getModel().getReferencedElement();
+	}
+
+	@Override
+	public CommentField getModel() {
+		return (CommentField) super.getModel();
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		comment = new Label();
-		update();
-		return comment;
+		return new Label(getModel().getLabel());
 	}
 
 	@Override
-	protected void update() {
-		comment.setText(((CommentField) getModel()).getLabel());
+	public Label getFigure() {
+		return (Label) super.getFigure();
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		getFigure().setText(getModel().getLabel());
 	}
 
 	@Override
@@ -56,23 +64,22 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 		handle.setDragAllowed(false);
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, handle);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					return new ChangeCommentCommand(getCastedModel(), (String) request.getCellEditor().getValue());
+		if (isDirectEditable()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy() {
+				@Override
+				protected Command getDirectEditCommand(final DirectEditRequest request) {
+					return new ChangeCommentCommand(getTargetInterfaceElement(),
+							(String) request.getCellEditor().getValue());
 				}
-				return null;
-			}
 
-			@Override
-			protected void revertOldEditValue(DirectEditRequest request) {
-				if (getHost() instanceof AbstractDirectEditableEditPart) {
-					final AbstractDirectEditableEditPart viewEditPart = (AbstractDirectEditableEditPart) getHost();
-					viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+				@Override
+				protected void revertOldEditValue(final DirectEditRequest request) {
+					if (getHost() instanceof final AbstractDirectEditableEditPart viewEditPart) {
+						viewEditPart.getNameLabel().setText(viewEditPart.getINamedElement().getComment());
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -89,7 +96,7 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 
 	@Override
 	public Label getNameLabel() {
-		return (Label) getFigure();
+		return getFigure();
 	}
 
 	@Override
@@ -100,5 +107,17 @@ public class CommentEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	public void refreshName() {
 		getNameLabel().setText(getCastedModel().getComment());
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return false;
+	}
+
+	protected IInterfaceElement getTargetInterfaceElement() {
+		if (getCastedModel() instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			return varDecl.getInOutVarOpposite();
+		}
+		return getCastedModel();
 	}
 }

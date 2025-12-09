@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -26,13 +26,13 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Response</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Response</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFblist <em>Fblist</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFbType <em>Fb Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getEndpointlist <em>Endpointlist</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getConnection <em>Connection</em>}</li>
  * </ul>
@@ -49,9 +50,9 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  */
 public class ResponseImpl extends EObjectImpl implements Response {
 	/**
-	 * The default value of the '{@link #getID() <em>ID</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getID() <em>ID</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getID()
 	 * @generated
 	 * @ordered
@@ -59,9 +60,9 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	protected static final String ID_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getID() <em>ID</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getID()
 	 * @generated
 	 * @ordered
@@ -70,8 +71,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 
 	/**
 	 * The cached value of the '{@link #getWatches() <em>Watches</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getWatches()
 	 * @generated
 	 * @ordered
@@ -80,8 +80,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 
 	/**
 	 * The default value of the '{@link #getReason() <em>Reason</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReason()
 	 * @generated
 	 * @ordered
@@ -90,8 +89,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 
 	/**
 	 * The cached value of the '{@link #getReason() <em>Reason</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReason()
 	 * @generated
 	 * @ordered
@@ -100,8 +98,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 
 	/**
 	 * The cached value of the '{@link #getFblist() <em>Fblist</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFblist()
 	 * @generated
 	 * @ordered
@@ -109,9 +106,17 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	protected FBList fblist;
 
 	/**
+	 * The cached value of the '{@link #getFbType() <em>Fb Type</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getFbType()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBType fbType;
+
+	/**
 	 * The cached value of the '{@link #getEndpointlist() <em>Endpointlist</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getEndpointlist()
 	 * @generated
 	 * @ordered
@@ -120,8 +125,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 
 	/**
 	 * The cached value of the '{@link #getConnection() <em>Connection</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getConnection()
 	 * @generated
 	 * @ordered
@@ -129,8 +133,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	protected Connection connection;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ResponseImpl() {
@@ -138,8 +141,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -148,8 +150,7 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -158,21 +159,20 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setID(String newID) {
 		String oldID = id;
 		id = newID;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__ID, oldID, id));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -181,16 +181,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			InternalEObject oldWatches = (InternalEObject)watches;
 			watches = (Watches)eResolveProxy(oldWatches);
 			if (watches != oldWatches) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__WATCHES, oldWatches, watches));
+				}
 			}
 		}
 		return watches;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Watches basicGetWatches() {
@@ -198,21 +198,20 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setWatches(Watches newWatches) {
 		Watches oldWatches = watches;
 		watches = newWatches;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__WATCHES, oldWatches, watches));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -221,21 +220,20 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setReason(String newReason) {
 		String oldReason = reason;
 		reason = newReason;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__REASON, oldReason, reason));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -244,16 +242,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			InternalEObject oldFblist = (InternalEObject)fblist;
 			fblist = (FBList)eResolveProxy(oldFblist);
 			if (fblist != oldFblist) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__FBLIST, oldFblist, fblist));
+				}
 			}
 		}
 		return fblist;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public FBList basicGetFblist() {
@@ -261,21 +259,59 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setFblist(FBList newFblist) {
 		FBList oldFblist = fblist;
 		fblist = newFblist;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__FBLIST, oldFblist, fblist));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBType getFbType() {
+		if (fbType != null && fbType.eIsProxy()) {
+			InternalEObject oldFbType = (InternalEObject)fbType;
+			fbType = (FBType)eResolveProxy(oldFbType);
+			if (fbType != oldFbType) {
+				if (eNotificationRequired()) {
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__FB_TYPE, oldFbType, fbType));
+				}
+			}
+		}
+		return fbType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FBType basicGetFbType() {
+		return fbType;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFbType(FBType newFbType) {
+		FBType oldFbType = fbType;
+		fbType = newFbType;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__FB_TYPE, oldFbType, fbType));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -284,16 +320,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			InternalEObject oldEndpointlist = (InternalEObject)endpointlist;
 			endpointlist = (EndpointList)eResolveProxy(oldEndpointlist);
 			if (endpointlist != oldEndpointlist) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__ENDPOINTLIST, oldEndpointlist, endpointlist));
+				}
 			}
 		}
 		return endpointlist;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EndpointList basicGetEndpointlist() {
@@ -301,21 +337,20 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setEndpointlist(EndpointList newEndpointlist) {
 		EndpointList oldEndpointlist = endpointlist;
 		endpointlist = newEndpointlist;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__ENDPOINTLIST, oldEndpointlist, endpointlist));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -324,16 +359,16 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			InternalEObject oldConnection = (InternalEObject)connection;
 			connection = (Connection)eResolveProxy(oldConnection);
 			if (connection != oldConnection) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__CONNECTION, oldConnection, connection));
+				}
 			}
 		}
 		return connection;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Connection basicGetConnection() {
@@ -341,21 +376,20 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void setConnection(Connection newConnection) {
 		Connection oldConnection = connection;
 		connection = newConnection;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__CONNECTION, oldConnection, connection));
+		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -364,26 +398,39 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__ID:
 				return getID();
 			case DevResponsePackage.RESPONSE__WATCHES:
-				if (resolve) return getWatches();
+				if (resolve) {
+					return getWatches();
+				}
 				return basicGetWatches();
 			case DevResponsePackage.RESPONSE__REASON:
 				return getReason();
 			case DevResponsePackage.RESPONSE__FBLIST:
-				if (resolve) return getFblist();
+				if (resolve) {
+					return getFblist();
+				}
 				return basicGetFblist();
+			case DevResponsePackage.RESPONSE__FB_TYPE:
+				if (resolve) {
+					return getFbType();
+				}
+				return basicGetFbType();
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
-				if (resolve) return getEndpointlist();
+				if (resolve) {
+					return getEndpointlist();
+				}
 				return basicGetEndpointlist();
 			case DevResponsePackage.RESPONSE__CONNECTION:
-				if (resolve) return getConnection();
+				if (resolve) {
+					return getConnection();
+				}
 				return basicGetConnection();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -401,19 +448,23 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)newValue);
 				return;
+			case DevResponsePackage.RESPONSE__FB_TYPE:
+				setFbType((FBType)newValue);
+				return;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)newValue);
 				return;
 			case DevResponsePackage.RESPONSE__CONNECTION:
 				setConnection((Connection)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -431,19 +482,23 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)null);
 				return;
+			case DevResponsePackage.RESPONSE__FB_TYPE:
+				setFbType((FBType)null);
+				return;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)null);
 				return;
 			case DevResponsePackage.RESPONSE__CONNECTION:
 				setConnection((Connection)null);
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -457,22 +512,26 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
 			case DevResponsePackage.RESPONSE__FBLIST:
 				return fblist != null;
+			case DevResponsePackage.RESPONSE__FB_TYPE:
+				return fbType != null;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				return endpointlist != null;
 			case DevResponsePackage.RESPONSE__CONNECTION:
 				return connection != null;
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return super.toString();
+		}
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (ID: "); //$NON-NLS-1$
@@ -483,4 +542,4 @@ public class ResponseImpl extends EObjectImpl implements Response {
 		return result.toString();
 	}
 
-} //ResponseImpl
+} // ResponseImpl

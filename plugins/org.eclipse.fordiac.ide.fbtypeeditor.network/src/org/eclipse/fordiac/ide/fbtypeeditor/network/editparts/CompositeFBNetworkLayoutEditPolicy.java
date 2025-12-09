@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network.editparts;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
 
@@ -30,8 +30,8 @@ public class CompositeFBNetworkLayoutEditPolicy extends FBNetworkXYLayoutEditPol
 		}
 		final Object childClass = request.getNewObjectType();
 		final Rectangle constraint = (Rectangle) getConstraintFor(request);
-		if (childClass instanceof FBTypePaletteEntry) {
-			final FBTypePaletteEntry type = (FBTypePaletteEntry) request.getNewObjectType();
+		if (childClass instanceof FBTypeEntry) {
+			final FBTypeEntry type = (FBTypeEntry) request.getNewObjectType();
 			if (getHost().getModel() instanceof FBNetwork) {
 				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
 				return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);

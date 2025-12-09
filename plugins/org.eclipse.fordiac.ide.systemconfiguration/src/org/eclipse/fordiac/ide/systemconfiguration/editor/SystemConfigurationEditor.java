@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2018 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 								Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -16,11 +16,8 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
-import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -29,9 +26,8 @@ import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 
-public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette implements ISystemEditor {
+public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 	private SystemConfiguration sysConf;
 
 	@Override
@@ -47,7 +43,7 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new SysConfTemplateTransferDropTargetListener(getViewer(), getSystem());
+		return new SysConfTemplateTransferDropTargetListener(getViewer(), getModel().getAutomationSystem());
 	}
 
 	@Override
@@ -56,25 +52,29 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		if (input instanceof SystemConfigurationEditorInput) {
-			final SystemConfigurationEditorInput sysConfInput = (SystemConfigurationEditorInput) input;
-			sysConf = sysConfInput.getContent();
-		}
-		super.setModel(input);
+	public void setInput(final IEditorInput input) {
+		final SystemConfigurationEditorInput sysConfInput = checkEditorInput(input);
+		sysConf = sysConfInput.getContent();
+		super.setInput(input);
 	}
 
-	@Override
-	public AutomationSystem getSystem() {
-		return (AutomationSystem) sysConf.eContainer();
+	private SystemConfigurationEditorInput checkEditorInput(final IEditorInput input) {
+		if (!(input instanceof final SystemConfigurationEditorInput sysConfEI)) {
+			throw new IllegalArgumentException(
+					"System configuration editors only accept SystemConfigurationEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+		final SystemConfigurationEditorInput currentEditorInput = (SystemConfigurationEditorInput) getEditorInput();
+		if (currentEditorInput != null && currentEditorInput.getContent() != sysConfEI.getContent()) {
+			throw new IllegalArgumentException(
+					"Editor input with new content given to system configuration editor. This is currently not supported!"); //$NON-NLS-1$
+		}
+		return sysConfEI;
 	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		// TODO __gebenh error handling if save fails!
-		SystemManager.saveSystem(getSystem());
-		getCommandStack().markSaveLocation();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		// with the breadcrumb based automation system editor this editor should not
+		// support a save method
 	}
 
 	@Override
@@ -84,9 +84,8 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 
 	@Override
 	protected PaletteRoot getPaletteRoot() {
-
-		if (getModel() != null && getSystem() != null) {
-			return SystemConfPaletteFactory.createPalette(getSystem());
+		if (getModel() != null && getModel().getAutomationSystem() != null) {
+			return SystemConfPaletteFactory.createPalette(getModel().getAutomationSystem());
 		}
 		return new PaletteRoot();
 	}
@@ -94,6 +93,14 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 	@Override
 	public void doSaveAs() {
 		// empty
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> type) {
+		if (SystemConfiguration.class == type) {
+			return type.cast(getModel());
+		}
+		return super.getAdapter(type);
 	}
 
 }

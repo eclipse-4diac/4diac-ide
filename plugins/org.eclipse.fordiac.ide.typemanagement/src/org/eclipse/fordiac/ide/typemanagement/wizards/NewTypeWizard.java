@@ -22,14 +22,16 @@
 package org.eclipse.fordiac.ide.typemanagement.wizards;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -45,7 +47,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class NewTypeWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	private NewFBTypeWizardPage page1;
-	private PaletteEntry entry;
+	private TypeEntry entry;
 
 	public NewTypeWizard() {
 		setWindowTitle(FordiacMessages.NewType);
@@ -75,7 +77,17 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 			return false;
 		}
 		final IFile targetTypeFile = getTargetFile();
-		entry = new TypeFromTemplateCreator(getTargetFile(), template).createTypeFromTemplate();
+		final String packageName = page1.getPackageName();
+		final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetFile(), template, packageName);
+		try {
+			getContainer().run(false, true, creator::createTypeFromTemplate);
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
+		}
+		entry = creator.getTypeEntry();
 		if (entry != null) {
 			if (page1.getOpenType()) {
 				openTypeEditor(targetTypeFile);
@@ -83,6 +95,11 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 			return true;
 		}
 		return false;
+	}
+
+	public static void openTypeEditor(final IFile file) {
+		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
+		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 
 	private IFile getTargetFile() {
@@ -105,12 +122,7 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		mbx.open();
 	}
 
-	private static void openTypeEditor(final IFile file) {
-		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
-	}
-
-	public PaletteEntry getPaletteEntry() {
+	public TypeEntry getTypeEntry() {
 		return entry;
 	}
 }

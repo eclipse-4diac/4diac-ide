@@ -1,0 +1,48 @@
+/*******************************************************************************
+ * Copyright (c) 2025 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.gef.preferences;
+
+public class GefPreferenceConstants {
+	public static final String GEF_PREFERENCES_ID = "org.eclipse.fordiac.ide.gef"; //$NON-NLS-1$
+
+	/** The Constant CORNER_DIM. */
+	public static final int CORNER_DIM = 6;
+	public static final int CORNER_DIM_HALF = CORNER_DIM / 2;
+
+	public static final String SNAP_TO_GRID = "SnapToGrid"; //$NON-NLS-1$
+
+	public static final String SHOW_GRID = "ShowGrid"; //$NON-NLS-1$
+
+	public static final String SHOW_RULERS = "ShowRulers"; //$NON-NLS-1$
+
+	public static final String PIN_LABEL_STYLE = "PinLabelStyle"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_PIN_NAME = "PinLabelStyle_PinName"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_PIN_COMMENT = "PinLabelStyle_PinComment"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_SRC_PIN_NAME = "PinLabelStyle_SourcePinName"; //$NON-NLS-1$
+
+	public static final String MAX_DEFAULT_VALUE_LENGTH = "MaxDefaultValueLength"; //$NON-NLS-1$
+
+	public static final String CONNECTION_AUTO_LAYOUT = "ConnectionAutoLayout"; //$NON-NLS-1$
+
+	public static final String EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR = "ExpandedInterfaceOldDirectBehaviour"; //$NON-NLS-1$
+	public static final String EXPANDED_INTERFACE_EVENTS_TOP = "ExpandedInterfaceEventsTop"; //$NON-NLS-1$
+
+	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
+	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
+
+	public static final String MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY = "ManageEventConnectionsAutomatically"; //$NON-NLS-1$
+
+	private GefPreferenceConstants() {
+
+	}
+}

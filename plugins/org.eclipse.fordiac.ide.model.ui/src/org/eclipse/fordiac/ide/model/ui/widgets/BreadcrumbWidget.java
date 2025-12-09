@@ -11,12 +11,14 @@
  *   Daniel Lindhuber - initial implementation and/or documentation
  *   Alois Zoitl - extended selection handling so that others can listen to
  *                 selection changes
+ *   Daniel Lindhuber - added path functionality
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.ListenerList;
@@ -27,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -43,6 +46,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 public class BreadcrumbWidget implements ISelectionProvider {
 
+	private static final String SEPARATOR = "/"; //$NON-NLS-1$
 	private AdapterFactoryContentProvider contentProvider;
 	private AdapterFactoryLabelProvider labelProvider;
 
@@ -53,12 +57,14 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	public BreadcrumbWidget(final Composite parent) {
 		toolbar = new ToolBar(parent, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		toolbar.addDisposeListener(e -> {
-			items.forEach(BreadcrumbItem::dispose);
-		});
+		toolbar.addDisposeListener(e -> items.forEach(BreadcrumbItem::dispose));
 	}
 
 	public void setInput(final Object input) {
+		setInput(input, new SelectionChangedEvent(this, new StructuredSelection(input)));
+	}
+
+	public void setInput(final Object input, final SelectionChangedEvent event) {
 		if (!items.isEmpty() && getActiveItem().getModel().equals(input)) {
 			return;
 		}
@@ -71,8 +77,12 @@ public class BreadcrumbWidget implements ISelectionProvider {
 			toolbar.pack();
 		}
 
-		final SelectionChangedEvent changeEvent = new SelectionChangedEvent(this, new StructuredSelection(input));
-		fireSelectionChanged(changeEvent);
+		// when calling setInput with null, no editor input will be provided
+		// sometimes needed when changing the content of the breadcrumb without needing
+		// an editor update
+		if (event != null) {
+			fireSelectionChanged(event);
+		}
 	}
 
 	private void createBreadcrumbItems(final Object input) {
@@ -112,8 +122,6 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		// @formatter:on
 	}
 
-
-
 	ToolBar getToolBar() {
 		return toolbar;
 	}
@@ -122,9 +130,65 @@ public class BreadcrumbWidget implements ISelectionProvider {
 		return items.get(items.size() - 1);
 	}
 
+	public String serializePath() {
+		return items.stream().map(item -> SEPARATOR + item.getText()).collect(Collectors.joining());
+	}
+
+	public boolean openPath(final String path, final AutomationSystem system) {
+		return validateAndOpenPath(path, system);
+	}
+
+	public boolean openPath(final String path, final SubAppType type) {
+		return validateAndOpenPath(path, type);
+	}
+
+	public boolean validateAndOpenPath(final String path, final INamedElement parent) {
+		if (path.isBlank()) {
+			return false;
+		}
+
+		final String[] tokens = path.substring(1).split(SEPARATOR); // remove first "/" and split
+
+		if (tokens.length == 0) {
+			return false;
+		}
+
+		if (parent.getName().equals(tokens[0])) {
+			if (tokens.length == 1) {
+				setInput(parent); // the system or type itself
+				return true;
+			}
+			Object current = parent;
+			for (int i = 1; i < tokens.length; i++) {
+				final Object child = getMatchingPathChild(current, tokens[i]);
+				if (child == null) {
+					return false;
+				}
+				if (i == tokens.length - 1) {
+					if (getActiveItem().getModel() != child) {
+						setInput(child); // last token, therefore we are at our destination
+					}
+					return true;
+				}
+				current = child;
+			}
+		}
+		return false;
+	}
+
+	private Object getMatchingPathChild(final Object current, final String token) {
+		final Object[] children = contentProvider.getChildren(current);
+		for (final Object child : children) {
+			if (labelProvider.getText(child).equals(token)) {
+				return child;
+			}
+		}
+		return null;
+	}
+
 	// recursive function for collecting parent objects
 	private void createItems(final Object input, final ArrayList<Object> parentObjects) {
-		if (input == null) {
+		if (input == null || (input instanceof org.eclipse.emf.ecore.resource.Resource)) {
 			return;
 		}
 
@@ -161,8 +225,8 @@ public class BreadcrumbWidget implements ISelectionProvider {
 
 	@Override
 	public void setSelection(final ISelection selection) {
-		if (!selection.isEmpty() && selection instanceof StructuredSelection) {
-			setInput(((StructuredSelection) selection).getFirstElement());
+		if (!selection.isEmpty() && selection instanceof final StructuredSelection structSel) {
+			setInput(structSel.getFirstElement());
 		}
 	}
 

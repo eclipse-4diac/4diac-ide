@@ -1,0 +1,338 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Hesam Rezaee
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+
+package org.eclipse.fordiac.ide.globalconstantseditor.ui;
+
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocument;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.document.GlobalConstantsDocumentPartitioner;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.outline.GlobalConstantsOutlinePage;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsLinkedPositionGroupCalculator;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsPartialSerializer;
+import org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsRenameStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreCleanupEditorCallback;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCorePrefixMatcher;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposalProvider.STCoreReferenceProposalCreator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentPartitioner;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.STCoreDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreXtextEditor;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.formatting.STCoreWhitespaceInformationProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.preferences.STCoreSubLanguagePreferenceStoreAccess;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuickAssistProcessor;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeConverter;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreChangeSerializer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRecordingXtextResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreReferenceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRegionDiffFormatter;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedEmfResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedResourcesProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRelatedXtextResourceUpdater;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameElementProcessor;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameNameValidator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreResourceLifecycleManager;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSimpleNameProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreSyncUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceForIEditorInputFactory;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.resource.STCoreResourceUIServiceProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreCustomValidatorConfigurationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerCreator;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreMarkerTypeProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.validation.STCoreResourceUIValidatorExtension;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
+import org.eclipse.xtext.formatting.IWhitespaceInformationProvider;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.refactoring.IRenameNameValidator;
+import org.eclipse.xtext.ide.refactoring.IRenameStrategy2;
+import org.eclipse.xtext.ide.serializer.IChangeSerializer;
+import org.eclipse.xtext.ide.serializer.impl.PartialSerializer;
+import org.eclipse.xtext.ide.serializer.impl.RecordingXtextResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.ReferenceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RegionDiffFormatter;
+import org.eclipse.xtext.ide.serializer.impl.RelatedEmfResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.RelatedResourcesProvider;
+import org.eclipse.xtext.ide.serializer.impl.RelatedXtextResourceUpdater;
+import org.eclipse.xtext.ide.serializer.impl.ResourceLifecycleManager;
+import org.eclipse.xtext.resource.containers.IAllContainersState;
+import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
+import org.eclipse.xtext.ui.editor.XtextEditor;
+import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider.ReferenceProposalCreator;
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
+import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
+import org.eclipse.xtext.ui.editor.contentassist.XtextContentAssistProcessor;
+import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
+import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
+import org.eclipse.xtext.ui.editor.model.IResourceForEditorInputFactory;
+import org.eclipse.xtext.ui.editor.model.XtextDocument;
+import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
+import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer;
+import org.eclipse.xtext.ui.editor.outline.actions.IOutlineContribution;
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
+import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
+import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor;
+import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
+import org.eclipse.xtext.ui.refactoring.ILinkedPositionGroupCalculator;
+import org.eclipse.xtext.ui.refactoring.impl.AbstractRenameProcessor;
+import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
+import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
+import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
+import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
+import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.ui.validation.AbstractValidatorConfigurationBlock;
+import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
+import org.eclipse.xtext.ui.validation.MarkerTypeProvider;
+
+import com.google.inject.Binder;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
+
+/** Use this class to register components to be used within the Eclipse IDE. */
+@SuppressWarnings({ "restriction", "static-method" })
+public class GlobalConstantsUiModule extends AbstractGlobalConstantsUiModule {
+
+	public GlobalConstantsUiModule(final AbstractUIPlugin plugin) {
+		super(plugin);
+	}
+
+	@Override
+	public Provider<? extends IAllContainersState> provideIAllContainersState() {
+		return Access.getWorkspaceProjectsState();
+	}
+
+	public Class<? extends XtextDocument> bindXtextDocument() {
+		return GlobalConstantsDocument.class;
+	}
+
+	public Class<? extends XtextDocumentProvider> bindXtextDocumentProvider() {
+		return STCoreDocumentProvider.class;
+	}
+
+	public Class<? extends STCoreDocumentPartitioner> bindSTCoreDocumentPartitioner() {
+		return GlobalConstantsDocumentPartitioner.class;
+	}
+
+	public void configureSTCoreCleanupEditorCallback(final Binder binder) {
+		binder.bind(IXtextEditorCallback.class).annotatedWith(Names.named("STCoreCleanupEditorCallback")) //$NON-NLS-1$
+				.to(STCoreCleanupEditorCallback.class);
+	}
+
+	@Override
+	public Class<? extends IResourceForEditorInputFactory> bindIResourceForEditorInputFactory() {
+		return STCoreResourceForIEditorInputFactory.class;
+	}
+
+	public Class<? extends XtextDocumentReconcileStrategy> bindXtextDocumentReconcileStrategy() {
+		return STCoreDocumentReconcileStrategy.class;
+	}
+
+	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		return STCoreHoverProvider.class;
+	}
+
+	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
+		return STCoreHoverDocumentationProvider.class;
+	}
+
+	public void configureIEObjectDocumentationProvider(final Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.START_TAG)).to("[/(]\\*\\*?"); //$NON-NLS-1$
+		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.END_TAG)).to("\\*[/)]"); //$NON-NLS-1$
+	}
+
+	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
+		return STCoreRefactoringDocumentProvider.class;
+	}
+
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return STCoreHighlightingConfiguration.class;
+	}
+
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return STCoreSemanticHighlightingCalculator.class;
+	}
+
+	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
+		return STCoreAntlrTokenToAttributeIdMapper.class;
+	}
+
+	public Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {
+		return CaseInsensitiveSimilarityMatcher.class;
+	}
+
+	public Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
+		return STCoreOccurrenceComputer.class;
+	}
+
+	public Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
+		return STCoreContentProposalPriorities.class;
+	}
+
+	public Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
+		return STCoreQuickAssistProcessor.class;
+	}
+
+	public Class<? extends XtextEditor> bindXtextEditor() {
+		return STCoreXtextEditor.class;
+	}
+
+	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
+		return STCoreSourceViewerFactory.class;
+	}
+
+	public void configureKeyBindingScope(final Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
+				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
+	}
+
+	public void configureContentAssist(final Binder binder) {
+		binder.bind(String.class)
+				.annotatedWith(com.google.inject.name.Names
+						.named(XtextContentAssistProcessor.COMPLETION_AUTO_ACTIVATION_CHARS))
+				.toProvider(STCoreContentAssistPreferences.CompletionAutoActivationCharsProvider.class);
+	}
+
+	public Class<? extends ReferenceProposalCreator> bindAbstractJavaBasedContentProposalProvider$ReferenceProposalCreator() {
+		return STCoreReferenceProposalCreator.class;
+	}
+
+	@Override
+	public Class<? extends PrefixMatcher> bindPrefixMatcher() {
+		return STCorePrefixMatcher.class;
+	}
+
+	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+		return STCoreResourceUIServiceProvider.class;
+	}
+
+	public Class<? extends MarkerCreator> bindMarkerCreator() {
+		return STCoreMarkerCreator.class;
+	}
+
+	@Override
+	public Class<? extends MarkerTypeProvider> bindMarkerTypeProvider() {
+		return STCoreMarkerTypeProvider.class;
+	}
+
+	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {
+		return STCoreResourceUIValidatorExtension.class;
+	}
+
+	@Override
+	public Class<? extends AbstractRenameProcessor> bindAbstractRenameProcessor() {
+		return STCoreRenameElementProcessor.class;
+	}
+
+	@Override
+	public Class<? extends ILinkedPositionGroupCalculator> bindILinkedPositionGroupCalculator() {
+		return GlobalConstantsLinkedPositionGroupCalculator.class;
+	}
+
+	public Class<? extends ISimpleNameProvider> bindISimpleNameProvider() {
+		return STCoreSimpleNameProvider.class;
+	}
+
+	@Override
+	public Class<? extends IRenameStrategy2> bindIRenameStrategy2() {
+		return GlobalConstantsRenameStrategy.class;
+	}
+
+	public Class<? extends IRenameNameValidator> bindIRenameNameValidator() {
+		return STCoreRenameNameValidator.class;
+	}
+
+	public Class<? extends IChangeSerializer> bindIChangeSerializer() {
+		return STCoreChangeSerializer.class;
+	}
+
+	public Class<? extends ChangeConverter.Factory> bindChangeConverter$Factory() {
+		return STCoreChangeConverter.Factory.class;
+	}
+
+	public Class<? extends RecordingXtextResourceUpdater> bindRecordingXtextResourceUpdater() {
+		return STCoreRecordingXtextResourceUpdater.class;
+	}
+
+	public Class<? extends RelatedXtextResourceUpdater> bindRelatedXtextResourceUpdater() {
+		return STCoreRelatedXtextResourceUpdater.class;
+	}
+
+	public Class<? extends RelatedEmfResourceUpdater> bindRelatedEmfResourceUpdater() {
+		return STCoreRelatedEmfResourceUpdater.class;
+	}
+
+	public Class<? extends ReferenceUpdater> bindReferenceUpdater() {
+		return STCoreReferenceUpdater.class;
+	}
+
+	public Class<? extends SyncUtil> bindSyncUtil() {
+		return STCoreSyncUtil.class;
+	}
+
+	public Class<? extends ResourceLifecycleManager> bindResourceLifecycleManager() {
+		return STCoreResourceLifecycleManager.class;
+	}
+
+	public Class<? extends RelatedResourcesProvider> bindRelatedResourcesProvider() {
+		return STCoreRelatedResourcesProvider.class;
+	}
+
+	public Class<? extends PartialSerializer> bindPartialSerializer() {
+		return GlobalConstantsPartialSerializer.class;
+	}
+
+	@Override
+	public Class<? extends IWhitespaceInformationProvider> bindIWhitespaceInformationProvider() {
+		return STCoreWhitespaceInformationProvider.class;
+	}
+
+	public Class<? extends RegionDiffFormatter> bindRegionDiffFormatter() {
+		return STCoreRegionDiffFormatter.class;
+	}
+
+	@Override
+	public Class<? extends IContentOutlinePage> bindIContentOutlinePage() {
+		return GlobalConstantsOutlinePage.class;
+	}
+
+	public void configureOutlineTreeContribution(final Binder binder) {
+		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("OutlineTreeContribution")) //$NON-NLS-1$
+				.to(OutlineTreeContribution.class);
+	}
+
+	@Override
+	public Class<? extends AbstractValidatorConfigurationBlock> bindAbstractValidatorConfigurationBlock() {
+		return STCoreCustomValidatorConfigurationBlock.class;
+	}
+
+	public Class<? extends IPreferenceStoreAccess> bindIPreferenceStoreAccess() {
+		return STCoreSubLanguagePreferenceStoreAccess.class;
+	}
+}

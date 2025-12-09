@@ -15,6 +15,8 @@
 package org.eclipse.fordiac.ide.test.export;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -28,9 +30,14 @@ public class ExporterTestBasicFBTypeBase extends ExporterTestBase<BasicFBType> {
 		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		functionBlock.setName(BASICFUNCTIONBLOCK_NAME);
 
-		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
+		final ECC ecc = LibraryElementFactory.eINSTANCE.createECC();
+		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
+		state.setName("INIT"); //$NON-NLS-1$
+		ecc.getECState().add(state);
+		ecc.setStart(state);
+		functionBlock.setECC(ecc);
 
-		functionBlock.setPaletteEntry(preparePaletteWithTypeLib());
+		functionBlock.setTypeEntry(prepareTypeEntryWithTypeLib());
 	}
 
 }

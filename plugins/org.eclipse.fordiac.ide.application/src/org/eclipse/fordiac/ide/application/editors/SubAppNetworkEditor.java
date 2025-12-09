@@ -17,7 +17,9 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -34,9 +36,9 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			final int type = notification.getEventType();
 			final int featureId = notification.getFeatureID(Application.class);
 
-			if ((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY == featureId)
-					&& (getSubApp().isTyped())) {
-				// undo of detached from the subapp type
+			if (((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == featureId) && (getSubApp().isTyped()))
+					|| isSubAppToggledToExpanded(notification)) {
+				// undo of detached from the subapp type or because of subapp beeing expanded
 				closeEditor();
 			} else {
 				if ((Notification.SET == type) && (LibraryElementPackage.SUB_APP__NAME == featureId)) {
@@ -44,6 +46,12 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 				}
 				firePropertyChange(PROP_DIRTY);
 			}
+		}
+
+		private boolean isSubAppToggledToExpanded(final Notification msg) {
+			return msg.getOldValue() == null && msg.getNewValue() instanceof final Attribute att
+					&& att.getAttributeDeclaration() == InternalAttributeDeclarations.UNFOLDED
+					&& "true".equals(att.getValue()); //$NON-NLS-1$
 		}
 	};
 
@@ -64,10 +72,14 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		if (input instanceof SubApplicationEditorInput) {
-			final SubApplicationEditorInput subAppInput = (SubApplicationEditorInput) input;
-			setModel(subAppInput.getSubApp().getSubAppNetwork());
+	public void setInput(final IEditorInput input) {
+		if (!(input instanceof final SubApplicationEditorInput subAppEI)) {
+			throw new IllegalArgumentException(
+					"SuppApp editors only accept SubApplicationEditorInput as valid inputs!"); //$NON-NLS-1$
+		}
+		if (getEditorInput() == null) {
+			// initial editor setup
+			setModel(subAppEI.getSubApp().getSubAppNetwork());
 			// register Adapter to be informed on changes of the subapplication name
 			getSubApp().eAdapters().add(adapter);
 			final EObject container = getSubApp().eContainer();
@@ -76,7 +88,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 				container.eAdapters().add(fbNetworkAdapter);
 			}
 		}
-		super.setModel(input);
+		super.setInput(input);
 	}
 
 	@Override
@@ -89,9 +101,9 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (FBNetworkElement.class == adapter) {
-			return getSubApp();
+			return adapter.cast(getSubApp());
 		}
 		return super.getAdapter(adapter);
 	}

@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2013, 2015 - 2017 Profactor GbmH, fortiss GmbH, 
+ * Copyright (c) 2008, 2009, 2013, 2015 - 2017 Profactor GbmH, fortiss GmbH,
  * 				 2018 - 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,9 +9,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -28,7 +27,7 @@ import org.eclipse.ui.IEditorPart;
 
 public class ResourceDeleteCommand extends Command {
 	private Device device;
-	private Resource resource;
+	private final Resource resource;
 	private CompoundCommand commands;
 
 	public ResourceDeleteCommand(final Resource resource) {
@@ -45,7 +44,7 @@ public class ResourceDeleteCommand extends Command {
 		closeResourceEditor(); // we need to do this before any model changes so that the editor closes cleanly
 		device = resource.getDevice();
 		commands = new CompoundCommand();
-		for (FBNetworkElement element : resource.getFBNetwork().getNetworkElements()) {
+		for (final FBNetworkElement element : resource.getFBNetwork().getNetworkElements()) {
 			Command cmd = null;
 			if (element.isMapped()) {
 				cmd = new UnmapCommand(element);
@@ -54,13 +53,16 @@ public class ResourceDeleteCommand extends Command {
 				commands.add(cmd);
 			}
 		}
-		redo();
+		commands.execute();
+		if (device != null) {
+			device.getResource().remove(resource);
+		}
 	}
 
 	private void closeResourceEditor() {
 		EditorUtils
-				.closeEditorsFiltered((IEditorPart editorPart) -> (editorPart instanceof DiagramEditorWithFlyoutPalette)
-						&& (resource.getFBNetwork().equals(((DiagramEditorWithFlyoutPalette) editorPart).getModel())));
+		.closeEditorsFiltered((final IEditorPart editorPart) -> (editorPart instanceof DiagramEditorWithFlyoutPalette)
+				&& (resource.getFBNetwork().equals(((DiagramEditorWithFlyoutPalette) editorPart).getModel())));
 	}
 
 	@Override
@@ -69,15 +71,13 @@ public class ResourceDeleteCommand extends Command {
 			device.getResource().add(resource);
 		}
 		commands.undo();
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
 	public void redo() {
-		commands.execute();
+		commands.redo();
 		if (device != null) {
 			device.getResource().remove(resource);
 		}
-		SystemManager.INSTANCE.notifyListeners();
 	}
 }

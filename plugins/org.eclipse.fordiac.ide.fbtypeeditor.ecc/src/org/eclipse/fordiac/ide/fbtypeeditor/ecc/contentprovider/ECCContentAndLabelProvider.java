@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2013, 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,28 +10,25 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     - expanded for input events
- *   Virendra Ashiwal, Bianca Wiesmayr
- *   	- expanded for Transitions
+ *   Bianca Wiesmayr - expanded for input events
+ *   Virendra Ashiwal, Bianca Wiesmayr - expanded for Transitions
+ *   Alois Zoitl - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
@@ -50,41 +46,41 @@ public final class ECCContentAndLabelProvider {
 		final List<Event> events = new ArrayList<>();
 		if (null != type) {
 			events.addAll(type.getInterfaceList().getEventOutputs());
-			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
-			.forEach(socket -> events.addAll(
-					createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
-			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType())).forEach(plug -> events
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventOutputs(), plug)));
+			type.getInterfaceList().getSockets().stream()
+					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventInputs()));
+			type.getInterfaceList().getPlugs().stream()
+					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventInputs()));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
 
 		return events;
 	}
 
+	public static boolean isOneConditionExpression(final ECTransition transition) {
+		return transition.getConditionExpression() != null && transition.getConditionExpression().equals(ONE_CONDITION);
+	}
+
 	public static List<String> getOutputEventNames(final BasicFBType type) {
-		final List<String> eventNames = getOutputEvents(type).stream().map(Event::getName).collect(Collectors.toList());
+		final List<String> eventNames = new ArrayList<>(getEventNames(getOutputEvents(type)));
 		eventNames.add(EMPTY_FIELD);
 		return eventNames;
 	}
 
 	public static List<Event> getInputEvents(final BasicFBType type) {
-		final List<Event> transitionConditions = new ArrayList<>();
+		final List<Event> events = new ArrayList<>();
 		if (null != type) {
-			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
-			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
-			.forEach(socket -> transitionConditions.addAll(
-					createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
-			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType()))
-			.forEach(plug -> transitionConditions
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
-			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
+			events.addAll(type.getInterfaceList().getEventInputs());
+			type.getInterfaceList().getSockets().stream()
+					.forEach(socket -> events.addAll(socket.getAdapterFB().getInterface().getEventOutputs()));
+			type.getInterfaceList().getPlugs().stream()
+					.forEach(plug -> events.addAll(plug.getAdapterFB().getInterface().getEventOutputs()));
+			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
-		return transitionConditions;
+		return events;
 	}
 
 	public static List<String> getInputEventNames(final BasicFBType type) {
-		final List<String> inputEventNames = getInputEvents(type).stream().map(Event::getName)
-				.collect(Collectors.toList());
+		final List<String> inputEventNames = new ArrayList<>(getEventNames(getInputEvents(type)));
 		inputEventNames.add(EMPTY_FIELD);
 		return inputEventNames;
 	}
@@ -96,31 +92,14 @@ public final class ECCContentAndLabelProvider {
 		return transitionConditionEvents;
 	}
 
-	// TODO move to a utility class as same function is used in
-	// ECTransitionEditPart
-	public static List<Event> createAdapterEventList(final EList<Event> events, final AdapterDeclaration adapter) {
-		final List<Event> adapterEvents = new ArrayList<>();
-
-		for (final Event event : events) {
-			final AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
-			ae.setName(event.getName());
-			ae.setComment(event.getComment());
-			ae.setAdapterDeclaration(adapter);
-			adapterEvents.add(ae);
-		}
-		return adapterEvents;
-	}
-
-	public static List<Algorithm> getAlgorithms(final BasicFBType type) {
-		final List<Algorithm> algorithms = new ArrayList<>();
-		algorithms.addAll(type.getAlgorithm());
-
+	public static List<Algorithm> getAlgorithms(final BaseFBType type) {
+		final List<Algorithm> algorithms = new ArrayList<>(type.getAlgorithm());
 		Collections.sort(algorithms, NamedElementComparator.INSTANCE);
 		return algorithms;
 	}
 
 	public static List<String> getAlgorithmNames(final BasicFBType type) {
-		final List<String> algNames = getAlgorithms(type).stream().map(Algorithm::getName).collect(Collectors.toList());
+		final List<String> algNames = new ArrayList<>(getAlgorithms(type).stream().map(Algorithm::getName).toList());
 		algNames.add(EMPTY_FIELD);
 		return algNames;
 	}
@@ -137,7 +116,18 @@ public final class ECCContentAndLabelProvider {
 	}
 
 	public static List<String> getStateNames(final BasicFBType type) {
-		return getStates(type).stream().map(ECState::getName).collect(Collectors.toList());
+		return getStates(type).stream().map(ECState::getName).toList();
+	}
+
+	private static List<String> getEventNames(final List<Event> eventList) {
+		return eventList.stream().map(ECCContentAndLabelProvider::getEventName).toList();
+	}
+
+	public static String getEventName(final Event event) {
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 
 	private ECCContentAndLabelProvider() {

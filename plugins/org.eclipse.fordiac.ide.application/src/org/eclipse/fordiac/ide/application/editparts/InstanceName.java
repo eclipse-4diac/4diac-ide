@@ -18,7 +18,7 @@ public class InstanceName {
 
 	private final FBNetworkElement refElement;
 
-	public InstanceName(FBNetworkElement refElement) {
+	public InstanceName(final FBNetworkElement refElement) {
 		this.refElement = refElement;
 	}
 

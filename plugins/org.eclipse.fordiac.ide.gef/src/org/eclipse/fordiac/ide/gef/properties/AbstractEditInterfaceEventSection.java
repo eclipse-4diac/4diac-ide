@@ -16,40 +16,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.InterfaceElementColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.nat.EventTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.EventTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
 
-	@Override
-	protected IContentProvider getOutputsContentProvider() {
-		return new EventInterfaceContentProvider(false);
-	}
-
-	@Override
-	protected IContentProvider getInputsContentProvider() {
-		return new EventInterfaceContentProvider(true);
-	}
-
-	@Override
-	protected String[] fillTypeCombo() {
-		final List<String> list = new ArrayList<>();
-		for (final DataType dataType : EventTypeLibrary.getInstance().getEventTypes()) {
-			list.add(dataType.getName());
-		}
-		return list.toArray(new String[0]);
-	}
-
-	protected DataType getLastUsedEventType(final InterfaceList interfaceList, final boolean isInput,
+	protected static DataType getLastUsedEventType(final InterfaceList interfaceList, final boolean isInput,
 			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();
@@ -58,14 +49,13 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (!eventList.isEmpty()) {
 			return eventList.get(eventList.size() - 1).getType();
 		}
-		return EventTypeLibrary.getInstance().getType(fillTypeCombo()[0]);
+		return EventTypeLibrary.getInstance().getType(null);
 	}
 
 	@Override
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement, final boolean isInput) {
 		if (null != interfaceElement) {
-			final InterfaceList interfaceList = (InterfaceList) interfaceElement.eContainer();
-			return getInsertingIndex(interfaceElement, getEventList(interfaceList, isInput));
+			return getInsertingIndex(interfaceElement, getEventList(interfaceElement.getInterfaceList(), isInput));
 		}
 		return -1;
 	}
@@ -75,33 +65,66 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if (entry instanceof Event) {
-			cmd.add(newInsertCommand((Event) entry, isInputsViewer(), index));
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
+		if (entry instanceof final Event entry2) {
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 
-	protected static class EventInterfaceContentProvider extends InterfaceContentProvider {
-		public EventInterfaceContentProvider(final boolean inputs) {
-			super(inputs);
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof final Event event) {
+			cmd.add(newDeleteCommand(event));
 		}
+	}
 
-		@Override
-		protected Object[] getInputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getEventInputs().toArray();
+	@Override
+	public void setupOutputTable(final Group outputsGroup) {
+		outputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public Command createCommand(final Event rowObject, final TypedElementTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
-			return new Object[0];
-		}
+		});
+		final DataLayer outputDataLayer = new DataLayer(outputProvider);
+		outputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(outputProvider, this::getAnnotationModel));
+		outputTable = NatTableWidgetFactory.createRowNatTable(
+				outputsGroup, outputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						EventTypeSelectionContentProvider.INSTANCE, EventTypeSelectionTreeContentProvider.INSTANCE),
+				this, false);
+	}
 
-		@Override
-		protected Object[] getOutputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getEventOutputs().toArray();
+	@Override
+	public void setupInputTable(final Group inputsGroup) {
+		inputProvider = new ChangeableListDataProvider<>(new InterfaceElementColumnAccessor<>(this) {
+			@Override
+			public Command createCommand(final Event rowObject, final TypedElementTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
 			}
-			return new Object[0];
-		}
+		});
+		final DataLayer inputDataLayer = new DataLayer(inputProvider);
+		inputDataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(inputProvider, this::getAnnotationModel));
+		inputTable = NatTableWidgetFactory.createRowNatTable(
+				inputsGroup, inputDataLayer, new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS),
+				getSectionEditableRule(), new TypeSelectionButton(this::getTypeLibrary,
+						EventTypeSelectionContentProvider.INSTANCE, EventTypeSelectionTreeContentProvider.INSTANCE),
+				this, true);
+	}
+
+	@Override
+	public void setTableInput(final InterfaceList il) {
+		inputProvider.setInput(il.getEventInputs());
+		outputProvider.setInput(il.getEventOutputs());
 	}
 }

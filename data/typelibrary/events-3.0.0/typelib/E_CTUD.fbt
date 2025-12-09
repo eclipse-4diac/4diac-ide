@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTUD" Comment="Event-Driven Up-Down Counter">
+	<Identification Standard="61499-1-A.x" Classification="Event-driven blocks" Function="Up-Down-counter" Description="Copyright (c) 2017 fortiss GmbH&#10;&#9;&#9;&#9;     2019 Johannes Keppler University Linz&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.0" Author="Franz Höpfinger" Date="2025-04-14" Remarks=" Made Version 3.0.0 inspired by Work from Patrick Aigner">
+	</VersionInfo>
+	<VersionInfo Organization="JKU" Version="1.1" Author="Alois Zoitl" Date="2019-07-09" Remarks="fixed bug in down counting">
+	</VersionInfo>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CU" Type="Event" Comment="Count Up">
+				<With Var="PV"/>
+			</Event>
+			<Event Name="CD" Type="Event" Comment="Count Down">
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
+			<Event Name="LD" Type="Event" Comment="Load">
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CO" Type="Event" Comment="Count Output Event">
+				<With Var="QU"/>
+				<With Var="CV"/>
+				<With Var="QD"/>
+			</Event>
+			<Event Name="RO" Type="Event" Comment="Reset Output Event">
+				<With Var="QU"/>
+				<With Var="CV"/>
+				<With Var="QD"/>
+			</Event>
+			<Event Name="LDO" Type="Event">
+				<With Var="QU"/>
+				<With Var="QD"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Preset Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QU" Type="BOOL" Comment="CV &gt;=PV"/>
+			<VarDeclaration Name="QD" Type="BOOL" Comment="CV &lt;= 0"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Counter Value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" x="1330" y="950">
+			</ECState>
+			<ECState Name="CU" x="190" y="570">
+				<ECAction Algorithm="CountUp"/>
+				<ECAction Algorithm="UpdateQUQD" Output="CO"/>
+			</ECState>
+			<ECState Name="R" x="190" y="1330">
+				<ECAction Algorithm="Reset"/>
+				<ECAction Algorithm="UpdateQUQD" Output="RO"/>
+			</ECState>
+			<ECState Name="CD" x="1710" y="570">
+				<ECAction Algorithm="CountDown"/>
+				<ECAction Algorithm="UpdateQUQD" Output="CO"/>
+			</ECState>
+			<ECState Name="LD" x="1805" y="1330">
+				<ECAction Algorithm="Load"/>
+				<ECAction Algorithm="UpdateQUQD" Output="LDO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CU[(CV&lt;65535)]" Comment="" x="145" y="1100"/>
+			<ECTransition Source="CU" Destination="START" Condition="1" Comment="" x="495" y="935"/>
+			<ECTransition Source="START" Destination="R" Condition="R" Comment="" x="710" y="1125"/>
+			<ECTransition Source="R" Destination="START" Condition="1" Comment="" x="745" y="1240"/>
+			<ECTransition Source="START" Destination="CD" Condition="CD[(CV &gt; 0)]" Comment="" x="1460" y="705"/>
+			<ECTransition Source="CD" Destination="START" Condition="1" Comment="" x="1780" y="925"/>
+			<ECTransition Source="START" Destination="LD" Condition="LD" Comment="" x="1825" y="1145"/>
+			<ECTransition Source="LD" Destination="START" Condition="1" Comment="" x="1515" y="1275"/>
+		</ECC>
+		<Algorithm Name="CountUp" Comment="Count Up">
+			<ST><![CDATA[CV := CV + 1;
+
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="Reset" Comment="Reset">
+			<ST><![CDATA[CV := 0;
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="Load" Comment="ALG">
+			<ST><![CDATA[CV := PV;]]></ST>
+		</Algorithm>
+		<Algorithm Name="UpdateQUQD" Comment="ALG">
+			<ST><![CDATA[QU := (CV>= PV);
+QD := (CV = 0);]]></ST>
+		</Algorithm>
+		<Algorithm Name="CountDown" Comment="ALG">
+			<ST><![CDATA[CV := CV - 1;]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

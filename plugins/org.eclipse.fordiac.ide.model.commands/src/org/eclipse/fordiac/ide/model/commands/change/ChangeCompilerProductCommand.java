@@ -14,22 +14,17 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class ChangeCompilerProductCommand.
  */
-public class ChangeCompilerProductCommand extends Command {
-
-	/** The new Compiler value. */
-	private final Compiler compiler;
+public class ChangeCompilerProductCommand extends AbstractChangeCompilerCommand {
 
 	private final String newProduct;
 	private String oldProduct;
 
 	public ChangeCompilerProductCommand(final Compiler compiler, final String newProduct) {
-		super();
-		this.compiler = compiler;
+		super(compiler);
 		this.newProduct = (null == newProduct) ? "" : newProduct; //$NON-NLS-1$
 	}
 
@@ -40,7 +35,7 @@ public class ChangeCompilerProductCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldProduct = compiler.getProduct();
+		oldProduct = getCompiler().getProduct();
 		redo();
 	}
 
@@ -51,7 +46,7 @@ public class ChangeCompilerProductCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		compiler.setProduct(oldProduct);
+		getCompiler().setProduct(oldProduct);
 	}
 
 	/*
@@ -61,7 +56,6 @@ public class ChangeCompilerProductCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		compiler.setProduct(newProduct);
+		getCompiler().setProduct(newProduct);
 	}
-
 }

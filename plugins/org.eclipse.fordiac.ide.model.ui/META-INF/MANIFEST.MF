@@ -3,19 +3,23 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model UI
 Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.ui;singleton:=true
-Bundle-Version: 2.0.1.qualifier
-Bundle-Activator: org.eclipse.fordiac.ide.model.ui.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-Version: 3.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.core.runtime,
- org.eclipse.fordiac.ide.ui,
  org.eclipse.gef,
+ org.eclipse.ui.editors,
  org.eclipse.ui.views.properties.tabbed,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.fordiac.ide.model.commands
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
-Export-Package: org.eclipse.fordiac.ide.model.ui.actions,
+Export-Package: org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.model.ui.actions,
  org.eclipse.fordiac.ide.model.ui.editors,
  org.eclipse.fordiac.ide.model.ui.listeners,
+ org.eclipse.fordiac.ide.model.ui.nat,
+ org.eclipse.fordiac.ide.model.ui.preferences,
  org.eclipse.fordiac.ide.model.ui.widgets

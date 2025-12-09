@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,80 +13,81 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.helpers.BlockInstanceFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
-	private FBTypePaletteEntry paletteEntry;
+	private FBTypeEntry typeEntry;
 
-	public FBCreateCommand(final FBTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, final int x, final int y) {
-		super(fbNetwork, createNewFb(paletteEntry), x, y);
-		this.paletteEntry = paletteEntry;
+	public FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final Position pos) {
+		super(fbNetwork, createNewFb(typeEntry), pos);
+		this.typeEntry = typeEntry;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
-		getFB().setPaletteEntry(paletteEntry);
+		getFB().setTypeEntry(typeEntry);
 	}
 
-	private static FB createNewFb(final FBTypePaletteEntry paletteEntry) {
-		if (paletteEntry.getFBType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
-			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (paletteEntry.getFBType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
-			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (paletteEntry.getType() instanceof CompositeFBType) {
-			return LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else {
-			return LibraryElementFactory.eINSTANCE.createFB();
-		}
+	public FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final int x, final int y) {
+		super(fbNetwork, createNewFb(typeEntry), x, y);
+		this.typeEntry = typeEntry;
+		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
+		getFB().setTypeEntry(typeEntry);
+	}
+
+	private static FB createNewFb(final FBTypeEntry typeEntry) {
+		return BlockInstanceFactory.createFBInstanceForTypeEntry(typeEntry);
 	}
 
 	// constructor to reuse this command for adapter creation
-	protected FBCreateCommand(final FBNetwork fbNetwork, final FBNetworkElement adapter, final int x, final int y) {
+	protected FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final FBNetworkElement adapter,
+			final int x, final int y) {
 		super(fbNetwork, adapter, x, y);
-		this.paletteEntry = null;
+		this.typeEntry = typeEntry;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
-		getFB().setPaletteEntry(paletteEntry);
+		getFB().setTypeEntry(typeEntry);
 	}
 
 	public FB getFB() {
 		return (FB) getElement();
 	}
 
-	public FBTypePaletteEntry getPaletteEntry() {
-		return paletteEntry;
+	public FBTypeEntry getTypeEntry() {
+		return typeEntry;
 	}
 
-	public void setPaletteEntry(final FBTypePaletteEntry paletteEntry) {
-		this.paletteEntry = paletteEntry;
+	public void setTypeEntry(final FBTypeEntry typeEntry) {
+		this.typeEntry = typeEntry;
 	}
 
 	@Override
 	public void execute() {
 		super.execute();
-		if (getFB() instanceof Multiplexer) {
-			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getFBType().getInterfaceList().getOutputVars().get(0).getType());
-		} else if (getFB() instanceof Demultiplexer) {
-			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getFBType().getInterfaceList().getInputVars().get(0).getType());
+		if (getFB() instanceof final ConfigurableFB fb) {
+			fb.updateConfiguration();
 		}
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (paletteEntry != null) && super.canExecute();
+		return (typeEntry != null) && super.canExecute();
 	}
 
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
-		return paletteEntry.getFBType().getInterfaceList();
+	protected InterfaceList createInterfaceList() {
+		InterfaceList interfaceList = typeEntry.getInterface();
+		if (interfaceList == null) {
+			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		} else {
+			interfaceList = interfaceList.copy();
+		}
+		return interfaceList;
 	}
 
 }

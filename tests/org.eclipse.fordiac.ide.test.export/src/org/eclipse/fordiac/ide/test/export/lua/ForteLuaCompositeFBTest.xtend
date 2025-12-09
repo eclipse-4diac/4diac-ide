@@ -70,11 +70,14 @@ class ForteLuaCompositeFBTest extends ExporterTestCompositeFBTypeBase {
 			  },
 			  fannedOutDataConnections = {
 			  },
+			  adapterConnections = {
+			  },
 			  numFBs = 0,
 			  numECons = 1,
 			  numFECons = 0,
 			  numDCons = 1,
 			  numFDCons = 0,
+			  numAdpCons = 0,
 			  numParams = 0
 			}
 			

@@ -1,236 +1,190 @@
-/*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *               2020 Johannes Kepler University Linz
- *
+/**********************************************************************************
+ * Copyright (c) 2019, 2025 fortiss GmbH, Johannes Kepler University Linz, 
+ *                          Martin Erich Jobst, Primetals Technologies Austria GmbH
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - fixed adapter and fb number generation in connection lists
- *******************************************************************************/
+ *                - added adapter connection generation 
+ *   Martin Melik Merkumians - add code for export CFB internal VarInOut usage
+ ********************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.composite
 
 import java.nio.file.Path
-import java.util.ArrayList
-import java.util.HashSet
+import java.util.List
+import java.util.Map
+import java.util.Set
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class CompositeFBImplTemplate extends ForteFBTemplate {
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-	@Accessors(PROTECTED_GETTER) CompositeFBType type
+class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
-	var fbs = new ArrayList<FBNetworkElement>
-	var numCompFBParams = 0;
-	var eConnNumber = 0
-	var fannedOutEventConns = 0
-	var dataConnNumber = 0
-	var fannedOutDataConns = 0
+	final List<FB> fbs
+	final Map<VarDeclaration, ILanguageSupport> fbNetworkInitialVariableLanguageSupport
 
-	new(CompositeFBType type, String name, Path prefix) {
-		super(name, prefix, "CCompositeFB")
-		this.type = type
-		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterFBType)])
+	new(CompositeFBType type, String name, Path prefix, Map<?, ?> options) {
+		super(type, name, prefix, "CCompositeFB", options)
+		fbs = type.FBNetwork.networkElements.filter(FB).reject(AdapterFB).toList
+		fbNetworkInitialVariableLanguageSupport = fbs.flatMap[interface.inputVars].filter[!value?.value.nullOrEmpty].
+			toInvertedMap [
+				ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
+			]
 	}
 
 	override generate() '''
 		«generateHeader»
-
+		
 		«generateImplIncludes»
-
-		«generateFBDefinition»
-
-		«generateFBInterfaceDefinition»
-
-		«generateFBInterfaceSpecDefinition»
-
-		«generateFBNetwork»
-
+		
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
+		
+		    «generateFBInterfaceDefinition»
+		
+		    «generateFBInterfaceSpecDefinition»
+		
+		    «generateFBNetwork»
+		  }
+		
+		  «generateFBDefinition»
+		
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId, cFBNData)«//no newline
+		      »«fbs.generateInternalFBInitializer»«// no newline
+		      »«type.interfaceList.outputVars.filter[inputConnections.empty].generateVariableInitializer»«// no newline
+		      »«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		      »«generateConnectionInitializer» {
+		  };
+		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateSetFBNetworkInitialValuesDefinition»
+		  «generateInterfaceDefinitions»
+		}
 	'''
 
-	def protected generateFBNetwork() '''
-		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
-		const SCFB_FBInstanceData «FBClassName»::scm_astInternalFBs[] = {
-		  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
-		};
+	override protected generateInterfaceDefinitions() '''
+		«super.generateInterfaceDefinitions»
+		«type.interfaceList.inputVars.generateConnectionAccessorsDefinition("getIf2InConUnchecked", "CDataConnection *", true)»
+		«IF (!type.interfaceList.inOutVars.empty)»
+			«type.interfaceList.outMappedInOutVars.generateConnectionAccessorsDefinition("getDIOOutConInternalUnchecked", "CInOutDataConnection *", true)»
 		«ENDIF»
+	'''
 
-		«type.FBNetwork.networkElements.exportFBParams»
-
+	def private generateFBNetwork() '''
 		«IF !type.FBNetwork.eventConnections.empty»
-		    «type.FBNetwork.eventConnections.exportEventConns»
-
+			«type.FBNetwork.eventConnections.generateConnections("cEventConnections")»
+			
 		«ENDIF»
 		«IF !type.FBNetwork.dataConnections.empty»
-			«type.FBNetwork.dataConnections.exportDataConns»
-
+			«type.FBNetwork.dataConnections.generateConnections("cDataConnections")»
+			
+		«ENDIF»
+		«IF !type.FBNetwork.adapterConnections.empty»
+			«type.FBNetwork.adapterConnections.generateConnections("cAdapterConnections")»
+			
 		«ENDIF»
 		«generateFBNDataStruct()»
-		'''
-	
-	protected def generateFBNDataStruct()
-		'''
-		const SCFB_FBNData «FBClassName»::scm_stFBNData = {
-		  «fbs.size», «IF !fbs.isEmpty»scm_astInternalFBs«ELSE»nullptr«ENDIF»,
-		  «eConnNumber», «IF 0 != eConnNumber»scm_astEventConnections«ELSE»nullptr«ENDIF»,
-		  «fannedOutEventConns», «IF 0 != fannedOutEventConns»scm_astFannedOutEventConnections«ELSE»nullptr«ENDIF»,
-		  «dataConnNumber», «IF 0 != dataConnNumber»scm_astDataConnections«ELSE»nullptr«ENDIF»,
-		  «fannedOutDataConns», «IF 0 != fannedOutDataConns»scm_astFannedOutDataConnections«ELSE»nullptr«ENDIF»,
-		  «numCompFBParams», «IF 0 != numCompFBParams»scm_astParamters«ELSE»nullptr«ENDIF»
+	'''
+
+	def private generateFBNDataStruct() '''
+		const SCFB_FBNData cFBNData = {
+		  .mEventConnections = «IF !type.FBNetwork.eventConnections.empty»cEventConnections«ELSE»{}«ENDIF»,
+		  .mDataConnections = «IF !type.FBNetwork.dataConnections.empty»cDataConnections«ELSE»{}«ENDIF»,
+		  .mAdapterConnections = «IF !type.FBNetwork.adapterConnections.empty»cAdapterConnections«ELSE»{}«ENDIF»,
 		};
-		
-		'''
-	
+	'''
 
-	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
-		return if(type.FBNetwork.networkElements.contains(elem))
-			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEString», «iface.name.FORTEString»), «elem.fbId»'''
+	def private generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
+		return if (type.FBNetwork.networkElements.contains(elem))
+			'''«elem.name.FORTEStringId», «iface.name.FORTEStringId»'''
 		else
-			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEString»), -1'''
+			'''{}, «iface.name.FORTEStringId»'''
 	}
 
-	def protected dispatch fbId(FBNetworkElement elem)
-	   '''«fbs.indexOf(elem)»'''
+	def private generateConnections(EList<? extends Connection> connections, String listName) '''
+		const auto «listName» = std::to_array<SCFB_FBConnectionData>({
+		  «FOR conn : connections»
+		  	«conn.generateConnectionEntry»
+		  «ENDFOR»
+		});
+	'''
 
-	def protected dispatch fbId(AdapterFB elem)
-	   '''CCompositeFB::scm_nAdapterMarker | «IF elem.isPlug»«getPlugIndex(elem)»«ELSE»«type.interfaceList.sockets.indexOf(elem.adapterDecl)»«ENDIF»'''
+	def private generateConnectionEntry(Connection con) //
+	'''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},'''
 
-    def protected getPlugIndex(AdapterFB elem) {
-        type.interfaceList.sockets.size + type.interfaceList.plugs.indexOf(elem.adapterDecl)
-    }
+	override protected generateConnectionInitializer() //
+	'''«super.generateConnectionInitializer»«// no newline
+		   »«type.interfaceList.inputVars.generateDataConnectionInitializer(true)»«// no newline
+		   »«type.interfaceList.outMappedInOutVars.generateDataConnectionInitializer(true)»'''
 
-    def protected exportEventConns(EList<EventConnection> eConns) {
-        var retVal = new StringBuilder()
-        var conSet = new HashSet()
-        var fannedOutConns = new StringBuilder()
+	override protected generateDataConnectionInitializer(List<VarDeclaration> variables, boolean internal) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateNameAsConnection(internal)»(*this, «variables.indexOf(variable)», «variable.generateVariableDefaultValue»)«ENDFOR»'''
 
-        retVal.append("const SCFB_FBConnectionData " + FBClassName + "::scm_astEventConnections[] = {\n")
+	override protected generateWriteOutputDataVariable(VarDeclaration variable) {
+		if (!variable.inOutVar && !variable.inputConnections.empty && variable.inputConnections.first.negated) {
+			'''
+				«variable.generateName» = func_NOT(«variable.inputConnections.first.generateConnectionValue»);
+				«super.generateWriteOutputDataVariable(variable)»
+			'''
+		} else
+			super.generateWriteOutputDataVariable(variable)
+	}
 
-        for (Connection eConn : eConns) {
-            if (!conSet.contains(eConn)) {
-                conSet.add(eConn)
-
-                retVal.append(eConn.getConnListEntry)
-
-                if (eConn.source.getOutputConnections.size > 1) {
-                    // we have fan out
-                    for (Connection fannedConn : eConn.source.getOutputConnections().filter[!(it == eConn)]) {
-                        conSet.add(fannedConn)
-                        fannedOutConns.append(fannedConn.genFannedOutConnString(eConnNumber))
-                        fannedOutEventConns++
-                    }
-                }
-                eConnNumber++;
-            }
-        }
-
-        retVal.append("};\n")
-
-        if (0 != fannedOutEventConns) {
-        	retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutEventConnections[] = {\n")
-            retVal.append(fannedOutConns)
-        	retVal.append("};\n"); //$NON-NLS-1$
-        }
-        return retVal
-    }
-
-    def protected exportDataConns(EList<DataConnection> dataConns) {
-        var retVal = new StringBuilder()
-        var conSet = new HashSet()
-        var fannedOutConns = new StringBuilder()
-
-        retVal.append("const SCFB_FBConnectionData " + FBClassName + "::scm_astDataConnections[] = {\n")
-
-        for (DataConnection dConn : dataConns) {
-            if (!conSet.contains(dConn)) {
-                val primConn = getPrimaryDataConn(dConn)
-                conSet.add(primConn);
-
-                retVal.append(primConn.getConnListEntry)
-
-                if (primConn.source.getOutputConnections.size > 1 ){
-                    // we have fan out
-                    for (Connection fannedConn : primConn.source.getOutputConnections().filter[!(it == primConn)]) {
-                        conSet.add(fannedConn)
-                        if (fannedConn.hasCFBInterfaceDestination && primConn.hasCFBInterfaceDestination){
-                            fannedOutConns.append("#error a fanout to several composite FB's outputs is currently not supported: "); //$NON-NLS-1$
-                            errors.add(" - " + name + " FORTE does currently not allow that a data a composite's data connection may be connected to several data outputs of the composite FB."); //$NON-NLS-1$
-                        }
-                        fannedOutConns.append(fannedConn.genFannedOutConnString(dataConnNumber))
-                        fannedOutDataConns++
-                    }
-                }
-                dataConnNumber++;
-            }
-        }
-
-        retVal.append("};\n")
-
-        if (0 != fannedOutDataConns) {
-        	retVal.append("\nconst SCFB_FBFannedOutConnectionData " + FBClassName + "::scm_astFannedOutDataConnections[] = {\n") 
-            retVal.append(fannedOutConns)
-        	retVal.append("};\n"); //$NON-NLS-1$
-        }
-        return retVal
-    }
-
-    def protected getConnListEntry(Connection con)
-    '''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},
-    '''
-
-    def protected genFannedOutConnString(Connection con, int connNum) {
-        '''  {«connNum», «con.destination.generateConnectionPortID(con.destinationElement)»},
-        '''
-    }
-
-    def private getPrimaryDataConn(DataConnection dataConn) {
-        //if from the source one connection is target to the interface of the CFB we have to take this first
-        for (Connection dc : dataConn.getSource().getOutputConnections()) {
-            if (dc.hasCFBInterfaceDestination) {
-                return dc
-            }
-        }
-        return dataConn
-    }
-
-    def private hasCFBInterfaceDestination(Connection conn){
-        conn?.getDestination()?.eContainer()?.eContainer() instanceof CompositeFBType
-    }
-
-	def protected exportFBParams(EList<FBNetworkElement> fbs) {
-		var retVal = new StringBuilder()
-
-		for (FBNetworkElement fb : fbs) {
-			for (VarDeclaration v : fb.getInterface.getInputVars.filter[it.value !== null && !it.value.value.isEmpty]) {
-				retVal.append('''  {«fb.fbId», g_nStringId«v.name», "«getParamValue(v)»"},
-				''')
-				numCompFBParams++
+	def generateSetFBNetworkInitialValuesDefinition() '''
+		«IF fbs.flatMap[interface.inputVars].exists[!value?.value.nullOrEmpty]»
+			void «FBClassName»::setFBNetworkInitialValues() {
+			  «FOR fb : fbs»
+			  	«FOR variable : fb.interface.inputVars.filter[!value?.value.nullOrEmpty]»
+			  		«IF fb.type.genericType»
+			  			if (auto v = «fb.generateName»->getDataInput(«variable.name.FORTEStringId»)) { v->setValue(«variable.generateFBNetworkInitialValue»); }
+			  		«ELSE»
+			  			«fb.generateName»->«variable.generateName» = «variable.generateFBNetworkInitialValue»;
+			  		«ENDIF»
+			  	«ENDFOR»
+			  «ENDFOR»
 			}
-		}
+			
+		«ENDIF»
+	'''
 
-		
-		'''«IF 0 != numCompFBParams»
-		const SCFB_FBParameter «FBClassName»::scm_astParamters[] = {
-		«retVal.toString»
-		};«ENDIF»'''
-	}
-	
-	def private getParamValue(VarDeclaration v) {
-		v.value.value.replace("\"", "\\\"");
+	def CharSequence generateFBNetworkInitialValue(VarDeclaration decl) {
+		fbNetworkInitialVariableLanguageSupport.get(decl)?.generate(emptyMap)
 	}
 
+	override getErrors() {
+		(super.getErrors + fbNetworkInitialVariableLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
+	}
+
+	override getWarnings() {
+		(super.getWarnings + fbNetworkInitialVariableLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).
+			toList
+	}
+
+	override getInfos() {
+		(super.getInfos + fbNetworkInitialVariableLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
+	}
+
+	override getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) + fbNetworkInitialVariableLanguageSupport.values.filterNull.flatMap [
+			getDependencies(options)
+		]).toSet
+	}
 }

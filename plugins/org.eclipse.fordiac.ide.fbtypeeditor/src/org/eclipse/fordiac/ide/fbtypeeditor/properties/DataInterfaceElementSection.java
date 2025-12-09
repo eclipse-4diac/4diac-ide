@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- *               2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,112 +12,57 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - extract table viewer creation, add initialvalue/arraysize columns
+ *   Dunja Životin
+ *     - extracted a part of the class into a separate widget
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.Arrays;
-import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.fordiac.ide.fbtypeeditor.Activator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.EventLabelProvider;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoDataWidget;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.ui.nat.DataTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class DataInterfaceElementSection extends AdapterInterfaceElementSection {
-	private Text arraySizeText;
-	private Text initValueText;
+
 	private TableViewer withEventsViewer;
 	private Group eventComposite;
-	private Button openEditorButton;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createDataSection(getLeftComposite());
 		createEventSection(getRightComposite());
 	}
 
-	private void createDataSection(final Composite parent) {
-		getWidgetFactory().createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
-		arraySizeText = createGroupText(parent, true);
-		arraySizeText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeArraySizeCommand((VarDeclaration) type, arraySizeText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
-		initValueText = createGroupText(parent, true);
-		initValueText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeValueCommand((VarDeclaration) type, initValueText.getText()));
-			addContentAdapter();
-		});
-	}
-
 	@Override
-	protected void createTypeAndCommentSection(final Composite parent) {
-		super.createTypeAndCommentSection(parent);
-		openEditorButton = new Button(typeCombo.getParent(), SWT.PUSH);
-		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-		openEditorButton.addListener(SWT.Selection, ev -> {
-			final IWorkbench workbench = PlatformUI.getWorkbench();
-			if (workbench != null) {
-				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				if (activeWorkbenchWindow != null) {
-					openStructEditor(activeWorkbenchWindow);
-				}
-			}
-		});
-	}
-
-	private void openStructEditor(final IWorkbenchWindow activeWorkbenchWindow) {
-		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-		final IFile file = getType().getType().getPaletteEntry().getFile();
-		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-		try {
-			activePage.openEditor(new FileEditorInput(file), desc.getId());
-		} catch (final PartInitException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
+	protected PinInfoBasicWidget createPinInfoSection(final Composite parent) {
+		return new PinInfoDataWidget(parent, getWidgetFactory());
 	}
 
 	private void createEventSection(final Composite parent) {
@@ -163,48 +107,50 @@ public class DataInterfaceElementSection extends AdapterInterfaceElementSection 
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		// hide with part for sub app type events
-		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if (null == commandStack) { // disable all field
-			arraySizeText.setEnabled(false);
-			initValueText.setEnabled(false);
+	protected VarDeclaration getType() {
+		return (VarDeclaration) super.getType();
+	}
+
+	@Override
+	protected void performRefresh() {
+		super.performRefresh();
+		// container can be null when refactoring operations are performed while
+		// section is open
+		final EObject container = getType().eContainer();
+		if (container != null && !(container.eContainer() instanceof SubAppType)) {
+			eventComposite.setVisible(true);
+			withEventsViewer.setInput(getType());
+			withEventsViewer.getTable().setEnabled(isEditable());
+			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
+			getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
+					.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
+		} else {
+			eventComposite.setVisible(false);
+		}
+	}
+
+	@Override
+	protected void setInputInit() {
+		if (getType() != null) {
+			if (getType().isInOutVar() && !getType().isIsInput()) {
+				setupPinInfoWidget(getType().getInOutVarOpposite());
+			} else {
+				setupPinInfoWidget(getType());
+			}
+		}
+		if (null == getCurrentCommandStack()) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 		}
 	}
 
 	@Override
-	protected VarDeclaration getType() {
-		return (VarDeclaration) super.getType();
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return DataTypeSelectionContentProvider.INSTANCE;
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			openEditorButton.setEnabled(getType().getType() instanceof StructuredType);
-			arraySizeText.setText(0 >= getType().getArraySize() ? "" : (Integer.toString((getType()).getArraySize()))); //$NON-NLS-1$
-			initValueText.setText(null == getType().getValue() ? "" : getType().getValue().getValue()); //$NON-NLS-1$
-			if (getType().eContainer().eContainer() instanceof FBType) {
-				eventComposite.setVisible(true);
-				withEventsViewer.setInput(getType());
-				Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setChecked(false));
-				getType().getWiths().stream().map(with -> withEventsViewer.testFindItem(with.eContainer()))
-						.filter(TableItem.class::isInstance).forEach(item -> ((TableItem) item).setChecked(true));
-			} else {
-				eventComposite.setVisible(false);
-			}
-		}
-		commandStack = commandStackBuffer;
-	}
-
-	@Override
-	protected Collection<DataType> getTypes() {
-		return getDataTypeLib().getDataTypesSorted();
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return DataTypeSelectionTreeContentProvider.INSTANCE;
 	}
 }

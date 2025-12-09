@@ -8,41 +8,40 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils.setVariable;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventSelectTest extends AbstractInterpreterTest {
 
-	public EventSelectTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
-		final BasicFBType fb = loadFBType("E_SELECT"); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SELECT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("EI0")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI0")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
-		final ServiceSequence seq2 = addServiceSequence(fb.getService());
+		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq2, new FBTransaction("EI0", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq2, new FBTransaction("EI1")); //$NON-NLS-1$
+		addTransaction(seq2, new FBTransactionBuilder("EI0", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransactionBuilder("EI1")); //$NON-NLS-1$
 
-		runTest(fb, seq2);
+		runFBTest(fb, seq2);
 
 	}
 }

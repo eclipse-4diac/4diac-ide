@@ -50,6 +50,8 @@ public final class Messages extends NLS {
 
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
+	public static String DeploymentHelper_VariableValueError;
+
 	public static String DownloadRunnable_DownloadErrorDetails;
 
 	public static String DownloadRunnable_MajorDownloadError;
@@ -69,6 +71,8 @@ public final class Messages extends NLS {
 	public static String DownloadRunnable_Warning;
 
 	public static String DownloadRunnable_DeploymentErrorWarningMessage;
+
+	public static String ResourceDeploymentData_MissingSubAppNetwork;
 
 	static {
 		// initialize resource bundle

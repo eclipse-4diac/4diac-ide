@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,24 +13,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateInternalFBCommand extends Command implements CreationCommand {
+public class CreateInternalFBCommand extends CreationCommand implements ScopedCommand {
 
 	/** The element where the internal FB is added to */
 	private final BaseFBType baseFbType;
 
 	/** Command information */
-	private FBTypePaletteEntry fbType;
+	private FBTypeEntry fbTypeEntry;
 	private final String name;
 	private final int index;
 
@@ -39,28 +41,12 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 
 	static final String DEFAULT_INTERNAL_FB_NAME = "InternalFB1"; //$NON-NLS-1$
 
-	protected CreateInternalFBCommand(final BaseFBType baseFbType) {
-		this(baseFbType, 0, null, null);
-	}
-
 	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
-			final FBTypePaletteEntry fbType) {
-		this.baseFbType = baseFbType;
-		this.fbType = fbType;
-		if (null == fbType) {
-			final EMap<String, FBTypePaletteEntry> typeLib = baseFbType.getTypeLibrary().getBlockTypeLib().getFbTypes();
-			this.fbType = typeLib.get(0).getValue();
-		}
-		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
-		this.index = index;
-	}
-
-	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
-			final FBTypePaletteEntry fbType, final Palette palette) {
-		this.baseFbType = baseFbType;
-		this.fbType = fbType;
-		if (null == fbType) {
-			this.fbType = (FBTypePaletteEntry) palette.eContents().get(0);
+			final FBTypeEntry fbTypeEntry) {
+		this.baseFbType = Objects.requireNonNull(baseFbType);
+		this.fbTypeEntry = fbTypeEntry;
+		if (null == fbTypeEntry) {
+			this.fbTypeEntry = baseFbType.getTypeLibrary().getFbTypes().iterator().next();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
 		this.index = index;
@@ -72,16 +58,15 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 	}
 
 	private EList<FB> getInteralFBList() {
-		final BaseFBType type = baseFbType;
-		return type.getInternalFbs();
+		return baseFbType.getInternalFbs();
 	}
 
 	@Override
 	public void execute() {
 		internalFB = LibraryElementFactory.eINSTANCE.createFB();
-		internalFB.setPaletteEntry(fbType);
+		internalFB.setTypeEntry(fbTypeEntry);
 		internalFB.setComment(""); //$NON-NLS-1$
-		internalFB.setInterface(fbType.getFBType().getInterfaceList().copy());
+		internalFB.setInterface(fbTypeEntry.getInterface().copy());
 		getInteralFBList().add(index, internalFB);
 		internalFB.setName(NameRepository.createUniqueName(internalFB, name));
 	}
@@ -96,4 +81,8 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 		getInteralFBList().add(index, internalFB);
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(baseFbType);
+	}
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TRAIN" Comment="Generate of a finite train of events seperated by the time DT">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017, 2025 fortiss GmbH,  HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization=" HR Agrartechnik GmbH  " Version="1.1" Author="Franz Höpfinger" Date="2025-02-15" Remarks="Bugfix">
+	</VersionInfo>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start event generation">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop event generation">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Generated events">
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Time by which the events should be seperated" />
+			<VarDeclaration Name="N" Type="UINT" Comment="Number of events to generate" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="CV" Type="UINT" Comment="count of the current event: EO index (0..N-1)" />
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="CTR" Type="iec61499::events::E_CTU" x="800" y="266.67">
+		</FB>
+		<FB Name="GATE" Type="iec61499::events::E_SWITCH" x="1500" y="266.67">
+		</FB>
+		<FB Name="DLY" Type="iec61499::events::E_DELAY" x="2400" y="266.67">
+		</FB>
+		<EventConnections>
+			<Connection Source="CTR.CUO" Destination="GATE.EI"/>
+			<Connection Source="CTR.RO" Destination="GATE.EI" dx1="153.33"/>
+			<Connection Source="START" Destination="CTR.R" dx1="360"/>
+			<Connection Source="GATE.EO0" Destination="DLY.START"/>
+			<Connection Source="STOP" Destination="DLY.STOP" dx1="1826.67"/>
+			<Connection Source="DLY.EO" Destination="EO" dx1="1500"/>
+			<Connection Source="DLY.EO" Destination="CTR.CU" dx1="80" dx2="80" dy="-386.67"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="N" Destination="CTR.PV" dx1="100"/>
+			<Connection Source="CTR.CV" Destination="CV" dx1="2246.67"/>
+			<Connection Source="DT" Destination="DLY.DT" dx1="1966.67"/>
+			<Connection Source="CTR.Q" Destination="GATE.G"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

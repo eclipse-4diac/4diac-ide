@@ -19,63 +19,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
-import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * The visualization of an FB. It Provides several containers for its interface.
- *
  */
-public class FBNetworkElementFigure extends FBShape implements ITransparencyFigure {
-
-	private static final class OpenTypeListener implements MouseListener {
-		private final AbstractFBNElementEditPart editPart;
-
-		public OpenTypeListener(final AbstractFBNElementEditPart editPart) {
-			this.editPart = editPart;
-		}
-
-		@Override
-		public void mousePressed(final MouseEvent me) {
-			if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
-				openTypeInEditor(editPart.getModel());
-			}
-		}
-
-		@Override
-		public void mouseReleased(final MouseEvent me) {
-			// nothing to be done here
-		}
-
-		@Override
-		public void mouseDoubleClicked(final MouseEvent me) {
-			// nothing to be done here
-		}
-
-	}
-
-	// TODO model refactoring - look for a better place for this function
-	public static void openTypeInEditor(final FBNetworkElement element) {
-		// open the default editor for the adapter file
-		final PaletteEntry entry = element.getPaletteEntry();
-		if (null != entry) {
-			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(entry.getFile().getName());
-			EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
-		}
-	}
+public class FBNetworkElementFigure extends FBShape {
 
 	/** The model. */
 	private FBNetworkElement model = null;
@@ -89,95 +40,30 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	 *
 	 * @param model the model
 	 */
-	public FBNetworkElementFigure(final FBNetworkElement model, final AbstractFBNElementEditPart editPart) {
-		super(model.getType());
+	public FBNetworkElementFigure(final FBNetworkElement model, final int maxTypeLabelSize) {
+		super(model.getTypeEntry(), maxTypeLabelSize);
 		this.model = model;
 		refreshToolTips();
-		if (null != editPart) {
-			setupMouseListener(editPart);
-		}
 	}
 
-	private void setupMouseListener(final AbstractFBNElementEditPart editPart) {
-
-		getMiddle().addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseDragged(final MouseEvent me) {
-				// nothing to bo done here
-			}
-
-			@Override
-			public void mouseEntered(final MouseEvent me) {
-				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
-					getTypeLabel().setDrawUnderline(true);
-				}
-			}
-
-			@Override
-			public void mouseExited(final MouseEvent me) {
-				getTypeLabel().setDrawUnderline(false);
-			}
-
-			@Override
-			public void mouseHover(final MouseEvent me) {
-				// currently mouseHover should be the same as mouse moved
-				mouseMoved(me);
-			}
-
-			@Override
-			public void mouseMoved(final MouseEvent me) {
-				if ((0 != (me.getState() & SWT.CONTROL)) && editPart.isOnlyThisOrNothingSelected()) {
-					if (!getTypeLabel().isDrawUnderline()) {
-						getTypeLabel().setDrawUnderline(true);
-					}
-				} else {
-					if (getTypeLabel().isDrawUnderline()) {
-						getTypeLabel().setDrawUnderline(false);
-					}
-				}
-			}
-
-		});
-
-		getMiddle().addMouseListener(createOpenTypeMouseListener(editPart));
-
-	}
-
-	private static OpenTypeListener createOpenTypeMouseListener(final AbstractFBNElementEditPart editPart) {
-		return new OpenTypeListener(editPart);
-	}
-
-	/**
-	 * Refresh tool tips.
-	 */
+	/** Refresh tool tips. */
 	public final void refreshToolTips() {
 		setToolTip(new FBNetworkElementTooltipFigure(model));
-	}
-
-	@Override
-	public void setTransparency(final int value) {
-		setAlpha(value);
-	}
-
-	@Override
-	public int getTransparency() {
-		return getAlpha().intValue();
 	}
 
 	public Rectangle getFBBounds() {
 		final int x = getTop().getBounds().x();
 		final int y = getLabelBounds().y();
 		final int width = getTop().getBounds().width;
-		final int height = getTop().getBounds().height() + getMiddle().getBounds().height() + getBottom().getBounds().height()
-				+ getLabelBounds().height();
+		final int height = getTop().getBounds().height() + getMiddle().getBounds().height()
+				+ getBottom().getBounds().height() + getLabelBounds().height();
 		return new Rectangle(x, y, width, height);
 	}
 
 	public Rectangle getLabelBounds() {
 		for (final Object figure : getChildren()) {
-			if (figure instanceof InstanceNameFigure) {
-				return ((InstanceNameFigure) figure).getBounds();
+			if (figure instanceof final InstanceNameFigure nameFigure) {
+				return nameFigure.getBounds();
 			}
 		}
 		return new Rectangle();

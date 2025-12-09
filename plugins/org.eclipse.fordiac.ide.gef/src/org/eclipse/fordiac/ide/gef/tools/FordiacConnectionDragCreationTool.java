@@ -18,6 +18,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -30,34 +31,53 @@ import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
 
-	// Safety border around the canvas to ensure that during dragging connections the canvas is not growing
+	// Safety border around the canvas to ensure that during dragging connections
+	// the canvas is not growing
 	private static final Insets NEW_CONNECTION_CANVAS_BORDER = new Insets(1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE, 1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE);
+			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE, 1,
+			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE);
 
 	public FordiacConnectionDragCreationTool() {
-		super();
 		setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
 		setDisabledCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_NO));
 	}
 
 	@Override
+	public void deactivate() {
+		stopHover();
+		super.deactivate();
+	}
+
+	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
-			((AdvancedScrollingGraphicalViewer) viewer)
-			.checkScrollPositionDuringDragBounded(me,
-					new Point(
-							MoveableRouter.MIN_CONNECTION_FB_DISTANCE + HideableConnection.BEND_POINT_BEVEL_SIZE
-							+ ConnectionPreferenceValues.HANDLE_SIZE,
+		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer advViewer) {
+			advViewer.checkScrollPositionDuringDragBounded(me,
+					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
+							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
 							ConnectionPreferenceValues.HANDLE_SIZE));
-			CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, NEW_CONNECTION_CANVAS_BORDER);
+			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
 		}
 		super.mouseDrag(me, viewer);
 	}
 
 	@Override
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		if (((me.stateMask & SWT.MOD2) != 0)) {
+			checkCurrentCommandforShiftMask();
+		}
+		super.mouseUp(me, viewer);
+	}
+
+	private void checkCurrentCommandforShiftMask() {
+		final Command curCmd = getCurrentCommand();
+		if (curCmd instanceof final AbstractConnectionCreateCommand conCreateCmd) {
+			conCreateCmd.setVisible(false);
+		}
+	}
+
+	@Override
 	protected void setCurrentCommand(final Command c) {
-		if(null == getCurrentCommand() && null != c) {
+		if (null == getCurrentCommand() && null != c) {
 			// Hover started
 			startHover();
 		} else if (null != getCurrentCommand() && null != c && c != getCurrentCommand()) {

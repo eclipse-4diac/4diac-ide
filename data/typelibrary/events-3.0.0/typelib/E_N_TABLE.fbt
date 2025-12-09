@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_N_TABLE" Comment="Generation of a finite train of sperate events">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0.1" Author="Martin Erich Jobst" Date="2025-08-25" Remarks="remove erroneous F_SUB">
+	</VersionInfo>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO0" Type="Event">
+			</Event>
+			<Event Name="EO1" Type="Event">
+			</Event>
+			<Event Name="EO2" Type="Event">
+			</Event>
+			<Event Name="EO3" Type="Event">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT"/>
+		</InputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="E_TABLE" Type="iec61499::events::E_TABLE" x="-105.26" y="105.26">
+		</FB>
+		<FB Name="E_DEMUX" Type="iec61499::events::E_DEMUX" x="1789.47" y="105.26">
+		</FB>
+		<EventConnections>
+			<Connection Source="START" Destination="E_TABLE.START" dx1="478.95"/>
+			<Connection Source="STOP" Destination="E_TABLE.STOP" dx1="357.89"/>
+			<Connection Source="E_TABLE.EO" Destination="E_DEMUX.EI" dx1="80"/>
+			<Connection Source="E_DEMUX.EO0" Destination="EO0" dx1="115.79"/>
+			<Connection Source="E_DEMUX.EO1" Destination="EO1" dx1="147.37"/>
+			<Connection Source="E_DEMUX.EO2" Destination="EO2" dx1="210.53"/>
+			<Connection Source="E_DEMUX.EO3" Destination="EO3" dx1="273.68"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DT" Destination="E_TABLE.DT" dx1="231.58"/>
+			<Connection Source="N" Destination="E_TABLE.N" dx1="147.37"/>
+			<Connection Source="E_TABLE.CV" Destination="E_DEMUX.K" dx1="173.68"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

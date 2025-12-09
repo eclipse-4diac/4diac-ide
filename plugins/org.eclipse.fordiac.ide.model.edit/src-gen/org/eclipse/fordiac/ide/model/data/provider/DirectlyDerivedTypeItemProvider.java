@@ -18,7 +18,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType} object. <!--
@@ -43,6 +46,50 @@ public class DirectlyDerivedTypeItemProvider extends DerivedTypeItemProvider {
 
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Base Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBaseTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DirectlyDerivedType_baseType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_DirectlyDerivedType_baseType_feature", "_UI_DirectlyDerivedType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DataPackage.Literals.DIRECTLY_DERIVED_TYPE__BASE_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Initial Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInitialValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DirectlyDerivedType_initialValue_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_DirectlyDerivedType_initialValue_feature", "_UI_DirectlyDerivedType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DataPackage.Literals.DIRECTLY_DERIVED_TYPE__INITIAL_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/** This returns DirectlyDerivedType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->

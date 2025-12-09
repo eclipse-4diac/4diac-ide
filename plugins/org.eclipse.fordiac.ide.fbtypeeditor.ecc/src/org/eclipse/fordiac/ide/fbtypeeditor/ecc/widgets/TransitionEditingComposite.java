@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +17,7 @@
  *     - change TransitionViewer to table and make it editable
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Bianca Wiesmayr - externalized code from StateSection and cleanup
+ *   Alois Zoitl - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeECTransitionCommentCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionDestinationCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeTransitionPriorityCommand;
@@ -33,6 +32,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateTransitionCommand
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.StateContentProvider;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -65,34 +65,34 @@ public class TransitionEditingComposite {
 	private static class TransitionListLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof ECTransition) {
+		public String getColumnText(final Object element, final int columnIndex) {
+			if (element instanceof final ECTransition ecTransition) {
 				switch (columnIndex) {
 				case TRANSITION_COLUMN_PRIORITY:
-					return Integer.toString(((ECTransition) element).getPriority());
+					return Integer.toString(ecTransition.getPriority());
 
 				case TRANSITION_COLUMN_DESTINATION:
-					if (null != ((ECTransition) element).getDestination()) {
-						return ((ECTransition) element).getDestination().getName();
+					if (null != ecTransition.getDestination()) {
+						return ecTransition.getDestination().getName();
 					}
 					break;
 
 				case TRANSITION_COLUMN_EVENT:
-					if (null != ((ECTransition) element).getConditionEvent()) {
-						return ((ECTransition) element).getConditionEvent().getName();
+					if (null != ecTransition.getConditionEvent()) {
+						return ECCContentAndLabelProvider.getEventName(ecTransition.getConditionEvent());
 					}
 					break;
 
 				case TRANSITION_COLUMN_CONDITION:
-					return ((ECTransition) element).getConditionExpression();
+					return ecTransition.getConditionExpression();
 
 				case TRANSITION_COLUMN_COMMENT:
-					return ((ECTransition) element).getComment();
+					return ecTransition.getComment();
 
 				default:
 					break;
@@ -110,47 +110,52 @@ public class TransitionEditingComposite {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			ECTransition selectedTransition = (ECTransition) element;
-			switch (property) {
+			final ECTransition selectedTransition = (ECTransition) element;
+			return switch (property) {
 			case TRANSITION_DESTINATION: // int for Combobox
-				List<String> dest = ECCContentAndLabelProvider.getStateNames(getBasicFBType());
-				return Integer.valueOf((null != selectedTransition.getDestination())
+			{
+				final List<String> dest = ECCContentAndLabelProvider.getStateNames(getBasicFBType());
+				yield Integer.valueOf((null != selectedTransition.getDestination())
 						? dest.indexOf(selectedTransition.getDestination().getName())
 						: dest.size());
-			case TRANSITION_EVENT:
-				List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
-				return Integer.valueOf((null != selectedTransition.getConditionEvent())
+			}
+			case TRANSITION_EVENT: {
+				final List<String> events = ECCContentAndLabelProvider
+						.getTransitionConditionEventNames(getBasicFBType());
+				yield Integer.valueOf((null != selectedTransition.getConditionEvent())
 						? events.indexOf(selectedTransition.getConditionEvent().getName())
 						: events.size());
-			case TRANSITION_CONDITION: // String for TextCellEditor
-				return selectedTransition.getConditionExpression();
-			case TRANSITION_COMMENT:
-				return selectedTransition.getComment();
-			default:
-				return ""; //$NON-NLS-1$
 			}
+			case TRANSITION_CONDITION: // String for TextCellEditor
+				yield selectedTransition.getConditionExpression();
+			case TRANSITION_COMMENT:
+				yield selectedTransition.getComment();
+			default:
+				yield ""; //$NON-NLS-1$
+			};
 		}
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {
-			TableItem tableItem = (TableItem) element;
-			ECTransition selectedTransition = (ECTransition) tableItem.getData();
+			final TableItem tableItem = (TableItem) element;
+			final ECTransition selectedTransition = (ECTransition) tableItem.getData();
 
 			Command cmd = null;
 			switch (property) {
 			case TRANSITION_DESTINATION:
-				int selectedDest = ((Integer) value).intValue();
-				List<ECState> destinations = ECCContentAndLabelProvider.getStates(getBasicFBType());
-				ECState dest = ((0 <= selectedDest) && (selectedDest < destinations.size()))
+				final int selectedDest = ((Integer) value).intValue();
+				final List<ECState> destinations = ECCContentAndLabelProvider.getStates(getBasicFBType());
+				final ECState dest = ((0 <= selectedDest) && (selectedDest < destinations.size()))
 						? destinations.get(selectedDest)
 						: null;
 				cmd = new ChangeTransitionDestinationCommand(selectedTransition, dest);
 				break;
 
 			case TRANSITION_EVENT:
-				int selectedEv = ((Integer) value).intValue();
-				List<String> events = ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType());
-				String ev = ((0 <= selectedEv) && (selectedEv < events.size())) ? events.get(selectedEv) : null;
+				final int selectedEv = ((Integer) value).intValue();
+				final List<String> events = ECCContentAndLabelProvider
+						.getTransitionConditionEventNames(getBasicFBType());
+				final String ev = ((0 <= selectedEv) && (selectedEv < events.size())) ? events.get(selectedEv) : null;
 				cmd = new ChangeConditionEventCommand(selectedTransition, ev);
 				break;
 
@@ -190,15 +195,15 @@ public class TransitionEditingComposite {
 	private static final int TRANSITION_COLUMN_COMMENT = 4;
 
 	private TableViewer transitionsOutViewer;
-	private TabbedPropertySheetWidgetFactory transitionWidgetFactory;
-	private Group transitionGroup;
+	private final TabbedPropertySheetWidgetFactory transitionWidgetFactory;
+	private final Group transitionGroup;
 
-	private CommandExecutor commandExecutor; // the parent section
+	private final CommandExecutor commandExecutor; // the parent section
 	private ECState type;
 	private CommandStack commandStack;
 
-	public TransitionEditingComposite(Composite parent, TabbedPropertySheetWidgetFactory transitionWidgetFactory,
-			CommandExecutor commandExecutor) {
+	public TransitionEditingComposite(final Composite parent,
+			final TabbedPropertySheetWidgetFactory transitionWidgetFactory, final CommandExecutor commandExecutor) {
 		this.transitionWidgetFactory = transitionWidgetFactory;
 		this.transitionGroup = transitionWidgetFactory.createGroup(parent,
 				Messages.TransitionEditingComposite_TransitionsFromSelectedState);
@@ -211,7 +216,7 @@ public class TransitionEditingComposite {
 	private void createGroupLayout() {
 		transitionGroup.setLayout(new GridLayout(2, false));
 		transitionGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		AddDeleteReorderListWidget transitionMgmButtons = new AddDeleteReorderListWidget();
+		final AddDeleteReorderListWidget transitionMgmButtons = new AddDeleteReorderListWidget();
 		transitionMgmButtons.createControls(transitionGroup, transitionWidgetFactory);
 
 		transitionsOutViewer = TableWidgetFactory.createTableViewer(transitionGroup);
@@ -227,17 +232,13 @@ public class TransitionEditingComposite {
 	}
 
 	private void configureTransitionTableLayout(final Table table) {
-		new TableColumn(table, SWT.LEFT); // creates a table column without headline for the order numbering
-		new TableColumn(table, SWT.LEFT)
-				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
-		new TableColumn(table, SWT.LEFT)
-				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
-		new TableColumn(table, SWT.LEFT)
-				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
-		new TableColumn(table, SWT.LEFT)
-				.setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
+		addColumn(table); // creates a table column without headline for the order numbering
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Destination);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Event);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Condition);
+		addColumn(table).setText(Messages.TransitionEditingComposite_ConfigureTransitionTableLayout_Comment);
 
-		TableLayout tabLayout = new TableLayout();
+		final TableLayout tabLayout = new TableLayout();
 		tabLayout.addColumnData(new ColumnWeightData(1, 50));
 		tabLayout.addColumnData(new ColumnWeightData(2, 50));
 		tabLayout.addColumnData(new ColumnWeightData(3, 50));
@@ -250,8 +251,12 @@ public class TransitionEditingComposite {
 				TRANSITION_EVENT, TRANSITION_CONDITION, TRANSITION_COMMENT });
 	}
 
-	private CellEditor[] createTransitionViewerCellEditors(Table table) {
-		BasicFBType fbType = getBasicFBType();
+	private static TableColumn addColumn(final Table table) {
+		return new TableColumn(table, SWT.LEFT);
+	}
+
+	private CellEditor[] createTransitionViewerCellEditors(final Table table) {
+		final BasicFBType fbType = getBasicFBType();
 		return new CellEditor[] { null,
 				ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 						ECCContentAndLabelProvider.getStateNames(fbType).toArray(new String[0]), SWT.READ_ONLY),
@@ -266,7 +271,7 @@ public class TransitionEditingComposite {
 	}
 
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			transitionsOutViewer.setInput(type);
@@ -274,7 +279,7 @@ public class TransitionEditingComposite {
 		commandStack = commandStackBuffer;
 	}
 
-	public void setTypeAndCommandStack(ECState type, CommandStack commandStack) {
+	public void setTypeAndCommandStack(final ECState type, final CommandStack commandStack) {
 		this.type = type;
 		this.commandStack = commandStack;
 

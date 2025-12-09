@@ -25,8 +25,10 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 
@@ -36,7 +38,7 @@ import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
  */
 public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
-	private int arc = DiagramPreferences.CORNER_DIM;
+	private int arc = GefPreferenceConstants.CORNER_DIM;
 
 	private Insets insets = new Insets(2);
 
@@ -47,7 +49,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 * @param insets the insets
 	 */
 	public ModifiedNonResizeableEditPolicy(final int arc, final Insets insets) {
-		super();
 		this.arc = arc;
 		this.insets = insets;
 	}
@@ -56,7 +57,6 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	 * Default constructor.
 	 */
 	public ModifiedNonResizeableEditPolicy() {
-		super();
 	}
 
 	@Override
@@ -66,9 +66,9 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	@Override
-	protected List<? extends IFigure> createSelectionHandles() {
-		final List<ModifiedMoveHandle> list = new ArrayList<>(1);
-		list.add(new ModifiedMoveHandle((GraphicalEditPart) getHost(), insets, arc));
+	protected List<Handle> createSelectionHandles() {
+		final List<Handle> list = new ArrayList<>(1);
+		list.add(new ModifiedMoveHandle(getHost(), insets, arc));
 		removeSelectionFeedbackFigure();
 		return list;
 	}
@@ -94,15 +94,17 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 	}
 
 	private boolean isValidConnectionRequest(final Request request) {
-		return (getHost() instanceof AbstractConnectableEditPart)
-				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
+		return (getHost() instanceof final AbstractConnectableEditPart acEP) && acEP.isConnectable()
 				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
 						|| REQ_CONNECTION_END.equals(request.getType()));
 	}
 
-	private RoundedRectangle createSelectionFeedbackFigure() {
-		if (getHost() instanceof GraphicalEditPart) {
-			final GraphicalEditPart ep = ((GraphicalEditPart) getHost());
+	protected RoundedRectangle createSelectionFeedbackFigure() {
+		return createSelectionFeedbackFigure(getHost(), arc);
+	}
+
+	public static RoundedRectangle createSelectionFeedbackFigure(final EditPart editPart, final int arc) {
+		if (editPart instanceof final GraphicalEditPart ep) {
 			final RoundedRectangle newSelFeedbackFigure = new RoundedRectangle();
 			newSelFeedbackFigure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 			newSelFeedbackFigure.setOutline(false);

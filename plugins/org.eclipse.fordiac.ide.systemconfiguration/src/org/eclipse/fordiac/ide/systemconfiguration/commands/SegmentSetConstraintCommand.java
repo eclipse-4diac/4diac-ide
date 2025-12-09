@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2012, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2008, 2024 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,13 +10,14 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -27,14 +28,11 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
  */
 public class SegmentSetConstraintCommand extends Command {
 
-	/** The Constant MOVE_LABEL. */
-	private static final String MOVE_LABEL = "Move/Resize";
+	private final Position newPos;
+	private Position oldPos;
 
-	/** The new bounds. */
-	private final Rectangle newBounds;
-
-	/** The old bounds. */
-	private Rectangle oldBounds;
+	private final double newWidth;
+	private final double oldWidth;
 
 	/** The request. */
 	private final ChangeBoundsRequest request;
@@ -46,10 +44,12 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	public SegmentSetConstraintCommand(final Segment segment, final Rectangle newBounds,
 			final ChangeBoundsRequest request) {
-		setLabel(MOVE_LABEL);
-		this.newBounds = newBounds;
+		setLabel("Move/Resize");
 		this.segment = segment;
 		this.request = request;
+		newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(newBounds.x, newBounds.y);
+		newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(newBounds.width);
+		oldWidth = segment.getWidth();
 	}
 
 	/*
@@ -74,8 +74,8 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	@Override
 	public void execute() {
-		oldBounds = new Rectangle(segment.getPosition().asPoint(), new Dimension(segment.getWidth(), -1));
-		redo();
+		oldPos = segment.getPosition();
+		setSegementPosAndWidth(newPos, newWidth);
 	}
 
 	/**
@@ -85,8 +85,7 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	@Override
 	public void redo() {
-		segment.updatePosition(newBounds.getTopLeft());
-		segment.setWidth(newBounds.width);
+		setSegementPosAndWidth(newPos, newWidth);
 
 	}
 
@@ -95,8 +94,12 @@ public class SegmentSetConstraintCommand extends Command {
 	 */
 	@Override
 	public void undo() {
-		segment.setWidth(oldBounds.width);
-		segment.updatePosition(oldBounds.getTopLeft());
+		setSegementPosAndWidth(oldPos, oldWidth);
+	}
+
+	private void setSegementPosAndWidth(final Position pos, final double width) {
+		segment.setPosition(pos);
+		segment.setWidth(width);
 	}
 
 }

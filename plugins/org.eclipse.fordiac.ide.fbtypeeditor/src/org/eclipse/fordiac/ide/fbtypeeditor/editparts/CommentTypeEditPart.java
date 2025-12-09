@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,9 +10,10 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Moved position calculation to the comment type edit part
- *   Virendra Ashiwal - Regulate Space at both side of FB (between FB and its interfaces) based on number of WITH connections
+ *   Virendra Ashiwal - Regulate Space at both side of FB (between FB and its
+ *                      interfaces) based on number of WITH connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
@@ -28,13 +29,15 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-class CommentTypeEditPart extends AbstractGraphicalEditPart {
+class CommentTypeEditPart extends AbstractGraphicalEditPart implements AnnotableGraphicalEditPart {
 
 	private static final int WITH_SIZE = 10;
 	private static final int DISTANCE_TO_FB_BORDER = 15;
@@ -57,9 +60,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	 */
 	private static class CommentTypeContainerFigure extends Figure {
 
-		/**
-		 * Instantiates a new variable output container figure.
-		 */
+		/** Instantiates a new variable output container figure. */
 		public CommentTypeContainerFigure() {
 			final GridLayout layout = new GridLayout(3, false);
 			layout.horizontalSpacing = 0;
@@ -74,9 +75,12 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	public void activate() {
 		super.activate();
 		getModel().getReferencedElement().eAdapters().add(contentAdapter);
-		final Object part = getViewer().getEditPartRegistry().get(getInterfaceElement());
-		if (part instanceof InterfaceEditPart) {
-			referencedInterface = (InterfaceEditPart) part;
+		setupReferencedEP();
+	}
+
+	public void setupReferencedEP() {
+		if (getViewer().getEditPartForModel(getInterfaceElement()) instanceof final InterfaceEditPart iep) {
+			referencedInterface = iep;
 			referencedInterface.getFigure().addAncestorListener(new AncestorListener() {
 
 				@Override
@@ -110,9 +114,19 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected void refreshVisuals() {
+	public void refreshVisuals() {
 		super.refreshVisuals();
 		refreshPosition();
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		getChildren().stream().filter(AnnotableGraphicalEditPart.class::isInstance)
+				.map(AnnotableGraphicalEditPart.class::cast).forEach(child -> child.updateAnnotations(event));
+	}
+
+	public InterfaceEditPart getReferencedInterface() {
+		return referencedInterface;
 	}
 
 	private void refreshPosition() {
@@ -123,7 +137,6 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 		}
 	}
-
 
 	private Point calculatePos() {
 		if (null != referencedInterface) {
@@ -136,16 +149,15 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 			} else {
 				final int countOutputEvWITH = getNrEvWITH(interfaceList.getEventOutputs());
 				dx = DISTANCE_TO_FB_BORDER + bounds.width + countOutputEvWITH * WITH_SIZE;
-			} 
+			}
 			return new Point(bounds.x + dx, bounds.y);
 		}
 		return new Point(0, 0);
 	}
 
-	private static int getNrEvWITH(EList<Event> eList) {
-		return (int)eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
+	private static int getNrEvWITH(final EList<Event> eList) {
+		return (int) eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
 	}
-
 
 	private int getFigureWidth() {
 		return getFigure().getPreferredSize().width;
@@ -156,7 +168,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 		return (CommentTypeField) super.getModel();
 	}
 
-	private IInterfaceElement getInterfaceElement() {
+	public IInterfaceElement getInterfaceElement() {
 		return getModel().getReferencedElement();
 	}
 
@@ -171,7 +183,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		return getModel().getChildren();
 	}
 }

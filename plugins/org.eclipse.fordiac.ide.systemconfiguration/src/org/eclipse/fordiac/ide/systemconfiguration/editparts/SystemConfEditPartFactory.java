@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +15,6 @@
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -27,7 +27,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 
-	public SystemConfEditPartFactory(GraphicalEditor editor) {
+	public SystemConfEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
@@ -52,12 +52,12 @@ public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ResourceEditPart();
 		}
 		if (modelElement instanceof Value) {
-			return new ValueEditPart();
+			return new DeviceValueEditPart();
 		}
 		if (modelElement instanceof ResourceContainer) {
 			return new ResourceContainerEditPart();
 		}
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 
 	}
 

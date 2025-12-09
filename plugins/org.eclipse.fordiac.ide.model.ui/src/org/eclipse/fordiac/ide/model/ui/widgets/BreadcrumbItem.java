@@ -9,11 +9,12 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial implementation and/or documentation
+ *   Prankur Agarwal - sorting the items alphabetically
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -21,10 +22,13 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.jface.resource.CompositeImageDescriptor;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -46,21 +50,19 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
 
 public class BreadcrumbItem {
-
 	private static final int SHELL_WIDTH = 250;
 	private static final int SHELL_HEIGHT = 250;
 
 	private final AdapterFactoryLabelProvider labelProvider;
 	private final ITreeContentProvider contentProvider;
-
 	private final Object current;
 	private final ToolItem text;
 	private ToolItem arrow;
 	private final BreadcrumbWidget parent;
 	private Shell shell;
 
-	BreadcrumbItem(final BreadcrumbWidget parent, final Object current,
-			final AdapterFactoryLabelProvider labelProvider, final AdapterFactoryContentProvider contentProvider) {
+	BreadcrumbItem(final BreadcrumbWidget parent, final Object current, final AdapterFactoryLabelProvider labelProvider,
+			final AdapterFactoryContentProvider contentProvider) {
 		this.current = current;
 		this.parent = parent;
 		this.labelProvider = labelProvider;
@@ -95,6 +97,10 @@ public class BreadcrumbItem {
 		return current;
 	}
 
+	public String getText() {
+		return labelProvider.getText(current);
+	}
+
 	void dispose() {
 		text.dispose();
 		if (arrow != null) {
@@ -116,7 +122,11 @@ public class BreadcrumbItem {
 
 		final TreeViewer viewer = new TreeViewer(shell);
 		viewer.setContentProvider(contentProvider);
-		viewer.setLabelProvider(labelProvider);
+		if (labelProvider instanceof final IStyledLabelProvider styledLabelProvider) {
+			viewer.setLabelProvider(new DelegatingStyledCellLabelProvider(styledLabelProvider));
+		} else {
+			viewer.setLabelProvider(labelProvider);
+		}
 		viewer.setInput(current);
 		viewer.getControl().addFocusListener(new FocusAdapter() {
 			@Override
@@ -166,11 +176,10 @@ public class BreadcrumbItem {
 		@Override
 		public Object[] getChildren(final Object parentElement) {
 			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
-					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
-							|| obj instanceof Application || obj instanceof SubApp
-							|| (obj instanceof CFBInstance)
-							|| obj instanceof Device || obj instanceof Resource)
-					.collect(Collectors.toList()).toArray();
+					.filter(obj -> (obj instanceof IFile) || (obj instanceof SystemConfiguration)
+							|| (obj instanceof Application) || (obj instanceof SubApp) || (obj instanceof CFBInstance)
+							|| (obj instanceof Device) || (obj instanceof Resource))
+					.sorted(new ChildrenSortComparator()).toArray();
 		}
 
 		@Override
@@ -202,7 +211,8 @@ public class BreadcrumbItem {
 				final ImageData imageData = image.getImageData(zoom);
 				image.dispose();
 
-				final int whitePixel = imageData.palette.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
+				final int whitePixel = imageData.palette
+						.getPixel(display.getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB());
 				imageData.transparentPixel = whitePixel;
 
 				return imageData;
@@ -217,4 +227,31 @@ public class BreadcrumbItem {
 
 	}
 
+}
+
+class ChildrenSortComparator implements Comparator<Object> {
+	@Override
+	public int compare(final Object obj1, final Object obj2) {
+		if (obj1 instanceof SystemConfiguration) {
+			if (obj2 instanceof SystemConfiguration) {
+				return -1;
+			}
+			return 1;
+		}
+
+		return getName(obj1).compareTo(getName(obj2));
+	}
+
+	@SuppressWarnings("static-method")
+	private String getName(final Object obj) {
+		if (obj instanceof final IFile file) {
+			return file.getName();
+		}
+		if (obj instanceof final INamedElement ne) {
+			return ne.getName();
+		}
+
+		// would not come here as already a filter in Arrays.stream
+		return ""; //$NON-NLS-1$
+	}
 }

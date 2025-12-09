@@ -39,16 +39,19 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
+import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
+import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteSegmentEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
@@ -65,11 +68,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPart {
 	/** necessary that the gradient pattern can be scaled accordingly */
 	private DiagramFontChangeListener fontChangeListener;
-
-	public SegmentEditPart() {
-		super();
-		setConnectable(true);
-	}
 
 	@Override
 	public void activate() {
@@ -151,19 +149,14 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
-		return null;
-	}
-
-	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
 			@Override
 			public Command getCommand(final Request request) {
 				final Object type = request.getType();
-				if (REQ_ALIGN.equals(type) && (request instanceof AlignmentRequest)) {
-					return getAlignCommand((AlignmentRequest) request);
+				if (REQ_ALIGN.equals(type) && (request instanceof final AlignmentRequest aReq)) {
+					return getAlignCommand(aReq);
 				}
 				return null;
 			}
@@ -191,9 +184,15 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		refreshPosition();
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 	protected void refreshPosition() {
-		final Rectangle bounds = new Rectangle(getModel().getPosition().getX(), getModel().getPosition().getY(),
-				getModel().getWidth(), -1);
+		final Point position = getModel().getPosition().toScreenPoint();
+		final Rectangle bounds = new Rectangle(position.x, position.y,
+				CoordinateConverter.INSTANCE.iec61499ToScreen(getModel().getWidth()), -1);
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 	}
 
@@ -202,17 +201,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		private final Label typeLabel;
 		private final Figure main = new Figure();
 
-		private final RoundedRectangle rect = new RoundedRectangle() {
-			@Override
-			protected void outlineShape(final Graphics graphics) {
-				// nothing to do here right now
-			}
-
-			@Override
-			protected void fillShape(final Graphics graphics) {
-				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-			}
-
+		private final RoundedRectangle rect = new BorderedRoundedRectangle() {
 			@Override
 			public void setBounds(final Rectangle rect) {
 				super.setBounds(rect);
@@ -251,7 +240,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 			main.add(rect);
 			main.setConstraint(rect, rectLayoutData);
+			rect.setBorder(new RoundedRectangleShadowBorder());
 			rect.add(instanceNameLabel);
+			rect.setOutline(false);
 			instanceNameLabel.setBorder(new MarginBorder(4, 0, 4, 0));
 
 			final GridLayout rectLayout = new GridLayout(3, false);
@@ -304,8 +295,8 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		}
 
 		private void setInstanceAndTypeLabelFonts() {
-			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
-			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(UIPreferenceConstants.DIAGRAM_FONT));
+			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
 		}
 	}
 

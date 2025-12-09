@@ -21,13 +21,10 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.swt.graphics.Image;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.FB} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
@@ -58,17 +55,11 @@ public class FBItemProvider extends FBNetworkElementItemProvider {
 	 * @generated not */
 	@Override
 	public Object getImage(Object object) {
-		FBType type = ((FB) object).getType();
-		if (type instanceof BasicFBType) {
-			return overlayImage(object, FordiacImage.ICON_BASIC_FB.getImage());
-		} else if (type instanceof SimpleFBType) {
-			return overlayImage(object, FordiacImage.ICON_SIMPLE_FB.getImage());
-		} else if (type instanceof CompositeFBType) {
-			return overlayImage(object, FordiacImage.ICON_COMPOSITE_FB.getImage());
-		} else if (type instanceof ServiceInterfaceFBType) {
-			return overlayImage(object, FordiacImage.ICON_SIFB.getImage());
+		Image typeImage = TypeImageProvider.getImageForTypeEntry(((FB) object).getTypeEntry());
+		if(typeImage == null) {
+			typeImage = FordiacImage.ICON_FB.getImage();
 		}
-		return overlayImage(object, FordiacImage.ICON_FB.getImage());
+		return overlayImage(object, typeImage);
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->

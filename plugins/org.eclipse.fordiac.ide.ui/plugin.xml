@@ -19,6 +19,23 @@
       </page>
    </extension>
    <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.eclipse.fordiac.ide.ui.preferences.EmptyPropertyPage"
+            id="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            name="4diac IDE">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.fordiac.ide.ui.preferences.PreferenceInitializer">
@@ -80,12 +97,138 @@
                 </separator>
             </menu>
         </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
+        
+       	<!-- Refactor menu definitions to be used by the different plugins of Eclipse 4diac or external contributions.
+          -->
+		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=org.eclipse.4diac.ide.source.menu">                
+			<menu label="Refactor"
+					mnemonic="t"
+			   		id="org.eclipse.4diac.ide.refactor.menu">
+				<separator name="typeGroup" visible="true"/>
+			</menu>
+		</menuContribution>
+		
+		<menuContribution
+            	locationURI="toolbar:org.eclipse.ui.workbench.navigate?after=org.eclipse.ui.window.pinEditor">
+			<command
+	            	commandId="org.eclipse.ui.window.splitEditor"
+	                icon="platform:/plugin/org.eclipse.ui.ide.application/icons/full/elcl16/split_horizontal.png"
+	                style="push">
+				<parameter
+					name="Splitter.isHorizontal"
+					value="true">
+				</parameter>
+			</command>
+			<command
+					commandId="org.eclipse.ui.window.splitEditor"
+					icon="platform:/plugin/org.eclipse.ui.ide.application/icons/full/elcl16/split_vertical.png"
+					style="push">
+				<parameter
+					name="Splitter.isHorizontal"
+					value="false">
+               </parameter>
+			</command>
+		</menuContribution>
+	</extension>
+   	<extension point="org.eclipse.ui.commandImages">
+    	<image
             commandId="org.eclipse.fordiac.ide.ui.contribute"
             icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/smartmode_co.png">
       </image>
    </extension>
+    <extension
+          point="org.eclipse.ui.themes">
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.EventConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DefaultEventConnectorColor"
+             value="99, 179, 31">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.BoolConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_BoolConnectorColor"
+             value="159, 164, 138">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyBitConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyBitConnectorColor"
+             value="130, 163, 169">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyIntConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyIntConnectorColor"
+             value="24, 81, 158">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyRealConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyRealConnectorColor"
+             value="219, 180, 24">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AnyStringConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_AnyStringConnectorColor"
+             value="189, 134, 99">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DataConnectorColor"
+             value="0, 0, 255">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.AdapterConnectionConnectorColor"
+             label="%FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor"
+             value="132, 93, 175">
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"
+             label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
+             value="99, 179, 31">
+       </colorDefinition>
+    </extension>
+ <extension
+       point="org.eclipse.ui.preferenceTransfer">
+    <transfer
+          icon="fordiacimage://ICON_4DIAC_16"
+          id="org.eclipse.fordiac.ide.model.projectTransfer"
+          name="%Export_Name">
+       <mapping
+             scope="instance">
+          <entry node="org.eclipse.fordiac.ide.debug"/>
+          <entry node="org.eclipse.fordiac.ide.deployment.debug"/>
+          <entry node="org.eclipse.fordiac.ide.deployment.iec61499"/>
+          <entry node="org.eclipse.fordiac.ide.export"/>
+          <entry node="org.eclipse.fordiac.ide.fbrtlauncher"/>
+          <entry node="org.eclipse.fordiac.ide.fmu"/>
+          <entry node="org.eclipse.fordiac.ide.fortelauncher"/>
+          <entry node="org.eclipse.fordiac.ide.gef"/>
+          <entry node="org.eclipse.fordiac.ide.gitlab"/>
+          <entry node="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"/>
+          <entry node="org.eclipse.fordiac.ide.globalconstantseditor.ui"/>
+          <entry node="org.eclipse.fordiac.ide.model"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextalgorithm.ui"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextcore.STCore"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextcore.ui"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"/>
+          <entry node="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui"/>
+          <entry node="org.eclipse.fordiac.ide.typemanagement"/>
+          <entry node="org.eclipse.fordiac.ide.ui"/>
+          <entry
+                node="org.eclipse.ui.workbench">
+             <key
+                   match="prefix"
+                   name="org.eclipse.fordiac.ide.">
+             </key>
+          </entry>
+       </mapping>
+    </transfer>
+ </extension>
 </plugin>

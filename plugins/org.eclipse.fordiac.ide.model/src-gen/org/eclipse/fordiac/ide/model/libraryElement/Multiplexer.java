@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,11 +16,26 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Multiplexer</b></em>'. <!-- end-user-doc -->
+import org.eclipse.emf.common.util.EList;
+
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Multiplexer</b></em>'.
+ * <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMultiplexer()
  * @model
- * @generated */
+ * @generated
+ */
 public interface Multiplexer extends StructManipulator {
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<VarDeclaration> getMemberVars();
 } // Multiplexer

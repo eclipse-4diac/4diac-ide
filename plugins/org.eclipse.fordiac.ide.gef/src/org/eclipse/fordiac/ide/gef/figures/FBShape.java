@@ -20,43 +20,51 @@
  *   Bianca Wiesmayr - edited appearance of FBs
  *   Daniel Lindhuber - changed layout of top part
  *   Alois Zoitl - Added shadow border, removed sharp border
+ *               - clean-up to make expanded subapp nicer
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
+import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
+import org.eclipse.fordiac.ide.gef.draw2d.OverlayAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.edit.providers.TypeImageProvider;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
-public class FBShape extends Shape implements IFontUpdateListener {
+public class FBShape extends Figure implements IFontUpdateListener, ITransparencyFigure {
+
+	private static final String TYPE_TRUNCATION_STRING = "\u2026"; //$NON-NLS-1$
+
+	private static final int INPUT_OUTPUT_INTERLEAVE = 7;
 
 	private static final int FB_NOTCH_INSET = 9;
+
+	private Figure fbFigureContainer;
 
 	/** The top. */
 	private RoundedRectangle top;
 
+	Figure middleContainer;
+
 	/** The middle. */
-	private RoundedRectangle middle;
+	private RectangleFigure middle;
 
 	/** The bottom. */
 	private RoundedRectangle bottom;
@@ -70,11 +78,15 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	/** The data inputs. */
 	private final Figure dataInputs = new Figure();
 
+	private final Figure varInOutInputs = new Figure();
+
 	/** The sockets. */
 	private final Figure sockets = new Figure();
 
 	/** The data outputs. */
 	private final Figure dataOutputs = new Figure();
+
+	private final Figure varInOutOutputs = new Figure();
 
 	/** The sockets. */
 	private final Figure errorMarkerInput = new Figure();
@@ -82,14 +94,23 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	/** The data outputs. */
 	private final Figure errorMarkerOutput = new Figure();
 
+	/** The indicator for hidden input pins */
+	private final Figure pinIndicatorInput = new Figure();
+
+	/** The indicator for hidden output pins */
+	private final Figure pinIndicatorOutput = new Figure();
+
 	/** The plugs. */
 	private final Figure plugs = new Figure();
 
-	private UnderlineAlphaLabel typeLabel;
+	private OverlayAlphaLabel typeLabel;
 
-	public FBShape(final FBType fbType) {
+	private final int maxTypeLabelSize;
+
+	public FBShape(final TypeEntry typeEntry, final int maxTypeLabelSize) {
+		this.maxTypeLabelSize = maxTypeLabelSize;
 		configureMainFigure();
-		createFBFigureShape(fbType);
+		createFBFigureShape(typeEntry);
 		setTypeLabelFont();
 		setBorder(new FBShapeShadowBorder());
 	}
@@ -121,6 +142,10 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return dataInputs;
 	}
 
+	public Figure getVarInOutInputs() {
+		return varInOutInputs;
+	}
+
 	public Figure getSockets() {
 		return sockets;
 	}
@@ -134,6 +159,10 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return dataOutputs;
 	}
 
+	public Figure getVarInOutOutputs() {
+		return varInOutOutputs;
+	}
+
 	public Figure getErrorMarkerInput() {
 		return errorMarkerInput;
 	}
@@ -142,30 +171,44 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return errorMarkerOutput;
 	}
 
+	public Figure getPinIndicatorInput() {
+		return pinIndicatorInput;
+	}
+
+	public Figure getPinIndicatorOutput() {
+		return pinIndicatorOutput;
+	}
+
 	public Figure getPlugs() {
 		return plugs;
 	}
 
-	public UnderlineAlphaLabel getTypeLabel() {
+	public OverlayAlphaLabel getTypeLabel() {
 		return typeLabel;
 	}
 
-	public RoundedRectangle getTop() {
+	protected RoundedRectangle getTop() {
 		return top;
 	}
 
-	public RoundedRectangle getMiddle() {
+	public Shape getMiddle() {
 		return middle;
 	}
 
-	public RoundedRectangle getBottom() {
+	protected RoundedRectangle getBottom() {
 		return bottom;
 	}
 
-	@Override
-	public void setAlpha(final int value) {
-		super.setAlpha(value);
+	protected final Figure getMiddleContainer() {
+		return middleContainer;
+	}
 
+	public Figure getFbFigureContainer() {
+		return fbFigureContainer;
+	}
+
+	@Override
+	public void setTransparency(final int value) {
 		bottom.setAlpha(value);
 		top.setAlpha(value);
 		getMiddle().setAlpha(value);
@@ -176,6 +219,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	@Override
+	public int getTransparency() {
+		return bottom.getAlpha().intValue();
+	}
+
+	@Override
 	public void updateFonts() {
 		setTypeLabelFont();
 		invalidateTree();
@@ -183,30 +231,10 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	private void setTypeLabelFont() {
-		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
-	}
-
-	@Override
-	protected void fillShape(final Graphics graphics) {
-		// not used
-	}
-
-	@Override
-	protected void outlineShape(final Graphics graphics) {
-		// not used
-	}
-
-	@Override
-	public void paintFigure(final Graphics graphics) {
-		// paint figure of shape does not check for background borders, needed for drop shadow
-		if (getBorder() instanceof AbstractBackground) {
-			((AbstractBackground) getBorder()).paintBackground(this, graphics, NO_INSETS);
-		}
-		super.paintFigure(graphics);
+		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
 	}
 
 	private void configureMainFigure() {
-		setFillXOR(false);
 		setOpaque(false);
 
 		final GridLayout mainLayout = new GridLayout(1, true);
@@ -217,72 +245,101 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		setLayoutManager(mainLayout);
 	}
 
-	private void createFBFigureShape(final FBType fbType) {
-		final Figure fbFigureContainer = createFigureContainer();
-		createFBTop(fbFigureContainer, DiagramPreferences.CORNER_DIM);
-		configureFBMiddle(fbType, fbFigureContainer);
-		createFBBottom(fbFigureContainer, DiagramPreferences.CORNER_DIM);
+	private void createFBFigureShape(final TypeEntry typeEntry) {
+		createFigureContainer();
+		createFBTop(GefPreferenceConstants.CORNER_DIM);
+		configureFBMiddle(typeEntry);
+		createFBBottom(GefPreferenceConstants.CORNER_DIM);
 	}
 
-	private void createFBBottom(final Figure fbFigureContainer, final int cornerDim) {
+	private void createFBBottom(final int cornerDim) {
 		bottom = new RoundedRectangle();
 		bottom.setOutline(false);
 		bottom.setCornerDimensions(new Dimension(cornerDim, cornerDim));
-		final GridLayout bottomLayout = new GridLayout(3, false);
-		bottomLayout.marginHeight = 4;
-		bottomLayout.marginWidth = 0;
-		bottomLayout.horizontalSpacing = 0;
-		bottomLayout.verticalSpacing = 0;
-		bottom.setLayoutManager(bottomLayout);
-
-		final GridData bottomLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		bottomLayoutData.verticalAlignment = SWT.TOP;
-
-		fbFigureContainer.add(bottom);
-		fbFigureContainer.setConstraint(bottom, bottomLayoutData);
-
-		setBottomIOs(bottom);
+		bottom.setLayoutManager(createTopBottomLayout());
+		addBottom();
+		setBottomIOs();
+		setPinIndicators();
 	}
 
-	private void configureFBMiddle(final FBType fbType, final Figure fbFigureContainer) {
-		final Figure middleContainer = new Figure();
-		final BorderLayout borderLayout = new BorderLayout();
-		middleContainer.setLayoutManager(borderLayout);
-		borderLayout.setHorizontalSpacing(10);
+	private void setPinIndicators() {
+		pinIndicatorInput.setLayoutManager(createPinIndicatorLayout());
+		errorMarkerInput.add(pinIndicatorInput);
+
+		// use the error marker container for now as this will anyhow be changed later
+
+		pinIndicatorOutput.setLayoutManager(createPinIndicatorLayout());
+		errorMarkerOutput.add(pinIndicatorOutput);
+	}
+
+	private static ToolbarLayout createPinIndicatorLayout() {
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+
+		return layout;
+	}
+
+	protected void addBottom() {
+		fbFigureContainer.add(bottom, createTopBottomLayoutData(), -1);
+	}
+
+	protected void configureFBMiddle(final TypeEntry typeEntry) {
+		middleContainer = new Figure();
+		middleContainer.setLayoutManager(new BorderLayout());
 		middleContainer.setBorder(new MarginBorder(0, FB_NOTCH_INSET, 0, FB_NOTCH_INSET));
 
-		fbFigureContainer.add(middleContainer);
-		final GridData middleLayouData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		fbFigureContainer.setConstraint(middleContainer, middleLayouData);
-
-		setupTypeNameAndVersion(fbType, middleContainer);
+		addMiddle();
+		setupTypeNameAndVersion(typeEntry, middleContainer);
 	}
 
-	private void createFBTop(final Figure fbFigureContainer, final int cornerDim) {
+	protected void addMiddle() {
+		fbFigureContainer.add(middleContainer, createMiddleLayoutData(), -1);
+	}
+
+	protected static GridData createMiddleLayoutData() {
+		return new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	}
+
+	private void createFBTop(final int cornerDim) {
 		top = new RoundedRectangle();
 		top.setOutline(false);
 		top.setCornerDimensions(new Dimension(cornerDim, cornerDim));
+		top.setLayoutManager(createTopBottomLayout());
 
-		final GridLayout topLayout = new GridLayout(3, false);
-		topLayout.marginHeight = 4;
-		topLayout.marginWidth = 0;
-		topLayout.horizontalSpacing = 0;
-		topLayout.verticalSpacing = 0;
-		top.setLayoutManager(topLayout);
-
-		fbFigureContainer.add(top);
-		final GridData topLayoutData = new GridData(
-				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL);
-		fbFigureContainer.setConstraint(top, topLayoutData);
-
-		setupTopIOs(top);
+		addTop();
+		setupTopIOs();
 	}
 
-	private Figure createFigureContainer() {
-		final Figure fbFigureContainer = new Figure();
+	protected void addTop() {
+		fbFigureContainer.add(top, createTopBottomLayoutData(), -1);
+	}
+
+	protected static GridData createTopBottomLayoutData() {
+		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		gridData.verticalAlignment = SWT.TOP;
+		return gridData;
+	}
+
+	private static GridLayout createTopBottomLayout() {
+		final GridLayout topLayout = new GridLayout(2, false);
+		topLayout.marginHeight = 1;
+		topLayout.marginWidth = 0;
+		topLayout.verticalSpacing = 0;
+		topLayout.horizontalSpacing = INPUT_OUTPUT_INTERLEAVE;
+		return topLayout;
+	}
+
+	private void createFigureContainer() {
+		fbFigureContainer = new Figure() {
+			@Override
+			public Insets getInsets() {
+				// even if we have a border do not return insets.
+				return NO_INSETS;
+			}
+		};
 		add(fbFigureContainer);
-		setConstraint(fbFigureContainer, new GridData(GridData.HORIZONTAL_ALIGN_CENTER));
+		setConstraint(fbFigureContainer, createDefaultFBContainerLayoutData());
 
 		final GridLayout gridLayout = new GridLayout(1, true);
 		gridLayout.marginHeight = 0;
@@ -290,99 +347,98 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.verticalSpacing = -1;
 		fbFigureContainer.setLayoutManager(gridLayout);
-		return fbFigureContainer;
 	}
 
-	private void setupTopIOs(final IFigure parent) {
-		final ToolbarLayout topInputsLayout = new ToolbarLayout(false);
-		final GridData topInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		eventInputs.setLayoutManager(topInputsLayout);
-		//
-		parent.add(eventInputs);
-		parent.setConstraint(eventInputs, topInputsLayoutData);
-
-		//
-		final ToolbarLayout topOutputsLayout = new ToolbarLayout(false);
-		final GridData topOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		topOutputsLayout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		eventOutputs.setLayoutManager(topOutputsLayout);
-		parent.add(eventOutputs);
-		parent.setConstraint(eventOutputs, topOutputsLayoutData);
+	protected static GridData createDefaultFBContainerLayoutData() {
+		return new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 	}
 
-	private void setBottomIOs(final IFigure parent) {
-		final Figure bottomInputArea = new Figure();
-		bottomInputArea.setLayoutManager(new ToolbarLayout(false));
-
-		final GridData bottomInputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		bottomInputsLayoutData.verticalAlignment = SWT.TOP;
-
-		parent.add(bottomInputArea);
-		parent.setConstraint(bottomInputArea, bottomInputsLayoutData);
-
-		dataInputs.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(dataInputs);
-
-		sockets.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(sockets);
-
-
-		errorMarkerInput.setLayoutManager(new ToolbarLayout(false));
-		bottomInputArea.add(errorMarkerInput);
-
-
-		final Figure bottomOutputArea = new Figure();
-		bottomOutputArea.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) bottomOutputArea.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-
-		final GridData bottomOutputsLayoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		parent.add(bottomOutputArea);
-		parent.setConstraint(bottomOutputArea, bottomOutputsLayoutData);
-
-		dataOutputs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) dataOutputs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(dataOutputs);
-
-		plugs.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) plugs.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(plugs);
-
-		errorMarkerOutput.setLayoutManager(new ToolbarLayout(false));
-		((ToolbarLayout) errorMarkerOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
-		bottomOutputArea.add(errorMarkerOutput);
-
-
+	private void setupTopIOs() {
+		eventInputs.setLayoutManager(createInputContainerLayout());
+		eventOutputs.setLayoutManager(createOutputContainerLayout());
+		addTopIOs();
 	}
 
-	protected void setupTypeNameAndVersion(final FBType type, final Figure container) {
-		middle = new RoundedRectangle();
+	protected void addTopIOs() {
+		top.add(eventInputs, createInputLayoutData(), -1);
+		top.add(eventOutputs, createOutputLayoutData(), -1);
+	}
+
+	private void setBottomIOs() {
+		dataInputs.setLayoutManager(createInputContainerLayout());
+		dataOutputs.setLayoutManager(createOutputContainerLayout());
+
+		varInOutInputs.setLayoutManager(createInputContainerLayout());
+		varInOutOutputs.setLayoutManager(createOutputContainerLayout());
+
+		sockets.setLayoutManager(createInputContainerLayout());
+		plugs.setLayoutManager(createOutputContainerLayout());
+
+		errorMarkerInput.setLayoutManager(createInputContainerLayout());
+		errorMarkerOutput.setLayoutManager(createOutputContainerLayout());
+
+		addBottomIOs();
+	}
+
+	private static ToolbarLayout createInputContainerLayout() {
+		final ToolbarLayout toolbarLayout = new ToolbarLayout(false);
+		toolbarLayout.setStretchMinorAxis(true);
+		return toolbarLayout;
+	}
+
+	private static ToolbarLayout createOutputContainerLayout() {
+		final ToolbarLayout layout = new ToolbarLayout(false);
+		layout.setStretchMinorAxis(true);
+		layout.setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+
+		return layout;
+	}
+
+	protected void addBottomIOs() {
+		bottom.add(dataInputs, createInputLayoutData(), -1);
+		bottom.add(dataOutputs, createOutputLayoutData(), -1);
+		bottom.add(varInOutInputs, createInputLayoutData(), -1);
+		bottom.add(varInOutOutputs, createOutputLayoutData(), -1);
+		bottom.add(sockets, createInputLayoutData(), -1);
+		bottom.add(plugs, createOutputLayoutData(), -1);
+		bottom.add(errorMarkerInput, createInputLayoutData(), -1);
+		bottom.add(errorMarkerOutput, createOutputLayoutData(), -1);
+	}
+
+	protected static GridData createInputLayoutData() {
+		return new GridData(SWT.BEGINNING, SWT.TOP, true, false);
+	}
+
+	protected static GridData createOutputLayoutData() {
+		return new GridData(SWT.END, SWT.TOP, true, false);
+	}
+
+	protected void setupTypeNameAndVersion(final TypeEntry typeEntry, final Figure container) {
+		middle = new RectangleFigure();
 		middle.setOutline(false);
 		container.add(middle, BorderLayout.CENTER);
-		middle.setCornerDimensions(new Dimension());
 
 		final GridLayout middleLayout = new GridLayout(1, true);
-		middleLayout.marginHeight = 2;
-		middleLayout.verticalSpacing = 1;
+		middleLayout.marginHeight = 0;
+		middleLayout.verticalSpacing = 0;
+		middleLayout.marginWidth = 3;
 
 		middle.setLayoutManager(middleLayout);
 
-		final String typeName = (null != type) ? type.getName() : Messages.FBFigure_TYPE_NOT_SET;
-
-		typeLabel = new UnderlineAlphaLabel(null != typeName ? typeName : FordiacMessages.ND);
+		typeLabel = new OverlayAlphaLabel();
+		changeTypeLabelText((null != typeEntry) ? typeEntry.getTypeName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
-		typeLabel.setOpaque(false);
-		typeLabel.setIcon(ResultListLabelProvider.getTypeImage(type));
+		typeLabel.setOpaque(true);
+		typeLabel.setIcon((null != typeEntry) ? TypeImageProvider.getImageForTypeEntry(typeEntry) : null);
+		typeLabel.setIconTextGap(2);
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
 
-	protected void changeTypeLabelText(final String text) {
+	protected void changeTypeLabelText(String text) {
+		if (text.length() > maxTypeLabelSize) {
+			text = text.substring(0, maxTypeLabelSize) + TYPE_TRUNCATION_STRING;
+		}
 		typeLabel.setText(text);
-		typeLabel.setIcon(null);
 	}
-
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - refactored class structure
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -16,34 +17,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 
-public class CheckableStructTreeNode extends StructTreeNode {
+public class CheckableStructTreeNode extends AbstractStructTreeNode {
 
 	private boolean isChecked = false;
 	private boolean isGrey = false;
 
-
-	private CheckableStructTreeNode(final VarDeclaration memberVariable, final CheckableStructTreeNode structTreeNode) {
-		super(memberVariable, structTreeNode);
+	CheckableStructTreeNode(final VarDeclaration memberVariable, final CheckableStructTreeNode structTreeNode,
+			final CheckableStructTree tree) {
+		super(memberVariable, structTreeNode, tree);
 	}
 
-	private CheckableStructTreeNode() {
-		super();
+	// this is used by the tree to create the root
+	CheckableStructTreeNode(final CheckableStructTree tree) {
+		setTree(tree);
 	}
 
-	public static CheckableStructTreeNode createRootNode() {
-		return new CheckableStructTreeNode();
+	@Override
+	public CheckableStructTree getTree() {
+		return (CheckableStructTree) super.getTree();
 	}
 
-	public static CheckableStructTreeNode initTree(final StructManipulator struct, final StructuredType structType) {
-		final CheckableStructTreeNode createRootNode = createRootNode();
-		buildTree(struct, structType, createRootNode);
-		return createRootNode;
+	@Override
+	public CheckableStructTreeNode addChild(final VarDeclaration memberVariable) {
+		return (CheckableStructTreeNode) super.addChild(memberVariable);
 	}
 
 	public void updateNode(final boolean check) {
@@ -55,7 +55,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		updateGreyedElements(this);
 	}
 
-	private void check(final boolean isChecked) {
+	void check(final boolean isChecked) {
 		if (getViewer() != null) {
 			getViewer().setChecked(this, isChecked);
 		}
@@ -74,24 +74,6 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		return childIsChecked(this);
 	}
 
-	public static void buildTree(final StructManipulator struct, final StructuredType structType,
-			final CheckableStructTreeNode parent) {
-		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
-			final CheckableStructTreeNode treeNode = parent.addChild(memberVariable);
-
-			if (struct.getInterfaceElement(treeNode.getPinName()) != null) {
-				treeNode.check(true);
-			}
-
-			if ((memberVariable.getType() instanceof StructuredType)
-					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT)) {
-				buildTree(struct, (StructuredType) memberVariable.getType(), treeNode);
-			} else if (treeNode.isChecked()) {
-				CheckableStructTreeNode.greyParents(treeNode);
-			}
-		}
-	}
-
 	private void updateGreyedElements(final CheckableStructTreeNode node) {
 		if (node.isChecked() || node.childIsChecked()) {
 			greyParents(node);
@@ -102,7 +84,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 
 	private void ungreyParents(final CheckableStructTreeNode node) {
 		CheckableStructTreeNode parent = node;
-		final StructTreeNode rootNode = node.getRootNode();
+		final AbstractStructTreeNode rootNode = node.getTree().getRoot();
 		while (parent != rootNode) {
 			if (parent.isGrey() && !parent.childIsChecked()) {
 				parent.setGrey(false);
@@ -117,7 +99,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 
 	public static void greyParents(final CheckableStructTreeNode node) {
 		CheckableStructTreeNode parent = node;
-		final StructTreeNode rootNode = node.getRootNode();
+		final AbstractStructTreeNode rootNode = node.getTree().getRoot();
 		while (parent != rootNode) {
 			if (!parent.isChecked()) {
 				parent.setGrey(true);
@@ -137,8 +119,8 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		check(b);
 	}
 
-	protected boolean childIsChecked(final StructTreeNode parent) {
-		for (final StructTreeNode node : parent.getChildren()) {
+	protected boolean childIsChecked(final AbstractStructTreeNode parent) {
+		for (final AbstractStructTreeNode node : parent.getChildren()) {
 			if (((CheckableStructTreeNode) node).isChecked) {
 				return true;
 			}
@@ -150,21 +132,13 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		return false;
 	}
 
-	@Override
-	public CheckableStructTreeNode addChild(final VarDeclaration memberVariable) {
-		final CheckableStructTreeNode treeNode = new CheckableStructTreeNode(memberVariable, this);
-		this.children.add(treeNode);
-		return treeNode;
-	}
-
-
-	private static StructTreeNode find(final StructTreeNode parent, final String name) {
-		for (final StructTreeNode node : parent.getChildren()) {
-			if (node.pinName.equals(name)) {
+	private static AbstractStructTreeNode find(final AbstractStructTreeNode parent, final String name) {
+		for (final AbstractStructTreeNode node : parent.getChildren()) {
+			if (node.getPinName().equals(name)) {
 				return node;
 			}
 			if (node.hasChildren()) {
-				final StructTreeNode find = find(node, name);
+				final AbstractStructTreeNode find = find(node, name);
 				if (find != null) {
 					return find;
 				}
@@ -173,16 +147,15 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		return null;
 	}
 
-	public StructTreeNode find(final String name) {
-		return find(getRootNode(), name);
+	public AbstractStructTreeNode find(final String name) {
+		return find(getTree().getRoot(), name);
 	}
 
-
 	private static void serializeTreeToString(final CheckableStructTreeNode parent, final StringBuilder stringBuilder) {
-		for (final StructTreeNode n : parent.getChildren()) {
+		for (final AbstractStructTreeNode n : parent.getChildren()) {
 			final CheckableStructTreeNode node = (CheckableStructTreeNode) n;
 			if (node.isChecked && !node.isGrey) {
-				stringBuilder.append(node.pinName);
+				stringBuilder.append(node.getPinName());
 				stringBuilder.append(LibraryElementTags.VARIABLE_SEPARATOR);
 			}
 			serializeTreeToString(node, stringBuilder);
@@ -193,7 +166,7 @@ public class CheckableStructTreeNode extends StructTreeNode {
 		final StringBuilder stringBuilder = new StringBuilder();
 		serializeTreeToString(this, stringBuilder);
 
-		if (stringBuilder.length() > 0) {
+		if (!stringBuilder.isEmpty()) {
 			return stringBuilder.substring(0, stringBuilder.length() - 1);
 		}
 
@@ -201,21 +174,15 @@ public class CheckableStructTreeNode extends StructTreeNode {
 	}
 
 	public CheckboxTreeViewer getViewer() {
-		return (CheckboxTreeViewer) root.viewer;
-	}
-
-	public CheckableStructTreeNode getRootNode() {
-		return (CheckableStructTreeNode) root;
+		return getTree().getViewer() instanceof final CheckboxTreeViewer checkboxtreeviewer ? checkboxtreeviewer : null;
 	}
 
 	public boolean isGrey() {
 		return isGrey;
 	}
 
-
-
 	private void setGrey(final boolean isGrey) {
-		if (root.viewer != null) {
+		if (getViewer() != null) {
 			getViewer().setGrayed(this, isGrey);
 		}
 		this.isGrey = isGrey;
@@ -237,6 +204,43 @@ public class CheckableStructTreeNode extends StructTreeNode {
 			}
 		});
 		return vars;
+	}
+
+	// equals and hash code are used by the treeviewer to maintain the expanded
+	// state on updates. For us currently the pinname which contains the full
+	// hierarchical name are the main equality criteria.
+	@Override
+	public int hashCode() {
+		return (getPinName() != null) ? getPinName().hashCode() : super.hashCode();
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final CheckableStructTreeNode other = (CheckableStructTreeNode) obj;
+		if (getPinName() != null && other.getPinName() != null) {
+			return getPinName().equals(other.getPinName());
+		}
+
+		return super.equals(obj);
+	}
+
+	@Override
+	protected AbstractStructTreeNode createChild(final VarDeclaration vardeclaration) {
+		return new CheckableStructTreeNode(vardeclaration, this, getTree());
+	}
+
+	@Override
+	protected String getChildSeparator() {
+		return ConfigurableFBManagement.MEMBER_VAR_SEPARATOR;
 	}
 
 }

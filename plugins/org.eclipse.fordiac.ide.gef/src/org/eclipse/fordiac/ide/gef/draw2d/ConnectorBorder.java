@@ -25,39 +25,52 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.swt.graphics.Color;
 
 public class ConnectorBorder extends AbstractBorder {
 
-	private static final int CONNECTOR_SIZE = 5;
+	private static final int CONNECTOR_WIDTH = 5;
+	private static final int CONNECTOR_HEIGHT = 10;
+	private static final int CONNECTOR_HEIGHT_HALF = CONNECTOR_HEIGHT / 2;
 	private static final int ADAPTER_SIZE = 9;
 
-	private static final int LR_MARGIN = CONNECTOR_SIZE + 1;
-	private static final int LR_ADAPTER_MARGIN = 11;
+	public static final int LR_MARGIN = CONNECTOR_WIDTH + 1;
+	protected static final int LR_ADAPTER_MARGIN = 11;
+
+	private static final int[] TRIANGLE_POINTS = { 0, 0, CONNECTOR_WIDTH, CONNECTOR_HEIGHT_HALF, 0, CONNECTOR_HEIGHT };
+	private static final PointList TRIANGLE_POINT_LIST = new PointList(TRIANGLE_POINTS);
+
+	private static final int[] DIAMOND_POINTS = { 0, 0, CONNECTOR_WIDTH, -CONNECTOR_HEIGHT_HALF, 2 * CONNECTOR_WIDTH, 0,
+			CONNECTOR_WIDTH, CONNECTOR_HEIGHT_HALF };
+	private static final PointList DIAMOND_POINT_LIST = new PointList(DIAMOND_POINTS);
 
 	private final IInterfaceElement editPartModelOject;
 	private Color connectorColor;
 
 	public ConnectorBorder(final IInterfaceElement editPartModelOject) {
-		super();
 		this.editPartModelOject = editPartModelOject;
 		updateColor();
 	}
 
+	protected IInterfaceElement getEditPartModelOject() {
+		return editPartModelOject;
+	}
+
 	public final void updateColor() {
 		if (isEvent()) {
-			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_EVENT_CONNECTOR_COLOR);
+			connectorColor = UIPreferenceConstants.getEventConnectorColor();
 		} else if (isAdapter()) {
-			connectorColor = PreferenceGetter.getColor(PreferenceConstants.P_ADAPTER_CONNECTOR_COLOR);
+			connectorColor = UIPreferenceConstants.getAdapterConnectorColor();
 		} else {
 			connectorColor = PreferenceGetter.getDataColor(editPartModelOject.getType().getName());
 		}
 	}
 
-	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, final Rectangle where, final int width,
-			final boolean filled) {
+	protected static void createAdapterSymbolMiniFBrotated(final Graphics graphics, final Rectangle where,
+			final int width, final boolean filled) {
 		graphics.setLineWidth(1);
 		graphics.setAntialias(1);
 		where.x += width;
@@ -101,31 +114,47 @@ public class ConnectorBorder extends AbstractBorder {
 		graphics.setBackgroundColor(connectorColor);
 
 		final Rectangle where = getPaintRectangle(figure, insets);
-		Rectangle r = null;
 		if (isInput()) {
 			if (isAdapter()) {
 				createAdapterSymbolMiniFBrotated(graphics, where, 0, false);
+			} else if (isVarInOut()) {
+				drawFilledPolygonAt(graphics, where.x, where.y + where.height / 2, DIAMOND_POINT_LIST);
 			} else {
-				r = new Rectangle(where.x, where.y + (where.height - CONNECTOR_SIZE) / 2, CONNECTOR_SIZE,
-						CONNECTOR_SIZE);
-				graphics.fillRectangle(r);
+				drawFilledPolygonAt(graphics, where.x, where.y + (where.height - CONNECTOR_HEIGHT) / 2,
+						TRIANGLE_POINT_LIST);
 			}
+		} else if (isAdapter()) {
+			createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
+		} else if (isVarInOut()) {
+			drawFilledPolygonAt(graphics, where.width + where.x - CONNECTOR_WIDTH * 2, where.y + where.height / 2,
+					DIAMOND_POINT_LIST);
 		} else {
-			if (isAdapter()) {
-				createAdapterSymbolMiniFBrotated(graphics, where, where.width - ADAPTER_SIZE + 1, true);
-			} else {
-				r = new Rectangle(where.width + where.x - CONNECTOR_SIZE,
-						where.y + (where.height - CONNECTOR_SIZE) / 2,
-						CONNECTOR_SIZE, CONNECTOR_SIZE);
-				graphics.fillRectangle(r);
-			}
+			drawFilledPolygonAt(graphics, where.x + where.width - CONNECTOR_WIDTH,
+					where.y + (where.height - CONNECTOR_HEIGHT) / 2, TRIANGLE_POINT_LIST);
 		}
+	}
+
+	private static void drawFilledPolygonAt(final Graphics graphics, final int startX, final int startY,
+			final PointList points) {
+		graphics.translate(startX, startY);
+		graphics.fillPolygon(points);
+		graphics.translate(-startX, -startY);
 	}
 
 	@Override
 	public Insets getInsets(final IFigure figure) {
-		final int lrMargin = (isAdapter()) ? LR_ADAPTER_MARGIN : LR_MARGIN;
-		return new Insets(0, lrMargin, 0, lrMargin);
+		final int lrMargin = getLRMargin();
+		return (isInput()) ? new Insets(0, lrMargin, 0, 0) : new Insets(0, 0, 0, lrMargin);
+	}
+
+	protected int getLRMargin() {
+		int lrMargin = LR_MARGIN;
+		if (isAdapter()) {
+			lrMargin = LR_ADAPTER_MARGIN;
+		} else if (isVarInOut()) {
+			lrMargin *= 2;
+		}
+		return lrMargin;
 	}
 
 	public boolean isInput() {
@@ -138,5 +167,9 @@ public class ConnectorBorder extends AbstractBorder {
 
 	public final boolean isAdapter() {
 		return editPartModelOject.getType() instanceof AdapterType;
+	}
+
+	private final boolean isVarInOut() {
+		return editPartModelOject instanceof final VarDeclaration varDecl && varDecl.isInOutVar();
 	}
 }

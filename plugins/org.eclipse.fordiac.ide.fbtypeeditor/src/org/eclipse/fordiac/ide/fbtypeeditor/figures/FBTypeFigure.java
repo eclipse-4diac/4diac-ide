@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,11 +26,11 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 public class FBTypeFigure extends FBShape {
 
-	private Label versionInfoLabel;
-	private FBType type;
+	private final Label versionInfoLabel;
+	private final FBType type;
 
 	public FBTypeFigure(final FBType type) {
-		super(type);
+		super(type.getTypeEntry(), Integer.MAX_VALUE);
 		this.type = type;
 
 		versionInfoLabel = new Label();
@@ -45,7 +45,7 @@ public class FBTypeFigure extends FBShape {
 	public final void updateVersionInfoLabel() {
 		VersionInfo versionInfo = null;
 		if (!type.getVersionInfo().isEmpty()) {
-			versionInfo = type.getVersionInfo().get(type.getVersionInfo().size() - 1);
+			versionInfo = type.getVersionInfo().get(0);
 		}
 		versionInfoLabel.setText(versionInfo != null ? versionInfo.getVersion() : FordiacMessages.ND);
 	}

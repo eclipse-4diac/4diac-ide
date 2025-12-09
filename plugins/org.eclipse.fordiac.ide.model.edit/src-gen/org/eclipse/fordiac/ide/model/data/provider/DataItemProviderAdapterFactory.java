@@ -241,25 +241,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return valueTypeItemProvider;
 	}
 
-	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ElementaryType}
-	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected ElementaryTypeItemProvider elementaryTypeItemProvider;
-
-	/** This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ElementaryType}. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public Adapter createElementaryTypeAdapter() {
-		if (elementaryTypeItemProvider == null) {
-			elementaryTypeItemProvider = new ElementaryTypeItemProvider(this);
-		}
-
-		return elementaryTypeItemProvider;
-	}
-
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.DerivedType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -830,6 +811,52 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return anyCharsTypeItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnySCharsType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnySCharsTypeItemProvider anySCharsTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnySCharsType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnySCharsTypeAdapter() {
+		if (anySCharsTypeItemProvider == null) {
+			anySCharsTypeItemProvider = new AnySCharsTypeItemProvider(this);
+		}
+
+		return anySCharsTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyWCharsType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnyWCharsTypeItemProvider anyWCharsTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyWCharsType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnyWCharsTypeAdapter() {
+		if (anyWCharsTypeItemProvider == null) {
+			anyWCharsTypeItemProvider = new AnyWCharsTypeItemProvider(this);
+		}
+
+		return anyWCharsTypeItemProvider;
+	}
+
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.AnyStringType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -1077,6 +1104,29 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return ldateTypeItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.InternalDataType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected InternalDataTypeItemProvider internalDataTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.InternalDataType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createInternalDataTypeAdapter() {
+		if (internalDataTypeItemProvider == null) {
+			internalDataTypeItemProvider = new InternalDataTypeItemProvider(this);
+		}
+
+		return internalDataTypeItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
@@ -1177,8 +1227,6 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 			subrangeTypeItemProvider.dispose();
 		if (valueTypeItemProvider != null)
 			valueTypeItemProvider.dispose();
-		if (elementaryTypeItemProvider != null)
-			elementaryTypeItemProvider.dispose();
 		if (derivedTypeItemProvider != null)
 			derivedTypeItemProvider.dispose();
 		if (eventTypeItemProvider != null)

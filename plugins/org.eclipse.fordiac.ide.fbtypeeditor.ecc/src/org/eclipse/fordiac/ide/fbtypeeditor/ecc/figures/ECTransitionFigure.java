@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
 import org.eclipse.draw2d.Bendpoint;
-import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Ellipse;
@@ -32,8 +31,7 @@ import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.jface.resource.JFaceResources;
@@ -50,11 +48,10 @@ public class ECTransitionFigure extends SplineConnection {
 		private final Label orderLabel;
 
 		public TransitionOrderDecorator() {
-			super();
 			setLayoutManager(new StackLayout());
 			setFill(true);
 			setAntialias(1);
-			setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+			setBackgroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 			setOutline(false);
 
 			orderLabel = new Label();
@@ -66,7 +63,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 		private static Font getOrderLabelFont() {
 			final FontData[] fontData = JFaceResources.getFontRegistry()
-					.getFontData(org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT).clone();
+					.getFontData(org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants.DIAGRAM_FONT).clone();
 			Arrays.stream(fontData).forEach(fd -> fd.setHeight(TRANSITON_ORDER_LABEL_FONT_SIZE));
 			JFaceResources.getFontRegistry().put(TRANSITION_ORDER_LABEL_FONT, fontData);
 			return JFaceResources.getFont(TRANSITION_ORDER_LABEL_FONT);
@@ -103,9 +100,8 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public ECTransitionFigure(final ECTransition ecTransition) {
 		setAntialias(SWT.ON);
-		setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+		setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 
-		setConnectionRouter(new BendpointConnectionRouter());
 		updateBendPoints(ecTransition);
 
 		transitionOrderDecorator = new TransitionOrderDecorator();
@@ -127,7 +123,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public void updateBendPoints(final ECTransition ecTransition) {
 		final List<Bendpoint> bendPoints = new ArrayList<>();
-		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().asPoint()));
+		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().toScreenPoint()));
 		getConnectionRouter().setConstraint(this, bendPoints);
 	}
 
@@ -154,7 +150,7 @@ public class ECTransitionFigure extends SplineConnection {
 		conditionBackground = new SetableAlphaLabel();
 		conditionBackground.setText(conditionText); // needed for correct size
 		conditionBackground
-		.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		conditionBackground.setAlpha(190);
 		conditionBackground.setOpaque(true);
 

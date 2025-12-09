@@ -1,112 +1,116 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>EC State</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>EC State</b></em>'.
+ * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions <em>In Transitions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECAction <em>EC Action</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getOutTransitions <em>Out Transitions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getInTransitions <em>In Transitions</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState()
  * @model
- * @generated */
+ * @generated
+ */
 public interface ECState extends INamedElement, PositionableElement {
-	/** Returns the value of the '<em><b>EC Action</b></em>' containment reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ECAction}. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}'. <!-- begin-user-doc
-	 * -->
-	 * <p>
-	 * If the meaning of the '<em>EC Action</em>' containment reference list isn't clear, there really should be more of
-	 * a description here...
-	 * </p>
+	/**
+	 * Returns the value of the '<em><b>EC Action</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECAction}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState <em>EC State</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>EC Action</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_ECAction()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECAction#getECState
-	 * @model opposite="eCState" containment="true" extendedMetaData="kind='element' name='ECAction'
-	 *        namespace='##targetNamespace'"
-	 * @generated */
+	 * @model opposite="eCState" containment="true"
+	 *        extendedMetaData="kind='element' name='ECAction' namespace='##targetNamespace'"
+	 * @generated
+	 */
 	EList<ECAction> getECAction();
 
-	/** Returns the value of the '<em><b>Out Transitions</b></em>' reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}'. <!--
-	 * begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Out Transitions</em>' reference list isn't clear, there really should be more of a
-	 * description here...
-	 * </p>
+	/**
+	 * Returns the value of the '<em><b>Out Transitions</b></em>' reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Out Transitions</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_OutTransitions()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getSource
 	 * @model opposite="source"
-	 * @generated */
+	 * @generated
+	 */
 	EList<ECTransition> getOutTransitions();
 
-	/** Returns the value of the '<em><b>In Transitions</b></em>' reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination <em>Destination</em>}'. <!--
-	 * begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>In Transitions</em>' reference list isn't clear, there really should be more of a
-	 * description here...
-	 * </p>
+	/**
+	 * Returns the value of the '<em><b>In Transitions</b></em>' reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination <em>Destination</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>In Transitions</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_InTransitions()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECTransition#getDestination
 	 * @model opposite="destination"
-	 * @generated */
+	 * @generated
+	 */
 	EList<ECTransition> getInTransitions();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
-	 * @generated */
-	boolean isStartState();
-
-	/** Returns the value of the '<em><b>ECC</b></em>' container reference. It is bidirectional and its opposite is
-	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC State</em>}'. <!-- begin-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>ECC</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState <em>EC State</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>ECC</em>' container reference.
 	 * @see #setECC(ECC)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECState_ECC()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ECC#getECState
 	 * @model opposite="eCState" transient="false"
-	 * @generated */
+	 * @generated
+	 */
 	ECC getECC();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}'
-	 * container reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ECState#getECC <em>ECC</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>ECC</em>' container reference.
 	 * @see #getECC()
-	 * @generated */
+	 * @generated
+	 */
 	void setECC(ECC value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
+	 * @generated
+	 */
+	boolean isStartState();
 
 } // ECState

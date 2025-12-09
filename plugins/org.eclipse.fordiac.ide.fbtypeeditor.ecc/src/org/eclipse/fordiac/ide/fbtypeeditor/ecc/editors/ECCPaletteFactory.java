@@ -34,7 +34,7 @@ public final class ECCPaletteFactory {
 	}
 
 	private static void fillPalette(final PaletteRoot palette) {
-		PaletteGroup eccGroup = new PaletteGroup(Messages.ECCPaletteFactory_LABEL_ECCGroup);
+		final PaletteGroup eccGroup = new PaletteGroup(Messages.ECCPaletteFactory_LABEL_ECCGroup);
 		ImageDescriptor desc = FordiacImage.ICON_EC_STATE.getImageDescriptor();
 		CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
 				Messages.ECCPaletteFactory_LABEL_State, Messages.ECCPaletteFactory_TOOLTIP_State,
@@ -43,10 +43,6 @@ public final class ECCPaletteFactory {
 		desc = FordiacImage.ICON_EC_ACTION.getImageDescriptor();
 		combined = new CombinedTemplateCreationEntry(Messages.ECCPaletteFactory_LABEL_Action,
 				Messages.ECCPaletteFactory_TOOLTIP_Action, new ActionCreationFactory(), desc, desc);
-		eccGroup.add(combined);
-		desc = FordiacImage.ICON_ALGORITHM.getImageDescriptor();
-		combined = new CombinedTemplateCreationEntry(Messages.ECCPaletteFactory_LABEL_STAlgorithm,
-				Messages.ECCPaletteFactory_TOOLTIP_STAlgorithm, new STAlgorithmCreationFactory(), desc, desc);
 		eccGroup.add(combined);
 		palette.add(eccGroup);
 	}

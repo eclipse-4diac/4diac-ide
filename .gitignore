@@ -5,3 +5,11 @@
 **/*java._trace
 /.sonarlint/
 **/*.orig
+**/xtend-gen/*
+**/.antlr-*.jar
+!.gitignore
+!.gitkeep
+**/.polyglot*
+**/.META-INF_MANIFEST.MF
+**/.tycho-consumer-pom.xml
+**/pom.tycho

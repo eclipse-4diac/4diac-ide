@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple cells
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -29,7 +29,7 @@ public class TablePasteAction extends Action {
 
 	private final Object part;
 
-	public TablePasteAction(Object part) {
+	public TablePasteAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.PASTE.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Paste);
@@ -41,9 +41,11 @@ public class TablePasteAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
+
 		if (editor != null) {
 			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
-				if (cell.isActivated()) {
+				// cell can be null if column is not editable
+				if (cell != null && cell.isActivated()) {
 					cell.performPaste();
 					return;
 				}
@@ -52,12 +54,17 @@ public class TablePasteAction extends Action {
 		}
 	}
 
-	private static void pasteItems(I4diacTableUtil editor) {
-		final TableViewer viewer = editor.getViewer();
+	private static void pasteItems(final I4diacTableUtil editor) {
+		final TableViewer viewer = (TableViewer) editor.getViewer();
 		final Table table = viewer.getTable();
 		final int[] pasteIndices = table.getSelectionIndices();
 		final Object content = Clipboard.getDefault().getContents();
 		final Object[] entries = createEntriesFromContent(content);
+
+		// catch wrong clipboard contents
+		if (entries == null) {
+			return;
+		}
 
 		int index = getInsertionStartIndex(pasteIndices, table);
 
@@ -78,7 +85,7 @@ public class TablePasteAction extends Action {
 		viewer.setSelection(viewer.getSelection());
 	}
 
-	private static Object[] createEntriesFromContent(Object content) {
+	private static Object[] createEntriesFromContent(final Object content) {
 		return (content instanceof StructuredSelection) ? ((StructuredSelection) content).toArray()
 				: (Object[]) content;
 	}

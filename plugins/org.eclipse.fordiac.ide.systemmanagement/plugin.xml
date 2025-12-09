@@ -9,6 +9,12 @@
                class="org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature">
          </run>
       </runtime>
+      <builder
+            id="org.eclipse.fordiac.ide.library.builder">
+      </builder>
+      <builder
+            id="org.eclipse.fordiac.ide.export.builder">
+      </builder>
    </extension>
    <!-- old nature name so that old projects can still be loaded -->
    <extension
@@ -20,33 +26,10 @@
          </run>
       </runtime>
    </extension>
-   <extension-point id="tagProvider" name="tagProvider" schema="schema/tagProvider.exsd"/>
    <extension
-         point="org.eclipse.fordiac.ide.systemmanagement.tagProvider">
-      <tagprovider
-            Interface="org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider">
-      </tagprovider>
-   </extension>
-
-  <!-- ant task infrastructure --> 
-   <extension point="org.eclipse.ant.core.antTasks">
-      <antTask
-            library="ant_tasks/systemmanagement-ant.jar"
-            name="fordiac.importProject"
-            class="org.eclipse.fordiac.ide.systemmanagement.ant.Import4diacProject">
-      </antTask>
-   </extension>
-   <extension point="org.eclipse.ant.core.antTasks">
-      <antTask
-            library="ant_tasks/systemmanagement-ant.jar"
-            name="fordiac.checkSystem"
-            class="org.eclipse.fordiac.ide.systemmanagement.ant.CheckSystem">
-      </antTask>
-   </extension>
-  
-   <extension point="org.eclipse.ant.core.extraClasspathEntries">
-      <extraClasspathEntry library="ant_tasks/systemmanagement-ant.jar" />
-   </extension>
-
-
+      point="org.eclipse.ui.startup">
+   		<startup
+        	class="org.eclipse.fordiac.ide.systemmanagement.changelistener.StartupHandler">
+   		</startup>
+   </extension> 
 </plugin>

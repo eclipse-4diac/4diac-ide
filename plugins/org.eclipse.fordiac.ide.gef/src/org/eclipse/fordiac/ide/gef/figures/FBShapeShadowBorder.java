@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,58 +13,35 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.AbstractBackground;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 
-public class FBShapeShadowBorder extends AbstractBackground {
+public class FBShapeShadowBorder extends AbstractShadowBorder {
 
-	private static final int SHADOW_ALPHA = 30;
-
-	private static final int SHADOW_SIZE = 4;
-
-	private static final int SHADOW_CORNER_RADIUS = DiagramPreferences.CORNER_DIM + 2;
-
-	public static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
-
-	@Override
-	public Insets getInsets(final IFigure figure) {
-		return SHADOW_INSETS;
-	}
-
-	@Override
-	public boolean isOpaque() {
-		return true;
-	}
+	private static Rectangle topShadowRect = new Rectangle();
+	private static Rectangle middleShadowRect = new Rectangle();
+	private static Rectangle bottomShadowRect = new Rectangle();
 
 	@Override
 	public void paintBackground(final IFigure figure, final Graphics graphics, final Insets insets) {
 		Assert.isTrue(figure instanceof FBShape);
 		final FBShape fbShape = (FBShape) figure;
 
-		graphics.pushState();
-		graphics.setBackgroundColor(ColorConstants.black);
+		final var backgroundColor = graphics.getBackgroundColor();
+		final var alpha = graphics.getAlpha();
+		graphics.setBackgroundColor(figure.getForegroundColor());
 
-		final Rectangle topShadowRect = fbShape.getTop().getBounds().getExpanded(2, 2);
-		final Rectangle middleShadowRect = fbShape.getMiddle().getBounds().getExpanded(2, 0);
-		final Rectangle bottomShadowRect = fbShape.getBottom().getBounds().getExpanded(2, 2);
-
-		final Rectangle clipRect = topShadowRect.getCopy();
-		clipRect.union(middleShadowRect);
-		clipRect.union(bottomShadowRect);
-		clipRect.width += SHADOW_SIZE;
-		clipRect.height += SHADOW_SIZE;
-		graphics.setClip(clipRect);
+		topShadowRect.setBounds(fbShape.getTop().getBounds()).expand(2, 2);
+		middleShadowRect.setBounds(fbShape.getMiddle().getBounds()).expand(2, 0);
+		bottomShadowRect.setBounds(fbShape.getBottom().getBounds()).expand(2, 2);
 
 		drawShadowHalo(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
-
 		drawDropShadow(graphics, topShadowRect, middleShadowRect, bottomShadowRect);
 
-		graphics.popState();
+		graphics.setBackgroundColor(backgroundColor);
+		graphics.setAlpha(alpha);
 	}
 
 	private static void drawShadowHalo(final Graphics graphics, final Rectangle topShadowRect,
@@ -81,7 +58,7 @@ public class FBShapeShadowBorder extends AbstractBackground {
 	private static void drawDropShadow(final Graphics graphics, final Rectangle topShadowRect,
 			final Rectangle middleShadowRect, final Rectangle bottomShadowRect) {
 		graphics.setAlpha(SHADOW_ALPHA);
-		final double horInc = 0.7;  // emulate a roughly 30° shadow angle
+		final double horInc = 0.7; // emulate a roughly 30° shadow angle
 		double horI = 0;
 		for (int i = 0; i < SHADOW_SIZE; i++) {
 			horI += horInc;
@@ -101,6 +78,5 @@ public class FBShapeShadowBorder extends AbstractBackground {
 		graphics.fillRectangle(middleShadowRect);
 		graphics.fillRoundRectangle(bottomShadowRect, SHADOW_CORNER_RADIUS, SHADOW_CORNER_RADIUS);
 	}
-
 
 }

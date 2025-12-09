@@ -1,6 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor Gmbh, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2020 Johannes Kepler University, Linz
+ * Copyright (c) 2008 - 2024 Profactor Gmbh, TU Wien ACIN, fortiss GmbH,
+ *                           Johannes Kepler University, Linz,
+ *                           Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *   			 - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
+ *  Hesam Rezaee - add export option for Variable configuration and visibility
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -25,35 +27,45 @@ import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.Activator;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
+import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-abstract class CommonElementExporter {
+public class CommonElementExporter {
 
-	private static class ByteBufferInputStream extends InputStream {
+	protected static class ByteBufferInputStream extends InputStream {
 
 		private final Iterator<ByteBuffer> bufferIterator;
 		private ByteBuffer currentDataBuffer;
@@ -70,7 +82,8 @@ abstract class CommonElementExporter {
 		public int read() throws IOException {
 			if (currentDataBuffer.hasRemaining()) {
 				return currentDataBuffer.get() & 0xFF;
-			} else if (bufferIterator.hasNext()) {
+			}
+			if (bufferIterator.hasNext()) {
 				currentDataBuffer = bufferIterator.next();
 				return currentDataBuffer.get() & 0xFF;
 			}
@@ -81,7 +94,8 @@ abstract class CommonElementExporter {
 		public int read(final byte[] b) throws IOException {
 			if (currentDataBuffer.hasRemaining()) {
 				return super.read(b);
-			} else if (bufferIterator.hasNext()) {
+			}
+			if (bufferIterator.hasNext()) {
 				currentDataBuffer = bufferIterator.next();
 				return super.read(b);
 			}
@@ -103,7 +117,12 @@ abstract class CommonElementExporter {
 
 		@Override
 		public int available() throws IOException {
-			return currentDataBuffer.remaining();
+			int remaining = currentDataBuffer.remaining();
+			if ((remaining == 0) && bufferIterator.hasNext()) {
+				currentDataBuffer = bufferIterator.next();
+				remaining = currentDataBuffer.remaining();
+			}
+			return remaining;
 		}
 
 		@Override
@@ -114,11 +133,18 @@ abstract class CommonElementExporter {
 
 	}
 
-	private static class ByteBufferOutputStream extends OutputStream {
+	protected static class ByteBufferOutputStream extends OutputStream {
 		private static final int SI_PREFIX_KI = 1024;
 		private static final int SI_PREFIX_MI = SI_PREFIX_KI * SI_PREFIX_KI;
-		private static final int SINGLE_DATA_BUFFER_CAPACITY = Activator.getDefault().getPreferenceStore()
-				.getInt(PreferenceConstants.P_ALLOCATION_SIZE) * SI_PREFIX_MI;
+		private static final int SINGLE_DATA_BUFFER_CAPACITY = getSingleDataBufCap();
+		private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
+
+		private static int getSingleDataBufCap() {
+			final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+			return preferences.getInt(ModelPreferenceConstants.P_ALLOCATION_SIZE,
+					ModelPreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE) * SI_PREFIX_MI;
+		}
+
 		private List<ByteBuffer> dataBuffers = new ArrayList<>(5); // give it an initial capacity of 5 to reduce
 		// reallocation
 		private ByteBuffer currentDataBuffer;
@@ -158,14 +184,18 @@ abstract class CommonElementExporter {
 
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
+	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
-	private ByteBufferOutputStream outputStream;
+	private final ByteBufferOutputStream outputStream;
+	private final Set<TypeEntry> dependencies;
 
 	private int tabCount = 0;
 
 	protected CommonElementExporter() {
+		outputStream = new ByteBufferOutputStream();
 		writer = createEventWriter();
+		dependencies = new HashSet<>();
 	}
 
 	/**
@@ -176,11 +206,21 @@ abstract class CommonElementExporter {
 	 */
 	protected CommonElementExporter(final CommonElementExporter parent) {
 		writer = parent.writer;
+		outputStream = parent.outputStream;
+		dependencies = parent.dependencies;
 		tabCount = parent.tabCount;
 	}
 
 	protected XMLStreamWriter getWriter() {
 		return writer;
+	}
+
+	protected ByteBufferOutputStream getOutputStream() {
+		return outputStream;
+	}
+
+	public Set<TypeEntry> getDependencies() {
+		return dependencies;
 	}
 
 	protected void addStartElement(final String name) throws XMLStreamException {
@@ -215,14 +255,13 @@ abstract class CommonElementExporter {
 	private XMLStreamWriter createEventWriter() {
 		final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
 
-		outputStream = new ByteBufferOutputStream();
 		try {
 			final XMLStreamWriter newWriter = outputFactory.createXMLStreamWriter(outputStream,
 					StandardCharsets.UTF_8.name());
 			newWriter.writeStartDocument(StandardCharsets.UTF_8.name(), "1.0"); //$NON-NLS-1$
 			return newWriter;
 		} catch (final XMLStreamException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -231,18 +270,31 @@ abstract class CommonElementExporter {
 		if (null != colElement.getColor()) {
 			final String colorValue = colElement.getColor().getRed() + "," + colElement.getColor().getGreen() + "," //$NON-NLS-1$ //$NON-NLS-2$
 					+ colElement.getColor().getBlue();
-			addAttributeElement(LibraryElementTags.COLOR, "STRING", colorValue, "color"); //$NON-NLS-1$ //$NON-NLS-2$
+			addAttributeElement(LibraryElementTags.COLOR, IecTypes.ElementaryTypes.STRING, colorValue, null);
 		}
 	}
 
-	protected void addAttributeElement(final String name, final String type, final String value, final String comment)
+	protected void addAttributeElement(final String name, final DataType type, final String value, final String comment)
 			throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
-		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
-		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
-		getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		if (HelperTypes.CDATA == type) {
+			addStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		}
+
+		addNameAttribute(name);
+		if (type != null && !(type.eContainer() instanceof AttributeDeclaration)) {
+			addTypeAttribute(type);
+		}
+		if (HelperTypes.CDATA != type) {
+			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		}
 		if ((null != comment) && (!comment.isBlank())) {
 			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		}
+		if (HelperTypes.CDATA == type) {
+			writeCDataSection(value);
+			addInlineEndElement();
 		}
 	}
 
@@ -250,49 +302,6 @@ abstract class CommonElementExporter {
 			throws XMLStreamException {
 		addStartElement(elemName);
 		addNameAndCommentAttribute(namedElement);
-	}
-
-	protected void writeToFile(final IFile iFile) {
-		final long startTime = System.currentTimeMillis();
-		try {
-			writer.writeCharacters(LINE_END);
-			writer.writeEndDocument();
-			writer.close();
-			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
-				if (iFile.exists()) {
-					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-				} else {
-					checkAndCreateFolderHierarchy(iFile);
-					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, null);
-				}
-			} finally {
-				outputStream.close();
-			}
-		} catch (CoreException | XMLStreamException | IOException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
-		}
-		final long endTime = System.currentTimeMillis();
-		Activator.getDefault().logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
-
-	}
-
-	/**
-	 * Check if the folders in the file's path exist and if not create them
-	 * accordingly
-	 *
-	 * @param file for which the path should be checked
-	 * @throws CoreException
-	 */
-	private static void checkAndCreateFolderHierarchy(final IFile file) throws CoreException {
-		final IPath path = file.getProjectRelativePath().removeLastSegments(1);
-
-		if (!path.isEmpty()) {
-			final IFolder folder = file.getProject().getFolder(path);
-			if (!folder.exists()) {
-				folder.create(true, true, null);
-				folder.refreshLocal(IResource.DEPTH_ZERO, null);
-			}
-		}
 	}
 
 	/**
@@ -321,7 +330,7 @@ abstract class CommonElementExporter {
 				writer.writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, ident.getType());
 			}
 			if ((null != ident.getDescription()) && !ident.getDescription().equals("")) { //$NON-NLS-1$
-				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, fullyEscapeValue(ident.getDescription()));
+				writeAttributeRaw(LibraryElementTags.DESCRIPTION_ELEMENT, ident.getDescription());
 			}
 			addEndElement();
 		}
@@ -361,28 +370,33 @@ abstract class CommonElementExporter {
 		}
 	}
 
-	protected void addCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
-		if (null != namedElement.getComment()) {
-			writer.writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, namedElement.getComment());
+	protected void addCommentAttribute(final String comment) throws XMLStreamException {
+		if (comment != null && !comment.isBlank()) {
+			writeAttributeRaw(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
 		}
 	}
 
 	protected void addNameAndCommentAttribute(final INamedElement namedElement) throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
-		addCommentAttribute(namedElement);
+		addCommentAttribute(namedElement.getComment());
 	}
 
-	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final INamedElement type)
+	protected void addNameTypeCommentAttribute(final INamedElement namedElement, final LibraryElement type)
 			throws XMLStreamException {
 		addNameAttribute(namedElement.getName());
 		addTypeAttribute(type);
-		addCommentAttribute(namedElement);
+		addCommentAttribute(namedElement.getComment());
 	}
 
 	protected void addAttributes(final EList<Attribute> attributes) throws XMLStreamException {
 		for (final Attribute attribute : attributes) {
-			addAttributeElement(attribute.getName(), attribute.getType().getName(), attribute.getValue(),
-					attribute.getComment());
+			final String name;
+			if (attribute.getAttributeDeclaration() != null) {
+				name = PackageNameHelper.getFullTypeName(addDependency(attribute.getAttributeDeclaration()));
+			} else {
+				name = attribute.getName();
+			}
+			addAttributeElement(name, attribute.getType(), attribute.getValue(), attribute.getComment());
 		}
 	}
 
@@ -393,15 +407,16 @@ abstract class CommonElementExporter {
 	 * @param attributeValue the value of the attribute
 	 * @throws XMLStreamException
 	 */
-	protected void writeAttributeRaw(final String attributeName, final String attributeValue) throws XMLStreamException {
+	protected void writeAttributeRaw(final String attributeName, final String attributeValue)
+			throws XMLStreamException {
 		try (Writer osWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
 			osWriter.write(" "); //$NON-NLS-1$
 			osWriter.write(attributeName);
 			osWriter.write("=\""); //$NON-NLS-1$
-			osWriter.write(attributeValue);
-			osWriter.write("\" "); //$NON-NLS-1$
+			osWriter.write(fullyEscapeValue(attributeValue));
+			osWriter.write("\""); //$NON-NLS-1$
 		} catch (final IOException e) {
-			throw new XMLStreamException("Could not write raw attribute", e);
+			throw new XMLStreamException("Could not write raw attribute", e); //$NON-NLS-1$
 		}
 	}
 
@@ -413,7 +428,8 @@ abstract class CommonElementExporter {
 	 * @return the escaped string
 	 */
 	protected static String fullyEscapeValue(final String value) {
-		String escapedValue = value.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		String escapedValue = value.replace("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		escapedValue = escapedValue.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace(">", "&gt;"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -423,8 +439,8 @@ abstract class CommonElementExporter {
 		return escapedValue;
 	}
 
-	protected void addTypeAttribute(final INamedElement type) throws XMLStreamException {
-		addTypeAttribute(((null != type) && (null != type.getName())) ? type.getName() : ""); //$NON-NLS-1$
+	protected void addTypeAttribute(final LibraryElement type) throws XMLStreamException {
+		addTypeAttribute(PackageNameHelper.getFullTypeName(addDependency(type)));
 	}
 
 	protected void addTypeAttribute(final String type) throws XMLStreamException {
@@ -435,23 +451,94 @@ abstract class CommonElementExporter {
 		writer.writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, (null != name) ? name : ""); //$NON-NLS-1$
 	}
 
-	protected void addParamsConfig(final EList<VarDeclaration> inputVars) throws XMLStreamException {
+	protected void addParamsConfig(final EList<? extends VarDeclaration> inputVars) throws XMLStreamException {
 		for (final VarDeclaration inVar : inputVars) {
-			if ((null != inVar.getValue()) && !inVar.getValue().getValue().isEmpty()) {
-				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-				addNameAttribute(inVar.getName());
-				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, inVar.getValue().getValue());
-			}
+			addParam(inVar);
 		}
+	}
+
+	protected void addParam(final IInterfaceElement ie) throws XMLStreamException {
+		final boolean hasAttributes = hasNonTrivialAttributes(ie);
+		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
+				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+		final boolean hasComment = ie.getComment() != null && !ie.getComment().isBlank();
+
+		if (hasAttributes) {
+			addStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+		} else if (hasInitalValue || hasComment || ie instanceof VarConfigInstance) {
+			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+		} else {
+			return;
+		}
+
+		addNameAttribute(ie.getName());
+		String value = ""; //$NON-NLS-1$
+		if (hasInitalValue) {
+			value = ((VarDeclaration) ie).getValue().getValue();
+		}
+		writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		addCommentAttribute(ie.getComment());
+
+		if (hasAttributes) {
+			addAttributes(ie.getAttributes());
+			addEndElement();
+		}
+	}
+
+	private static boolean hasNonTrivialAttributes(final IInterfaceElement ie) {
+		if (ie.getAttributes().isEmpty()) {
+			return false;
+		}
+		return ie.getAttributes().stream()
+				.anyMatch(att -> att.getAttributeDeclaration() != InternalAttributeDeclarations.VAR_CONFIG
+						|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
 	}
 
 	protected void addXYAttributes(final PositionableElement fb) throws XMLStreamException {
 		addXYAttributes(fb.getPosition().getX(), fb.getPosition().getY());
 	}
 
-	protected void addXYAttributes(final int x, final int y) throws XMLStreamException {
-		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
-		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
+	protected void addXYAttributes(final double x, final double y) throws XMLStreamException {
+		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, formatPosOrSizeVal(x));
+		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, formatPosOrSizeVal(y));
 	}
 
+	protected void writeCDataSection(final String cdataText) throws XMLStreamException {
+		final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(cdataText);
+		int currentPosition = 0;
+		if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
+			do {
+				getWriter().writeCData(cdataText.substring(currentPosition, endPatternMatcher.start()));
+				getWriter().writeCharacters("]]>"); //$NON-NLS-1$
+				currentPosition = endPatternMatcher.end();
+			} while (endPatternMatcher.find());
+
+			if (currentPosition < cdataText.length()) {
+				// there is some text after the last CData end pattern
+				getWriter().writeCData(cdataText.substring(currentPosition));
+			}
+		} else {
+			// no CData end pattern write the algorithm text as whole
+			getWriter().writeCData(cdataText);
+		}
+	}
+
+	protected <T extends TypeEntry> T addDependency(final T entry) {
+		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+			dependencies.add(entry);
+		}
+		return entry;
+	}
+
+	protected <T extends LibraryElement> T addDependency(final T libraryElement) {
+		if (libraryElement != null) {
+			addDependency(libraryElement.getTypeEntry());
+		}
+		return libraryElement;
+	}
+
+	protected static String formatPosOrSizeVal(final double val) {
+		final String stringVal = Double.toString(Math.round(val * 100.0) / 100.0);
+		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal;
+	}
 }

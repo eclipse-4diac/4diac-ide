@@ -39,19 +39,22 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
+import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
+import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteDeviceEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeviceViewLayoutEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
@@ -68,8 +71,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	private DiagramFontChangeListener fontChangeListener;
 
 	DeviceEditPart() {
-		super();
-		setConnectable(true);
 	}
 
 	@Override
@@ -129,6 +130,12 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		getFigure().getName().setText(getModel().getName());
+	}
+
+	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof DeviceInterfaceEditPart) {
@@ -181,11 +188,6 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	public IPropertyChangeListener getPreferenceChangeListener() {
-		return null;
-	}
-
-	@Override
 	protected IFigure createFigureForModel() {
 		return new DeviceFigure();
 	}
@@ -199,6 +201,11 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			getModel().setColor(fordiacColor);
 		}
 		setColor(figure, fordiacColor);
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 
 	private final class DeviceConnectionAnchor extends ChopboxAnchor {
@@ -238,18 +245,19 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 
-		private final RoundedRectangle deviceRectangle = new RoundedRectangle();
+		private final RoundedRectangle deviceRectangle = new BorderedRoundedRectangle();
 
 		public DeviceFigure() {
 			setLayoutManager(new ToolbarLayout());
 			createInstanceNameLabel(this);
 
-			deviceRectangle
-					.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+			deviceRectangle.setCornerDimensions(
+					new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
 			final ToolbarLayout bottomLayout = new ToolbarLayout();
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);
 			deviceRectangle.setOutline(DEVICE_HAS_OUTER_BORDER);
+			deviceRectangle.setBorder(new RoundedRectangleShadowBorder());
 			add(deviceRectangle);
 
 			createDeviceInfoSection(deviceRectangle);
@@ -339,8 +347,8 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 		}
 
 		public void setInstanceAndTypeLabelFonts() {
-			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(PreferenceConstants.DIAGRAM_FONT));
-			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+			instanceNameLabel.setFont(JFaceResources.getFontRegistry().getBold(UIPreferenceConstants.DIAGRAM_FONT));
+			typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
 		}
 	}
 
@@ -365,10 +373,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected List<?> getModelTargetConnections() {
-		final List<Object> connections = new ArrayList<>();
-		connections.addAll(getModel().getInConnections());
-		connections.addAll(super.getModelTargetConnections());
-		return connections;
+	protected List<Link> getModelTargetConnections() {
+		return getModel().getInConnections();
 	}
 }

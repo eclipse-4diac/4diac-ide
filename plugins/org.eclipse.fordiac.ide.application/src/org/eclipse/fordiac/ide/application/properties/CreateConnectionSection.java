@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -35,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -64,10 +62,9 @@ public class CreateConnectionSection extends AbstractSection {
 	@Override
 	protected List<IInterfaceElement> getInputType(final Object input) {
 		final List<IInterfaceElement> editParts = new ArrayList<>();
-		if (input instanceof IStructuredSelection
-				&& ((IStructuredSelection) input).getFirstElement() instanceof EditPart
-				&& ((EditPart) ((IStructuredSelection) input).getFirstElement())
-				.getModel() instanceof IInterfaceElement) {
+		if (input instanceof final IStructuredSelection structSel
+				&& structSel.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof IInterfaceElement) {
 
 			final List<Object> selectionList = ((IStructuredSelection) input).toList();
 
@@ -86,7 +83,6 @@ public class CreateConnectionSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
 		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
@@ -104,7 +100,7 @@ public class CreateConnectionSection extends AbstractSection {
 				Messages.CreateConnectionSection_CreateConnection, SWT.PUSH);
 		createConnectionButton.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		createConnectionButton
-		.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
 		createConnectionButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
@@ -128,25 +124,25 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 
 	private static FBNetwork getFBNetwork(final IInterfaceElement source, final IInterfaceElement dest) {
-		if (source.eContainer().eContainer() instanceof CompositeFBType) {
-			return ((CompositeFBType) source.eContainer().eContainer()).getFBNetwork();
-		} else if ((source.getFBNetworkElement().getFbNetwork() != dest.getFBNetworkElement().getFbNetwork())
-				&& (source.getFBNetworkElement() instanceof SubApp)) {
-			// one of the both is a untyped subapp interface element
-			if (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dest.getFBNetworkElement()
-					.getFbNetwork()) {
-				return dest.getFBNetworkElement().getFbNetwork();
-			}
-			return source.getFBNetworkElement().getFbNetwork();
+		if (source.eContainer().eContainer() instanceof final CompositeFBType cfbt) {
+			return cfbt.getFBNetwork();
 		}
-		return source.getFBNetworkElement().getFbNetwork();
+		if ((source.getBlockFBNetworkElement().getFbNetwork() != dest.getBlockFBNetworkElement().getFbNetwork())
+				&& (source.getBlockFBNetworkElement() instanceof final SubApp subApp)) {
+			// one of the both is a untyped subapp interface element
+			if (subApp.getSubAppNetwork() == dest.getBlockFBNetworkElement().getFbNetwork()) {
+				return dest.getBlockFBNetworkElement().getFbNetwork();
+			}
+			return source.getBlockFBNetworkElement().getFbNetwork();
+		}
+		return source.getBlockFBNetworkElement().getFbNetwork();
 	}
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		commandStack = getCommandStack(part, selection);
-		if (null == commandStack) { // disable all fields
+		setCurrentCommandStack(part, selection);
+		if (null == getCurrentCommandStack()) { // disable all fields
 			commentText.setEnabled(false);
 			sourceText.setEnabled(false);
 			targetText.setEnabled(false);
@@ -155,14 +151,9 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			sourceText.setText(getInterfaceName(true));
-			targetText.setText(getInterfaceName(false));
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		sourceText.setText(getInterfaceName(true));
+		targetText.setText(getInterfaceName(false));
 	}
 
 	private IInterfaceElement getInterfaceElement(final boolean source) {

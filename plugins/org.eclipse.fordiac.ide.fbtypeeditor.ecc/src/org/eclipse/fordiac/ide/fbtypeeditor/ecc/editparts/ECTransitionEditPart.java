@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2021 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,21 +27,21 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionEventCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeConditionExpressionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteTransitionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.MoveBendpointCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConditionExpressionCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -65,9 +65,10 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
-public class ECTransitionEditPart extends AbstractConnectionEditPart {
+public class ECTransitionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
 	private DirectEditManager manager;
 
@@ -92,9 +93,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	};
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_TRANSITION_COLOR)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_TRANSITION_COLOR));
+	private final IPropertyChangeListener colorChangeListener = event -> {
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR)) {
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 		}
 	};
 
@@ -121,16 +122,13 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
-				if ((notification.getOldValue() == getModel().getConditionEvent())
-						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration)
-								&& (((AdapterEvent) getModel().getConditionEvent())
-										.getAdapterDeclaration() == notification.getOldValue()))) {
+				if ((notification.getOldValue() == getModel().getConditionEvent()) || ECActionOutputEventEditPart
+						.isAdapterNotification(notification.getOldValue(), getModel().getConditionEvent())) {
 					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
 				}
 			} else if (notification.getEventType() == Notification.SET) {
 				if (null != getModel().getConditionEvent()) {
-					handleCondiationEventUpdate(notification);
+					handleConditionEventUpdate(notification);
 				}
 
 				if (notification.getNotifier() instanceof VarDeclaration) {
@@ -139,14 +137,12 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void handleCondiationEventUpdate(final Notification notification) {
-			if (notification.getNewValue() instanceof String) {
-				final String newValue = (String) notification.getNewValue();
-				if ((getModel().getConditionEvent().getName().equals(newValue))
-						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
-								&& (((AdapterEvent) getModel().getConditionEvent()).getAdapterDeclaration().getName()
-										.equals(newValue)))) {
-					super.notifyChanged(notification);
+		private void handleConditionEventUpdate(final Notification notification) {
+			if (notification.getNewValue() instanceof final String newValue) {
+				final Event ce = getModel().getConditionEvent();
+				if ((ce.getName().equals(newValue))
+						|| ((ce.getBlockFBNetworkElement() instanceof final AdapterFB adapterFB)
+								&& (adapterFB.getName().equals(newValue)))) {
 					refresh();
 				}
 			}
@@ -230,8 +226,9 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 
 			@Override
 			public Command getCommand(final Request request) {
-				if (RequestConstants.REQ_MOVE.equals(request.getType()) && (request instanceof ChangeBoundsRequest)) {
-					return getTransitionMoveCommand((ChangeBoundsRequest) request);
+				if (RequestConstants.REQ_MOVE.equals(request.getType())
+						&& (request instanceof final ChangeBoundsRequest cbReq)) {
+					return getTransitionMoveCommand(cbReq);
 				}
 				return null;
 			}
@@ -243,7 +240,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 
 			private Command getTransitionMoveCommand(final ChangeBoundsRequest request) {
-				final Point p = getModel().getPosition().asPoint();
+				final Point p = getModel().getPosition().toScreenPoint();
 				final double scaleFactor = ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager().getZoom();
 				p.scale(scaleFactor);
 				p.x += request.getMoveDelta().x;
@@ -299,7 +296,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	}
 
 	protected void refreshLocator() {
-		getManager().updateRefPosition(getModel().getPosition().asPoint());
+		getManager().updateRefPosition(getModel().getPosition().toScreenPoint());
 	}
 
 	@Override
@@ -328,7 +325,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			// Adapt to the fbtype so that we get informed on interface changes
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -340,7 +337,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			getModel().getECC().eAdapters().remove(adapter);
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -369,5 +366,11 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 	@Override
 	public ECTransitionFigure getFigure() {
 		return (ECTransitionFigure) super.getFigure();
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getLabel(), getModel(), event);
+		getFigure().getToolTip().refreshAnotations(getModel(), event.getModel());
 	}
 }

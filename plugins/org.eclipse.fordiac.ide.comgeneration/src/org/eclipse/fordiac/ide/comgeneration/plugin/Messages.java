@@ -30,7 +30,7 @@ public final class Messages extends NLS {
 
 	public static String ProtocolSelector_NoConnectionAvailable;
 
-	public static String CommGenerator_FBTypePaletteEntryNotFound;
+	public static String CommGenerator_FBTypeEntryNotFound;
 
 	static {
 		// initialize resource bundle

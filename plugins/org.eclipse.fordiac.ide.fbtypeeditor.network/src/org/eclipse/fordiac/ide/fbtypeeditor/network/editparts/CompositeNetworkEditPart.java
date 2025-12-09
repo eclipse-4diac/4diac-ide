@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2012, 2014, 2016, 2017  Profactor GmbH, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2024  Profactor GmbH, fortiss GmbH,
+ *                           Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,13 +15,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network.editparts;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -32,69 +30,14 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
  */
 public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 
-	/** The adapter. */
-	private Adapter adapter;
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#activate()
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void activate() {
-		if (!isActive()) {
-			super.activate();
-			getModel().eAdapters().add(getContentAdapter());
-			getModel().eContainer().eAdapters().add(getContentAdapter());
+	protected List<?> getModelChildren() {
+		final List<Object> modelChildren = (List<Object>) super.getModelChildren();
+		if (getModel() != null) {
+			modelChildren.addAll(getInterfaceList().getInOutVars());
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#deactivate()
-	 */
-	@Override
-	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
-			getModel().eContainer().eAdapters().remove(getContentAdapter());
-		}
-	}
-
-	/**
-	 * Gets the content adapter.
-	 *
-	 * @return the content adapter
-	 */
-	public Adapter getContentAdapter() {
-		if (null == adapter) {
-			adapter = new EContentAdapter() {
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					switch (notification.getEventType()) {
-					case Notification.ADD:
-					case Notification.ADD_MANY:
-						refreshChildren();
-						break;
-					case Notification.MOVE:
-						if (notification.getNewValue() instanceof IInterfaceElement) {
-							refreshChildren();
-						}
-						break;
-					case Notification.REMOVE:
-					case Notification.REMOVE_MANY:
-						refreshChildren();
-						break;
-					default:
-						break;
-					}
-				}
-			};
-		}
-		return adapter;
+		return modelChildren;
 	}
 
 	/**
@@ -104,6 +47,7 @@ public class CompositeNetworkEditPart extends EditorWithInterfaceEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
+		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// // handles constraint changes of model elements and creation of new
 		// // model elements

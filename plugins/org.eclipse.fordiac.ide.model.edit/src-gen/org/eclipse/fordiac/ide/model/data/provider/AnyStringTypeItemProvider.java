@@ -20,8 +20,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.data.AnyStringType} object. <!--
  * begin-user-doc --> <!-- end-user-doc -->
@@ -45,6 +48,28 @@ public class AnyStringTypeItemProvider extends AnyCharsTypeItemProvider {
 
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Length feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxLengthPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnyStringType_maxLength_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnyStringType_maxLength_feature", "_UI_AnyStringType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 DataPackage.Literals.ANY_STRING_TYPE__MAX_LENGTH,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/** This returns AnyStringType.gif. <!-- begin-user-doc --> <!-- end-user-doc -->

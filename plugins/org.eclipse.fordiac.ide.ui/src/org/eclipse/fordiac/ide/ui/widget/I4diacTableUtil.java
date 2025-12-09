@@ -14,15 +14,15 @@
 package org.eclipse.fordiac.ide.ui.widget;
 
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.viewers.AbstractTableViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 
 public interface I4diacTableUtil extends ISelectionProvider {
 
-	TableViewer getViewer();
+	AbstractTableViewer getViewer();
 
 	void addEntry(Object entry, int index, CompoundCommand cmd);
 

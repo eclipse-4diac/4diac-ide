@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  * 							 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
@@ -14,64 +14,57 @@
  *   Alois Zoitl - reworked deployment to detect if monitoring was enabled
  *               - added message dialog informing about error responses from
  *                 devices
+ *   Martin Jobst - rework initial value handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
+import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
-import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData.ParameterData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor.IDeviceManagementInteractorCloser;
-import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
+public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 	private final List<DeviceDeploymentData> deploymentData;
 	private final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler;
 	private final IDeploymentListener outputView;
 	private final String profile;
 	private IProgressMonitor curMonitor;
-	private boolean errorOccured = false;
+	private IStatus result = Status.OK_STATUS;
 
 	/**
 	 * flag indicating if an existing resource should automatically be overriden or
 	 * if the user should be asked
 	 */
 	private boolean overrideAll = false;
-
-	/**
-	 * set of automation systems where monitoring was active during deployment.
-	 *
-	 * For these automation systems monitoring was disabled and need to be renabled
-	 * after deployment.
-	 */
-	private final Set<AutomationSystem> monitoredSystems = new HashSet<>();
 
 	/**
 	 * DownloadRunnable constructor.
@@ -112,25 +105,21 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			}
 			deployDevice(devData);
 		}
-		reenableMonitoring();
-		if (errorOccured) {
-			showDeploymenErrorDialog();
-		}
 		monitor.done();
 	}
 
-	private void deployDevice(final DeviceDeploymentData devData) throws InvocationTargetException, InterruptedException {
+	private void deployDevice(final DeviceDeploymentData devData) throws InterruptedException {
 		final IDeviceManagementInteractor executor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(devData.getDevice(), overrideDevMgmCommHandler, profile);
 		if (executor != null) {
-			checkMonitoring(devData.getDevice().getAutomationSystem());
 			addDeploymentListener(executor);
 			try (IDeviceManagementInteractorCloser closer = executor::disconnect) {
 				executor.connect();
+				queryTypes(devData, executor);
 				deployResources(devData, executor);
 				deployDeviceData(devData, executor);
 			} catch (final DeploymentException e) {
-				showDeploymentErrorDialog(devData.getDevice(), e);
+				handleDeploymentException(devData.getDevice(), e);
 			} finally {
 				removeDeploymentListener(executor);
 			}
@@ -140,10 +129,28 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		}
 	}
 
+	private void queryTypes(final DeviceDeploymentData devData, final IDeviceManagementInteractor executor)
+			throws DeploymentException, InterruptedException {
+		for (final FBTypeEntry entry : devData.getFbTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryFBType(entry);
+			curMonitor.worked(1);
+		}
+		for (final DataTypeEntry entry : devData.getDataTypes()) {
+			if (curMonitor.isCanceled()) {
+				throw new InterruptedException(Messages.DeploymentCoordinator_LABEL_DownloadAborted);
+			}
+			executor.queryDataType(entry);
+			curMonitor.worked(1);
+		}
+	}
+
 	private void deployResources(final DeviceDeploymentData devData, final IDeviceManagementInteractor executor)
 			throws InterruptedException, DeploymentException {
-		final Set<String> resources = executor.queryResources().stream().map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName)
-				.collect(Collectors.toSet());
+		final Set<String> resources = executor.queryResources().stream()
+				.map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName).collect(Collectors.toSet());
 
 		for (final ResourceDeploymentData resData : devData.getResData()) {
 			if (curMonitor.isCanceled()) {
@@ -167,19 +174,17 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 	 * @throws DeploymentException
 	 * @throws InterruptedException
 	 */
-	private boolean checkResource(final Resource res, final Set<String> resourceNames, final IDeviceManagementInteractor executor)
-			throws DeploymentException, InterruptedException {
+	private boolean checkResource(final Resource res, final Set<String> resourceNames,
+			final IDeviceManagementInteractor executor) throws DeploymentException, InterruptedException {
 		if (resourceNames.contains(res.getName())) {
 			// the resource is in the device
 			if (overrideAll) {
 				executor.deleteResource(res.getName());
+			} else if (askOverrideForResource(res)) {
+				executor.deleteResource(res.getName());
 			} else {
-				if (askOverrideForResource(res)) {
-					executor.deleteResource(res.getName());
-				} else {
-					// the user has canceled to override this resource
-					return false;
-				}
+				// the user has canceled to override this resource
+				return false;
 			}
 		}
 
@@ -191,7 +196,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		if (!devData.getSelectedDevParams().isEmpty()) {
 			final Device device = devData.getDevice();
 			for (final VarDeclaration devVar : devData.getSelectedDevParams()) {
-				final String value = DeploymentHelper.getVariableValue(devVar, device.getAutomationSystem());
+				final String value = DeploymentHelper.getVariableValue(devVar);
 				if (null != value) {
 					executor.writeDeviceParameter(device, devVar.getName(), value);
 				}
@@ -200,15 +205,6 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			// we have device parameters send start to the device so that
 			executor.startDevice(device);
 		}
-	}
-
-	private static void showDeploymentErrorDialog(final Device device, final DeploymentException e) {
-		Display.getDefault().asyncExec(() -> {
-			final Shell shell = Display.getDefault().getActiveShell();
-			MessageDialog.openError(shell, Messages.DownloadRunnable_MajorDownloadError,
-					MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
-							DeploymentHelper.getMgrID(device), e.getMessage()));
-		});
 	}
 
 	private void addDeploymentListener(final IDeviceManagementInteractor executor) {
@@ -231,11 +227,12 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		for (final DeviceDeploymentData devData : deploymentData) {
 			retVal += devData.getSelectedDevParams().size();
 			retVal += devData.getResData().size();
+			retVal += devData.getFbTypes().size();
+			retVal += devData.getDataTypes().size();
 			for (final ResourceDeploymentData resDepData : devData.getResData()) {
 				retVal += countResourceParams(resDepData.getRes());
 				retVal += resDepData.getFbs().size() + resDepData.getConnections().size()
 						+ resDepData.getParams().size();
-				// TODO count variables of Fbs
 			}
 		}
 		return retVal;
@@ -258,24 +255,25 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			executor.createResource(res);
 			curMonitor.worked(1);
 			for (final VarDeclaration varDecl : res.getVarDeclarations()) {
-				final String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
+				final String val = DeploymentHelper.getVariableValue(varDecl);
 				if (null != val) {
 					executor.writeResourceParameter(res, varDecl.getName(), val);
 					curMonitor.worked(1);
 				}
 			}
 			createFBInstance(resDepData, executor);
-			deployParamters(resDepData, executor); // this needs to be done before the connections are created
+			deployParameters(resDepData, executor); // this needs to be done before the connections are created
 			deployConnections(resDepData, executor);
 			executor.startResource(res);
 		}
 	}
 
-	private void deployParamters(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
+	private void deployParameters(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
 			throws DeploymentException {
-		for (final ParameterData param : resDepData.getParams()) {
-			executor.writeFBParameter(resDepData.getRes(), param.getValue(),
-					new FBDeploymentData(param.getPrefix(), param.getVar().getFBNetworkElement()), param.getVar());
+		for (final ParameterDeploymentData param : resDepData.getParams()) {
+			executor.writeFBParameter(resDepData.getRes(), param.value(),
+					new FBDeploymentData(param.prefix(), param.variable().getBlockFBNetworkElement()),
+					param.variable());
 			curMonitor.worked(1);
 		}
 	}
@@ -295,38 +293,10 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			throws DeploymentException {
 		final Resource res = resDepData.getRes();
 		for (final FBDeploymentData fbDepData : resDepData.getFbs()) {
-			if (fbDepData.getFb() instanceof FB && !((FB) fbDepData.getFb()).isResourceTypeFB()) {
+			if (fbDepData.getFb() instanceof final FB fb && !fb.isResourceTypeFB()) {
 				executor.createFBInstance(fbDepData, res);
 				curMonitor.worked(1);
-				final InterfaceList interfaceList = fbDepData.getFb().getInterface();
-				if (interfaceList != null) {
-					for (final VarDeclaration varDecl : interfaceList.getInputVars()) {
-						final String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
-						if (null != val) {
-							executor.writeFBParameter(res, val, fbDepData, varDecl);
-							curMonitor.worked(1);
-						}
-					}
-				}
 			}
-		}
-	}
-
-	private void checkMonitoring(final AutomationSystem automationSystem)
-			throws InvocationTargetException, InterruptedException {
-		if (!monitoredSystems.contains(automationSystem)) {
-			final AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
-			if (monitoringManager.isSystemMonitored(automationSystem)) {
-				monitoringManager.disableSystemSynch(automationSystem, curMonitor);
-				monitoredSystems.add(automationSystem);
-			}
-		}
-	}
-
-	private void reenableMonitoring() throws InvocationTargetException, InterruptedException {
-		final AbstractMonitoringManager monitoringManager = AbstractMonitoringManager.getMonitoringManager();
-		for (final AutomationSystem system : monitoredSystems) {
-			monitoringManager.enableSystemSynch(system, curMonitor);
 		}
 	}
 
@@ -389,17 +359,8 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		overrideAll = true;
 	}
 
-	private static void showDeploymenErrorDialog() {
-		Display.getDefault().syncExec(() -> {
-			final Shell shell = Display.getDefault().getActiveShell();
-			MessageDialog.openWarning(shell, Messages.DownloadRunnable_Warning,
-					Messages.DownloadRunnable_DeploymentErrorWarningMessage);
-		});
-	}
-
-
 	@Override
-	public void connectionOpened() {
+	public void connectionOpened(final Device dev) {
 		// we don't need to do anything on connection opened
 	}
 
@@ -410,14 +371,22 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 	@Override
 	public void postResponseReceived(final String response, final String source) {
-		if (response.contains("Reason")) { //$NON-NLS-1$
-			errorOccured = true;
+		if (response.contains("Reason") && result.isOK()) { //$NON-NLS-1$
+			result = Status.error(Messages.DownloadRunnable_DeploymentErrorWarningMessage);
 		}
 	}
 
 	@Override
-	public void connectionClosed() {
+	public void connectionClosed(final Device dev) {
 		// we don't need to do anything on connection closed
 	}
 
+	private void handleDeploymentException(final Device device, final DeploymentException e) {
+		result = Status.error(MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
+				DeploymentHelper.getMgrIDSafe(device), e.getMessage()), e.getCause());
+	}
+
+	public IStatus getResult() {
+		return result;
+	}
 }

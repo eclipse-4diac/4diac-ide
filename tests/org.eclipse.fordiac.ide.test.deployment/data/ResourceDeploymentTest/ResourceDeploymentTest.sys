@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="ResourceDeploymentTest" Comment="">
+	<VersionInfo Version="1.0" Author="mario" Date="2024-08-21">
+	</VersionInfo>
+	<Application Name="ResourceDeploymentTestApp" Comment="">
+		<SubAppNetwork>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" Comment="" x="2205.56" y="594.44">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="TestNetwork_Empty" Type="EMB_RES" Comment="" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="TestNetwork_StackedTypedSubapp" Type="EMB_RES" Comment="" x="0" y="0">
+			<FBNetwork>
+				<SubApp Name="OuterSubApp" Type="OuterSubApp" Comment="" x="2000" y="0">
+					<Parameter Name="DI1" Value="TRUE" Comment=""/>
+				</SubApp>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="TestNetwork_StackedUntypedSubapp" Type="EMB_RES" Comment="" x="0" y="0">
+			<FBNetwork>
+				<SubApp Name="SubApp" Comment="" x="2111.11" y="111.11">
+					<SubAppInterfaceList>
+						<SubAppEventInputs>
+							<SubAppEvent Name="EI1" Type="Event" Comment="">
+							</SubAppEvent>
+							<SubAppEvent Name="EI2" Type="Event" Comment="">
+							</SubAppEvent>
+						</SubAppEventInputs>
+						<InputVars>
+							<VarDeclaration Name="DI1" Type="INT" Comment=""/>
+							<VarDeclaration Name="DI2" Type="BOOL" Comment=""/>
+							<VarDeclaration Name="DI3" Type="STRING" Comment=""/>
+							<VarDeclaration Name="DI4" Type="BOOL" Comment="" InitialValue="TRUE"/>
+						</InputVars>
+					</SubAppInterfaceList>
+					<SubAppNetwork>
+						<SubApp Name="SubApp" Comment="" x="-222.22" y="444.44">
+							<SubAppInterfaceList>
+								<InputVars>
+									<VarDeclaration Name="DI1" Type="BOOL" Comment=""/>
+									<VarDeclaration Name="DI2" Type="INT" Comment=""/>
+									<VarDeclaration Name="DI3" Type="BOOL" Comment=""/>
+								</InputVars>
+							</SubAppInterfaceList>
+							<SubAppNetwork>
+								<FB Name="PUBLISH_0" Type="PUBLISH_0" Comment="" x="1155.56" y="-394.44">
+								</FB>
+								<DataConnections>
+									<Connection Source="DI1" Destination="PUBLISH_0.QI" Comment="" dx1="1883.33"/>
+								</DataConnections>
+							</SubAppNetwork>
+							<Attribute Name="width" Type="LREAL" Value="200"/>
+							<Attribute Name="height" Type="LREAL" Value="100"/>
+						</SubApp>
+						<FB Name="E_PERMIT" Type="E_PERMIT" Comment="" x="-2161.11" y="1572.22">
+						</FB>
+						<DataConnections>
+							<Connection Source="DI4" Destination="E_PERMIT.PERMIT" Comment="" dx1="2444.44"/>
+							<Connection Source="DI4" Destination="SubApp.DI3" Comment="" dx1="3427.78"/>
+							<Connection Source="DI4" Destination="SubApp.DI1" Comment="" dx1="3427.78"/>
+							<Connection Source="DI1" Destination="SubApp.DI2" Comment="" dx1="3427.78"/>
+						</DataConnections>
+					</SubAppNetwork>
+					<Attribute Name="width" Type="LREAL" Value="200"/>
+					<Attribute Name="height" Type="LREAL" Value="100"/>
+				</SubApp>
+			</FBNetwork>
+		</Resource>
+	</Device>
+</System>

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011, 2025 TU Wien ACIN, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,79 +11,43 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Patrick Aigner
+ *     - moved methods to LibraryElementContentProvider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import java.util.ArrayList;
+import java.util.List;
 
-public class FBTypeContentProvider extends AdapterFactoryContentProvider {
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.navigator.CommonViewer;
+
+public class FBTypeContentProvider extends LibraryElementContentProvider implements IResourceChangeListener {
 
 	public FBTypeContentProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
-	}
-
-	@Override
-	public Object[] getElements(final Object inputElement) {
-		return getChildren(inputElement);
-	}
-
-	@Override
-	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof IFile) {
-			final IFile element = (IFile) parentElement;
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
-			if (null != entry) {
-				parentElement = entry.getType();
-				if (parentElement instanceof AdapterType) {
-					parentElement = ((AdapterType) parentElement).getAdapterFBType();
-				}
-			}
-		}
-		if ((parentElement instanceof AutomationSystem) || (parentElement instanceof Application)
-				|| (parentElement instanceof SystemConfiguration) || (parentElement instanceof FB)
-				|| (parentElement instanceof Device) || (parentElement instanceof Resource)
-				|| (parentElement instanceof SubApp)) {
-			return new Object[0];
-		}
-		return super.getChildren(parentElement);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.POST_BUILD);
 	}
 
 	@Override
 	public Object getParent(final Object element) {
-		if (element instanceof IFile) {
-			return ((IResource) element).getParent();
+		if (element instanceof final IFile file) {
+			return file.getParent();
 		}
 		return super.getParent(element);
-		// FIXME check for the correct elements and return the IFile for them
-		//			if(retval instanceof FBType){
-		//
-		//			}
 	}
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if ((element instanceof AutomationSystem) || (element instanceof Application)
-				|| (element instanceof SystemConfiguration) || (element instanceof FB) || (element instanceof Device)
-				|| (element instanceof Resource) || (element instanceof SubApp)) {
-			return false;
-		}
 		if (element instanceof IFile) {
 			return true;
 		}
@@ -90,17 +55,38 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	}
 
 	@Override
-	public void notifyChanged(final Notification notification) {
-		if (notification.getNotifier() instanceof FBType) {
-			// as the automation system is changed we need to perform a special refresh here
-			LibraryElement type = (LibraryElement) notification.getNotifier();
-			if (type instanceof AdapterFBType) {
-				type = ((AdapterFBType) type).getAdapterType();
+	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+		super.dispose();
+	}
+
+	@Override
+	public void resourceChanged(final IResourceChangeEvent event) {
+		try {
+			final List<IResource> list = new ArrayList<>();
+			event.getDelta().accept(delta -> {
+				for (final IMarkerDelta markerDelta : delta.getMarkerDeltas()) {
+					IResource resource = markerDelta.getResource();
+					while (resource != null) {
+						list.add(resource);
+						resource = resource.getParent();
+					}
+				}
+				return true;
+			});
+			if (!list.isEmpty()) {
+				performViewerRefresh(list);
 			}
-			super.notifyChanged(new ViewerNotification(notification, type.getPaletteEntry().getFile()));
-		} else {
-			super.notifyChanged(notification);
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Couldn't refresh markers", e); //$NON-NLS-1$
 		}
 	}
 
+	private void performViewerRefresh(final List<IResource> list) {
+		Display.getDefault().asyncExec(() -> {
+			if (viewer instanceof final CommonViewer cViewer && !viewer.getControl().isDisposed()) {
+				cViewer.update(list.toArray(), null);
+			}
+		});
+	}
 }

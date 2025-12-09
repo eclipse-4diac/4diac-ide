@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.export.feature"
       label="Export Function Block Types"
-      version="2.0.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -24,7 +24,7 @@ Eisenmenger, Monika Wenger
 - initial API and implementation and/or initial documentation
    </copyright>
 
-   <license url="http://www.eclipse.org/legal/epl-v10.html">
+   <license url="license.html">
       Eclipse Foundation Software User Agreement
 
 November 22, 2017
@@ -168,18 +168,7 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.compare"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.xtext"/>
-      <import plugin="com.google.guava"/>
-      <import plugin="org.eclipse.xtext.xbase.lib"/>
-      <import plugin="org.eclipse.xtend.lib.macro"/>
    </requires>
 
    <plugin
@@ -219,6 +208,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.export.forte_ng"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.ant"
          download-size="0"
          install-size="0"
          version="0.0.0"

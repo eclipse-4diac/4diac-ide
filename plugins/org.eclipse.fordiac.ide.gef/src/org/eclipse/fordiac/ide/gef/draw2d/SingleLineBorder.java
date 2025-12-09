@@ -18,13 +18,21 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.graphics.Color;
 
 public class SingleLineBorder extends MarginBorder {
 
 	private static final Insets DEFAULT_INSETS = new Insets(1, 1, 1, 1);
 
+	private final Color borderColor;
+
 	public SingleLineBorder() {
+		this(ColorConstants.buttonDarker);
+	}
+
+	public SingleLineBorder(final Color borderColor) {
 		super(DEFAULT_INSETS);
+		this.borderColor = borderColor;
 	}
 
 	@Override
@@ -38,7 +46,7 @@ public class SingleLineBorder extends MarginBorder {
 		g.setLineWidth(1);
 		final Rectangle r = getPaintRectangle(figure, insets);
 		r.resize(-1, -1);
-		g.setForegroundColor(ColorConstants.buttonDarker);
+		g.setForegroundColor(borderColor);
 		g.drawRectangle(r);
 	}
 

@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.IFilter;
 public class AdapterInterfaceFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
-		return (InterfaceFilterSelection.getSelectableObject(toTest) instanceof AdapterDeclaration);
+	public boolean select(final Object toTest) {
+		return (InterfaceFilterSelection.getSelectableInterfaceElementOfType(toTest) instanceof AdapterDeclaration);
 	}
 }

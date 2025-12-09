@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2015 - 2024 fortiss GmbH, Johannes Kepler University Linz,
+ * 							 Primetals Technologies Germany GmbH,
+ * 							 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,253 +21,85 @@
  *   Alexander Lumplecker
  *     - changed AddDeleteWidget to AddDeleteReorderListWidget
  *     - added ChangeVariableOrderCommand
+ *   Sebastian Hollersbacher - change to nebula NatTable
+ *   Martin Jobst - add initial value cell editor support
+ *   Prankur Agarwal - create a super class and change it's implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper.RetainTag;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.DropdownSelectionWidget;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class InternalVarsSection extends AbstractSection implements I4diacTableUtil {
-	private static final String IV_NAME = "NAME"; //$NON-NLS-1$
-	private static final String IV_TYPE = "TYPE"; //$NON-NLS-1$
-	private static final String IV_ARRAY = "ARRAY_SIZE"; //$NON-NLS-1$
-	private static final String IV_INIT = "INITIAL_VALUE"; //$NON-NLS-1$
-	private static final String IV_COMMENT = "COMMENT"; //$NON-NLS-1$
-
-	private TableViewer internalVarsViewer;
-	private DataTypeDropdown typeDropDown;
+public class InternalVarsSection extends AbstractInternalVarsSection {
 
 	@Override
-	protected BaseFBType getType() {
-		return (BaseFBType) type;
+	protected CreationCommand newCreateCommand(final Object refElement) {
+		return new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType());
 	}
 
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
-		super.createControls(parent, tabbedPropertySheetPage);
-		createInternalVarsControls(parent);
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
-		OpenStructMenu.addTo(internalVarsViewer);
-	}
-
-	public void createInternalVarsControls(final Composite parent) {
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(composite, getWidgetFactory());
-
-		internalVarsViewer = TableWidgetFactory.createTableViewer(composite);
-		configureTableLayout(internalVarsViewer.getTable());
-
-		internalVarsViewer.setColumnProperties(new String[] { IV_NAME, IV_TYPE, IV_COMMENT, IV_INIT, IV_ARRAY });
-		internalVarsViewer.setContentProvider(new ArrayContentProvider());
-		internalVarsViewer.setLabelProvider(new DataLabelProvider());
-		internalVarsViewer.setCellModifier(new InternalVarsCellModifier());
-
-		buttons.bindToTableViewer(internalVarsViewer, this,
-				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
-				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref),
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
-	}
-
-	private DataType getDataType() {
-		final VarDeclaration varInternal = getLastSelectedVariable();
-		return (null != varInternal) ? varInternal.getType() : null;
-	}
-
-	private String getName() {
-		final VarDeclaration varInternal = getLastSelectedVariable();
-		return (null != varInternal) ? varInternal.getName() : null;
-	}
-
-	private int getInsertionIndex() {
-		final VarDeclaration varInternal = getLastSelectedVariable();
-		if (null == varInternal) {
-			return getType().getInternalVars().size();
-		}
-		return getType().getInternalVars().indexOf(varInternal) + 1;
-	}
-
-	private VarDeclaration getLastSelectedVariable() {
-		final IStructuredSelection selection = internalVarsViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return null;
-		}
-		return (VarDeclaration) selection.toList().get(selection.toList().size() - 1);
-	}
-
-	private static void configureTableLayout(final Table table) {
-		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(FordiacMessages.Name);
-		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(FordiacMessages.Type);
-		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(FordiacMessages.Comment);
-		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText(FordiacMessages.InitialValue);
-		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText(FordiacMessages.ArraySize);
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(1, 20));
-		layout.addColumnData(new ColumnWeightData(1, 20));
-		layout.addColumnData(new ColumnWeightData(3, 50));
-		table.setLayout(layout);
-	}
-
-	private CellEditor[] createCellEditors(final Table table) {
-		final TextCellEditor varNameEditor = new TextCellEditor(table);
-		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		typeDropDown = new DataTypeDropdown(getDataTypeLib(), internalVarsViewer);
-		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
-				new TextCellEditor(table) };
+	protected Command newDeleteCommand(final Object refElement) {
+		return new DeleteInternalVariableCommand(getType(), (VarDeclaration) refElement);
 	}
 
 	@Override
-	protected void setInputCode() {
-		internalVarsViewer.setCellModifier(null);
+	protected EList<VarDeclaration> getVarList() {
+		return getType().getInternalVars();
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			internalVarsViewer.setInput(getType().getInternalVars());
-		}
-		commandStack = commandStackBuffer;
-	}
-
-	@Override
-	protected void setInputInit() {
-		internalVarsViewer.setCellEditors(createCellEditors(internalVarsViewer.getTable()));
-	}
-
-	private final class InternalVarsCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			final VarDeclaration varInternal = (VarDeclaration) element;
-			switch (property) {
-			case IV_NAME:
-				return varInternal.getName();
-			case IV_TYPE:
-				return varInternal.getTypeName();
-			case IV_COMMENT:
-				return varInternal.getComment();
-			case IV_ARRAY:
-				return Integer.toString(varInternal.getArraySize());
-			default:
-				return varInternal.getValue() == null ? "" : varInternal.getValue().getValue(); //$NON-NLS-1$
-			}
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final VarDeclaration data = (VarDeclaration) tableItem.getData();
-			Command cmd = null;
-			switch (property) {
-			case IV_NAME:
-				cmd = new ChangeNameCommand(data, value.toString());
-				break;
-			case IV_TYPE:
-				final DataType type = typeDropDown.getType((String) value);
-				if (type == null) {
-					return;
-				}
-				cmd = new ChangeDataTypeCommand(data, type);
-				break;
-			case IV_COMMENT:
-				cmd = new ChangeCommentCommand(data, value.toString());
-				break;
-			case IV_ARRAY:
-				cmd = new ChangeArraySizeCommand(data, value.toString());
-				break;
-			default:
-				cmd = new ChangeValueCommand(data, value.toString());
-				break;
-			}
-
-			executeCommand(cmd);
-			internalVarsViewer.refresh(data);
-		}
-	}
-
-	@Override
-	public TableViewer getViewer() {
-		return internalVarsViewer;
-	}
-
 	public Object getEntry(final int index) {
 		return getType().getInternalVars().get(index);
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if (entry instanceof VarDeclaration) {
-			final VarDeclaration varEntry = (VarDeclaration) entry;
-			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof final VarDeclaration varEntry) {
+			cmd.add(new DeleteInternalVariableCommand(getType(), varEntry));
 		}
 	}
 
 	@Override
-	public Object removeEntry(final int index, final CompoundCommand cmd) {
-		final VarDeclaration entry = (VarDeclaration) getEntry(index);
-		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
-		return entry;
+	public void createNatTable(final Composite composite) {
+		provider = new ChangeableListDataProvider<>(
+				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN));
+		final DataLayer dataLayer = new VarDeclarationDataLayer(provider,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		final VarDeclarationConfigLabelAccumulator acc = new VarDeclarationConfigLabelAccumulator(provider,
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+
+		dataLayer.setConfigLabelAccumulator(acc);
+
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_RETAIN);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, columnProvider,
+				IEditableRule.ALWAYS_EDITABLE, null, this, false);
+
+		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
+		table.addConfiguration(new DropdownSelectionWidget(RetainTag.getTagList()));
+		table.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
+		table.configure();
 	}
 
-	@Override
-	public void executeCompoundCommand(final CompoundCommand cmd) {
-		executeCommand(cmd);
-		getViewer().refresh();
-	}
 }

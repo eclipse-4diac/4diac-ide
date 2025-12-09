@@ -19,11 +19,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.AbstractChangeAlgorithmTypeCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.AlgorithmEditingComposite;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -72,10 +69,5 @@ class AlgorithmGroup extends AlgorithmEditingComposite {
 		super.updateAlgFields();
 	}
 
-	@Override
-	protected AbstractChangeAlgorithmTypeCommand getChangeAlgorithmTypeCommand(final BaseFBType fbType,
-			final Algorithm oldAlgorithm, final String algorithmType) {
-		return new ChangeAlgorithmTypeCommand(fbType, oldAlgorithm, algorithmType);
-	}
 
 }

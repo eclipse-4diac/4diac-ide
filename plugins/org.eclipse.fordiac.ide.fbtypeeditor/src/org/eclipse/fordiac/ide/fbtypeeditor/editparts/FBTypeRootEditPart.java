@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,40 +16,39 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
 public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
-	private Adapter adapter;
+	private Adapter interfaceAdapter;
+	private final Map<IInterfaceElement, CommentTypeField> commentTypeFieldCache = new HashMap<>();
 
 	@Override
-	protected IFigure createFigure() {
-		final IFigure figure = super.createFigure();
-		// Create the static router for the connection layer
-		final ConnectionLayer connLayer = (ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER);
-		connLayer.setConnectionRouter(new ShortestPathConnectionRouter(figure));
-		return figure;
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new ShortestPathConnectionRouter(figure);
 	}
 
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			getModel().eAdapters().add(getContentAdapter());
+			getModel().getInterfaceList().eAdapters().add(getInterfaceAdapter());
 		}
 	}
 
@@ -57,22 +56,19 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
+			getModel().getInterfaceList().eAdapters().remove(getInterfaceAdapter());
 		}
 	}
 
-	public Adapter getContentAdapter() {
-		if (null == adapter) {
-			adapter = new EContentAdapter() {
+	public Adapter getInterfaceAdapter() {
+		if (null == interfaceAdapter) {
+			interfaceAdapter = new SingleRecursiveContentAdapter() {
 				@Override
 				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
 					final int type = notification.getEventType();
 					switch (type) {
-					case Notification.ADD:
-					case Notification.ADD_MANY:
-					case Notification.REMOVE:
-					case Notification.REMOVE_MANY:
+					case Notification.ADD, Notification.ADD_MANY, Notification.REMOVE, Notification.REMOVE_MANY:
 						Display.getDefault().asyncExec(FBTypeRootEditPart.this::refreshChildren);
 						break;
 					case Notification.SET:
@@ -83,7 +79,7 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 				}
 			};
 		}
-		return adapter;
+		return interfaceAdapter;
 	}
 
 	@Override
@@ -103,8 +99,9 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		children.add(getModel());
 
 		getModel().getInterfaceList().getAllInterfaceElements().forEach(interfaceElement -> {
-			final CommentTypeField field = new CommentTypeField(interfaceElement);
-			children.add(field);
+			final CommentTypeField commentTypeField = commentTypeFieldCache.computeIfAbsent(interfaceElement,
+					CommentTypeField::new);
+			children.add(commentTypeField);
 		});
 		return children;
 	}

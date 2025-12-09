@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2016 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012, 2025 TU Wien ACIN, fortiss GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,64 +8,70 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Monika Wenger 
+ *   Alois Zoitl, Monika Wenger
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst - add value validation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize;
+
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeArraySizeCommand extends Command {
-	private VarDeclaration variable;
-	private int oldArraySize;
-	private int newArraySize;
-	private String newArraySizeString;
+public class ChangeArraySizeCommand extends AbstractChangeInterfaceElementCommand {
+	private final String newArraySize;
+	private String oldArraySize;
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
-	public ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySizeString) {
-		super();
-		this.variable = variable;
-		this.newArraySizeString = newArraySizeString;
+	protected ChangeArraySizeCommand(final VarDeclaration variable, final String newArraySize) {
+		super(variable);
+		this.newArraySize = newArraySize;
+	}
+
+	public static ChangeArraySizeCommand forArraySize(final VarDeclaration variable, final String newArraySize) {
+		final ChangeArraySizeCommand result = new ChangeArraySizeCommand(variable, newArraySize);
+		if (variable != null && variable.getBlockFBNetworkElement() instanceof final SubApp subApp
+				&& subApp.isMapped()) {
+			result.getAdditionalCommands().add(new ChangeArraySizeCommand(
+					subApp.getOpposite().getInterface().getVariable(variable.getName()), newArraySize));
+		}
+		return result;
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != variable) && (null != newArraySizeString);
+		return super.canExecute() && !isSubAppPinAndConnected();
 	}
 
 	@Override
-	public void execute() {
-		if (variable.isArray()) {
-			oldArraySize = variable.getArraySize();
-		} else {
-			oldArraySize = 0;
-		}
-		if (newArraySizeString.length() == 0) {
-			newArraySize = 0;
-		} else if (newArraySizeString.length() > 0) {
-			try {
-				newArraySize = Integer.parseInt(newArraySizeString);
-			} catch (NumberFormatException nfe) {
-				newArraySize = 0;
-			}
-		}
-		if(newArraySize < 0) {
-			newArraySize = 0;
-		}
-		setArraySize(newArraySize);
-	}
-
-	private void setArraySize(int arraySize) {
-		variable.setArraySize(arraySize);
+	protected void doExecute() {
+		final VarDeclaration variable = getInterfaceElement();
+		oldArraySize = getArraySize(variable);
+		setArraySize(variable, newArraySize);
+		additionalCommands.execute();
 	}
 
 	@Override
-	public void undo() {
-		setArraySize(oldArraySize);
+	protected void doUndo() {
+		additionalCommands.undo();
+		setArraySize(getInterfaceElement(), oldArraySize);
 	}
 
 	@Override
-	public void redo() {
-		setArraySize(newArraySize);
+	protected void doRedo() {
+		setArraySize(getInterfaceElement(), newArraySize);
+		additionalCommands.redo();
+	}
+
+	@Override
+	public VarDeclaration getInterfaceElement() {
+		return (VarDeclaration) super.getInterfaceElement();
+	}
+
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
 }

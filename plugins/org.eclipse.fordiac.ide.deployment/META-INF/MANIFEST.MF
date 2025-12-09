@@ -6,25 +6,22 @@ Export-Package: org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.devResponse.util,
  org.eclipse.fordiac.ide.deployment.exceptions,
  org.eclipse.fordiac.ide.deployment.interactors,
- org.eclipse.fordiac.ide.deployment.monitoringbase,
- org.eclipse.fordiac.ide.deployment.monitoringbase.impl,
- org.eclipse.fordiac.ide.deployment.monitoringbase.util,
  org.eclipse.fordiac.ide.deployment.util
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.systemmanagement,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.gef
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
-Bundle-Activator: org.eclipse.fordiac.ide.deployment.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-21

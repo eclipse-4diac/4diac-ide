@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2022 Primetals Technologies Germany GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,6 +8,8 @@
  *
  * Contributors:
  *   Ernst Blecha - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - added option to show error messages at the bottom right
+ *                  instead of the mouse position
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.handlers;
 
@@ -21,26 +23,12 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
-import org.eclipse.jface.dialogs.PopupDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.fordiac.ide.ui.handlers.internal.ErrorMessageDialog;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -49,14 +37,18 @@ public class ErrorMessageHandler {
 
 	private static final int MOUSE_HOVER_DELAY = 700;
 
-	private boolean isHovering = false;
+	boolean hovering = false;
 
 	public synchronized void setHover(final boolean hovering) {
-		isHovering = hovering;
-		if(!hovering) {
+		this.hovering = hovering;
+		if (!hovering) {
 			messages.stream().forEach(ErrorMessage::setInvalid);
 			closeAllDialogs();
 		}
+	}
+
+	public boolean isHovering() {
+		return hovering;
 	}
 
 	public ErrorMessageHandler(final BundleContext context) {
@@ -91,168 +83,8 @@ public class ErrorMessageHandler {
 
 	private final Set<ErrorMessage> messages = new HashSet<>();
 
-	private static final class ErrorMessageDialog extends PopupDialog {
-
-		private static final int ERROR_TEXT_WIDTH_HINT = 400;
-		private static final int MOUSE_CURSOR_OFFSET_Y = 10;
-		private static final int MOUSE_CURSOR_OFFSET_X = 5;
-		private static final Point MOUSE_CURSOR_OFFSET = new Point(MOUSE_CURSOR_OFFSET_X, MOUSE_CURSOR_OFFSET_Y);
-		private final String errorMsg;
-		private final int timeout;
-
-		private final ErrorMessageHandler container;
-
-		@Override
-		protected Color getBackground() {
-			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_BACKGROUND);
-		}
-
-		@Override
-		protected Color getForeground() {
-			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND);
-		}
-
-		private ErrorMessageDialog(final ErrorMessageHandler container, final String errorMsg, final int timeout) {
-			super(null, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
-			this.errorMsg = errorMsg;
-			this.timeout = timeout;
-			this.container = container;
-		}
-
-		@Override
-		protected void adjustBounds() {
-			super.adjustBounds();
-
-			final Control focused = getShell().getDisplay().getFocusControl();
-
-			Point pt;
-			if (isTextInput(focused)) {
-				final Rectangle elementBounds = focused.getDisplay().getBounds();
-				pt = focused.toDisplay(new Point(elementBounds.x, elementBounds.y + focused.getSize().y));
-			} else if (isTableInput(focused)) {
-				final Table table = (Table) focused;
-				final TableItem ti = table.getItem(table.getSelectionIndex());
-				final Rectangle elementBounds = ti.getBounds();
-				pt = focused.toDisplay(new Point(elementBounds.x, elementBounds.y + ti.getBounds().height));
-			} else {
-				pt = getShell().getDisplay().getCursorLocation();
-				pt.x += MOUSE_CURSOR_OFFSET.x;
-				pt.y += MOUSE_CURSOR_OFFSET.y;
-			}
-			final Rectangle boundingBox = getShell().getBounds();
-			boundingBox.x = pt.x;
-			boundingBox.y = pt.y;
-			getShell().setBounds(boundingBox);
-		}
-
-		private static boolean isTextInput(final Control focused) {
-			return focused instanceof Text && ((Text) focused).getEditable();
-		}
-
-		private static boolean isTableInput(final Control focused) {
-			if (focused instanceof Table) {
-				final Table table = (Table) focused;
-				return table.getSelectionCount() != 0 && table.getItem(table.getSelectionIndex()) != null;
-			}
-			return false;
-		}
-
-		@Override
-		protected Control createDialogArea(final Composite parent) {
-			final Composite warningComposite = new Composite(parent, SWT.NONE);
-			warningComposite.setLayout(new GridLayout(2, false));
-			warningComposite.setLayoutData(new GridData(0, 0, true, true));
-
-			final Label image = new Label(warningComposite, SWT.NONE);
-			image.setImage(parent.getDisplay().getSystemImage(SWT.ICON_WARNING));
-			image.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-			final Label errorText = new Label(warningComposite, SWT.WRAP);
-			errorText.setText(errorMsg); // message is never null (instanceof check in receiver)
-
-			final GridData errorTestLayoutData = new GridData(SWT.FILL, SWT.CENTER, true, true);
-			errorTestLayoutData.widthHint = ERROR_TEXT_WIDTH_HINT;
-			errorText.setLayoutData(errorTestLayoutData);
-
-			final Control focused = getShell().getDisplay().getFocusControl();
-			if (isTextInput(focused)) {
-				clearPopupOnKeypress(focused);
-				clearPopupOnLostFocus(focused);
-			} else if (isTableInput(focused)) {
-				clearPopupOnKeypress(focused);
-				clearPopupOnLostFocus(focused);
-				clearPopupOnSelectionChange(focused);
-			} else {
-				clearPopupAfterTimeout(timeout);
-			}
-
-			return warningComposite;
-		}
-
-		private void clearPopupAfterTimeout(final int t) {
-			if(!container.isHovering) {
-				getShell().getDisplay().timerExec(t, () -> container.clearDialog(getShell()));
-			}
-		}
-
-		private final FocusListener lostFocusListener = new FocusListener() {
-			@Override
-			public void focusLost(final FocusEvent e) {
-				container.clearDialog(getShell());
-			}
-
-			@Override
-			public void focusGained(final FocusEvent e) {
-				// Nothing to do
-			}
-		};
-
-		private void clearPopupOnLostFocus(final Control focused) {
-			focused.removeFocusListener(lostFocusListener);
-			focused.addFocusListener(lostFocusListener);
-		}
-
-		private final KeyListener keypressListener = new KeyListener() {
-			@Override
-			public void keyReleased(final KeyEvent e) {
-				// NOP
-			}
-
-			@Override
-			public void keyPressed(final KeyEvent e) {
-				container.clearDialog(getShell());
-			}
-		};
-
-		private void clearPopupOnKeypress(final Control focused) {
-			focused.removeKeyListener(keypressListener);
-			focused.addKeyListener(keypressListener);
-		}
-
-		private final SelectionListener selectionChangeListener = new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				container.clearDialog(getShell());
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				// Nothing to do
-			}
-		};
-
-		private void clearPopupOnSelectionChange(final Control focused) {
-			if(focused instanceof Table) {
-				final Table table = (Table) focused;
-				table.removeSelectionListener(selectionChangeListener);
-				table.addSelectionListener(selectionChangeListener);
-			}
-		}
-
-	}
-
 	@SuppressWarnings("squid:S3398")
-	private synchronized void clearDialog(final Composite dialogArea) {
+	public synchronized void clearDialog(final Composite dialogArea) {
 		// This method is not inside ErrorMessageDialog because this would use a
 		// different synchronization reference than used in closeDialog
 		// calling close on a disposed element will fail; must not be reentrant
@@ -271,18 +103,19 @@ public class ErrorMessageHandler {
 	}
 
 	private void removeInvalidMessages() {
-		final List<ErrorMessage> toRemove = messages.stream().filter((final ErrorMessage m) -> !m.isStillValid()).collect(Collectors.toList());
-		for(final ErrorMessage m: toRemove) {
+		final List<ErrorMessage> toRemove = messages.stream().filter((final ErrorMessage m) -> !m.isStillValid())
+				.toList();
+		for (final ErrorMessage m : toRemove) {
 			ErrorMessenger.hashCleared(m.hashCode());
 		}
 		messages.removeAll(toRemove);
 	}
 
 	private void showErrorMessageDialog(final ErrorMessage m) {
-		if(isHovering) {
+		if (hovering) {
 			updateMessageList(m);
 			Display.getDefault().timerExec(MOUSE_HOVER_DELAY, () -> {
-				if(isHovering) {
+				if (hovering) {
 					closeAllDialogs();
 					showMessages(m);
 					m.setInvalid(); // hover-messages will not be reshown
@@ -314,19 +147,28 @@ public class ErrorMessageHandler {
 	}
 
 	private void showMessages(final ErrorMessage m) {
-		if(!messages.isEmpty()) {
-			final String dialogContent = messages.stream().map(ErrorMessage::getMessage).collect(Collectors.joining("\n")); //$NON-NLS-1$
+		if (!messages.isEmpty()) {
+			final String dialogContent = messages.stream().map(ErrorMessage::getMessage)
+					.collect(Collectors.joining("\n")); //$NON-NLS-1$
 
-			final ErrorMessageDialog dialog = new ErrorMessageDialog(this, dialogContent, m.getTimeout());
+			final ErrorMessageDialog dialog = new ErrorMessageDialog(getShell(), this, dialogContent, m.getTimeout());
 			dialog.open();
 			windows.push(dialog.getShell());
 		}
 	}
 
+	private static Shell getShell() {
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null) {
+			return window.getShell();
+		}
+		return null;
+	}
+
 	private final EventHandler receiver = (final Event event) -> {
 		final Object data = event.getProperty(IEventBroker.DATA);
-		if (eventsRegistered && data instanceof ErrorMessage) {
-			showErrorMessageDialog((ErrorMessage)data);
+		if (eventsRegistered && data instanceof final ErrorMessage em) {
+			showErrorMessageDialog(em);
 		}
 	};
 

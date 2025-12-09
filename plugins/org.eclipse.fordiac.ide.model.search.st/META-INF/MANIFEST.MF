@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Evaluator
+Bundle-SymbolicName: org.eclipse.fordiac.ide.model.search.st;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Vendor: Eclipse 4diac
+Automatic-Module-Name: org.eclipse.fordiac.ide.model.search.st
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.xtext,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.globalconstantseditor
+Export-Package: org.eclipse.fordiac.ide.model.search.st

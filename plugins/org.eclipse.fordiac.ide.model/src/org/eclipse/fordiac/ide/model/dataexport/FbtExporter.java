@@ -1,7 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2020 Johannes Keppler University, Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Keppler University, Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,17 +16,16 @@
  *               - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
  *   Martin Melik Merkumians - adds export of internal FBs
+ *   Alois Zoitl - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -34,25 +33,32 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
+import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * The Class FbtExporter.
  */
-class FbtExporter extends AbstractBlockTypeExporter {
-
-	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
+public class FbtExporter extends AbstractBlockTypeExporter {
 
 	/**
 	 * Instantiates a new fbt exporter.
 	 *
 	 * @param entry
 	 */
-	FbtExporter(FBTypePaletteEntry entry) {
-		super(entry.getFBType());
+	public FbtExporter(final FBType type) {
+		super(type);
 	}
 
 	@Override
@@ -62,12 +68,12 @@ class FbtExporter extends AbstractBlockTypeExporter {
 
 	@Override
 	protected void createBlockTypeSpecificXMLEntries() throws XMLStreamException {
-		if (getType() instanceof CompositeFBType) {
-			new FBNetworkExporter(this).createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork());
-		} else if (getType() instanceof BasicFBType) {
-			addBasicFB((BasicFBType) getType());
-		} else if (getType() instanceof SimpleFBType) {
-			addSimpleFB((SimpleFBType) getType());
+		if (getType() instanceof final CompositeFBType cFBT) {
+			new FBNetworkExporter(this).createFBNetworkElement(cFBT.getFBNetwork());
+		} else if (getType() instanceof final BasicFBType bFBT) {
+			addBasicFB(bFBT);
+		} else if (getType() instanceof final SimpleFBType sFBT) {
+			addSimpleFB(sFBT);
 		}
 	}
 
@@ -80,9 +86,10 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addBasicFB(final BasicFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
 		addECC(type.getECC());
-		for (Algorithm alg : type.getAlgorithm()) {
-			addAlgorithm(alg);
+		for (final ICallable callable : type.getCallables()) {
+			addICallable(callable);
 		}
 		addEndElement();
 	}
@@ -98,29 +105,13 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
 				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
 
-		writeTextAlgorithmText(algorithm);
+		writeAlgorithmText(algorithm.getText());
 		addInlineEndElement();
 	}
 
-	private void writeTextAlgorithmText(final TextAlgorithm algorithm) throws XMLStreamException {
-		if (null != algorithm.getText()) {
-			Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(algorithm.getText());
-			int currentPosition = 0;
-			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
-				do {
-					getWriter().writeCData(algorithm.getText().substring(currentPosition, endPatternMatcher.start()));
-					getWriter().writeCharacters("]]>"); //$NON-NLS-1$
-					currentPosition = endPatternMatcher.end();
-				} while (endPatternMatcher.find());
-
-				if (currentPosition < algorithm.getText().length()) {
-					// there is some text after the last CData end pattern
-					getWriter().writeCData(algorithm.getText().substring(currentPosition));
-				}
-			} else {
-				// no CData end pattern write the algorithm text as whole
-				getWriter().writeCData(algorithm.getText());
-			}
+	private void writeAlgorithmText(final String text) throws XMLStreamException {
+		if (null != text) {
+			writeCDataSection(text);
 		} else {
 			getWriter().writeCharacters(""); //$NON-NLS-1$
 		}
@@ -134,7 +125,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ST_ELEMENT);
-		writeTextAlgorithmText(algorithm);
+		writeAlgorithmText(algorithm.getText());
 		addInlineEndElement();
 	}
 
@@ -148,7 +139,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addStartElement(LibraryElementTags.ECC_ELEMENT);
 		if (ecc != null) {
 			addECStates(ecc.getECState(), ecc.getStart());
-			for (ECTransition transition : ecc.getECTransition()) {
+			for (final ECTransition transition : ecc.getECTransition()) {
 				createTransitionEntry(transition);
 			}
 		}
@@ -181,7 +172,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addECStates(final List<ECState> states, final ECState startState) throws XMLStreamException {
 		createECState(startState);
-		for (ECState state : states) {
+		for (final ECState state : states) {
 			if (!state.equals(startState)) {
 				createECState(state);
 			}
@@ -197,10 +188,8 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void createECState(final ECState state) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ECSTATE_ELEMENT);
 
-		addNameAttribute(state.getName());
-		addCommentAttribute(state);
+		addNameAndCommentAttribute(state);
 		addXYAttributes(state);
-
 		addECActions(state.getECAction());
 
 		addEndElement();
@@ -213,15 +202,23 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 * @throws XMLStreamException
 	 */
 	private void addECActions(final List<ECAction> actions) throws XMLStreamException {
-		for (ECAction action : actions) {
+		for (final ECAction action : actions) {
 			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
 			if (action.getAlgorithm() != null) {
 				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
 			}
 			if (action.getOutput() != null) {
-				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,
+						getActionOutputEventName(action.getOutput()));
 			}
 		}
+	}
+
+	private static String getActionOutputEventName(final Event event) {
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 
 	/**
@@ -233,8 +230,58 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
-		addAlgorithm(type.getAlgorithm());
+		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
+		addSimpleECStates(type.getSimpleECStates());
+		for (final ICallable callable : type.getCallables()) {
+			addICallable(callable);
+		}
 		addEndElement();
+	}
+
+	/**
+	 * Adds the simple ec states.
+	 *
+	 * @param states the states
+	 * @throws XMLStreamException
+	 */
+	private void addSimpleECStates(final List<SimpleECState> states) throws XMLStreamException {
+		for (final SimpleECState state : states) {
+			createSimpleECState(state);
+		}
+	}
+
+	/**
+	 * Creates the simple ec state.
+	 *
+	 * @param state the state
+	 * @throws XMLStreamException
+	 */
+	private void createSimpleECState(final SimpleECState state) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ECSTATE_ELEMENT);
+
+		addNameAndCommentAttribute(state);
+		addSimpleECActions(state.getSimpleECActions());
+
+		addEndElement();
+	}
+
+	/**
+	 * Adds the simple ec actions.
+	 *
+	 * @param actions the actions
+	 * @throws XMLStreamException
+	 */
+	private void addSimpleECActions(final List<SimpleECAction> actions) throws XMLStreamException {
+		for (final SimpleECAction action : actions) {
+			addEmptyStartElement(LibraryElementTags.ECACTION_ELEMENT);
+			if (action.getAlgorithm() != null) {
+				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm());
+			}
+			if (action.getOutput() != null) {
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,
+						getActionOutputEventName(action.getOutput()));
+			}
+		}
 	}
 
 	/**
@@ -246,15 +293,86 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addAlgorithm(final Algorithm algorithm) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ALGORITHM_ELEMENT);
 
-		addNameAttribute(algorithm.getName());
-		addCommentAttribute(algorithm);
+		addNameAndCommentAttribute(algorithm);
 
-		if (algorithm instanceof STAlgorithm) {
-			addSTAlgorithm((STAlgorithm) algorithm);
-		} else if (algorithm instanceof OtherAlgorithm) {
-			addOtherAlgorithm((OtherAlgorithm) algorithm);
+		if (algorithm instanceof final STAlgorithm stAlg) {
+			addSTAlgorithm(stAlg);
+		} else if (algorithm instanceof final OtherAlgorithm oAlg) {
+			addOtherAlgorithm(oAlg);
 		}
 		addEndElement();
 	}
 
+	/**
+	 * Adds the method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException
+	 */
+	private void addICallable(final ICallable callable) throws XMLStreamException {
+		if (callable instanceof final Algorithm alg) {
+			addAlgorithm(alg);
+		} else if (callable instanceof final Method method) {
+			addMethod(method);
+		}
+	}
+
+	/**
+	 * Adds the method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException
+	 */
+	private void addMethod(final Method method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.METHOD_ELEMENT);
+
+		addNameAttribute(method.getName());
+		addTypeAttribute(method.getReturnType());
+		addCommentAttribute(method.getComment());
+
+		if (method instanceof final STMethod stMethod) {
+			addSTMethod(stMethod);
+		} else if (method instanceof final OtherMethod oMethod) {
+			addOtherMethod(oMethod);
+		}
+		addEndElement();
+	}
+
+	/**
+	 * Adds the st method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException
+	 */
+	private void addSTMethod(final STMethod method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.ST_ELEMENT);
+		writeAlgorithmText(method.getText());
+		addInlineEndElement();
+		writeTextMethodParameters(method);
+	}
+
+	/**
+	 * Adds the other method.
+	 *
+	 * @param method the method
+	 * @throws XMLStreamException
+	 */
+	private void addOtherMethod(final OtherMethod method) throws XMLStreamException {
+		addStartElement(LibraryElementTags.OTHER_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
+				(null != method.getLanguage()) ? method.getLanguage() : ""); //$NON-NLS-1$
+
+		writeAlgorithmText(method.getText());
+		addInlineEndElement();
+		writeTextMethodParameters(method);
+	}
+
+	private void writeTextMethodParameters(final TextMethod method) throws XMLStreamException {
+		addVarList(method.getInputParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.INPUT_VARS_ELEMENT);
+		addVarList(method.getOutputParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.OUTPUT_VARS_ELEMENT);
+		addVarList(method.getInOutParameters().stream().map(VarDeclaration.class::cast).toList(),
+				LibraryElementTags.INOUT_VARS_ELEMENT);
+	}
 }

@@ -29,23 +29,19 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -55,7 +51,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
@@ -78,10 +74,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	};
 
-	public ECStateEditPart() {
-		setConnectable(true);
-	}
-
 	private void refreshStateTooltip() {
 		getFigure().getToolTip().setECState(this.getModel());
 
@@ -92,7 +84,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -101,7 +93,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -170,7 +162,7 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 
 	@Override
 	protected void refreshVisuals() {
-		final Rectangle rect = new Rectangle(getModel().getPosition().asPoint(), new Dimension(-1, -1));
+		final Rectangle rect = new Rectangle(getModel().getPosition().toScreenPoint(), new Dimension(-1, -1));
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rect);
 		getFigure().setHasAction(!getModel().getECAction().isEmpty());
 		refreshStateTooltip();
@@ -224,37 +216,36 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	}
 
 	/** The property change listener. */
-	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_COLOR)) {
-			getNameLabel().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_COLOR));
+	private final IPropertyChangeListener colorChangeListener = event -> {
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)) {
+			getNameLabel().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateColor());
 		}
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
-			getNameLabel().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
-			getFigure().getLine()
-			.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_STATE_TEXT_COLOR));
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
+			getNameLabel().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
+			getFigure().getLine().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		}
 	};
 
 	public void highlightTransitions(final boolean highlight) {
 		for (final Object obj : getSourceConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
 		for (final Object obj : getTargetConnections()) {
-			if (obj instanceof ECTransitionEditPart) {
-				((ECTransitionEditPart) obj).highlight(highlight);
+			if (obj instanceof final ECTransitionEditPart ectEP) {
+				ectEP.highlight(highlight);
 			}
 		}
-	}
-
-	@Override
-	protected DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 
 	@Override
 	public ECStateFigure getFigure() {
 		return (ECStateFigure) super.getFigure();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
 	}
 }

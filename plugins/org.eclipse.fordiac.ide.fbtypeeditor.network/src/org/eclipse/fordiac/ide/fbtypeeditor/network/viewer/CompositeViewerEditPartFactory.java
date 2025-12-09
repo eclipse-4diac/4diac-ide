@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2013, 2024 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -41,22 +41,20 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 		this.fbInstance = fbInstance;
 	}
 
-	/** Maps an object to an EditPart.
+	/**
+	 * Maps an object to an EditPart.
 	 *
 	 * @param context      the context
 	 * @param modelElement the model element
 	 *
 	 * @return the part for element
 	 *
-	 * @throws RuntimeException if no match was found (programming error) */
+	 * @throws RuntimeException if no match was found (programming error)
+	 */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof IInterfaceElement) {
-			final IInterfaceElement iElement = (IInterfaceElement) modelElement;
-			if (fbInstance == iElement.eContainer().eContainer()) {
-				return new CompositeInternalInterfaceEditPartRO();
-			}
-			return new InterfaceEditPartForFBNetworkRO();
+		if (modelElement instanceof final IInterfaceElement iElement) {
+			return getPartForInterfaceElement(context, iElement);
 		}
 		if (modelElement instanceof AdapterFB) {
 			return new AdapterFBEditPart() {
@@ -80,6 +78,13 @@ public class CompositeViewerEditPartFactory extends CompositeNetworkEditPartFact
 			return new ConnectionEditPartRO();
 		}
 		return super.getPartForElement(context, modelElement);
+	}
+
+	protected EditPart getPartForInterfaceElement(final EditPart context, final IInterfaceElement ie) {
+		if (fbInstance == ie.eContainer().eContainer()) {
+			return new CompositeInternalInterfaceEditPartRO();
+		}
+		return new InterfaceEditPartForFBNetworkRO();
 	}
 
 	@Override

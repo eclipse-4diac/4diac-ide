@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2017 fortiss GmbH
- * 		         2019, 2021 Johannes Kepler University Linz
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,6 +25,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -63,7 +62,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class TransactionSection extends AbstractServiceSection {
+public class TransactionSection extends AbstractSection {
 
 	private static final int PARAMETER_COL_WIDTH = 400;
 	private static final int EVENT_COL_WIDTH = 200;
@@ -76,26 +75,22 @@ public class TransactionSection extends AbstractServiceSection {
 	private CCombo eventNameInput;
 	private Text parameterNameInput;
 
-	private static final String INTERFACE = "";  //$NON-NLS-1$
+	private static final String INTERFACE = ""; //$NON-NLS-1$
 	private static final String INDEX = "index"; //$NON-NLS-1$
 	private static final String NAME = "name"; //$NON-NLS-1$
 	private static final String PARAM = "parameter"; //$NON-NLS-1$
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		final Composite section = getWidgetFactory().createComposite(parent);
-		section.setLayout(new GridLayout(1, false));
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite inputsComp = getWidgetFactory().createComposite(section);
+		final Composite inputsComp = getWidgetFactory().createComposite(parent);
 		inputsComp.setLayout(new GridLayout(1, false));
 		inputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createInputPrimitiveGroup(inputsComp);
 
-		final Composite outputsComp = getWidgetFactory().createComposite(section);
+		final Composite outputsComp = getWidgetFactory().createComposite(parent);
 		outputsComp.setLayout(new GridLayout(1, false));
 		outputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createOutputsEdit(outputsComp);
@@ -118,7 +113,6 @@ public class TransactionSection extends AbstractServiceSection {
 			executeCommand(cmd);
 			refresh();
 		});
-
 
 		getWidgetFactory().createCLabel(composite, Messages.ServiceSection_Name);
 
@@ -163,8 +157,8 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	private String[] getOutputEventNames() {
-		return (getType().getServiceSequence().getService().getFBType()).getInterfaceList().getEventOutputs()
-				.stream().map(Event::getName).toArray(String[]::new);
+		return (getType().getServiceSequence().getService().getFBType()).getInterfaceList().getEventOutputs().stream()
+				.map(Event::getName).toArray(String[]::new);
 	}
 
 	private static String[] getColumnProperties() {
@@ -187,7 +181,6 @@ public class TransactionSection extends AbstractServiceSection {
 		layout.addColumnData(new ColumnPixelData(PARAMETER_COL_WIDTH));
 		return layout;
 	}
-
 
 	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer primitiveViewer) {
 		buttons.bindToTableViewer(primitiveViewer, this, ref -> newCreateCommand((OutputPrimitive) ref, true),
@@ -260,23 +253,17 @@ public class TransactionSection extends AbstractServiceSection {
 	}
 
 	@Override
-	public void refresh() {
-		super.refresh();
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			interfaceSelector.setType(getType().getInputPrimitive());
-			outputPrimitivesViewer.setInput(getType());
-			outputsGroup.setText(getInterfaceNames());
-			fillEventNameInputDropdown();
-			eventNameInput.setText(getType().getInputPrimitive().getEvent());
-			if (getType().getInputPrimitive().getParameters() == null) {
-				parameterNameInput.setText(""); //$NON-NLS-1$
-			} else {
-				parameterNameInput.setText(getType().getInputPrimitive().getParameters());
-			}
+	protected void performRefresh() {
+		interfaceSelector.setType(getType().getInputPrimitive());
+		outputPrimitivesViewer.setInput(getType());
+		outputsGroup.setText(getInterfaceNames());
+		fillEventNameInputDropdown();
+		eventNameInput.setText(getType().getInputPrimitive().getEvent());
+		if (getType().getInputPrimitive().getParameters() == null) {
+			parameterNameInput.setText(""); //$NON-NLS-1$
+		} else {
+			parameterNameInput.setText(getType().getInputPrimitive().getParameters());
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	private void fillEventNameInputDropdown() {
@@ -291,8 +278,8 @@ public class TransactionSection extends AbstractServiceSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof TransactionEditPart) {
-			return ((TransactionEditPart) input).getModel();
+		if (input instanceof final TransactionEditPart transEP) {
+			return transEP.getModel();
 		}
 		if (input instanceof ServiceTransaction) {
 			return input;
@@ -319,8 +306,7 @@ public class TransactionSection extends AbstractServiceSection {
 
 		@Override
 		public String getColumnText(final Object element, final int columnIndex) {
-			if (element instanceof Primitive) {
-				final Primitive primitive = (Primitive) element;
+			if (element instanceof final Primitive primitive) {
 				switch (columnIndex) {
 				case INTERFACE_COL_INDEX:
 					return ""; //$NON-NLS-1$
@@ -331,7 +317,7 @@ public class TransactionSection extends AbstractServiceSection {
 					return primitive.getEvent();
 				case PARAM_COL_INDEX:
 					if (primitive.getParameters() == null) {
-						return "";  //$NON-NLS-1$
+						return ""; //$NON-NLS-1$
 					}
 					return primitive.getParameters();
 				default:
@@ -343,8 +329,7 @@ public class TransactionSection extends AbstractServiceSection {
 
 		@Override
 		public Image getColumnImage(final Object object, final int columnIndex) {
-			if ((object instanceof Primitive) && (columnIndex == INTERFACE_COL_INDEX)) {
-				final Primitive primitive = (Primitive) object;
+			if ((object instanceof final Primitive primitive) && (columnIndex == INTERFACE_COL_INDEX)) {
 				if (primitive.getInterface().isLeftInterface()) {
 					return FordiacImage.ICON_LEFT_INPUT_PRIMITIVE.getImage();
 				}
@@ -354,7 +339,6 @@ public class TransactionSection extends AbstractServiceSection {
 		}
 	}
 
-
 	private class TransactionCellModifier implements ICellModifier {
 		@Override
 		public boolean canModify(final Object element, final String property) {
@@ -363,8 +347,7 @@ public class TransactionSection extends AbstractServiceSection {
 
 		@Override
 		public Object getValue(final Object element, final String property) {
-			if (element instanceof Primitive) {
-				final Primitive primitive = (Primitive) element;
+			if (element instanceof final Primitive primitive) {
 				switch (property) {
 				case INDEX:
 					return String
@@ -373,7 +356,7 @@ public class TransactionSection extends AbstractServiceSection {
 					return getNameOfCurrentEvent(primitive);
 				case PARAM:
 					if (primitive.getParameters() == null) {
-						return "";  //$NON-NLS-1$
+						return ""; //$NON-NLS-1$
 					}
 					return primitive.getParameters();
 				case INTERFACE:
@@ -384,7 +367,6 @@ public class TransactionSection extends AbstractServiceSection {
 			}
 			return element;
 		}
-
 
 		@Override
 		public void modify(final Object element, final String property, final Object value) {

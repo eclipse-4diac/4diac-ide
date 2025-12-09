@@ -19,4 +19,76 @@
 
 <plugin>
    <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerSeverity="2"
+            markerType="org.eclipse.fordiac.ide.model.problem"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.error"
+            super="org.eclipse.ui.workbench.texteditor.error">
+      </type>
+      <type
+            markerSeverity="1"
+            markerType="org.eclipse.fordiac.ide.model.problem"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.warning"
+            super="org.eclipse.ui.workbench.texteditor.warning">
+      </type>
+      <type
+            markerSeverity="0"
+            markerType="org.eclipse.fordiac.ide.model.problem"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.info"
+            super="org.eclipse.ui.workbench.texteditor.info">
+      </type>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferences"
+            name="Block Size">
+      </page>
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferences"
+            name="Validation">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.BlockSizePreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.properties.BlockSizePreferences"
+            name="Block Size">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
+            category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
+            class="org.eclipse.fordiac.ide.model.ui.preferences.ValidationPreferencePage"
+            id="org.eclipse.fordiac.ide.model.ui.properties.ValidationPreferences"
+            name="Validation">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.eclipse.fordiac.ide.systemmanagement.FordiacNature">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 </plugin>

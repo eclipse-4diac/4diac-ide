@@ -19,16 +19,40 @@ import org.eclipse.osgi.util.NLS;
 /**
  * The Class Messages.
  */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.export.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
+
+	public static String ExportBuilder_Build;
+
+	public static String ExportBuilder_CMakeListExportFailed;
+
+	public static String ExportBuilder_Clean;
+
+	public static String ExportBuilder_CouldntExportFile;
 
 	public static String ExportTemplate_ExportTemplate;
 
+	public static String FordiacExporter_ERROR;
+
+	public static String FordiacExporter_EXPORT_CANCELED;
+
+	public static String FordiacExporter_ExportingCMakeLists;
+
+	public static String FordiacExporter_ExportingSelectedTypesUsingExporter;
+
+	public static String FordiacExporter_ExportingType;
+
+	public static String TemplateExportFilter_CANCEL_ALL_LABEL_STRING;
+
 	public static String TemplateExportFilter_ErrorDuringTemplateGeneration;
 
+	public static String TemplateExportFilter_EXPORT_CANCELED;
+
 	public static String TemplateExportFilter_FILE_EXISTS;
+
+	public static String TemplateExportFilter_FILE_IGNORED;
 
 	public static String TemplateExportFilter_LIST_FOUR_OR_MORE_ELEMENTS;
 
@@ -42,15 +66,13 @@ public final class Messages extends NLS {
 
 	public static String TemplateExportFilter_MERGE_LABEL_STRING;
 
-	public static String TemplateExportFilter_NO_DIFFERENCES_MESSAGE;
-
-	public static String TemplateExportFilter_NO_DIFFERENCES_TITLE;
-
 	public static String TemplateExportFilter_OVERWRITE_LABEL_STRING;
 
 	public static String TemplateExportFilter_OVERWRITE_REQUEST;
 
 	public static String TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME;
+
+	public static String TemplateExportFilter_OVERWRITE_ALL_LABEL_STRING;
 
 	static {
 		// initialize resource bundle

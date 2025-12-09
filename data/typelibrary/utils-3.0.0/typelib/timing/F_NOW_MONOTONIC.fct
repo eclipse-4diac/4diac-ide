@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_NOW_MONOTONIC" Comment="returns current monotonic clock value">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH   &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;return a clear monotonic time&#10;&#10;monotonic time from a specified point of time (depending on OS and hardware) which has no direct correlation to the current time.&#10;&#10;(This is only a Wrapper around the ST Function NOW_MONOTONIC)">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH   " Version="1.0" Author="Franz Höpfinger" Date="2024-10-01">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::timing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="" Type="TIME" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE utils::timing;
+
+(* returns current monotonic clock value *)
+FUNCTION F_NOW_MONOTONIC : TIME
+F_NOW_MONOTONIC := NOW_MONOTONIC();
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

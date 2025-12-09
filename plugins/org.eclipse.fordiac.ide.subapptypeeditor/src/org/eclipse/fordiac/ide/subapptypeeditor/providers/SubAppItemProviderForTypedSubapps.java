@@ -26,9 +26,9 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppItemProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.TypedSubAppItemProvider;
 
-public class SubAppItemProviderForTypedSubapps extends SubAppItemProvider {
+public class SubAppItemProviderForTypedSubapps extends TypedSubAppItemProvider {
 
 	protected FBNetworkItemProvider subAppNetworkItemProvider = null;
 
@@ -69,7 +69,7 @@ public class SubAppItemProviderForTypedSubapps extends SubAppItemProvider {
 	public Object getParent(final Object object) {
 		final EObject cont = ((SubApp) object).eContainer();
 		if (cont instanceof FBNetwork) {
-			return ((FBNetwork) cont).eContainer();
+			return cont.eContainer();
 		}
 		return super.getParent(object);
 	}

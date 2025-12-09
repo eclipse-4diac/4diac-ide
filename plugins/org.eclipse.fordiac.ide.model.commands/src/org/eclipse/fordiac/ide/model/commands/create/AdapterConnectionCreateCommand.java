@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class AdapterConnectionCreateCommand extends AbstractConnectionCreateCommand {
 

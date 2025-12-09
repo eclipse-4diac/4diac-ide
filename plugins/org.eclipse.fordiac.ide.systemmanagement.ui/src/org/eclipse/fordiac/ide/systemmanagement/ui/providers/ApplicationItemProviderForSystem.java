@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.fordiac.ide.model.edit.providers.FBNetworkItemProviderForSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ApplicationItemProvider;

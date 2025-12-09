@@ -1,4 +1,5 @@
 /**
+ * *******************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
@@ -6,31 +7,52 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio GarmendÃ­a, Bianca Wiesmayr
  *          - initial implementation and/or documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FunctionFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransitionTrace;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
-/** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements OperationalSemanticsFactory {
-	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public static OperationalSemanticsFactory init() {
 		try {
 			OperationalSemanticsFactory theOperationalSemanticsFactory = (OperationalSemanticsFactory) EPackage.Registry.INSTANCE
@@ -44,16 +66,21 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 		return new OperationalSemanticsFactoryImpl();
 	}
 
-	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public OperationalSemanticsFactoryImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
@@ -63,72 +90,249 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createEventManager();
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME:
 			return createBasicFBTypeRuntime();
-		case OperationalSemanticsPackage.FB_TYPE_RUNTIME:
-			return createFBTypeRuntime();
-		case OperationalSemanticsPackage.TRANSACTION:
-			return createTransaction();
+		case OperationalSemanticsPackage.COMPOSITE_FB_TYPE_RUNTIME:
+			return createCompositeFBTypeRuntime();
+		case OperationalSemanticsPackage.FUNCTION_FB_TYPE_RUNTIME:
+			return createFunctionFBTypeRuntime();
+		case OperationalSemanticsPackage.SERVICE_INTERFACE_FB_TYPE_RUNTIME:
+			return createServiceInterfaceFBTypeRuntime();
+		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME:
+			return createSimpleFBTypeRuntime();
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
+			return createFBNetworkRuntime();
+		case OperationalSemanticsPackage.FB_TRANSACTION:
+			return createFBTransaction();
+		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP:
+			return (EObject) createConnectionToValueMap();
+		case OperationalSemanticsPackage.RUNTIME_MAP:
+			return (EObject) createRuntimeMap();
+		case OperationalSemanticsPackage.TRACE:
+			return createTrace();
+		case OperationalSemanticsPackage.ECC_TRACE:
+			return createEccTrace();
+		case OperationalSemanticsPackage.TRANSITION_TRACE:
+			return createTransitionTrace();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+		case OperationalSemanticsPackage.EXCEPTION:
+			return createExceptionFromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+		case OperationalSemanticsPackage.EXCEPTION:
+			return convertExceptionToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence createEventOccurrence() {
 		EventOccurrenceImpl eventOccurrence = new EventOccurrenceImpl();
 		return eventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventManager createEventManager() {
 		EventManagerImpl eventManager = new EventManagerImpl();
 		return eventManager;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BasicFBTypeRuntime createBasicFBTypeRuntime() {
 		BasicFBTypeRuntimeImpl basicFBTypeRuntime = new BasicFBTypeRuntimeImpl();
 		return basicFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public FBTypeRuntime createFBTypeRuntime() {
-		FBTypeRuntimeImpl fbTypeRuntime = new FBTypeRuntimeImpl();
-		return fbTypeRuntime;
+	public SimpleFBTypeRuntime createSimpleFBTypeRuntime() {
+		SimpleFBTypeRuntimeImpl simpleFBTypeRuntime = new SimpleFBTypeRuntimeImpl();
+		return simpleFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public Transaction createTransaction() {
-		TransactionImpl transaction = new TransactionImpl();
-		return transaction;
+	public FunctionFBTypeRuntime createFunctionFBTypeRuntime() {
+		FunctionFBTypeRuntimeImpl functionFBTypeRuntime = new FunctionFBTypeRuntimeImpl();
+		return functionFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	@Override
+	public ServiceInterfaceFBTypeRuntime createServiceInterfaceFBTypeRuntime() {
+		ServiceInterfaceFBTypeRuntimeImpl serviceInterfaceFBTypeRuntime = new ServiceInterfaceFBTypeRuntimeImpl();
+		return serviceInterfaceFBTypeRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public CompositeFBTypeRuntime createCompositeFBTypeRuntime() {
+		CompositeFBTypeRuntimeImpl compositeFBTypeRuntime = new CompositeFBTypeRuntimeImpl();
+		return compositeFBTypeRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public FBNetworkRuntime createFBNetworkRuntime() {
+		FBNetworkRuntimeImpl fbNetworkRuntime = new FBNetworkRuntimeImpl();
+		return fbNetworkRuntime;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public FBTransaction createFBTransaction() {
+		FBTransactionImpl fbTransaction = new FBTransactionImpl();
+		return fbTransaction;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public Map.Entry<Connection, Value> createConnectionToValueMap() {
+		ConnectionToValueMapImpl connectionToValueMap = new ConnectionToValueMapImpl();
+		return connectionToValueMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public Map.Entry<FBNetworkElement, FBRuntimeAbstract> createRuntimeMap() {
+		RuntimeMapImpl runtimeMap = new RuntimeMapImpl();
+		return runtimeMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public Trace createTrace() {
+		TraceImpl trace = new TraceImpl();
+		return trace;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EccTrace createEccTrace() {
+		EccTraceImpl eccTrace = new EccTraceImpl();
+		return eccTrace;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public TransitionTrace createTransitionTrace() {
+		TransitionTraceImpl transitionTrace = new TransitionTraceImpl();
+		return transitionTrace;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public Exception createExceptionFromString(EDataType eDataType, String initialValue) {
+		return (Exception) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public String convertExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public OperationalSemanticsPackage getOperationalSemanticsPackage() {
 		return (OperationalSemanticsPackage) getEPackage();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @deprecated
-	 * @generated */
+	 * @generated
+	 */
 	@Deprecated
 	public static OperationalSemanticsPackage getPackage() {
 		return OperationalSemanticsPackage.eINSTANCE;

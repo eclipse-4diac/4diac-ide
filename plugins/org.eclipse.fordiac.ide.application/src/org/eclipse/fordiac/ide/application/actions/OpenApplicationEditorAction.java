@@ -31,17 +31,15 @@ public class OpenApplicationEditorAction extends AbstractOpenSystemElementListen
 
 	@Override
 	public void run(final IAction action) {
-		final IFile file = app.getAutomationSystem().getSystemFile();
+		final IFile file = app.getAutomationSystem().getTypeEntry().getFile();
 		openInSystemEditor(file, app);
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSel = (IStructuredSelection) selection;
-			if (structuredSel.getFirstElement() instanceof Application) {
-				app = (Application) structuredSel.getFirstElement();
-			}
+		if ((selection instanceof final IStructuredSelection structuredSel)
+				&& (structuredSel.getFirstElement() instanceof final Application firstElement)) {
+			app = firstElement;
 		}
 	}
 

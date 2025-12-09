@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_RTimeOut" Comment="Simple implementation of the timeout services">
+	<Identification Standard="61499-2" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<Sockets>
+			<AdapterDeclaration Name="TimeOutSocket" Type="iec61499::events::ARTimeOut" x="190" y="380"/>
+		</Sockets>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="DLY" Type="iec61499::events::E_RDELAY" x="1045" y="380">
+		</FB>
+		<EventConnections>
+			<Connection Source="TimeOutSocket.START" Destination="DLY.START" dx1="80" dx2="80" dy="160"/>
+			<Connection Source="TimeOutSocket.STOP" Destination="DLY.STOP" dx1="80" dx2="80" dy="160"/>
+			<Connection Source="DLY.EO" Destination="TimeOutSocket.TimeOut" dx1="80" dx2="80" dy="160"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="TimeOutSocket.DT" Destination="DLY.DT" dx1="80" dx2="80" dy="160"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

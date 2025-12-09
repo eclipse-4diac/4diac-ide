@@ -16,22 +16,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.internal;
 
-import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
-/**
- * The Class ChangeComplierInfoCommand.
- */
-public abstract class ChangeCompilerInfoCommand extends Command {
-
-	/** The identification of the type. */
-	private final CompilerInfo compilerInfo;
-
-	public CompilerInfo getCompilerInfo() {
-		return compilerInfo;
-	}
+/** The Class ChangeComplierInfoCommand. */
+public abstract class ChangeCompilerInfoCommand extends Command implements ScopedCommand {
+	private final LibraryElement libraryElement;
 
 	/**
 	 * Instantiates a new change comment command.
@@ -39,14 +36,24 @@ public abstract class ChangeCompilerInfoCommand extends Command {
 	 * @param type    which identification information is about to change
 	 * @param comment the comment
 	 */
-	protected ChangeCompilerInfoCommand(final CompilableType type) {
-		super();
-
-		if (type.getCompilerInfo() == null) {
-			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
-		}
-
-		this.compilerInfo = type.getCompilerInfo();
+	protected ChangeCompilerInfoCommand(final LibraryElement type) {
+		this.libraryElement = Objects.requireNonNull(type);
 	}
 
+	public CompilerInfo getCompilerInfo() {
+		if (libraryElement.getCompilerInfo() == null) {
+			libraryElement.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+		}
+		return libraryElement.getCompilerInfo();
+	}
+
+	public LibraryElement getLibraryElement() {
+		return libraryElement;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		// compiler info affects the entire library element (e.g., package, imports)
+		return Set.of(libraryElement);
+	}
 }

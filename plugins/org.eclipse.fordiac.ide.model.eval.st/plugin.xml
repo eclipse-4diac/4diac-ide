@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.model.eval.factory">
+      <factory
+            class="org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STMethod">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody">
+         </source>
+         <source
+               type="java.lang.String">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.Attribute">
+         </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.data.DirectlyDerivedType">
+         </source>
+      </factory>
+   </extension>
+
+</plugin>

@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.AncestorListener;
+import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.ChopboxAnchor;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -29,36 +31,36 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
-import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.tools.DirectEditManager;
 
-public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
-
-	public InterfaceEditPart() {
-		super();
-		setConnectable(true);
-	}
+public class InterfaceEditPart extends AbstractInterfaceElementEditPart
+		implements NodeEditPart, AnnotableGraphicalEditPart {
 
 	public class InterfaceFigure extends Label implements InteractionStyleFigure {
 		public InterfaceFigure() {
-			super();
 			setText(getINamedElement().getName());
 			setBorder(new ConnectorBorder(getCastedModel()));
 			setOpaque(false);
@@ -91,14 +93,25 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		}
 
 		public void updateConnectorColor() {
-			((ConnectorBorder) getBorder()).updateColor();
+			Border curBorder = getBorder();
+			if (curBorder instanceof final CompoundBorder comBorder) {
+				curBorder = comBorder.getOuterBorder();
+			}
+			if (curBorder instanceof final ConnectorBorder conBorder) {
+				conBorder.updateColor();
+			}
 		}
 	}
 
 	@Override
 	protected IFigure createFigure() {
 		final IFigure fig = new InterfaceFigure();
-		fig.addAncestorListener(new AncestorListener() {
+		fig.addAncestorListener(createAncestorListener());
+		return fig;
+	}
+
+	protected AncestorListener createAncestorListener() {
+		return new AncestorListener() {
 			@Override
 			public void ancestorRemoved(final IFigure ancestor) {
 				// nothing to do here
@@ -106,22 +119,46 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 
 			@Override
 			public void ancestorMoved(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
 			@Override
 			public void ancestorAdded(final IFigure ancestor) {
-				update();
+				refreshVisuals();
 			}
 
-		});
-		return fig;
+		};
 	}
 
 	@Override
-	protected void update() {
+	protected Adapter createAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
+					refreshTypeRoot();
+				}
+			}
+		};
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
+				FordiacAnnotationUtil::showOnTarget, FordiacAnnotationUtil::showOnTargetName);
+		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
+		if (commentTypeEditPart != null) {
+			commentTypeEditPart.updateAnnotations(event);
+		}
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
-			for (final Object con : sourceConnections) {
+			for (final ConnectionEditPart con : sourceConnections) {
 				final WithEditPart with = (WithEditPart) con;
 				with.updateWithPos();
 			}
@@ -136,17 +173,47 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return (IInterfaceElement) getModel();
 	}
 
-	public void setInOutConnectionsWith(final int with) {
-		for (final Object element : getSourceConnections()) {
-			final ConnectionEditPart cep = (ConnectionEditPart) element;
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
+	@Override
+	public void activate() {
+		super.activate();
+		checkAssociatedCommentType();
+		// tell the root edipart that we are here and that it should add the type
+		// comment children
+		refreshTypeRoot();
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
+	private void refreshTypeRoot() {
+		final FBTypeRootEditPart typeRootEP = getFBTypeRootEP();
+		if (typeRootEP != null) {
+			typeRootEP.refresh();
+			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
+					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
+		}
+	}
+
+	private FBTypeRootEditPart getFBTypeRootEP() {
+		for (final Object part : getRoot().getChildren()) {
+			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
+				return fbtRootEP;
 			}
 		}
-		for (final Object element : getTargetConnections()) {
-			final ConnectionEditPart cep = (ConnectionEditPart) element;
-			if (cep.getFigure() instanceof PolylineConnection) {
-				((PolylineConnection) cep.getFigure()).setLineWidth(with);
+		return null;
+	}
+
+	public void setInOutConnectionsWith(final int with) {
+		for (final ConnectionEditPart cep : getSourceConnections()) {
+			if (cep.getFigure() instanceof final PolylineConnection plc) {
+				plc.setLineWidth(with);
+			}
+		}
+		for (final ConnectionEditPart cep : getTargetConnections()) {
+			if (cep.getFigure() instanceof final PolylineConnection plc) {
+				plc.setLineWidth(with);
 			}
 		}
 	}
@@ -156,9 +223,12 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		super.createEditPolicies();
 
 		// allow delete of a FB
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
+		if (isInterfaceEditable()) {
+			installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
 
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+			installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
+		}
+
 	}
 
 	@Override
@@ -197,16 +267,15 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return new OutputWithAnchor(getFigure(), pos, this);
 	}
 
-
 	public static int calculateWithPos(final With with, final boolean isInput) {
 		final Event event = (Event) with.eContainer();
 		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
 		if (null != interfaceList) {
-				return getnumEventwith( isInput?interfaceList.getEventInputs():interfaceList.getEventOutputs(), event);
+			return getnumEventwith(isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs(), event);
 		}
 		return 0;
 	}
-	
+
 	protected static int getnumEventwith(final EList<Event> eList, final Event event) {
 		int nrOfEventWITH = 0;
 		for (final Event ele : eList) {
@@ -245,8 +314,18 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		return getCastedModel();
 	}
 
-	@Override
-	protected DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
+	private void checkAssociatedCommentType() {
+		final CommentTypeEditPart ep = findAssociatedCommentTypeEP();
+		if (ep != null && ep.getReferencedInterface() == null) {
+			// the associated comment type editpart was created before us
+			ep.setupReferencedEP();
+		}
+	}
+
+	private CommentTypeEditPart findAssociatedCommentTypeEP() {
+		return (CommentTypeEditPart) getViewer().getEditPartRegistry().values().stream()
+				.filter(CommentTypeEditPart.class::isInstance)
+				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
+				.orElse(null);
 	}
 }

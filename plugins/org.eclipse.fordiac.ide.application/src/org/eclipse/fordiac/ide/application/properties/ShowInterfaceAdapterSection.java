@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,61 +13,44 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection.CellImmutableModifier;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.EditPart;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
+
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
-		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
-			return (FBNetworkElement) ((EditPart) input).getModel();
+		return getFBNetworkElementFromInput(input);
+	}
+
+	public static BlockFBNetworkElement getFBNetworkElementFromInput(final Object input) {
+		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractBlockFBNElementEditPart)) {
+			return (BlockFBNetworkElement) ((EditPart) input).getModel();
 		}
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
+		if (input instanceof final BlockFBNetworkElement fbne) {
+			return fbne;
 		}
 		return null;
 	}
 
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createButtons = false;
-		super.createControls(parent, tabbedPropertySheetPage);
-		final Table inputTable = (Table) getInputsViewer().getControl();
-		inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		getInputsViewer().setCellModifier(new CellImmutableModifier());
-
-		final Table outputTable = (Table) getOutputsViewer().getControl();
-		outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		getOutputsViewer().setCellModifier(new CellImmutableModifier());
-	}
-
-	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		return null;
 	}
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return null;
 	}
 
@@ -82,13 +65,23 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return null;
+	protected BlockFBNetworkElement getType() {
+		return (BlockFBNetworkElement) type;
 	}
 
 	@Override
-	protected FBNetworkElement getType() {
-		return (FBNetworkElement) type;
+	public boolean isEditable() {
+		return false;
+	}
+
+	@Override
+	public boolean isShowTableEditButtons() {
+		return false;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return getType().getTypeInterface();
 	}
 
 }

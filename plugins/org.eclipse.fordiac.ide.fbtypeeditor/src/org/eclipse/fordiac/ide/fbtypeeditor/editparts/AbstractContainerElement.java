@@ -29,5 +29,5 @@ public abstract class AbstractContainerElement {
 		return fbType;
 	}
 
-	abstract List<IInterfaceElement> getChildren();
+	abstract List<? extends IInterfaceElement> getChildren();
 }

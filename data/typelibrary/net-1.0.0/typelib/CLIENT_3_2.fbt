@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CLIENT_3_2" Comment="Client with 3 inputs and 2 outputs, needed for HTTP">
+	<Identification Standard="61499-2" Description="Copyright (c) 2024 Monika Wenger&#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Monika Wenger" Date="2024-02-26">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Open new connection (QI = TRUE) / Close connection (QI = FALSE)">
+				<With Var="QI"/>
+				<With Var="ID"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Transmits data to the server">
+				<With Var="QI"/>
+				<With Var="SD_1"/>
+				<With Var="SD_2"/>
+				<With Var="SD_3"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="New connection established (QI = TRUE) / connection closed (QI = FALSE)">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Response from the server">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="RD_1"/>
+				<With Var="RD_2"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="ID" Type="WSTRING"/>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Token for authentication at the server"/>
+			<VarDeclaration Name="SD_2" Type="ANY" Comment="Parameters for the message"/>
+			<VarDeclaration Name="SD_3" Type="ANY" Comment="Body of the message"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING"/>
+			<VarDeclaration Name="RD_1" Type="ANY" Comment="Response code from the server"/>
+			<VarDeclaration Name="RD_2" Type="ANY" Comment="Body from the server&apos;s response"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_CLIENT'"/>
+	<Attribute Name="TypeHash" Value="''"/>
+</FBType>

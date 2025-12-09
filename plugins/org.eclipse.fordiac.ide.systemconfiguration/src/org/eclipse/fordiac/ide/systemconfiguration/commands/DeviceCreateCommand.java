@@ -18,76 +18,68 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.AttributeInheritMode;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.fordiac.ide.util.YUV;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.RGB;
 
 public class DeviceCreateCommand extends Command {
+
+	private static final String DEFAULT_RESOURCE_TYPE = "EMB_RES"; //$NON-NLS-1$
+	private static final String DEFAULT_RESOURCE_FULL_TYPE = "iec61499::system::EMB_RES"; //$NON-NLS-1$
+
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
-	private final DeviceTypePaletteEntry entry;
+	private final DeviceTypeEntry entry;
 	private final SystemConfiguration parent;
-	private final Rectangle bounds;
+	private final Position pos;
 	private Device device;
 
 	public Device getDevice() {
 		return device;
 	}
 
-	public DeviceCreateCommand(final DeviceTypePaletteEntry entry, final SystemConfiguration parent,
-			final Rectangle bounds) {
+	public DeviceCreateCommand(final DeviceTypeEntry entry, final SystemConfiguration parent, final Rectangle bounds) {
 		this.entry = entry;
 		this.parent = parent;
-		this.bounds = bounds;
+		this.pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(bounds.x, bounds.y);
 		setLabel(CREATE_DEVICE_LABEL);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (entry != null) && (bounds != null) && (parent != null);
+		return (entry != null) && (parent != null);
 	}
 
 	@Override
 	public void execute() {
 		createDevice();
-		device.setPaletteEntry(entry);
-		CommonElementImporter.createParamters(device);
+		device.setTypeEntry(entry);
+		CommonElementImporter.createParameters(device);
 		setDeviceProfile();
-		device.updatePosition(bounds.getTopLeft());
+		device.setPosition(pos);
 		parent.getDevices().add(device);
 		// the name needs to be set after the device is added to the network
 		// so that name checking works correctly
-		device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
-		setDeviceAttributes();
+		device.setName(NameRepository.createUniqueName(device, entry.getType().getName()));
+		AttributeInheritMode.copyAttributeValuesFromType(device);
 		createResource();
-		SystemManager.INSTANCE.notifyListeners();
-	}
-
-	private void setDeviceAttributes() {
-		for (final AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
-			final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
-			attribute.setName(attributeDeclaration.getName());
-			attribute.setComment(attributeDeclaration.getComment());
-			attribute.setValue(attributeDeclaration.getInitialValue());
-			attribute.setAttributeDeclaration(attributeDeclaration);
-			device.getAttributes().add(attribute);
-		}
 	}
 
 	private void setDeviceProfile() {
@@ -95,8 +87,8 @@ public class DeviceCreateCommand extends Command {
 		if ((null != device.getType().getProfile()) && !"".equals(device.getType().getProfile())) { //$NON-NLS-1$
 			profile = device.getType().getProfile();
 		} else {
-			profile = UIPlugin.getDefault().getPreferenceStore()
-					.getString(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE);
+			profile = Platform.getPreferencesService().getString(UIPreferenceConstants.FORDIAC_UI_PREFERENCES_ID,
+					UIPreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "", null); //$NON-NLS-1$
 		}
 		device.setProfile(profile);
 	}
@@ -107,17 +99,17 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private void createResource() {
-		for (final Resource res : entry.getDeviceType().getResource()) {
+		for (final Resource res : entry.getType().getResource()) {
 			ResourceCreateCommand cmd = null;
-			if (res.getPaletteEntry() != null) {
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) res.getPaletteEntry(), device, true);
+			if (res.getTypeEntry() != null) {
+				cmd = new ResourceCreateCommand((ResourceTypeEntry) res.getTypeEntry(), device, true);
 				cmd.execute();
 				final Resource copy = cmd.getResource();
 				copy.setName(res.getName());
 			} else {
-				org.eclipse.fordiac.ide.systemconfiguration.Activator.getDefault().logInfo("Referenced Resource Type: " //$NON-NLS-1$
+				FordiacLogHelper.logInfo("Referenced Resource Type: " //$NON-NLS-1$
 						+ (res.getName() != null ? res.getName() : "N/A") //$NON-NLS-1$
-						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ (res.getTypeEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!"); //$NON-NLS-1$
 			}
 		}
@@ -130,7 +122,10 @@ public class DeviceCreateCommand extends Command {
 				|| device.getType().getName().contains("FRAME")) { //$NON-NLS-1$
 			type = getResourceType("PANEL_RESOURCE"); //$NON-NLS-1$
 		} else {
-			type = getResourceType("EMB_RES"); //$NON-NLS-1$
+			type = getResourceType(DEFAULT_RESOURCE_FULL_TYPE);
+			if (type == null) {
+				type = getResourceType(DEFAULT_RESOURCE_TYPE);
+			}
 		}
 		if (null != type) {
 			final ResourceCreateCommand cmd = new ResourceCreateCommand(type, device, false);
@@ -139,7 +134,7 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private ResourceTypeEntry getResourceType(final String resTypeName) {
-		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
+		return device.getTypeEntry().getTypeLibrary().getResourceTypeEntry(resTypeName);
 	}
 
 	private Color createRandomDeviceColor() {
@@ -171,7 +166,6 @@ public class DeviceCreateCommand extends Command {
 	public void redo() {
 		if (parent != null) {
 			parent.getDevices().add(device);
-			SystemManager.INSTANCE.notifyListeners();
 		}
 	}
 
@@ -179,7 +173,6 @@ public class DeviceCreateCommand extends Command {
 	public void undo() {
 		if (parent != null) {
 			parent.getDevices().remove(device);
-			SystemManager.INSTANCE.notifyListeners();
 		}
 	}
 }

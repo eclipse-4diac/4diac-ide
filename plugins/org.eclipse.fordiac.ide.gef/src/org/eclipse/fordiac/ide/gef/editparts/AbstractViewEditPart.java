@@ -23,7 +23,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
@@ -31,17 +30,16 @@ import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
-	private DirectEditManager manager;
 
 	private Adapter adapter;
 
@@ -56,9 +54,9 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private final Adapter iNamedElementContentAdapter = new AdapterImpl() {
 
 		@Override
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 			if (notification.getNotifier().equals(getINamedElement())) {
-				Object feature = notification.getFeature();
+				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
 					refreshName();
 				}
@@ -71,16 +69,12 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		}
 	};
 
-	protected void backgroundColorChanged(IFigure figure) {
-		Color fordiacColor = getBackgroundColor();
-		setColor(figure, fordiacColor);
+	protected void backgroundColorChanged(final IFigure figure) {
+		setColor(figure, null);
 	}
 
-	protected Color getBackgroundColor() {
-		return null;
-	}
-
-	protected void setColor(IFigure figure, Color fordiacColor) {
+	@SuppressWarnings("static-method")
+	protected void setColor(final IFigure figure, final Color fordiacColor) {
 		org.eclipse.swt.graphics.Color newColor;
 		if (fordiacColor != null) {
 			newColor = ColorManager
@@ -112,19 +106,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	 */
 	protected abstract Adapter createContentAdapter();
 
-	/**
-	 * If an View needs to be informed for changes in the PreferencePage (e.g.
-	 * change of a Color) the derived class have to return an
-	 * IPropertyChangeListener with implemented <code>propertyChange()</code> method
-	 * if notification on changes are required otherwise it can return
-	 * <code>null</code>.
-	 *
-	 * @return IPropertyChangeListener the IPropertyChangeListener of the derived
-	 *         class or <code>null</code> if derived class should not be added to
-	 *         the listeners.
-	 */
-	protected abstract IPropertyChangeListener getPreferenceChangeListener();
-
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -133,9 +114,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 				getINamedElement().eAdapters().add(iNamedElementContentAdapter);
 			}
 			((Notifier) getModel()).eAdapters().add(getContentAdapter());
-			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
-			}
 		}
 	}
 
@@ -147,9 +125,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 				getINamedElement().eAdapters().remove(iNamedElementContentAdapter);
 			}
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
-			if (getPreferenceChangeListener() != null) {
-				Activator.getDefault().getPreferenceStore().removePropertyChangeListener(getPreferenceChangeListener());
-			}
 		}
 	}
 
@@ -171,8 +146,8 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			if (f != null) {
 				backgroundColorChanged(f);
 			}
-		} catch (IllegalArgumentException e) {
-			Activator.getDefault().logError(ERROR_IN_CREATE_FIGURE, e);
+		} catch (final IllegalArgumentException e) {
+			FordiacLogHelper.logError(ERROR_IN_CREATE_FIGURE, e);
 		}
 		return f;
 	}
@@ -196,24 +171,17 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		}
 	}
 
-	protected DirectEditManager getManager() {
-		if (manager == null) {
-			manager = createDirectEditManager();
-		}
-		return manager;
-	}
-
 	protected DirectEditManager createDirectEditManager() {
 		return new LabelDirectEditManager(this, getNameLabel());
 	}
 
 	protected void performDirectEdit() {
-		getManager().show();
+		createDirectEditManager().show();
 	}
 
-	public void setTransparency(int value) {
-		if (getFigure() instanceof ITransparencyFigure) {
-			((ITransparencyFigure) getFigure()).setTransparency(value);
+	public void setTransparency(final int value) {
+		if (getFigure() instanceof final ITransparencyFigure transparancyFigure) {
+			transparancyFigure.setTransparency(value);
 		}
 	}
 

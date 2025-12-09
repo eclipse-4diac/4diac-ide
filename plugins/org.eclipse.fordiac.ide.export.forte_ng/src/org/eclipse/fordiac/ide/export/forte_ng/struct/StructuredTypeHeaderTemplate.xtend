@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,57 +10,73 @@
  * 
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - add constructor with member list
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
-import org.eclipse.fordiac.ide.export.forte_ng.struct.StructBaseTemplate
+import java.util.Map
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.data.StructuredType
+
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
 class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 
-
-	new(StructuredType type, String name, Path prefix) {
-		super(type, name, prefix)
+	new(StructuredType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, options)
 	}
 
 	override generate() '''
 		«generateHeader»
-
+		
 		«generateIncludeGuardStart»
-
+		
 		«generateHeaderIncludes»
-
-		class «structClassName»: public CIEC_STRUCT {
-		  DECLARE_FIRMWARE_DATATYPE(«type.name»)
-
-		  public:
-		      «structClassName»();
-
-		      virtual ~«structClassName»() {
+		
+		namespace «type.generateTypeNamespace» {
+		  class «className» final : public CIEC_STRUCT {
+		    DECLARE_FIRMWARE_DATATYPE(«type.generateTypeNamePlain»)
+		
+		    public:
+		      «className»();
+		«IF !type.memberVariables.empty»
+		
+		      «className»(«generateConstructorParameters»);
+		
+		      «type.memberVariables.generateVariableDeclarations(false)»
+		«ENDIF»
+		      size_t getStructSize() const override {
+		        return «type.memberVariables.size»;
 		      }
-
-          «type.memberVariables.generateAccessors("getMember")»
-
-		  private:
-		    static const CStringDictionary::TStringId scmElementTypes[];
-		    static const CStringDictionary::TStringId scmElementNames[];
-
-		};
-
+		
+		      const StringId* elementNames() const override {
+		        return scmElementNames;
+		      }
+		
+		      StringId getStructTypeNameID() const override;
+		
+		      void setValue(const CIEC_ANY &paValue) override;
+		
+		      «generateAccessorDeclaration("getMember", false)»
+		      «generateAccessorDeclaration("getMember", true)»
+		
+		    private:
+		      static const StringId scmElementNames[];
+		
+		  };
+		}
+		
 		«generateIncludeGuardEnd»
-
+		
 	'''
 
 	def protected generateHeaderIncludes() '''
-		#include "forte_struct.h"
+		«generateDependencyInclude("forte/datatypes/forte_struct.h")»
 		
-		«type.memberVariables.generateTypeIncludes»
+		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		
 		«type.compilerInfo?.header»
-	'''
-
-	def protected generateAlgorithms() '''
-		void alg_REQ(void);
 	'''
 }

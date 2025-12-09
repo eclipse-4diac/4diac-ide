@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.application.commands.FlattenSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.CommandStack;
@@ -74,34 +76,39 @@ public class FlattenSubApplication extends AbstractHandler {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 
-		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp));
+		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp) && !resultsInGroupInGroup(subApp));
+	}
+
+	private static boolean resultsInGroupInGroup(final SubApp subApp) {
+		return (getContainedGroup(subApp) != null) && (subApp.getGroup() != null);
+	}
+
+	private static FBNetworkElement getContainedGroup(final SubApp subApp) {
+		return subApp.getSubAppNetwork().getNetworkElements().stream().filter(Group.class::isInstance).findFirst()
+				.orElse(null);
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		if (currentElement instanceof SubApp) {
-			return (SubApp) currentElement;
-		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
-		} else if (currentElement instanceof UISubAppNetworkEditPart) {
-			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
-		}
-		return null;
+		return switch (currentElement) {
+		case final SubApp subApp -> subApp;
+		case final SubAppForFBNetworkEditPart subAppEP -> subAppEP.getModel();
+		case final UISubAppNetworkEditPart uiSubAppNWEP -> (SubApp) uiSubAppNWEP.getModel().eContainer();
+		default -> null;
+		};
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = ((IStructuredSelection) selection);
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getSubApp(structSel.getFirstElement());
-			}
+		if (selection instanceof final IStructuredSelection structSel && !structSel.isEmpty()
+				&& (structSel.size() == 1)) {
+			return getSubApp(structSel.getFirstElement());
 		}
 		return null;
 	}
 
 	private static List<Object> getSelectionList(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			return ((StructuredSelection) selection).toList();
+		if (selection instanceof final StructuredSelection structSel) {
+			return structSel.toList();
 		}
 		return Collections.emptyList();
 	}

@@ -13,12 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fortelauncher.preferences;
 
-import org.eclipse.fordiac.ide.fortelauncher.Activator;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fortelauncher.Messages;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -38,7 +39,8 @@ public class FortePreferencePage extends FieldEditorPreferencePage implements IW
 	 */
 	public FortePreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				FortePreferenceConstants.FORTELAUNCHER_PREFERENCES_ID));
 		setDescription(Messages.FortePreferencePage_FORTEPreferencesPage);
 	}
 
@@ -49,7 +51,7 @@ public class FortePreferencePage extends FieldEditorPreferencePage implements IW
 	 */
 	@Override
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(PreferenceConstants.P_PATH, Messages.FortePreferencePage_FORTELocation,
+		addField(new FileFieldEditor(FortePreferenceConstants.P_PATH, Messages.FortePreferencePage_FORTELocation,
 				getFieldEditorParent()));
 	}
 

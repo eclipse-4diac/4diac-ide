@@ -17,11 +17,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.fmu.Activator;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -29,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -54,7 +56,8 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	 */
 	public FMUPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(
+				new ScopedPreferenceStore(InstanceScope.INSTANCE, FMUPreferenceConstants.FMU_PREFERENCES_ID));
 		setDescription(Messages.FMUPreferencePage_FMUPreferencesPage);
 	}
 
@@ -66,7 +69,7 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 	@Override
 	public void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, Messages.FMUPreferencePage_BinariesLocation,
+		addField(new DirectoryFieldEditor(FMUPreferenceConstants.P_PATH, Messages.FMUPreferencePage_BinariesLocation,
 				getFieldEditorParent()));
 
 		librariesGroup = new Group(getFieldEditorParent(), SWT.NONE);
@@ -78,22 +81,22 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 		gridData.horizontalSpan = 2;
 
 		// Add the fields to the group
-		win32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN32, PreferenceConstants.P_FMU_WIN32,
+		win32Field = new BooleanFieldEditor(FMUPreferenceConstants.P_FMU_WIN32, FMUPreferenceConstants.P_FMU_WIN32,
 				librariesGroup);
 		win32Field.setEnabled(false, librariesGroup);
 		addField(win32Field);
 
-		win64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_WIN64, PreferenceConstants.P_FMU_WIN64,
+		win64Field = new BooleanFieldEditor(FMUPreferenceConstants.P_FMU_WIN64, FMUPreferenceConstants.P_FMU_WIN64,
 				librariesGroup);
 		win64Field.setEnabled(false, librariesGroup);
 		addField(win64Field);
 
-		linux32Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN32, PreferenceConstants.P_FMU_LIN32,
+		linux32Field = new BooleanFieldEditor(FMUPreferenceConstants.P_FMU_LIN32, FMUPreferenceConstants.P_FMU_LIN32,
 				librariesGroup);
 		linux32Field.setEnabled(false, librariesGroup);
 		addField(linux32Field);
 
-		linux64Field = new BooleanFieldEditor(PreferenceConstants.P_FMU_LIN64, PreferenceConstants.P_FMU_LIN64,
+		linux64Field = new BooleanFieldEditor(FMUPreferenceConstants.P_FMU_LIN64, FMUPreferenceConstants.P_FMU_LIN64,
 				librariesGroup);
 		linux64Field.setEnabled(false, librariesGroup);
 		addField(linux64Field);
@@ -101,15 +104,15 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 		librariesGroup.setLayoutData(gridData);
 		librariesGroup.setLayout(gridLayout);
 
-		updateEnabledLibraries(true, Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH));
+		updateEnabledLibraries(true, getPreferenceStore().getString(FMUPreferenceConstants.P_PATH));
 	}
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent event) {
-		if (event.getSource() instanceof DirectoryFieldEditor
-				&& ((DirectoryFieldEditor) event.getSource()).getPreferenceName().equals(PreferenceConstants.P_PATH)) {
-			if (event.getNewValue() instanceof String) {
-				updateEnabledLibraries(true, (String) event.getNewValue());
+		if (event.getSource() instanceof final DirectoryFieldEditor fieldEditor
+				&& fieldEditor.getPreferenceName().equals(FMUPreferenceConstants.P_PATH)) {
+			if (event.getNewValue() instanceof final String newValue) {
+				updateEnabledLibraries(true, newValue);
 			} else if (event.getNewValue() instanceof Boolean) {// When directory doesn't exists, the event is a false
 				// boolean
 				updateEnabledLibraries(false, null);
@@ -151,18 +154,20 @@ public class FMUPreferencePage extends FieldEditorPreferencePage implements IWor
 
 	public static List<String> getFoundLibraries() {
 		final List<String> found = new ArrayList<>();
-		final String pathString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH);
+		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
+				FMUPreferenceConstants.FMU_PREFERENCES_ID);
+		final String pathString = store.getString(FMUPreferenceConstants.P_PATH);
 		if ((new File(pathString + File.separatorChar + "win32Forte.dll").exists())) { //$NON-NLS-1$
-			found.add(PreferenceConstants.P_FMU_WIN32);
+			found.add(FMUPreferenceConstants.P_FMU_WIN32);
 		}
 		if ((new File(pathString + File.separatorChar + "win64Forte.dll").exists())) { //$NON-NLS-1$
-			found.add(PreferenceConstants.P_FMU_WIN64);
+			found.add(FMUPreferenceConstants.P_FMU_WIN64);
 		}
 		if ((new File(pathString + File.separatorChar + "linux32Forte.so").exists())) { //$NON-NLS-1$
-			found.add(PreferenceConstants.P_FMU_LIN32);
+			found.add(FMUPreferenceConstants.P_FMU_LIN32);
 		}
 		if ((new File(pathString + File.separatorChar + "linux64Forte.so").exists())) { //$NON-NLS-1$
-			found.add(PreferenceConstants.P_FMU_LIN64);
+			found.add(FMUPreferenceConstants.P_FMU_LIN64);
 		}
 
 		return found;

@@ -26,12 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class CreateTransitionCommand.
  */
-public class CreateTransitionCommand extends Command implements CreationCommand {
+public class CreateTransitionCommand extends CreationCommand {
 	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */
@@ -62,7 +61,6 @@ public class CreateTransitionCommand extends Command implements CreationCommand 
 	private EditPartViewer viewer;
 
 	public CreateTransitionCommand() {
-		super();
 	}
 
 	/**
@@ -78,9 +76,11 @@ public class CreateTransitionCommand extends Command implements CreationCommand 
 	 */
 	public CreateTransitionCommand(final ECState source, final ECState destination, final Event conditionEvent) {
 		this.source = source;
-		this.sourceLocation = source.getPosition().asPoint();
+		this.sourceLocation = source.getPosition().toScreenPoint();
 		this.destination = destination;
-		this.destLocation = destination.getPosition().asPoint();
+		if (destination.getPosition() != null) {
+			this.destLocation = destination.getPosition().toScreenPoint();
+		}
 		this.conditionEvent = conditionEvent;
 	}
 
@@ -138,7 +138,7 @@ public class CreateTransitionCommand extends Command implements CreationCommand 
 
 	@Override
 	public boolean canExecute() {
-		return ((null != source) && (null != destination) && (null != source.getECC()));
+		return ((null != source) && (null != destination) && (null != source.getECC()) && (null != destLocation));
 	}
 
 	/*
@@ -157,22 +157,20 @@ public class CreateTransitionCommand extends Command implements CreationCommand 
 		// it is necessary to invoke the following code after adding the
 		// transition to the parent, otherwise ECTransitionEditPart will
 		// throw a NPE in the activate method!
-		transition.updatePosition(calcTransitionBendPoint());
+		transition.updatePositionFromScreenCoordinates(calcTransitionBendPoint());
 		transition.setSource(source);
 		transition.setDestination(destination);
 		transition.setConditionEvent(conditionEvent);
 
 		if (conditionExpression != null) {
 			transition.setConditionExpression(conditionExpression);
-		} else {
-			if (conditionEvent == null) {
-				transition.setConditionExpression("1"); //$NON-NLS-1$
-			}
+		} else if (conditionEvent == null) {
+			transition.setConditionExpression("1"); //$NON-NLS-1$
 		}
 		if (null != viewer) {
-			final Object obj = viewer.getEditPartRegistry().get(transition);
-			if (null != obj) {
-				viewer.select((EditPart) obj);
+			final EditPart ep = viewer.getEditPartForModel(transition);
+			if (ep != null) {
+				viewer.select(ep);
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2017 - 2018 fortiss GmbH
- *               2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
+ * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,34 +12,31 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - allow navigation to parent by double-clicking on subapp
  *                 interface element
+ *               - show hidden connections in interface bar
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
-import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
-import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.ui.IEditorPart;
 
 public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceElementEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		final InterfaceFigure figure = new InterfaceFigure();
+		final IFigure figure = super.createFigure();
 		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {
@@ -47,6 +44,24 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 			}
 		});
 		return figure;
+	}
+
+	@Override
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			targetInteraceAdapter = new TargetInterfaceAdapter(this);
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (isActive()) {
+			if (targetInteraceAdapter != null) {
+				targetInteraceAdapter.deactivate();
+			}
+			super.deactivate();
+		}
 	}
 
 	@Override
@@ -68,7 +83,7 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 
 	@Override
 	protected void refreshVisuals() {
-		getFigure().setToolTip(new ToolTipFigure(getModel()));
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
 		super.refreshVisuals();
 	}
 
@@ -80,35 +95,6 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 		} else {
 			super.performRequest(request);
 		}
-	}
-
-	@Override
-	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
-		if (isEvent()) {
-			return new EventNodeEditPolicy() {
-				@Override
-				protected FBNetwork getParentNetwork() {
-					return getSubappNetwork();
-				}
-			};
-		}
-		if (isAdapter()) {
-			return new AdapterNodeEditPolicy() {
-				@Override
-				protected FBNetwork getParentNetwork() {
-					return getSubappNetwork();
-				}
-			};
-		}
-		if (isVariable()) {
-			return new VariableNodeEditPolicy() {
-				@Override
-				protected FBNetwork getParentNetwork() {
-					return getSubappNetwork();
-				}
-			};
-		}
-		return null;
 	}
 
 	@Override
@@ -128,13 +114,24 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 	}
 
 	private void goToParent() {
-		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getFBNetworkElement());
+		final IEditorPart newEditor = HandlerHelper.openParentEditor(getModel().getBlockFBNetworkElement());
 		final GraphicalViewer viewer = newEditor.getAdapter(GraphicalViewer.class);
 		HandlerHelper.selectElement(getModel(), viewer);
 	}
 
-	private FBNetwork getSubappNetwork() {
-		return ((SubApp) getModel().getFBNetworkElement()).getSubAppNetwork();
+	@Override
+	protected FixedAnchor createSourceConAnchor() {
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
+	@Override
+	protected FixedAnchor createTargetConAnchor() {
+		return new FixedAnchor(getFigure(), isInput());
+	}
+
+	@Override
+	protected int getMaxWidth() {
+		// we always want the max width of the interface bar
+		return getInterfaceBarMaxWidth();
+	}
 }

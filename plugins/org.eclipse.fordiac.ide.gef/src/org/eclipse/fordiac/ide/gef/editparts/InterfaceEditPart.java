@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University,
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@
  *   			   creation feedback
  *   Daniel Lindhuber - added source comment
  *   Alois Zoitl - added update handling on source comment
+ *   Fabio Gandolfi - added resizing of pin labels by property settings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -30,28 +31,38 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.InterfaceElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -62,27 +73,39 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class InterfaceEditPart extends AbstractConnectableEditPart
-implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
-	private ValueEditPart referencedPart;
+		implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart, AnnotableGraphicalEditPart {
+
 	private int mouseState;
 
 	private Adapter contentAdapter = null;
 	private IInterfaceElement sourcePin = null;
 	private Adapter sourcePinAdapter = null;
 
-	private boolean showInstanceName = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_COMMENT_AT_PIN);
+	private String pinLabelStyle;
+
 	private final IPropertyChangeListener preferenceListener = event -> {
-		if (event.getProperty().equals(DiagramPreferences.SHOW_COMMENT_AT_PIN)) {
-			showInstanceName = ((Boolean) event.getNewValue()).booleanValue();
+		if (event.getProperty().equals(GefPreferenceConstants.PIN_LABEL_STYLE)
+				|| event.getProperty().equals(PreferenceStoreProvider.PROJECT_STORE_ACTIVE)) {
+			pinLabelStyle = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+					.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 			refreshLabelText();
 		}
 	};
 
 	protected InterfaceEditPart() {
-		setConnectable(true);
-		addPreferenceListener();
+		pinLabelStyle = ""; //$NON-NLS-1$
+	}
+
+	protected int getMinWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMinPinLabelSize();
+	}
+
+	// allow subclasses to overload and provide different max widths
+	protected int getMaxWidth() {
+		return ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxPinLabelSize();
 	}
 
 	@Override
@@ -103,12 +126,34 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		}
 	}
 
+	@Override
+	public boolean isConnectable() {
+		return true;
+	}
+
 	protected String getLabelText() {
-		final String comment = getSourcePinInstanceName();
-		if (isShowInput() && !comment.isBlank()) {
-			return comment;
+		final String altText = getAlternativePinLabelText();
+		return (!altText.isBlank()) ? altText : getPinName(getModel());
+	}
+
+	private String getAlternativePinLabelText() {
+		switch (pinLabelStyle) {
+		case GefPreferenceConstants.PIN_LABEL_STYLE_PIN_COMMENT:
+			if (getModel().getBlockFBNetworkElement() != null) {
+				// only return the comment for instances and not for type editors
+				return getModel().getComment();
+			}
+			break;
+		case GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME:
+			if (isShowInput()) {
+				return getSourcePinInstanceName();
+			}
+			break;
+		default:
+			// in the default case we don't nothing and fall back to the default value below
+			break;
 		}
-		return getModel().getName();
+		return ""; //$NON-NLS-1$
 	}
 
 	private void refreshLabelText() {
@@ -116,18 +161,15 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private boolean isShowInput() {
-		return showInstanceName && isInput() && !getModel().getInputConnections().isEmpty();
-	}
-
-	private void addPreferenceListener() {
-		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceListener);
+		return GefPreferenceConstants.PIN_LABEL_STYLE_SRC_PIN_NAME.equals(pinLabelStyle) && isInput()
+				&& !getModel().getInputConnections().isEmpty();
 	}
 
 	private String getSourcePinInstanceName() {
 		final IInterfaceElement refPin = getSourcePin();
 		if (refPin != null) {
-			final FBNetworkElement source = refPin.getFBNetworkElement();
-			final String pinName = refPin.getName();
+			final FBNetworkElement source = refPin.getBlockFBNetworkElement();
+			final String pinName = getPinName(refPin);
 			if (source != null && !isSubAppPin(source)) {
 				final String elementName = source.getName();
 				return elementName + "." + pinName; //$NON-NLS-1$
@@ -135,6 +177,13 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			return pinName;
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	private static String getPinName(final IInterfaceElement pin) {
+		if (pin instanceof final MemberVarDeclaration memberVarDecl) {
+			return memberVarDecl.getDisplayName();
+		}
+		return pin.getName();
 	}
 
 	private IInterfaceElement getSourcePin() {
@@ -146,15 +195,15 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private boolean isSubAppPin(final FBNetworkElement connSource) {
-		if (connSource instanceof SubApp && getModel().getFBNetworkElement() != null) {
-			return ((SubApp) connSource).getSubAppNetwork() == getModel().getFBNetworkElement().getFbNetwork();
+		if (connSource instanceof final SubApp subapp && getModel().getBlockFBNetworkElement() != null) {
+			return subapp.getSubAppNetwork() == getModel().getBlockFBNetworkElement().getFbNetwork();
 		}
 		return false;
 	}
 
 	public class InterfaceFigure extends SetableAlphaLabel {
+
 		public InterfaceFigure() {
-			super();
 			setOpaque(false);
 			setText(getLabelText());
 			setBorder(new ConnectorBorder(getModel()));
@@ -165,7 +214,6 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 				setLabelAlignment(PositionConstants.RIGHT);
 				setTextAlignment(PositionConstants.RIGHT);
 			}
-			setToolTip(new ToolTipFigure(getModel()));
 
 			if (isAdapter()) {
 				// this mouse listener acquires the current mouse state including the modifier
@@ -202,11 +250,59 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 				});
 			}
 		}
+
+		@Override
+		public String getSubStringText() {
+			if (getLabelText().length() < getMinWidth()) {
+				final int diff = getMinWidth() - getLabelText().length();
+				return isInput() ? getLabelText() + " ".repeat(diff) : " ".repeat(diff) + getLabelText(); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			if (getLabelText().length() > getMaxWidth()) {
+				return getLabelText().substring(0, getMaxWidth() - 1) + getTruncationString();
+			}
+			return getLabelText();
+		}
+
+		@Override
+		// Copied code from Label class, changed size calculation via subStringTextSize
+		// rather than TextSize.
+		public Dimension getPreferredSize(final int wHint, final int hHint) {
+			if (prefSize == null) {
+				prefSize = calculateLabelSize(getSubStringTextSize());
+				final Insets insets = getInsets();
+				prefSize.expand(insets.getWidth(), insets.getHeight());
+				if (getLayoutManager() != null) {
+					prefSize.union(getLayoutManager().getPreferredSize(this, wHint, hHint));
+				}
+			}
+			if (wHint >= 0 && wHint < prefSize.width) {
+				final Dimension minSize = getMinimumSize(wHint, hHint);
+				final Dimension result = prefSize.getCopy();
+				result.width = Math.min(result.width, wHint);
+				result.width = Math.max(minSize.width, result.width);
+				return result;
+			}
+			return prefSize;
+		}
+
+		@Override
+		public Dimension getMinimumSize(final int wHint, final int hHint) {
+			return getPreferredSize(-1, -1);
+		}
+
+		@Override
+		public Dimension getTextSize() {
+			// call super class to set TextSize
+			super.getTextSize();
+			return getSubStringTextSize();
+		}
 	}
 
 	@Override
 	protected IFigure createFigure() {
-		return new InterfaceFigure();
+		final InterfaceFigure figure = new InterfaceFigure();
+		figure.setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+		return figure;
 	}
 
 	@Override
@@ -217,13 +313,13 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	protected abstract GraphicalNodeEditPolicy getNodeEditPolicy();
 
 	public void setInOutConnectionsWidth(final int width) {
-		getSourceConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
-		getTargetConnections().forEach(cep -> checkConnection(width, (ConnectionEditPart) cep));
+		getSourceConnections().forEach(cep -> checkConnection(width, cep));
+		getTargetConnections().forEach(cep -> checkConnection(width, cep));
 	}
 
 	private static void checkConnection(final int width, final ConnectionEditPart cep) {
-		if (cep.getFigure() instanceof PolylineConnection) {
-			((PolylineConnection) cep.getFigure()).setLineWidth(width);
+		if (cep.getFigure() instanceof final PolylineConnection plc) {
+			plc.setLineWidth(width);
 		}
 	}
 
@@ -260,6 +356,14 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	@Override
+	public <T> T getAdapter(final Class<T> key) {
+		if (key == IInterfaceElement.class) {
+			return key.cast(getModel());
+		}
+		return super.getAdapter(key);
+	}
+
+	@Override
 	public IInterfaceElement getModel() {
 		return (IInterfaceElement) super.getModel();
 	}
@@ -285,14 +389,14 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		// don't show any children
 	}
 
-	private Adapter getContentAdapter() {
+	protected Adapter getContentAdapter() {
 		if (null == contentAdapter) {
 			contentAdapter = createContentAdapter();
 		}
 		return contentAdapter;
 	}
 
-	// Allows childclasses to provide their own content adapters
+	// Allows child classes to provide their own content adapters
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
@@ -300,8 +404,14 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
-					refresh();
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
+					Display.getDefault().execute(() -> {
+						// check if editpart has not been removed in the meantime
+						if (isActive()) {
+							refresh();
+						}
+					});
 				}
 				super.notifyChanged(notification);
 			}
@@ -312,6 +422,10 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
+			final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
+					.getStoreProvider();
+			storeProvider.addPropertyChangeListener(preferenceListener);
+			pinLabelStyle = storeProvider.getStore().getString(GefPreferenceConstants.PIN_LABEL_STYLE);
 			getModel().eAdapters().add(getContentAdapter());
 			addSourcePinAdapter();
 		}
@@ -319,32 +433,54 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			super.deactivate();
-			getModel().eAdapters().remove(getContentAdapter());
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceListener);
-			removeSourcePinAdapter();
+		super.deactivate();
+		getModel().eAdapters().remove(getContentAdapter());
+		((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getStoreProvider()
+				.removePropertyChangeListener(preferenceListener);
+		getModel().eAdapters().remove(getContentAdapter());
+		removeSourcePinAdapter();
+	}
+
+	private ConnectionAnchor sourceConAnchor = null;
+	private ConnectionAnchor destinationConAnchor = null;
+
+	@Override
+	public final ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+		if (sourceConAnchor == null) {
+			sourceConAnchor = createSourceConAnchor();
 		}
-		referencedPart = null;
+		return sourceConAnchor;
 	}
 
 	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+	public final ConnectionAnchor getSourceConnectionAnchor(final Request request) {
+		if (sourceConAnchor == null) {
+			sourceConAnchor = createSourceConAnchor();
+		}
+		return sourceConAnchor;
+	}
+
+	@Override
+	public final ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+		if (destinationConAnchor == null) {
+			destinationConAnchor = createTargetConAnchor();
+		}
+		return destinationConAnchor;
+	}
+
+	@Override
+	public final ConnectionAnchor getTargetConnectionAnchor(final Request request) {
+		if (destinationConAnchor == null) {
+			destinationConAnchor = createTargetConAnchor();
+		}
+		return destinationConAnchor;
+	}
+
+	protected FixedAnchor createSourceConAnchor() {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
-	@Override
-	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new FixedAnchor(getFigure(), isInput());
-	}
-
-	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		return new FixedAnchor(getFigure(), isInput());
-	}
-
-	@Override
-	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
+	protected FixedAnchor createTargetConAnchor() {
 		return new FixedAnchor(getFigure(), isInput());
 	}
 
@@ -376,7 +512,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			final ValueEditPart part = getReferencedValueEditPart();
-			if ((part != null) && (isVariable()) && (!(getModel() instanceof AdapterDeclaration))) {
+			if ((part != null) && (isVariable())) {
 				part.performRequest(request);
 			}
 		} else {
@@ -385,13 +521,21 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if ((null == referencedPart) && (getModel() instanceof VarDeclaration)) {
-			final Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
-			if (temp instanceof ValueEditPart) {
-				referencedPart = (ValueEditPart) temp;
-			}
+		final Value value = getValue();
+		if ((value != null) && (getViewer().getEditPartForModel(value) instanceof final ValueEditPart vep)) {
+			return vep;
 		}
-		return referencedPart;
+		return null;
+	}
+
+	private Value getValue() {
+		if (getModel() instanceof final VarDeclaration varDecl) {
+			return varDecl.getValue();
+		}
+		if (getModel() instanceof final ErrorMarkerInterface emi) {
+			return emi.getValue();
+		}
+		return null;
 	}
 
 	private void addSourcePinAdapter() {
@@ -399,7 +543,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 			sourcePin = getSourcePin();
 			if (sourcePin != null) {
 				sourcePin.eAdapters().add(getSourcePinAdapter());
-				final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+				final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 				if (sourceElement != null) {
 					sourceElement.eAdapters().add(getSourcePinAdapter());
 				}
@@ -410,7 +554,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private void removeSourcePinAdapter() {
 		if (sourcePin != null) {
 			sourcePin.eAdapters().remove(getSourcePinAdapter());
-			final FBNetworkElement sourceElement = sourcePin.getFBNetworkElement();
+			final FBNetworkElement sourceElement = sourcePin.getBlockFBNetworkElement();
 			if (sourceElement != null) {
 				sourceElement.eAdapters().remove(getSourcePinAdapter());
 			}
@@ -420,14 +564,15 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 
 	private void updateSourcePinAdapter() {
 		if (sourcePin != getSourcePin()) {
-			// the source pin has changed remove the adapters from the old source ping and add to the new
+			// the source pin has changed remove the adapters from the old source ping and
+			// add to the new
 			removeSourcePinAdapter();
 			addSourcePinAdapter();
 		}
 	}
 
 	private Adapter getSourcePinAdapter() {
-		if(sourcePinAdapter == null) {
+		if (sourcePinAdapter == null) {
 			sourcePinAdapter = createSourcePinAdapter();
 		}
 		return sourcePinAdapter;
@@ -446,17 +591,23 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	protected void updatePadding(final int yPosition) {
-		final IFigure paddingFigure = (IFigure) getFigure().getParent().getChildren().get(0);
+		final IFigure paddingFigure = getFigure().getParent().getChildren().get(0);
 		final int textHeight = ((InterfaceFigure) getFigure()).getTextBounds().height();
 		paddingFigure.setMinimumSize(new Dimension(-1, yPosition - textHeight));
 	}
 
 	protected static int getYPositionFromAttribute(final IInterfaceElement ie) {
-		final Attribute attribute = ie.getAttribute("YPOSITION"); //$NON-NLS-1$
+		final Attribute attribute = ie.getAttribute(FordiacKeywords.INTERFACE_Y_POSITION);
 		if (attribute != null) {
 			return Integer.parseInt(attribute.getValue());
 		}
 		return 0;
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event);
+		getFigure().setToolTip(new ToolTipFigure(getModel(), event.getModel()));
 	}
 
 }

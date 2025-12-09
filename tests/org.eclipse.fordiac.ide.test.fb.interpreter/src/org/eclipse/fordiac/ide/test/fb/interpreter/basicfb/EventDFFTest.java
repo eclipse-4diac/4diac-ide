@@ -8,74 +8,72 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils.setVariable;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventDFFTest extends AbstractInterpreterTest {
 
-	public EventDFFTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
-		final BasicFBType fb = loadFBType("E_D_FF"); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("E_D_FF"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
 
-		runTest(fb, seq);
-
-		seq = newServiceSequence(fb);
-		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		runTest(fb, seq);
-
-		seq = newServiceSequence(fb);
-		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq);
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "RESET"); //$NON-NLS-1$
+		runFBTest(fb, seq);
+
+		seq = newServiceSequence(fb);
+		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
+
+		seq = newServiceSequence(fb);
+		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
+
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
 
-		runTest(fb, seq, "RESET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
 	}
 
 	private static ServiceSequence newServiceSequence(final BasicFBType fb) {
 		fb.getService().getServiceSequence().clear();
-		return addServiceSequence(fb.getService());
+		return ServiceSequenceUtils.addServiceSequence(fb.getService());
 	}
-
 
 }

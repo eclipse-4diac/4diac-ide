@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,9 +21,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.ConnectThroughCommand;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
-import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -57,23 +56,19 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	private static List<IInterfaceElement> checkSelection(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = (IStructuredSelection) selection;
-			@SuppressWarnings("unchecked")
-			final
-			List<IInterfaceElement> ieList = (List<IInterfaceElement>) structSel.toList().stream()
-			.filter(InterfaceEditPartForFBNetwork.class::isInstance)
-			.map(val -> ((InterfaceEditPartForFBNetwork) val).getModel()).collect(Collectors.toList());
-
-			ieList.sort((arg0, arg1) -> {
-				if (arg0.isIsInput() && !arg1.isIsInput()) {
-					return -1;
-				}
-				if (arg1.isIsInput() && !arg0.isIsInput()) {
-					return 1;
-				}
-				return 0;
-			});
+		if (selection instanceof final IStructuredSelection structSel) {
+			final List<IInterfaceElement> ieList = ((List<?>) structSel.toList()).stream()
+					.filter(InterfaceEditPartForFBNetwork.class::isInstance)
+					.map(InterfaceEditPartForFBNetwork.class::cast).map(InterfaceEditPartForFBNetwork::getModel)
+					.sorted((arg0, arg1) -> {
+						if (arg0.isIsInput() && !arg1.isIsInput()) {
+							return -1;
+						}
+						if (arg1.isIsInput() && !arg0.isIsInput()) {
+							return 1;
+						}
+						return 0;
+					}).toList();
 			if ((ieList.size() == 2) && (checkSelectedIEs(ieList.get(0), ieList.get(1)))) {
 				return ieList;
 			}
@@ -82,14 +77,14 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	private static boolean checkSelectedIEs(final IInterfaceElement element1, final IInterfaceElement element2) {
-		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))) {
-			// the second element is an output, both are of the same type
-			if (!element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
-				if (element1 instanceof VarDeclaration) {
-					return LinkConstraints.typeCheck(element1, element2);
-				}
-				return true;
+		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))
+				&& !element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
+			// the second element is an output, both are of the same type and are not empty
+			if (element1 instanceof VarDeclaration) {
+				return LinkConstraints.typeCheck(element1, element2);
 			}
+			return true;
+
 		}
 		return false;
 	}

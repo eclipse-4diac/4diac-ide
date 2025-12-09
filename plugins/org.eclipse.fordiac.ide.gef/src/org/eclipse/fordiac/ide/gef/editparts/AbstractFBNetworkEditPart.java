@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
+ * Copyright (c) 2016, 2025 fortiss GmbH, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,25 +16,36 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.draw2d.ConnectionRouter;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
+import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 
-public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart {
+public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart implements AnnotableGraphicalEditPart {
 
 	/** The child providers. */
 	private List<IChildrenProvider> childProviders = null;
 
-	protected EList<FBNetworkElement> getNetworkElements() {
-		return getModel().getNetworkElements();
+	protected List<FBNetworkElement> getNetworkElements() {
+		return getModel().getNetworkElements().stream().filter(el -> !el.isInGroup()).toList();
 	}
 
 	@Override
@@ -61,7 +72,63 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 				children.addAll(provider.getChildren(getModel()));
 			}
 		}
+
+		final GraphicalAnnotationModel annotationModel = FordiacAnnotationUtil.getAnnotationModel(this);
+		if (annotationModel != null) {
+			annotationModel.getAnnotations(getModel()).stream().filter(GraphicalAnnotationStyles::hasAnnotationEditPart)
+					.forEachOrdered(children::add);
+		}
+
 		return children;
+	}
+
+	@Override
+	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
+		if (!event.getAdded(this.getModel()).isEmpty() || !event.getRemoved(this.getModel()).isEmpty()) {
+			refreshChildren();
+		}
+		event.getChanged(this.getModel()).stream().map(getViewer().getEditPartRegistry()::get).filter(Objects::nonNull)
+				.forEachOrdered(EditPart::refresh);
+	}
+
+	@Override
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new MoveableRouter();
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		if (childEditPart instanceof final SpecificLayerEditPart slEP) {
+			final String layer = slEP.getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
+			if (layerFig != null) {
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				layerFig.add(child);
+				return;
+			}
+		}
+		// as some of the children are in a different layer we can not use the index
+		// given.
+
+		// Currently -1 seems to be the best option
+		super.addChildVisual(childEditPart, -1);
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		if (childEditPart instanceof final SpecificLayerEditPart slEP) {
+			final String layer = slEP.getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
+			if (layerFig != null) {
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				// Check if the figure was not yet removed
+				if (layerFig.equals(child.getParent())) {
+					layerFig.remove(child);
+				}
+				return;
+			}
+		}
+		super.removeChildVisual(childEditPart);
 	}
 
 	/**
@@ -70,13 +137,15 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	 */
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
-		for (final FBNetworkElement element : getNetworkElements()) {
-			for (final VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
-				if (null != interfaceElement.getValue()) {
-					valueElements.add(interfaceElement.getValue());
-				}
-			}
-		}
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(getNetworkElements()).forEach(element -> {
+			final InterfaceList fbIinterface = element.getInterface();
+			fbIinterface.getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
+					.forEach(di -> valueElements.add(di.getValue()));
+			fbIinterface.getInOutVars().stream().filter(di -> (di.isVisible() && di.getValue() != null))
+					.forEach(di -> valueElements.add(di.getValue()));
+			fbIinterface.getErrorMarker().stream().filter(er -> (er.getValue() != null))
+					.forEach(er -> valueElements.add(er.getValue()));
+		});
 		return valueElements;
 	}
 
@@ -95,13 +164,12 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IChildrenProvider) {
-					final IChildrenProvider childrenProvider = (IChildrenProvider) object;
+				if (object instanceof final IChildrenProvider childrenProvider) {
 					childProviders.add(childrenProvider);
 				}
 			} catch (final CoreException corex) {
-				Activator.getDefault()
-				.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", corex); //$NON-NLS-1$
+				FordiacLogHelper.logError("Error loading ChildrenProvider Extensions in org.eclipse.fordiac.ide.gef", //$NON-NLS-1$
+						corex);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2011, 2014, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,9 +18,13 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -39,15 +43,15 @@ public class ToolTipFigure extends Figure {
 	 *
 	 * @param element the element
 	 */
-	public ToolTipFigure(final INamedElement element) {
-		ToolbarLayout mainLayout = new ToolbarLayout(false);
+	public ToolTipFigure(final INamedElement element, final GraphicalAnnotationModel annotationModel) {
+		final ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
-		String nameLine = element.getName();
+		String nameLine = getName(element);
 
-		if ((element instanceof VarDeclaration) && (((VarDeclaration) element).getType() != null)) {
-			nameLine += " - " + ((VarDeclaration) element).getType().getName(); //$NON-NLS-1$
+		if (element instanceof final ITypedElement typedElement && typedElement.getFullTypeName() != null) {
+			nameLine += " - " + typedElement.getFullTypeName(); //$NON-NLS-1$
 		}
 
 		add(new Label(nameLine));
@@ -55,27 +59,39 @@ public class ToolTipFigure extends Figure {
 		line = new VerticalLineCompartmentFigure();
 		add(line);
 
-		String comment = element.getComment();
+		final String comment = element.getComment();
 		if ((comment != null) && (!comment.isEmpty())) {
 			line.add(new Label(comment));
 		}
-		if (element instanceof Event) {
-			addWiths((Event) element);
-		} else if (element instanceof VarDeclaration) {
-			addVarDefaultValue((VarDeclaration) element);
+		if (element instanceof final Event event) {
+			addWiths(event);
+		} else if (element instanceof final VarDeclaration varDecl) {
+			addVarDefaultValue(varDecl);
 		}
+
+		if (annotationModel != null) {
+			annotationModel.getAnnotations(element).stream().forEach(annotation -> line
+					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
+		}
+	}
+
+	private static String getName(final INamedElement element) {
+		if (element instanceof final MemberVarDeclaration memberVarDecl) {
+			return memberVarDecl.getDisplayName();
+		}
+		return element.getName();
 	}
 
 	public final VerticalLineCompartmentFigure getLine() {
 		return line;
 	}
 
-	private void addWiths(Event element) {
-		List<With> withs = element.getWith();
+	private void addWiths(final Event element) {
+		final List<With> withs = element.getWith();
 		if (!withs.isEmpty()) {
 			boolean first = true;
-			StringBuilder withText = new StringBuilder(FordiacMessages.With + ": ["); //$NON-NLS-1$
-			for (With with : withs) {
+			final StringBuilder withText = new StringBuilder(FordiacMessages.With + ": ["); //$NON-NLS-1$
+			for (final With with : withs) {
 				if (first) {
 					first = false;
 				} else {
@@ -91,31 +107,26 @@ public class ToolTipFigure extends Figure {
 
 	}
 
-	private void addVarDefaultValue(VarDeclaration variable) {
-		VarDeclaration typeVar = getTypevariable(variable);
+	private void addVarDefaultValue(final VarDeclaration variable) {
+		final VarDeclaration typeVar = getTypevariable(variable);
 		if (null != typeVar && null != typeVar.getValue()) {
 			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
 			if (!typeVar.getValue().getValue().isEmpty()) {
-				initvalue += variable.getValue().getValue();
+				initvalue += typeVar.getValue().getValue();
 			}
 			line.add(new Label(initvalue));
 		}
 	}
 
-	private static VarDeclaration getTypevariable(VarDeclaration variable) {
-		if (variable.eContainer() instanceof Device) {
-			Device dev = (Device) variable.eContainer();
-			if (null != dev.getType()) {
-				for (VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
-					if (typeVar.getName().equals(variable.getName())) {
-						return typeVar;
-					}
+	private static VarDeclaration getTypevariable(final VarDeclaration variable) {
+		if ((variable.eContainer() instanceof final Device dev) && (dev.getType() != null)) {
+			for (final VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
+				if (typeVar.getName().equals(variable.getName())) {
+					return typeVar;
 				}
 			}
-		} else if (null != variable.getFBNetworkElement() && null != variable.getFBNetworkElement().getType()) {
-			return variable.getFBNetworkElement().getType().getInterfaceList().getVariable(variable.getName());
 		}
-		return null;
+		return variable.findInTypeInterface();
 	}
 
 }

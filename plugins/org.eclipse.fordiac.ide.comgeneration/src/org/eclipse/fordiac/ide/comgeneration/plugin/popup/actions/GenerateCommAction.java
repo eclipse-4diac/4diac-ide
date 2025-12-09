@@ -21,8 +21,8 @@ import org.eclipse.fordiac.ide.comgeneration.implementation.ProtocolSelector;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.CanPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.EthernetPubSubGenerator;
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -30,6 +30,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class GenerateCommAction implements IObjectActionDelegate {
+	private static final int DEFAULT_START_PORT = 61550;
 	private Application selectedApplication = null;
 
 	public GenerateCommAction() {
@@ -44,12 +45,12 @@ public class GenerateCommAction implements IObjectActionDelegate {
 	@Override
 	public void run(final IAction action) {
 		if (selectedApplication != null) {
-			final Palette palette = selectedApplication.getAutomationSystem().getPalette();
+			final TypeLibrary typeLib = selectedApplication.getAutomationSystem().getTypeLibrary();
 			final MediaSpecificGeneratorFactory specificGeneratorFactory = new MediaSpecificGeneratorFactory();
-			final EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(palette);
-			ethernetPubSubGenerator.reset(61550);
+			final EthernetPubSubGenerator ethernetPubSubGenerator = new EthernetPubSubGenerator(typeLib);
+			ethernetPubSubGenerator.reset(DEFAULT_START_PORT);
 			specificGeneratorFactory.addGenerator(ethernetPubSubGenerator);
-			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(palette));
+			specificGeneratorFactory.addGenerator(new CanPubSubGenerator(typeLib));
 			final Analyzer analyzer = new Analyzer();
 			final CommunicationModel model = analyzer.analyze(selectedApplication);
 			ProtocolSelector.doAutomatedProtocolSelection(model);
@@ -63,11 +64,10 @@ public class GenerateCommAction implements IObjectActionDelegate {
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		selectedApplication = null;
-		if (selection instanceof StructuredSelection) {
-			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+		if (selection instanceof final StructuredSelection structuredSelection) {
 			final Object selectedObject = structuredSelection.getFirstElement();
-			if (selectedObject instanceof Application) {
-				selectedApplication = (Application) selectedObject;
+			if (selectedObject instanceof final Application selectedApp) {
+				selectedApplication = selectedApp;
 			}
 		}
 	}

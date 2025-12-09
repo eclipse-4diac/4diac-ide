@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,14 +10,22 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - add helper to find children by simple name
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.annotations;
 
+import java.util.stream.Stream;
+
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations;
 
 public final class FBAnnotations {
 
@@ -30,17 +39,21 @@ public final class FBAnnotations {
 		return false;
 	}
 
-	public static boolean isResourceTypeFB(final FB fb) {
-		return false;
-	}
-
 	public static FBNetwork loadCFBNetwork(final CFBInstance cfb) {
 		FBNetwork fbNetwork = cfb.getCfbNetwork();
 		if (null == fbNetwork) {
-			fbNetwork = FBNetworkHelper.copyFBNetWork(cfb.getType().getFBNetwork(), cfb.getInterface());
+			fbNetwork = FBNetworkHelper.copyCFBNetWork(cfb.getType().getFBNetwork(), cfb.getInterface());
 			cfb.setCfbNetwork(fbNetwork);
+			fbNetwork.getEventConnections().forEach(EventConnection::checkIfConnectionBroken);
+			fbNetwork.getDataConnections().forEach(DataConnection::checkIfConnectionBroken);
+			fbNetwork.getAdapterConnections().forEach(AdapterConnection::checkIfConnectionBroken);
 		}
 		return fbNetwork;
+	}
+
+	public static Stream<INamedElement> findBySimpleName(final CFBInstance root, final String name) {
+		loadCFBNetwork(root); // ensure network is loaded
+		return NamedElementAnnotations.findBySimpleName(root, name);
 	}
 
 	private FBAnnotations() {

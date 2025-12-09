@@ -19,8 +19,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
@@ -28,20 +28,18 @@ import org.eclipse.ui.NavigationLocation;
 
 public class BreadcrumbNavigationLocation extends NavigationLocation {
 
-	// we need to explicitly store the breadcrumb editor as getEditorPart my provide the wrong editor when we are inside
+	// we need to explicitly store the breadcrumb editor as getEditorPart my provide
+	// the wrong editor when we are inside
 	// a type editor
 	private final AbstractBreadCrumbEditor breadCrumbEditor;
-	private final Object model;
+	private final String breadcrumbPath;
 	private GraphicalViewerNavigationLocationData viewerData = null;
-	private final AdapterFactoryContentProvider contentProvider;
-	private final AdapterFactoryLabelProvider labelProvider;
 
-	protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart, final Object model) {
+	protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart) {
 		super(editorPart);
 		this.breadCrumbEditor = editorPart;
-		this.model = model;
-		contentProvider = editorPart.getBreadcrumb().getContentProvider();
-		labelProvider = editorPart.getBreadcrumb().getLabelProvider();
+		this.breadcrumbPath = editorPart.getBreadcrumb().serializePath();
+
 		final GraphicalViewer viewer = editorPart.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
 			viewerData = new GraphicalViewerNavigationLocationData(viewer);
@@ -50,25 +48,15 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public String getText() {
-		final var sb = new StringBuilder();
-		generateItemPath(sb, model, contentProvider, labelProvider);
-		return sb.substring(1);
+		return generateItemPath(breadCrumbEditor.getBreadcrumb()).substring(1);
 	}
 
-	public static void generateItemPath(final StringBuilder sb, final Object model,
-			final AdapterFactoryContentProvider adapterFactoryContentProvider,
-			final AdapterFactoryLabelProvider adapterFactoryLabelProvider) {
-		if (model == null) {
-			return;
-		}
-		generateItemPath(sb, adapterFactoryContentProvider.getParent(model), adapterFactoryContentProvider,
-				adapterFactoryLabelProvider);
-		sb.append("."); //$NON-NLS-1$
-		sb.append(adapterFactoryLabelProvider.getText(model));
+	public static String generateItemPath(final BreadcrumbWidget breadcrumb) {
+		return breadcrumb.serializePath().replace('/', '.');
 	}
 
-	private Object getModel() {
-		return model;
+	private String getBreadCrumbPath() {
+		return breadcrumbPath;
 	}
 
 	@Override
@@ -83,11 +71,9 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public void restoreLocation() {
-		if (breadCrumbEditor.getBreadcrumb().getActiveItem().getModel().equals(model)) {
-			return;
-		}
+		breadCrumbEditor.getBreadcrumb().validateAndOpenPath(breadcrumbPath,
+				breadCrumbEditor.getAdapter(LibraryElement.class));
 
-		breadCrumbEditor.getBreadcrumb().setInput(model);
 		final GraphicalViewer viewer = breadCrumbEditor.getAdapter(GraphicalViewer.class);
 		if ((viewer != null) && (viewerData != null)) {
 			viewerData.restoreGraphicalViewerData(viewer);
@@ -96,14 +82,12 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public boolean mergeInto(final INavigationLocation currentLocation) {
-		if (currentLocation instanceof BreadcrumbNavigationLocation) {
-			final BreadcrumbNavigationLocation currentBreadCrumbLocation = ((BreadcrumbNavigationLocation) currentLocation);
-			if (this.model == currentBreadCrumbLocation.getModel()) {
-				if (viewerData != null) {
-					return viewerData.equals(currentBreadCrumbLocation.viewerData);
-				}
-				return true;
+		if (currentLocation instanceof final BreadcrumbNavigationLocation loc
+				&& this.breadcrumbPath.equals(loc.getBreadCrumbPath())) {
+			if (viewerData != null) {
+				return viewerData.equals(loc.viewerData);
 			}
+			return true;
 		}
 		return false;
 	}

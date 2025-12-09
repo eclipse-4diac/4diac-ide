@@ -16,12 +16,15 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing *.seg files
@@ -32,6 +35,10 @@ public class SEGImporter extends TypeImporter {
 
 	public SEGImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public SEGImporter(final InputStream inputStream, final TypeLibrary typeLib) {
+		super(inputStream, typeLib);
 	}
 
 	@Override

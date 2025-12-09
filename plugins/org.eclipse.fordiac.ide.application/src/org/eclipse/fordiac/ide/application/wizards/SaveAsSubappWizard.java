@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -23,31 +23,36 @@
 package org.eclipse.fordiac.ide.application.wizards;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -65,27 +70,12 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 
 	@Override
 	public void addPages() {
-		final IProject project = checkSubAppEditor();
+		final IProject project = ModelHelper.getProjectFromContextChecked(subApp);
 		final StructuredSelection selection = new StructuredSelection(project); // select the current project
 		newFilePage = SaveAsWizardPage
 				.createSaveAsSubAppWizardPage(Messages.SaveAsSubApplicationTypeAction_WizardPageName, selection);
 		newFilePage.setFileName(subApp.getName());
 		addPage(newFilePage);
-	}
-
-	private IProject checkSubAppEditor() {
-		IProject project = null;
-		final EObject obj = EcoreUtil.getRootContainer(subApp);
-		if (obj instanceof SubAppType) {
-			project = ((SubAppType) obj).getPaletteEntry().getFile().getProject();
-		} else {
-			project = getSystem().getSystemFile().getProject();
-		}
-		return project;
-	}
-
-	private AutomationSystem getSystem() {
-		return subApp.getSubAppNetwork().getAutomationSystem();
 	}
 
 	@Override
@@ -96,27 +86,43 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 				MessageDialog.openError(getShell(), Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle,
 						Messages.SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage);
 			} else {
-				final TypeFromTemplateCreator creator = new TypeFromTemplateCreator(getTargetTypeFile(), template) {
-					@Override
-					protected void performTypeSpecificSetup(final LibraryElement type) {
-						performTypeSetup((SubAppType) type);
-					}
-				};
-				final PaletteEntry entry = creator.createTypeFromTemplate();
-				if (entry != null) {
-					// replace needs to be called before opening the type editor so that we get the correct command
-					// stack
-					if (newFilePage.getReplaceSource()) {
-						replaceWithType(entry);
-					}
-
-					if (newFilePage.getOpenType()) {
-						openTypeEditor(entry);
-					}
+				final TypeFromTemplateCreator creator = getTypeCreator(template);
+				try {
+					getContainer().run(true, true, creator::createTypeFromTemplate);
+				} catch (final InvocationTargetException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+					Thread.currentThread().interrupt();
 				}
+				preformPostTypeCreationSteps(creator);
 			}
 		}
 		return true;
+	}
+
+	private TypeFromTemplateCreator getTypeCreator(final File template) {
+		return new TypeFromTemplateCreator(getTargetTypeFile(), template, newFilePage.getPackageName()) {
+			@Override
+			protected void performTypeSpecificSetup(final LibraryElement type) {
+				performTypeSetup((SubAppType) type);
+			}
+		};
+	}
+
+	private void preformPostTypeCreationSteps(final TypeFromTemplateCreator creator) {
+		final TypeEntry entry = creator.getTypeEntry();
+		if (entry != null) {
+			// replace needs to be called before opening the type editor so that we get the
+			// correct command stack
+			if (newFilePage.getReplaceSource()) {
+				replaceWithType(entry);
+			}
+
+			if (newFilePage.getOpenType()) {
+				openTypeEditor(entry);
+			}
+		}
 	}
 
 	private static File getSubappTemplate() {
@@ -138,16 +144,26 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		return templateFolder.listFiles();
 	}
 
-	private static void openTypeEditor(final PaletteEntry entry) {
+	private static void openTypeEditor(final TypeEntry entry) {
 		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 				.getDefaultEditor(entry.getFile().getName());
 		EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 	}
 
-	private void replaceWithType(final PaletteEntry entry) {
+	private void replaceWithType(final TypeEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
-		final CommandStack commandStack = EditorUtils.getCurrentActiveEditor().getAdapter(CommandStack.class);
-		commandStack.execute(new UpdateFBTypeCommand(subApp, entry));
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final CommandStack commandStack = currentActiveEditor.getAdapter(CommandStack.class);
+			Command cmd = new UpdateFBTypeCommand(subApp, entry);
+			if (subApp.isUnfolded()) {
+				final CompoundCommand compoundCmd = new CompoundCommand();
+				compoundCmd.add(new ToggleSubAppRepresentationCommand(subApp));
+				compoundCmd.add(cmd);
+				cmd = compoundCmd;
+			}
+			commandStack.execute(cmd);
+		}
 	}
 
 	private void performTypeSetup(final SubAppType type) {

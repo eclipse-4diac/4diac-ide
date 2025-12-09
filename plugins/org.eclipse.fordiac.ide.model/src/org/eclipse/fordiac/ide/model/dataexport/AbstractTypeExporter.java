@@ -20,30 +20,24 @@
 
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
 	private final LibraryElement type;
 
 	protected AbstractTypeExporter(final LibraryElement type) {
-		super();
 		this.type = type;
 	}
 
@@ -52,8 +46,27 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		type = null;
 	}
 
-	protected LibraryElement getType() {
+	public LibraryElement getType() {
 		return type;
+	}
+
+	public InputStream getFileContent() {
+		try {
+			createXMLEntries();
+			getWriter().writeCharacters(LINE_END);
+			getWriter().writeEndDocument();
+			getWriter().close();
+			return new ByteBufferInputStream(getOutputStream().transferDataBuffers());
+		} catch (final XMLStreamException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} finally {
+			try {
+				getOutputStream().close();
+			} catch (final IOException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		}
+		return null;
 	}
 
 	protected void createXMLEntries() throws XMLStreamException {
@@ -62,44 +75,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addVersionInfo(getType());
 		createTypeSpecificXMLEntries();
 		addEndElement();
-	}
-
-	public static void saveType(final PaletteEntry entry) {
-		final AbstractTypeExporter exporter = getTypeExporter(entry);
-
-		if (null != exporter) {
-			try {
-				exporter.createXMLEntries();
-			} catch (final XMLStreamException e) {
-				Activator.getDefault().logError(e.getMessage(), e);
-			}
-
-			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					exporter.writeToFile(entry.getFile());
-					// "reset" the modification timestamp in the PaletteEntry to avoid reload - as for this timestamp it
-					// is not necessary as the data is in memory
-					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(entry.getFile().getParent());
-			job.schedule();
-		}
-	}
-
-	private static AbstractTypeExporter getTypeExporter(final PaletteEntry entry) {
-		if (entry instanceof FBTypePaletteEntry) {
-			return new FbtExporter((FBTypePaletteEntry) entry);
-		} else if (entry instanceof AdapterTypePaletteEntry) {
-			return new AdapterExporter((AdapterTypePaletteEntry) entry);
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
-		} else if (entry instanceof DataTypePaletteEntry) {
-			return new DataTypeExporter((AnyDerivedType) entry.getType());
-		}
-		return null;
 	}
 
 	protected abstract String getRootTag();
@@ -115,6 +90,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			if ((null != compilerInfo.getClassdef()) && !"".equals(compilerInfo.getClassdef())) { //$NON-NLS-1$
 				getWriter().writeAttribute(LibraryElementTags.CLASSDEF_ATTRIBUTE, compilerInfo.getClassdef());
 			}
+			if ((null != compilerInfo.getPackageName()) && !"".equals(compilerInfo.getPackageName())) { //$NON-NLS-1$
+				getWriter().writeAttribute(LibraryElementTags.PACKAGE_NAME_ATTRIBUTE, compilerInfo.getPackageName());
+			}
+			for (final Import imp : compilerInfo.getImports()) {
+				addImport(imp);
+			}
 			for (final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler : compilerInfo.getCompiler()) {
 				addCompiler(compiler);
 			}
@@ -122,10 +103,12 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 	}
 
-	/** Adds the compiler.
+	/**
+	 * Adds the compiler.
 	 *
 	 * @param compiler the compiler
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	private void addCompiler(final org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler)
 			throws XMLStreamException {
 		addEmptyStartElement(LibraryElementTags.COMPILER_ELEMENT);
@@ -139,12 +122,27 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 				(null != compiler.getVersion()) ? compiler.getVersion() : ""); //$NON-NLS-1$
 	}
 
-	/** Adds the variable.
+	/**
+	 * Adds the import.
+	 *
+	 * @param imp the import
+	 * @throws XMLStreamException
+	 */
+	private void addImport(final Import imp) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.IMPORT_ELEMENT);
+		getWriter().writeAttribute(LibraryElementTags.DECLARATION_ATTRIBUTE,
+				(null != imp.getImportedNamespace()) ? imp.getImportedNamespace() : ""); //$NON-NLS-1$
+	}
+
+	/**
+	 * Adds the variable.
 	 *
 	 * @param varDecl the var decl
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void addVarDeclaration(final VarDeclaration varDecl) throws XMLStreamException {
-		final boolean hasAttributes = !varDecl.getAttributes().isEmpty();
+		final boolean hasAttributes = !varDecl.getAttributes().isEmpty()
+				|| (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().getAttributes().isEmpty());
 		if (hasAttributes) {
 			addStartElement(LibraryElementTags.VAR_DECLARATION_ELEMENT);
 		} else {
@@ -153,14 +151,16 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 
 		addNameTypeCommentAttribute(varDecl, varDecl.getType());
 		if (varDecl.isArray()) {
-			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE,
-					Integer.toString(varDecl.getArraySize()));
+			getWriter().writeAttribute(LibraryElementTags.ARRAYSIZE_ATTRIBUTE, getArraySize(varDecl));
 		}
 		if ((null != varDecl.getValue()) && (!varDecl.getValue().getValue().isEmpty())) {
 			getWriter().writeAttribute(LibraryElementTags.INITIALVALUE_ATTRIBUTE, varDecl.getValue().getValue());
 		}
 
 		if (hasAttributes) {
+			if (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().isVisible()) {
+				addAttributeElement(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, null, "false", null); //$NON-NLS-1$
+			}
 			addAttributes(varDecl.getAttributes());
 			addEndElement();
 		}

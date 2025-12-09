@@ -57,12 +57,10 @@ public class EventConnectionItemProvider extends ConnectionItemProvider {
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated */
+	 * @generated NOT */
 	@Override
 	public String getText(Object object) {
-		String label = ((EventConnection) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_EventConnection_type") : //$NON-NLS-1$
-				getString("_UI_EventConnection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return ConnectProviderAnnotation.getConnectionName((EventConnection) object);
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by

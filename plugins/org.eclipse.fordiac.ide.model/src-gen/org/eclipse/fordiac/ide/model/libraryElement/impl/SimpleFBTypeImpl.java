@@ -1,13 +1,14 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -15,162 +16,168 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
-import org.eclipse.emf.common.notify.Notification;
+import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Simple FB Type</b></em>'. <!-- end-user-doc
- * -->
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Simple FB Type</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeImpl#getSimpleECStates <em>Simple EC States</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class SimpleFBTypeImpl extends BaseFBTypeImpl implements SimpleFBType {
-	/** The cached value of the '{@link #getAlgorithm() <em>Algorithm</em>}' containment reference. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
-	 * 
-	 * @see #getAlgorithm()
+	/**
+	 * The cached value of the '{@link #getSimpleECStates() <em>Simple EC States</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimpleECStates()
 	 * @generated
-	 * @ordered */
-	protected Algorithm algorithm;
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	 * @ordered
+	 */
+	protected EList<SimpleECState> simpleECStates;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	protected SimpleFBTypeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.SIMPLE_FB_TYPE;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
-	public Algorithm getAlgorithm() {
-		return algorithm;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	public NotificationChain basicSetAlgorithm(Algorithm newAlgorithm, NotificationChain msgs) {
-		Algorithm oldAlgorithm = algorithm;
-		algorithm = newAlgorithm;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-					LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, oldAlgorithm, newAlgorithm);
-			if (msgs == null)
-				msgs = notification;
-			else
-				msgs.add(notification);
+	public EList<SimpleECState> getSimpleECStates() {
+		if (simpleECStates == null) {
+			simpleECStates = new EObjectContainmentWithInverseEList.Resolving<SimpleECState>(SimpleECState.class, this, LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES, LibraryElementPackage.SIMPLE_EC_STATE__SIMPLE_FB_TYPE);
 		}
-		return msgs;
+		return simpleECStates;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setAlgorithm(Algorithm newAlgorithm) {
-		if (newAlgorithm != algorithm) {
-			NotificationChain msgs = null;
-			if (algorithm != null)
-				msgs = ((InternalEObject) algorithm).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
-			if (newAlgorithm != null)
-				msgs = ((InternalEObject) newAlgorithm).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM, null, msgs);
-			msgs = basicSetAlgorithm(newAlgorithm, msgs);
-			if (msgs != null)
-				msgs.dispatch();
-		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM,
-					newAlgorithm, newAlgorithm));
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getSimpleECStates()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-			return basicSetAlgorithm(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				return ((InternalEList<?>)getSimpleECStates()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-			return getAlgorithm();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				return getSimpleECStates();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-			setAlgorithm((Algorithm) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				getSimpleECStates().clear();
+				getSimpleECStates().addAll((Collection<? extends SimpleECState>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-			setAlgorithm((Algorithm) null);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				getSimpleECStates().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.SIMPLE_FB_TYPE__ALGORITHM:
-			return algorithm != null;
-		default:
-			return super.eIsSet(featureID);
+			case LibraryElementPackage.SIMPLE_FB_TYPE__SIMPLE_EC_STATES:
+				return simpleECStates != null && !simpleECStates.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
 	}
 
-} // SimpleFBTypeImpl
+} //SimpleFBTypeImpl

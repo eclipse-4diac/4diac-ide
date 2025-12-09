@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated communication -->
+      <package
+            uri="http://Communication/1.0"
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage"
+            genModel="model/communication.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.systemconfiguration.communication">
+      <communicationProtocol
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.TsnDetails"
+            id="EthernetTSN"
+            label="TSN"
+            name="tsnProtocol">
+      </communicationProtocol>
+      <communicationProtocol
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.DefaultCommDetails"
+            id="Ethernet"
+            label="Default"
+            name="defaultProtocol">
+      </communicationProtocol>
+   </extension>
+</plugin>

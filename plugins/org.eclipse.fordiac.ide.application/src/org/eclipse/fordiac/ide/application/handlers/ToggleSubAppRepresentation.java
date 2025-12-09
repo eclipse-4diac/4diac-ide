@@ -20,16 +20,20 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -44,10 +48,19 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final SubApp subapp = (SubApp) ((EditPart) selection.getFirstElement()).getModel();
-		final ToggleSubAppRepresentationCommand cmd = new ToggleSubAppRepresentationCommand(subapp);
+		Command cmd = new ToggleSubAppRepresentationCommand(subapp);
+
+		if (!subapp.isUnfolded()
+				&& (selection.getFirstElement() instanceof final SubAppForFBNetworkEditPart subAppEP)) {
+			// we are going to get unfolded wrap resize command
+			cmd = new ResizeGroupOrSubappCommand(subAppEP, cmd);
+		}
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
-		commandStack.execute(cmd);
+		if (cmd.canExecute()) {
+			commandStack.execute(cmd);
+		}
+
 		// requesting a change is needed for the Source dropdown menu
 		requestChange();
 		return Status.OK_STATUS;
@@ -59,19 +72,24 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final SubApp subApp = getSelectedSubApp(selection);
 
 		// for now we only allow untyped subapps to be expanded or collapsed
-		setBaseEnabled(((null != subApp) && (!subApp.isTyped())));
+		final boolean isUntypedSubapp = (null != subApp) && (!subApp.isTyped());
+		final boolean isInResource = (null != subApp) && subApp.eContainer().eContainer() instanceof Resource;
+		setBaseEnabled(isUntypedSubapp && !isInResource);
 	}
 
 	@Override
 	public void updateElement(final UIElement element, final Map parameters) {
-		final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		final EditPart editPart = (EditPart) viewer.getSelectedEditParts().get(0);
+		final IEditorPart currentActiveEditor = EditorUtils.getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			final GraphicalViewer viewer = currentActiveEditor.getAdapter(GraphicalViewer.class);
+			final EditPart editPart = viewer.getSelectedEditParts().get(0);
 
-		if ((editPart.getModel() instanceof SubApp)) {
-			if (((SubApp) editPart.getModel()).isUnfolded()) {
-				element.setText(Messages.ToggleSubAppRepresentation_Collapse);
-			} else {
-				element.setText(Messages.ToggleSubAppRepresentation_Expand);
+			if ((editPart.getModel() instanceof final SubApp subApp)) {
+				if (subApp.isUnfolded()) {
+					element.setText(Messages.ToggleSubAppRepresentation_Collapse);
+				} else {
+					element.setText(Messages.ToggleSubAppRepresentation_Expand);
+				}
 			}
 		}
 	}
@@ -85,23 +103,24 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = ((IStructuredSelection) selection);
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getSubApp(structSel.getFirstElement());
-			}
+		if ((selection instanceof final IStructuredSelection structSel)
+				&& (!structSel.isEmpty() && (structSel.size() == 1))) {
+			return getSubApp(structSel.getFirstElement());
 		}
 		return null;
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		if (currentElement instanceof SubApp) {
-			return (SubApp) currentElement;
-		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
-		} else if (currentElement instanceof UISubAppNetworkEditPart) {
+		if (currentElement instanceof final SubApp subApp) {
+			return subApp;
+		}
+		if (currentElement instanceof final SubAppForFBNetworkEditPart subAppNetworkEP) {
+			return subAppNetworkEP.getModel();
+		}
+		if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
 		}
 		return null;
 	}
+
 }

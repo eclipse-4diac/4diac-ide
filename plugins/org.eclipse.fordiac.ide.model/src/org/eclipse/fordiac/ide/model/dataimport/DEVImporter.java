@@ -17,21 +17,22 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.Activator;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.data.BaseType1;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,6 +45,10 @@ public class DEVImporter extends TypeImporter {
 
 	public DEVImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public DEVImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
 	}
 
 	@Override
@@ -83,18 +88,16 @@ public class DEVImporter extends TypeImporter {
 				// TODO __gebenh import "supported Resourcetypes"
 				break;
 			case LibraryElementTags.RESOURCE_ELEMENT:
-				getElement().getResource().add(parseResource());
+				getElement().getResource().add(parseResource(new HashMap<>()));
 				break;
 			case LibraryElementTags.FBNETWORK_ELEMENT:
-				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this, getElement().getVarDeclaration());
+				final ResDevFBNetworkImporter resNetworkImporter = new ResDevFBNetworkImporter(this,
+						getElement().getVarDeclaration());
 				getElement().setFBNetwork(resNetworkImporter.getFbNetwork());
 				resNetworkImporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseDeviceTypeAttribute();
-				break;
-			case LibraryElementTags.ATTRIBUTE_DECLARATION_ELEMENT:
-				parseDeviceTypeAttributeDeclaration();
 				break;
 			default:
 				return false;
@@ -136,20 +139,11 @@ public class DEVImporter extends TypeImporter {
 
 			}
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
 		return references;
 
-	}
-
-	private void parseDeviceTypeAttributeDeclaration() {
-		final AttributeDeclaration attributeDeclaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
-		attributeDeclaration.setName(getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE));
-		attributeDeclaration.setComment(getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE));
-		attributeDeclaration.setInitialValue(getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE));
-		attributeDeclaration.setType(BaseType1.getByName(getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE)));
-		getElement().getAttributeDeclarations().add(attributeDeclaration);
 	}
 
 	private void parseDeviceTypeAttribute() {

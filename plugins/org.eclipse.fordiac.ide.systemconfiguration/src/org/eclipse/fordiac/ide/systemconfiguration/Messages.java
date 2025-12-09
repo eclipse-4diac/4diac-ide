@@ -17,9 +17,7 @@ package org.eclipse.fordiac.ide.systemconfiguration;
 
 import org.eclipse.osgi.util.NLS;
 
-/**
- * The Class Messages.
- */
+/** The Class Messages. */
 @SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemconfiguration.messages"; //$NON-NLS-1$
@@ -37,20 +35,8 @@ public final class Messages extends NLS {
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;
 
-	public static String virtualDNSConfigurationTitle;
-	public static String virtualDNSNewConfiguration;
-	public static String virtualDNSDeleteConfiguration;
-	public static String virtualDNSNewConfigTitle;
-	public static String virtualDNSNewConfigMessage;
-	public static String virtualDNSNewConfigDefaultName;
-	public static String virtualDNSValueNotSet;
-	public static String virtualDNSNewEntryButtonText;
-	public static String virtualDNSDeleteEntryButtonText;
-	public static String virtualDNSActiveConfigurationText;
-	public static String virtualDNSFirstColumnTitle;
-	public static String virtualDNSSecondColumnTitle;
-	public static String virtualDNSSameVariableNameError;
-	public static String virtualDNSEmptyNameError;
+	public static String Segment_NoConfigErrorMessage;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

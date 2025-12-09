@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- * 								Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2011, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,13 +11,13 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit, redesign ECC
+ *   Bianca Wiesmayr -  consistent dropdown menu edit, redesign ECC
+ *   Alois Zoitl     - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_HORIZONTAL;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants.MARGIN_VERTICAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
 import java.util.List;
 
@@ -30,20 +30,18 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Activator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeOutputCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECActionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPolicy;
@@ -54,7 +52,7 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.gef.tools.DirectEditManager;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
@@ -66,7 +64,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshEventLabel();
+			refreshEventLabel(getNameLabel());
 		}
 	};
 
@@ -87,33 +85,43 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 
 		private void handleSet(final Notification notification) {
-			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
-				if ((getAction().getOutput().getName().equals(notification.getNewValue()))
-						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
-										.equals(notification.getNewValue())))) {
-					refreshEventLabel();
-				}
+			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
+					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
+				refreshEventLabel(getNameLabel());
 			}
+		}
+
+		private boolean isOutputEvent(final Notification notification) {
+			return getAction().getOutput().getName().equals(notification.getNewValue());
+		}
+
+		private boolean isAdapterOutputEvent(final Notification notification) {
+			return isAdapterNotification(notification.getNewValue(), getAction().getOutput());
 		}
 
 		private void handleRemove(final Notification notification) {
 			if ((notification.getOldValue() == getAction().getOutput())
-					|| ((getAction().getOutput() instanceof AdapterEvent)
-							&& (notification.getOldValue() instanceof AdapterDeclaration)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-							.getOldValue()))) {
+					|| isAdapterNotification(notification.getOldValue(), getAction().getOutput())) {
 				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};
 
-	private final IPropertyChangeListener propertyChangeListener = event -> {
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_COLOR)) {
-			getFigure().setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
+	public static boolean isAdapterNotification(final Object change, final Event ev) {
+		if (ev != null) {
+			final FBNetworkElement fbNetworkElement = ev.getBlockFBNetworkElement();
+			return (fbNetworkElement instanceof final AdapterFB adapterFB)
+					&& ((adapterFB.getAdapterDecl() == change) || (fbNetworkElement.getName().equals(change)));
 		}
-		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR)) {
-			getFigure().setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
+		return false;
+	}
+
+	private final IPropertyChangeListener colorChangeListener = event -> {
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR)) {
+			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
+		}
+		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR)) {
+			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
 		}
 	};
 
@@ -125,7 +133,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			// Adapt to the fbtype so that we get informed on interface changes
 			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
 
-			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -138,7 +146,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
 			}
-			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
+			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -189,7 +197,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	}
 
 	@Override
-	protected DirectEditManager createDirectEditManager() {
+	protected ComboDirectEditManager createDirectEditManager() {
 		return new ComboDirectEditManager(this, ComboBoxCellEditor.class, new ComboCellEditorLocator(getNameLabel()),
 				getNameLabel());
 	}
@@ -200,9 +208,10 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 				.getOutputEventNames(ECCContentAndLabelProvider.getFBType(getAction()));
 		final int selected = (getAction().getOutput() != null) ? eventNames.indexOf(getAction().getOutput().getName())
 				: eventNames.size() - 1;
-		((ComboDirectEditManager) getManager()).updateComboData(eventNames);
-		((ComboDirectEditManager) getManager()).setSelectedItem(selected);
-		getManager().show();
+		final ComboDirectEditManager editManager = createDirectEditManager();
+		editManager.updateComboData(eventNames);
+		editManager.setSelectedItem(selected);
+		editManager.show();
 	}
 
 	public ECActionOutputEvent getCastedModel() {
@@ -226,17 +235,30 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	@Override
 	protected IFigure createFigure() {
 		final Label eventLabel = new Label();
-		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
-		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
+		eventLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
+		eventLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
 		eventLabel.setOpaque(true);
-		eventLabel.setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+		refreshEventLabel(eventLabel);
 		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));
 		eventLabel.setTextAlignment(PositionConstants.LEFT);
 		eventLabel.setLabelAlignment(PositionConstants.LEFT);
 		return eventLabel;
 	}
 
-	private void refreshEventLabel() {
-		getNameLabel().setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+	private void refreshEventLabel(final Label eventLabel) {
+		if (eventLabel != null) {
+			eventLabel.setText(getActionOutputLabelText(getAction().getOutput()));
+		}
+	}
+
+	private static String getActionOutputLabelText(final Event event) {
+		if (event == null) {
+			return ""; //$NON-NLS-1$
+		}
+
+		if (event.getBlockFBNetworkElement() instanceof AdapterFB) {
+			return event.getBlockFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 }

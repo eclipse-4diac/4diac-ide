@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,17 +22,14 @@ import org.eclipse.fordiac.ide.application.figures.FBNetworkElementFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 
 /**
  * This class implements an EditPart for a FunctionBlock.
  */
-public class FBEditPart extends AbstractFBNElementEditPart {
-
-	public FBEditPart() {
-		super();
-	}
+public class FBEditPart extends AbstractBlockFBNElementEditPart {
 
 	/**
 	 * Creates the figure (for the specified model) to be used as this parts
@@ -44,11 +41,11 @@ public class FBEditPart extends AbstractFBNElementEditPart {
 	protected IFigure createFigureForModel() {
 		// extend this if FunctionBlock gets extended!
 		FBNetworkElementFigure f = null;
-		if (getModel() != null) {
-			f = new FBNetworkElementFigure(getModel(), this);
-		} else {
+		if (getModel() == null) {
 			throw new IllegalArgumentException(Messages.FBEditPart_ERROR_UnsupportedFBType);
 		}
+		f = new FBNetworkElementFigure(getModel(),
+				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 		return f;
 	}
 

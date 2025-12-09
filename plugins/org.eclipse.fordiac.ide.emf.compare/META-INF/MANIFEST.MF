@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Compare
+Bundle-SymbolicName: org.eclipse.fordiac.ide.emf.compare;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.emf.compare
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-Vendor: Eclipse 4diac
+Require-Bundle: org.eclipse.fordiac.ide.systemmanagement.ui,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.edit,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.emf.compare,
+ org.eclipse.emf.compare.rcp.ui,
+ org.eclipse.emf.compare.rcp,
+ org.eclipse.emf.ecore
+Bundle-ActivationPolicy: lazy

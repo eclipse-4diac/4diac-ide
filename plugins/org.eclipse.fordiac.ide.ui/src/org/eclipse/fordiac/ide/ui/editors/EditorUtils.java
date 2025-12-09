@@ -15,9 +15,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
-import org.eclipse.fordiac.ide.ui.UIPlugin;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -29,6 +35,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 public final class EditorUtils {
+	public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor"; //$NON-NLS-1$
 
 	public static final EditorAction CloseEditor = (final IEditorPart part) -> PlatformUI.getWorkbench()
 			.getActiveWorkbenchWindow().getActivePage().closeEditor(part, false);
@@ -45,53 +52,58 @@ public final class EditorUtils {
 		return null;
 	}
 
-	public static IEditorPart openEditor(final IEditorInput input, final String editorId) {
-		IEditorPart editor = null;
-		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		try {
-			editor = activePage.openEditor(input, editorId);
-		} catch (final PartInitException e) {
-			UIPlugin.getDefault().logError(e.getMessage(), e);
-		}
-		return editor;
-	}
-
-	public static IEditorPart findEditor(final EditorFilter filter) {
-		final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getEditorReferences();
-
-		for (final IEditorReference editorReference : editorReferences) {
-			final IEditorPart editor = editorReference.getEditor(false);
-			if (null != editor && filter.filter(editor)) {
-				return editor;
-			}
+	public static GraphicalViewer getGraphicalViewerFromCurrentActiveEditor() {
+		final IEditorPart currentActiveEditor = getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			return currentActiveEditor.getAdapter(GraphicalViewer.class);
 		}
 		return null;
 	}
 
-	public static void forEachOpenEditorFiltered(final EditorFilter filter, final EditorAction action) {
+	public static IEditorPart openTextEditor(final IEditorInput input) {
+		return openEditor(input, TEXT_EDITOR_ID);
+	}
+
+	public static IEditorPart openEditor(final IEditorInput input, final String editorId) {
+		IEditorPart editor = null;
+		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			editor = activePage.openEditor(input, editorId, true, IWorkbenchPage.MATCH_INPUT | IWorkbenchPage.MATCH_ID);
+		} catch (final PartInitException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+		return editor;
+	}
+
+	public static IEditorPart[] findEditor(final EditorFilter filter) {
 		final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getEditorReferences();
 
-		for (final IEditorReference editorReference : editorReferences) {
-			final IEditorPart editor = editorReference.getEditor(false);
-			if (null != editor && filter.filter(editor)) {
-				action.run(editor);
-			}
-		}
+		return Arrays.stream(editorReferences).map(ref -> ref.getEditor(false)).filter(Objects::nonNull)
+				.filter(editor -> filter.filter(editor)).toArray(IEditorPart[]::new);
+	}
+
+	public static void forEachOpenEditorFiltered(final EditorFilter filter, final EditorAction action) {
+		Stream.of(PlatformUI.getWorkbench().getWorkbenchWindows()).flatMap(window -> Stream.of(window.getPages()))
+				.flatMap(page -> Stream.of(page.getEditorReferences())).map(ref -> ref.getEditor(false))
+				.filter(Objects::nonNull).filter(filter::filter).forEach(action::run);
 	}
 
 	public static void closeEditorsFiltered(final EditorFilter filter) {
 		forEachOpenEditorFiltered(filter, CloseEditor);
 	}
 
-	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final GraphicalViewer viewer,
+	public static void refreshPropertySheetWithSelection(final IEditorPart activeEditor, final EditPartViewer viewer,
 			final Object obj) {
-		viewer.select((EditPart) obj);
+		if (viewer != null) {
+			viewer.select((EditPart) obj);
+		}
 		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
-		if (view instanceof PropertySheet) {
-			((PropertySheet) view).selectionChanged(activeEditor, viewer.getSelection());
+		if (activeEditor != null && view instanceof final PropertySheet propertySheet) {
+			final ISelection selection = activeEditor.getSite().getSelectionProvider().getSelection();
+			propertySheet.selectionChanged(activeEditor, selection);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
 		}
 	}
 }

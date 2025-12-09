@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014, 2017 Profactor GbmH, fortiss GmbH 
- * 
+ * Copyright (c) 2012, 2014, 2017 Profactor GbmH, fortiss GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,25 +14,26 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class ToolTipFigure.
- * 
+ *
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ValueToolTipFigure extends ToolTipFigure {
-	/**
-	 * Instantiates a new tool tip figure.
-	 * 
-	 * @param element the element
-	 */
-	public ValueToolTipFigure(final INamedElement element, Value value) {
-		super(element);
-		Label l = new Label();
-		l.setText(value.getValue());
-		getLine().add(l);
-	}
 
+	public ValueToolTipFigure(final IInterfaceElement element, final Value value,
+			final GraphicalAnnotationModel annotationModel) {
+		super(element, null); // pass null here to avoid showing annotations for element
+		getLine().add(new Label(FordiacMessages.Value + ": " + value.getValue())); //$NON-NLS-1$
+		if (annotationModel != null) {
+			annotationModel.getAnnotations(value).stream().forEach(annotation -> getLine()
+					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
+		}
+	}
 }

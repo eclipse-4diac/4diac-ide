@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2024 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,26 +11,25 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *               - extracted double column section for cleaner code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -49,11 +47,11 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public abstract class AbstractSection extends AbstractPropertySection implements CommandExecutor {
 
 	protected Object type;
-	protected CommandStack commandStack;
-	private Composite rightComposite;
-	private Composite leftComposite;
-	protected boolean createSuperControls = true;
+	private CommandStack commandStack;
 	private ComposedAdapterFactory adapterFactory;
+	private Composite parent;
+
+	private GraphicalAnnotationModel annotationModel;
 
 	// block updates triggered by any command
 	protected boolean blockRefresh = false;
@@ -66,30 +64,37 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected abstract void setInputInit();
 
+	/**
+	 * Subclasses shall perform all actions to refresh the data in the property
+	 * sheet.
+	 *
+	 * Implementors can assume that getType is not null and execute command has no
+	 * effect.
+	 */
+	protected abstract void performRefresh();
+
+	protected void performRefreshAnnotations() {
+		// empty default
+	}
+
 	protected void setType(final Object input) {
-		// as the property sheet is reused for different selection first remove listening to the old element
+		// as the property sheet is reused for different selection first remove
+		// listening to the old element
 		removeContentAdapter();
 		type = getInputType(input);
 		addContentAdapter();
 	}
 
-	protected final TypeLibrary getTypeLibrary() {
-		final EObject root = EcoreUtil.getRootContainer(getType());
-
-		if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary();
-		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getPalette().getTypeLibrary();
+	public final TypeLibrary getTypeLibrary() {
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(getType());
+		if (typeLib != null) {
+			return typeLib;
 		}
 		throw new IllegalStateException(
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$
 	}
 
-	protected final Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
-	}
-
-	protected final DataTypeLibrary getDataTypeLib() {
+	public final DataTypeLibrary getDataTypeLib() {
 		return getTypeLibrary().getDataTypeLibrary();
 	}
 
@@ -98,35 +103,92 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return part.getAdapter(CommandStack.class);
 	}
 
+	protected final void setCurrentCommandStack(final IWorkbenchPart part, final Object input) {
+		this.commandStack = getCommandStack(part, input);
+	}
+
+	protected void setCurrentCommandStack(final CommandStack commandStack) {
+		this.commandStack = commandStack;
+	}
+
+	protected CommandStack getCurrentCommandStack() {
+		return commandStack;
+	}
+
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		final Object input = ((IStructuredSelection) selection).getFirstElement();
-		commandStack = getCommandStack(part, input);
+		Object input = selection;
+		if (selection instanceof final IStructuredSelection structSel) {
+			input = structSel.getFirstElement();
+		}
+		setCurrentCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			setInputCode();
 		}
+		removeAnnotationModelListener();
+		annotationModel = part.getAdapter(GraphicalAnnotationModel.class);
+		addAnnotationModelListener();
 		setType(input);
 		setInputInit();
 	}
 
-	private final Adapter contentAdapter = new EContentAdapter() {
+	private final Adapter contentAdapter = new SingleRecursiveContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
-				leftComposite.getDisplay().asyncExec(() -> {
-					if (!leftComposite.isDisposed()) {
-						refresh();
-					}
-				});
+			if (!notification.isTouch()) {
+				notifiyRefresh();
 			}
 		}
 	};
 
+	protected final void notifiyRefresh() {
+		if (shouldRefresh()) {
+			parent.getDisplay().asyncExec(() -> {
+				if (!parent.isDisposed()) {
+					refresh();
+				}
+			});
+		}
+	}
+
+	protected final void notifiyRefreshAnnotations() {
+		if (shouldRefresh()) {
+			parent.getDisplay().asyncExec(() -> {
+				if (!parent.isDisposed()) {
+					refreshAnnotations();
+				}
+			});
+		}
+	}
+
+	@Override
+	public final void refresh() {
+		if (getType() != null) {
+			final CommandStack commandStackBuffer = commandStack;
+			commandStack = null;
+			performRefresh();
+			commandStack = commandStackBuffer;
+		}
+	}
+
+	public final void refreshAnnotations() {
+		if (getType() != null) {
+			final CommandStack commandStackBuffer = commandStack;
+			commandStack = null;
+			performRefreshAnnotations();
+			commandStack = commandStackBuffer;
+		}
+	}
+
+	protected boolean shouldRefresh() {
+		return (null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh;
+	}
+
 	@Override
 	public void dispose() {
 		removeContentAdapter();
+		removeAnnotationModelListener();
 		super.dispose();
 	}
 
@@ -142,22 +204,29 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 	}
 
-	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		if (createSuperControls) {
-			parent.setLayout(new GridLayout(2, true));
-			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-			leftComposite = createComposite(parent);
-			rightComposite = createComposite(parent);
-		} else {
-			leftComposite = parent; // store the parent to be used in the content adapter
-			parent.setLayout(new GridLayout(1, true));
-			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+	private final GraphicalAnnotationModelListener annotationModelListener = event -> notifiyRefreshAnnotations();
+
+	protected void removeAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.removeAnnotationModelListener(annotationModelListener);
 		}
 	}
 
-	private Composite createComposite(final Composite parent) {
+	protected void addAnnotationModelListener() {
+		if (annotationModel != null) {
+			annotationModel.addAnnotationModelListener(annotationModelListener);
+		}
+	}
+
+	@Override
+	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
+		super.createControls(parent, tabbedPropertySheetPage);
+		this.parent = parent; // store the parent to be used in the content adapter
+		parent.setLayout(new GridLayout(1, true));
+		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+	}
+
+	protected Composite createComposite(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
@@ -197,19 +266,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return adapterFactory;
 	}
 
-	protected Composite getLeftComposite() {
-		return leftComposite;
+	public GraphicalAnnotationModel getAnnotationModel() {
+		return annotationModel;
 	}
 
-	protected void setLeftComposite(final Composite leftComposite) {
-		this.leftComposite = leftComposite;
-	}
-
-	protected Composite getRightComposite() {
-		return rightComposite;
-	}
-
-	protected void setRightComposite(final Composite rightComposite) {
-		this.rightComposite = rightComposite;
-	}
 }

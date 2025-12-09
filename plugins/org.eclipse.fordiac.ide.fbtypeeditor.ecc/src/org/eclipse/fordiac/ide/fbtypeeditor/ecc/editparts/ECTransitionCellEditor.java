@@ -58,7 +58,7 @@ public class ECTransitionCellEditor extends AbstractCombinedCellEditor<ECTransit
 	@Override
 	protected int getIndexToSelect(final List<String> eventNames) {
 		if (getTransition().getConditionEvent() != null) {
-			return eventNames.indexOf(getTransition().getConditionEvent().getName());
+			return eventNames.indexOf(ECCContentAndLabelProvider.getEventName(getTransition().getConditionEvent()));
 		}
 		if (getTransition().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 			return eventNames.indexOf(ECCContentAndLabelProvider.ONE_CONDITION);

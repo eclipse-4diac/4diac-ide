@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 fortiss GmbH
+ * Copyright (c) 2015, 2025 fortiss GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,10 +15,14 @@
 package org.eclipse.fordiac.ide.export.forte_lua.filter
 
 import java.util.ArrayList
+import java.util.Collections
 import java.util.HashMap
 import java.util.List
 import java.util.Map
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -28,18 +32,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.model.libraryElement.Method
 
 class BasicFBFilter {
+	Map<ECTransition, ILanguageSupport> transitionLanguageSupport;
+	
+	def private void setupLanguageSupport(BasicFBType type){	
+		transitionLanguageSupport = type.ECC.ECTransition.toInvertedMap [
+			ILanguageSupportFactory.createLanguageSupport("forte_lua", it)
+		]
+	}
+
 
 	@Accessors(PUBLIC_GETTER)
 	List<String> errors = new ArrayList<String>;
-	STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	def String lua(BasicFBType type) '''
+		«type.setupLanguageSupport»
+		local STfunc = require "STfunc"
+		
 		«type.luaConstants»
+		
+		«type.luaMethods»
 		
 		«type.luaAlgorithms»
 		
@@ -61,18 +77,18 @@ class BasicFBFilter {
 		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
 		  «FOR adapter : adapterSocketsVariables.keySet»
-		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
 		  «ENDFOR»
 		  «FOR adapter : adapterPlugsVariables.keySet»
-		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
 		  «ENDFOR»
@@ -120,8 +136,7 @@ class BasicFBFilter {
 		ECTransition tran) '''«IF tran.conditionEvent !== null»«tran.conditionEvent.luaInputEventName» == id«ELSE»true«ENDIF» and «IF !tran.conditionExpression.nullOrEmpty»«tran.luaTransitionConditionExpression»«ELSE»true«ENDIF»'''
 
 	def private luaTransitionConditionExpression(ECTransition tran) {
-		val type = tran.rootContainer as BasicFBType
-		stAlgorithmFilter.lua(type, tran.conditionExpression)
+		transitionLanguageSupport.get(tran)?.generate(emptyMap)
 	}
 
 	def private luaStates(ECC ecc) '''
@@ -136,7 +151,7 @@ class BasicFBFilter {
 		  «luaFBStateVariable» = «state.luaStateName»
 		  «FOR action : state.ECAction»
 		  	«IF null !== action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
-		  	«IF action.output instanceof AdapterEvent»
+		  	«IF action.output.blockFBNetworkElement instanceof AdapterFB»
 		  		«action.output?.luaSendAdapterOutputEvent»
 		  	«ELSE»	
 		  		«action.output?.luaSendOutputEvent»
@@ -145,6 +160,25 @@ class BasicFBFilter {
 		  return true
 		end
 	'''
+
+	def private luaMethods(BasicFBType type) '''
+		«FOR meth : type.methods»
+			«meth.luaMethod»
+			
+		«ENDFOR»
+	'''
+	
+	def private dispatch luaMethod(Method meth) {
+		throw new UnsupportedOperationException("Cannot export algorithm " + meth.class)
+	}
+	
+	def private dispatch luaMethod(STMethod meth) {
+		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", meth)
+		val result = '''«lang.generate(Collections.emptyMap())»'''
+		errors.addAll(lang.errors.map['''Error in algorithm «meth.name»: «it»'''])
+		lang.errors.clear()
+		return result
+	}
 
 	def private luaAlgorithms(BasicFBType type) '''
 		«FOR alg : type.algorithm»
@@ -158,13 +192,21 @@ class BasicFBFilter {
 	}
 
 	def private dispatch luaAlgorithm(STAlgorithm alg) {
-		val result = '''
+		/*val result = '''
 			local function «alg.luaAlgorithmName»(fb)
 			  «stAlgorithmFilter.lua(alg)»
 			end
 		'''
 		errors.addAll(stAlgorithmFilter.errors.map['''Error in algorithm «alg.name»: «it»'''])
-		stAlgorithmFilter.errors.clear()
+		stAlgorithmFilter.errors.clear()*/
+		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", alg)
+		val result = '''
+			local function «alg.luaAlgorithmName»(fb)
+			  «lang.generate(Collections.emptyMap())»
+			end
+		'''
+		errors.addAll(lang.errors.map['''Error in algorithm «alg.name»: «it»'''])
+		lang.errors.clear()
 		return result
 	}
 

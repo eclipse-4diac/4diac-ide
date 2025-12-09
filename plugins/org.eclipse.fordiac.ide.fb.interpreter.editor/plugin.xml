@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ *******************************************************************************
+ Copyright (c) 2021 Johannes Kepler University Linz
+  
+ This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
+ 
+ SPDX-License-Identifier: EPL-2.0
+ 
+ Contributors:
+   Antonio Garmendía, Bianca Wiesmayr
+          - initial implementation and/or documentation
+ *******************************************************************************
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated OperationalSemantics -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsModelWizardID"
+            name="%_UI_OperationalSemanticsModelWizard_label"
+            class="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/OperationalSemanticsModelFile.gif">
+         <description>%_UI_OperationalSemanticsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated OperationalSemantics -->
+      <editor
+            id="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsEditorID"
+            name="%_UI_OperationalSemanticsEditor_label"
+            icon="icons/full/obj16/OperationalSemanticsModelFile.gif"
+            extensions="opsem"
+            class="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsEditor"
+            contributorClass="org.eclipse.fordiac.ide.fb.interpreter.OpSem.presentation.OperationalSemanticsActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

@@ -25,16 +25,24 @@ import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.ui.preferences.IGraphicalPreferencesCache;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * The Class AdvancedScrollingGraphicalViewer.
  */
 public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
+	private final IGraphicalPreferencesCache cache;
+
+	// reference to GefPreferences
+	public AdvancedScrollingGraphicalViewer(final IGraphicalPreferencesCache cache) {
+		this.cache = cache;
+	}
 
 	/**
 	 * Extends the superclass implementation to scroll the native Canvas control
@@ -59,8 +67,20 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		// do not correct viewport for connections
 		if (!(part instanceof ConnectionEditPart)) {
 			super.reveal(part);
-			if (part instanceof GraphicalEditPart) {
-				centerPartPositionInViewport((GraphicalEditPart) part);
+			if (part instanceof final GraphicalEditPart graphicalEP) {
+				final IFigure figure = graphicalEP.getFigure();
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						flush();
+						if (figure.isShowing() && !figure.getBounds().isEmpty()) {
+							centerPartPositionInViewport(graphicalEP);
+						} else {
+							// Retry until the figure is laid out
+							Display.getDefault().timerExec(50, this);
+						}
+					}
+				});
 			}
 		}
 	}
@@ -79,7 +99,7 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 		final int dx = currentCenter.x - partCenter.x;
 		final int dy = currentCenter.y - partCenter.y;
 
-		getFigureCanvas().scrollSmoothTo(getViewLocation().x - dx, getViewLocation().y - dy);
+		getFigureCanvas().scrollTo(getViewLocation().x - dx, getViewLocation().y - dy);
 	}
 
 	private Point getTranslatedPartCenter(final IFigure partFigure) {
@@ -118,7 +138,8 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 	 */
 	public void checkScrollPositionDuringDrag(final MouseEvent me) {
 		final org.eclipse.swt.graphics.Rectangle controlBounds = getControl().getBounds();
-		// mousecoordinates are given releativ to control origin, translate for correct handling
+		// mouse coordinates are given relative to control origin, translate for
+		// correct handling
 		final Point relativePos = new Point(me.x + controlBounds.x, me.y + controlBounds.y);
 		if (!controlBounds.contains(relativePos.x, relativePos.y)) {
 			final Point newLocation = getNewScrollPosition(relativePos);
@@ -187,5 +208,9 @@ public class AdvancedScrollingGraphicalViewer extends ScrollingGraphicalViewer {
 
 	public org.eclipse.swt.graphics.Point getFigureCanvasSize() {
 		return getFigureCanvas().getSize();
+	}
+
+	public IGraphicalPreferencesCache getPreferencesCache() {
+		return cache;
 	}
 }

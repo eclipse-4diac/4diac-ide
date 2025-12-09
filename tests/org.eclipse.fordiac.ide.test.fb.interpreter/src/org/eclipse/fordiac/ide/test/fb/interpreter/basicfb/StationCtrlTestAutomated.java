@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -16,28 +16,21 @@ package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.junit.Test;
 
 public class StationCtrlTestAutomated extends AbstractInterpreterTest {
 
-	public StationCtrlTestAutomated() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
-		final BasicFBType fb = loadFBType("StationCtrl2", false); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("StationCtrl2", false); //$NON-NLS-1$
 
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, seq.getStartState());
 
 		seq = fb.getService().getServiceSequence().get(1);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, seq.getStartState());
 
 		seq = fb.getService().getServiceSequence().get(2);
-		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
+		runFBTest(fb, seq, seq.getStartState());
 	}
-
-
 
 }

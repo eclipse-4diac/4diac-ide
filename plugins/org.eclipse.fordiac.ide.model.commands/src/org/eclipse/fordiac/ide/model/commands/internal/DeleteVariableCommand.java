@@ -15,7 +15,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.internal;
 
+import java.util.Objects;
+import java.util.Set;
+
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
@@ -23,13 +28,13 @@ import org.eclipse.gef.commands.Command;
 /**
  * abstract command to delete a variable from a list of a LibraryElement
  */
-public abstract class DeleteVariableCommand extends Command {
+public abstract class DeleteVariableCommand extends Command implements ScopedCommand {
 
 	/** The type to whose list the new variable is added. */
 	private final LibraryElement type;
 
 	/** The variable that is deleted */
-	private VarDeclaration varToDelete;
+	private final VarDeclaration varToDelete;
 
 	/** The old index. */
 	private int oldIndex;
@@ -37,12 +42,12 @@ public abstract class DeleteVariableCommand extends Command {
 	/**
 	 * Instantiates a command to remove a variable from a list.
 	 *
-	 * @param type the type from which the var is deleted
-	 * @param varToDelete  the var that should be deleted
+	 * @param type        the type from which the var is deleted
+	 * @param varToDelete the var that should be deleted
 	 */
 	protected DeleteVariableCommand(final LibraryElement type, final VarDeclaration varToDelete) {
-		this.type = type;
-		this.varToDelete = varToDelete;
+		this.type = Objects.requireNonNull(type);
+		this.varToDelete = Objects.requireNonNull(varToDelete);
 	}
 
 	/*
@@ -85,5 +90,10 @@ public abstract class DeleteVariableCommand extends Command {
 	@Override
 	public void redo() {
 		getVariableList().remove(varToDelete);
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(type);
 	}
 }

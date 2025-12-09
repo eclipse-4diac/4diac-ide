@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,41 +13,44 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ReconnectRequest;
 
-public abstract class AbstractReconnectConnectionCommand extends Command {
-	private final FBNetwork parent;
+public abstract class AbstractReconnectConnectionCommand extends Command implements ScopedCommand {
+	private FBNetwork parent;
 	private final Connection connection;
-	private final boolean isSourceReconect;
+	private final boolean isSourceReconnect;
 	private final IInterfaceElement newTarget;
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
 
-	protected AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request,
-			final FBNetwork parent) {
-		this(label, (Connection) request.getConnectionEditPart().getModel(),
-				request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE), getRequestTarget(request), parent);
-	}
-
 	protected AbstractReconnectConnectionCommand(final String label, final Connection connection,
 			final boolean isSourceReconnect, final IInterfaceElement newTarget, final FBNetwork parent) {
 		super(label);
-		this.connection = connection;
-		this.isSourceReconect = isSourceReconnect;
+		this.connection = Objects.requireNonNull(connection);
+		this.isSourceReconnect = isSourceReconnect;
 		this.newTarget = newTarget;
 		this.parent = parent;
 	}
 
-	protected FBNetwork getParent() {
+	public FBNetwork getParent() {
 		return parent;
+	}
+
+	public void setParent(final FBNetwork parent) {
+		this.parent = parent;
 	}
 
 	@Override
@@ -62,14 +64,14 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	public IInterfaceElement getNewSource() {
-		if (!isSourceReconect) {
+		if (!isSourceReconnect) {
 			return getConnnection().getSource();
 		}
 		return newTarget;
 	}
 
 	public IInterfaceElement getNewDestination() {
-		if (isSourceReconect) {
+		if (isSourceReconnect) {
 			return getConnnection().getDestination();
 		}
 		return newTarget;
@@ -77,14 +79,6 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 
 	protected Connection getConnnection() {
 		return connection;
-	}
-
-	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
-		final EditPart target = request.getTarget();
-		if (target.getModel() instanceof IInterfaceElement) {
-			return (IInterfaceElement) target.getModel();
-		}
-		return null;
 	}
 
 	@Override
@@ -97,13 +91,11 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	public void execute() {
 		final Connection con = getConnnection();
 		deleteConnectionCmd = new DeleteConnectionCommand(con);
-		connectionCreateCmd = createConnectionCreateCommand(parent);
-		connectionCreateCmd.setSource(getNewSource());
-		connectionCreateCmd.setDestination(getNewDestination());
-		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
-
-		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
+		getCreateConnectionCommand(con);
+		connectionCreateCmd.execute(); // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
+		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());
+
 	}
 
 	@Override
@@ -116,6 +108,35 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	public void undo() {
 		deleteConnectionCmd.undo();
 		connectionCreateCmd.undo();
+	}
+
+	private static void copyAttributes(final Connection dstCon, final Connection srcCon) {
+		srcCon.getAttributes().forEach(
+				attr -> dstCon.setAttribute(attr.getName(), attr.getType(), attr.getValue(), attr.getComment()));
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		final Set<EObject> result = Stream.of(parent, connection).filter(Objects::nonNull)
+				.collect(Collectors.toCollection(HashSet::new));
+		if (connectionCreateCmd != null) {
+			result.addAll(connectionCreateCmd.getAffectedObjects());
+		}
+		if (deleteConnectionCmd != null) {
+			result.addAll(deleteConnectionCmd.getAffectedObjects());
+		}
+		return Set.copyOf(result);
+	}
+
+	private void getCreateConnectionCommand(final Connection con) {
+		connectionCreateCmd = createConnectionCreateCommand(parent);
+		// when updating the following list also update the similar list in
+		// AbstractUpdateFBNElementCommand::replaceConnection
+		connectionCreateCmd.setSource(getNewSource());
+		connectionCreateCmd.setDestination(getNewDestination());
+		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
+		connectionCreateCmd.setAttributes(con.getAttributes());
+		connectionCreateCmd.setElementIndex(parent.getConnectionIndex(con));
 	}
 
 	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand(FBNetwork parent);

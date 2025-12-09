@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_MERGE" Comment="Merge (OR) of two input events">
+	<Identification Standard="61499-1 Annex A" Function="Output EO is triggered when either EI1 or EI2 is received" Description="&lt;p&gt;Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p&gt;&#10;" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="EO" Comment="" x="606.6666666666667" y="1020.0">
+				<ECAction Output="EO"/>
+			</ECState>
+			<ECTransition Source="EO" Destination="START" Condition="1" Comment="" x="686.6666666666667" y="800.0"/>
+			<ECTransition Source="START" Destination="EO" Condition="EI1" Comment="" x="400.0" y="760.0"/>
+			<ECTransition Source="START" Destination="EO" Condition="EI2" Comment="" x="906.6666666666667" y="780.0"/>
+		</ECC>
+	</BasicFB>
+</FBType>

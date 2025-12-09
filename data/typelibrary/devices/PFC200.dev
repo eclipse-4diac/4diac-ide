@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
-<DeviceType Name="PFC200" Comment="Wago PFC200 controller" >
-  <Identification Standard="61499 ITA" Description="Copyright (c) 2015 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" />
-  <VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2015-10-31" Remarks="Initial version" />
-  <VarDeclaration Name="MGR_ID" Type="WSTRING" InitialValue="&#34;localhost:61499&#34;" Comment="Device manager socket ID" />  
-</DeviceType>

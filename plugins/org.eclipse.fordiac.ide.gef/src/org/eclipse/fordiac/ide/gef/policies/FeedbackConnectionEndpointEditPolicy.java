@@ -28,9 +28,9 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.fordiac.ide.gef.handles.ScrollingConnectionEndpointHandle;
+import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
@@ -44,12 +44,12 @@ import org.eclipse.gef.requests.SelectionRequest;
 public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEditPolicy
 		implements PropertyChangeListener {
 
+	// the number of pixels the selection feedback should be wider then the
+	// connection, needs to be an even number so
+	// that the selection feedback is symmetric around the connection line
+	private static final int SELECTION_FEEDBACK_SIZE_DELTA = 6;
 	private IFigure selectionFeedback;
 	private IFigure hoverFeedback;
-
-	public FeedbackConnectionEndpointEditPolicy() {
-		super();
-	}
 
 	@Override
 	public void activate() {
@@ -66,8 +66,9 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	}
 
 	@Override
-	protected void showSelection() {
+	public void showSelection() {
 		super.showSelection();
+		getConnectionFigure().setLineWidth(ConnectionPreferenceValues.SELECTED_LINE_WIDTH);
 		removeHoverFigure();
 		if (null == selectionFeedback) {
 			addSelectionFeedbackFigure();
@@ -75,8 +76,9 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	}
 
 	@Override
-	protected void hideSelection() {
+	public void hideSelection() {
 		removeSelectionFigure();
+		getConnectionFigure().setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		super.hideSelection();
 	}
 
@@ -86,11 +88,11 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	 * @return the connection figure
 	 */
 	protected PolylineConnection getConnectionFigure() {
-		return (PolylineConnection) ((GraphicalEditPart) getHost()).getFigure();
+		return (PolylineConnection) getHost().getFigure();
 	}
 
 	@Override
-	protected List createSelectionHandles() {
+	protected List<? extends ConnectionEndpointHandle> createSelectionHandles() {
 		final List<ConnectionEndpointHandle> list = new ArrayList<>();
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.SOURCE));
 		list.add(createConnectionEndPointHandle((ConnectionEditPart) getHost(), ConnectionLocator.TARGET));
@@ -107,8 +109,8 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 	public void showTargetFeedback(final Request request) {
 		if ((request instanceof SelectionRequest) && (null == hoverFeedback) && (null == handles)) {
 			final IFigure connFigure = getHostFigure();
-			if ((connFigure instanceof PolylineConnection) && (null == hoverFeedback)) {
-				hoverFeedback = createSelectionFeedbackFigure((PolylineConnection) connFigure);
+			if ((connFigure instanceof final PolylineConnection plc) && (null == hoverFeedback)) {
+				hoverFeedback = createSelectionFeedbackFigure(plc);
 				addFeedback(hoverFeedback);
 			}
 		}
@@ -142,9 +144,10 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 		}
 	}
 
+	@SuppressWarnings("static-method") // allow sub-classe to provide their own selection feedback figure
 	protected IFigure createSelectionFeedbackFigure(final PolylineConnection connFigure) {
 		final Polyline figure = new Polyline();
-		figure.setLineWidth(connFigure.getLineWidth() + 5);
+		figure.setLineWidth(connFigure.getLineWidth() + SELECTION_FEEDBACK_SIZE_DELTA);
 		figure.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		figure.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		figure.setPoints(connFigure.getPoints().getCopy());
@@ -159,6 +162,10 @@ public class FeedbackConnectionEndpointEditPolicy extends ConnectionEndpointEdit
 			addSelectionFeedbackFigure();
 		}
 
+	}
+
+	public boolean isSelectionFeedbackShowing() {
+		return selectionFeedback != null;
 	}
 
 }

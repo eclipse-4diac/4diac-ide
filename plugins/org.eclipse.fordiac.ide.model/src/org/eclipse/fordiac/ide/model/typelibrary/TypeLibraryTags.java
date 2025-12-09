@@ -14,47 +14,78 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-public interface TypeLibraryTags {
-
-	String TOOL_LIBRARY_PROJECT_NAME = "Tool Library"; //$NON-NLS-1$
+public final class TypeLibraryTags {
 
 	/** The Constant for the file ending of FB type files. */
-	String FB_TYPE_FILE_ENDING = "FBT"; //$NON-NLS-1$
+	public static final String FB_TYPE_FILE_ENDING = "FBT"; //$NON-NLS-1$
 
-	String FB_TYPE_FILE_ENDING_WITH_DOT = "." + FB_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String FB_TYPE_FILE_ENDING_WITH_DOT = "." + FB_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String ADAPTER_TYPE_FILE_ENDING = "ADP"; //$NON-NLS-1$
+	public static final String ADAPTER_TYPE_FILE_ENDING = "ADP"; //$NON-NLS-1$
 
-	String ADAPTER_TYPE_FILE_ENDING_WITH_DOT = "." + ADAPTER_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String ADAPTER_TYPE_FILE_ENDING_WITH_DOT = "." + ADAPTER_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String DEVICE_TYPE_FILE_ENDING = "DEV"; //$NON-NLS-1$
+	public static final String ATTRIBUTE_TYPE_FILE_ENDING = "ATP"; //$NON-NLS-1$
 
-	String DEVICE_TYPE_FILE_ENDING_WITH_DOT = "." + DEVICE_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String ATTRIBUTE_TYPE_FILE_ENDING_WITH_DOT = "." + ATTRIBUTE_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String DATA_TYPE_FILE_ENDING = "DTP"; //$NON-NLS-1$
+	public static final String DEVICE_TYPE_FILE_ENDING = "DEV"; //$NON-NLS-1$
 
-	String DATA_TYPE_FILE_ENDING_WITH_DOT = "." + DATA_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String DEVICE_TYPE_FILE_ENDING_WITH_DOT = "." + DEVICE_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String RESOURCE_TYPE_FILE_ENDING = "RES"; //$NON-NLS-1$
+	public static final String DATA_TYPE_FILE_ENDING = "DTP"; //$NON-NLS-1$
 
-	String RESOURCE_TYPE_FILE_ENDING_WITH_DOT = "." + RESOURCE_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String DATA_TYPE_FILE_ENDING_WITH_DOT = "." + DATA_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String SEGMENT_TYPE_FILE_ENDING = "SEG"; //$NON-NLS-1$
+	public static final String RESOURCE_TYPE_FILE_ENDING = "RES"; //$NON-NLS-1$
 
-	String SEGMENT_TYPE_FILE_ENDING_WITH_DOT = "." + SEGMENT_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String RESOURCE_TYPE_FILE_ENDING_WITH_DOT = "." + RESOURCE_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String SUBAPP_TYPE_FILE_ENDING = "SUB"; //$NON-NLS-1$
+	public static final String SEGMENT_TYPE_FILE_ENDING = "SEG"; //$NON-NLS-1$
 
-	String SUBAPP_TYPE_FILE_ENDING_WITH_DOT = "." + SUBAPP_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String SEGMENT_TYPE_FILE_ENDING_WITH_DOT = "." + SEGMENT_TYPE_FILE_ENDING; //$NON-NLS-1$
 
-	String SYSTEM_TYPE_FILE_ENDING = "SYS"; //$NON-NLS-1$
+	public static final String SUBAPP_TYPE_FILE_ENDING = "SUB"; //$NON-NLS-1$
 
-	String SYSTEM_TYPE_FILE_ENDING_WITH_DOT = "." + SUBAPP_TYPE_FILE_ENDING; //$NON-NLS-1$
+	public static final String SUBAPP_TYPE_FILE_ENDING_WITH_DOT = "." + SUBAPP_TYPE_FILE_ENDING; //$NON-NLS-1$
+
+	public static final String SYSTEM_TYPE_FILE_ENDING = "SYS"; //$NON-NLS-1$
+
+	public static final String SYSTEM_TYPE_FILE_ENDING_WITH_DOT = "." + SYSTEM_TYPE_FILE_ENDING; //$NON-NLS-1$
 
 	/** The Constant TYPE_LIBRARY. */
-	String TYPE_LIBRARY = "typelibrary";//$NON-NLS-1$
+	public static final String TYPE_LIBRARY = "typelibrary";//$NON-NLS-1$
 
 	/** The Constant TOOL_TYPE_DIR. */
-	String TOOL_TYPE_DIR = TYPE_LIBRARY + "/";//$NON-NLS-1$
+	public static final String TOOL_TYPE_DIR = TYPE_LIBRARY + "/";//$NON-NLS-1$
+
+	/** The Constant for the file ending of FUNC files. */
+	public static final String FC_TYPE_FILE_ENDING = "FCT"; //$NON-NLS-1$
+
+	public static final String FC_TYPE_FILE_ENDING_WITH_DOT = "." + FC_TYPE_FILE_ENDING; //$NON-NLS-1$
+
+	/** The Constant for the file ending of global constants files. */
+	public static final String GLOBAL_CONST_FILE_ENDING = "GCF"; //$NON-NLS-1$
+
+	public static final String GLOBAL_CONST_FILE_ENDING_WITH_DOT = "." + GLOBAL_CONST_FILE_ENDING; //$NON-NLS-1$
+
+	/** The Constant for the IEventBroker topic called at type library creation */
+	public static final String TYPE_LIBRARY_CREATION_TOPIC = "org/eclipse/fordiac/event/type_library_creation"; //$NON-NLS-1$
+
+	/** Folder containing the projects types */
+	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
+
+	/** Folder containing standard libraries linked in the project */
+	public static final String STANDARD_LIB_FOLDER_NAME = "Standard Libraries"; //$NON-NLS-1$
+
+	/** Folder containing external libraries linked in the project */
+	public static final String EXTERNAL_LIB_FOLDER_NAME = "External Libraries"; //$NON-NLS-1$
+
+	public static final String TYPE_HASH_ATTRIBUTE_NAME = "TypeHash"; //$NON-NLS-1$
+	public static final String TYPE_HASH_ATTRIBUTE_FULL_NAME = "eclipse4diac::core::TypeHash"; //$NON-NLS-1$
+
+	private TypeLibraryTags() {
+		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
+	}
 
 }

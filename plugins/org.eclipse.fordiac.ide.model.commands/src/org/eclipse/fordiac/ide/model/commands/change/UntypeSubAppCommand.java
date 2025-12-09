@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,53 +12,40 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
-public class UntypeSubAppCommand extends Command {
-	private final SubApp subapp;
-	private final SubApplicationTypePaletteEntry typeEntry;
+public class UntypeSubAppCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	public UntypeSubAppCommand(final SubApp subapp) {
-		super(Messages.UntypeSubappCommand_Label);
-		this.subapp = subapp;
-		typeEntry = (SubApplicationTypePaletteEntry) subapp.getPaletteEntry();
-	}
-
-	public SubApp getSubapp() {
-		return subapp;
+		super(subapp);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return null != typeEntry;
+		return super.canExecute() && oldElement instanceof final TypedSubApp subapp && subapp.getTypeEntry() != null;
 	}
 
 	@Override
-	public void execute() {
-		if (subapp.getSubAppNetwork() == null) {
-			// the subapp network was not yet copied from the type, i.e., subapp was never shown in viewer
-			subapp.setSubAppNetwork(
-					FBNetworkHelper.copyFBNetWork(subapp.getType().getFBNetwork(), subapp.getInterface()));
-		}
-		removeType();
+	protected void createNewFB() {
+		super.createNewFB();
+		// the FBNetwork can only be copied at the end when the interface is correctly
+		// setup
+		((UntypedSubApp) newElement).setSubAppNetwork(FBNetworkHelper
+				.copyFBNetWork(((TypedSubApp) oldElement).getType().getFBNetwork(), newElement.getInterface()));
 	}
 
 	@Override
-	public void redo() {
-		removeType();
+	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
+		return LibraryElementFactory.eINSTANCE.createUntypedSubApp();
 	}
 
 	@Override
-	public void undo() {
-		subapp.setPaletteEntry(typeEntry);
+	protected void setInterface() {
+		newElement.setInterface(oldElement.getTypeInterface().copy());
 	}
-
-	private void removeType() {
-		subapp.setPaletteEntry(null);
-	}
-
 }

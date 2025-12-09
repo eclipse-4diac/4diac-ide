@@ -10,7 +10,8 @@
  * Contributors:
  *   Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
- *
+ *   Dunja Životin
+ *     - length checks of the selection
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.widgets;
@@ -21,7 +22,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -49,11 +50,12 @@ public final class OpenStructMenu {
 			@Override
 			public void menuShown(final MenuEvent e) {
 				final Item[] selection = viewer.getTable().getSelection();
-				if (!(selection[0].getData() instanceof Event)
+				if (selection.length > 0 && !(selection[0].getData() instanceof Event)
 						&& !(selection[0].getData() instanceof AdapterDeclaration)) {
 					final StructuredType type = getSelectedStructuredType(selection);
 					openItem.setEnabled((type != null) && (type != IecTypes.GenericTypes.ANY_STRUCT));
 				} else {
+					openItem.setEnabled(false);
 					menu.setVisible(false);
 				}
 			}
@@ -75,7 +77,7 @@ public final class OpenStructMenu {
 			public void widgetSelected(final SelectionEvent e) {
 				final StructuredType sel = getSelectedStructuredType(viewer.getTable().getSelection());
 				if (sel != null) {
-					openStructEditor(sel.getPaletteEntry().getFile());
+					openStructEditor(sel.getTypeEntry().getFile());
 				}
 			}
 
@@ -89,7 +91,7 @@ public final class OpenStructMenu {
 	}
 
 	private static StructuredType getSelectedStructuredType(final Item[] selected) {
-		if (selected[0].getData() instanceof VarDeclaration) {
+		if (selected.length > 0 && selected[0].getData() instanceof VarDeclaration) {
 			final VarDeclaration varDecl = (VarDeclaration) selected[0].getData();
 			if (varDecl.getType() instanceof StructuredType) {
 				return (StructuredType) varDecl.getType();
@@ -109,7 +111,7 @@ public final class OpenStructMenu {
 				try {
 					activePage.openEditor(new FileEditorInput(file), desc.getId());
 				} catch (final PartInitException e) {
-					Activator.getDefault().logError(e.getMessage(), e);
+					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
 		}

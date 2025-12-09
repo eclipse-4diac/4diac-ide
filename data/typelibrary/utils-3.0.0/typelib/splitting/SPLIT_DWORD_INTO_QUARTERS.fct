@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_DWORD_INTO_QUARTERS" Comment="this Function extracts the 16 QUARTER BYTE from a dword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2024 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.1" Author="Moritz Ortmeier" Date="2024-07-24" Remarks="rename Function and change Output Variables">
+	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2024-02-22" Remarks="initial Implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::splitting">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="QUARTER_BYTE_00"/>
+				<With Var="QUARTER_BYTE_01"/>
+				<With Var="QUARTER_BYTE_02"/>
+				<With Var="QUARTER_BYTE_03"/>
+				<With Var="QUARTER_BYTE_04"/>
+				<With Var="QUARTER_BYTE_05"/>
+				<With Var="QUARTER_BYTE_06"/>
+				<With Var="QUARTER_BYTE_07"/>
+				<With Var="QUARTER_BYTE_08"/>
+				<With Var="QUARTER_BYTE_09"/>
+				<With Var="QUARTER_BYTE_10"/>
+				<With Var="QUARTER_BYTE_11"/>
+				<With Var="QUARTER_BYTE_12"/>
+				<With Var="QUARTER_BYTE_13"/>
+				<With Var="QUARTER_BYTE_14"/>
+				<With Var="QUARTER_BYTE_15"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="DWORD"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QUARTER_BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_01" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_02" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_03" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_04" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_05" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_06" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_07" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_08" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_09" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_10" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_11" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_12" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_13" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_14" Type="BYTE"/>
+			<VarDeclaration Name="QUARTER_BYTE_15" Type="BYTE"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 16 QUARTER BYTE from a dword *)
+FUNCTION SPLIT_DWORD_INTO_QUARTERS
+
+VAR_INPUT
+	IN : DWORD;
+END_VAR
+
+VAR_OUTPUT
+	QUARTER_BYTE_00 : BYTE;
+	QUARTER_BYTE_01 : BYTE;
+	QUARTER_BYTE_02 : BYTE;
+	QUARTER_BYTE_03 : BYTE;
+	QUARTER_BYTE_04 : BYTE;
+	QUARTER_BYTE_05 : BYTE;
+	QUARTER_BYTE_06 : BYTE;
+	QUARTER_BYTE_07 : BYTE;
+	QUARTER_BYTE_08 : BYTE;
+	QUARTER_BYTE_09 : BYTE;
+	QUARTER_BYTE_10 : BYTE;
+	QUARTER_BYTE_11 : BYTE;
+	QUARTER_BYTE_12 : BYTE;
+	QUARTER_BYTE_13 : BYTE;
+	QUARTER_BYTE_14 : BYTE;
+	QUARTER_BYTE_15 : BYTE;
+END_VAR
+
+QUARTER_BYTE_00 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_00, quarterconst::SHIFT_QUARTER_00));
+QUARTER_BYTE_01 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_01, quarterconst::SHIFT_QUARTER_01));
+QUARTER_BYTE_02 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_02, quarterconst::SHIFT_QUARTER_02));
+QUARTER_BYTE_03 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_03, quarterconst::SHIFT_QUARTER_03));
+QUARTER_BYTE_04 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_04, quarterconst::SHIFT_QUARTER_04));
+QUARTER_BYTE_05 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_05, quarterconst::SHIFT_QUARTER_05));
+QUARTER_BYTE_06 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_06, quarterconst::SHIFT_QUARTER_06));
+QUARTER_BYTE_07 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_07, quarterconst::SHIFT_QUARTER_07));
+QUARTER_BYTE_08 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_08, quarterconst::SHIFT_QUARTER_08));
+QUARTER_BYTE_09 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_09, quarterconst::SHIFT_QUARTER_09));
+QUARTER_BYTE_10 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_10, quarterconst::SHIFT_QUARTER_10));
+QUARTER_BYTE_11 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_11, quarterconst::SHIFT_QUARTER_11));
+QUARTER_BYTE_12 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_12, quarterconst::SHIFT_QUARTER_12));
+QUARTER_BYTE_13 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_13, quarterconst::SHIFT_QUARTER_13));
+QUARTER_BYTE_14 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_14, quarterconst::SHIFT_QUARTER_14));
+QUARTER_BYTE_15 := DWORD_TO_BYTE(SHR(IN AND quarterconst::DWORD_QUARTER_15, quarterconst::SHIFT_QUARTER_15));
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

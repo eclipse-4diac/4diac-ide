@@ -1,0 +1,472 @@
+/*******************************************************************************
+ * Copyright (c) 2021, 2025 Primetals Technologies GmbH, 
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Melik Merkumians
+ *       - initial API and implementation and/or initial documentation
+ * 		 - add reserved but currently not used keywords
+ *   Martin Jobst
+ *       - access expressions and assignment lvalues
+ *       - literal data types
+ *       - enhanced partial access
+ *       - input/output variable blocks
+ *       - (initializer) expression source
+ *       - type declaration
+ *       - add imports and full-qualified access
+ *       - add pragmas
+ *       - add enumerated value literals
+ *******************************************************************************/
+grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
+
+import "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "org.eclipse.fordiac.ide.model.datatype" as datatype
+import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
+
+STCoreSource returns STSource:
+	{STCoreSource} statements+=STStatement*;
+
+STExpressionSource returns STSource:
+	{STExpressionSource} expression=STExpression?;
+
+STExpressionSource0 returns STSource:
+	STExpressionSource; // necessary to keep Xtext from skipping this rule
+
+STInitializerExpressionSource returns STSource:
+	{STInitializerExpressionSource} initializerExpression=STInitializerExpression?;
+
+STInitializerExpressionSource0 returns STSource:
+	STInitializerExpressionSource; // necessary to keep Xtext from skipping this rule
+
+STImport returns STImport:
+	'IMPORT' importedNamespace=QualifiedNameWithWildcard ';';
+
+STVarDeclarationBlock returns STVarPlainDeclarationBlock:
+	{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarTempDeclarationBlock returns STVarTempDeclarationBlock:
+	{STVarTempDeclarationBlock} 'VAR_TEMP' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
+	{STVarInputDeclarationBlock} 'VAR_INPUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
+	{STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarInOutDeclarationBlock returns STVarInOutDeclarationBlock:
+	{STVarInOutDeclarationBlock} 'VAR_IN_OUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarDeclaration:
+	{STVarDeclaration}
+	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
+	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	(type=[datatype::DataType|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	defaultValue=STInitializerExpression)? pragma=STPragma? ';';
+
+STTypeDeclaration:
+	{STTypeDeclaration}
+	(array?='ARRAY' (('[' ranges+=(STExpression) (',' ranges+=STExpression)* ']') |
+	('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	(type=[datatype::DataType|STAnyType])
+	('[' maxLength=STExpression ']')?;
+
+STTypeDeclaration0 returns STTypeDeclaration:
+	STTypeDeclaration; // necessary to keep Xtext from skipping this rule
+
+STInitializerExpression:
+	STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
+
+STElementaryInitializerExpression:
+	value=STExpression;
+
+STArrayInitializerExpression:
+	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
+
+STArrayInitElement:
+	STSingleArrayInitElement | STRepeatArrayInitElement;
+
+STSingleArrayInitElement:
+	initExpression=STInitializerExpression;
+
+STRepeatArrayInitElement:
+	repetitions=INT '(' initExpressions+=STInitializerExpression (','
+	initExpressions+=STInitializerExpression)* ')';
+
+STStructInitializerExpression:
+	(type=[datatype::StructuredType|QualifiedName] '#')? '(' values+=STStructInitElement (','
+	values+=STStructInitElement)* ')';
+
+STStructInitElement:
+	variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
+
+STPragma:
+	{STPragma}
+	'{' attributes+=STAttribute (',' attributes+=STAttribute)* '}';
+
+STAttribute:
+	declaration=[libraryElement::AttributeDeclaration|STAttributeName] ':=' value=STInitializerExpression;
+
+STAttributeName:
+	QualifiedName;
+
+STStatement:
+	(STIfStatement |
+	STCaseStatement |
+	STForStatement |
+	STWhileStatement |
+	STRepeatStatement |
+	STAssignment |
+	{STReturn} 'RETURN' |
+	{STContinue} 'CONTINUE' |
+	{STExit} 'EXIT') ';' |
+	{STNop} ';';
+
+STAssignment returns STExpression:
+	STExpression ({STAssignment.left=current} ':=' right=STAssignment)?;
+
+STCallArgument:
+	STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument;
+
+STCallUnnamedArgument:
+	argument=STExpression;
+
+STCallNamedInputArgument:
+	parameter=[libraryElement::INamedElement] ':=' argument=STExpression;
+
+STCallNamedOutputArgument:
+	not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression;
+
+STIfStatement:
+	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
+
+STElseIfPart:
+	'ELSIF' condition=STExpression 'THEN' statements+=STStatement*;
+
+STCaseStatement:
+	'CASE' selector=STExpression 'OF' cases+=STCaseCases+ (else=STElsePart)? 'END_CASE';
+
+STCaseCases:
+	conditions+=STExpression (',' conditions+=STExpression)* ':' =>statements+=STStatement*;
+
+STElsePart:
+	{STElsePart} 'ELSE' statements+=STStatement*;
+
+STForStatement:
+	'FOR' variable=STExpression ':=' from=STExpression 'TO' to=STExpression ('BY' by=STExpression)? 'DO'
+	statements+=STStatement*
+	'END_FOR';
+
+STWhileStatement:
+	'WHILE' condition=STExpression 'DO'
+	statements+=STStatement*
+	'END_WHILE';
+
+STRepeatStatement:
+	'REPEAT'
+	statements+=STStatement*
+	'UNTIL' condition=STExpression
+	'END_REPEAT';
+
+STExpression returns STExpression:
+	STSubrangeExpression;
+
+enum SubrangeOperator returns STBinaryOperator:
+	Range='..';
+
+STSubrangeExpression returns STExpression:
+	STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
+
+enum OrOperator returns STBinaryOperator:
+	OR;
+
+STOrExpression returns STExpression:
+	STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
+
+enum XorOperator returns STBinaryOperator:
+	XOR;
+
+STXorExpression returns STExpression:
+	STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
+
+enum AndOperator returns STBinaryOperator:
+	AND | AMPERSAND='&';
+
+STAndExpression returns STExpression:
+	STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
+
+enum EqualityOperator returns STBinaryOperator:
+	EQ='=' | NE='<>';
+
+STEqualityExpression returns STExpression:
+	STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
+
+enum CompareOperator returns STBinaryOperator:
+	LT='<' | LE='<=' | GT='>' | GE='>=';
+
+STComparisonExpression returns STExpression:
+	STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
+
+enum AddSubOperator returns STBinaryOperator:
+	ADD='+' | SUB='-';
+
+STAddSubExpression returns STExpression:
+	STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
+
+enum MulDivModOperator returns STBinaryOperator:
+	MUL='*' | DIV='/' | MOD;
+
+STMulDivModExpression returns STExpression:
+	STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
+
+enum PowerOperator returns STBinaryOperator:
+	POWER='**';
+
+STPowerExpression returns STExpression:
+	STUnaryExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STUnaryExpression)*;
+
+enum UnaryOperator returns STUnaryOperator:
+	MINUS='-' | PLUS='+' | NOT;
+
+STUnaryExpression returns STExpression:
+	STAccessExpression | STLiteralExpressions | => STSignedLiteralExpressions | ({STUnaryExpression} op=UnaryOperator
+	expression=STUnaryExpression);
+
+STAccessExpression returns STExpression:
+	STPrimaryExpression (({STMemberAccessExpression.receiver=current} '.' member=(STFeatureExpression |
+	STMultibitPartialExpression)) |
+	({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
+
+STPrimaryExpression returns STExpression:
+	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression;
+
+STFeatureExpression returns STExpression:
+	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName]
+	(call?='('
+	(parameters+=STCallArgument (',' parameters+=STCallArgument)*)?
+	')')?;
+
+STFeatureName:
+	QualifiedName | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+
+STBuiltinFeatureExpression returns STExpression:
+	{STBuiltinFeatureExpression} feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument
+	(',' parameters+=STCallArgument)*)? ')')?;
+
+enum STBuiltinFeature:
+	THIS;
+
+enum STMultiBitAccessSpecifier:
+	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
+
+STMultibitPartialExpression returns STExpression:
+	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'))
+;
+
+STLiteralExpressions returns STExpression:
+	STNumericLiteral |
+	STDateLiteral |
+	STTimeLiteral |
+	STTimeOfDayLiteral |
+	STDateAndTimeLiteral |
+	STStringLiteral |
+	STEnumLiteral;
+
+STSignedLiteralExpressions returns STExpression:
+	STSignedNumericLiteral;
+
+STNumericLiteralType:
+	STAnyBitType | STAnyNumType;
+
+STNumericLiteral:
+	(type=[datatype::DataType|STNumericLiteralType] '#' value=SignedNumeric) |
+	((type=[datatype::DataType|STNumericLiteralType] '#')?
+	value=Numeric);
+
+STSignedNumericLiteral returns STNumericLiteral:
+	value=SignedNumeric;
+
+STDateLiteralType:
+	STDateType |
+	'D' |
+	'LD';
+
+STDateLiteral:
+	type=[datatype::DataType|STDateLiteralType] '#' value=Date;
+
+STTimeLiteralType:
+	STAnyDurationType |
+	'T' |
+	'LT';
+
+STTimeLiteral:
+	type=[datatype::DataType|STTimeLiteralType] '#' value=Time;
+
+STTimeOfDayLiteral:
+	type=[datatype::DataType|STTimeOfDayType] '#' value=TimeOfDay;
+
+STDateAndTimeLiteral:
+	type=[datatype::DataType|STDateAndTimeType] '#' value=DateAndTime;
+
+STStringLiteral:
+	(type=[datatype::DataType|STAnyCharsType] '#')? value=STRING;
+
+STEnumLiteral:
+	value=[datatype::EnumeratedValue|EnumValue];
+
+EnumValue:
+	QualifiedName '#' ID;
+
+STAnyType:
+	QualifiedName | STAnyBuiltinType;
+
+STAnyBuiltinType:
+	STAnyBitType | STAnyNumType | STAnyDurationType | STAnyDateType | STAnyCharsType;
+
+STAnyBitType:
+	'BOOL' | 'BYTE' | 'WORD' | 'DWORD' | 'LWORD';
+
+STAnyNumType:
+	'SINT' | 'INT' | 'DINT' | 'LINT' | 'USINT' | 'UINT' | 'UDINT' | 'ULINT' | 'REAL' | 'LREAL';
+
+STAnyDurationType:
+	'TIME' | 'LTIME';
+
+STAnyDateType:
+	STDateType | STTimeOfDayType | STDateAndTimeType;
+
+STDateType:
+	'DATE' | 'LDATE';
+
+STTimeOfDayType:
+	'TIME_OF_DAY' |
+	'LTIME_OF_DAY' |
+	'TOD' |
+	'LTOD';
+
+STDateAndTimeType:
+	'DATE_AND_TIME' |
+	'LDATE_AND_TIME' |
+	'DT' |
+	'LDT';
+
+STAnyCharsType:
+	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
+
+QualifiedName:
+	ID ('::' ID)*;
+
+QualifiedNameWithWildcard:
+	QualifiedName '::*'?;
+
+Numeric returns ecore::EJavaObject:
+	'TRUE' | 'FALSE' | Number | NON_DECIMAL;
+
+Number hidden():
+	INT ('.' (INT | DECIMAL))?;
+
+SignedNumeric returns ecore::EJavaObject:
+	SignedNumber;
+
+SignedNumber hidden():
+	('+' | '-') INT ('.' (INT | DECIMAL))?;
+
+Time returns STTime hidden():
+	('+' | '-')? TIME_VALUE;
+
+Date returns STDate:
+	INT '-' INT '-' INT;
+
+DateAndTime returns STDateAndTime:
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT ('.' INT)?;
+
+TimeOfDay returns STTimeOfDay:
+	INT ':' INT ':' INT ('.' INT)?;
+
+enum STAccessSpecifier:
+	PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';
+
+/** Keep in sync with fordiac keywords */
+RESERVED_KEYWORDS:
+	'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+	'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+	'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+	'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+	'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+	'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+	'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+	'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+
+terminal fragment HEX_DIGIT:
+	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
+
+terminal NON_DECIMAL:
+	('2#' | '8#' | '16#') HEX_DIGIT+;
+
+terminal INT returns ecore::EBigInteger:
+	'0'..'9' ('0'..'9' | '_')*;
+
+terminal DECIMAL:
+	INT (('e' | 'E') ('+' | '-')? INT)?;
+
+terminal TIME_VALUE:
+	(TIME_PART ('_')?)+;
+
+terminal fragment TIME_PART:
+	INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+
+terminal fragment TIME_DAYS:
+	'D' | 'd';
+
+terminal fragment TIME_HOURS:
+	'H' | 'h';
+
+terminal fragment TIME_MINUTES:
+	'M' | 'm';
+
+terminal fragment TIME_SECONDS:
+	'S' | 's';
+
+terminal fragment TIME_MILLIS:
+	('M' | 'm') ('S' | 's'); // MS
+
+terminal fragment TIME_MICROS:
+	('U' | 'u') ('S' | 's'); // US
+
+terminal fragment TIME_NANOS:
+	('N' | 'n') ('S' | 's'); // NS
+
+terminal ID:
+	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+
+terminal STRING returns STString:
+	'"' ('$' . /* 'L'|'N'|'P'|'R'|'T'|'"'|'$' */ | !('$' | '"'))* '"' |
+	"'" ('$' . /* "L"|"N"|"P"|"R"|"T"|"'"|"$" */ | !('$' | "'"))* "'";
+
+terminal ML_COMMENT:
+	'/*'->'*/' | '(*'->'*)';
+
+terminal SL_COMMENT:
+	'//' !('\n' | '\r')* ('\r'? '\n')?;
+
+terminal WS:
+	(' ' | '\t' | '\r' | '\n')+;
+
+terminal ANY_OTHER:
+	.;

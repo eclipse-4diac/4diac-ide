@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008, 2009, 2013 - 2017  Profactor GmbH, fortiss GmbH
- * 				 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,18 +16,21 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing SubApplication files.
  *
  * @author Martijn Rooker (martijn.rooker@profactor.at)
  */
-public class SubAppTImporter extends FBTImporter {
+public class SubAppTImporter extends BlockTypeImporter {
 
 	public SubAppTImporter(final IFile typeFile) {
 		super(typeFile);
@@ -35,6 +38,10 @@ public class SubAppTImporter extends FBTImporter {
 
 	public SubAppTImporter(final CommonElementImporter importer) {
 		super(importer);
+	}
+
+	public SubAppTImporter(final InputStream inputStream, final TypeLibrary typeLib) {
+		super(inputStream, typeLib);
 	}
 
 	@Override
@@ -68,7 +75,8 @@ public class SubAppTImporter extends FBTImporter {
 				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
+				getElement().setInterfaceList(
+						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT));
 				break;
 			case LibraryElementTags.SERVICE_ELEMENT:
 				parseService(getElement());
@@ -79,6 +87,10 @@ public class SubAppTImporter extends FBTImporter {
 				getElement().setFBNetwork(subAppImporter.getFbNetwork());
 				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}
@@ -87,23 +99,17 @@ public class SubAppTImporter extends FBTImporter {
 	}
 
 	@Override
-	protected String getEventOutputElement() {
-		return LibraryElementTags.SUBAPP_EVENTOUTPUTS_ELEMENT;
-	}
-
-	@Override
-	protected String getEventInputElement() {
-		return LibraryElementTags.SUBAPP_EVENTINPUTS_ELEMENT;
-	}
-
-	@Override
 	protected String getEventElement() {
 		return LibraryElementTags.SUBAPP_EVENT_ELEMENT;
 	}
 
 	@Override
-	protected void processWiths() {
-		// supapps may not have a with construct. Therefore we are doing nothing here
+	protected String getInterfaceListElementName() {
+		return LibraryElementTags.SUBAPPINTERFACE_LIST_ELEMENT;
 	}
 
+	@Override
+	protected InterfaceListImporter createInterfaceListImporter() {
+		return new SubAppInterfaceListImporter(this);
+	}
 }

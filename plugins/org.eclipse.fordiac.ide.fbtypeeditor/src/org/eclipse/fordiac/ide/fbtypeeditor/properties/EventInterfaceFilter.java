@@ -25,8 +25,8 @@ import org.eclipse.jface.viewers.IFilter;
 public class EventInterfaceFilter implements IFilter {
 
 	@Override
-	public boolean select(Object toTest) {
-		return (InterfaceFilterSelection.getSelectableObject(toTest) instanceof Event);
+	public boolean select(final Object toTest) {
+		return (InterfaceFilterSelection.getSelectableInterfaceElementOfType(toTest) instanceof Event);
 	}
 
 }

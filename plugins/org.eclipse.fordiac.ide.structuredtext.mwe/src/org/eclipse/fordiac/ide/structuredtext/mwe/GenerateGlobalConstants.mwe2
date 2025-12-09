@@ -1,0 +1,102 @@
+/*******************************************************************************
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Hesam Rezaee
+ *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - fix line delimiter and file header
+ *******************************************************************************/
+module org.eclipse.fordiac.ide.structuredtext.mwe.GenerateGlobalConstants
+
+import org.eclipse.xtext.xtext.generator.*
+import org.eclipse.xtext.xtext.generator.model.project.*
+
+var rootPath = ".."
+
+Workflow {
+	
+	component = XtextGenerator {
+		configuration = {
+			project = StandardProjectConfig {
+				baseName = "org.eclipse.fordiac.ide.globalconstantseditor"
+				rootPath = rootPath
+				runtimeTest = {
+					enabled = true
+				}
+				eclipsePlugin = {
+					enabled = true
+				}
+				eclipsePluginTest = {
+					enabled = true
+				}
+				createEclipseMetaData = true
+			}
+			code = {
+				encoding = "UTF-8"
+				lineDelimiter = "\n"
+				fileHeader = "/*******************************************************************************
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Hesam Rezaee, Martin Jobst
+ *       - initial API and implementation and/or initial documentation
+ *******************************************************************************/"
+				preferXtendStubs = false
+			}
+		}
+		language = StandardLanguage {
+			name = "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
+			fileExtensions = "globalconsts"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
+			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
+			referencedResource =
+			"platform:/resource/org.eclipse.fordiac.ide.globalconstantseditor.model/model/GlobalConstants.genmodel"
+
+			serializer = {
+				generateStub = false
+			}
+			validator = {
+				generatePropertyPage = true
+			}
+			scopeProvider = {
+				ignoreCase = true
+			}
+			parserGenerator = {
+				options = {
+					ignoreCase = true
+				}
+			}
+			generator = {
+				generateXtendStub = true
+			}
+			junitSupport = {
+				junitVersion = "5"
+			}
+			fragment = ui.codemining.CodeMiningFragment {
+				generateStub = true
+				generateXtendStub = true
+			}
+			renameRefactoring = {
+				useChangeSerializer = true
+			}
+			formatter = {
+				generateStub = true
+			}
+		}
+	}
+}

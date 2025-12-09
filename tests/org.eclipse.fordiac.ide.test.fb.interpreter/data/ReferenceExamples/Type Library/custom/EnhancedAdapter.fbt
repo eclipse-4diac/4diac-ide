@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EnhancedAdapter" Comment="FB testing an adapter with events and data">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#10;" >
+	</Identification>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="AK115394" Date="2023-03-07" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="INT" Comment=""/>
+			<VarDeclaration Name="DO2" Type="BOOL" Comment=""/>
+		</OutputVars>
+		<Sockets>
+			<AdapterDeclaration Name="adp" Type="CompoundAdapter" Comment=""/>
+		</Sockets>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="720.0" y="666.6666666666667">
+			</ECState>
+			<ECState Name="State" Comment="" x="2120.0" y="593.3333333333334">
+				<ECAction Algorithm="setAdapterData" Output="adp.REQ"/>
+			</ECState>
+			<ECState Name="State_1" Comment="" x="1186.6666666666667" y="1380.0">
+				<ECAction Algorithm="setData" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="State" Condition="REQ" Comment="" x="1493.3333333333335" y="586.6666666666667"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1540.0" y="813.3333333333334"/>
+			<ECTransition Source="START" Destination="State_1" Condition="adp.CNF" Comment="" x="886.6666666666667" y="1200.0"/>
+			<ECTransition Source="State_1" Destination="START" Condition="1" Comment="" x="1260.0" y="1140.0"/>
+		</ECC>
+		<Algorithm Name="setAdapterData" Comment="">
+			<ST><![CDATA[ALGORITHM setAdapterData
+	adp.DI1 := INT#5;
+	adp.DI2 := TRUE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="setData" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM setData
+	DO1 := adp.DO1;
+	DO2 := adp.DO2;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

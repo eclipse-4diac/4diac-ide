@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="GPIOChip" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2023 OFFIS e.V.&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="OFFIS e.V." Version="1.0" Author="Jörg Walter" Date="2023-11-10">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::io::gpiochip">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="VALUE"/>
+				<With Var="ChipNumber"/>
+				<With Var="LineNumber"/>
+				<With Var="ReadWriteMode"/>
+				<With Var="BiasMode"/>
+				<With Var="ActiveLow"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="Indication from Resource">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="VALUE" Type="WSTRING" Comment="Receiver IX/QX block name"/>
+			<VarDeclaration Name="ChipNumber" Type="UINT" Comment="ID of /dev/gpiochipX device" InitialValue="0"/>
+			<VarDeclaration Name="LineNumber" Type="UINT" Comment="ID of GPIO line within selected chip" InitialValue="0"/>
+			<VarDeclaration Name="ReadWriteMode" Type="UINT" Comment="Reading/Writing mode of line (0=read, 1=write push/pull, 2=open drain, 3=open source)" InitialValue="0"/>
+			<VarDeclaration Name="BiasMode" Type="UINT" Comment="Bias mode of line (0=none, 1=pull up, 2=pull down)" InitialValue="0"/>
+			<VarDeclaration Name="ActiveLow" Type="BOOL" Comment="True if a logic 1 corresponds to low voltage" InitialValue="0"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+		<ServiceSequence Name="normal_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="RESOURCE" Event="initialize" Parameters="PARAMS"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-" Parameters="STATUS"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</FBType>

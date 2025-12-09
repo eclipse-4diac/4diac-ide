@@ -1,99 +1,229 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- * 				 2020 Johannes Kepler Unviersity Linz
+ * Copyright (c) 2019, 2024 fortiss GmbH
+ *                          Johannes Kepler Unviersity Linz
+ *                          Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
+ *   Martin Jobst - generate variable default values with constant expressions
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.export.ExportTemplate
+import java.util.Map
+import java.util.Set
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.xtend.lib.annotations.Accessors
 
-abstract class ForteLibraryElementTemplate extends ExportTemplate {
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
-	public static final CharSequence EXPORT_PREFIX = "st_"
+abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
-	new(String name, Path prefix) {
-		super(name, prefix) 
+	@Accessors(PROTECTED_GETTER) final T type
+	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport
+
+	new(T type, String name, Path prefix, Map<?,?> options) {
+		super(name, prefix)
+		this.type = type;
+		variableLanguageSupport = type.getAllContentsOfType(VarDeclaration).toInvertedMap [
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it, options)
+		]
 	}
 
-	def protected LibraryElement getType()
-
-
-	def protected getExportPrefix() {
-		return EXPORT_PREFIX
-	}
+	def protected getClassName() '''FORTE_«type.generateTypeNamePlain»'''
 
 	def protected generateHeader() '''
 		/*************************************************************************
 		 *** FORTE Library Element
 		 ***
-		 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+		 *** «HEADER_TEXT»
 		 ***
 		 *** Name: «type.name»
-		 *** Description: «type.comment»
+		 *** Description: «type.comment.escapeMultilineCommentString»
 		 *** Version:
-		«FOR info : type.versionInfo»
-			***     «info.version»: «info.date»/«info.author» - «info.organization» - «info.remarks»
-		«ENDFOR»
+		 «FOR info : type.versionInfo»
+		 	***     «info.version.escapeMultilineCommentString»: «info.date.escapeMultilineCommentString»/«info.author.escapeMultilineCommentString» - «info.organization.escapeMultilineCommentString» - «info.remarks.escapeMultilineCommentString»
+		 «ENDFOR»
 		 *************************************************************************/
 	'''
 
 	def protected generateIncludeGuardStart() '''
-		#ifndef _«type.name.toUpperCase»_H_
-		#define _«type.name.toUpperCase»_H_
+		#pragma once
 	'''
 
 	def protected generateIncludeGuardEnd() '''
-		#endif // _«type.name.toUpperCase»_H_
 	'''
 
-	def protected generateTypeIncludes(Iterable<VarDeclaration> vars) '''
-		«FOR include : vars.map[it.typeName].sort.toSet»
-			#include "forte_«include.toLowerCase».h"
-			«IF include.startsWith("ANY")»
-				#error type contains variables of type ANY. Please check the usage of these variables as we can not gurantee correct usage on export!
-			«ENDIF»
+	def protected generateImplIncludes() '''
+		#include "«type.generateTypeIncludePath»"
+
+		«getDependencies(emptyMap).generateDependencyIncludes»
+		«type.compilerInfo?.header»
+		
+		using namespace std::literals;
+		using namespace forte::literals;
+	'''
+	
+	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
+		«FOR variable : variables AFTER '\n'»
+			«IF const»static const «ENDIF»«variable.generateVariableTypeName» «variable.generateName»;
 		«ENDFOR»
-		«IF vars.exists[array]»
-			#include "forte_array.h"
-		«ENDIF»
-		#include "forte_array_at.h"
 	'''
 
-	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
-		«FOR v : vars»
-			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«exportPrefix»«v.name»() {
-			  «IF v.array»
-			  	return static_cast<CIEC_«v.typeName»*>((*static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»)))[0]); //the first element marks the start of the array
-			  «ELSE»
-			  	return *static_cast<CIEC_«v.typeName»*>(«function»(«vars.indexOf(v)»));
-			  «ENDIF»
+	def protected generateVariableDefinitions(List<VarDeclaration> variables, boolean const) '''
+		«FOR variable : variables AFTER '\n'»
+			«IF const»const «ENDIF»«variable.generateVariableTypeName» «className»::«variable.generateName» = «variable.generateVariableDefaultValue»;
+		«ENDFOR»
+	'''
+
+	def protected generateVariableInitializer(Iterable<VarDeclaration> variables) ///
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateVariableDefaultValue»)«ENDFOR»'''
+
+	def protected generateVariableInitializerFromParameters(Iterable<VarDeclaration> variables) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateNameAsParameter»)«ENDFOR»'''
+
+	def protected generatePlugDeclarations(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters AFTER '\n'»
+			forte::CPlugPin<«adapter.type.generateTypeName»_Plug> «adapter.generateName»;
+		«ENDFOR»
+	'''
+
+	def protected generateSocketDeclarations(List<AdapterDeclaration> adapters) '''
+		«FOR adapter : adapters AFTER '\n'»
+			forte::CSocketPin<«adapter.type.generateTypeName»_Socket> «adapter.generateName»;
+		«ENDFOR»
+	'''
+
+	def protected generateAdapterInitializer(List<AdapterDeclaration> adapters) ///
+	'''«FOR adapter : adapters BEFORE ",\n" SEPARATOR ",\n"»«adapter.generateName»(«adapter.name.FORTEStringId», *this, «IF type instanceof CompositeFBType»forte::cgCFBParentAdapterlistIDMarker«ELSE»«adapters.indexOf(adapter)»«ENDIF»)«ENDFOR»'''
+
+	def protected generateAccessorDeclaration(String function, boolean const) {
+		generateAccessorDeclaration(function, "CIEC_ANY *", const)
+	}
+
+	def protected generateAccessorDeclaration(String function, String type, boolean const) '''
+		«IF const»const «ENDIF»«type»«function»(size_t)«IF const» const«ENDIF» override;
+	'''
+
+	def protected generateAccessorDefinition(List<VarDeclaration> variables, String function, boolean const) {
+		generateAccessorDefinition(variables, function, "CIEC_ANY *", const)
+	}
+
+	def protected generateAccessorDefinition(List<? extends IInterfaceElement> variables, String function, String type, boolean const) '''
+		«IF variables.empty»
+			«IF const»const «ENDIF»«type»«className»::«function»(size_t)«IF const» const«ENDIF» {
+			  return nullptr;
 			}
 			
-		«ENDFOR»
+		«ELSE»
+			«IF const»const «ENDIF»«type»«className»::«function»(const size_t paIndex)«IF const» const«ENDIF» {
+			  switch(paIndex) {
+			    «FOR variable : variables»
+			    	case «variables.indexOf(variable)»: return &«variable.generateName»;
+			    «ENDFOR»
+			  }
+			  return nullptr;
+			}
+			
+		«ENDIF»
+	'''
+	
+	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(emptyMap)
+	}
+
+	def CharSequence generateVariableTypeName(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE -> Boolean.TRUE})
+	}
+
+	def CharSequence generateVariableTypeNameAsInputParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_IN_PARAM -> Boolean.TRUE})
+	}
+
+	def CharSequence generateVariableTypeNameAsInOutParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_IN_OUT_PARAM -> Boolean.TRUE})
+	}
+
+	def CharSequence generateVariableTypeNameAsOutputParameter(VarDeclaration decl) {
+		variableLanguageSupport.get(decl)?.generate(#{ForteNgExportFilter.OPTION_TYPE_OUT_PARAM -> Boolean.TRUE})
+	}
+
+	def protected CharSequence generateParameters(ICallable callable) //
+	'''«FOR param : callable.callableParameters SEPARATOR ", "»«param.generateParameter»«ENDFOR»'''
+		
+	def protected CharSequence generateForwardArguments(ICallable callable) //
+	'''«FOR param : callable.callableParameters SEPARATOR ", "»«param.generateForwardArgument»«ENDFOR»'''
+
+	def protected CharSequence generateParameter(VarDeclaration param) {
+		if (param.inOutVar)
+			'''«param.generateVariableTypeNameAsInOutParameter» &«param.generateNameAsParameter»'''
+		else if (param.isIsInput)
+			'''const «param.generateVariableTypeNameAsInputParameter» &«param.generateNameAsParameter»'''
+		else
+			'''«param.generateVariableTypeNameAsOutputParameter» «param.generateNameAsParameter»'''
+	}
+
+	def protected CharSequence generateForwardArgument(VarDeclaration param) {
+		if (param.inOutVar)
+			'''std::forward<«param.generateVariableTypeNameAsInOutParameter» &>(«param.generateNameAsParameter»)'''
+		else if (param.isIsInput)
+			'''std::forward<const «param.generateVariableTypeNameAsInputParameter» &>(«param.generateNameAsParameter»)'''
+		else
+			'''std::forward<«param.generateVariableTypeNameAsOutputParameter»>(«param.generateNameAsParameter»)'''
+	}
+
+	def protected getCallableParameters(ICallable callable) {
+		(callable.inputParameters + callable.inOutParameters + callable.outputParameters).filter(VarDeclaration)
+	}
+
+	def protected CharSequence generateOutputGuard(VarDeclaration variable) '''
+		COutputGuard guard_«variable.name»(«variable.generateNameAsParameter»);
 	'''
 
-	def protected getFORTEString(String s) '''g_nStringId«s»'''
-	
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
-		elements.map[name.FORTEString].join(", ")
+		elements.map[name.FORTEStringId].join(", ")
 	}
 
-	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map['''«IF it.array»«"ARRAY".FORTEString», «it.arraySize», «ENDIF»«it.type.name.FORTEString»'''].join(", ")
+	def protected getFORTEEventTypeList(List<? extends Event> elements) {
+		elements.map[it.typeName.FORTEStringId].join(", ")
 	}
 
+	override getErrors() {
+		(super.getErrors + variableLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
+	}
+
+	override getWarnings() {
+		(super.getWarnings + variableLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).toList
+	}
+
+	override getInfos() {
+		(super.getInfos + variableLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
+	}
+
+	def Set<INamedElement> getDependencies(Map<?, ?> options) {
+		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
+	}
+	
+	def protected generateTypeHash() '''
+		constexpr std::string_view TypeHash ="«type.typeEntry.typeHash»"sv;
+	'''
 }

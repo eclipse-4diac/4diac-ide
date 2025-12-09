@@ -24,10 +24,9 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveEventCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangePrimitiveParameterCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures.AdvancedFixedAnchor;
@@ -62,7 +61,7 @@ implements NodeEditPart, IChangeStringEditPart {
 	protected AdvancedFixedAnchor srcNeighbourAnchor;
 	protected AdvancedFixedAnchor dstNeighbourAnchor;
 
-	private final Adapter adapter = new AdapterImpl() {
+	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
@@ -77,15 +76,16 @@ implements NodeEditPart, IChangeStringEditPart {
 	@Override
 	public void activate() {
 		if (!isActive()) {
-			getModel().eAdapters().add(adapter);
+			getModel().eContainer().eAdapters().add(adapter);
 		}
 		super.activate();
 	}
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			getModel().eAdapters().remove(adapter);
+		if (isActive() && (getModel().eContainer() != null)) {
+
+			getModel().eContainer().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}
@@ -222,11 +222,6 @@ implements NodeEditPart, IChangeStringEditPart {
 
 	private ZoomManager getZoomManager() {
 		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
-	}
-
-	@Override
-	public void performDirectEdit() {
-		getManager().show();
 	}
 
 	private static List<String> getRelevantEvents(final EditPart editPart, final Primitive primitive) {

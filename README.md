@@ -22,15 +22,13 @@ in the root directory of 4diac IDE source code. After the build completes you ca
     
    `plugins/org.eclipse.fordiac.ide.product/target` 
 
-More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/index.adoc)
-
+More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/development/building4diac.adoc)
 
 ## Links
 
-* [Home page](https://www.eclipse.org/4diac)
+* [Home page](https://eclipse.dev/4diac)
 * [Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/index.adoc) 
 * [Mailing list](https://dev.eclipse.org/mailman/listinfo/4diac-dev)
-* [Wiki](https://wiki.eclipse.org/Eclipse_4diac_Wiki)
 * [Examples](https://github.com/eclipse-4diac/4diac-examples)
 * [4diac IDE Nightly builds](https://download.eclipse.org/4diac/updates/nightly)
 

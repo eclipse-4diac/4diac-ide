@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2014, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * 				 2019, 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,26 +12,32 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added preference driven max width for value edit parts
+ *   Prankur Agarwal - added preference max size for hidden connection label
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.fordiac.ide.gef.Activator;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
-/**
- * Class used to initialize default preference values.
- */
+/** Class used to initialize default preference values. */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
-		store.setDefault(DiagramPreferences.SHOW_GRID, true);
-		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
-		store.setDefault(DiagramPreferences.CONNECTION_ROUTER, "Adjustable Router (no Jumplinks)"); //$NON-NLS-1$
-		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
-																		// port
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
+				.getNode(GefPreferenceConstants.GEF_PREFERENCES_ID);
+		preferences.putBoolean(GefPreferenceConstants.SNAP_TO_GRID, true);
+		preferences.putBoolean(GefPreferenceConstants.SHOW_GRID, true);
+
+		preferences.put(GefPreferenceConstants.PIN_LABEL_STYLE, GefPreferenceConstants.PIN_LABEL_STYLE_PIN_NAME);
+
+		preferences.putInt(GefPreferenceConstants.MAX_DEFAULT_VALUE_LENGTH, 1000);
+
+		preferences.putBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_OLD_DIRECT_BEHAVIOUR, true);
+		preferences.putBoolean(GefPreferenceConstants.EXPANDED_INTERFACE_EVENTS_TOP, true);
+
+		preferences.putBoolean(GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				GefPreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
 	}
 }

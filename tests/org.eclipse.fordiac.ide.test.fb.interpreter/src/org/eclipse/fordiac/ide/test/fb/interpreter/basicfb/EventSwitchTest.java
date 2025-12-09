@@ -8,39 +8,41 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils.setVariable;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventSwitchTest extends AbstractInterpreterTest {
 
-	public EventSwitchTest() {
-		// do nothing
-	}
-
-	@Test
-	public void test() throws Exception {
-		final BasicFBType fb = loadFBType("E_SWITCH"); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SWITCH"); //$NON-NLS-1$
+		assertNotNull(fb);
+		fb.setService(ServiceFactory.createDefaultServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
-		final ServiceSequence seq2 = addServiceSequence(fb.getService());
+		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransactionBuilder("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq2);
+		runFBTest(fb, seq2);
 	}
-
 }

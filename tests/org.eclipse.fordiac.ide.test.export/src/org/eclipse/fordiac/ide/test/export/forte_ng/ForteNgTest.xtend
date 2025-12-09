@@ -1,18 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University
- *
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Ernst Blecha
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.export.forte_ng
 
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate
 import org.eclipse.fordiac.ide.test.export.ExporterTestBase
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeBase
 import org.junit.jupiter.api.Test
@@ -28,9 +29,8 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def emptyExpression() {
-		var generatedCode = generateExpression(functionBlock, "", errors) //$NON-NLS-1$
-
-		assertErrors(errors) // Expression can not be empty
+		var generatedCode = generateExpression(functionBlock, "", errors) // $NON-NLS-1$
+		assertNoErrors(errors) // Expression can be empty
 		assertNull(generatedCode)
 	}
 
@@ -38,8 +38,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	def assignmentExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» := 1''', errors) //$NON-NLS-1$
-
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» := 1''', errors) // $NON-NLS-1$
 		assertErrors(errors) // Expression can not be an assignment
 		assertNull(generatedCode)
 	}
@@ -47,26 +46,25 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def simpleAssignmentAlgorithm() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
-		functionBlock.getAlgorithm()
-				.add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := 1;''')) //$NON-NLS-1$
-
+		functionBlock.callables.add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := 1;''')) // $NON-NLS-1$
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«EXPORTED_VARIABLE_NAME»() = 1;
-		'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		assertEquals('''
+			
+			«EXPORTED_VARIABLE_NAME» = 1_BOOL;
+		'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
 	def functionSQRTExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME»)''', errors) //$NON-NLS-1$
-
-		assertNoErrors(errors) // Expression can not be an assignment
+		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME») = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''SQRT(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) //$NON-NLS-1$
+		assertEquals('''func_EQ(func_SQRT(«EXPORTED_VARIABLE_NAME»), 0_SINT)'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
@@ -74,64 +72,73 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''EXPT(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
 	def timeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME"))//$NON-NLS-1$
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TIME#1m;'''))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME")) // $NON-NLS-1$
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TIME#1m;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_TIME("T#1m");
-'''.toString(), generatedCode.toString())
+		assertEquals('''
+			
+			«EXPORTED_VARIABLE_NAME» = 60000000000_TIME;
+		'''.toString(), generatedCode.toString())
 	}
 
 	@Test
 	def dateAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE"))//$NON-NLS-1$
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := D#1996-08-12;'''))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE")) // $NON-NLS-1$
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := D#1996-08-12;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_DATE("D#1996-08-12");
-'''.toString(), generatedCode.toString())
+		assertEquals('''
+			
+			«EXPORTED_VARIABLE_NAME» = 839808000000000000_DATE;
+		'''.toString(), generatedCode.toString())
 	}
 
 	@Test
 	def todAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD"))//$NON-NLS-1$
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TOD#06:06:59;'''))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD")) // $NON-NLS-1$
+		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TOD#06:06:59;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_TIME_OF_DAY("TOD#06:06:59");
-'''.toString(), generatedCode.toString())
+		assertEquals('''
+			
+			«EXPORTED_VARIABLE_NAME» = 22019000000000_TIME_OF_DAY;
+		'''.toString(), generatedCode.toString())
 	}
 
 	@Test
 	def datetimeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT"))//$NON-NLS-1$
-		functionBlock.getAlgorithm().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT")) // $NON-NLS-1$
+		functionBlock.getCallables().add(
+			createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
 		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''«EXPORTED_VARIABLE_NAME»() = CIEC_DATE_AND_TIME("DT#1989-06-15-13:56:14.770000000");
-'''.toString(), generatedCode.toString())
+		assertEquals('''
+			
+			«EXPORTED_VARIABLE_NAME» = 613922174770000000_DATE_AND_TIME;
+		'''.toString(), generatedCode.toString())
 	}
 
 	@Test
@@ -139,183 +146,259 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''ADD(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
-	
+
 	@Test
 	def subExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''SUB(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
-	
+
 	@Test
 	def divExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
-
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''DIV(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
-	
+
 	@Test
 	def mulExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) //$NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_SINT)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
+	}
 
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''MUL(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), //$NON-NLS-1$
-				generatedCode.toString())
+	@Test
+	def mulTimeRealExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
+	}
+
+	@Test
+	def mulTimeLintExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, LINT))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = T#0s''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals(
+			'''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME», «EXPORTED_VARIABLE2_NAME»), 0_TIME)'''.toString(), // $NON-NLS-1$
+			generatedCode.toString())
 	}
 
 	@Test
 	def void otherAlgorithmBasic() {
 		val ALGORITHM_TEXT = '''int i = 0; i++;'''
-		
-		functionBlock.algorithm.add(createOtherAlgorithm(ALGORITHM_NAME, ALGORITHM_TEXT, "C++"))
 
-		val exports = generateFunctionBlock(functionBlock);
+		functionBlock.callables.add(createOtherAlgorithm(ALGORITHM_NAME, ALGORITHM_TEXT, "C++"))
 
-		var headerfileFound = false;
-		var cppfileFound = false;
+		val exports = generateFunctionBlock(functionBlock)
+
+		var headerfileFound = false
+		var cppfileFound = false
 
 		for (export : exports) {
 			switch export.getName() {
-				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h''': {
 					headerfileFound = true
-					
+
 					assertEquals('''
-					/*************************************************************************
-					 *** FORTE Library Element
-					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-					 ***
-					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
-					 *** Version:
-					 *************************************************************************/
-
-					#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
-					#include "basicfb.h"
-					#include "forte_array_at.h"
-
-
-					class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
-					  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
-
-					private:
-					  
-					  
-					  
-					  
-
-					  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
-
-
-					  void «EXPORTED_ALGORITHM_NAME»(void);
-
-					  
-
-					  virtual void executeEvent(int pa_nEIID);
-
-					  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
-
-					public:
-					  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-					      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
-					  };
-
-					  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
-					};
-
-					#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
+						/*************************************************************************
+						 *** FORTE Library Element
+						 ***
+						 *** «ForteNgExportTemplate.HEADER_TEXT»
+						 ***
+						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+						 *** Description:
+						 *** Version:
+						 *************************************************************************/
+						
+						#pragma once
+						
+						#include "forte/basicfb.h"
+						#include "forte/iec61131_functions.h"
+						#include "forte/datatypes/forte_array_common.h"
+						#include "forte/datatypes/forte_array.h"
+						#include "forte/datatypes/forte_array_fixed.h"
+						#include "forte/datatypes/forte_array_variable.h"
+						
+						namespace forte {
+						  class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
+						      DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						
+						    private:
+						
+						      CIEC_ANY *getVarInternal(size_t) override;
+						
+						      void «EXPORTED_ALGORITHM_NAME»(void);
+						
+						      static const TForteInt16 scmStateINIT = 0;
+						
+						      void enterStateINIT(CEventChainExecutionThread *const paECET);
+						
+						      void executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) override;
+						
+						      void readInputData(TEventID paEIID) override;
+						      void writeOutputData(TEventID paEIID) override;
+						      void setInitialValues() override;
+						
+						    public:
+						      «EXPORTED_FUNCTIONBLOCK_NAME»(StringId paInstanceNameId, CFBContainer &paContainer);
+						
+						      CIEC_ANY *getDI(size_t) override;
+						      CIEC_ANY *getDO(size_t) override;
+						      CEventConnection *getEOConUnchecked(TPortId) override;
+						      CDataConnection **getDIConUnchecked(TPortId) override;
+						      CDataConnection *getDOConUnchecked(TPortId) override;
+						  };
+						}
+						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
-					assertNoErrors(export.warnings)
-					assertNoErrors(export.infos)
 				}
-				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
+				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.cpp''': {
 					cppfileFound = true
-					
+
 					assertEquals('''
 					/*************************************************************************
 					 *** FORTE Library Element
 					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+					 *** «ForteNgExportTemplate.HEADER_TEXT»
 					 ***
 					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
+					 *** Description:
 					 *** Version:
 					 *************************************************************************/
 					
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
-					#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
-					#endif
+					#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 					
+					#include "forte/iec61131_functions.h"
+					#include "forte/datatypes/forte_array_common.h"
+					#include "forte/datatypes/forte_array.h"
+					#include "forte/datatypes/forte_array_fixed.h"
+					#include "forte/datatypes/forte_array_variable.h"
 					
-					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringIdfunctionblock)
+					using namespace std::literals;
+					using namespace forte::literals;
 					
+					namespace forte {
+					  namespace {
+					    constexpr std::string_view TypeHash ="1234"sv;
 					
+					    const SFBInterfaceSpec cFBInterfaceSpec = {
+					        .mEINames = {},
+					        .mEITypeNames = {},
+					        .mEONames = {},
+					        .mEOTypeNames = {},
+					        .mDINames = {},
+					        .mDONames = {},
+					        .mDIONames = {},
+					        .mSocketNames = {},
+					        .mPlugNames = {},
+					    };
+					  }
 					
+					  DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», "functionblock"_STRID, TypeHash)
 					
+					  FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+					      CBasicFB(paContainer, cFBInterfaceSpec, paInstanceNameId, {}) {
+					  }
 					
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::setInitialValues() {
+					    CBasicFB::setInitialValues();
+					  }
 					
-					const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr
-					};
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(TEventID paEIID, CEventChainExecutionThread *const paECET) {
+					    do {
+					      switch(mECCState) {
+					        case scmStateINIT:
+					          return; //no transition cleared
+					        default:
+					          DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", mECCState.operator TForteUInt16 ());
+					          mECCState = 0; // 0 is always the initial state
+					          return;
+					      }
+					      paEIID = cgInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+					    } while(true);
+					  }
 					
-					void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-					  #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
-					  #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
-					  «ALGORITHM_TEXT»
-					}
+					  void FORTE_functionblock::enterStateINIT(CEventChainExecutionThread *const) {
+					    mECCState = scmStateINIT;
+					  }
 					
+					  void FORTE_functionblock::readInputData(TEventID) {
+					    // nothing to do
+					  }
 					
+					  void FORTE_functionblock::writeOutputData(TEventID) {
+					    // nothing to do
+					  }
 					
-					void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
-					  bool bTransitionCleared;
-					  do {
-					    bTransitionCleared = true;
-					    switch(m_nECCState) {
-					      default:
-					        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 0.", m_nECCState.operator TForteUInt16 ());
-					        m_nECCState = 0; // 0 is always the initial state
-					        break;
-					    }
-					    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
-					  } while(bTransitionCleared);
-					}
-
-					'''.toString(), export.data.toString())
+					  CIEC_ANY *FORTE_functionblock::getDI(size_t) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *FORTE_functionblock::getDO(size_t) {
+					    return nullptr;
+					  }
+					
+					  CEventConnection *FORTE_functionblock::getEOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection **FORTE_functionblock::getDIConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CDataConnection *FORTE_functionblock::getDOConUnchecked(TPortId) {
+					    return nullptr;
+					  }
+					
+					  CIEC_ANY *FORTE_functionblock::getVarInternal(size_t) {
+					    return nullptr;
+					  }
+					
+					  void FORTE_«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+					    #pragma GCC warning "Algorithm of type: 'C++' may lead to unexpected results!"
+					    #pragma message ("warning Algorithm of type: 'C++' may lead to unexpected results!")
+					    «ALGORITHM_TEXT»
+					  }
+					
+					}'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
-					assertNoErrors(export.warnings)
-					assertNoErrors(export.infos)
 				}
 				default:
 					fail("unexpected export file")

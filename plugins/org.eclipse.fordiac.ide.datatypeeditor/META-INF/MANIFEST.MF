@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Data Type Editor
+Bundle-Localization: plugin
+Bundle-Name: %DataTypeEditor.bundleName
 Bundle-SymbolicName: org.eclipse.fordiac.ide.datatypeeditor;singleton:=true
-Bundle-Version: 2.0.1.qualifier
-Bundle-Activator: org.eclipse.fordiac.ide.datatypeeditor.Activator
+Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
@@ -18,7 +18,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.model.edit,
- org.eclipse.fordiac.ide.systemmanagement
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.fordiac.ide.typeeditor
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.eclipse.fordiac.ide.datatypeeditor
 Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.fordiac.ide.datatypeeditor.properties,
+ org.eclipse.fordiac.ide.datatypeeditor.widgets

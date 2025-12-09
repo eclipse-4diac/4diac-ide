@@ -18,11 +18,18 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditManager;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.widgets.Composite;
 
 public class ECTransitionDirectEditManager extends AbstractDirectEditManager<ECTransition> {
 
 	public ECTransitionDirectEditManager(final GraphicalEditPart source, final ECTransition transition,
 			final Label label, final ZoomManager zoomManager, final FigureCanvas fc) {
-		super(source, transition, label, zoomManager, fc, ECTransitionCellEditor.class);
+		super(source, transition, label, zoomManager, fc);
+	}
+
+	@Override
+	protected CellEditor createCellEditorOn(final Composite composite) {
+		return new ECTransitionCellEditor(composite);
 	}
 }

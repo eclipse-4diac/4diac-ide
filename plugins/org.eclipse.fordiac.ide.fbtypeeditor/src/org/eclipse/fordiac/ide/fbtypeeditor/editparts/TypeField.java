@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,41 +14,30 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class TypeField {
+public class TypeField implements IAdaptable {
 	private final IInterfaceElement referencedElement;
 
 	public IInterfaceElement getReferencedElement() {
 		return referencedElement;
 	}
 
-	public TypeField(IInterfaceElement referencedElement) {
+	public TypeField(final IInterfaceElement referencedElement) {
 		this.referencedElement = referencedElement;
 	}
 
 	public String getLabel() {
-		String type = ""; //$NON-NLS-1$
-		if (getReferencedElement() instanceof Event) {
-			type = "Event"; //$NON-NLS-1$
-		} else if (getReferencedElement() instanceof VarDeclaration) {
-			VarDeclaration varDecl = (VarDeclaration) getReferencedElement();
-			type = varDecl.getTypeName();
-		}
-		return type;
+		return getReferencedElement().getFullTypeName();
 	}
 
-	public String getArrayLabel() {
-		String typeLabel = getLabel();
-		if (referencedElement instanceof VarDeclaration) {
-			// if is array append array size
-			VarDeclaration varDec = (VarDeclaration) referencedElement;
-			if (varDec.isArray()) {
-				typeLabel = typeLabel + "[" + varDec.getArraySize() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-			}
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == ConfigurableObject.class) {
+			return adapter.cast(referencedElement);
 		}
-		return typeLabel;
+		return null;
 	}
 }

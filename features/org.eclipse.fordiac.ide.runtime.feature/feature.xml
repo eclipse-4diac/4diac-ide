@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.runtime.feature"
       label="Runtime"
-      version="2.0.0.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
@@ -167,11 +167,6 @@ United States, other countries, or both.\n
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.ui.externaltools"/>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
    </requires>
 

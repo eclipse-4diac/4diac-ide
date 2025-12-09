@@ -19,18 +19,19 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
-import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
+import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -42,13 +43,13 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 	private NewSystemWizardPage page;
 
 	public NewSystemWizard() {
-		setWindowTitle(FordiacMessages.NewType);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemTitle);
 	}
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 		this.selection = selection;
-		setWindowTitle(FordiacMessages.NewType);
+		setWindowTitle(Messages.NewSystemWizardPage_NewSystemTitle);
 	}
 
 	@Override
@@ -62,19 +63,20 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		try {
 			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
-				protected void execute(final IProgressMonitor monitor) {
+				protected void execute(final IProgressMonitor monitor) throws CoreException {
 					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
-					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(), page.getSystemName());
-					TypeManagementPreferencesHelper.setupVersionInfo(system);
-					createInitialApplication(monitorToUse, system);
+					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(),
+							page.getSystemName(), monitorToUse);
+					TypeManagementPreferencesHelper.setupVersionInfo(system, system.getTypeLibrary().getProject());
+					createInitialApplication(system);
 				}
 			};
 			getContainer().run(false, true, op);
 		} catch (final InvocationTargetException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
 		} catch (final InterruptedException x) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			return false;
 		}
 		// everything worked fine
@@ -92,11 +94,11 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		return wsr.getFile(new Path(page.getContainerFullPath() + File.separator + sysName));
 	}
 
-	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
-		final NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
-		cmd.execute(monitor, null);
+	private void createInitialApplication(final AutomationSystem system) {
+		final CreateApplicationCommand cmd = new CreateApplicationCommand(system, page.getInitialApplicationName());
+		cmd.execute();
 
-		final Application app = cmd.getApplication();
+		final Application app = cmd.getCreatedElement();
 		if (page.getOpenApplication() && null != app) {
 			OpenListenerManager.openEditor(app);
 		}

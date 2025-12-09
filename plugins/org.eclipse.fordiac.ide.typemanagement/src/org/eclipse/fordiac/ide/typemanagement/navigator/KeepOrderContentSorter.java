@@ -16,22 +16,22 @@ import org.eclipse.jface.viewers.ViewerSorter;
 
 /**
  * A simple content sorter that will keep the order as given to it.
- * 
+ *
  * For the type navigator it needs to be a ViewerSorter!!
  */
 @SuppressWarnings("deprecation")
 public class KeepOrderContentSorter extends ViewerSorter {
 
 	@Override
-	public int compare(Viewer viewer, Object e1, Object e2) {
+	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 		// we want to keep the original order for resources
 		return 1;
 	}
 
 	@Override
-	public void sort(Viewer viewer, Object[] elements) {
-		// wehn we do nothing here the order as stored in the model should be provided.
-		// This is what we want for resouces.
+	public void sort(final Viewer viewer, final Object[] elements) {
+		// when we do nothing here the order as stored in the model should be provided.
+		// This is what we want for resources.
 	}
 
 }

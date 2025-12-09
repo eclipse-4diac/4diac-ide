@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple cells
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -25,7 +25,7 @@ public class TableCopyAction extends Action {
 
 	private final Object part;
 
-	public TableCopyAction(Object part) {
+	public TableCopyAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.COPY.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Cut);
@@ -37,15 +37,16 @@ public class TableCopyAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
+
 		if (editor != null) {
 			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
-			if (cell.isActivated()) {
-				cell.performCopy();
-				return;
+				// cell can be null if column is not editable
+				if (cell != null && cell.isActivated()) {
+					cell.performCopy();
+					return;
+				}
 			}
-		}
-		Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());
+			Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());
 		}
 	}
-
 }

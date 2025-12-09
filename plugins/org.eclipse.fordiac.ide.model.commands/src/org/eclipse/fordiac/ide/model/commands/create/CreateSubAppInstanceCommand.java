@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2016, 2017 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,41 +13,47 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementCommand {
 
-	private SubApplicationTypePaletteEntry paletteEntry;
+	private final SubAppTypeEntry typeEntry;
 
-	public CreateSubAppInstanceCommand(final SubApplicationTypePaletteEntry paletteEntry, final FBNetwork fbNetwork,
-			int x, int y) {
-		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
-		this.paletteEntry = paletteEntry;
+	public CreateSubAppInstanceCommand(final SubAppTypeEntry typeEntry, final FBNetwork fbNetwork, final int x,
+			final int y) {
+		super(fbNetwork, LibraryElementFactory.eINSTANCE.createTypedSubApp(), x, y);
+		this.typeEntry = typeEntry;
 		setLabel(Messages.CreateSubAppInstanceCommand_CreateSubapplicationInstance);
-		getSubApp().setPaletteEntry(paletteEntry);
+		getSubApp().setTypeEntry(typeEntry);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return paletteEntry != null && super.canExecute();
+		return typeEntry != null && super.canExecute();
 	}
 
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
-		return paletteEntry.getSubApplicationType().getInterfaceList();
+	protected InterfaceList createInterfaceList() {
+		InterfaceList interfaceList = typeEntry.getInterface();
+		if (interfaceList == null) {
+			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
+		} else {
+			interfaceList = interfaceList.copy();
+		}
+		return interfaceList;
 	}
 
-	public SubApp getSubApp() {
-		return (SubApp) getElement();
+	public TypedSubApp getSubApp() {
+		return (TypedSubApp) getElement();
 	}
 
-	public SubApplicationTypePaletteEntry getPaletteEntry() {
-		return paletteEntry;
+	public SubAppTypeEntry getTypeEntry() {
+		return typeEntry;
 	}
 
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EC_KILL_ELEM" Comment="Kills the instance of a FB, Connection (Event/Data), Resource or Device according as the state machine of IEC 61499 FBs">
+	<Identification Standard="61499-1" Classification="Reconfiguration" Function="Kills FB, Connection, Resource or Device instances" Type="Execution Control Service" Description="Copyright (c) 2012 Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
+	</VersionInfo>
+	<VersionInfo Organization="Profactor GmbH" Version="1.0" Author="Gerhard Ebenhofer" Date="2012-05-31">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::reconfiguration">
+		<Compiler Language="Cpp" Vendor="GNU" Product="GCC" Version="&gt;3.0"/>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Event to require killing an element">
+				<With Var="ELEM_NAME"/>
+				<With Var="DST"/>
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Event to confirm that the element has been killed">
+				<With Var="STATUS"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="ELEM_NAME" Type="WSTRING" Comment="Element instance name"/>
+			<VarDeclaration Name="DST" Type="WSTRING" Comment="Destination where the element has to be killed  (Syntax: ResourceName)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status: RDY, NO_SUCH_OBJECT, INVALID_STATE"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Kills the instance of a FB, Connection (Event/Data), Resource or Device according as the state machine of IEC 61499 FBs">
+		<ServiceSequence Name="normal_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="unsuccessful_establishment">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_confirm">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_inhibited">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ-"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="request_error">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="REQ+"/>
+				<OutputPrimitive Interface="APPLICATION" Event="CNF-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="application_initiated_termination">
+			<ServiceTransaction>
+				<InputPrimitive Interface="APPLICATION" Event="INIT-"/>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="resource_initiated_termination">
+			<ServiceTransaction>
+				<OutputPrimitive Interface="APPLICATION" Event="INITO-"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

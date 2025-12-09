@@ -19,22 +19,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentTypeField;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeField;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.EditPart;
 
 final class InterfaceFilterSelection {
-	static Object getSelectableObject(Object object) {
-		if (object instanceof InterfaceEditPart) {
-			return ((InterfaceEditPart) object).getCastedModel();
+
+	static IInterfaceElement getSelectableInterfaceElementOfType(final Object object) {
+		Object ie = object;
+		if (ie instanceof EditPart) {
+			ie = ((EditPart) ie).getModel();
 		}
-		if (object instanceof TypeEditPart) {
-			return ((TypeEditPart) object).getCastedModel();
+
+		if (ie instanceof TypeField) {
+			return ((TypeField) ie).getReferencedElement();
 		}
-		if (object instanceof CommentEditPart) {
-			return ((CommentEditPart) object).getCastedModel();
+		if (ie instanceof CommentTypeField) {
+			return ((CommentTypeField) ie).getReferencedElement();
 		}
-		return object;
+
+		return isInterfaceElementOfType(ie) ? (IInterfaceElement) ie : null;
+	}
+
+	private static boolean isInterfaceElementOfType(final Object ie) {
+		return (ie instanceof IInterfaceElement)
+				&& (((IInterfaceElement) ie).eContainer().eContainer() instanceof FBType);
 	}
 
 	private InterfaceFilterSelection() {

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 fortiss GmbH
- * 				 2019 Johannes Kepler Unviersity
+ * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,24 +15,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CLabel;
@@ -52,10 +49,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createTypeAndCommentSection(parent);
 	}
 
@@ -65,10 +59,9 @@ public class InterfaceElementSection extends AbstractSection {
 		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(composite, true);
-		nameText.addVerifyListener(new IdentifierVerifyListener());
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeSubAppIENameCommand(getType(), nameText.getText()));
+			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -89,13 +82,10 @@ public class InterfaceElementSection extends AbstractSection {
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
-				final DataType newType = getPalette().getAdapterTypeEntry(typeCombo.getText()).getType();
+				final DataType newType = getTypeLibrary().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
-			} else {
-				if (getType() instanceof VarDeclaration) {
-					cmd = newChangeTypeCommand((VarDeclaration) getType(),
-							getDataTypeLib().getType(typeCombo.getText()));
-				}
+			} else if (getType() instanceof final VarDeclaration varDecl) {
+				cmd = newChangeTypeCommand(varDecl, getDataTypeLib().getType(typeCombo.getText()));
 			}
 			executeCommand(cmd);
 		});
@@ -113,7 +103,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
-			getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
+			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getTypeName()));
 		} else if (getType() instanceof VarDeclaration) {
 			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}
@@ -124,33 +114,27 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			setEditableFields(getType().getFBNetworkElement() instanceof SubApp);
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			String itype = ""; //$NON-NLS-1$
-			if (getType() instanceof VarDeclaration) {
-				final VarDeclaration variable = (VarDeclaration) getType();
-				itype = variable.getType() != null ? variable.getType().getName() : ""; //$NON-NLS-1$
-				if (getType().isIsInput()) {
-					parameterText.setVisible(true);
-					valueCLabel.setVisible(true);
-					parameterText.setText((variable.getValue() != null) ? variable.getValue().getValue() : ""); //$NON-NLS-1$
-				} else {
-					valueCLabel.setVisible(false);
-					parameterText.setVisible(false);
-				}
+	protected void performRefresh() {
+		setEditableFields(getType().getBlockFBNetworkElement() instanceof SubApp);
+		nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+		commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+		String itype = ""; //$NON-NLS-1$
+		if (getType() instanceof final VarDeclaration varDecl) {
+			itype = varDecl.getType() != null ? varDecl.getTypeName() : ""; //$NON-NLS-1$
+			if (getType().isIsInput()) {
+				parameterText.setVisible(true);
+				valueCLabel.setVisible(true);
+				parameterText.setText((varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""); //$NON-NLS-1$
 			} else {
-				itype = FordiacMessages.Event;
 				valueCLabel.setVisible(false);
 				parameterText.setVisible(false);
 			}
-			fillTypeCombo(itype);
+		} else {
+			itype = FordiacMessages.Event;
+			valueCLabel.setVisible(false);
+			parameterText.setVisible(false);
 		}
-		commandStack = commandStackBuffer;
+		fillTypeCombo(itype);
 	}
 
 	/**
@@ -173,15 +157,18 @@ public class InterfaceElementSection extends AbstractSection {
 	@SuppressWarnings("static-method") // this method allows sub-classes to provide own change type commands, e.g.,
 	// subapps
 	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
-		return new ChangeDataTypeCommand(data, newType);
+		return ChangeDataTypeCommand.forDataType(data, newType);
 	}
 
 	@Override
 	protected IInterfaceElement getInputType(final Object input) {
-		if (input instanceof InterfaceEditPart) {
-			return ((InterfaceEditPart) input).getModel();
-		} else if (input instanceof ValueEditPart) {
-			return ((ValueEditPart) input).getModel().getVarDeclaration();
+		final Object objToCheck = (input instanceof final EditPart ep) ? ep.getModel() : input;
+
+		if (objToCheck instanceof final IInterfaceElement ie) {
+			return ie;
+		}
+		if (input instanceof final Value value) {
+			return value.getParentIE();
 		}
 		return null;
 	}

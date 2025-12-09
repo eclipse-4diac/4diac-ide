@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,15 +13,25 @@
 
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 
 public final class HandlerHelper {
@@ -41,29 +51,35 @@ public final class HandlerHelper {
 		return editor.getAdapter(FBNetwork.class);
 	}
 
-	public static void selectElement(final Object element, final IEditorPart editor) {
+	public static boolean selectElement(final Object element, final IEditorPart editor) {
 		if (null != editor) {
 			final GraphicalViewer viewer = getViewer(editor);
 			if (null != viewer) {
-				selectElement(element, viewer);
-			} else {
-				// TODO how other editor may want to handle selection
+				return selectElement(element, viewer);
 			}
+			// TODO how other editor may want to handle selection
 		}
+		return false;
 	}
 
-	public static void selectElement(final Object element, final GraphicalViewer viewer) {
+	public static boolean selectElement(final Object element, final GraphicalViewer viewer) {
 		if (viewer != null) {
-			final EditPart editPart = (EditPart) viewer.getEditPartRegistry().get(element);
-			if (null != editPart) {
-				viewer.flush(); // ensure that the viewer is ready
-				if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-					((AdvancedScrollingGraphicalViewer) viewer).selectAndRevealEditPart(editPart);
-				} else {
-					viewer.select(editPart);
-					viewer.reveal(editPart);
-				}
+			final EditPart editPart = viewer.getEditPartForModel(element);
+			if (editPart != null) {
+				selectEditPart(viewer, editPart);
+				return true;
 			}
+		}
+		return false;
+	}
+
+	public static void selectEditPart(final EditPartViewer viewer, final EditPart editPart) {
+		viewer.flush(); // ensure that the viewer is ready
+		if (viewer instanceof final AdvancedScrollingGraphicalViewer asgv) {
+			asgv.selectAndRevealEditPart(editPart);
+		} else {
+			viewer.select(editPart);
+			viewer.reveal(editPart);
 		}
 	}
 
@@ -72,7 +88,7 @@ public final class HandlerHelper {
 	}
 
 	public static IEditorPart openParentEditor(final FBNetworkElement model) {
-		final EObject parentModel = model.eContainer().eContainer();  // use eContainer here so that it also works for
+		final EObject parentModel = model.eContainer().eContainer(); // use eContainer here so that it also works for
 		// types
 		return OpenListenerManager.openEditor(parentModel);
 	}
@@ -85,10 +101,35 @@ public final class HandlerHelper {
 		EObject obj = subApp;
 		while (obj.eContainer() != null) {
 			obj = obj.eContainer();
-			if (obj instanceof SubAppType) {
+			if (obj instanceof TypedSubApp) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
+		if ((selection instanceof final IStructuredSelection sel) && !sel.isEmpty()) {
+			return ((List<?>) sel.toList()).stream().filter(EditPart.class::isInstance).map(EditPart.class::cast)
+					.map(EditPart::getModel).filter(FBNetworkElement.class::isInstance)
+					.map(FBNetworkElement.class::cast).toList();
+		}
+		return Collections.emptyList();
+	}
+
+	public static void showExpandedSubapp(final SubApp subapp, final IEditorPart editor) {
+		Display.getCurrent().asyncExec(() -> {
+			// move canvas to show the top-left corner of an expanded subapp
+			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
+			if (null != viewer) {
+				final EditPart subappEP = viewer.getEditPartForModel(subapp);
+				if ((subappEP != null) && (subappEP.getRoot() instanceof final ScalableFreeformRootEditPart gep
+						&& gep.getFigure() instanceof final FreeformViewport viewp)) {
+					final Point pos = subapp.getPosition().toScreenPoint();
+					viewp.setHorizontalLocation((int) (pos.x * gep.getZoomManager().getZoom()));
+					viewp.setVerticalLocation((int) (pos.y * gep.getZoomManager().getZoom()));
+				}
+			}
+		});
 	}
 }

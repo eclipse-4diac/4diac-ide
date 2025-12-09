@@ -22,16 +22,18 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
+import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Activator;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.systemmanagement.ui.commands.NewAppCommand;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -41,14 +43,15 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  */
 public class New4diacProjectWizard extends Wizard implements INewWizard {
 
-	/** The page. */
+	/** The pages. */
 	private New4diacProjectPage page;
+	private LibrarySelectionPage libPage;
 
 	/**
 	 * Instantiates a new new system wizard.
 	 */
 	public New4diacProjectWizard() {
-		setWindowTitle(Messages.New4diacProjectWizard_WizardName);
+		setWindowTitle(Messages.New4diacProjectWizard_WizardTitle);
 	}
 
 	/*
@@ -58,11 +61,18 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		page = new New4diacProjectPage(Messages.New4diacProjectWizard_WizardName);
-		page.setTitle(Messages.New4diacProjectWizard_WizardName);
+		page = new New4diacProjectPage(Messages.New4diacProjectWizard_WizardTitle);
+		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
+		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_LibPageName, true, true, true);
+		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
+		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
+
+		page.setLibraryPage(libPage);
+
 		addPage(page);
+		addPage(libPage);
 	}
 
 	/*
@@ -81,10 +91,10 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			};
 			getContainer().run(false, true, op);
 		} catch (final InvocationTargetException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
 		} catch (final InterruptedException x) {
-			Thread.currentThread().interrupt();  // mark interruption
+			Thread.currentThread().interrupt(); // mark interruption
 			return false;
 		}
 		// everything worked fine
@@ -100,24 +110,34 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		try {
 
 			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), page.importDefaultPalette(), monitor);
-			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject, page.getInitialSystemName());
-			TypeManagementPreferencesHelper.setupVersionInfo(system);
-			createInitialApplication(monitor, system);
+					page.getLocationPath(), libPage.getChosenLibraries(), monitor);
+			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject,
+					page.getInitialSystemName(), monitor);
+			TypeManagementPreferencesHelper.setupVersionInfo(system, newProject);
+			createInitialApplication(system);
 		} catch (final CoreException e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}
 	}
 
-	private void createInitialApplication(final IProgressMonitor monitor, final AutomationSystem system) {
-		final NewAppCommand cmd = new NewAppCommand(system, page.getInitialApplicationName(), ""); //$NON-NLS-1$
-		cmd.execute(monitor, null);
+	private void createInitialApplication(final AutomationSystem system) {
+		final CreateApplicationCommand cmd = new CreateApplicationCommand(system, page.getInitialApplicationName());
+		cmd.execute();
 
-		final Application app = cmd.getApplication();
+		final Application app = cmd.getCreatedElement();
 		if (page.getOpenApplication() && null != app) {
-			OpenListenerManager.openEditor(app);
+			final IEditorPart openEditor = OpenListenerManager.openEditor(app);
+			if (openEditor != null) {
+				openEditor.doSave(new NullProgressMonitor());
+			}
+		} else {
+			try {
+				system.getTypeEntry().save(system);
+			} catch (final CoreException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

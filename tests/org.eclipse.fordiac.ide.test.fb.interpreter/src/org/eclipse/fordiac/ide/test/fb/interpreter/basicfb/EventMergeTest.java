@@ -8,34 +8,30 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.junit.Test;
 
 public class EventMergeTest extends AbstractInterpreterTest {
 
-
-	public EventMergeTest() {
-		// do nothing
-	}
-
-	@Test
-	public void testEI1() throws Exception {
-		final BasicFBType fb = loadFBType("E_MERGE"); //$NON-NLS-1$
+	@Override
+	public void test() {
+		final BasicFBType fb = (BasicFBType) loadFBType("E_MERGE"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
-		addTransaction(seq, new FBTransaction("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("EI2", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI2", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 }

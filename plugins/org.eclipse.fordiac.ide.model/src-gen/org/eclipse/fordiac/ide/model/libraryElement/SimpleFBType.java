@@ -1,13 +1,14 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -15,40 +16,39 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Simple FB Type</b></em>'. <!-- end-user-doc -->
+import org.eclipse.emf.common.util.EList;
+
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Simple FB Type</b></em>'.
+ * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm <em>Algorithm</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getSimpleECStates <em>Simple EC States</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType()
  * @model
- * @generated */
+ * @generated
+ */
 public interface SimpleFBType extends BaseFBType {
-	/** Returns the value of the '<em><b>Algorithm</b></em>' containment reference. <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Algorithm</em>' containment reference list isn't clear, there really should be more of
-	 * a description here...
-	 * </p>
+
+	/**
+	 * Returns the value of the '<em><b>Simple EC States</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECState}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleECState#getSimpleFBType <em>Simple FB Type</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @return the value of the '<em>Algorithm</em>' containment reference.
-	 * @see #setAlgorithm(Algorithm)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType_Algorithm()
-	 * @model containment="true" required="true" extendedMetaData="kind='element' name='Algorithm'
-	 *        namespace='##targetNamespace'"
-	 * @generated */
-	Algorithm getAlgorithm();
-
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType#getAlgorithm
-	 * <em>Algorithm</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @param value the new value of the '<em>Algorithm</em>' containment reference.
-	 * @see #getAlgorithm()
-	 * @generated */
-	void setAlgorithm(Algorithm value);
-
+	 * @return the value of the '<em>Simple EC States</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSimpleFBType_SimpleECStates()
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SimpleECState#getSimpleFBType
+	 * @model opposite="simpleFBType" containment="true" resolveProxies="true" required="true"
+	 *        extendedMetaData="kind='element' name='SimpleECStates' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	EList<SimpleECState> getSimpleECStates();
 } // SimpleFBType

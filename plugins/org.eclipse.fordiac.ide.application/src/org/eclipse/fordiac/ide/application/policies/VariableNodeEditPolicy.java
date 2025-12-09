@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2014, 2016, 2018 Profactor GmbH, fortiss GmbH,
- * 											  Johannes Kepler University
+ * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,46 +11,75 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal - added handling for structs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
+import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;
-import org.eclipse.gef.requests.ReconnectRequest;
 
 /**
  * An EditPolicy which allows drawing Connections between VariableInterfaces.
  */
 public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#
-	 * getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
-	 */
 	@Override
-	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
-		final DataConnectionCreateCommand cmd = new DataConnectionCreateCommand(getParentNetwork());
-		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		if ((cmd.getSource() instanceof VarDeclaration)
-				&& (!LinkConstraints.isWithConstraintOK(cmd.getSource()))) {
-			return null; // Elements which are not connected by a with construct are not allowed to be
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
+		final IInterfaceElement pin = getHost().getModel();
+		if ((pin instanceof VarDeclaration) && (!LinkConstraints.isWithConstraintOK(pin))) {
+			// Elements which are not connected by a with construct are not allowed to be
 			// connected
+			return null;
 		}
-		request.setStartCommand(cmd);
-		return new DataConnectionCreateCommand(getParentNetwork());
 
+		if (getHost().getRoot() == null) {
+			// we are in an intermediate configuration stage
+			return null;
+		}
+
+		return (AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin))
+				? new StructDataConnectionCreateCommand(getParentNetwork())
+				: new DataConnectionCreateCommand(getParentNetwork());
 	}
 
 	@Override
-	protected Command createReconnectCommand(final ReconnectRequest request) {
-		return new ReconnectDataConnectionCommand(request, getParentNetwork());
+	protected AbstractReconnectConnectionCommand createReconnectCommand(final Connection connection,
+			final boolean isSourceReconnect, final IInterfaceElement newTarget) {
+		return new ReconnectDataConnectionCommand(connection, isSourceReconnect, newTarget, getParentNetwork());
 	}
 
+	@Override
+	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
+		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
+		final IInterfaceElement pin = getHost().getModel();
+
+		if (command instanceof StructDataConnectionCreateCommand) {
+			// if we drag from a struct manipulater but target is not a struct or
+			// configureable F_MOVE pin use normal
+			// data connection creation
+			if (!(pin.getType() instanceof StructuredType)
+					&& !(pin.eContainer().eContainer() instanceof ConfigurableMoveFB)) {
+				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(command.getParent());
+				structCmd.setSource(command.getSource());
+				request.setStartCommand(structCmd);
+			}
+		} else if (AbstractConnectionCreateCommand.shouldStructDataConnCreationBeUsed(pin, command.getSource())) {
+			final StructDataConnectionCreateCommand structCmd = new StructDataConnectionCreateCommand(
+					command.getParent());
+			structCmd.setSource(command.getSource());
+			request.setStartCommand(structCmd);
+		}
+		return super.getConnectionCompleteCommand(request);
+	}
 }

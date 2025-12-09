@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_SPLIT" Comment="Template for an empty basic function block">
+	<Identification Standard="61499-1 Annex A" Classification="event function block" Function="Split one event into two events" Description="Copyright (c) 2017 fortiss GmbH &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO1" Type="Event" Comment="">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="Sx" Type="BOOL" Comment=""/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="SE" Comment="&amp;quot;&amp;quot;" x="1753.3333333333335" y="280.0">
+				<ECAction Output="EO1"/>
+				<ECAction Output="EO2"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SE" Condition="EI" Comment="" x="1266.6666666666667" y="393.33333333333337"/>
+			<ECTransition Source="SE" Destination="START" Condition="1" Comment="" x="1260.0" y="600.0"/>
+		</ECC>
+	</BasicFB>
+</FBType>

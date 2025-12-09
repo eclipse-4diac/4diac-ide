@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated STCore -->
+      <package
+            uri="http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
+            class="org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage"
+            genModel="model/STCore.genmodel"/>
+   </extension>
+</plugin>

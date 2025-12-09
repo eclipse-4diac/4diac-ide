@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.exportWizards">
+		<wizard
+			category="org.eclipse.fordiac.ide.export.ui"
+			class="org.eclipse.fordiac.ide.deployment.bootfile.wizard.CreateBootfilesWizard"
+			id="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles"
+			name="Create FORTE boot files">
+		</wizard>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			allPopups="false"
+			locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+			<command
+				commandId="org.eclipse.ui.file.export"
+				label="Create boot-files">
+				<parameter
+					name="exportWizardId"
+					value="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles">
+				</parameter>
+				<visibleWhen
+					checkEnabled="false">
+					<iterate
+						ifEmpty="false"
+						operator="or">
+						<or>
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.Device">
+							</instanceof>
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.Resource">
+							</instanceof>
+							<instanceof
+								value="org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem">
+							</instanceof>
+						</or>
+					</iterate>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution
+			locationURI="menu:org.eclipse.ui.run?after=additions">
+			<separator
+				name="org.eclipse.fordiac.ide.deployment.bootfile"
+				visible="true">
+			</separator>
+			<command
+				commandId="org.eclipse.ui.file.export"
+				label="Create boot-files">
+				<parameter
+					name="exportWizardId"
+					value="org.eclipse.fordiac.ide.deployment.bootfile.CreateBootfiles">
+				</parameter>
+			</command>
+		</menuContribution>
+	</extension>
+</plugin>

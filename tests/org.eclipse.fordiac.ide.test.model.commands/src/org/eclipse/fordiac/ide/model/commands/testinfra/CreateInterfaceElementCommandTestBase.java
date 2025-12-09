@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.commands.Command;
@@ -50,17 +51,17 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 				CreateInterfaceElementCommandTestBase::initializeState, //
 				(StateVerifier<State>) CreateInterfaceElementCommandTestBase::verifyInitialState, //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
 	}
 
 	protected static InterfaceList getTypeInterfaceList(final State s) {
-		return s.getFunctionblock().getFBType().getInterfaceList();
+		return s.getFunctionblock().getInterface();
 	}
 
 	protected static InterfaceList getInstanceInterfaceList(final State s) {
-		return s.getFbNetwork().getNetworkElements().get(0).getInterface();
+		return ((BlockFBNetworkElement) s.getFbNetwork().getNetworkElements().get(0)).getInterface();
 	}
 
 	private static State executeNOP(final State state) {
@@ -70,15 +71,15 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 		return commandExecution(state);
 	}
 
-	private static <V extends IInterfaceElement> State executeReorder(final State state, final Function<State, EList<V>> translator,
-			final int index, final boolean direction) {
+	private static <V extends IInterfaceElement> State executeReorder(final State state,
+			final Function<State, EList<V>> translator, final int index, final boolean direction) {
 		final EList<V> list = translator.apply(state);
 		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), direction));
 		return commandExecution(state);
 	}
 
-	private static <V extends IInterfaceElement> State executeReorder(final State state, final Function<State, EList<V>> translator,
-			final int index, final int newPosition) {
+	private static <V extends IInterfaceElement> State executeReorder(final State state,
+			final Function<State, EList<V>> translator, final int index, final int newPosition) {
 		final EList<V> list = translator.apply(state);
 		state.setCommand(new ChangeInterfaceOrderCommand(list.get(index), newPosition));
 		return commandExecution(state);
@@ -94,7 +95,8 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 	}
 
 	protected static <V extends IInterfaceElement> Collection<ExecutionDescription<State>> createReordering(
-			final Function<State, EList<V>> translator, final String element1, final String element2, final String element3) {
+			final Function<State, EList<V>> translator, final String element1, final String element2,
+			final String element3) {
 		return List.of( //
 				new ExecutionDescription<>("validate order", //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeNOP, //
@@ -120,12 +122,12 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 						(final State s) -> executeReorder(s, translator, 0, 2), //
 						(final State s, final State o, final TestFunction t) -> verifyOrder(s, t, translator, element1,
 								element2, element3)) //
-				);
+		);
 	}
 
 	private static State executeUpdate(final State state) {
-		state.setCommand(
-				new UpdateFBTypeCommand(state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
+		state.setCommand(new UpdateFBTypeCommand(
+				(BlockFBNetworkElement) state.getFbNetwork().getNetworkElements().get(0), state.getFunctionblock()));
 		return commandExecution(state);
 	}
 
@@ -143,7 +145,7 @@ public abstract class CreateInterfaceElementCommandTestBase extends FBNetworkTes
 				new ExecutionDescription<>("update FB", // //$NON-NLS-1$
 						CreateInterfaceElementCommandTestBase::executeUpdate, //
 						v) //
-				);
+		);
 	}
 
 }

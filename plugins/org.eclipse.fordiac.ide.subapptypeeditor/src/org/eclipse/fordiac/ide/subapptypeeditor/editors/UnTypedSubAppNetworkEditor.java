@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Austria GmbH
+ * Copyright (c) 2020, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,39 +16,20 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
-import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.ui.IEditorInput;
 
 public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements IFBTEditorPart {
 
-	private CommandStack commandStack;
 	private TypeLibrary typeLib;
 
 	public void setTypeLib(final TypeLibrary typeLib) {
 		this.typeLib = typeLib;
-	}
-
-	@Override
-	public void setCommonCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
-	}
-
-	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
 	}
 
 	@Override
@@ -60,13 +41,8 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	protected Palette getPalette() {
-		return typeLib.getBlockTypeLib();
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return null;
+	protected TypeLibrary getTypeLibrary() {
+		return typeLib;
 	}
 
 	@Override
@@ -76,12 +52,13 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(), getPalette().getProject());
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(), getTypeLibrary().getProject());
 	}
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		// nothing needed to be done here, should be handled by the parent SubAppNetworkBreadCrumbEditor
+		// nothing needed to be done here, should be handled by the parent
+		// SubAppNetworkBreadCrumbEditor
 	}
 
 	@Override
@@ -95,9 +72,9 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	public void reloadType(final FBType type) {
-		if (type instanceof SubAppType) {
-			final FBNetwork fbNetwork = ((SubAppType) type).getFBNetwork();
+	public void reloadType() {
+		if (getType() instanceof final SubAppType subAppType) {
+			final FBNetwork fbNetwork = subAppType.getFBNetwork();
 			if (fbNetwork != null) {
 				getGraphicalViewer().setContents(fbNetwork);
 			} else {
@@ -108,7 +85,7 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	public Object getSelectableEditPart() {
+	public Object getSelectableObject() {
 		if (getGraphicalViewer() == null) {
 			return null;
 		}

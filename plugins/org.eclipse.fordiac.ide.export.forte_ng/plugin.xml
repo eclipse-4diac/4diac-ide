@@ -5,10 +5,21 @@
          point="org.eclipse.fordiac.ide.export.exportFilter">
       <ExportFilter
             class="org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter"
-            description="FORTE Export New Generation for FORTE 1.x"
-            name="FORTE 1.x NG"
-            sortIndex="10">
+            description="Export type files to be added to 4diac FORTE"
+            name="4diac FORTE 3.x"
+            sortIndex="10"
+            id="org.eclipse.fordiac.ide.export.exportFilter.forteNg">
       </ExportFilter>
+   </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.export.language.supportFactory">
+      <factory
+            class="org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory"
+            filter="forte_ng">
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm">
+         </source>
+      </factory>
    </extension>
 
 </plugin>

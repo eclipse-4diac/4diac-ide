@@ -16,36 +16,46 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEditPart {
 	public abstract IInterfaceElement getCastedModel();
 
-	protected abstract void update();
+	private Adapter adapter;
 
-	private final Adapter adapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
-			refresh();
-			update();
+	private Adapter getAdapter() {
+		if (adapter == null) {
+			adapter = createAdapter();
 		}
-	};
+		return adapter;
+	}
+
+	protected Adapter createAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+			}
+		};
+	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		getCastedModel().eAdapters().add(adapter);
+		getCastedModel().eAdapters().add(getAdapter());
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getCastedModel().eAdapters().remove(adapter);
+		getCastedModel().eAdapters().remove(getAdapter());
 	}
 
 	public boolean isInput() {
@@ -62,5 +72,19 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 
 	public boolean isAdapter() {
 		return getCastedModel() instanceof AdapterDeclaration;
+	}
+
+	@Override
+	public boolean isConnectable() {
+		return isInterfaceEditable();
+	}
+
+	@Override
+	public boolean isDirectEditable() {
+		return isInterfaceEditable();
+	}
+
+	public boolean isInterfaceEditable() {
+		return !(EcoreUtil.getRootContainer(getCastedModel()) instanceof FunctionFBType);
 	}
 }

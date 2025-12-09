@@ -18,11 +18,18 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -41,38 +48,50 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.graphics.Point;
 
-public class FlattenSubAppCommand extends Command {
+public class FlattenSubAppCommand extends Command implements QualNameAffectedCommand {
 	private final SubApp subapp;
-	private final FBNetwork parent;
+	private final FBNetwork parentNetwork;
 	private final List<FBNetworkElement> elements = new ArrayList<>();
+	private final List<FBNetworkElement> elementsToMove = new ArrayList<>();
 	private final List<EventConnection> transferEventConnections = new ArrayList<>();
 	private final List<DataConnection> transferDataConnections = new ArrayList<>();
 	private final List<AdapterConnection> transferAdapterConnections = new ArrayList<>();
 	private final CompoundCommand deleteCommands = new CompoundCommand();
 	private final CompoundCommand createCommands = new CompoundCommand();
-	private final CompoundCommand mappCommands = new CompoundCommand();
+	private final CompoundCommand mapCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
-	private final Point fbnetworkPosInSubapp;
+	private final Position fbnetworkPosInSubapp;
+	private boolean select = true;
+	private final Map<INamedElement, String> oldQualNames = new HashMap<>();
+	private final Map<INamedElement, String> newQualNames = new HashMap<>();
 
 	public FlattenSubAppCommand(final SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
-		this.subapp = subapp;
-		parent = subapp.getFbNetwork();
+		this.subapp = Objects.requireNonNull(subapp);
+		parentNetwork = Objects.requireNonNull(subapp.getFbNetwork());
 		fbnetworkPosInSubapp = FBNetworkHelper
 				.getTopLeftCornerOfFBNetwork(subapp.getSubAppNetwork().getNetworkElements());
+	}
+
+	public FlattenSubAppCommand(final SubApp subapp, final boolean select) {
+		this(subapp);
+		this.select = select;
 	}
 
 	@Override
 	public void execute() {
 		elements.addAll(subapp.getSubAppNetwork().getNetworkElements());
+		elements.forEach(e -> oldQualNames.put(e, e.getQualifiedName()));
+		elementsToMove.addAll(elements.stream().filter(el -> !el.isInGroup()).toList());
 		// add elements to parent
-		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToMove, -getOriginalPositionX(), -getOriginalPositionY());
 
 		checkConnections();
 		createMapCommands();
@@ -81,34 +100,38 @@ public class FlattenSubAppCommand extends Command {
 		deleteCommands.execute();
 
 		subapp.getSubAppNetwork().getNetworkElements().removeAll(elements);
-		parent.getNetworkElements().addAll(elements);
+		parentNetwork.getNetworkElements().addAll(elements);
 
 		subapp.getSubAppNetwork().getEventConnections().removeAll(transferEventConnections);
-		parent.getEventConnections().addAll(transferEventConnections);
+		parentNetwork.getEventConnections().addAll(transferEventConnections);
 
 		subapp.getSubAppNetwork().getDataConnections().removeAll(transferDataConnections);
-		parent.getDataConnections().addAll(transferDataConnections);
+		parentNetwork.getDataConnections().addAll(transferDataConnections);
 
 		subapp.getSubAppNetwork().getAdapterConnections().removeAll(transferAdapterConnections);
-		parent.getAdapterConnections().addAll(transferAdapterConnections);
+		parentNetwork.getAdapterConnections().addAll(transferAdapterConnections);
 
 		createCommands.execute();
-		mappCommands.execute();
+		mapCommands.execute();
 
 		// check unique names
 		for (final FBNetworkElement fbNetworkElement : elements) {
 			ensureUniqueName(fbNetworkElement);
 		}
-		setUniqueName.execute();
 
-		ElementSelector.selectViewObjects(elements);
+		if (select) {
+			ElementSelector.selectViewObjects(elementsToMove);
+		}
+		elements.forEach(e -> newQualNames.put(e, e.getQualifiedName()));
 	}
 
 	private void ensureUniqueName(final FBNetworkElement element) {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+			final ChangeNameCommand uniqueNameCmd = ChangeNameCommand.forName(element, uniqueName);
+			uniqueNameCmd.execute();
+			setUniqueName.add(uniqueNameCmd);
 		}
 	}
 
@@ -116,42 +139,51 @@ public class FlattenSubAppCommand extends Command {
 	public void redo() {
 		deleteCommands.redo();
 		subapp.getSubAppNetwork().getNetworkElements().removeAll(elements);
-		parent.getNetworkElements().addAll(elements);
-		FBNetworkHelper.moveFBNetworkByOffset(elements, -getOriginalPositionX(), -getOriginalPositionY());
+		parentNetwork.getNetworkElements().addAll(elements);
+
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToMove, -getOriginalPositionX(), -getOriginalPositionY());
 
 		subapp.getSubAppNetwork().getEventConnections().removeAll(transferEventConnections);
-		parent.getEventConnections().addAll(transferEventConnections);
+		parentNetwork.getEventConnections().addAll(transferEventConnections);
 
 		subapp.getSubAppNetwork().getDataConnections().removeAll(transferDataConnections);
-		parent.getDataConnections().addAll(transferDataConnections);
+		parentNetwork.getDataConnections().addAll(transferDataConnections);
 
 		subapp.getSubAppNetwork().getAdapterConnections().removeAll(transferAdapterConnections);
-		parent.getAdapterConnections().addAll(transferAdapterConnections);
+		parentNetwork.getAdapterConnections().addAll(transferAdapterConnections);
 
 		createCommands.redo();
 		setUniqueName.redo();
-		mappCommands.redo();
+		mapCommands.redo();
+
+		if (select) {
+			ElementSelector.selectViewObjects(elementsToMove);
+		}
 	}
 
 	@Override
 	public void undo() {
-		mappCommands.undo();
+		mapCommands.undo();
 		createCommands.undo();
-		parent.getNetworkElements().removeAll(elements);
+		parentNetwork.getNetworkElements().removeAll(elements);
 		subapp.getSubAppNetwork().getNetworkElements().addAll(elements);
-		FBNetworkHelper.removeXYOffsetForFBNetwork(elements); // ??
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToMove, getOriginalPositionX(), getOriginalPositionY());
 
-		parent.getEventConnections().removeAll(transferEventConnections);
+		parentNetwork.getEventConnections().removeAll(transferEventConnections);
 		subapp.getSubAppNetwork().getEventConnections().addAll(transferEventConnections);
 
-		parent.getDataConnections().removeAll(transferDataConnections);
+		parentNetwork.getDataConnections().removeAll(transferDataConnections);
 		subapp.getSubAppNetwork().getDataConnections().addAll(transferDataConnections);
 
-		parent.getAdapterConnections().removeAll(transferAdapterConnections);
+		parentNetwork.getAdapterConnections().removeAll(transferAdapterConnections);
 		subapp.getSubAppNetwork().getAdapterConnections().addAll(transferAdapterConnections);
 
 		setUniqueName.undo();
 		deleteCommands.undo();
+
+		if (select) {
+			ElementSelector.selectViewObjects(Arrays.asList(subapp));
+		}
 	}
 
 	private void checkConnections() {
@@ -161,18 +193,18 @@ public class FlattenSubAppCommand extends Command {
 
 	}
 
-	private int getOriginalPositionX() {
-		return -subapp.getPosition().getX() + fbnetworkPosInSubapp.x;
+	private double getOriginalPositionX() {
+		return -subapp.getPosition().getX() + fbnetworkPosInSubapp.getX();
 	}
 
-	private int getOriginalPositionY() {
-		return -subapp.getPosition().getY() + fbnetworkPosInSubapp.y;
+	private double getOriginalPositionY() {
+		return -subapp.getPosition().getY() + fbnetworkPosInSubapp.getY();
 	}
 
 	private void createMapCommands() {
 		if (subapp.isMapped()) {
 			for (final FBNetworkElement fbNetworkElement : elements) {
-				mappCommands.add(new MapToCommand(fbNetworkElement, subapp.getResource()));
+				mapCommands.add(MapToCommand.createMapToCommand(fbNetworkElement, subapp.getResource()));
 			}
 		}
 	}
@@ -185,27 +217,31 @@ public class FlattenSubAppCommand extends Command {
 				transferConnectionList.add(connection);
 			} else {
 				deleteCommands.add(new DeleteConnectionCommand(connection));
-				if ((connection.getSourceElement() == subapp) && (connection.getDestinationElement() == subapp)) {
-					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
-						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
-							createCommands
-									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
-						}
-					}
-				} else if (connection.getSourceElement() == subapp) {
-					// for each connection coming into the sub app create one connection in the
-					// outer fb network
-					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
-						createCommands.add(createConnCreateCmd(inboundConn.getSource(), connection.getDestination()));
-					}
-				} else if (connection.getDestinationElement() == subapp) {
-					// for each connection going from the subapp outputs create one connection in
-					// the other fb network
-					for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
-						createCommands.add(createConnCreateCmd(connection.getSource(), outboundConn.getDestination()));
-					}
+				createCommandsFrom(connection);
+			}
+		}
+	}
+
+	private <T extends Connection> void createCommandsFrom(final T connection) {
+		if ((connection.getSourceElement() == subapp) && (connection.getDestinationElement() == subapp)) {
+			for (final Connection inboundConn : connection.getSource().getInputConnections()) {
+				for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
+					createCommands.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 				}
 			}
+		} else if (connection.getSourceElement() == subapp) {
+			// for each connection coming into the sub app create one connection in the
+			// outer fb network
+			for (final Connection inboundConn : connection.getSource().getInputConnections()) {
+				createCommands.add(createConnCreateCmd(inboundConn.getSource(), connection.getDestination()));
+			}
+		} else if (connection.getDestinationElement() == subapp) {
+			// for each connection going from the subapp outputs create one connection in
+			// the other fb network
+			for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
+				createCommands.add(createConnCreateCmd(connection.getSource(), outboundConn.getDestination()));
+			}
+
 		}
 	}
 
@@ -213,11 +249,11 @@ public class FlattenSubAppCommand extends Command {
 			final IInterfaceElement destination) {
 		AbstractConnectionCreateCommand cmd = null;
 		if (source instanceof Event) {
-			cmd = new EventConnectionCreateCommand(parent);
+			cmd = new EventConnectionCreateCommand(parentNetwork);
 		} else if (source instanceof AdapterDeclaration) {
-			cmd = new AdapterConnectionCreateCommand(parent);
+			cmd = new AdapterConnectionCreateCommand(parentNetwork);
 		} else if (source instanceof VarDeclaration) {
-			cmd = new DataConnectionCreateCommand(parent);
+			cmd = new DataConnectionCreateCommand(parentNetwork);
 		}
 
 		if (null != cmd) {
@@ -225,5 +261,25 @@ public class FlattenSubAppCommand extends Command {
 			cmd.setDestination(destination);
 		}
 		return cmd;
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(parentNetwork);
+	}
+
+	@Override
+	public String getOldQualName(final INamedElement element) {
+		return oldQualNames.get(element);
+	}
+
+	@Override
+	public String getNewQualName(final INamedElement element) {
+		return newQualNames.get(element);
+	}
+
+	@Override
+	public List<INamedElement> getChangedElements() {
+		return new ArrayList<>(elements);
 	}
 }

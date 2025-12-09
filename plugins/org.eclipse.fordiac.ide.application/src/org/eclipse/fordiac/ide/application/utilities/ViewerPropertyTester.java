@@ -21,16 +21,14 @@ import java.util.List;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class ViewerPropertyTester extends PropertyTester {
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		final IEditorPart part = EditorUtils.getCurrentActiveEditor();
-		final FBNetwork network = part.getAdapter(FBNetwork.class);
-
+	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if (receiver instanceof List) {
 			final List<?> selectedElements = (List<?>) receiver;
 			if (selectedElements.size() > 1) {
@@ -41,6 +39,16 @@ public class ViewerPropertyTester extends PropertyTester {
 				return false;
 			}
 		}
-		return null != network;
+
+		final IWorkbenchPart part = getCurrentActiveView();
+		return (part != null) && (part.getAdapter(FBNetwork.class) != null);
+	}
+
+	public static IWorkbenchPart getCurrentActiveView() {
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null && window.getActivePage() != null) {
+			return window.getActivePage().getActivePart();
+		}
+		return null;
 	}
 }

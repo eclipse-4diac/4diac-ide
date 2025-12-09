@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Martin Erich Jobst
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Martin Jobst - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.deployment.eval;
+
+import org.eclipse.osgi.util.NLS;
+
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
+public class Messages extends NLS {
+	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.deployment.eval.messages"; //$NON-NLS-1$
+	public static String DeploymentEvaluatorTraceProxy_ConnectionClosed;
+	public static String DeploymentEvaluatorTraceProxy_ConnectionOpened;
+	public static String DeploymentFBEvaluator_CannotAddWatch;
+	public static String DeploymentFBEvaluator_CannotRemoveWatch;
+	public static String DeploymentFBEvaluator_CannotTriggerEvent;
+	public static String DeploymentFBEvaluator_CannotWriteValue;
+	public static String DeploymentFBNetworkElementEvaluator_InvalidWatchValue;
+	public static String DeploymentFBNetworkElementEvaluator_NoSuchInstanceEvent;
+	public static String DeploymentFBNetworkElementEvaluator_NoSuchTypeEvent;
+	public static String DeploymentFBNetworkElementEvaluator_NoWatchValue;
+	public static String DeploymentSubAppEvaluator_CannotAddWatch;
+	public static String DeploymentSubAppEvaluator_CannotRemoveWatch;
+	public static String DeploymentSubAppEvaluator_CannotTriggerEvent;
+	public static String DeploymentSubAppEvaluator_CannotWriteValue;
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+
+	private Messages() {
+	}
+}

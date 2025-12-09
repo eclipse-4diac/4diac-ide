@@ -15,25 +15,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
 import org.eclipse.fordiac.ide.gef.properties.CompilableTypeInfoSection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.provider.PropertiesItemProvider;
 
 public class FBTypeInfoSection extends CompilableTypeInfoSection {
 
 	@Override
-	protected LibraryElement getInputType(Object input) {
-		if (input instanceof FBTypeEditPart) {
-			return ((FBTypeEditPart) input).getModel();
-		}
-		if (input instanceof FBTypeRootEditPart) {
-			return ((FBTypeRootEditPart) input).getModel();
-		}
-		if (input instanceof PropertiesItemProvider) {
-			return (LibraryElement) ((PropertiesItemProvider) input).getTarget();
-		}
-		return null;
+	protected LibraryElement getInputType(final Object input) {
+		return FBTypePropertiesFilter.getFBTypeFromSelectedElement(input);
 	}
 }

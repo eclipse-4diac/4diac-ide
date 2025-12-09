@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="InnerSubApp" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="mario" Date="2024-08-05">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="BOOL" Comment="" InitialValue="FALSE"/>
+			<VarDeclaration Name="DI2" Type="BOOL" Comment="" InitialValue="TRUE"/>
+			<VarDeclaration Name="DI3" Type="BOOL" Comment="" InitialValue="TRUE"/>
+		</InputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="DIONE" Type="E_PERMIT" Comment="" x="555.56" y="444.44">
+		</FB>
+		<FB Name="DITWO" Type="E_PERMIT" Comment="" x="333.33" y="1000">
+		</FB>
+		<FB Name="DITHREE" Type="E_PERMIT" Comment="" x="-133.33" y="2016.67">
+		</FB>
+		<DataConnections>
+			<Connection Source="DI1" Destination="DIONE.PERMIT" Comment="" dx1="1577.78"/>
+			<Connection Source="DI2" Destination="DITWO.PERMIT" Comment="" dx1="1472.22"/>
+			<Connection Source="DI3" Destination="DITHREE.PERMIT" Comment="" dx1="2350"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -28,9 +28,8 @@ import org.eclipse.fordiac.ide.deployment.devResponse.FB;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>FB List</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
+ * List</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -42,17 +41,17 @@ import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
  */
 public class FBListImpl extends EObjectImpl implements FBList {
 	/**
-	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getFbs() <em>Fbs</em>}' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
 	 * @see #getFbs()
 	 * @generated
 	 * @ordered
 	 */
 	protected EList<FB> fbs;
+
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected FBListImpl() {
@@ -60,8 +59,7 @@ public class FBListImpl extends EObjectImpl implements FBList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -70,21 +68,19 @@ public class FBListImpl extends EObjectImpl implements FBList {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public EList<FB> getFbs() {
 		if (fbs == null) {
-			fbs = new EObjectResolvingEList<FB>(FB.class, this, DevResponsePackage.FB_LIST__FBS);
+			fbs = new EObjectResolvingEList<>(FB.class, this, DevResponsePackage.FB_LIST__FBS);
 		}
 		return fbs;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -92,13 +88,13 @@ public class FBListImpl extends EObjectImpl implements FBList {
 		switch (featureID) {
 			case DevResponsePackage.FB_LIST__FBS:
 				return getFbs();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -109,13 +105,14 @@ public class FBListImpl extends EObjectImpl implements FBList {
 				getFbs().clear();
 				getFbs().addAll((Collection<? extends FB>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -124,13 +121,14 @@ public class FBListImpl extends EObjectImpl implements FBList {
 			case DevResponsePackage.FB_LIST__FBS:
 				getFbs().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -138,8 +136,9 @@ public class FBListImpl extends EObjectImpl implements FBList {
 		switch (featureID) {
 			case DevResponsePackage.FB_LIST__FBS:
 				return fbs != null && !fbs.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
-} //FBListImpl
+} // FBListImpl

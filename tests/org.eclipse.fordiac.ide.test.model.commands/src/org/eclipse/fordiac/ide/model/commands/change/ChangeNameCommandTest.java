@@ -59,7 +59,7 @@ public class ChangeNameCommandTest extends CommandTestBase<CommandTestBase.State
 	}
 
 	private static State executeCommand(State state, String newName, boolean isValidName) {
-		state.setCommand(new ChangeNameCommand(state.getElement(), newName));
+		state.setCommand(ChangeNameCommand.forName(state.getElement(), newName));
 		state.setUndoAllowed(isValidName);
 		if (isValidName) {
 			return commandExecution(state);

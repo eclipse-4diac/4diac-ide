@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
@@ -32,36 +33,28 @@ import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
-import org.eclipse.fordiac.ide.gef.tools.CanvasHelper;
-import org.eclipse.fordiac.ide.gef.tools.MarqueeDragTracker;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.GuideLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -83,6 +76,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private static final float[] GRID_MINOR_DASHES_STYLE = new float[] { 1.0f, 5.0f };
 		private static final float[] GRID_MEDIUM_DASHES_STYLE = new float[] { 2.0f, 4.0f };
 		private static final float[] GRID_MAJOR_DASHES_STYLE = new float[] { 4.0f, 2.0f };
+		private static final int DASH_REPEAT = 6; // 1+5 = 2+4 = 4+2 = 6
 
 		@Override
 		protected void paintGrid(final Graphics g) {
@@ -104,13 +98,15 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private void drawVerLines(final Graphics g, final Rectangle clip) {
 			final int majorInterleaveX = gridX * MAJOR_INTERLEAVE;
 			final int medInterleaveX = gridX * MEDIUM_INTERLEAVE;
-			final int realInterleaveX = determineInterleave(gridX, medInterleaveX, majorInterleaveX, g.getAbsoluteScale());
+			final int realInterleaveX = determineInterleave(gridX, medInterleaveX, majorInterleaveX,
+					g.getAbsoluteScale());
 
 			if (realInterleaveX > 0) {
+				final int clipYSnapped = snap2DashGrid(clip.y);
 				for (int i = getLineStart(origin.x, clip.x, realInterleaveX); i < clip.x
 						+ clip.width; i += realInterleaveX) {
 					setLineStyle(g, i, origin.x, majorInterleaveX, medInterleaveX);
-					g.drawLine(i, clip.y, i, clip.y + clip.height);
+					g.drawLine(i, clipYSnapped, i, clip.y + clip.height);
 				}
 			}
 		}
@@ -118,12 +114,15 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		private void drawHorLines(final Graphics g, final Rectangle clip) {
 			final int majorInterleaveY = gridY * MAJOR_INTERLEAVE;
 			final int medInterleaveY = gridY * MEDIUM_INTERLEAVE;
-			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY, g.getAbsoluteScale());
+			final int realInterleaveY = determineInterleave(gridY, medInterleaveY, majorInterleaveY,
+					g.getAbsoluteScale());
+
 			if (realInterleaveY > 0) {
+				final int clipXSnapped = snap2DashGrid(clip.x);
 				for (int i = getLineStart(origin.y, clip.y, realInterleaveY); i < clip.y
 						+ clip.height; i += realInterleaveY) {
 					setLineStyle(g, i, origin.y, majorInterleaveY, medInterleaveY);
-					g.drawLine(clip.x, i, clip.x + clip.width, i);
+					g.drawLine(clipXSnapped, i, clip.x + clip.width, i);
 				}
 			}
 		}
@@ -145,17 +144,14 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		}
 
 		private static int getLineStart(final int origin, final int clip, final int distance) {
-			int newOrigin = origin;
 			if (origin >= clip) {
-				while (newOrigin - distance >= clip) {
-					newOrigin -= distance;
-				}
-			} else {
-				while (newOrigin < clip) {
-					newOrigin += distance;
-				}
+				return origin - Math.floorDiv(origin - clip, distance) * distance;
 			}
-			return newOrigin;
+			return origin + Math.ceilDiv(clip - origin, distance) * distance;
+		}
+
+		private static int snap2DashGrid(final int value) {
+			return Math.floorDiv(value, DASH_REPEAT) * DASH_REPEAT;
 		}
 
 		private static void setLineStyle(final Graphics g, final int currLinePos, final int origin,
@@ -169,81 +165,12 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 				g.setLineDash(GRID_MINOR_DASHES_STYLE);
 			}
 		}
-
-	}
-
-	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
-
-	// Safety border around the canvas to ensure that during dragging marquee selection does not grow the canvas
-	private static final Insets MARQUEE_DRAG_BORDER = new Insets(1, 1, 1, 1);
-
-	/** MarqueeDragTracker which deselects all elements on right click if nothing so that the correct context menu is
-	 * shown. We are only here if there is no element under the cursor.
-	 *
-	 * Furthermore it performs autoscrolling if the user went beyond the viewport boundaries. */
-	public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
-
-		@Override
-		protected boolean handleButtonDown(final int button) {
-			if (3 == button) {
-				// on right click deselect everything
-				getViewer().setSelection(StructuredSelection.EMPTY);
-			}
-			return super.handleButtonDown(button);
-		}
-
-		@Override
-		public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
-			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
-			}
-			super.mouseDown(me, viewer);
-		}
-
-		@Override
-		public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
-				final Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
-				((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
-				final Dimension delta = oldViewPort
-						.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
-				// Compensate the moved scrolling in the start position for correct dropping of
-				// moved parts
-				setStartLocation(getStartLocation().getTranslated(delta));
-				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
-			}
-			super.mouseDrag(me, viewer);
-		}
-
-		@Override
-		protected boolean handleDoubleClick(final int button) {
-			if (1 == button) {
-				performOpen();
-			}
-			return true;
-		}
-
-		protected void performOpen() {
-			final EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
-			if (null != editPart) {
-				final SelectionRequest request = new SelectionRequest();
-				request.setLocation(getLocation());
-				request.setType(RequestConstants.REQ_OPEN);
-				editPart.performRequest(request);
-			}
-		}
-
-		// In the base class version not shown elements can not be selected, as we have now auto-scrolling this is not a
-		// good behavior therefore this overridden version. For details see base class.
-		@Override
-		protected boolean isMarqueeSelectable(final GraphicalEditPart editPart) {
-			return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable();
-		}
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
 
 	public ZoomScalableFreeformRootEditPart(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {
+		super(false);
 		configureZoomManger();
 		setupZoomActions(site, actionRegistry);
 	}
@@ -287,28 +214,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	@Override
 	protected ScalableFreeformLayeredPane createScaledLayers() {
-		final ScalableFreeformLayeredPane pane = new ScalableFreeformLayeredPane() {
-			@Override
-			protected void paintClientArea(final Graphics graphics) {
-				// adjusted super paint client area without using the scaled graphics
-				// see https://bugs.eclipse.org/bugs/show_bug.cgi?id=470334 for details
-				// this fixes some text drawing issues on different scales
-				if (getChildren().isEmpty()) {
-					return;
-				}
-				final boolean optimizeClip = (getBorder() == null) || getBorder().isOpaque();
-				if (!optimizeClip) {
-					graphics.clipRect(getBounds().getShrinked(getInsets()));
-				}
-				graphics.scale(getScale());
-				graphics.pushState();
-				paintChildren(graphics);
-				graphics.popState();
-			}
-		};
-		pane.add(createGridLayer(), GRID_LAYER);
-		pane.add(getPrintableLayers(), PRINTABLE_LAYERS);
-		pane.add(new FeedbackLayer(), SCALED_FEEDBACK_LAYER);
+		final ScalableFreeformLayeredPane pane = super.createScaledLayers();
 		pane.add(new FreeformLayer(), HANDLE_LAYER);
 		pane.add(new FeedbackLayer(), FEEDBACK_LAYER);
 		return pane;
@@ -320,8 +226,9 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		zoomLevels.add(ZoomManager.FIT_WIDTH);
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
 		getZoomManager().setZoomLevelContributions(zoomLevels);
-		getZoomManager().setZoomLevels(new double[] { .25, .5, .75, .80, .85, .90, 1.0, 1.5, 2.0, 2.5, 3, 4 });
-		getZoomManager().setZoomAnimationStyle(ZoomManager.ANIMATE_ZOOM_IN_OUT);
+		getZoomManager().setZoomLevels(
+				new double[] { .25, .45, .5, .55, .6, .65, .75, .80, .85, .90, .95, 1.0, 1.25, 1.5, 1.75, 2.0 });
+		getZoomManager().setZoomAnimationStyle(AbstractZoomManager.ANIMATE_ZOOM_IN_OUT);
 	}
 
 	private void setupZoomActions(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {
@@ -364,13 +271,25 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	private static void configureDrawingContainer(final FreeformLayeredPane drawingArea,
 			final AbstractFreeformFigure drawingAreaContainer) {
 		drawingAreaContainer.setOpaque(true);
-
-		final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
-				.getColorRegistry();
-
-		drawingAreaContainer.setBackgroundColor(colorRegistry.get("org.eclipse.ui.editors.backgroundColor")); //$NON-NLS-1$
+		drawingAreaContainer.setBackgroundColor(getDrawingAreaBGColor());
 		drawingAreaContainer.setBorder(new SingleLineBorder());
 		drawingAreaContainer.setContents(drawingArea);
+	}
+
+	private static Color getDrawingAreaBGColor() {
+		final String background = Platform.getPreferencesService().getString("org.eclipse.ui.editors", //$NON-NLS-1$
+				"AbstractTextEditor.Color.Background", null, null); //$NON-NLS-1$
+
+		if (background != null) {
+			// we have a color in the preferences set
+			final RGB rgb = StringConverter.asRGB(background, null);
+			return new Color(rgb);
+		}
+
+		// if not in the preferences try to get it from the current theme
+		final ColorRegistry colorRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
+				.getColorRegistry();
+		return colorRegistry.get("org.eclipse.ui.editors.backgroundColor"); //$NON-NLS-1$
 	}
 
 }

@@ -1,12 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2019 fortiss GmbH
- *
+ * Copyright (c) 2019, 2024 fortiss GmbH
+ *                          Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Martin Jobst
  *     - initial API and implementation and/or initial documentation
@@ -14,17 +15,16 @@
 package org.eclipse.fordiac.ide.export.forte_ng.service
 
 import java.nio.file.Path
+import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-	@Accessors(PROTECTED_GETTER) ServiceInterfaceFBType type
+class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBType> {
 
-	new(ServiceInterfaceFBType type, String name, Path prefix) {
-		super(name, prefix, "CFunctionBlock")
-		this.type = type
+	new(ServiceInterfaceFBType type, String name, Path prefix, Map<?,?> options) {
+		super(type, name, prefix, "CFunctionBlock", options)
 	}
 
 	override generate() '''
@@ -32,25 +32,39 @@ class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
 		
 		«generateImplIncludes»
 		
-		«generateFBDefinition»
+		namespace «type.generateTypeNamespace» {
+		  namespace {
+		    «generateTypeHash»
 		
-		«generateFBInterfaceDefinition»
+		    «generateFBInterfaceDefinition»
+		    «generateFBInterfaceSpecDefinition»
+		  }
 		
-		«generateFBInterfaceSpecDefinition»
+		  «generateFBDefinition»
 		
-		«generateExecuteEvent»
+		  «FBClassName»::«FBClassName»(const StringId paInstanceNameId, CFBContainer &paContainer) :
+		      «baseClass»(paContainer, cFBInterfaceSpec, paInstanceNameId)«//no newline
+		  	»«(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateVariableInitializer»«// no newline
+		  	»«(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAdapterInitializer»«// no newline
+		  	»«generateConnectionInitializer» {
+		  };
 		
+		  «(type.interfaceList.inputVars + type.interfaceList.inOutVars + type.interfaceList.outputVars).generateSetInitialValuesDefinition»
+		  «generateExecuteEvent»
+		
+		  «generateInterfaceDefinitions»
+		}
 	'''
-	
+
 	def protected generateExecuteEvent() '''
-		void «FBClassName»::executeEvent(int pa_nEIID) {
-		  switch(pa_nEIID) {
+		void «FBClassName»::executeEvent(const TEventID paEIID, CEventChainExecutionThread *const paECET) {
+		  switch(paEIID) {
 		    «FOR event : type.interfaceList.eventInputs»
-		    	case scm_nEvent«event.name»ID:
+		    	case scmEvent«event.name»ID:
 		    	  #error add code for «event.name» event!
 		    	  /*
 		    	    do not forget to send output event, calling e.g.
-		    	      sendOutputEvent(scm_nEventCNFID);
+		    	      sendOutputEvent(scmEventCNFID, paECET);
 		    	  */
 		    	  break;
 		    «ENDFOR»

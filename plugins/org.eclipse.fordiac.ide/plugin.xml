@@ -11,6 +11,44 @@
             name="%perspective.name">
       </perspective>
    </extension>
+	<extension 
+			point="org.eclipse.ui.perspectiveExtensions">
+      	<perspectiveExtension
+        		targetID="org.eclipse.fordiac.ide.typemanagement.perspective">
+			<perspectiveShortcut
+	        	id="org.eclipse.fordiac.ide.SystemPerspective">
+	        </perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            	targetID="org.eclipse.debug.ui.DebugPerspective">
+         	<perspectiveShortcut
+				id="org.eclipse.fordiac.ide.SystemPerspective">
+			</perspectiveShortcut>
+			<view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               relationship="stack"
+               relative="org.eclipse.ui.console.ConsoleView">
+         	</view>
+		</perspectiveExtension>
+		<perspectiveExtension
+        		editorOnboardingImage="$nl$/icons/sys_onboarding.png"
+				editorOnboardingText="Develop your IEC 61499 solutions here"
+				targetID="org.eclipse.fordiac.ide.SystemPerspective">
+			<editorOnboardingCommand
+            	id="org.eclipse.ui.window.quickAccess">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.ui.window.showKeyAssist">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.ui.newWizard">
+         	</editorOnboardingCommand>
+         	<editorOnboardingCommand
+            	id="org.eclipse.fordiac.ide.typemanagement.openType">
+         	</editorOnboardingCommand>
+		</perspectiveExtension>
+   </extension>
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
@@ -19,7 +57,7 @@
             name="4diac IDE">
          <property
                name="appName"
-               value="4diac IDE">
+               value="4diac IDE">  <!-- This string shall not be exported! --> 
          </property>
          <property
                name="aboutImage"
@@ -31,11 +69,11 @@
          </property>
          <property
                name="windowImages"
-               value="icons/fordiac16.png,icons/fordiac32.png,icons/fordiac48.png,icons/fordiac256.png">
+               value="icons/4diac16.png,icons/4diac32.png,icons/4diac48.png,icons/4diac64.png,icons/4diac128.png,icons/4diac256.png">
          </property>
          <property
                name="introTitle"
-               value="Welcome to 4diac IDE">
+               value="%introTitle">
          </property>
          <property
                name="introBrandingImageText"
@@ -43,7 +81,7 @@
          </property>
          <property
                name="introBrandingImage"
-               value="product:intro/graphics/fordiac_logo.png">
+               value="product:intro/graphics/4diac_IDE_Logo.svg">
          </property>
          <property
     name="cssTheme"
@@ -119,34 +157,46 @@
          point="org.eclipse.ui.intro.quicklinks">
        <command
             id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
-            description="Create a new 4diac IDE project with an Automation System"
-            label="Create New Project"
+            description="%introQuicklink.New4diacIDEProject.description"
+            label="%introQuicklink.New4diacIDEProject.label"
             importance="medium"
             resolution="launchbar">
       </command>
        <command
             id="org.eclipse.ui.file.import(importWizardId=org.eclipse.ui.wizards.import.ExternalProject)"
-            description="Import existing 4diac IDE projects from the filesystem or an archive"
+            description="%introQuicklink.ImportProject.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/import-existing-project.png"
-            label="Import Existing Projects"
+            label="%introQuicklink.ImportProject.label"
             resolution="launchbar">
       </command> 
       <command
             id="org.eclipse.ui.file.import(importWizardId=org.eclipse.egit.ui.internal.clone.GitCloneWizard)"
-            label="Clone Project from GIT Repository"
-            description="Clone existing 4diac IDE projects from a GIT repository"
+            label="%introQuicklink.CloneFromGit.label"
+            description="%introQuicklink.CloneFromGit.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/egit-checkout.png"
             resolution="launchbar">
       </command>  
+       <command
+            id="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard)"
+            description="%introQuicklink.New4diacIDEExampleProject.description"
+            label="%introQuicklink.New4diacIDEExampleProject.label"
+            importance="medium"
+            resolution="launchbar">
+      </command>
       <override
-            command="org.eclipse.ui.newWizard*"
+            command="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacProjectWizard)"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/new-project.png"
+            theme="org.eclipse.ui.intro.universal.solstice">
+      </override>
+      <override
+            command="org.eclipse.ui.newWizard(newWizardId=org.eclipse.fordiac.ide.systemmanagement.ui.wizard.New4diacExampleWizard)"
+            icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/samples.png"
             theme="org.eclipse.ui.intro.universal.solstice">
       </override>
        <url
             location="http://org.eclipse.ui.intro/close"
-            label="Continue to 4diac IDE"
-            description="Close welcome page and work on your projects"
+            label="%introQuicklink.CloseIntro.label"
+            description="%introQuicklink.CloseIntro.description"
             icon="platform:/plugin/org.eclipse.ui.intro.universal/themes/solstice/graphics/icons/ctool/workbench.png"
             importance="medium">
        </url>  
@@ -155,28 +205,33 @@
    <!-- If these activties should be needed in the future remove the respective line below -->
    <extension point="org.eclipse.ui.activities">
     <activity id="org.eclipse.fordiac.ide.disabledxtensions" name="Hidden activities"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.debug.ui.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.search.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.jdt.*" /> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.pde.*" />
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.externaltools.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.mwe2.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ant.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.*"/> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.shared.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.cleanAction"/> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildProject"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildAutomatically"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildAll"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.rebuildAll"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildLast"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.xtext.ui.*"/>   
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.ide.*"/>   
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.ui.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.edit.text.gotoLastEditPosition"/> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.edit.text.gotoNextEditPosition"/>  
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.ui/.*" /> 
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.debug\.ui/.*" />
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.pde/.*" />
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.emf\.mwe2.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.ui/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.xtext\.ui/.*"/>   
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.ide/.*"/>   
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.ui/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.examples/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.junit/.*"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.edit.text.gotoLastEditPosition"/> 
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.edit.text.gotoNextEditPosition"/>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.issuereport.GitIssueReportingPage"
+            id="org.eclipse.fordiac.ide.issuereport.GitIssueReportingPage"
+            name="Git Issue Reporting">
+      </page>
+   </extension>
 </plugin>

@@ -2,12 +2,21 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.fBTEditorTabs">
-      <editor
+         point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+      <editorPage
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceSequenceEditor"
-            sortIndex="66"
-            type="ForAllTypes">
-      </editor>
+            sortIndex="66">
+         <enablement>
+            <instanceof
+                  value="org.eclipse.fordiac.ide.model.libraryElement.FBType">
+            </instanceof>
+            <not>
+               <instanceof
+                     value="org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType">
+               </instanceof>
+            </not>
+         </enablement>
+      </editorPage>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -62,28 +71,18 @@
          <propertySection
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSection"
                id="property.section.service"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceFilter"
                tab="property.tab.service">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.Service">
-            </input>
          </propertySection>
          <propertySection
                afterSection="property.section.service"
                class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSequenceSection"
                id="property.section.serviceSequence"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.ServiceSequenceFilter"
                tab="property.tab.serviceSequence">
-            <input
-                  type="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart">
-            </input>
-            <input
-                  type="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence">
-            </input>
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.PrimitiveSection"
+               class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties.InputPrimitiveFilter"
                id="property.section.inputPrimitive"
                tab="property.tab.inputPrimitive">
@@ -116,6 +115,46 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RecordServiceSequenceHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.CreateAllServiceSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences">
+      </handler> 
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.CreateMaxCoverageSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences">
+      </handler> 
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.LoadServiceSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences">
+      </handler> 
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.GetCoverageHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage">
+      </handler> 
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setAlways">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setForbidden">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setConditional">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.NewServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.ExportServiceSequencesAsTestHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -130,7 +169,27 @@
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
             name="Record Service Sequence">
-      </command>      
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
+            name="Create all Service Sequences">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
+            name="Create max Coverage Sequences">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
+            name="Load Service Sequences from File">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
+            name="Get Coverage">
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
+            name="Export Service Sequences as C++ Boost Test">
+      </command>       
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -194,6 +253,27 @@
             </visibleWhen>
        </command>
    	</menuContribution> 
+   	<menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+    <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
+            label="Expand/Collapse"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+   	</menuContribution> 
    <menuContribution
             locationURI="menu:org.eclipse.4diac.ide.source.menu">
        <command
@@ -231,5 +311,214 @@
             </visibleWhen>
        </command>
 	</menuContribution> 
+	<menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            label="Record Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	   <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.getCoverage"
+            label="Get Test Coverage"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.loadSequences"
+            label="Load Service Sequences from File"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	   <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
+            label="Create all Service Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createMaxCoverageSequences"
+            label="Create max Coverage Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.exportServiceSequencesAsTest"
+            label="Export Service Sequences as C++ Boost Test"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	</menuContribution>
+	<menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+       <menu id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.settype" label="Set Type">
+       	<command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible"
+            label="Possible"
+            style="push">
+       </command>
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setAlways"
+            label="Always"
+            style="push">
+       </command>
+	  <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setForbidden"
+            label="Forbidden"
+            style="push">
+       </command>
+	   <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setConditional"
+            label="Conditional"
+            style="push">
+       </command>
+       <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </menu>
+	</menuContribution>
+   	<menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+    <command
+          commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence"
+          label="New Service Sequence"
+          style="push">
+       <visibleWhen
+             checkEnabled="true">
+          <with
+                variable="selection">
+             <iterate>
+                <or>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart">
+                   </instanceof>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart">
+                   </instanceof>
+                   <instanceof
+                         value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence">
+                   </instanceof>
+                </or>
+             </iterate>
+          </with>
+       </visibleWhen>
+    </command>
+ </menuContribution>
+ 
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+            icon="fordiacimage://ICON_FB"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+            name="SSAV"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.fordiac.ide.typemanagement.TypeManagementPerspective">
+      	<perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+         <view
+               id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+               minimized="false"
+               ratio="0.75f"
+               relationship="stack"
+               relative="org.eclipse.ui.propertiesView">
+         </view>
+      </perspectiveExtension>
    </extension>
 </plugin>

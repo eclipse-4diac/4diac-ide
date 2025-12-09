@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Composite Function Block Type" Name="E_TABLE">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Start table driven event generation" Name="START" Type="Event">
+        <With Var="DT"/>
+        <With Var="N"/>
+      </Event>
+      <Event Comment="Stop table driven event generation" Name="STOP" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Generated events" Name="EO" Type="Event">
+        <With Var="CV"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration ArraySize="4" Comment="" Name="DT" Type="TIME"/>
+      <VarDeclaration Comment="" Name="N" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="CV" Type="UINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <FBNetwork>
+    <FB Comment="" Name="E_TABLE_CTRL" Type="E_TABLE_CTRL" x="600.0" y="300.0"/>
+    <FB Comment="" Name="E_DELAY" Type="E_DELAY" x="1400.0" y="200.0"/>
+    <DataConnections>
+      <Connection Comment="" Destination="E_DELAY.DT" Source="E_TABLE_CTRL.DTO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="CV" Source="E_TABLE_CTRL.CV" dx1="1430.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="E_TABLE_CTRL.DT" Source="DT" dx1="175.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="E_TABLE_CTRL.N" Source="N" dx1="0.0" dx2="0.0" dy="0.0"/>
+    </DataConnections>
+    <EventConnections>
+      <Connection Comment="" Destination="E_DELAY.START" Source="E_TABLE_CTRL.CLKO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="EO" Source="E_DELAY.EO" dx1="0.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="E_TABLE_CTRL.INIT" Source="START" dx1="525.0" dx2="0.0" dy="0.0"/>
+      <Connection Comment="" Destination="E_TABLE_CTRL.CLK" Source="E_DELAY.EO" dx1="0.0" dx2="0.0" dy="465.0"/>
+      <Connection Comment="" Destination="E_DELAY.STOP" Source="STOP" dx1="1470.0" dx2="0.0" dy="0.0"/>
+    </EventConnections>
+  </FBNetwork>
+</FBType>

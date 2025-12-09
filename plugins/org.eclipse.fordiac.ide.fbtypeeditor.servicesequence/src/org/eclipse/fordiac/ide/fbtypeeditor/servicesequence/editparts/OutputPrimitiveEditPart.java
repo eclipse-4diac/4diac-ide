@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011 - 2015 Profactor GmbH, fortiss GmbH
- *               2021 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2024 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -65,8 +65,8 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 		}
 
 		final List<Object> conns = new ArrayList<>();
-		if (getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel()) < (getModel()
-				.getServiceTransaction().getOutputPrimitive().size() - 1)) {
+		if (getModel().getServiceTransaction().getOutputPrimitive()
+				.indexOf(getModel()) < (getModel().getServiceTransaction().getOutputPrimitive().size() - 1)) {
 			conns.add(getConnectingConnection());
 		}
 		conns.add(getPrimitiveConnection());
@@ -84,7 +84,7 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 		final int currentIndex = getModel().getServiceTransaction().getOutputPrimitive().indexOf(getModel());
 		if (currentIndex == 0) { // First output primitive: connection from input primitive
 			final InputPrimitive iP = getModel().getServiceTransaction().getInputPrimitive();
-			final InputPrimitiveEditPart part = (InputPrimitiveEditPart) getViewer().getEditPartRegistry().get(iP);
+			final InputPrimitiveEditPart part = (InputPrimitiveEditPart) getViewer().getEditPartForModel(iP);
 			if (part != null && !part.getModelSourceConnections().isEmpty()) {
 				conns.add(part.getModelSourceConnections().get(0));
 			}
@@ -93,7 +93,7 @@ public class OutputPrimitiveEditPart extends AbstractPrimitiveEditPart {
 		// return previous output primitive
 
 		final OutputPrimitive oP = getModel().getServiceTransaction().getOutputPrimitive().get(currentIndex - 1);
-		final OutputPrimitiveEditPart part = (OutputPrimitiveEditPart) getViewer().getEditPartRegistry().get(oP);
+		final OutputPrimitiveEditPart part = (OutputPrimitiveEditPart) getViewer().getEditPartForModel(oP);
 		conns.add(part.getModelSourceConnections().get(0));
 
 		return conns;

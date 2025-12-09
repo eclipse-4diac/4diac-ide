@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2015, 2023 Profactor GbmH, fortiss GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - allow subclasses to implement connectable property
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -22,14 +25,9 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public abstract class AbstractConnectableEditPart extends AbstractGraphicalEditPart {
 
-	private boolean connectable = false;
-
-	public final boolean isConnectable() {
-		return connectable;
-	}
-
-	public final void setConnectable(final boolean connectable) {
-		this.connectable = connectable;
+	@SuppressWarnings("static-method") // allow subclasses to override
+	public boolean isConnectable() {
+		return false;
 	}
 
 	private ConnectionMovementHighlightEditPolicy cmPolicy;

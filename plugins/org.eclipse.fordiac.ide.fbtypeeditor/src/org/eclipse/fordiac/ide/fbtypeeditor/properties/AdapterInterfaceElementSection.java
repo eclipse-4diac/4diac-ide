@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,165 +12,56 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - moved adapter search code to palette
  *               - cleaned command stack handling for property sections
+ *   Dunja Životin
+ *     - extracted a part of the class into a separate widget
  ******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeEditPart;
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
+import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.AdapterTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AdapterInterfaceElementSection extends AbstractSection {
-	private Text nameText;
-	private Text commentText;
-	protected CCombo typeCombo;
+public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection {
+
+	protected PinInfoBasicWidget pinInfoBasicWidget;
 
 	@Override
 	protected IInterfaceElement getInputType(final Object input) {
-		if (input instanceof InterfaceEditPart) {
-			return ((InterfaceEditPart) input).getCastedModel();
-		}
-		if (input instanceof TypeEditPart) {
-			return ((TypeEditPart) input).getCastedModel();
-		}
-		if (input instanceof CommentEditPart) {
-			return ((CommentEditPart) input).getCastedModel();
-		}
-		if (input instanceof Event) {
-			return (Event) input;
-		}
-		if (input instanceof VarDeclaration) {
-			return (VarDeclaration) input;
-		}
-		return null;
+		return InterfaceFilterSelection.getSelectableInterfaceElementOfType(input);
 	}
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createTypeAndCommentSection(getLeftComposite());
+		pinInfoBasicWidget = createPinInfoSection(getLeftComposite());
 	}
 
-	protected void createTypeAndCommentSection(final Composite parent) {
-		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupText(parent, true);
-		nameText.addVerifyListener(new IdentifierVerifyListener());
-		nameText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(parent, true);
-		commentText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-			addContentAdapter();
-		});
-		getWidgetFactory().createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
-		final Composite typeComp = getWidgetFactory().createComposite(parent);
-		typeComp.setLayout(new GridLayout(2, false));
-		typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		typeCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), typeComp);
-		final GridData languageComboGridData = new GridData(SWT.FILL, 0, true, false);
-		typeCombo.setLayoutData(languageComboGridData);
-		typeCombo.addListener(SWT.Selection, event -> {
-			final DataType newType = getTypeForSelection(typeCombo.getText());
-			if (null != newType) {
-				executeCommand(new ChangeDataTypeCommand((VarDeclaration) type, newType));
-				refresh();
-			}
-		});
+	protected PinInfoBasicWidget createPinInfoSection(final Composite parent) {
+		return new PinInfoBasicWidget(parent, getWidgetFactory());
 	}
 
 	@Override
 	protected void setInputCode() {
-		nameText.setEnabled(false);
-		commentText.setEnabled(false);
-		typeCombo.removeAll();
+		pinInfoBasicWidget.disableAllFields();
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			setTypeDropdown();
-		}
-		commandStack = commandStackBuffer;
-	}
-
-	Collection<DataType> typeList;
-
-	protected void setTypeDropdown() {
-		typeCombo.removeAll();
-		typeList = getTypes();
-		if (null != typeList) {
-			final List<String> typeNames = new ArrayList<>();
-			for (final DataType type : typeList) {
-				typeNames.add(type.getName());
-			}
-			Collections.sort(typeNames);
-			final String currTypeName = (null != ((VarDeclaration) type).getType())
-					? ((VarDeclaration) type).getType().getName()
-							: ""; // this handles gracefully the case when the adpater type could //$NON-NLS-1$
-			// not be loaded
-			for (int i = 0; i < typeNames.size(); i++) {
-				typeCombo.add(typeNames.get(i));
-				if (typeNames.get(i).equals(currTypeName)) {
-					typeCombo.select(i);
-				}
-			}
+	protected void performRefresh() {
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.refresh();
 		}
 	}
 
-	protected Collection<DataType> getTypes() {
-		final List<DataType> types = new ArrayList<>();
-		final FBType fbType = (FBType) getType().eContainer().eContainer();
-		final PaletteEntry entry = fbType.getPaletteEntry();
-
-		entry.getPalette().getAdapterTypesSorted().forEach(adaptertype -> types.add(adaptertype.getType()));
-		return types;
-	}
-
-	protected DataType getTypeForSelection(final String text) {
-		if (null != typeList) {
-			for (final DataType dataType : typeList) {
-				if (dataType.getName().equals(text)) {
-					return dataType;
-				}
-			}
-		}
-		return null;
+	public boolean isEditable() {
+		return !(EcoreUtil.getRootContainer(getType()) instanceof FunctionFBType);
 	}
 
 	@Override
@@ -181,6 +71,25 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		// nothing to be done here
+		setupPinInfoWidget(getType());
+
+	}
+
+	protected void setupPinInfoWidget(final IInterfaceElement ie) {
+		if (pinInfoBasicWidget != null) {
+			pinInfoBasicWidget.initialize(ie, this::executeCommand);
+			pinInfoBasicWidget.getTypeSelectionWidget().initialize(ie, getTypeSelectionContentProvider(),
+					getTypeSelectionTreeContentProvider());
+		}
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
+		return AdapterTypeSelectionContentProvider.INSTANCE;
+	}
+
+	@SuppressWarnings("static-method") // subclasses may override
+	protected ITreeContentProvider getTypeSelectionTreeContentProvider() {
+		return AdapterTypeSelectionTreeContentProvider.INSTANCE;
 	}
 }

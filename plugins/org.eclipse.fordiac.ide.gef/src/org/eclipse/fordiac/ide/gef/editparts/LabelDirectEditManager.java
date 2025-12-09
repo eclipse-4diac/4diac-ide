@@ -13,15 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -33,9 +28,6 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 
 	/** The label. */
 	private final Label label;
-
-	/** The scaled font. */
-	private Font scaledFont;
 
 	/** The initial string. */
 	private String initialString = null;
@@ -60,7 +52,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 */
 	public LabelDirectEditManager(final GraphicalEditPart source, final Label label,
 			final VerifyListener aditionalVerifyListener) {
-		super(source, TextCellEditor.class, new NameCellEditorLocator(label));
+		super(source, new FigureCellEditorLocator(label));
 		this.label = label;
 		this.aditionalVerify = aditionalVerifyListener;
 	}
@@ -88,13 +80,8 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 	 */
 	@Override
 	protected void bringDown() {
-		final Font disposeFont = scaledFont;
-		scaledFont = null;
 		initialString = null;
 		super.bringDown();
-		if (disposeFont != null) {
-			disposeFont.dispose();
-		}
 	}
 
 	/*
@@ -119,15 +106,14 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 			initialLabelText = initialString;
 			getCellEditor().setValue(initialLabelText);
 		}
-		final IFigure figure = getEditPart().getFigure();
-		scaledFont = figure.getFont();
-		final FontData data = scaledFont.getFontData()[0];
-		final Dimension fontSize = new Dimension(0, data.getHeight());
-		label.translateToAbsolute(fontSize);
-		data.setHeight(fontSize.height);
-		scaledFont = new Font(null, data);
-		text.setFont(scaledFont);
 		text.selectAll();
+	}
+
+	public void setInitialString(final String val) {
+		initialString = val;
+		if (null != getCellEditor()) {
+			getCellEditor().setValue(initialString);
+		}
 	}
 
 	@Override
@@ -139,7 +125,7 @@ public class LabelDirectEditManager extends TextDirectEditManager {
 				text.removeVerifyListener(aditionalVerify);
 			}
 		} catch (final Exception e) {
-			Activator.getDefault().logError(e.getMessage(), e);
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University Linz
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,159 +13,197 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Matthias Plasch
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked paste to also handle cut elements
+ *   Fabio Gandolfi - fixed pasting and positioning of different networks
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-/**
- * The Class PasteCommand.
- */
-public class PasteCommand extends Command {
+/** The Class PasteCommand. */
+public class PasteCommand extends Command implements ScopedCommand {
 
-	private static final int DEFAULT_DELTA = 20;
-	private final Collection<? extends Object> templates;
+	private static final double DEFAULT_DELTA = 20 * 100.0 / 18;
+	private final CopyPasteData copyPasteData;
 	private final FBNetwork dstFBNetwork;
-	private FBNetwork srcFBNetwork = null;
 
 	private final Map<FBNetworkElement, FBNetworkElement> copiedElements = new HashMap<>();
 
-	private final List<FBNetworkElement> elementsToCopy = new ArrayList<>();
-
-	private final Set<ConnectionReference> connectionsToCopy = new HashSet<>();
-
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
+	private final CompoundCommand updateTypeCmds = new CompoundCommand();
+	private final CompoundCommand importCmds = new CompoundCommand();
 
-	private int xDelta;
-	private int yDelta;
-	private boolean calcualteDelta = false;
-	private Point pasteRefPos;
-
-	private CutAndPasteFromSubAppCommand cutPasteCmd;
+	private double xDelta;
+	private double yDelta;
+	private boolean calculateDelta = false;
+	private Position pasteRefPos;
+	private final TypeLibrary dstTypeLib;
 
 	/**
 	 * Instantiates a new paste command.
 	 *
-	 * @param templates   the elements that should be copied to the destination
-	 * @param destination the destination fbnetwork where the elements should be
-	 *                    copied to
-	 * @param pasteRefPos the reference position for pasting the elements
+	 * @param copyPasteData the elements that should be copied to the destination
+	 * @param destination   the destination fbnetwork where the elements should be
+	 *                      copied to
+	 * @param pasteRefPos   the reference position for pasting the elements
 	 */
-	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final Point pasteRefPos) {
-		this.templates = templates;
+	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final Point pasteRefPos) {
+		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
-		this.pasteRefPos = pasteRefPos;
-		calcualteDelta = true;
-
+		this.pasteRefPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(pasteRefPos.x, pasteRefPos.y);
+		calculateDelta = true;
+		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
 
-	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final int copyDeltaX,
+	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final int copyDeltaX,
 			final int copyDeltaY) {
-		this.templates = templates;
+		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
-		xDelta = copyDeltaX;
-		yDelta = copyDeltaY;
+		xDelta = CoordinateConverter.INSTANCE.screenToIEC61499(copyDeltaX);
+		yDelta = CoordinateConverter.INSTANCE.screenToIEC61499(copyDeltaY);
+		dstTypeLib = checkTypeLib(copyPasteData.srcNetwork(), destination);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (null != templates) && (null != dstFBNetwork);
+		return (null != copyPasteData) && !copyPasteData.isEmpty() && (null != dstFBNetwork);
 	}
 
 	@Override
 	public void execute() {
 		if (dstFBNetwork != null) {
 			ErrorMessenger.pauseMessages();
-			gatherCopyData();
-			copyFBs();
+			updateDelta();
+			removeDuplicateElements();
+			copyPasteData.elements().forEach(this::copyAndCreateFB);
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
+
+			if (dstTypeLib != null) {
+				createUpdateTypeCommands();
+			}
+			updateTypeCmds.execute();
+			checkAndAddMissingImports();
+
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
-				ErrorMessenger.popUpErrorMessage(
-						Messages.PasteRecreateNotPossible,
-						ErrorMessenger.USE_DEFAULT_TIMEOUT);
+				ErrorMessenger.popUpErrorMessage(Messages.PasteRecreateNotPossible, ErrorMessenger.USE_DEFAULT_TIMEOUT);
 			}
 		}
 	}
 
 	@Override
 	public void undo() {
+		updateTypeCmds.undo();
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
-		if (cutPasteCmd != null) {
-			cutPasteCmd.undo();
-		}
-		ElementSelector.selectViewObjects(templates);
-
+		importCmds.undo();
 	}
 
 	@Override
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
-		if (cutPasteCmd != null) {
-			cutPasteCmd.redo();
-		}
+		updateTypeCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
+		importCmds.redo();
 	}
 
-	private void gatherCopyData() {
-		int x = Integer.MAX_VALUE;
-		int y = Integer.MAX_VALUE;
+	private void checkAndAddMissingImports() {
+		final List<String> neededImports = new ArrayList<>();
 
-		for (final Object object : templates) {
-			if (object instanceof FBNetworkElement) {
-				final FBNetworkElement element = (FBNetworkElement) object;
-				if (null == srcFBNetwork) {
-					srcFBNetwork = element.getFbNetwork();
-				}
-				elementsToCopy.add(element);
-				x = Math.min(x, element.getPosition().getX());
-				y = Math.min(y, element.getPosition().getY());
-			} else if (object instanceof ConnectionReference) {
-				connectionsToCopy.add((ConnectionReference) object);
-			} else if (object instanceof FBNetwork) {
-				srcFBNetwork = (FBNetwork) object;
+		for (final FBNetworkElement elem : copiedElements.keySet()) {
+			final EObject srcObj = EcoreUtil.getRootContainer(elem);
+			if (srcObj instanceof final LibraryElement srcLE && srcLE.getCompilerInfo() != null) {
+				srcLE.getCompilerInfo().getImports().stream().map(Import::getImportedNamespace)
+						.forEach(neededImports::add);
 			}
 		}
+		final EObject destContainer = EcoreUtil.getRootContainer(dstFBNetwork);
+		if (destContainer instanceof final LibraryElement le) {
+			if (le.getCompilerInfo() == null) {
+				le.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+			}
 
-		updateDelta(x, y);
+			final List<String> importNames = le.getCompilerInfo().getImports().stream()
+					.map(Import::getImportedNamespace).toList();
+
+			for (final String importName : neededImports) {
+				if (!importNames.contains(importName)) {
+					final AddNewImportCommand importCmd = new AddNewImportCommand(le, importName);
+					if (importCmd.canExecute()) {
+						importCmd.execute();
+					}
+					importCmds.add(importCmd);
+				}
+			}
+		}
 	}
 
-	private void updateDelta(final int x, final int y) {
-		if (calcualteDelta) {
+	// remove elements, if they are already inside a selected top-level subapp.
+	private void removeDuplicateElements() {
+		copyPasteData.elements()
+				.removeIf(element -> copyPasteData.elements().stream().filter(SubApp.class::isInstance)
+						.map(SubApp.class::cast).filter(subapp -> !subapp.isTyped())
+						.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream().filter(Group.class::isInstance)
+				.map(Group.class::cast).anyMatch(group -> group.getGroupElements().contains(element)));
+	}
+
+	private void updateDelta() {
+		if (calculateDelta) {
 			if (null != pasteRefPos) {
-				xDelta = pasteRefPos.x - x;
-				yDelta = pasteRefPos.y - y;
+				double x = Double.MAX_VALUE;
+				double y = Double.MAX_VALUE;
+
+				for (final FBNetworkElement element : copyPasteData.elements()) {
+					final Position pos = element.getPosition();
+					x = Math.min(x, pos.getX());
+					y = Math.min(y, pos.getY());
+				}
+				xDelta = pasteRefPos.getX() - x;
+				yDelta = pasteRefPos.getY() - y;
 			} else {
 				xDelta = DEFAULT_DELTA;
 				yDelta = DEFAULT_DELTA;
@@ -172,37 +211,70 @@ public class PasteCommand extends Command {
 		}
 	}
 
-	private void copyFBs() {
-		for (final FBNetworkElement element : elementsToCopy) {
-			final FBNetworkElement copiedElement = createElementCopyFB(element);
-			copiedElements.put(element, copiedElement);
-			dstFBNetwork.getNetworkElements().add(copiedElement);
-			copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
-		}
+	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element) {
+		return copyAndCreateFB(element, false);
 	}
 
-	private FBNetworkElement createElementCopyFB(final FBNetworkElement element) {
-		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
-		// clear the connection references
-		for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
-			if (ie.isIsInput()) {
-				ie.getInputConnections().clear();
-			} else {
-				ie.getOutputConnections().clear();
-			}
+	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element, final boolean isNested) {
+		final FBNetworkElement copiedElement = createElementCopyFB(element, isNested);
+		copiedElements.put(element, copiedElement);
+		dstFBNetwork.getNetworkElements().add(copiedElement);
+		copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
+		return copiedElement;
+	}
+
+	private FBNetworkElement createElementCopyFB(final FBNetworkElement element, final boolean isNested) {
+		final FBNetworkElement copiedElement = createCopiedElement(element);
+
+		if (!isNested) {
+			copiedElement.setPosition(calculatePastePos(element));
 		}
-		copiedElement.setPosition(calculatePastePos(element));
 		copiedElement.setMapping(null);
 
-		if (copiedElement instanceof StructManipulator) {
+		if (copiedElement instanceof final StructManipulator copiedStructMan) {
 			// structmanipulators may destroy the param values during copy
-			checkDataValues(element, copiedElement);
+			checkDataValues((StructManipulator) element, copiedStructMan);
+		}
+
+		// copy content of Groups
+		if (element instanceof final Group group) {
+			for (final FBNetworkElement groupElement : group.getGroupElements()) {
+				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
+			}
 		}
 
 		return copiedElement;
 	}
 
-	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
+	private FBNetworkElement createCopiedElement(final FBNetworkElement element) {
+		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
+		if (dstTypeLib != null && element.getTypeEntry() != null) {
+			// we are copying between projects and it is a typed FBNetworkElement
+			final TypeEntry dstTypeEntry = dstTypeLib.getFBOrSubAppType(element.getFullTypeName());
+			if (dstTypeEntry != null) {
+				// the target project has the type
+				copiedElement.setTypeEntry(dstTypeEntry);
+			} else {
+				copiedElement.setTypeEntry(dstTypeLib.createErrorTypeEntry(element.getFullTypeName(),
+						element.getTypeEntry().getTypeEClass()));
+				if (element instanceof final BlockFBNetworkElement bfbElement) {
+					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
+				}
+			}
+		} else if (copiedElement instanceof final BlockFBNetworkElement copiedBlockElement) {
+			// clear the connection references
+			for (final IInterfaceElement ie : copiedBlockElement.getInterface().getAllInterfaceElements()) {
+				if (ie.isIsInput()) {
+					ie.getInputConnections().clear();
+				} else {
+					ie.getOutputConnections().clear();
+				}
+			}
+		}
+		return copiedElement;
+	}
+
+	private static void checkDataValues(final StructManipulator src, final StructManipulator copy) {
 		final EList<VarDeclaration> srcList = src.getInterface().getInputVars();
 		final EList<VarDeclaration> copyList = copy.getInterface().getInputVars();
 
@@ -219,14 +291,16 @@ public class PasteCommand extends Command {
 	}
 
 	private void copyConnections() {
-		for (final ConnectionReference connRef : connectionsToCopy) {
-			final FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
-			final FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
+		for (final ConnectionReference connRef : copyPasteData.conns()) {
+			final BlockFBNetworkElement copiedSrc = (BlockFBNetworkElement) copiedElements.get(connRef.sourceElement());
+			final BlockFBNetworkElement copiedDest = (BlockFBNetworkElement) copiedElements
+					.get(connRef.destinationElement());
 
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
 				// get a duplicate connection
-				final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
+
+				final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.source());
 				if (null != cmd) {
 					copyConnection(connRef, copiedSrc, copiedDest, cmd);
 					if (cmd.canExecute()) { // checks if the resulting connection is valid
@@ -250,21 +324,25 @@ public class PasteCommand extends Command {
 		return cmd;
 	}
 
-	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc, final FBNetworkElement copiedDest,
-			final AbstractConnectionCreateCommand cmd) {
-		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
-		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+	private void copyConnection(final ConnectionReference connRef, final BlockFBNetworkElement copiedSrc,
+			final BlockFBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
+		final IInterfaceElement source = getInterfaceElement(connRef.source(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.destination(), copiedDest);
 
 		cmd.setSource(source);
 		cmd.setDestination(destination);
-		cmd.setArrangementConstraints(connRef.getRoutingData());
+		cmd.setArrangementConstraints(connRef.routingData());
+		cmd.setVisible(connRef.visible());
 	}
 
-	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {
+	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig,
+			final BlockFBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
-		} else if (dstFBNetwork.equals(srcFBNetwork)) {
+		}
+		if (dstFBNetwork.equals(copyPasteData.srcNetwork())
+				|| (dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
 			// we have a connection target to an existing FBNElement, only retrieve the
 			// interface element if the target FBNetwrok is the same as the source. In this
 			// case it is save to return the original interface element.
@@ -275,17 +353,42 @@ public class PasteCommand extends Command {
 
 	private Position calculatePastePos(final FBNetworkElement element) {
 		final Position pastePos = LibraryElementFactory.eINSTANCE.createPosition();
-		pastePos.setX(element.getPosition().getX() + xDelta);
-		pastePos.setY(element.getPosition().getY() + yDelta);
+		final Position outermostPos = element.getPosition();
+		pastePos.setX(outermostPos.getX() + xDelta);
+		pastePos.setY(outermostPos.getY() + yDelta);
 		return pastePos;
 	}
 
-	protected CutAndPasteFromSubAppCommand getCutPasteCmd() {
-		return cutPasteCmd;
+	public Collection<FBNetworkElement> getCopiedFBs() {
+		return copiedElements.values();
 	}
 
-	public void setCutPasteCmd(final CutAndPasteFromSubAppCommand cutPasteCmd) {
-		this.cutPasteCmd = cutPasteCmd;
+	private static TypeLibrary checkTypeLib(final FBNetwork srcNetwork, final FBNetwork destNetwork) {
+		final EObject srcRoot = EcoreUtil.getRootContainer(srcNetwork);
+		final EObject dstRoot = EcoreUtil.getRootContainer(destNetwork);
+
+		if (srcRoot instanceof final LibraryElement srcLibEl && dstRoot instanceof final LibraryElement dstLibEl
+				&& !srcLibEl.getTypeLibrary().getProject().equals(dstLibEl.getTypeLibrary().getProject())) {
+			// we copy between projects
+			return dstLibEl.getTypeLibrary();
+		}
+		return null;
 	}
 
+	private void createUpdateTypeCommands() {
+		FBNetworkHelper.getBlockFBNetworkElementsFromList(copiedElements.values()).forEach(fbnEl -> {
+			if (fbnEl.getTypeEntry() != null && !(fbnEl instanceof ErrorMarkerFBNElement)) {
+				// we only need to update the type if we have a type entry
+				updateTypeCmds.add(new UpdateFBTypeCommand(fbnEl));
+			}
+		});
+	}
+
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		if (dstFBNetwork != null) {
+			return Set.of(dstFBNetwork);
+		}
+		return Set.of();
+	}
 }

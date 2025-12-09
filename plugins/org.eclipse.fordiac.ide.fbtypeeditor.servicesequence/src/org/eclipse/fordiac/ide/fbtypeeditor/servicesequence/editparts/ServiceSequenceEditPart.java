@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Melanie Winter - made expandable
+ *   Felix Roithmayr - added startstate and type support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts;
 
@@ -153,7 +154,8 @@ public class ServiceSequenceEditPart extends AbstractDirectEditableEditPart /* R
 		super.refreshVisuals();
 		final SequenceFigure figure = getFigure();
 		if (null != getModel()) {
-			figure.setLabelText(getModel().getName(), getModel().getComment());
+			figure.setLabelText(getModel().getName(), getModel().getComment(), getModel().getServiceSequenceType(),
+					getModel().getStartState());
 		}
 	}
 

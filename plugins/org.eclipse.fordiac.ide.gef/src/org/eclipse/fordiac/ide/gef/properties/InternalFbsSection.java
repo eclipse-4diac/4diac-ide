@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2024 Primetals Technologies Germany GmbH,
+ *                          Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,55 +11,52 @@
  * Contributors:
  *   Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added NewInstanceCellEditor in "Type" cell
+ *   Prankur Agarwal - switch to NatTable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
+import java.util.Collections;
+
+import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementConfigLabelAccumulator;
+import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.IndexUpDown;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalFBCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
-import org.eclipse.fordiac.ide.model.edit.providers.InternalFBLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
+import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
+import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
+import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.RowPostSelectionProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class InternalFbsSection extends AbstractSection implements I4diacTableUtil {
-	private static final String FB_NAME = "NAME"; //$NON-NLS-1$
-	private static final String FB_TYPE = "TYPE"; //$NON-NLS-1$
-	private static final String FB_COMMENT = "COMMENT"; //$NON-NLS-1$
-
-	private TableViewer internalFbsViewer;
+public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil, ISelectionProviderSection {
+	protected IChangeableRowDataProvider<FB> provider;
+	protected NatTable table;
+	private RowPostSelectionProvider<FB> selectionProvider;
+	private AddDeleteReorderToolbarWidget buttons;
 
 	@Override
 	protected BaseFBType getType() {
@@ -67,11 +65,8 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalFbsControls(parent);
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
-		OpenStructMenu.addTo(internalFbsViewer);
 	}
 
 	public void createInternalFbsControls(final Composite parent) {
@@ -79,27 +74,33 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
+		buttons = new AddDeleteReorderToolbarWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		internalFbsViewer = TableWidgetFactory.createTableViewer(composite);
-		configureTableLayout(internalFbsViewer.getTable());
+		provider = new ChangeableListDataProvider<>(new FBColumnAccessor(this));
+		final DataLayer dataLayer = new DataLayer(provider);
+		dataLayer.setConfigLabelAccumulator(
+				new TypedElementConfigLabelAccumulator<>(provider, this::getAnnotationModel));
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer,
+				new NatTableColumnProvider<>(TypedElementTableColumn.DEFAULT_COLUMNS), IEditableRule.ALWAYS_EDITABLE,
+				new TypeSelectionButton(this::getTypeLibrary, FBTypeSelectionContentProvider.INSTANCE,
+						FBTypeSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE),
+				this, false);
+		table.configure();
 
-		internalFbsViewer.setColumnProperties(new String[] { FB_NAME, FB_TYPE, FB_COMMENT });
-		internalFbsViewer.setContentProvider(new ArrayContentProvider());
-		internalFbsViewer.setLabelProvider(new InternalFBLabelProvider());
-		internalFbsViewer.setCellModifier(new InternalFBsCellModifier());
-
-		buttons.bindToTableViewer(internalFbsViewer, this,
-				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypePaletteEntry()),
-				ref -> new DeleteInternalFBCommand(getType(), getLastSelectedFB()),
+		buttons.bindToTableViewer(table, this,
+				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
+				ref -> new DeleteInternalFBCommand((FB) ref),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
+
+		selectionProvider = new RowPostSelectionProvider<>(table, NatTableWidgetFactory.getSelectionLayer(table),
+				provider, false);
 	}
 
-	private FBTypePaletteEntry getFBTypePaletteEntry() {
+	private FBTypeEntry getFBTypeEntry() {
 		final FB fb = getLastSelectedFB();
-		return (null != fb) ? (FBTypePaletteEntry) fb.getPaletteEntry() : null;
+		return (null != fb) ? (FBTypeEntry) fb.getTypeEntry() : null;
 	}
 
 	private String getName() {
@@ -116,130 +117,74 @@ public abstract class InternalFbsSection extends AbstractSection implements I4di
 	}
 
 	private FB getLastSelectedFB() {
-		final IStructuredSelection selection = internalFbsViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return null;
-		}
-		return (FB) selection.toList().get(selection.toList().size() - 1);
-	}
-
-	private static void configureTableLayout(final Table table) {
-		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(FordiacMessages.Name);
-		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(FordiacMessages.Type);
-		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(FordiacMessages.Comment);
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(2, 30));
-		layout.addColumnData(new ColumnWeightData(1, 20));
-		table.setLayout(layout);
-	}
-
-	private static CellEditor[] createCellEditors(final Table table) {
-		final TextCellEditor fbNameEditor = new TextCellEditor(table);
-		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		final TextCellEditor fbTypeEditor = new TextCellEditor(table);
-		((Text) fbTypeEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
-				new TextCellEditor(table) };
+		return (FB) NatTableWidgetFactory.getLastSelectedVariable(table);
 	}
 
 	@Override
-	protected void setInputCode() {
-		internalFbsViewer.setCellModifier(null);
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
+		if (entry instanceof final FB fb) {
+			cmd.add(new InsertFBCommand(getType(), fb, index));
+		}
+
 	}
 
 	@Override
-	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
-		if (null != type) {
-			internalFbsViewer.setInput(getType().getInternalFbs());
-		}
-		commandStack = commandStackBuffer;
+	protected void performRefresh() {
+		provider.setInput(getType() != null ? getType().getInternalFbs() : Collections.emptyList());
+		table.refresh();
 	}
 
 	@Override
-	protected void setInputInit() {
-		internalFbsViewer.setCellEditors(createCellEditors(internalFbsViewer.getTable()));
-	}
-
-	private final class InternalFBsCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			final FB fb = (FB) element;
-			switch (property) {
-			case FB_NAME:
-				return fb.getName();
-			case FB_TYPE:
-				return fb.getTypeName();
-			case FB_COMMENT:
-				return fb.getComment();
-			default:
-				return ""; //$NON-NLS-1$
-			}
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final FB fb = (FB) tableItem.getData();
-			Command cmd = null;
-			switch (property) {
-			case FB_NAME:
-				cmd = new ChangeNameCommand(fb, value.toString());
-				break;
-			case FB_TYPE:
-				final FBTypePaletteEntry fbTypeEntry = getPalette().getFBTypeEntry(value.toString());
-				if (null == fbTypeEntry) {
-					return;
-				}
-				cmd = new ChangeFbTypeCommand(fb, fbTypeEntry);
-				break;
-			default:
-				cmd = new ChangeCommentCommand(fb, value.toString());
-				break;
-			}
-
-			executeCommand(cmd);
-			internalFbsViewer.refresh(fb);
-		}
-	}
-
-	@Override
-	public TableViewer getViewer() {
-		return internalFbsViewer;
-	}
-
-	public Object getEntry(final int index) {
-		return getType().getInternalFbs().get(index);
-	}
-
-	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if (entry instanceof FB) {
-			final FBType fbTypeEntry = (FBType) entry;
-			cmd.add(new InsertFBCommand(getType().getInternalFbs(), fbTypeEntry, index));
-		}
-	}
-
-	@Override
-	public Object removeEntry(final int index, final CompoundCommand cmd) {
-		final FB fbEntry = (FB) getEntry(index);
-		cmd.add(new DeleteInternalFBCommand(getType(), fbEntry));
-		return fbEntry;
+	protected void performRefreshAnnotations() {
+		table.refresh(false);
 	}
 
 	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
-		getViewer().refresh();
+		table.refresh();
+
+	}
+
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+	@Override
+	protected Object getInputType(final Object input) {
+		return BaseFBFilter.getFBTypeFromSelectedElement(input);
+	}
+
+	@Override
+	protected void setInputCode() {
+		// nothing to do here
+	}
+
+	@Override
+	protected void setInputInit() {
+		final BaseFBType currentType = getType();
+		provider.setInput(currentType != null ? currentType.getInternalFbs() : Collections.emptyList());
+		table.refresh();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (buttons != null) {
+			buttons.dispose();
+		}
+	}
+
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof final FB fb) {
+			cmd.add(new DeleteInternalFBCommand(fb));
+		}
+	}
+
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return selectionProvider;
 	}
 }

@@ -16,7 +16,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -27,15 +30,17 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
+import org.osgi.framework.VersionRange;
 
 public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 	public static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
 
-	private boolean importDefaultPalette = true;
 	private boolean openApplication = true;
 
 	private Button advancedButton;
@@ -49,34 +54,37 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	 */
 	private int linkedResourceGroupHeight = -1;
 
-	/**
-	 * Container for the advanced section in the creation wizard
-	 *
-	 */
+	/** Container for the advanced section in the creation wizard */
 	private Composite advancedGroupContainer;
 
 	private Composite advancedGroupParent;
 
 	private boolean blockListeners = false;
 
-	private Listener nameModifyListener = e -> {
+	private final Listener nameModifyListener = e -> {
 		if (!blockListeners) {
 			setPageComplete(validatePage());
 		}
 	};
+
+	private LibrarySelectionPage libPage;
+
+	private static final String[] comboLabels = { "current", "old", "none" };
+	private static final VersionRange[] comboValues = { new VersionRange("3.0.0"), new VersionRange("[1.0.0,1.0.0]"),
+			new VersionRange("(0.0.0,0.0.0)") };
 
 	/**
 	 * Creates a new project creation wizard page.
 	 *
 	 * @param pageName the name of this page
 	 */
-	public New4diacProjectPage(String pageName) {
+	public New4diacProjectPage(final String pageName) {
 		super(pageName);
 		setPageComplete(false);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
 		systemName = new InitialNameGroup((Composite) getControl(), Messages.New4diacProjectWizard_InitialSystemName);
@@ -87,7 +95,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 		createAdvancedControls((Composite) getControl());
 
-		Composite composite = (Composite) getControl();
+		final Composite composite = (Composite) getControl();
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -99,8 +107,8 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	protected boolean validatePage() {
 		blockListeners = true;
 		try {
-			if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
-				setErrorMessage(Messages.SystemNameNotValid);
+			if (IdentifierVerifier.verifyIdentifier(getProjectName()).isPresent()) {
+				setErrorMessage(Messages.New4diacProjectWizard_SystemNameNotValid);
 				return false;
 			}
 
@@ -112,10 +120,19 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				return false;
 			}
 
-			return super.validatePage();
+			if (!super.validatePage()) {
+				return false;
+			}
+			// if we are in the default project location area check if there is no directory
+			// with given name
+			if (useDefaults() && projectNameExistsinWSPath(getProjectName())) {
+				setErrorMessage(Messages.New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace);
+				return false;
+			}
 		} finally {
 			blockListeners = false;
 		}
+		return true;
 	}
 
 	public String getInitialSystemName() {
@@ -130,11 +147,11 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		return openApplication;
 	}
 
-	private void createAdvancedControls(Composite parent) {
+	private void createAdvancedControls(final Composite parent) {
 		advancedGroupParent = new Composite(parent, SWT.NONE);
 		advancedGroupParent.setFont(parent.getFont());
 		advancedGroupParent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout();
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		advancedGroupParent.setLayout(layout);
@@ -142,20 +159,18 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedButton = new Button(advancedGroupParent, SWT.PUSH);
 		advancedButton.setFont(advancedGroupParent.getFont());
 		advancedButton.setText(Messages.NewSystemWizard_ShowAdvanced);
-		GridData data = setButtonLayoutData(advancedButton);
+		final GridData data = setButtonLayoutData(advancedButton);
 		data.horizontalAlignment = GridData.BEGINNING;
 		advancedButton.setLayoutData(data);
 		advancedButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				handleAdvancedButtonSelect();
 			}
 		});
 	}
 
-	/**
-	 * Shows/hides the advanced option widgets.
-	 */
+	/** Shows/hides the advanced option widgets. */
 	protected void handleAdvancedButtonSelect() {
 		if (advancedGroupContainer != null) {
 			advancedGroupContainer.dispose();
@@ -164,12 +179,12 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		} else {
 			createAdvancedGroup();
 			if (linkedResourceGroupHeight == -1) {
-				Point groupSize = advancedGroupContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+				final Point groupSize = advancedGroupContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 				linkedResourceGroupHeight = groupSize.y;
 			}
 			advancedButton.setText(Messages.NewSystemWizard_HideAdvanced);
 		}
-		Composite compo = (Composite) getControl();
+		final Composite compo = (Composite) getControl();
 		compo.layout();
 	}
 
@@ -178,23 +193,8 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayout(new GridLayout());
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
-		Button importDefaultPaletteSB = new Button(advancedGroupContainer, SWT.CHECK);
-		importDefaultPaletteSB.setSelection(importDefaultPalette);
-		importDefaultPaletteSB.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
-		importDefaultPaletteSB.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				importDefaultPalette = true;
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-				importDefaultPalette = false;
-			}
-		});
-
-		Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
-		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
+		final Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
+		openApplicationCheckbox.setText(Messages.OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(openApplication);
 		openApplicationCheckbox.addSelectionListener(new SelectionListener() {
 			@Override
@@ -207,10 +207,42 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				openApplication = false;
 			}
 		});
+
+		final Label standardLibraryLabel = new Label(advancedGroupContainer, SWT.NONE);
+		standardLibraryLabel.setText("Import standard libraries:");
+
+		final Combo standardLibraryCombo = new Combo(advancedGroupContainer, SWT.DROP_DOWN);
+		for (int i = 0; i < comboLabels.length; i++) {
+			standardLibraryCombo.add(comboLabels[i], i);
+		}
+		standardLibraryCombo.select(0);
+		standardLibraryCombo.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				if (libPage != null) {
+					libPage.setStandardLibRange(comboValues[standardLibraryCombo.getSelectionIndex()]);
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				if (libPage != null) {
+					libPage.setStandardLibRange(comboValues[standardLibraryCombo.getSelectionIndex()]);
+				}
+			}
+		});
 	}
 
-	public boolean importDefaultPalette() {
-		return importDefaultPalette;
+	public void setLibraryPage(final LibrarySelectionPage libraryPage) {
+		this.libPage = libraryPage;
+		this.libPage.setStandardLibRange(comboValues[0]);
+	}
+
+	private static boolean projectNameExistsinWSPath(final String projectName) {
+		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		final IPath localProjectPath = wsPath.append(projectName);
+		return localProjectPath.toFile().exists();
 	}
 
 }

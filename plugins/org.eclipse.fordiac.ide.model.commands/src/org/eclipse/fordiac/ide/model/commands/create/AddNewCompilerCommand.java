@@ -16,6 +16,11 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -23,12 +28,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class AddNewCompilerCommand.
  */
-public class AddNewCompilerCommand extends Command implements CreationCommand {
+public class AddNewCompilerCommand extends CreationCommand implements ScopedCommand {
 
 	/** The new Compiler value. */
 	private Compiler compiler;
@@ -36,11 +40,7 @@ public class AddNewCompilerCommand extends Command implements CreationCommand {
 	private final FBType type;
 
 	public AddNewCompilerCommand(final FBType type) {
-		super();
-		this.type = type;
-		if (type.getCompilerInfo() == null) {
-			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
-		}
+		this.type = Objects.requireNonNull(type);
 	}
 
 	/*
@@ -80,6 +80,9 @@ public class AddNewCompilerCommand extends Command implements CreationCommand {
 	}
 
 	private CompilerInfo getCompilerInfo() {
+		if (type.getCompilerInfo() == null) {
+			type.setCompilerInfo(LibraryElementFactory.eINSTANCE.createCompilerInfo());
+		}
 		return type.getCompilerInfo();
 	}
 
@@ -88,4 +91,8 @@ public class AddNewCompilerCommand extends Command implements CreationCommand {
 		return compiler;
 	}
 
+	@Override
+	public Set<EObject> getAffectedObjects() {
+		return Set.of(getCompilerInfo());
+	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Johannes Kepler University
+ * Copyright (c) 2018, 2025 Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,12 +20,13 @@ public class ChangeSubAppInterfaceOrderCommand extends ChangeInterfaceOrderComma
 
 	private ChangeInterfaceOrderCommand mirroredElement = null;
 
-	public ChangeSubAppInterfaceOrderCommand(IInterfaceElement selection, boolean moveUp) {
+	public ChangeSubAppInterfaceOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		super(selection, moveUp);
 
-		if (selection.getFBNetworkElement().isMapped()) {
+		if (selection.getBlockFBNetworkElement().isMapped()) {
 			mirroredElement = new ChangeInterfaceOrderCommand(
-					selection.getFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()), moveUp);
+					selection.getBlockFBNetworkElement().getOpposite().getInterfaceElement(selection.getName()),
+					moveUp);
 		}
 	}
 

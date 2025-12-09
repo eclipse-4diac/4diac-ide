@@ -36,9 +36,9 @@ import org.eclipse.swt.widgets.Display;
  */
 public class ModifiedMoveHandle extends MoveHandle {
 
-	static class SelectionBorder extends AbstractBorder {
-
+	public static class SelectionBorder extends AbstractBorder {
 		private int arc;
+		private Color color = getSelectionColor();
 
 		public SelectionBorder(final int arc) {
 			this.arc = arc;
@@ -48,15 +48,18 @@ public class ModifiedMoveHandle extends MoveHandle {
 			this.arc = arc;
 		}
 
+		public void setColor(final Color color) {
+			this.color = color;
+		}
+
 		@Override
 		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
-			Rectangle rect = getPaintRectangle(figure, insets);
 			g.setLineStyle(Graphics.LINE_SOLID);
 			g.setLineWidth(SELECTION_BORDER_WIDTH);
 			g.setXORMode(false);
-			g.setForegroundColor(getSelectionColor());
-			g.setBackgroundColor(getSelectionColor());
-			rect = rect.getShrinked(1, 1);
+			g.setForegroundColor(color);
+			g.setBackgroundColor(color);
+			final Rectangle rect = getPaintRectangle(figure, insets).shrink(1, 1);
 			g.drawRoundRectangle(rect, arc, arc);
 			g.setAlpha(SELECTION_FILL_ALPHA);
 			g.fillRoundRectangle(rect, arc, arc);
@@ -71,6 +74,7 @@ public class ModifiedMoveHandle extends MoveHandle {
 	public static final int SELECTION_FILL_ALPHA = 50;
 	public static final int SELECTION_BORDER_WIDTH = 2;
 	private static Color selectionColor = null;
+	private static Color collisionColor = null;
 
 	public static Color getSelectionColor() {
 		if (null == selectionColor) {
@@ -78,6 +82,14 @@ public class ModifiedMoveHandle extends MoveHandle {
 			selectionColor = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
 		}
 		return selectionColor;
+	}
+
+	public static Color getCollisionColor() {
+		if (null == collisionColor) {
+			final Display display = Display.getCurrent();
+			collisionColor = display.getSystemColor(SWT.COLOR_DARK_YELLOW);
+		}
+		return collisionColor;
 	}
 
 	private final Insets insets;

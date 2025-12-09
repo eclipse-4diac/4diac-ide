@@ -1,0 +1,108 @@
+/*******************************************************************************
+ * Copyright (c) 2024 Felix Schmid
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Felix Schmid
+ *     - initial commit of contract specification editor
+ *******************************************************************************/
+grammar org.eclipse.fordiac.ide.ContractSpec with org.eclipse.xtext.common.Terminals
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+generate contractSpec "http://www.eclipse.org/fordiac/ide/ContractSpec"
+
+Model:
+	timeSpec+=TimeSpec*;
+
+TimeSpec:
+	SingleEvent | Repetition | Reaction | Age |
+	CausalReaction | CausalAge | CausalFuncDecl | ClockDefinition;
+
+SingleEvent:
+	events=EventList "occurs" "within" interval=Interval
+	("using" "clock" clock=[ClockDefinition])?;
+
+Repetition:
+	events=EventList "occurs" "every" interval=Interval
+	("with" repetitionOptions=RepetitionOptions)?
+	("using" "clock" clock=[ClockDefinition])?;
+
+RepetitionOptions:
+	(jitter=Jitter ("and" offset=Offset)?) |
+	(offset=Offset ("and" jitter=Jitter)?);
+
+Jitter:
+	"jitter" time=TimeExpr;
+
+Offset:
+	"offset" interval=Interval;
+
+Reaction:
+	"whenever" input=EventExpr "occurs" "then" output=EventExpr "occurs" "within" interval=Interval
+	(once?="once" | n=INT "out" "of" outOf=INT "times")?
+	("using" "clock" clock=[ClockDefinition])?;
+
+Age:
+	"whenever" output=EventExpr "occurs" "then" input=EventExpr "has" "occurred" "within" interval=Interval
+	(once?="once" | n=INT "out" "of" outOf=INT "times")?
+	("using" "clock" clock=[ClockDefinition])?;
+
+CausalReaction:
+	"Reaction" "(" input=EventSpec "," output=EventSpec ")" "within" interval=Interval
+	("using" "clock" clock=[ClockDefinition])?;
+
+CausalAge:
+	"Age" "(" output=EventSpec "," input=EventSpec ")" "within" interval=Interval
+	("using" "clock" clock=[ClockDefinition])?;
+
+EventExpr:
+	event=EventSpec |
+	(sequence?="(" events=EventList ")") | // event sequence
+	("{" events=EventList "}");            // event set
+
+EventList:
+	events+=EventSpec ("," events+=EventSpec)*;
+
+EventSpec:
+	port=[Port] ("." eventValue=ID)?;
+
+Port:
+	name=ID isInput=INT; // component name implicit, isInput used as boolean
+
+Interval:
+	time=TimeExpr | 
+	(lBound=Boundary lbValue=Value "," ubValue=Value uBound=Boundary unit=Unit);
+
+TimeExpr:
+	value=Value unit=Unit;
+
+Boundary:
+	"[" | "]";
+
+Value returns ecore::EDouble:
+	INT ("." INT)?;
+
+enum Unit:
+	S="s" | MS="ms" | US="us" | NS="ns";
+
+CausalFuncDecl:
+	funcName=CausalFuncName "(" port1=[Port] "," port2=[Port] ")" ":=" relation=CausalRelation;
+
+enum CausalFuncName:
+	REACTION="|>" | AGE="<|";
+
+enum CausalRelation:
+	FIFO="FIFO" | LIFO="LIFO" | ID="ID";
+
+ClockDefinition:
+	"Clock" name=ID "has"
+	("resolution" resolution=TimeExpr)?
+	("skew" skew=TimeExpr)?
+	("drift" drift=Interval)?
+	("maxdiff" maxdiff=TimeExpr)?;

@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2013 Profactor GmbH, fortiss GmbH
- * 
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ *                          Primetals Technologies Austria GmbH
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -25,7 +26,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
  */
 public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 
-	public ECCEditPartFactory(GraphicalEditor editor) {
+	public ECCEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
@@ -49,7 +50,7 @@ public class ECCEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ECActionOutputEventEditPart();
 		}
 
-		throw createEditpartCreationException(modelElement);
+		throw createEditpartCreationException(context, modelElement);
 	}
 
 }

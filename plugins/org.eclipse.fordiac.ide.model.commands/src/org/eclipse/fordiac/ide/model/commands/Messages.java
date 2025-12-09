@@ -21,8 +21,10 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.commands.messages"; //$NON-NLS-1$
+	public static String UpdateFBTypeCommand_type_mismatch;
 	public static String AdapterConnectionNotAllowed;
 	public static String ChangeBackgroundcolorCommand_LABEL_ChangeColor;
+	public static String ChangeFbTypeCommand_TypeNotFound;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
 	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
@@ -30,12 +32,6 @@ public final class Messages extends NLS {
 	public static String DeleteFBNetworkElement;
 	public static String DeleteFBNetworkElementCommand_DeleteFBOrSubapplication;
 	public static String FBCreateCommand_LABEL_CreateFunctionBlock;
-	public static String LinkConstraints_ClassLinconstraintsShouldNotBeCreated;
-	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
-	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
-	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
-	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
-	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String MapToCommand_STATUSMessage_AlreadyMapped;
 	public static String MapToCommand_STATUSMessage_TypeNotSupported;
 	public static String ReconnectDataConnectionCommand_LABEL;
@@ -43,12 +39,9 @@ public final class Messages extends NLS {
 	public static String ReconnectAdapterConnectionCommand_LABEL;
 	public static String ViewSetPositionCommand_LABEL_Move;
 	public static String WithExists;
-	public static String ConnectingIncompatibleInterfaceTypes;
 	public static String UntypeSubappCommand_Label;
 
 	public static String UpdateFBTypeCommand_Pin_not_found;
-	public static String UpdateFBTypeCommand_type_mismatch;
-	public static String UpdateFBTypeCommand_wrong_type;
 
 	static {
 		// initialize resource bundle
