@@ -27,14 +27,14 @@ class HiddenConnectionTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		Path projectPath = new Path("data/HiddenConnectionTest");
-		Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.model");
+		final Path projectPath = new Path("data/HiddenConnectionTest"); //$NON-NLS-1$
+		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.model"); //$NON-NLS-1$
 		loader = new FordiacProjectLoader(bundle, projectPath);
 	}
 
 	@Test
 	@SuppressWarnings("static-method")
 	void testLoader() {
-		Assert.isNotNull(loader.getAutomationSystem("HiddenConnectionTest"));
+		Assert.isNotNull(loader.getAutomationSystem("HiddenConnectionTest")); //$NON-NLS-1$
 	}
 }

@@ -167,7 +167,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 			selectionTree.setCheckedElements(
 					DeploymentLaunchConfigurationAttributes.getSelection(configuration, system).toArray());
 		} catch (final CoreException e) {
-			systemText.setText("");
+			systemText.setText(""); //$NON-NLS-1$
 		}
 	}
 

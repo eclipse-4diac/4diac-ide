@@ -264,14 +264,14 @@ public class SystemImporter extends CommonElementImporter {
 		final var devResSeperator = toValue.indexOf('.');
 		if (devResSeperator == -1) {
 			getErrors().add(
-					new TypeImportDiagnostic("Wrong to mapping string", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+					new TypeImportDiagnostic("Wrong to mapping string", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$ //$NON-NLS-2$
 			return null;
 		}
 
 		final Device dev = getElement().getDeviceNamed(toValue.substring(0, devResSeperator));
 		if (dev == null) {
 			getErrors().add(
-					new TypeImportDiagnostic("Device missing in mapping", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+					new TypeImportDiagnostic("Device missing in mapping", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$ //$NON-NLS-2$
 			return null;
 		}
 
@@ -281,7 +281,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		final Resource res = dev.getResourceNamed(resName);
 		if (res == null) {
-			getErrors().add(new TypeImportDiagnostic("Resource missing in mapping", fromValue + "->" + toValue, //$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic("Resource missing in mapping", fromValue + "->" + toValue, //$NON-NLS-1$ //$NON-NLS-2$
 					getLineNumber()));
 			return null;
 		}

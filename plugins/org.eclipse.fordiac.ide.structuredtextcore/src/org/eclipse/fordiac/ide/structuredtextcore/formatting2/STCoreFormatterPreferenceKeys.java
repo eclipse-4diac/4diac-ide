@@ -20,5 +20,5 @@ public class STCoreFormatterPreferenceKeys extends FormatterPreferenceKeys {
 	/**
 	 * The maximum of characters that may fit into one comment line.
 	 */
-	public static final IntegerKey maxCommentWidth = new IntegerKey("comment.width.max", 100);
+	public static final IntegerKey maxCommentWidth = new IntegerKey("comment.width.max", 100); //$NON-NLS-1$
 }

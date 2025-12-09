@@ -86,7 +86,7 @@ public class ConnectionSection extends AbstractSection {
 		});
 
 		negateConnectionLabel = getWidgetFactory().createCLabel(composite, Messages.ConnectionSection_NegateConnection);
-		negateConnectionButton = getWidgetFactory().createButton(composite, "", SWT.CHECK);
+		negateConnectionButton = getWidgetFactory().createButton(composite, "", SWT.CHECK); //$NON-NLS-1$
 		negateConnectionButton.setEnabled(false);
 
 		negateConnectionButton.addSelectionListener(new SelectionAdapter() {

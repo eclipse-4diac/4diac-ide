@@ -37,6 +37,6 @@ public final class HiddenElementAnnotations {
 	}
 
 	private HiddenElementAnnotations() {
-		throw new UnsupportedOperationException("Utility class should not be instantiated");
+		throw new UnsupportedOperationException("Utility class should not be instantiated"); //$NON-NLS-1$
 	}
 }

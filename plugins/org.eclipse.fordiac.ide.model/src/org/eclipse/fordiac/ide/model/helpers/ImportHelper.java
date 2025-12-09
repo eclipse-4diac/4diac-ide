@@ -36,6 +36,7 @@ public final class ImportHelper {
 	public static final String WILDCARD_IMPORT = "*"; //$NON-NLS-1$
 	public static final String WILDCARD_IMPORT_SUFFIX = PACKAGE_NAME_DELIMITER + WILDCARD_IMPORT;
 
+	@SuppressWarnings("nls")
 	public static final Set<String> IMPLICIT_IMPORTS = Set.of(//
 			"eclipse4diac::convert", //
 			"eclipse4diac::core", //
