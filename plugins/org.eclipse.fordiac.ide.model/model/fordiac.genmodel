@@ -512,6 +512,10 @@
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateName/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/validateType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.validateType(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateType/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetworkElement/validateType/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getQualifiedName"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBNetworkElementAnnotations.getQualifiedName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/getWidth" body="throw new UnsupportedOperationException();"/>

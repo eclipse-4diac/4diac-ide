@@ -335,12 +335,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int FB_NETWORK_ELEMENT__VALIDATE_NAME = 20;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'FB Network Element'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int FB_NETWORK_ELEMENT__VALIDATE_TYPE = 21;
+
+	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Collisions' of 'Group'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int GROUP__VALIDATE_COLLISIONS = 21;
+	public static final int GROUP__VALIDATE_COLLISIONS = 22;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'IInterface Element'.
@@ -348,7 +356,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 22;
+	public static final int IINTERFACE_ELEMENT__VALIDATE_NAME = 23;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'INamed Element'.
@@ -356,7 +364,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int INAMED_ELEMENT__VALIDATE_NAME = 23;
+	public static final int INAMED_ELEMENT__VALIDATE_NAME = 24;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'ITyped Element'.
@@ -364,7 +372,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 24;
+	public static final int ITYPED_ELEMENT__VALIDATE_TYPE = 25;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Library Element'.
@@ -372,7 +380,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int LIBRARY_ELEMENT__VALIDATE_NAME = 25;
+	public static final int LIBRARY_ELEMENT__VALIDATE_NAME = 26;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Type' of 'Typed Configureable Object'.
@@ -380,7 +388,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 26;
+	public static final int TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE = 27;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Name' of 'Var Config Instance'.
@@ -388,7 +396,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 27;
+	public static final int VAR_CONFIG_INSTANCE__VALIDATE_NAME = 28;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Multiple Input Connections' of 'Var Declaration'.
@@ -396,7 +404,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 28;
+	public static final int VAR_DECLARATION__VALIDATE_MULTIPLE_INPUT_CONNECTIONS = 29;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Generic Type Variable' of 'Var Declaration'.
@@ -404,7 +412,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = 29;
+	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = 30;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Illegal Variable Length Array Variable' of 'Var Declaration'.
@@ -412,7 +420,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE = 30;
+	public static final int VAR_DECLARATION__VALIDATE_ILLEGAL_VARIABLE_LENGTH_ARRAY_VARIABLE = 31;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate No Value For Variable Length Array Variable' of 'Var Declaration'.
@@ -420,7 +428,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE = 31;
+	public static final int VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_VARIABLE_LENGTH_ARRAY_VARIABLE = 32;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value For Generic Instance Variable' of 'Var Declaration'.
@@ -428,7 +436,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 32;
+	public static final int VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE = 33;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Value Overridden By Sub App Input' of 'Var Declaration'.
@@ -436,7 +444,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT = 33;
+	public static final int VAR_DECLARATION__VALIDATE_VALUE_OVERRIDDEN_BY_SUB_APP_INPUT = 34;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Source Type Is Well Defined' of 'Var Declaration'.
@@ -444,7 +452,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 34;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SOURCE_TYPE_IS_WELL_DEFINED = 35;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Is Withed' of 'Var Declaration'.
@@ -452,7 +460,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 35;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_IS_WITHED = 36;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Interface' of 'Var Declaration'.
@@ -460,7 +468,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 36;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_INTERFACE = 37;
 
 	/**
 	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Var In Out Subapp Network' of 'Var Declaration'.
@@ -468,7 +476,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 37;
+	public static final int VAR_DECLARATION__VALIDATE_VAR_IN_OUT_SUBAPP_NETWORK = 38;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -476,7 +484,7 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 37;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 38;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -834,7 +842,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(adapterFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(adapterFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(adapterFB, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(adapterFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(adapterFB, diagnostics, context);
 		return result;
 	}
 
@@ -1038,7 +1046,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(blockFBNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(blockFBNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(blockFBNetworkElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(blockFBNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(blockFBNetworkElement, diagnostics, context);
 		return result;
 	}
 
@@ -1058,7 +1066,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(cfbInstance, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(cfbInstance, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(cfbInstance, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(cfbInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(cfbInstance, diagnostics, context);
 		return result;
 	}
 
@@ -1096,7 +1104,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(comment, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(comment, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(comment, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(comment, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(comment, diagnostics, context);
 		return result;
 	}
 
@@ -1116,7 +1124,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(communicationChannel, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(communicationChannel, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(communicationChannel, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(communicationChannel, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(communicationChannel, diagnostics, context);
 		return result;
 	}
 
@@ -1230,7 +1238,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(configurableFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(configurableFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(configurableFB, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(configurableFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(configurableFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConfigurableFB_validateDataType(configurableFB, diagnostics, context);
 		return result;
 	}
@@ -1261,7 +1269,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(configurableMoveFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(configurableMoveFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(configurableMoveFB, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(configurableMoveFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(configurableMoveFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConfigurableFB_validateDataType(configurableMoveFB, diagnostics, context);
 		return result;
 	}
@@ -1501,7 +1509,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(demultiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(demultiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(demultiplexer, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(demultiplexer, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(demultiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConfigurableFB_validateDataType(demultiplexer, diagnostics, context);
 		return result;
 	}
@@ -1626,7 +1634,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorMarkerFBNElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorMarkerFBNElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(errorMarkerFBNElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(errorMarkerFBNElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(errorMarkerFBNElement, diagnostics, context);
 		return result;
 	}
 
@@ -1738,7 +1746,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(fb, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(fb, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(fb, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(fb, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(fb, diagnostics, context);
 		return result;
 	}
 
@@ -1787,7 +1795,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(fbNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(fbNetworkElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(fbNetworkElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(fbNetworkElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(fbNetworkElement, diagnostics, context);
 		return result;
 	}
 
@@ -1799,6 +1807,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateFBNetworkElement_validateName(FBNetworkElement fbNetworkElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return fbNetworkElement.validateName(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateType constraint of '<em>FB Network Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateFBNetworkElement_validateType(FBNetworkElement fbNetworkElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return fbNetworkElement.validateType(diagnostics, context);
 	}
 
 	/**
@@ -1902,7 +1920,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(group, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(group, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(group, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(group, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(group, diagnostics, context);
 		if (result || diagnostics != null) result &= validateGroup_validateCollisions(group, diagnostics, context);
 		return result;
 	}
@@ -2250,7 +2268,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(multiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(multiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(multiplexer, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(multiplexer, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(multiplexer, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConfigurableFB_validateDataType(multiplexer, diagnostics, context);
 		return result;
 	}
@@ -2402,7 +2420,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(resourceTypeFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(resourceTypeFB, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(resourceTypeFB, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(resourceTypeFB, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(resourceTypeFB, diagnostics, context);
 		return result;
 	}
 
@@ -2649,7 +2667,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(structManipulator, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(structManipulator, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(structManipulator, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(structManipulator, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(structManipulator, diagnostics, context);
 		if (result || diagnostics != null) result &= validateConfigurableFB_validateDataType(structManipulator, diagnostics, context);
 		return result;
 	}
@@ -2670,7 +2688,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(subApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(subApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(subApp, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(subApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(subApp, diagnostics, context);
 		return result;
 	}
 
@@ -2814,7 +2832,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(typedSubApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(typedSubApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(typedSubApp, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(typedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(typedSubApp, diagnostics, context);
 		return result;
 	}
 
@@ -2834,7 +2852,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(untypedSubApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(untypedSubApp, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFBNetworkElement_validateName(untypedSubApp, diagnostics, context);
-		if (result || diagnostics != null) result &= validateTypedConfigureableObject_validateType(untypedSubApp, diagnostics, context);
+		if (result || diagnostics != null) result &= validateFBNetworkElement_validateType(untypedSubApp, diagnostics, context);
 		return result;
 	}
 
