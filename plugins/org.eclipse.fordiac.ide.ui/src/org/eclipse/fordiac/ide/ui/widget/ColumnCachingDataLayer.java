@@ -62,6 +62,10 @@ public class ColumnCachingDataLayer<T extends Enum<?>> extends AbstractCachingDa
 		return placeholderValues.get(columnIndex);
 	}
 
+	protected final List<T> getColumns() {
+		return columns;
+	}
+
 	public void setPlaceholderValue(final int columnIndex, final Object value) {
 		placeholderValues.set(columnIndex, value);
 	}
