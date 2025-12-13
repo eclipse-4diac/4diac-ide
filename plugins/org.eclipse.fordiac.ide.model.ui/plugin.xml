@@ -127,4 +127,11 @@
           value="false">
     </persistent>
   </extension>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory"
+            id="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory">
+      </factory>
+   </extension>
 </plugin>

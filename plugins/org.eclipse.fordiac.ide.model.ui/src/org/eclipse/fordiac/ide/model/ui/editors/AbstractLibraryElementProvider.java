@@ -77,6 +77,26 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 	}
 
 	@Override
+	public <U> U getElement(final IEditorInput input, final Class<? extends U> elementClass) throws ClassCastException {
+		if (input instanceof final ISubEditorInput subEditorInput) {
+			return elementClass.cast(getSubElement(subEditorInput));
+		}
+		return elementClass.cast(getLibraryElement(input));
+	}
+
+	protected Object getSubElement(final ISubEditorInput input) {
+		final LibraryElement libraryElement = getLibraryElement(input);
+		if (libraryElement == null) {
+			return null;
+		}
+		if (input.getFragment().startsWith("/") && libraryElement.eResource() != null) { //$NON-NLS-1$
+			return libraryElement.eResource().getEObject(input.getFragment());
+		}
+		return libraryElement.findByQualifiedName(input.getFragment()).filter(input.getElementClass()::isInstance)
+				.findFirst().orElse(null);
+	}
+
+	@Override
 	public LibraryElement getLibraryElement(final IEditorInput input) {
 		// allow concurrent access
 		final T info = getLibraryElementInfo(input);
@@ -187,11 +207,17 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 	}
 
 	protected T createLibraryElementInfo(final IEditorInput input) throws CoreException {
+		if (input instanceof final ISubEditorInput subEditorInput) {
+			return createLibraryElementInfo(subEditorInput.getParent());
+		}
 		throw new CoreException(Status.error(MessageFormat
 				.format(Messages.AbstractLibraryElementProvider_CannotHandleInput, input.getToolTipText())));
 	}
 
 	protected final T getLibraryElementInfo(final IEditorInput input) {
+		if (input instanceof final ISubEditorInput subEditorInput) {
+			return infos.get(subEditorInput.getParent());
+		}
 		return input != null ? infos.get(input) : null;
 	}
 

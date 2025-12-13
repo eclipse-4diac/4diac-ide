@@ -55,6 +55,16 @@ public interface LibraryElementProvider {
 	void disconnect(IEditorInput input);
 
 	/**
+	 * Get the element for the given input.
+	 *
+	 * @param input        The input
+	 * @param elementClass The element class
+	 * @return The element or {@code null} if none is currently connected
+	 * @throws ClassCastException if the element is not a subclass of elementClass
+	 */
+	<T> T getElement(IEditorInput input, Class<? extends T> elementClass) throws ClassCastException;
+
+	/**
 	 * Get the library element for the given input.
 	 *
 	 * @param input The input
