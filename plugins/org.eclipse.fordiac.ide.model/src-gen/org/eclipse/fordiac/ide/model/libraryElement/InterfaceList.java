@@ -224,7 +224,15 @@ public interface InterfaceList extends EObject {
 	 * @model required="true"
 	 * @generated
 	 */
-	InterfaceList copy();
+	InterfaceList instanceCopy();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	InterfaceList fullCopy();
 
 	/**
 	 * <!-- begin-user-doc -->

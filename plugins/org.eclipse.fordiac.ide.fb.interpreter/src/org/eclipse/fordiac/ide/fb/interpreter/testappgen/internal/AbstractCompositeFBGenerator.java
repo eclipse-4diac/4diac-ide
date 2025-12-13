@@ -77,7 +77,7 @@ public abstract class AbstractCompositeFBGenerator extends AbstractBlockGenerato
 		final BlockFBNetworkElement el = LibraryElementFactory.eINSTANCE.createFB();
 		el.setTypeEntry(blockToAdd.getTypeEntry());
 		addPosition(el, x, y);
-		el.setInterface(blockToAdd.getInterfaceList().copy());
+		el.setInterface(blockToAdd.getInterfaceList().instanceCopy());
 
 		net.getNetworkElements().add(el);
 		final String name = NameRepository.createUniqueName(el, "TESTAPPFB1"); //$NON-NLS-1$

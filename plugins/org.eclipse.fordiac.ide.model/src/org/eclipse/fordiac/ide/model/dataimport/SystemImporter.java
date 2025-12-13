@@ -335,7 +335,7 @@ public class SystemImporter extends CommonElementImporter {
 						comm.setName(copyCommunication.getName());
 						comm.setPosition(EcoreUtil.copy(copyCommunication.getPosition()));
 						comm.setTypeEntry(copyCommunication.getTypeEntry());
-						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
+						comm.setInterface(copyCommunication.getType().getInterfaceList().instanceCopy());
 						channel.getMappedElements().add(comm);
 						return comm;
 					}

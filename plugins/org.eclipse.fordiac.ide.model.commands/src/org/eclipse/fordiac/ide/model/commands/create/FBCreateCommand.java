@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -85,7 +85,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		if (interfaceList == null) {
 			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
 		} else {
-			interfaceList = interfaceList.copy();
+			interfaceList = interfaceList.instanceCopy();
 		}
 		return interfaceList;
 	}
