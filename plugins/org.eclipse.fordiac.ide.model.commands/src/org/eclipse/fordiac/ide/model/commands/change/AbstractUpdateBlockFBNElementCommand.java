@@ -282,7 +282,7 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 					: adpType.getInterfaceList());
 		}
 		if (typeInterface != null) {
-			newElement.setInterface(typeInterface.copy());
+			newElement.setInterface(typeInterface.instanceCopy());
 		} else {
 			newElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		}

@@ -111,30 +111,20 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected boolean handleFBNetworkChild(final String name) throws XMLStreamException, TypeImportException {
 		switch (name) {
-		case LibraryElementTags.FB_ELEMENT:
-			parseFB();
-			break;
-		case LibraryElementTags.GROUP_ELEMENT:
-			parseGroup();
-			break;
-		case LibraryElementTags.COMMENT_ELEMENT:
-			parseComment();
-			break;
-		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT:
-			parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
-					LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
-			break;
-		case LibraryElementTags.DATA_CONNECTIONS_ELEMENT:
-			parseConnectionList(LibraryElementPackage.eINSTANCE.getDataConnection(), fbNetwork.getDataConnections(),
-					LibraryElementTags.DATA_CONNECTIONS_ELEMENT);
-			break;
-		case LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT:
-			parseConnectionList(LibraryElementPackage.eINSTANCE.getAdapterConnection(),
-					fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT);
-			break;
-		default:
+		case LibraryElementTags.FB_ELEMENT -> parseFB();
+		case LibraryElementTags.GROUP_ELEMENT -> parseGroup();
+		case LibraryElementTags.COMMENT_ELEMENT -> parseComment();
+		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
+				LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
+		case LibraryElementTags.DATA_CONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getDataConnection(), fbNetwork.getDataConnections(),
+				LibraryElementTags.DATA_CONNECTIONS_ELEMENT);
+		case LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getAdapterConnection(),
+				fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT);
+		default -> {
 			return false;
 		}
+		}
+		;
 		return true;
 	}
 
@@ -228,7 +218,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if (fbInterface == null) {
 			fbInterface = LibraryElementFactory.eINSTANCE.createInterfaceList();
 		} else {
-			fbInterface = fbInterface.copy();
+			fbInterface = fbInterface.instanceCopy();
 		}
 		fb.setInterface(fbInterface);
 		fb.setTypeEntry(entry);

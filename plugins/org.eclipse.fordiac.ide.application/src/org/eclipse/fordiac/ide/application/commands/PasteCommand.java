@@ -258,7 +258,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 				copiedElement.setTypeEntry(dstTypeLib.createErrorTypeEntry(element.getFullTypeName(),
 						element.getTypeEntry().getTypeEClass()));
 				if (element instanceof final BlockFBNetworkElement bfbElement) {
-					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
+					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().fullCopy());
 				}
 			}
 		} else if (copiedElement instanceof final BlockFBNetworkElement copiedBlockElement) {

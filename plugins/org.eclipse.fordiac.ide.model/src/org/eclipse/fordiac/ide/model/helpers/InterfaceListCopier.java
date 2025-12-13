@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,8 +36,9 @@ public final class InterfaceListCopier {
 	/**
 	 * Create a new copy of the source interface list
 	 *
-	 * @param src        source interface list
-	 * @param copyValues flag indicating if initial values should be copied or not
+	 * @param src          source interface list
+	 * @param copyValues   flag indicating if initial values should be copied or not
+	 * @param copyComments flag indicating if comments should be copied or not
 	 * @return
 	 */
 	public static InterfaceList copy(final InterfaceList src, final boolean copyValues, final boolean copyComments) {
@@ -81,10 +82,6 @@ public final class InterfaceListCopier {
 
 		return copy;
 
-	}
-
-	public static InterfaceList copy(final InterfaceList src) {
-		return copy(src, false, false);
 	}
 
 	public static void copyVarList(final Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars,
