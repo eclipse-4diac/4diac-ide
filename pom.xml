@@ -20,7 +20,7 @@
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
 		<tycho.version>5.0.1</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2025-12</tycho-repo.url>
+		<tycho-repo.url>https://download.eclipse.org/releases/2026-03</tycho-repo.url>
 		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
@@ -30,10 +30,9 @@
 		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.1</org.eclipse.justj.jre.repository>
         <xtend-version>2.41.0</xtend-version>
         <xtend-java-version>21</xtend-java-version>
-        <eclipse.platform.version>4.38</eclipse.platform.version>
-        <equinox.executable.version>3.8.3100</equinox.executable.version>
         <eclipse.cbi.version>1.5.2</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+        <maven-resources-plugin-version>3.4.0</maven-resources-plugin-version>
 	</properties>
 
 	<repositories>
@@ -139,25 +138,7 @@
 					</target>
 					
 					<resolveWithExecutionEnvironmentConstraints>false</resolveWithExecutionEnvironmentConstraints>
-					
-					<dependency-resolution>	
-						<extraRequirements>
-							<requirement>
-								<type>eclipse-feature</type>
-								<id>org.eclipse.equinox.executable</id>
-								<versionRange>${equinox.executable.version}</versionRange>
-							</requirement>
-							<requirement>
-								<type>eclipse-feature</type>
-								<id>org.eclipse.platform</id>
-								<versionRange>${eclipse.platform.version}</versionRange>
-							</requirement>
-						</extraRequirements>
-						<profileProperties>
-							<org.eclipse.justj.buildtime>true</org.eclipse.justj.buildtime>
-						</profileProperties>
-					</dependency-resolution>
- 
+
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -238,7 +219,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>${maven-resources-plugin-version}</version>
 				<executions>
 					<execution>
 						<id>copy-resources-splash</id>
