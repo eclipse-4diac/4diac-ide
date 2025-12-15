@@ -56,6 +56,11 @@ public final class Messages extends NLS {
 	public static String Validation_SeverityLabel;
 	public static String Validation_WarningLabel;
 
+	public static String DataTypeDialog_OneElement;
+	public static String DataTypeDialog_NoFolder;
+	public static String DataTypeDialog_InvalidSelection;
+	public static String DataTypeDialog_Selected;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
