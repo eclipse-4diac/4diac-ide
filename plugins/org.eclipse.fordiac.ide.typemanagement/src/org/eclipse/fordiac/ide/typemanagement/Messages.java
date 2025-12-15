@@ -147,6 +147,7 @@ public final class Messages extends NLS {
 	public static String CopyResourceChange_Name;
 	public static String CopyTypeChange_CannotLoadResource;
 	public static String CopyTypeChange_CannotSaveResource;
+	public static String CopyTypeChange_RenamePackage;
 
 	public static String Copy_OverwriteDialog_Title;
 	public static String Copy_OverwriteDialog_Message;
