@@ -54,17 +54,15 @@ public class ValidationPreferencePage extends FordiacPropertyPreferencePage {
 		header.setText(Messages.Validation_Severity_Info);
 		header.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 2, 1));
 
-		// section: collisions
-		final Composite section1 = createSection(Messages.Validation_Section_Collision, parent, true);
+		final Composite collisionSection = createSection(Messages.Validation_Section_Collision, parent, true);
 		addField(new ComboFieldEditor(ValidationPreferences.COLLISION_SEVERITY,
-				Messages.Validation_CollisionSeverityLabel, SEVERITIES, section1));
+				Messages.Validation_CollisionSeverityLabel, SEVERITIES, collisionSection));
 		addField(new ComboFieldEditor(ValidationPreferences.RIGHT_INTERFACE_BAR_COLLISION_SEVERITY,
-				Messages.Validation_InterfaceCollisionSeverityLabel, SEVERITIES, section1));
+				Messages.Validation_InterfaceCollisionSeverityLabel, SEVERITIES, collisionSection));
 
-		// section: types
-		final Composite section2 = createSection(Messages.Validation_Section_TypeManagement, parent, true);
+		final Composite typeSection = createSection(Messages.Validation_Section_TypeManagement, parent, true);
 		addField(new ComboFieldEditor(ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER,
-				Messages.Validation_PackagenameMismatchFolder, SEVERITIES, section2));
+				Messages.Validation_PackagenameMismatchFolder, SEVERITIES, typeSection));
 	}
 
 	private static Composite createSection(final String label, final Composite composite, final boolean expanded) {
