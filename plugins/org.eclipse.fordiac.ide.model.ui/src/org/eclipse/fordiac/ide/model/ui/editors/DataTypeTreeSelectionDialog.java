@@ -16,9 +16,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.text.MessageFormat;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -40,8 +45,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.osgi.framework.FrameworkUtil;
 
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
+	private final String pluginId = FrameworkUtil.getBundle(getClass()).getSymbolicName();
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider) {
 		this(parent, contentProvider, new TreeNodeLabelProvider());
@@ -84,6 +91,24 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 				// nothing to be done here
 			}
 		});
+
+		this.setValidator(selection -> {
+			if (selection == null || selection.length != 1 || !(selection[0] instanceof final TypeNode typeNode)) {
+				return new Status(IStatus.ERROR, pluginId, Messages.DataTypeDialog_OneElement);
+			}
+
+			if (!typeNode.getChildren().isEmpty()) {
+				return new Status(IStatus.ERROR, pluginId, Messages.DataTypeDialog_NoFolder);
+			}
+
+			if (typeNode.getType() == null) {
+				return new Status(IStatus.ERROR, pluginId, Messages.DataTypeDialog_InvalidSelection);
+			}
+
+			return new Status(IStatus.OK, pluginId,
+					MessageFormat.format(Messages.DataTypeDialog_Selected, typeNode.getFullName()));
+		});
+
 		control.setMenu(openEditorMenu);
 	}
 
