@@ -288,11 +288,6 @@ public class TransactionSection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
 	protected void setInputInit() {
 		outputPrimitivesViewer.setCellEditors(createCellEditors(outputPrimitivesViewer.getTable()));
 		outputPrimitivesViewer.setCellModifier(new TransactionCellModifier());

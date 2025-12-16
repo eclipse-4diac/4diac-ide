@@ -122,15 +122,4 @@ public class AppearancePropertySection extends AbstractSection {
 		}
 		return null;
 	}
-
-	@Override
-	protected void setInputCode() {
-		// currently nothing to do here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing to do here
-	}
-
 }

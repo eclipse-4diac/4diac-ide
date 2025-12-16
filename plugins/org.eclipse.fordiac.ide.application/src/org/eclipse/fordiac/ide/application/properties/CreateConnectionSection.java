@@ -171,14 +171,4 @@ public class CreateConnectionSection extends AbstractSection {
 	private static String getFBName(final INamedElement element) {
 		return ((INamedElement) element.eContainer().eContainer()).getName();
 	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do here
-	}
 }

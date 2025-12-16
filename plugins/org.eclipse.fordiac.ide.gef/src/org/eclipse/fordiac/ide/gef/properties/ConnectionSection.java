@@ -153,14 +153,4 @@ public class ConnectionSection extends AbstractSection {
 	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {
 		return (element.eContainer().eContainer() instanceof final FBNetworkElement fbne) ? fbne.getName() : ""; //$NON-NLS-1$
 	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing needed to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing needed to be done here
-	}
 }

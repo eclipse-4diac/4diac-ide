@@ -209,18 +209,8 @@ public class InfoPropertySection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// DO NOTHING
-	}
-
-	@Override
-	protected void setInputInit() {
-		formatPage();
-	}
-
-	@Override
 	protected void performRefresh() {
-		// DO NOTHING
+		formatPage();
 	}
 
 	private void formatPage() {

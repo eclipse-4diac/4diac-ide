@@ -88,11 +88,6 @@ public class DataTypeInfoSection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// currently nothing to do here
-	}
-
-	@Override
 	protected void performRefresh() {
 		commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
 		typeInfoWidget.refresh();

@@ -343,11 +343,6 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	protected void setInputInit() {
-		// no implementation needed
-	}
-
-	@Override
 	public void dispose() {
 		super.dispose();
 		if (refreshJob != null) {

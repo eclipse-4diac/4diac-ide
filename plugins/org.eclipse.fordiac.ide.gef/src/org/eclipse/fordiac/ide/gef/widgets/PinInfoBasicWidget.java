@@ -89,10 +89,10 @@ public class PinInfoBasicWidget implements CommandExecutor {
 			if ((null != type.getName()) && (null != type.getComment())) {
 				nameText.setText(type.getName());
 				commentText.setText(type.getComment());
-				typeSelectionWidget.refresh();
-				typeDeclarationEditor.refresh();
-				checkFieldEnablements();
 			}
+			typeSelectionWidget.refresh();
+			typeDeclarationEditor.refresh();
+			checkFieldEnablements();
 			commandExecutor = commandExecutorBuffer;
 		}
 

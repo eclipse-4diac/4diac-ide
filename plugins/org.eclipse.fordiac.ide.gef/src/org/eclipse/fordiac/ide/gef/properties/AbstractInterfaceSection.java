@@ -260,14 +260,4 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 			return element.toString();
 		}
 	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing to do here
-	}
-
-	@Override
-	protected void setInputCode() {
-		// currently nothing to do here
-	}
 }
