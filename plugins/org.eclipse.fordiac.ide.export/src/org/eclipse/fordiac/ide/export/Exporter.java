@@ -16,23 +16,37 @@ package org.eclipse.fordiac.ide.export;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.export.utils.ExportFilterUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 
-public abstract class AbstractExporter {
+public class Exporter {
+
 	private final String outputDirectory;
 	private final IConfigurationElement filterConfig;
 	private boolean overwriteWithoutWarning;
 	private boolean enableCMakeLists;
 	private final IExportFilter filter;
+
+	public Exporter(final IConfigurationElement filterConfig, final String outputDirectory,
+			final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
+		this.filterConfig = filterConfig;
+		this.outputDirectory = outputDirectory;
+		this.overwriteWithoutWarning = overwriteWithoutWarning;
+		this.enableCMakeLists = enableCMakeLists;
+		this.filter = ExportFilterUtil.createExportFilter(Optional.of(filterConfig));
+
+	}
 
 	public void exportElements(final IProgressMonitor monitor, final List<IFile> exportees) {
 		monitor.beginTask(MessageFormat.format(Messages.FordiacExporter_ExportingSelectedTypesUsingExporter,
@@ -40,7 +54,7 @@ public abstract class AbstractExporter {
 
 		if (null != filter) {
 			for (final IFile file : exportees) {
-				if (!exportIsCanceled(monitor)) {
+				if (!monitor.isCanceled()) {
 					try {
 						exportElement(monitor, filter, file, null);
 					} catch (final ExportException.OverwriteAll e) {
@@ -66,27 +80,16 @@ public abstract class AbstractExporter {
 				monitor.worked(1);
 			}
 			monitor.worked(1);
-			if (exportIsCanceled(monitor)) {
+			if (monitor.isCanceled()) {
 				filter.getErrors().add(Messages.FordiacExporter_EXPORT_CANCELED);
 				throw new OperationCanceledException();
 			}
-			Display.getDefault().asyncExec(() -> showErrorWarningSummary(filter));
 		}
 		monitor.done();
 	}
 
-	protected AbstractExporter(final IConfigurationElement filterConfig, final String outputDirectory,
-			final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
-		this.filterConfig = filterConfig;
-		this.outputDirectory = outputDirectory;
-		this.overwriteWithoutWarning = overwriteWithoutWarning;
-		this.enableCMakeLists = enableCMakeLists;
-		this.filter = createExportFilter();
-	}
-
-	@SuppressWarnings("static-method")
-	protected boolean exportIsCanceled(final IProgressMonitor monitor) {
-		return monitor.isCanceled();
+	public IExportFilter getExportFilter() {
+		return filter;
 	}
 
 	protected void exportElement(final IProgressMonitor monitor, final IExportFilter filter, final IFile file,
@@ -107,19 +110,12 @@ public abstract class AbstractExporter {
 		}
 	}
 
-	protected IExportFilter createExportFilter() {
-		IExportFilter exportFilter = null;
-		try {
-			exportFilter = (IExportFilter) filterConfig.createExecutableExtension("class"); //$NON-NLS-1$
-		} catch (final CoreException e) {
-			processError(Messages.FordiacExporter_ERROR + e.getMessage());
-		}
-		return exportFilter;
+	protected static void processError(final String errorMessage) {
+		FordiacLogHelper.logError(errorMessage);
+		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
+		msg.setMessage(errorMessage);
+		msg.open();
 	}
-
-	protected abstract void showErrorWarningSummary(final IExportFilter filter);
-
-	protected abstract void processError(String errorMessage);
 
 	private static String getExportElementName(final EObject element, final IFile file) {
 		String name = "anonymous"; //$NON-NLS-1$
