@@ -50,7 +50,7 @@ public class MultiPageEditorContentOutlinePage extends Page
 	}
 
 	private final MultiPageEditorPart editorPart;
-	private final IContentOutlinePage defaultPage;
+	private final IContentOutlinePage defaultOutlinePage;
 	private final CopyOnWriteArrayList<ISelectionChangedListener> selectionChangedListeners = new CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<ISelectionChangedListener> postSelectionChangedListeners = new CopyOnWriteArrayList<>();
 	private final Map<IEditorPart, PageRecord> pages = new HashMap<>();
@@ -61,17 +61,19 @@ public class MultiPageEditorContentOutlinePage extends Page
 	private final IPageChangedListener pageChangedListener = this::pageChanged;
 
 	private PageBook book;
+	private PageRecord defaultPage;
 	private PageRecord currentPage;
 
 	public MultiPageEditorContentOutlinePage(final MultiPageEditorPart editorPart,
-			final IContentOutlinePage defaultPage) {
+			final IContentOutlinePage defaultOutlinePage) {
 		this.editorPart = editorPart;
-		this.defaultPage = defaultPage;
+		this.defaultOutlinePage = defaultOutlinePage;
 	}
 
 	@Override
 	public void createControl(final Composite parent) {
 		book = new PageBook(parent, SWT.NONE);
+		defaultPage = createPage(editorPart, defaultOutlinePage);
 		if (editorPart.getSelectedPage() instanceof final IEditorPart activeEditor) {
 			showPage(getOrCreatePage(activeEditor));
 		} else {
@@ -91,7 +93,7 @@ public class MultiPageEditorContentOutlinePage extends Page
 				return createPage(editorPart, page);
 			}
 		}
-		return createPage(editorPart, defaultPage);
+		return defaultPage;
 	}
 
 	private PageRecord createPage(final IEditorPart editorPart, final IContentOutlinePage page) {
@@ -106,11 +108,22 @@ public class MultiPageEditorContentOutlinePage extends Page
 		} else {
 			site = new MultiPageSite(getSite());
 		}
-		if (page.getControl() == null) {
+		if (page.getControl() == null || page.getControl().isDisposed()) {
 			page.createControl(book);
 			page.setActionBars(site.getActionBars());
+		} else if (!isAncestor(page.getControl().getParent(), book)) {
+			throw new IllegalStateException("The page " + page + " is currently used in a different page book"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return new PageRecord(editorPart, page, site);
+	}
+
+	private static boolean isAncestor(Control control, final Composite ancestor) {
+		while ((control = control.getParent()) != null) {
+			if (control == ancestor) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected void showPage(final PageRecord page) {
@@ -230,7 +243,8 @@ public class MultiPageEditorContentOutlinePage extends Page
 		if (book != null && !book.isDisposed()) {
 			book.setFocus();
 		}
-		if (currentPage != null) {
+		if (currentPage != null && currentPage.page().getControl() != null
+				&& !currentPage.page().getControl().isDisposed()) {
 			currentPage.page().setFocus();
 		}
 	}
@@ -247,10 +261,17 @@ public class MultiPageEditorContentOutlinePage extends Page
 	public void dispose() {
 		editorPart.removePageChangedListener(pageChangedListener);
 		multiPageChildren.forEach(child -> child.removePageChangedListener(pageChangedListener));
+		multiPageChildren.clear();
 		showPage(null);
 		pages.values().forEach(PageRecord::dispose);
+		pages.clear();
+		if (defaultPage != null) {
+			defaultPage.dispose();
+			defaultPage = null;
+		}
 		if (book != null) {
 			book.dispose();
+			book = null;
 		}
 		super.dispose();
 	}
