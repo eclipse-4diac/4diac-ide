@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>EmptyTestProject</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.fordiac.ide.library.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.fordiac.ide.export.builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.fordiac.ide.systemmanagement.FordiacNature</nature>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>External Libraries</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/convert</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/convert-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/core</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/core-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/events</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/events-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/iec61131-3</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/iec61131-3-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/io</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/io-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/net</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/net-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/powerlink</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/powerlink-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/reconfiguration</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/reconfiguration-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/rtevents</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/rtevents-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/signalprocessing</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/signalprocessing-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/system</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/system-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/utils</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/utils-3.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/convert/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/convert-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/core/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/core-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/events/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/events-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/iec61131-3/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/iec61131-3-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/io/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/io-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/net/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/net-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/powerlink/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/powerlink-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/reconfiguration/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/reconfiguration-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/rtevents/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/rtevents-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/signalprocessing/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/signalprocessing-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/system/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/system-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Standard Libraries/utils/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/utils-3.0.0/MANIFEST.MF</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
