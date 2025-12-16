@@ -20,10 +20,10 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -38,9 +38,9 @@ public class SearchChildrenProviderHelper {
 			retval = Stream.concat(retval, baseFBType.getInternalVars().stream());
 			retval = Stream.concat(retval, baseFBType.getInternalConstVars().stream());
 		}
-		if (fbType instanceof final SubAppType subappType) {
-			// we may have untyped subapps inside
-			retval = Stream.concat(retval, getFBNetworkChildren(subappType.getFBNetwork()));
+		if (fbType instanceof final CompositeFBType cfbType) { // cfbtype includes subapptype
+			// we may have a network with children inside
+			retval = Stream.concat(retval, getFBNetworkChildren(cfbType.getFBNetwork()));
 		}
 
 		return retval;
