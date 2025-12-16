@@ -53,9 +53,13 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected abstract Object getInputType(Object input);
 
-	protected abstract void setInputCode();
+	protected void setInputCode() {
+		// do nothing by default
+	}
 
-	protected abstract void setInputInit();
+	protected void setInputInit() {
+		// do nothing by default
+	}
 
 	/**
 	 * Subclasses shall perform all actions to refresh the data in the property

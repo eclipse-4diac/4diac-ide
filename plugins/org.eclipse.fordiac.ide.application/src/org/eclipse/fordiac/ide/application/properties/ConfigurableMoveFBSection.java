@@ -298,17 +298,9 @@ public class ConfigurableMoveFBSection extends AbstractSection implements Comman
 	}
 
 	@Override
-	protected void setInputCode() {
-		// Currently nothing needs to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// Currently nothing needs to be done here
-	}
-
-	@Override
 	protected void performRefresh() {
+		typeSelectionWidget.refresh();
+
 		if (getType() == null) {
 			inputDataMemberAccessViewer.setInput(null);
 			outputDataMemberAccessViewer.setInput(null);

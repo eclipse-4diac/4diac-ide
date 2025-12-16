@@ -269,9 +269,4 @@ public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSecti
 			customEventText.setText(currentEvent);
 		}
 	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing to be done here
-	}
 }

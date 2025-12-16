@@ -68,11 +68,6 @@ public class AlgorithmsSection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// no action needed
-	}
-
-	@Override
 	protected void setInputInit() {
 		getAlgorithmList().initialize(getType());
 	}

@@ -267,11 +267,6 @@ public class ServiceSection extends AbstractSection {
 		sequencesViewer.setInput(null);
 	}
 
-	@Override
-	protected void setInputInit() {
-		// currently nothing to be done here
-	}
-
 	private static Composite createButtonContainer(final FormToolkit widgetFactory, final Composite parent) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
 		final GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, true);

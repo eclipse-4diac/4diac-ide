@@ -20,15 +20,12 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
-import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
@@ -146,43 +143,21 @@ public class TypeSelectionWidget {
 		this.configurableObject = type;
 		this.contentProvider = contentProvider;
 		this.treeContentProvider = treeContentProvider;
-
-		if (type instanceof final StructManipulator structManipulator) {
-			final String newName = ImportHelper.deresolveImport(
-					PackageNameHelper.getFullTypeName(structManipulator.getDataType()),
-					PackageNameHelper.getContainerPackageName(type), ImportHelper.getContainerImports(type));
-			tableViewer.setInput(new String[] { newName });
-			resizeTextField();
-		} else if (type instanceof final VarDeclaration varDecl) {
-			tableViewer.setInput(new String[] { InterfaceElementAnnotations.getFullTypeName(varDecl) });
-		} else if (type instanceof final IInterfaceElement interfaceElement) {
-			tableViewer.setInput(new String[] { interfaceElement.getType().getName() });
-		} else if (type instanceof final ConfigurableMoveFB moveFb) {
-			if (moveFb.getDataType() == null) {
-				tableViewer.setInput(new String[] { IecTypes.GenericTypes.ANY.getName() });
-			} else {
-				tableViewer
-						.setInput(new String[] { ((ConfigurableMoveFB) configurableObject).getDataType().getName() });
-			}
-			resizeTextField();
-		}
-
-		disableOpenEditorForAnyType();
-		tableViewer.setCellEditors(createCellEditors());
+		tableViewer.setCellEditors(new CellEditor[] {
+				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) });
 	}
 
 	public void refresh() {
-		if (configurableObject instanceof final VarDeclaration varDecl) {
-			tableViewer.setInput(new String[] { InterfaceElementAnnotations.getFullTypeName(varDecl) });
-		} else if (configurableObject instanceof final IInterfaceElement iel) {
-			tableViewer.setInput(new String[] { iel.getType().getName() });
-		}
+		tableViewer.setInput(new String[] { switch (configurableObject) {
+		case final ConfigurableFB configurableFB when configurableFB.getDataType() == null ->
+			IecTypes.GenericTypes.ANY.getName();
+		case final ConfigurableFB configurableFB ->
+			ImportHelper.deresolveImport(configurableFB.getDataType(), configurableFB);
+		case final ITypedElement typedElement -> typedElement.getFullTypeName();
+		default -> ""; //$NON-NLS-1$
+		} });
+		resizeTextField();
 		disableOpenEditorForAnyType();
-	}
-
-	private CellEditor[] createCellEditors() {
-		return new CellEditor[] {
-				new DataTypeDropdown(this::getTypeLibrary, contentProvider, treeContentProvider, tableViewer) };
 	}
 
 	private static TableViewer createTableViewer(final Composite parent) {

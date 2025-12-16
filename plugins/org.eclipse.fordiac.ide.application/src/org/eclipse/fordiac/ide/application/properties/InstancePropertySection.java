@@ -125,11 +125,25 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected void performRefresh() {
-		if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			outputTable.refresh();
+		if (getType() != null) {
+			if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
+				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			}
+
+			final List<VarDeclaration> allInputs = new ArrayList<>();
+			final InterfaceList fbInterface = getType().getInterface();
+			allInputs.addAll(fbInterface.getInputVars());
+			allInputs.addAll(fbInterface.getInOutVars());
+			inputDataProvider.setInput(allInputs);
+
+			final List<VarDeclaration> allOutputs = new ArrayList<>();
+			allOutputs.addAll(fbInterface.getOutputVars());
+			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
+			outputDataProvider.setInput(allOutputs);
+
 			inputTable.refresh();
+			outputTable.refresh();
 		}
 	}
 
@@ -285,29 +299,6 @@ public class InstancePropertySection extends AbstractSection {
 			return fbNetworkElement;
 		}
 		return null;
-	}
-
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
-	}
-
-	@Override
-	protected void setInputInit() {
-		if (getType() != null) {
-			final List<VarDeclaration> allInputs = new ArrayList<>();
-			final InterfaceList fbInterface = getType().getInterface();
-			allInputs.addAll(fbInterface.getInputVars());
-			allInputs.addAll(fbInterface.getInOutVars());
-			inputDataProvider.setInput(allInputs);
-
-			final List<VarDeclaration> allOutputs = new ArrayList<>();
-			allOutputs.addAll(fbInterface.getOutputVars());
-			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
-			outputDataProvider.setInput(allOutputs);
-		}
-		inputTable.refresh();
-		outputTable.refresh();
 	}
 
 	protected final Adapter interfaceAdapter = new EContentAdapter() {

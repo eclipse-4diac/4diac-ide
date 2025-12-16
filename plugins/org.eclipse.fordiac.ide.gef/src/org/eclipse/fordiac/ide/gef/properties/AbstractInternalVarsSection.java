@@ -180,14 +180,7 @@ public abstract class AbstractInternalVarsSection extends AbstractSection
 
 	@Override
 	protected void setInputInit() {
-		final BaseFBType currentType = getType();
-		provider.setInput(currentType != null ? getVarList() : Collections.emptyList());
-		table.refresh();
-	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to do here
+		provider.setInput(getType() != null ? getVarList() : Collections.emptyList());
 	}
 
 	@Override

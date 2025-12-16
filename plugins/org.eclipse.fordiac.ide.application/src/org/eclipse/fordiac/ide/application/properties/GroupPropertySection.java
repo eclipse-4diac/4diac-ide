@@ -203,15 +203,4 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		}
 		return null;
 	}
-
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do for now
-	}
-
 }

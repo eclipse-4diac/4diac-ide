@@ -207,14 +207,4 @@ public class AttributeTargetSection extends AbstractSection {
 		}
 		return null;
 	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do here
-	}
 }

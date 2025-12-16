@@ -148,16 +148,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	}
 
 	@Override
-	protected void setInputCode() {
-		// nothing to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to be done here
-	}
-
-	@Override
 	protected void performRefresh() {
 		setTableInput();
 		inputTable.refresh();

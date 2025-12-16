@@ -142,18 +142,8 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// Not needed currently
-	}
-
-	@Override
-	protected void setInputInit() {
-		inputDataProvider.setInput(collectVarConfigs());
-		inputTable.refresh();
-	}
-
-	@Override
 	protected void performRefresh() {
+		inputDataProvider.setInput(collectVarConfigs());
 		inputTable.refresh();
 	}
 

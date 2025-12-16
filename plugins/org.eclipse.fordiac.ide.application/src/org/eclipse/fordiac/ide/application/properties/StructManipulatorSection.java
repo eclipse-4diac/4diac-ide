@@ -342,6 +342,7 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 
 	@Override
 	protected void performRefresh() {
+		typeSelectionWidget.refresh();
 		if ((null != getType().getFbNetwork()) && !blockRefresh) {
 			refreshStructTypeTable();
 		}
@@ -397,16 +398,6 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 				}
 			}
 		}
-	}
-
-	@Override
-	protected void setInputCode() {
-		// Currently nothing needs to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// Currently nothing needs to be done here
 	}
 
 	protected CheckboxTreeViewer getViewer() {

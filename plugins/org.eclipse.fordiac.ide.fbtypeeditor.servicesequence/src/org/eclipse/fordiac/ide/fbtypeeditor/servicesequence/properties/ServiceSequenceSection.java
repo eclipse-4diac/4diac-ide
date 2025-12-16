@@ -233,11 +233,6 @@ public class ServiceSequenceSection extends AbstractSection {
 		transactionsViewer.setInput(null);
 	}
 
-	@Override
-	protected void setInputInit() {
-		// currently nothing to be done here
-	}
-
 	protected static class TransactionLabelProvider extends LabelProvider implements ITableLabelProvider {
 		private static final int INDEX_COL_INDEX = 0;
 		private static final int INPUT_PRIMITIVE_COL_INDEX = 1;

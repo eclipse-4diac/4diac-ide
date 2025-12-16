@@ -126,11 +126,6 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	}
 
 	@Override
-	protected void setInputCode() {
-		// not needed
-	}
-
-	@Override
 	protected void performRefresh() {
 		setTableInput();
 		inputTable.refresh();
@@ -142,11 +137,6 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	}
 
 	protected abstract void setTableInput();
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do
-	}
 
 	@Override
 	public void dispose() {
