@@ -77,10 +77,13 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 			result.getAdditionalCommands().add(new ChangeDataTypeCommand(
 					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));
 		}
-		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration
-				&& interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType
-				&& !(compositeFBType instanceof SubAppType)) {
-			result.getAdditionalCommands().add(new ChangeAdapterFBCommand(adapterDeclaration));
+		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration) {
+			if (interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType
+					&& !(compositeFBType instanceof SubAppType)) {
+				result.getAdditionalCommands().add(new ChangeAdapterFBCommand(adapterDeclaration));
+			} else {
+				result.getAdditionalCommands().add(new ChangeInterfaceAdapterFBCommand(adapterDeclaration));
+			}
 		}
 		return result;
 	}

@@ -19,25 +19,14 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
-public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
+/**
+ * This class is only used by the {@link ChangeDataTypeCommand}
+ */
+final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
 	public ChangeAdapterFBCommand(final AdapterDeclaration adpDecl) {
 		super(adpDecl.getAdapterFB(), null);
-	}
-
-	@Override
-	protected BlockFBNetworkElement createCopiedFBEntry(final BlockFBNetworkElement srcElement) {
-		final AdapterFB copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		if (null == getEntry()) {
-			copy.setTypeEntry(srcElement.getTypeEntry());
-		} else {
-			copy.setTypeEntry(getEntry());
-		}
-		copy.setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
-		return copy;
 	}
 
 	@Override
@@ -51,7 +40,7 @@ public final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 	@Override
 	public void undo() {
 		super.undo();
-		setAdapterFB((AdapterFB) oldElement);
+		setAdapterFB(getOldElement());
 	}
 
 	@Override
