@@ -37,17 +37,16 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class CopyTypeChange extends Change {
 
-	private final String name;
 	private final URI destination;
+	private String newPackageName;
 
-	protected CopyTypeChange(final String name, final URI destination) {
-		this.name = name;
+	protected CopyTypeChange(final URI destination) {
 		this.destination = destination;
 	}
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-		// nothing to do
+		newPackageName = PackageNameHelper.getPackageNameFromURI(destination);
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class CopyTypeChange extends Change {
 
 	@Override
 	public String getName() {
-		return name;
+		return MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName);
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class CopyTypeChange extends Change {
 		if (!element.getName().equals(typeName)) {
 			element.setName(typeName);
 		}
-		PackageNameHelper.setPackageName(element, PackageNameHelper.getPackageNameFromURI(destination));
+		PackageNameHelper.setPackageName(element, newPackageName);
 		try {
 			resource.get().save(Map.of());
 		} catch (final IOException e) {
