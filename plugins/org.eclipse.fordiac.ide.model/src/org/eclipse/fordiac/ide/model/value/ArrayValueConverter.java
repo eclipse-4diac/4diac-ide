@@ -42,7 +42,12 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 
 	@Override
 	public List<T> toValue(final String string) throws IllegalArgumentException {
-		return toValue(new Scanner(string));
+		final Scanner scanner = new Scanner(string);
+		final List<T> value = toValue(scanner);
+		if (scanner.hasNext()) { // ensure we parsed entire input
+			throw new IllegalArgumentException(Messages.ArrayValueConverter_InvalidArrayLiteral);
+		}
+		return value;
 	}
 
 	@Override
