@@ -406,12 +406,12 @@ public abstract class AbstractUpdateBlockFBNElementCommand extends Command
 
 	private void processEvents(final InterfaceList interfaceList) {
 		for (final Event input : interfaceList.getEventInputs()) {
-			if (input.getInputConnections().isEmpty() || (!input.getAttributes().isEmpty())) {
+			if (input.getInputConnections().isEmpty() && !input.getAttributes().isEmpty()) {
 				updateSelectedInterface(input, newElement);
 			}
 		}
 		for (final Event output : interfaceList.getEventOutputs()) {
-			if (output.getOutputConnections().isEmpty() || (!output.getAttributes().isEmpty())) {
+			if (output.getOutputConnections().isEmpty() && !output.getAttributes().isEmpty()) {
 				updateSelectedInterface(output, newElement);
 			}
 		}

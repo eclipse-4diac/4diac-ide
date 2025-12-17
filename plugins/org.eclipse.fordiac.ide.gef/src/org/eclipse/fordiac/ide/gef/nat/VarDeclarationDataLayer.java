@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
-import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 
 public class VarDeclarationDataLayer extends ColumnCachingDataLayer<VarDeclarationTableColumn> {
 
@@ -29,8 +28,7 @@ public class VarDeclarationDataLayer extends ColumnCachingDataLayer<VarDeclarati
 	protected void registerCommandHandlers() {
 		super.registerCommandHandlers();
 
-		// always update value
 		unregisterCommandHandler(UpdateDataCommand.class);
-		registerCommandHandler(new UpdateDataCommandHandler(this, false));
+		registerCommandHandler(new DefaultCellUpdateDataCommandHandler(this));
 	}
 }

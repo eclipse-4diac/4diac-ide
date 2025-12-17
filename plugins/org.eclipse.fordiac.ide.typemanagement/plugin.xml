@@ -473,7 +473,12 @@
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
-         	<reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+           <or>
+             <reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+             <adapt type="org.eclipse.core.resources.IFile">
+               <test forcePluginActivation="true" property="org.eclipse.core.resources.extension" value="sys"/>
+             </adapt>
+           </or>
          </enablement>
       </renameParticipant>
       <renameParticipant

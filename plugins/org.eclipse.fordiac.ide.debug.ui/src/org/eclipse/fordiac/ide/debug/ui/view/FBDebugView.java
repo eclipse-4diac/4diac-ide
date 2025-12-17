@@ -155,7 +155,18 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	}
 
 	private void createGraphicalViewer(final Composite parent) {
-		viewer = new ScrollingGraphicalViewer();
+		viewer = new ScrollingGraphicalViewer() {
+			@Override
+			public void setContents(final Object contents) {
+				if (contents == null) {
+					// if we should not show anything clear the viewer
+					getRootEditPart().setContents(null);
+				} else {
+					super.setContents(contents);
+				}
+
+			}
+		};
 		viewer.createControl(parent);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
 		// needed to get selection working
