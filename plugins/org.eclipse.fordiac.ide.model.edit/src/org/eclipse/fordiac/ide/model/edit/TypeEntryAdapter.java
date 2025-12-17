@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
@@ -38,9 +39,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.types.AdapterTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.AttributeTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -138,17 +141,31 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 					// our editor was closed no update needed
 					return;
 				}
-				if ((typeEntry instanceof FBTypeEntry || typeEntry instanceof SubAppTypeEntry)) {
-					handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+
+				switch (typeEntry) {
+				// adapter type entry needs to be before FBTypeEntry
+				case final AdapterTypeEntry adpEntry -> handleAdapterTypeDependenyUpdate(editedElement, adpEntry);
+				case final FBTypeEntry fbEntry -> handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+				case final SubAppTypeEntry subAppEntry -> handleBlockTypeDependencyUpdate(editedElement, typeEntry);
+				case final AttributeTypeEntry atEntry -> handleAttributeTypeEntryUpdate(editedElement, atEntry);
+				case final DataTypeEntry dtEntry -> handleDataTypeEntryUpdate(editedElement, dtEntry);
+				default -> {
+					// do nothing
 				}
-				if (typeEntry instanceof final DataTypeEntry dtEntry) {
-					handleDataTypeEntryUpdate(editedElement, dtEntry);
-				}
-				if (typeEntry instanceof final AttributeTypeEntry atEntry) {
-					handleAttributeTypeEntryUpdate(editedElement, atEntry);
 				}
 			});
 		}
+	}
+
+	private static void handleAdapterTypeDependenyUpdate(final LibraryElement editedElement,
+			final AdapterTypeEntry adpEntry) {
+		final AdapterTypeInstanceSearch search = new AdapterTypeInstanceSearch(editedElement, adpEntry);
+		final List<? extends EObject> result = search.performSearch();
+		result.forEach(r -> {
+			if (r instanceof final AdapterDeclaration adpDecl) {
+				ChangeDataTypeCommand.forDataType(adpDecl, adpEntry.getType()).execute();
+			}
+		});
 	}
 
 	private static void handleAttributeTypeEntryUpdate(final LibraryElement editedElement,

@@ -29,6 +29,7 @@ import org.eclipse.nebula.widgets.nattable.copy.action.CopyDataAction;
 import org.eclipse.nebula.widgets.nattable.copy.action.PasteDataAction;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDisplayConverter;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
@@ -101,6 +102,7 @@ public final class NatTableWidgetFactory {
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
 	public static final String LEFT_TRUNCATING = "LEFT_TRUNCATING"; //$NON-NLS-1$
+	public static final String NONE_NULL = "NONE_NULL"; //$NON-NLS-1$
 
 	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
 	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
@@ -203,8 +205,8 @@ public final class NatTableWidgetFactory {
 				selectionLayer);
 
 		final ILayer columnHeader;
-		if (sortModel != null && bodyDataLayer.getDataProvider() instanceof final ListDataProvider<?> dataProvider) {
-			columnHeader = createSortHeaderLayer(columnHeaderLayer, dataProvider, sortModel);
+		if (sortModel != null) {
+			columnHeader = createSortHeaderLayer(columnHeaderLayer, sortModel);
 		} else {
 			columnHeader = columnHeaderLayer;
 		}
@@ -341,7 +343,7 @@ public final class NatTableWidgetFactory {
 	}
 
 	private static <T> SortHeaderLayer<T> createSortHeaderLayer(final ColumnHeaderLayer columnHeaderLayer,
-			final ListDataProvider<T> bodyDataProvider, final ISortModel sortModel) {
+			final ISortModel sortModel) {
 		return new SortHeaderLayer<>(columnHeaderLayer, sortModel, false);
 	}
 
@@ -437,6 +439,21 @@ public final class NatTableWidgetFactory {
 
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
+		table.addConfiguration(new AbstractRegistryConfiguration() {
+			@Override
+			public void configureRegistry(final IConfigRegistry configRegistry) {
+				configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
+						new DefaultDisplayConverter() {
+							@Override
+							public Object displayToCanonicalValue(final Object destinationValue) {
+								if (destinationValue == null) {
+									return ""; //$NON-NLS-1$
+								}
+								return destinationValue.toString();
+							}
+						}, DisplayMode.EDIT, NONE_NULL);
+			}
+		});
 
 		table.addConfiguration(tableStyle);
 		table.addConfiguration(selectionStyle);
@@ -504,7 +521,7 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
-				
+
 				// Padding for the left aligned cells
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(
 						new PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
