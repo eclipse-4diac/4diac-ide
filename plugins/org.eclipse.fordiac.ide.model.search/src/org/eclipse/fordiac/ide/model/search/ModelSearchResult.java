@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -46,17 +47,16 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		this.dictionary = new SearchNameDictionary();
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public String getLabel() {
-		if (results.size() == 1) {
-			return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " result"; //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " results"; //$NON-NLS-1$ //$NON-NLS-2$
+		return MessageFormat.format(results.size() == 1 ? Messages.ModelSearch_Result : Messages.ModelSearch_Results,
+				modelSearchQuery.getLabel(), results.size());
 	}
 
 	@Override
 	public String getTooltip() {
-		return "Found model elements";
+		return Messages.ModelSearch_Tooltip;
 	}
 
 	@Override

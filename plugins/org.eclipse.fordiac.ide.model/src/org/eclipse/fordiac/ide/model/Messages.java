@@ -227,6 +227,10 @@ public final class Messages extends NLS {
 
 	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
 
+	public static String SystemImporter_Mapping_WrongString;
+	public static String SystemImporter_Mapping_MissingDevice;
+	public static String SystemImporter_Mapping_MissingResource;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
