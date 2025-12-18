@@ -46,6 +46,9 @@ public final class Messages extends NLS {
 	public static String SearchForTypeReferences;
 	public static String STSearchErrorDialog_Title;
 	public static String STSearchErrorDialog_Body;
+	public static String ModelSearch_Result;
+	public static String ModelSearch_Results;
+	public static String ModelSearch_Tooltip;
 
 	static {
 		// initialize resource bundle
