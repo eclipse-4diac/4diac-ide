@@ -26,8 +26,8 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Connection;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
-import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
@@ -41,7 +41,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFblist <em>Fblist</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getFbType <em>Fb Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getTypeResponse <em>Type Response</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getEndpointlist <em>Endpointlist</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResponseImpl#getConnection <em>Connection</em>}</li>
  * </ul>
@@ -106,13 +106,14 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	protected FBList fblist;
 
 	/**
-	 * The cached value of the '{@link #getFbType() <em>Fb Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFbType()
+	 * The cached value of the '{@link #getTypeResponse() <em>Type Response</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypeResponse()
 	 * @generated
 	 * @ordered
 	 */
-	protected FBType fbType;
+	protected TypeResponse typeResponse;
 
 	/**
 	 * The cached value of the '{@link #getEndpointlist() <em>Endpointlist</em>}' reference.
@@ -272,41 +273,44 @@ public class ResponseImpl extends EObjectImpl implements Response {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public FBType getFbType() {
-		if (fbType != null && fbType.eIsProxy()) {
-			InternalEObject oldFbType = (InternalEObject)fbType;
-			fbType = (FBType)eResolveProxy(oldFbType);
-			if (fbType != oldFbType) {
+	public TypeResponse getTypeResponse() {
+		if (typeResponse != null && typeResponse.eIsProxy()) {
+			InternalEObject oldTypeResponse = (InternalEObject)typeResponse;
+			typeResponse = (TypeResponse)eResolveProxy(oldTypeResponse);
+			if (typeResponse != oldTypeResponse) {
 				if (eNotificationRequired()) {
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__FB_TYPE, oldFbType, fbType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DevResponsePackage.RESPONSE__TYPE_RESPONSE, oldTypeResponse, typeResponse));
 				}
 			}
 		}
-		return fbType;
+		return typeResponse;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FBType basicGetFbType() {
-		return fbType;
+	public TypeResponse basicGetTypeResponse() {
+		return typeResponse;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public void setFbType(FBType newFbType) {
-		FBType oldFbType = fbType;
-		fbType = newFbType;
+	public void setTypeResponse(TypeResponse newTypeResponse) {
+		TypeResponse oldTypeResponse = typeResponse;
+		typeResponse = newTypeResponse;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__FB_TYPE, oldFbType, fbType));
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESPONSE__TYPE_RESPONSE, oldTypeResponse, typeResponse));
 		}
 	}
 
@@ -409,11 +413,11 @@ public class ResponseImpl extends EObjectImpl implements Response {
 					return getFblist();
 				}
 				return basicGetFblist();
-			case DevResponsePackage.RESPONSE__FB_TYPE:
+			case DevResponsePackage.RESPONSE__TYPE_RESPONSE:
 				if (resolve) {
-					return getFbType();
+					return getTypeResponse();
 				}
-				return basicGetFbType();
+				return basicGetTypeResponse();
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				if (resolve) {
 					return getEndpointlist();
@@ -448,8 +452,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)newValue);
 				return;
-			case DevResponsePackage.RESPONSE__FB_TYPE:
-				setFbType((FBType)newValue);
+			case DevResponsePackage.RESPONSE__TYPE_RESPONSE:
+				setTypeResponse((TypeResponse)newValue);
 				return;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)newValue);
@@ -482,8 +486,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 			case DevResponsePackage.RESPONSE__FBLIST:
 				setFblist((FBList)null);
 				return;
-			case DevResponsePackage.RESPONSE__FB_TYPE:
-				setFbType((FBType)null);
+			case DevResponsePackage.RESPONSE__TYPE_RESPONSE:
+				setTypeResponse((TypeResponse)null);
 				return;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				setEndpointlist((EndpointList)null);
@@ -512,8 +516,8 @@ public class ResponseImpl extends EObjectImpl implements Response {
 				return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
 			case DevResponsePackage.RESPONSE__FBLIST:
 				return fblist != null;
-			case DevResponsePackage.RESPONSE__FB_TYPE:
-				return fbType != null;
+			case DevResponsePackage.RESPONSE__TYPE_RESPONSE:
+				return typeResponse != null;
 			case DevResponsePackage.RESPONSE__ENDPOINTLIST:
 				return endpointlist != null;
 			case DevResponsePackage.RESPONSE__CONNECTION:

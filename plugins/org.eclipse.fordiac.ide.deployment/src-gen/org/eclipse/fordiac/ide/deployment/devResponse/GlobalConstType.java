@@ -17,45 +17,16 @@
  */
 package org.eclipse.fordiac.ide.deployment.devResponse;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Global Const Type</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType#getName <em>Name</em>}</li>
- * </ul>
  *
  * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getGlobalConstType()
  * @model
  * @generated
  */
-public interface GlobalConstType extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getGlobalConstType_Name()
-	 * @model extendedMetaData="name='Name' kind='attribute'"
-	 * @generated
-	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
+public interface GlobalConstType extends TypeResponse {
 
 } // GlobalConstType
