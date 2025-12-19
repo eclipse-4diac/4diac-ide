@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -265,14 +266,16 @@ public class SystemImporter extends CommonElementImporter {
 		final var devResSeperator = toValue.indexOf('.');
 		if (devResSeperator == -1) {
 			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_WrongString,
-					fromValue + "->" + toValue, getLineNumber())); //$NON-NLS-1$
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
 		final Device dev = getElement().getDeviceNamed(toValue.substring(0, devResSeperator));
 		if (dev == null) {
 			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingDevice,
-					fromValue + "->" + toValue, getLineNumber())); //$NON-NLS-1$
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
@@ -283,7 +286,8 @@ public class SystemImporter extends CommonElementImporter {
 		final Resource res = dev.getResourceNamed(resName);
 		if (res == null) {
 			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingResource,
-					fromValue + "->" + toValue, getLineNumber())); //$NON-NLS-1$
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
