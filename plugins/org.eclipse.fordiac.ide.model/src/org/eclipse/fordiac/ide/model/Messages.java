@@ -230,6 +230,7 @@ public final class Messages extends NLS {
 	public static String SystemImporter_Mapping_WrongString;
 	public static String SystemImporter_Mapping_MissingDevice;
 	public static String SystemImporter_Mapping_MissingResource;
+	public static String SystemImporter_Mapping_LocationFormat;
 
 	static {
 		// initialize resource bundle
