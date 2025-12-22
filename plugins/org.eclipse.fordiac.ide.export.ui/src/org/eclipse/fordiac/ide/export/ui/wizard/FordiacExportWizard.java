@@ -32,7 +32,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -73,7 +72,6 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	}
 
 	@Override
-	@SuppressWarnings("squid:S2142")
 	public boolean performFinish() {
 		page.saveWidgetValues();
 
@@ -88,19 +86,13 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 		try {
 			setNeedsProgressMonitor(true);
 			getContainer().run(true, true, monitor -> exporter.exportElements(monitor, exportees));
-			Display.getDefault().asyncExec(() -> showErrorWarningSummary(exporter.getExportFilter()));
-		} catch (final InterruptedException | InvocationTargetException e) {
-			showExceptionErrorDialog(e);
+			showErrorWarningSummary(exporter.getExportFilter());
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e.getCause());
 		}
-
 		return true;
-	}
-
-	protected static void showExceptionErrorDialog(final Exception e) {
-		FordiacLogHelper.logError(e.getMessage(), e);
-		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-		msg.setMessage(e.getMessage());
-		msg.open();
 	}
 
 	protected static void showErrorWarningSummary(final IExportFilter filter) {
