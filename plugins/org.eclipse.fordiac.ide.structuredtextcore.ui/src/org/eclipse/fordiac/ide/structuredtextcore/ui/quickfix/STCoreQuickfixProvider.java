@@ -561,7 +561,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		if (element instanceof final STFeatureExpression expression) {
 			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
 			final String name = getFeatureText(expression);
-			final LibraryElement type = getExpectedFeatureType(expression);
+			final LibraryElement type = findNonGenericType(getExpectedFeatureType(expression));
 			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
 					&& type instanceof final DataType dataType) {
 				createMissingVariable(callable, name, dataType, kind);
@@ -617,6 +617,14 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 			}
 		}
 		return ElementaryTypes.SINT;
+	}
+
+	protected static LibraryElement findNonGenericType(final LibraryElement type) {
+		if (type instanceof final DataType dataType && STCoreUtil.isAnyType(dataType)) {
+			return ElementaryTypes.getAllElementaryType().stream().filter(dataType::isAssignableFrom).findFirst()
+					.orElse(ElementaryTypes.SINT);
+		}
+		return type;
 	}
 
 	protected boolean hasSyntaxErrors(final Issue issue) {
