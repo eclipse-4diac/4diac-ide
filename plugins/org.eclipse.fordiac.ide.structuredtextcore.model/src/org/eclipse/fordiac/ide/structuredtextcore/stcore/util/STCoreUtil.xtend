@@ -589,15 +589,20 @@ final class STCoreUtil {
 		else if (type.isAssignableFrom(other) || other.isAssignableFrom(type))
 			type
 		else if (type instanceof AnyUnsignedType &&
-			(type.isAssignableFrom(other.equivalentAnyUnsignedType) ||
-				other.equivalentAnyUnsignedType.isAssignableFrom(type)))
+			(isAssignableFrom(type, other.equivalentAnyUnsignedType) ||
+				isAssignableFrom(other.equivalentAnyUnsignedType, type)))
 			type
 		else if (type instanceof AnyBitType &&
-			(type.isAssignableFrom(other.equivalentAnyBitType) ||
-				other.equivalentAnyBitType.isAssignableFrom(type)))
+			(isAssignableFrom(type, other.equivalentAnyBitType) ||
+				isAssignableFrom(other.equivalentAnyBitType, type)))
 			type
 		else // fallback to other _only_ if type is not compatible
 			other
+	}
+
+
+	def static boolean isAssignableFrom(DataType first, DataType second) {
+		return first !== null && first.isAssignableFrom(second)
 	}
 
 	def static AnyNumType getEquivalentAnyNumType(LibraryElement type) {
