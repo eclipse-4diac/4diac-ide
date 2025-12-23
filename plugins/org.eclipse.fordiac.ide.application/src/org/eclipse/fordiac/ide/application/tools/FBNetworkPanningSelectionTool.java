@@ -92,7 +92,10 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		checkConnCreationState(evt.keyCode);
+		if (evt.stateMask == 0) {
+			// only when the ctrl key alone is pressed we want to activate
+			checkConnCreationState(evt.keyCode);
+		}
 		super.keyDown(evt, viewer);
 	}
 
@@ -163,8 +166,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 					|| (!isConnectionCreationTarget(getTargetEditPart()))) {
 				deactivateConnectionCreation();
 			}
-		} else if (((stateMask & CONNECTION_CREATION_MOD_KEY) == CONNECTION_CREATION_MOD_KEY)
-				&& (isConnectionCreationTarget(getTargetEditPart()))) {
+		} else if (stateMask == CONNECTION_CREATION_MOD_KEY && isConnectionCreationTarget(getTargetEditPart())) {
 			activateConnectionCreation(getCurrentViewer());
 		}
 		return connectionCreationTool != null;
