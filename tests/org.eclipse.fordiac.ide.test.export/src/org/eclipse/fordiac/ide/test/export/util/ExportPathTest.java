@@ -40,7 +40,7 @@ class ExportPathTest {
 
 	@SuppressWarnings("static-method")
 	@ParameterizedTest
-	@CsvSource({ "A/B/C, true", "C:/A/B/C, false", "A/../../C, false" })
+	@CsvSource({ "A/B/C,true", "/A/B/C,false", "A/../../C,false" })
 	void testValidateExportPath(final String path, final String isValid) {
 		assertEquals(Boolean.valueOf(ExportFilterUtil.validateExportPath(path, project)), Boolean.valueOf(isValid));
 	}
