@@ -67,6 +67,34 @@ public interface DevResponsePackage extends EPackage {
 	DevResponsePackage eINSTANCE = org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.TypeResponseImpl <em>Type Response</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.TypeResponseImpl
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getTypeResponse()
+	 * @generated
+	 */
+	int TYPE_RESPONSE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE_RESPONSE__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Type Response</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE_RESPONSE_FEATURE_COUNT = 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.AdapterTypeImpl <em>Adapter Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -83,7 +111,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_TYPE__NAME = 0;
+	int ADAPTER_TYPE__NAME = TYPE_RESPONSE__NAME;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Type</em>' class.
@@ -92,7 +120,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_TYPE_FEATURE_COUNT = 1;
+	int ADAPTER_TYPE_FEATURE_COUNT = TYPE_RESPONSE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataTypeImpl <em>Data Type</em>}' class.
@@ -111,7 +139,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_TYPE__NAME = 0;
+	int DATA_TYPE__NAME = TYPE_RESPONSE__NAME;
 
 	/**
 	 * The number of structural features of the '<em>Data Type</em>' class.
@@ -120,7 +148,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_TYPE_FEATURE_COUNT = 1;
+	int DATA_TYPE_FEATURE_COUNT = TYPE_RESPONSE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
@@ -227,7 +255,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TYPE__NAME = 0;
+	int FB_TYPE__NAME = TYPE_RESPONSE__NAME;
 
 	/**
 	 * The number of structural features of the '<em>FB Type</em>' class. <!--
@@ -236,7 +264,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TYPE_FEATURE_COUNT = 1;
+	int FB_TYPE_FEATURE_COUNT = TYPE_RESPONSE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.GlobalConstTypeImpl <em>Global Const Type</em>}' class.
@@ -255,7 +283,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GLOBAL_CONST_TYPE__NAME = 0;
+	int GLOBAL_CONST_TYPE__NAME = TYPE_RESPONSE__NAME;
 
 	/**
 	 * The number of structural features of the '<em>Global Const Type</em>' class.
@@ -264,7 +292,7 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GLOBAL_CONST_TYPE_FEATURE_COUNT = 1;
+	int GLOBAL_CONST_TYPE_FEATURE_COUNT = TYPE_RESPONSE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
@@ -383,13 +411,13 @@ public interface DevResponsePackage extends EPackage {
 	int RESPONSE__FBLIST = 3;
 
 	/**
-	 * The feature id for the '<em><b>Fb Type</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * The feature id for the '<em><b>Type Response</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESPONSE__FB_TYPE = 4;
+	int RESPONSE__TYPE_RESPONSE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Endpointlist</b></em>' reference. <!--
@@ -546,17 +574,6 @@ public interface DevResponsePackage extends EPackage {
 	EClass getAdapterType();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.AdapterType#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.AdapterType#getName()
-	 * @see #getAdapterType()
-	 * @generated
-	 */
-	EAttribute getAdapterType_Name();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.DataType <em>Data Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -565,17 +582,6 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDataType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.DataType#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DataType#getName()
-	 * @see #getDataType()
-	 * @generated
-	 */
-	EAttribute getDataType_Name();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource <em>Resource</em>}'.
@@ -667,16 +673,6 @@ public interface DevResponsePackage extends EPackage {
 	EClass getFBType();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBType#getName()
-	 * @see #getFBType()
-	 * @generated
-	 */
-	EAttribute getFBType_Name();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType <em>Global Const Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -685,17 +681,6 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getGlobalConstType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType#getName()
-	 * @see #getGlobalConstType()
-	 * @generated
-	 */
-	EAttribute getGlobalConstType_Name();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.Port <em>Port</em>}'.
@@ -805,14 +790,15 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResponse_Fblist();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType <em>Fb Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Fb Type</em>'.
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType()
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getTypeResponse <em>Type Response</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Type Response</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Response#getTypeResponse()
 	 * @see #getResponse()
 	 * @generated
 	 */
-	EReference getResponse_FbType();
+	EReference getResponse_TypeResponse();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}'.
@@ -921,6 +907,27 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getConnection_Destination();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse <em>Type Response</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Type Response</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse
+	 * @generated
+	 */
+	EClass getTypeResponse();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse#getName()
+	 * @see #getTypeResponse()
+	 * @generated
+	 */
+	EAttribute getTypeResponse_Name();
+
+	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -952,14 +959,6 @@ public interface DevResponsePackage extends EPackage {
 		EClass ADAPTER_TYPE = eINSTANCE.getAdapterType();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ADAPTER_TYPE__NAME = eINSTANCE.getAdapterType_Name();
-
-		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.DataTypeImpl <em>Data Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -968,14 +967,6 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EClass DATA_TYPE = eINSTANCE.getDataType();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DATA_TYPE__NAME = eINSTANCE.getDataType_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl <em>Resource</em>}' class.
@@ -1047,13 +1038,6 @@ public interface DevResponsePackage extends EPackage {
 		EClass FB_TYPE = eINSTANCE.getFBType();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FB_TYPE__NAME = eINSTANCE.getFBType_Name();
-
-		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.GlobalConstTypeImpl <em>Global Const Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1062,14 +1046,6 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EClass GLOBAL_CONST_TYPE = eINSTANCE.getGlobalConstType();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute GLOBAL_CONST_TYPE__NAME = eINSTANCE.getGlobalConstType_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.PortImpl <em>Port</em>}' class.
@@ -1156,11 +1132,12 @@ public interface DevResponsePackage extends EPackage {
 		EReference RESPONSE__FBLIST = eINSTANCE.getResponse_Fblist();
 
 		/**
-		 * The meta object literal for the '<em><b>Fb Type</b></em>' reference feature.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Type Response</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference RESPONSE__FB_TYPE = eINSTANCE.getResponse_FbType();
+		EReference RESPONSE__TYPE_RESPONSE = eINSTANCE.getResponse_TypeResponse();
 
 		/**
 		 * The meta object literal for the '<em><b>Endpointlist</b></em>' reference feature.
@@ -1246,6 +1223,24 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.TypeResponseImpl <em>Type Response</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.TypeResponseImpl
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getTypeResponse()
+		 * @generated
+		 */
+		EClass TYPE_RESPONSE = eINSTANCE.getTypeResponse();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TYPE_RESPONSE__NAME = eINSTANCE.getTypeResponse_Name();
 
 	}
 

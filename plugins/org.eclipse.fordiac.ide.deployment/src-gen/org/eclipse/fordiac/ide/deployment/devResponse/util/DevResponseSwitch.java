@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
@@ -92,6 +93,9 @@ public class DevResponseSwitch<T> extends Switch<T> {
 				AdapterType adapterType = (AdapterType)theEObject;
 				T result = caseAdapterType(adapterType);
 				if (result == null) {
+					result = caseTypeResponse(adapterType);
+				}
+				if (result == null) {
 					result = defaultCase(theEObject);
 				}
 				return result;
@@ -99,6 +103,9 @@ public class DevResponseSwitch<T> extends Switch<T> {
 			case DevResponsePackage.DATA_TYPE: {
 				DataType dataType = (DataType)theEObject;
 				T result = caseDataType(dataType);
+				if (result == null) {
+					result = caseTypeResponse(dataType);
+				}
 				if (result == null) {
 					result = defaultCase(theEObject);
 				}
@@ -124,6 +131,9 @@ public class DevResponseSwitch<T> extends Switch<T> {
 				FBType fbType = (FBType)theEObject;
 				T result = caseFBType(fbType);
 				if (result == null) {
+					result = caseTypeResponse(fbType);
+				}
+				if (result == null) {
 					result = defaultCase(theEObject);
 				}
 				return result;
@@ -131,6 +141,9 @@ public class DevResponseSwitch<T> extends Switch<T> {
 			case DevResponsePackage.GLOBAL_CONST_TYPE: {
 				GlobalConstType globalConstType = (GlobalConstType)theEObject;
 				T result = caseGlobalConstType(globalConstType);
+				if (result == null) {
+					result = caseTypeResponse(globalConstType);
+				}
 				if (result == null) {
 					result = defaultCase(theEObject);
 				}
@@ -187,6 +200,14 @@ public class DevResponseSwitch<T> extends Switch<T> {
 			case DevResponsePackage.CONNECTION: {
 				Connection connection = (Connection)theEObject;
 				T result = caseConnection(connection);
+				if (result == null) {
+					result = defaultCase(theEObject);
+				}
+				return result;
+			}
+			case DevResponsePackage.TYPE_RESPONSE: {
+				TypeResponse typeResponse = (TypeResponse)theEObject;
+				T result = caseTypeResponse(typeResponse);
 				if (result == null) {
 					result = defaultCase(theEObject);
 				}
@@ -371,6 +392,21 @@ public class DevResponseSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConnection(Connection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Type Response</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Type Response</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypeResponse(TypeResponse object) {
 		return null;
 	}
 

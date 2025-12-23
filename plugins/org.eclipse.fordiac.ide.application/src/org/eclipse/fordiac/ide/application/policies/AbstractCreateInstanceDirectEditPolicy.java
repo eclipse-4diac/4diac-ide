@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
@@ -21,10 +20,8 @@ import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.LocationRequest;
@@ -82,26 +79,15 @@ public abstract class AbstractCreateInstanceDirectEditPolicy extends DirectEditP
 		return refPoint;
 	}
 
-	private double getZoom() {
-		final RootEditPart root = getHost().getRoot();
-		if (root instanceof final ScalableFreeformRootEditPart scalableEditPart) {
-			return scalableEditPart.getZoomManager().getZoom();
-		}
-		return 1.0;
-	}
-
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
 		// we don't need to do anything here for creating new fb instances
 	}
 
 	public Point getInsertPos(final LocationRequest request) {
-		final Point location = request.getLocation();
-		final FigureCanvas figureCanvas = (FigureCanvas) getHost().getViewer().getControl();
-		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
-		location.x += viewLocation.x;
-		location.y += viewLocation.y;
-		return new Point(location.x, location.y).scale(1.0 / getZoom());
+		final Point location = request.getLocation().getCopy();
+		getHost().getFigure().translateToRelative(location);
+		return location;
 	}
 
 	@Override
