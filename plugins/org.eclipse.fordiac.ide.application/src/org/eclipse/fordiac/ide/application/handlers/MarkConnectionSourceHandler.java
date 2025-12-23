@@ -17,9 +17,11 @@ package org.eclipse.fordiac.ide.application.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -45,10 +47,23 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 
 		if (UtilityMarkerHelper.getMarkedElement(getMarkerId(),
 				conTarget) instanceof final IInterfaceElement connectionSource) {
-			HandlerHelper.getCommandStack(editor).execute(CreateSubAppCrossingConnectionsCommand
-					.createProcessBorderCrossingConnection(connectionSource, conTarget));
+			final var cmd = CreateSubAppCrossingConnectionsCommand
+					.createProcessBorderCrossingConnection(connectionSource, conTarget);
+			if (cmd.canExecute()) {
+				HandlerHelper.getCommandStack(editor).execute(cmd);
+				removeMarker(conTarget);
+			}
+
 		}
 		return null;
+	}
+
+	private void removeMarker(final IInterfaceElement conTarget) {
+		final var root = EcoreUtil.getRootContainer(conTarget);
+		if (root instanceof final LibraryElement le && le.getTypeEntry() != null
+				&& le.getTypeEntry().getFile() != null) {
+			UtilityMarkerHelper.deleteElementMarker(getMarkerId(), le.getTypeEntry().getFile());
+		}
 	}
 
 	private static IInterfaceElement getConnectionTarget(final ExecutionEvent event) {
