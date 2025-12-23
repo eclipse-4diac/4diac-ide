@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -187,10 +186,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	protected Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
-		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
-		final Point location = viewerControl.getViewport().getViewLocation();
-		return new Point(request.getLocation().x + location.x, request.getLocation().y + location.y)
-				.scale(1.0 / getZoomManager().getZoom());
+		final Point location = request.getLocation().getCopy();
+		getHost().getFigure().translateToRelative(location);
+		return location;
 	}
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<? extends EditPart> editParts,
