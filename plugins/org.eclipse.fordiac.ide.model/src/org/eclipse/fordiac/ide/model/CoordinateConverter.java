@@ -93,7 +93,7 @@ public enum CoordinateConverter {
 	 * @return according screen coordinate value
 	 */
 	public int iec61499ToScreen(final double value) {
-		return (int) (value * transformationScale);
+		return (int) Math.round(value * transformationScale);
 	}
 
 	/**
