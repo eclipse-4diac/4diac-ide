@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2011, 2012, 2016, 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 Johanes Kepler University
+ * Copyright (c) 2009, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johanes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,11 +17,11 @@ package org.eclipse.fordiac.ide.gef.commands;
 
 import java.text.MessageFormat;
 
-import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -29,21 +29,21 @@ import org.eclipse.gef.commands.Command;
 
 public class AdjustConnectionCommand extends Command {
 
-	private final Connection connection;
+	private final Point connStart;
+	private final Point connEnd;
 	private final Point point;
 	private final int index;
-	private final org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection;
-	private final double zoom;
+	private final Connection modelConnection;
 	private final ConnectionRoutingData oldRoutingData;
 	private ConnectionRoutingData newRoutingData;
 
-	public AdjustConnectionCommand(final Connection connection, final Point p, final int index,
-			final org.eclipse.fordiac.ide.model.libraryElement.Connection modelConnection, final double zoom) {
-		this.connection = connection;
+	public AdjustConnectionCommand(final Connection modelConnection, final Point connStart, final Point connEnd,
+			final Point p, final int index) {
+		this.modelConnection = modelConnection;
+		this.connStart = connStart;
+		this.connEnd = connEnd;
 		this.point = p;
 		this.index = index;
-		this.modelConnection = modelConnection;
-		this.zoom = zoom;
 		this.oldRoutingData = modelConnection.getRoutingData();
 	}
 
@@ -66,29 +66,24 @@ public class AdjustConnectionCommand extends Command {
 
 	private void updateRoutingData(final ConnectionRoutingData routingData) {
 		modelConnection.setRoutingData(routingData);
-		connection.revalidate();
 	}
 
 	private void updateNewRoutingData() {
-		final Point sourceP = getSourcePoint();
-		final Point destP = getDestinationPoint();
-		final int scaledMinDistance = (int) Math.floor(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN * zoom);
-
 		switch (index) {
 		case 2:
-			int newDx1 = Math.max(point.x - sourceP.x, scaledMinDistance);
+			int newDx1 = Math.max(point.x - connStart.x, MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN);
 			if (newRoutingData.is3SegementData()) {
 				// we have three segment connection check that we are not beyond the input
-				newDx1 = Math.min(newDx1, destP.x - sourceP.x - scaledMinDistance);
+				newDx1 = Math.min(newDx1, connEnd.x - connStart.x - MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN);
 			}
-			newRoutingData.setDx1(fromScreen((int) Math.floor(newDx1 / zoom)));
+			newRoutingData.setDx1(fromScreen(newDx1));
 			break;
 		case 4:
-			newRoutingData.setDy(fromScreen((int) Math.floor((point.y - sourceP.y) / zoom)));
+			newRoutingData.setDy(fromScreen(point.y - connStart.y));
 			break;
 		case 6:
-			final int newDx2 = Math.max(destP.x - point.x, scaledMinDistance);
-			newRoutingData.setDx2(fromScreen((int) Math.floor(newDx2 / zoom)));
+			final int newDx2 = Math.max(connEnd.x - point.x, MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN);
+			newRoutingData.setDx2(fromScreen(newDx2));
 			break;
 		default:
 			FordiacLogHelper.logError(MessageFormat.format(Messages.AdjustConnectionCommand_WrongConnectionSegmentIndex,
@@ -102,14 +97,6 @@ public class AdjustConnectionCommand extends Command {
 		newRoutingData.setDx1(oldRoutingData.getDx1());
 		newRoutingData.setDx2(oldRoutingData.getDx2());
 		newRoutingData.setDy(oldRoutingData.getDy());
-	}
-
-	private Point getDestinationPoint() {
-		return connection.getTargetAnchor().getLocation(connection.getTargetAnchor().getReferencePoint()).getCopy();
-	}
-
-	private Point getSourcePoint() {
-		return connection.getSourceAnchor().getLocation(connection.getSourceAnchor().getReferencePoint()).getCopy();
 	}
 
 	private static double fromScreen(final int val) {

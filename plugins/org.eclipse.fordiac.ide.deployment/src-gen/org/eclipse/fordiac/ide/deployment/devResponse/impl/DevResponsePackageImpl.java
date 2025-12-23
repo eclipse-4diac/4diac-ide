@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
+import org.eclipse.fordiac.ide.deployment.devResponse.TypeResponse;
 import org.eclipse.fordiac.ide.deployment.devResponse.Watches;
 
 /**
@@ -127,6 +128,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	private EClass connectionEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass typeResponseEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -204,28 +212,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	@Override
-	public EAttribute getAdapterType_Name() {
-		return (EAttribute)adapterTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getDataType() {
 		return dataTypeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getDataType_Name() {
-		return (EAttribute)dataTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -310,15 +298,6 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getFBType_Name() {
-		return (EAttribute)fbTypeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -326,16 +305,6 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	@Override
 	public EClass getGlobalConstType() {
 		return globalConstTypeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getGlobalConstType_Name() {
-		return (EAttribute)globalConstTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -438,11 +407,12 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public EReference getResponse_FbType() {
+	public EReference getResponse_TypeResponse() {
 		return (EReference)responseEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -546,6 +516,26 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getTypeResponse() {
+		return typeResponseEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getTypeResponse_Name() {
+		return (EAttribute)typeResponseEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -575,10 +565,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 
 		// Create classes and their features
 		adapterTypeEClass = createEClass(ADAPTER_TYPE);
-		createEAttribute(adapterTypeEClass, ADAPTER_TYPE__NAME);
 
 		dataTypeEClass = createEClass(DATA_TYPE);
-		createEAttribute(dataTypeEClass, DATA_TYPE__NAME);
 
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__NAME);
@@ -591,10 +579,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEReference(fbEClass, FB__PORTS);
 
 		fbTypeEClass = createEClass(FB_TYPE);
-		createEAttribute(fbTypeEClass, FB_TYPE__NAME);
 
 		globalConstTypeEClass = createEClass(GLOBAL_CONST_TYPE);
-		createEAttribute(globalConstTypeEClass, GLOBAL_CONST_TYPE__NAME);
 
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__NAME);
@@ -609,7 +595,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEReference(responseEClass, RESPONSE__WATCHES);
 		createEAttribute(responseEClass, RESPONSE__REASON);
 		createEReference(responseEClass, RESPONSE__FBLIST);
-		createEReference(responseEClass, RESPONSE__FB_TYPE);
+		createEReference(responseEClass, RESPONSE__TYPE_RESPONSE);
 		createEReference(responseEClass, RESPONSE__ENDPOINTLIST);
 		createEReference(responseEClass, RESPONSE__CONNECTION);
 
@@ -625,6 +611,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		connectionEClass = createEClass(CONNECTION);
 		createEAttribute(connectionEClass, CONNECTION__SOURCE);
 		createEAttribute(connectionEClass, CONNECTION__DESTINATION);
+
+		typeResponseEClass = createEClass(TYPE_RESPONSE);
+		createEAttribute(typeResponseEClass, TYPE_RESPONSE__NAME);
 	}
 
 	/**
@@ -656,13 +645,15 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		adapterTypeEClass.getESuperTypes().add(this.getTypeResponse());
+		dataTypeEClass.getESuperTypes().add(this.getTypeResponse());
+		fbTypeEClass.getESuperTypes().add(this.getTypeResponse());
+		globalConstTypeEClass.getESuperTypes().add(this.getTypeResponse());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterTypeEClass, AdapterType.class, "AdapterType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getAdapterType_Name(), ecorePackage.getEString(), "name", null, 0, 1, AdapterType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(dataTypeEClass, DataType.class, "DataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getDataType_Name(), ecorePackage.getEString(), "name", null, 0, 1, DataType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getResource_Name(), ecorePackage.getEString(), "name", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -675,10 +666,8 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getFBType_Name(), ecorePackage.getEString(), "name", null, 0, 1, FBType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(globalConstTypeEClass, GlobalConstType.class, "GlobalConstType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getGlobalConstType_Name(), ecorePackage.getEString(), "name", null, 0, 1, GlobalConstType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -693,7 +682,7 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEReference(getResponse_Watches(), this.getWatches(), null, "Watches", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getResponse_Reason(), ecorePackage.getEString(), "Reason", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Fblist(), this.getFBList(), null, "fblist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getResponse_FbType(), this.getFBType(), null, "fbType", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getResponse_TypeResponse(), this.getTypeResponse(), null, "typeResponse", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Endpointlist(), this.getEndpointList(), null, "endpointlist", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResponse_Connection(), this.getConnection(), null, "connection", null, 0, 1, Response.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -709,6 +698,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getConnection_Source(), ecorePackage.getEString(), "Source", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getConnection_Destination(), ecorePackage.getEString(), "Destination", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(typeResponseEClass, TypeResponse.class, "TypeResponse", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getTypeResponse_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeResponse.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
@@ -728,39 +720,18 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
 		addAnnotation
-		  (getAdapterType_Name(),
-		   source,
-		   new String[] {
-			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
-			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getDataType_Name(),
-		   source,
-		   new String[] {
-			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
-			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getFBType_Name(),
-		   source,
-		   new String[] {
-			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
-			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getGlobalConstType_Name(),
-		   source,
-		   new String[] {
-			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
-			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
-		addAnnotation
-		  (getResponse_FbType(),
+		  (getResponse_TypeResponse(),
 		   source,
 		   new String[] {
 			   "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
 			   "name", "FBType" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getTypeResponse_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

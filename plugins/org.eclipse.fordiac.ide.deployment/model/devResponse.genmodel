@@ -10,12 +10,8 @@
   <foreignModel>devResponse.ecore</foreignModel>
   <genPackages prefix="DevResponse" basePackage="org.eclipse.fordiac.ide.deployment"
       disposableProviderFactory="true" contentTypeIdentifier="" ecorePackage="devResponse.ecore#/">
-    <genClasses ecoreClass="devResponse.ecore#//AdapterType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//AdapterType/name"/>
-    </genClasses>
-    <genClasses ecoreClass="devResponse.ecore#//DataType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//DataType/name"/>
-    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//AdapterType"/>
+    <genClasses ecoreClass="devResponse.ecore#//DataType"/>
     <genClasses ecoreClass="devResponse.ecore#//Resource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Resource/type"/>
@@ -26,12 +22,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FB/type"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//FB/ports"/>
     </genClasses>
-    <genClasses ecoreClass="devResponse.ecore#//FBType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//FBType/name"/>
-    </genClasses>
-    <genClasses ecoreClass="devResponse.ecore#//GlobalConstType">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//GlobalConstType/name"/>
-    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//FBType"/>
+    <genClasses ecoreClass="devResponse.ecore#//GlobalConstType"/>
     <genClasses ecoreClass="devResponse.ecore#//Port">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Port/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Port/dataValues"/>
@@ -45,7 +37,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/Watches"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Response/Reason"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference devResponse.ecore#//Response/fblist"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/fbType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/typeResponse"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/endpointlist"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference devResponse.ecore#//Response/connection"/>
     </genClasses>
@@ -61,6 +53,9 @@
     <genClasses ecoreClass="devResponse.ecore#//Connection">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/Source"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//Connection/Destination"/>
+    </genClasses>
+    <genClasses ecoreClass="devResponse.ecore#//TypeResponse">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute devResponse.ecore#//TypeResponse/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

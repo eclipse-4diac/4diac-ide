@@ -165,22 +165,6 @@
          </propertyTabs>
       </extension>
       <extension
-         point="org.eclipse.ltk.core.refactoring.renameParticipants">
-      <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
-            id="org.eclipse.fordiac.ide.typemanagement.renameType"
-            name="Rename Type handler">
-         <enablement>
-            <and>
-               <instanceof  value="org.eclipse.core.resources.IFile">
-               </instanceof>               
-               <test forcePluginActivation="true" property="org.eclipse.core.resources.extension" value="sys">
-               </test>
-            </and>
-         </enablement>
-      </renameParticipant>
-   </extension>
-      <extension
             point="org.eclipse.ui.ide.projectNatureImages">
          <image
                icon="fordiacimage://OVERLAY_DISTRIBUTED_NATURE"

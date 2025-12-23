@@ -60,6 +60,7 @@ public class TypedElementConfigLabelAccumulator<T extends ITypedElement>
 			accumulateAttributeConfigLabels(configLabels, rowItem, FordiacAnnotationUtil::showOnTargetType);
 			break;
 		case COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.NONE_NULL);
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			if (!CommentHelper.hasComment(rowItem)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
