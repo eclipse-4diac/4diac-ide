@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -47,23 +48,12 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 
 		if (UtilityMarkerHelper.getMarkedElement(getMarkerId(),
 				conTarget) instanceof final IInterfaceElement connectionSource) {
-			final var cmd = CreateSubAppCrossingConnectionsCommand
-					.createProcessBorderCrossingConnection(connectionSource, conTarget);
-			if (cmd.canExecute()) {
-				HandlerHelper.getCommandStack(editor).execute(cmd);
-				removeMarker(conTarget);
-			}
-
+			final var cmd = new ConEndpointMarkerCommandWrapper(CreateSubAppCrossingConnectionsCommand
+					.createProcessBorderCrossingConnection(connectionSource, conTarget), connectionSource);
+			HandlerHelper.getCommandStack(editor).execute(cmd);
 		}
 		return null;
-	}
 
-	private void removeMarker(final IInterfaceElement conTarget) {
-		final var root = EcoreUtil.getRootContainer(conTarget);
-		if (root instanceof final LibraryElement le && le.getTypeEntry() != null
-				&& le.getTypeEntry().getFile() != null) {
-			UtilityMarkerHelper.deleteElementMarker(getMarkerId(), le.getTypeEntry().getFile());
-		}
 	}
 
 	private static IInterfaceElement getConnectionTarget(final ExecutionEvent event) {
@@ -87,6 +77,59 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 	@Override
 	protected EObject getValidSelectedElement(final Object selectedObject) {
 		return (selectedObject instanceof final InterfaceEditPart iep) ? iep.getModel() : null;
+	}
+
+	private class ConEndpointMarkerCommandWrapper extends Command {
+
+		private final Command cmd;
+		IInterfaceElement conEndpoint;
+
+		public ConEndpointMarkerCommandWrapper(final Command cmd, final IInterfaceElement conEndpoint) {
+			this.cmd = cmd;
+			this.conEndpoint = conEndpoint;
+		}
+
+		@Override
+		public boolean canExecute() {
+			return cmd.canExecute();
+		}
+
+		@Override
+		public boolean canUndo() {
+			return cmd.canUndo();
+		}
+
+		@Override
+		public boolean canRedo() {
+			return cmd.canRedo();
+		}
+
+		@Override
+		public void execute() {
+			cmd.execute();
+			removeMarker();
+		}
+
+		@Override
+		public void undo() {
+			cmd.undo();
+			UtilityMarkerHelper.setMarkedElement(getMarkerId(), conEndpoint);
+		}
+
+		@Override
+		public void redo() {
+			cmd.redo();
+			removeMarker();
+		}
+
+		private void removeMarker() {
+			final var root = EcoreUtil.getRootContainer(conEndpoint);
+			if (root instanceof final LibraryElement le && le.getTypeEntry() != null
+					&& le.getTypeEntry().getFile() != null) {
+				UtilityMarkerHelper.deleteElementMarker(getMarkerId(), le.getTypeEntry().getFile());
+			}
+		}
+
 	}
 
 }
