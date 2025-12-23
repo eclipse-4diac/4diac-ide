@@ -25,6 +25,8 @@ public final class Messages extends NLS {
 
 	public static String ArrayValueConverter_IllegalElementValue;
 
+	public static String ArrayValueConverter_InvalidArrayLiteral;
+
 	public static String ArrayValueConverter_InvalidRepeatSyntax;
 
 	public static String CommonElementImporter_ERROR_DeclarationNotSet;

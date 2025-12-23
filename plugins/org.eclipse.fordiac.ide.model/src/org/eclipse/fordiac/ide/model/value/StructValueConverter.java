@@ -38,7 +38,12 @@ public class StructValueConverter implements ValueConverter<Map<String, Object>>
 
 	@Override
 	public Map<String, Object> toValue(final String string) throws IllegalArgumentException {
-		return toValue(new Scanner(string));
+		final Scanner scanner = new Scanner(string);
+		final Map<String, Object> value = toValue(scanner);
+		if (scanner.hasNext()) { // ensure we parsed entire input
+			throw new IllegalArgumentException(Messages.StructValueConverter_InvalidStructLiteral);
+		}
+		return value;
 	}
 
 	@Override

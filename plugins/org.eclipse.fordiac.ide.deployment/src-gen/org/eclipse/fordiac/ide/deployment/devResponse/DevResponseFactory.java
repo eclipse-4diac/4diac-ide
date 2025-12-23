@@ -152,6 +152,15 @@ public interface DevResponseFactory extends EFactory {
 	Connection createConnection();
 
 	/**
+	 * Returns a new object of class '<em>Type Response</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Type Response</em>'.
+	 * @generated
+	 */
+	TypeResponse createTypeResponse();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->

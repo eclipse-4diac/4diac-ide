@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 fortiss GmbH
- * 				 2019 Johannes Keppler University Linz
+ * Copyright (c) 2016, 2025 fortiss GmbH, Johannes Keppler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,8 +23,6 @@ import org.eclipse.gef.commands.Command;
 
 public class SetPositionCommand extends Command {
 	private final PositionableElement positionableElement;
-//	private final double dx;
-//	private final double dy;
 	private Position oldPos;
 	private Position newPos;
 
@@ -36,20 +33,25 @@ public class SetPositionCommand extends Command {
 	private SetPositionCommand(final PositionableElement positionableElement) {
 		this.positionableElement = positionableElement;
 		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
-	}
-
-	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
-		this(positionableElement);
 		if (positionableElement != null) {
 			oldPos = getPositionableElement().getPosition();
-			newPos = createNewPosition(oldPos, dx, dy);
 		}
 	}
 
+	public SetPositionCommand(final PositionableElement positionableElement, final Position newPos) {
+		this(positionableElement);
+		setLabel(Messages.ViewSetPositionCommand_LABEL_Move);
+		this.newPos = newPos;
+	}
+
+	public SetPositionCommand(final PositionableElement positionableElement, final double dx, final double dy) {
+		this(positionableElement, createNewPosition(positionableElement.getPosition(), dx, dy));
+	}
+
+	@Deprecated
 	public SetPositionCommand(final PositionableElement positionableElement, final int dx, final int dy) {
 		this(positionableElement);
 		if (positionableElement != null) {
-			oldPos = getPositionableElement().getPosition();
 			newPos = createNewPosition(oldPos, dx, dy);
 		}
 	}

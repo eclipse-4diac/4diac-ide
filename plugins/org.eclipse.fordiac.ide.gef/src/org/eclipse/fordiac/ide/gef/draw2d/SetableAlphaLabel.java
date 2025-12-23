@@ -17,6 +17,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 public class SetableAlphaLabel extends Label implements ITransparencyFigure {
@@ -90,7 +91,14 @@ public class SetableAlphaLabel extends Label implements ITransparencyFigure {
 			graphics.drawText(getSubStringText(), tx + 1, ty + 1);
 			graphics.setForegroundColor(ColorConstants.buttonDarker);
 		}
-		graphics.drawText(getSubStringText(), tx, ty);
+
+		final Dimension subStringTextSize = getSubStringTextSize();
+		if ((subStringTextSize.height * graphics.getAbsoluteScale()) < 3) {
+			graphics.setBackgroundColor(getForegroundColor());
+			graphics.fillRectangle(tx, ty, subStringTextSize.width, subStringTextSize.height);
+		} else {
+			graphics.drawText(getSubStringText(), tx, ty);
+		}
 	}
 
 	@Override

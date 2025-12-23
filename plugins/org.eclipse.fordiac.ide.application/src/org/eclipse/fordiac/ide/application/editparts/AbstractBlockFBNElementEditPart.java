@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -44,7 +43,6 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
@@ -73,7 +71,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
@@ -578,15 +575,9 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	}
 
 	private Point getRefPoint() {
-		final org.eclipse.draw2d.geometry.Point typeLabelTopLeft = getFigure().getTypeLabel().getBounds().getTopLeft()
-				.scale(getZoomManager().getZoom());
-		final FigureCanvas viewerControl = (FigureCanvas) getViewer().getControl();
-		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
-		return new Point(typeLabelTopLeft.x - location.x, typeLabelTopLeft.y - location.y);
-	}
-
-	private ZoomManager getZoomManager() {
-		return ((ZoomScalableFreeformRootEditPart) getRoot()).getZoomManager();
+		final org.eclipse.draw2d.geometry.Point typeLabelTopLeft = getFigure().getTypeLabel().getBounds().getTopLeft();
+		getFigure().getTypeLabel().translateToAbsolute(typeLabelTopLeft);
+		return typeLabelTopLeft.getSWTPoint();
 	}
 
 	@Override

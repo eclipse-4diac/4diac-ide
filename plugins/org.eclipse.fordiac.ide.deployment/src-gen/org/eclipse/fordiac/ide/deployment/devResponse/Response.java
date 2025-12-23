@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getWatches <em>Watches</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getReason <em>Reason</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFblist <em>Fblist</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType <em>Fb Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getTypeResponse <em>Type Response</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getEndpointlist <em>Endpointlist</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getConnection <em>Connection</em>}</li>
  * </ul>
@@ -146,25 +146,26 @@ public interface Response extends EObject {
 	void setFblist(FBList value);
 
 	/**
-	 * Returns the value of the '<em><b>Fb Type</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the value of the '<em>Fb Type</em>' reference.
-	 * @see #setFbType(FBType)
-	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_FbType()
+	 * Returns the value of the '<em><b>Type Response</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type Response</em>' reference.
+	 * @see #setTypeResponse(TypeResponse)
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage#getResponse_TypeResponse()
 	 * @model extendedMetaData="kind='element' name='FBType'"
 	 * @generated
 	 */
-	FBType getFbType();
+	TypeResponse getTypeResponse();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getFbType <em>Fb Type</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fb Type</em>' reference.
-	 * @see #getFbType()
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.deployment.devResponse.Response#getTypeResponse <em>Type Response</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type Response</em>' reference.
+	 * @see #getTypeResponse()
 	 * @generated
 	 */
-	void setFbType(FBType value);
+	void setTypeResponse(TypeResponse value);
 
 	/**
 	 * Returns the value of the '<em><b>Endpointlist</b></em>' reference. <!--

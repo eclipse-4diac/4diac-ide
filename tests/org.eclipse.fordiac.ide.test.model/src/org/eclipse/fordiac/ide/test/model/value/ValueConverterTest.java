@@ -73,6 +73,8 @@ class ValueConverterTest {
 				arguments(NumericValueConverter.INSTANCE, IllegalArgumentException.class, "NoNumber"), //
 				arguments(NumericValueConverter.INSTANCE, IllegalArgumentException.class, "1__00"), //
 				arguments(NumericValueConverter.INSTANCE, IllegalArgumentException.class, "a1"), //
+				arguments(NumericValueConverter.INSTANCE, IllegalArgumentException.class, "trueerror"), //
+				arguments(NumericValueConverter.INSTANCE, IllegalArgumentException.class, "17error"), //
 				arguments(StringValueConverter.INSTANCE, "", "''"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "\"\""), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, ""), //
@@ -82,6 +84,7 @@ class ValueConverterTest {
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac$''IDE'"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac'$'IDE'"), //
+				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac IDE'error"), //
 				arguments(StringValueConverter.INSTANCE, "abc", "'abc'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_ACUTE, "'4diac$'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_BACKSLASH, "'4diac\"IDE'"), //
@@ -99,6 +102,7 @@ class ValueConverterTest {
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac\"$\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac$\"\"IDE\""), //
+				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac IDE\"error"), //
 				arguments(WStringValueConverter.INSTANCE, "abc", "\"abc\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_ACUTE, "\"4diac'IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_BACKSLASH, "\"4diac$\"IDE\""), //
@@ -134,6 +138,8 @@ class ValueConverterTest {
 						"[17,,]"), //
 				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), IllegalArgumentException.class,
 						"[4"), //
+				arguments(new ArrayValueConverter<>(NumericValueConverter.INSTANCE), IllegalArgumentException.class,
+						"[17,4]error"), //
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
 								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
@@ -160,7 +166,15 @@ class ValueConverterTest {
 				arguments(
 						named("StructValueConverter [NumericValueConverter]",
 								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
-						IllegalArgumentException.class, "(a:=invalid,b:=4)") //
+						IllegalArgumentException.class, ""), //
+				arguments(
+						named("StructValueConverter [NumericValueConverter]",
+								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+						IllegalArgumentException.class, "(a:=invalid,b:=4)"), //
+				arguments(
+						named("StructValueConverter [NumericValueConverter]",
+								new StructValueConverter(unused -> NumericValueConverter.INSTANCE)),
+						IllegalArgumentException.class, "(a:=17,b:=4)error") //
 		);
 	}
 

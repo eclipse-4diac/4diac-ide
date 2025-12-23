@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -89,19 +88,20 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp
 				|| child.getModel() instanceof Comment) && RequestUtil.isResizeRequest(request)) {
-			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request);
+			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request, (Rectangle) constraint);
 		}
 		if ((child.getModel() instanceof final PositionableElement pe) && (RequestUtil.isMoveRequest(request))) {
-			return createMoveCommand(pe, request, constraint);
+			return createMoveCommand(pe, (Rectangle) constraint);
 		}
 		return null;
 	}
 
-	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request) {
+	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request,
+			final Rectangle constraint) {
 		final Dimension sizeDelta = getScaledSizeDelta(request);
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
-			return createMoveCommand(container, request, null);
+			return createMoveCommand(container, constraint);
 		}
 		final Point moveDelta = getScaledMoveDelta(request);
 		return createChangeBoundsCommand(container, sizeDelta, moveDelta);
@@ -186,10 +186,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	protected Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
-		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
-		final Point location = viewerControl.getViewport().getViewLocation();
-		return new Point(request.getLocation().x + location.x, request.getLocation().y + location.y)
-				.scale(1.0 / getZoomManager().getZoom());
+		final Point location = request.getLocation().getCopy();
+		getHost().getFigure().translateToRelative(location);
+		return location;
 	}
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<? extends EditPart> editParts,
@@ -241,25 +240,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return (getHost().getModel() instanceof final FBNetwork fbNetwork) ? fbNetwork : null;
 	}
 
-	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,
-			final Object constraint) {
-		final Point moveDelta = (RequestUtil.isAlignmentRequest(request)) ? getAlignmentDelta(model, constraint)
-				: getScaledMoveDelta(request);
+	private static Command createMoveCommand(final PositionableElement model, final Rectangle constraint) {
+		final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(constraint.x, constraint.y);
 		if (model instanceof final FBNetworkElement fbnEl) {
-			return new FBNetworkElementSetPositionCommand(fbnEl, moveDelta.x, moveDelta.y);
+			return new FBNetworkElementSetPositionCommand(fbnEl, newPos);
 		}
-		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
-	}
-
-	private static Point getAlignmentDelta(final PositionableElement model, final Object constraint) {
-		if (constraint instanceof final Rectangle rect) {
-			final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rect.x, rect.y);
-			newPos.setX(newPos.getX() - model.getPosition().getX());
-			newPos.setY(newPos.getY() - model.getPosition().getY());
-			return newPos.toScreenPoint();
-		}
-		// we don't have new positions keep the old one
-		return model.getPosition().toScreenPoint();
+		return new SetPositionCommand(model, newPos);
 	}
 
 	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {

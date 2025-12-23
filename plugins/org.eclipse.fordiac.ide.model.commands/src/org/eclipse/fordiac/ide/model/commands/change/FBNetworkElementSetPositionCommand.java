@@ -28,8 +28,8 @@ public class FBNetworkElementSetPositionCommand extends SetPositionCommand imple
 	private static final Consumer<IInterfaceElement> OUTPUT_CONSUMER = ie -> ie.getOutputConnections()
 			.forEach(con -> con.getRoutingData().setNeedsValidation(true));
 
-	public FBNetworkElementSetPositionCommand(final FBNetworkElement fbe, final int dx, final int dy) {
-		super(fbe, dx, dy);
+	public FBNetworkElementSetPositionCommand(final FBNetworkElement fbe, final Position newPos) {
+		super(fbe, newPos);
 	}
 
 	@Override
