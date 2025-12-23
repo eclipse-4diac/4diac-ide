@@ -41,7 +41,7 @@ public class MarkConnectionSourceHandler extends AbstractMarkerHandler {
 		final IInterfaceElement conTarget = getConnectionTarget(event);
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 
-		if (conTarget == null || !conTarget.isIsInput() || editor == null) {
+		if (conTarget == null || editor == null) {
 			return null;
 		}
 
