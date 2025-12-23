@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012, 2014, 2016, 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 Johannes Kepler University
+ * Copyright (c) 2008, 2025 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,12 +19,13 @@ import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -79,8 +80,8 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			}
 			// return a command that can move a "PositionableElement"
 			if (child.getModel() instanceof final PositionableElement posel && RequestUtil.isMoveRequest(request)) {
-				final Point moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
-				return new SetPositionCommand(posel, moveDelta.x, moveDelta.y);
+				final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rec.x, rec.y);
+				return new SetPositionCommand(posel, newPos);
 			}
 		}
 		return null;

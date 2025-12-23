@@ -47,24 +47,12 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
 		if ((child.getModel() instanceof final ECState state) && RequestUtil.isMoveRequest(request)) {
-			final Point moveDelta;
-			if (constraint instanceof final Rectangle rect && RequestUtil.isAlignmentRequest(request)) {
-				moveDelta = getMoveDelta(rect, state);
-			} else {
-				moveDelta = request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
-			}
-
-			return new SetPositionCommand(state, moveDelta.x, moveDelta.y);
+			final Rectangle rectConstraint = (Rectangle) constraint;
+			final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rectConstraint.x,
+					rectConstraint.y);
+			return new SetPositionCommand(state, newPos);
 		}
 		return null;
-	}
-
-	private static Point getMoveDelta(final Rectangle rect, final ECState state) {
-		final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(rect.x, rect.y);
-		final Position oldPos = state.getPosition();
-		newPos.setX(Math.floor((newPos.getX() - oldPos.getX()) / 2));
-		newPos.setY(Math.floor((newPos.getY() - oldPos.getY()) / 2));
-		return newPos.toScreenPoint();
 	}
 
 	@Override
