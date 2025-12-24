@@ -18,6 +18,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,6 @@ import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -164,7 +164,7 @@ public class LibrarySelectionPage extends WizardPage {
 					}
 					return lib.version().toString();
 				}
-				return treeViewer.getTree();
+				return null;
 			}
 
 			@Override
@@ -240,6 +240,8 @@ public class LibrarySelectionPage extends WizardPage {
 
 	private void fillViewer(final boolean isLibrary) {
 		final Object[] tempSelection = treeViewer.getCheckedElements();
+		treeViewer.getTree().clearAll(true);
+		final String version = null != range ? range.getLeft().toString() : ""; //$NON-NLS-1$
 		createColumns(isLibrary);
 		if (null != listener) {
 			treeViewer.getTree().removeSelectionListener(listener);
@@ -247,20 +249,23 @@ public class LibrarySelectionPage extends WizardPage {
 		if (isLibrary) {
 			treeViewer.setInput(libraries.stream().map(LibraryRecord::name).distinct().sorted().toList());
 			treeViewer.setCheckedElements(tempSelection);
-			treeViewer.setCheckStateProvider(getLibraryNameCheckStateProvider());
+			if (range != null && Collections.max(libraries, Comparator.comparing(LibraryRecord::version)).version()
+					.equals(range.getLeft())) {
+				Stream.of(treeViewer.getTree().getItems())
+						.filter(r -> Stream.of(r.getItems()).anyMatch(d -> d.getText().equals(version)))
+						.forEach(r -> treeViewer.setChecked(r, true));
+			}
 			treeViewer.getTree().addSelectionListener(getLibraryNameListener());
 		} else {
 			treeViewer.setInput(libraries.stream().map(LibraryRecord::version).distinct()
 					.sorted(Comparator.reverseOrder()).map(Version::toString).toList());
-			treeViewer.setCheckedElements(tempSelection);
 			if (range != null) {
-				final String version = range.getLeft().toString();
 				final Object[] children = ((ITreeContentProvider) treeViewer.getContentProvider()).getChildren(version);
+				treeViewer.setCheckedElements(tempSelection);
 				if (Arrays.stream(children).allMatch(child -> treeViewer.getChecked(child))) {
 					treeViewer.setChecked(version, true);
 				}
 			}
-			treeViewer.setCheckStateProvider(null);
 			treeViewer.getTree().addSelectionListener(getVersionListener());
 		}
 		treeViewer.refresh();
@@ -270,35 +275,41 @@ public class LibrarySelectionPage extends WizardPage {
 		listener = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
-				if (event.detail == SWT.CHECK && event.item instanceof final TreeItem item
-						&& item.getParentItem() instanceof final TreeItem parent) {
-					treeViewer.getTree().removeSelectionListener(listener);
+				if (event.detail == SWT.CHECK && event.item instanceof final TreeItem item) {
+					removeListener();
 					final boolean checked = item.getChecked();
-					if (checked) {
+					if (item.getParentItem() instanceof final TreeItem parent && checked) {
+						// when this child is checked all other children have to be unchecked
 						Stream.of(parent.getItems()).filter(i -> i != item).forEach(c -> c.setChecked(false));
+						Stream.of(parent.getItems())
+								.max(Comparator.comparing(ti -> ((LibraryRecord) ti.getData()).version()))
+								.ifPresent(p -> parent.setChecked(p.equals(item)));
 					}
-					treeViewer.getTree().addSelectionListener(listener);
+					if (item.getItemCount() > 0) {
+						// when parent is check the first ordered child is set all other have to be
+						// unchecked
+						Stream.of(item.getItems()).forEach(ti -> ti.setChecked(false));
+						if (checked) {
+							Stream.of(item.getItems())
+									.max(Comparator.comparing(ti -> ((LibraryRecord) ti.getData()).version()))
+									.ifPresent(r -> r.setChecked(true));
+						}
+					}
+					addListener();
 				}
 			}
 		};
 		return listener;
 	}
 
-	private ICheckStateProvider getLibraryNameCheckStateProvider() {
-		return new ICheckStateProvider() {
-			@Override
-			public boolean isChecked(final Object element) {
-				if (element instanceof String) {
-					return false;
-				}
-				return treeViewer.getChecked(element);
-			}
+	private void addListener() {
+		treeViewer.getTree().addSelectionListener(listener);
+		treeViewer.getTree().setRedraw(true);
+	}
 
-			@Override
-			public boolean isGrayed(final Object element) {
-				return element instanceof String;
-			}
-		};
+	private void removeListener() {
+		treeViewer.getTree().removeSelectionListener(listener);
+		treeViewer.getTree().setRedraw(false);
 	}
 
 	private SelectionAdapter getVersionListener() {
@@ -306,7 +317,7 @@ public class LibrarySelectionPage extends WizardPage {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
 				if (event.detail == SWT.CHECK && event.item instanceof final TreeItem item) {
-					treeViewer.getTree().removeSelectionListener(listener);
+					removeListener();
 					final boolean checked = item.getChecked();
 					final TreeItem[] children = item.getItems();
 					if (children.length > 0) {
@@ -316,7 +327,7 @@ public class LibrarySelectionPage extends WizardPage {
 					}
 					treeViewer.refresh();
 					setPageComplete(isPageComplete());
-					treeViewer.getTree().addSelectionListener(listener);
+					addListener();
 				}
 			}
 
