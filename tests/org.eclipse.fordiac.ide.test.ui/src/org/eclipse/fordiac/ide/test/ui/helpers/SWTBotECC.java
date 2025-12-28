@@ -21,20 +21,12 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.test.ui.swtbot.SWT4diacGefBot;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 
 public class SWTBotECC {
-
-	private final SWT4diacGefBot bot;
-
-	@SuppressWarnings("static-access")
-	public SWTBotECC(final SWT4diacGefBot bot) {
-		this.bot = bot;
-	}
 
 	/**
 	 * Change the algorithm or event value of an EC state action.

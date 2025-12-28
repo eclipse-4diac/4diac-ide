@@ -71,7 +71,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 
 		// drag rectangle over the FBs, therefore FBs should be selected
 		editor.drag(80, 80, 400, 400);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());
@@ -108,7 +108,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// drag rectangle over to FB, therefore FB should be selected
 		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		editor.drag(50, 50, 500, 300);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 
@@ -152,7 +152,7 @@ public class SubapplicationTests extends Abstract4diacUITests {
 		// selected
 		final SWTBot4diacGefEditor editor = bot.gefEditor(UITestNamesHelper.PROJECT_NAME);
 		editor.drag(250, 50, 600, 200);
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertEquals(2, selectedEditParts.size());

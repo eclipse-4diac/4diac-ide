@@ -52,7 +52,6 @@ public class SWTBotFB {
 	@SuppressWarnings("static-access")
 	public SWTBotFB(final SWT4diacGefBot bot) {
 		this.bot = bot;
-		// TODO editor vom bot holen und field
 	}
 
 	/**

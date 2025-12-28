@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotECC;
@@ -112,7 +112,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	public void createECAction() {
 		final SWTBotGefEditPart statePart = editor.getEditPart(UITestNamesHelper.TESTSTATE);
 		assertNotNull(statePart);
-		final Point testStatePoint = new SWTBotECC(bot).getPoint(statePart);
+		final Point testStatePoint = new SWTBotECC().getPoint(statePart);
 		editor.clickContextMenu(UITestNamesHelper.ADD_ACTION, testStatePoint.x, testStatePoint.y);
 		assertNotNull(editor.getEditPart(UITestNamesHelper.TESTSTATE).children());
 	}
@@ -126,7 +126,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Order(4)
 	public void createAlgorithm() {
 
-		new SWTBotECC(bot).changeAlgorithmAndEventValue(editor, UITestNamesHelper.TESTSTATE,
+		new SWTBotECC().changeAlgorithmAndEventValue(editor, UITestNamesHelper.TESTSTATE,
 				UITestNamesHelper.DEINITIALIZE, 0);
 	}
 
@@ -138,7 +138,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Test
 	@Order(5)
 	public void createOutputEvent() {
-		new SWTBotECC(bot).changeAlgorithmAndEventValue(editor, UITestNamesHelper.DEINIT, UITestNamesHelper.CNF, -1);
+		new SWTBotECC().changeAlgorithmAndEventValue(editor, UITestNamesHelper.DEINIT, UITestNamesHelper.CNF, -1);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Order(6)
 	public void createTransition() {
 		final SWTBotGefEditPart statePart = editor.getEditPart(UITestNamesHelper.START);
-		final SWTBotECC eccBot = new SWTBotECC(bot);
+		final SWTBotECC eccBot = new SWTBotECC();
 		final Point start = eccBot.getPoint(statePart);
 		assertNotNull(start);
 
@@ -170,8 +170,8 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Test
 	@Order(7)
 	public void changeAlgorithm() {
-		new SWTBotECC(bot).changeAlgorithmAndEventValue(editor, UITestNamesHelper.TESTSTATE,
-				UITestNamesHelper.INITIALIZE, 0);
+		new SWTBotECC().changeAlgorithmAndEventValue(editor, UITestNamesHelper.TESTSTATE, UITestNamesHelper.INITIALIZE,
+				0);
 	}
 
 	/**
@@ -182,8 +182,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Test
 	@Order(8)
 	public void changeConditionEvent() {
-		new SWTBotECC(bot).changeAlgorithmAndEventValue(editor, UITestNamesHelper.INIT_SMALL, UITestNamesHelper.CNF,
-				-1);
+		new SWTBotECC().changeAlgorithmAndEventValue(editor, UITestNamesHelper.INIT_SMALL, UITestNamesHelper.CNF, -1);
 	}
 
 	/**
@@ -240,7 +239,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	@Test
 	@Order(11)
 	public void deleteECAction() {
-		final SWTBotECC eccBot = new SWTBotECC(bot);
+		final SWTBotECC eccBot = new SWTBotECC();
 		final SWTBotGefEditPart actionPart = eccBot.getChildrenPart(editor.getEditPart(UITestNamesHelper.TESTSTATE), 0);
 		final Point actionPoint = eccBot.getPoint(actionPart);
 		actionPart.click();
@@ -369,7 +368,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 
 		// Uncomment and modify the following line if you need to validate the removal
 		// of an old event
-		// assertNull(editor.getEditPart(UITestNamesHelper.INITIALIZE));
+		assertNull(editor.getEditPart(UITestNamesHelper.INITIALIZE));
 	}
 
 	/**
@@ -390,7 +389,7 @@ public class ECCEditorTests extends Abstract4diacUITests {
 		assertNotNull(part);
 
 		// Get the location of the transition part and delete it via context menu
-		final Point partPoint = new SWTBotECC(bot).getPoint(part);
+		final Point partPoint = new SWTBotECC().getPoint(part);
 		editor.select(part);
 		editor.clickContextMenu(UITestNamesHelper.DELETE, partPoint.x, partPoint.y);
 
@@ -409,18 +408,6 @@ public class ECCEditorTests extends Abstract4diacUITests {
 	public void deleteECState() {
 		editor.getEditPart(UITestNamesHelper.TESTSTATE).click();
 		editor.clickContextMenu(UITestNamesHelper.DELETE);
-	}
-
-	public void tryToMoveBendPoint() {
-		// TODO
-	}
-
-	public void tryToChangeTransitionDestination() {
-		// TODO
-	}
-
-	public void tryToChangeTransitionSource() {
-		// TODO
 	}
 
 }
