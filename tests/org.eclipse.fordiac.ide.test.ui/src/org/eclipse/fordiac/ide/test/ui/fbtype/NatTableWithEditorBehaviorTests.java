@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.ui.fbtype;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.eclipse.fordiac.ide.test.ui.Abstract4diacUITests;
 import org.eclipse.fordiac.ide.test.ui.helpers.SWTBotFBType;
@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacGefEditor;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
+import org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
