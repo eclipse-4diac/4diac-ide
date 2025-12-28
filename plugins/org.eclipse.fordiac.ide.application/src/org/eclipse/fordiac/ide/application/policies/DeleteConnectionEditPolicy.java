@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016, 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,8 +31,8 @@ public class DeleteConnectionEditPolicy extends org.eclipse.gef.editpolicies.Con
 	 */
 	@Override
 	protected Command getDeleteCommand(final GroupRequest request) {
-		if (getHost().getModel() instanceof Connection) {
-			return new DeleteConnectionCommand((Connection) getHost().getModel());
+		if (getHost().getModel() instanceof final Connection con) {
+			return new DeleteConnectionCommand(con);
 		}
 		return null;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2024 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
  * 				            Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -64,17 +64,15 @@ public class MoveToParentHandler extends AbstractHandler {
 				getCommandStack(editor).execute(cmd);
 
 				// select moved elements in editor
-				selectElements(editor, fbelements);
+				selectElements(fbelements);
 			}
 		}
 		return Status.OK_STATUS;
 	}
 
-	private static void selectElements(final IEditorPart editor, final List<FBNetworkElement> fbelements) {
-
+	private static void selectElements(final List<FBNetworkElement> fbelements) {
 		final INamedElement viewableNetwork = findNextViewableNetwork(fbelements.get(0));
 		final GraphicalViewer viewer = HandlerHelper.openEditor(viewableNetwork).getAdapter(GraphicalViewer.class);
-
 		HandlerHelper.selectElement(fbelements.get(0), viewer);
 	}
 

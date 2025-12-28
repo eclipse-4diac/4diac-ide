@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.composite
 import java.nio.file.Path
 import java.util.List
 import java.util.Map
-import java.util.Set
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport

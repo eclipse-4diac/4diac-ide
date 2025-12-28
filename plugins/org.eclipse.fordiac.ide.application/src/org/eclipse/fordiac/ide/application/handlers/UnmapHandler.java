@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -57,25 +57,25 @@ public class UnmapHandler extends AbstractHandler {
 		setBaseEnabled(!getMappedFBList(getSelectedElements(evaluationContext)).isEmpty());
 	}
 
-	@SuppressWarnings("static-method")  // this method is not static to be overrideable by children
+	@SuppressWarnings("static-method") // this method is not static to be overrideable by children
 	protected List<?> getSelectedElements(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			return ((StructuredSelection) selection).toList();
+		if (selection instanceof final StructuredSelection structSel) {
+			return structSel.toList();
 		}
 		return Collections.emptyList();
 	}
 
-	private List<FBNetworkElement> getMappedFBList(final List<?> fbNetwork){
+	private List<FBNetworkElement> getMappedFBList(final List<?> fbNetwork) {
 		selectedNetworkElements.clear();
 		for (Object element : fbNetwork) {
-			if(element instanceof EditPart) {
-				element = ((EditPart)element).getModel();
+			if (element instanceof final EditPart ep) {
+				element = ep.getModel();
 			}
 
-			if ((element instanceof FBNetworkElement)) {
-				checkMapping((FBNetworkElement) element);
+			if ((element instanceof final FBNetworkElement fbne)) {
+				checkMapping(fbne);
 			}
 		}
 		return selectedNetworkElements;

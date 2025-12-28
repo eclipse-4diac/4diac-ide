@@ -27,20 +27,20 @@ public class GroupSectionFilter implements IFilter {
 
 	static Group groupFromSelectedObejct(final Object selObj) {
 		Object retval = selObj;
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
+		if (retval instanceof final EditPart ep) {
+			retval = ep.getModel();
 		}
 
-		if (retval instanceof InstanceComment) {
-			retval = ((InstanceComment) retval).getRefElement();
+		if (retval instanceof final InstanceComment instComment) {
+			retval = instComment.getRefElement();
 		}
 
-		if (retval instanceof InstanceName) {
-			retval = ((InstanceName) retval).getRefElement();
+		if (retval instanceof final InstanceName instName) {
+			retval = instName.getRefElement();
 		}
 
-		if (retval instanceof Group) {
-			return (Group) retval;
+		if (retval instanceof final Group group) {
+			return group;
 		}
 		return null;
 	}

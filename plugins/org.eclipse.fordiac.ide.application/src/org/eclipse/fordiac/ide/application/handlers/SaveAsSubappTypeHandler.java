@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -56,15 +56,14 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 	}
 
 	private static boolean calculateEnabled(final ISelection selection) {
-		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
-			for (final Object selected : ((IStructuredSelection) selection).toList()) {
-				if ((selected instanceof EditPart) && (((EditPart) selected).getModel() instanceof SubApp)) {
-					if (null != ((SubApp) ((EditPart) selected).getModel()).getTypeEntry()) {
-						// a typed subapplication has been selected
-						return false;
-					}
-				} else {
+		if ((selection instanceof final IStructuredSelection structSel) && !selection.isEmpty()) {
+			for (final Object selected : structSel.toList()) {
+				if (!(selected instanceof final EditPart ep) || !(ep.getModel() instanceof final SubApp subApp)) {
 					// a non subapplication has been selected
+					return false;
+				}
+				if (null != subApp.getTypeEntry()) {
+					// a typed subapplication has been selected
 					return false;
 				}
 			}

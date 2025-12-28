@@ -157,8 +157,8 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 
 	protected void createCommands(final IMarker[] markers, final IProgressMonitor monitor) throws CoreException {
 		monitor.beginTask(Messages.AbstractCommandMarkerResolution_PerformTask, markers.length);
-		for (final IMarker marker : markers) {
-			createCommand(marker, monitor.slice(1));
+		for (final IMarker m : markers) {
+			createCommand(m, monitor.slice(1));
 		}
 	}
 

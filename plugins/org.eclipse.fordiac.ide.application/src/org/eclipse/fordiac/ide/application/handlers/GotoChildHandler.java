@@ -67,18 +67,16 @@ public class GotoChildHandler extends AbstractHandler {
 	}
 
 	public static EditPart getValidEditPart(final ISelection selection) {
-		if (selection instanceof final IStructuredSelection structuredSelection && !selection.isEmpty()) {
-			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof final EditPart ep
-					&& ep.getAdapter(EditPart.class) != null) {
-				final EditPart editPart = ep.getAdapter(EditPart.class);
-				final Object model = editPart.getModel();
-				if (isSubAppOrCFBInstance(model)) {
-					return editPart;
-				}
-				if (model instanceof final IInterfaceElement iel
-						&& isSubAppOrCFBInstance(iel.getBlockFBNetworkElement())) {
-					return editPart;
-				}
+		if (selection instanceof final IStructuredSelection structuredSelection && structuredSelection.size() == 1
+				&& structuredSelection.getFirstElement() instanceof final EditPart ep
+				&& ep.getAdapter(EditPart.class) != null) {
+			final EditPart editPart = ep.getAdapter(EditPart.class);
+			final Object model = editPart.getModel();
+			if (isSubAppOrCFBInstance(model)) {
+				return editPart;
+			}
+			if (model instanceof final IInterfaceElement iel && isSubAppOrCFBInstance(iel.getBlockFBNetworkElement())) {
+				return editPart;
 			}
 		}
 		return null;

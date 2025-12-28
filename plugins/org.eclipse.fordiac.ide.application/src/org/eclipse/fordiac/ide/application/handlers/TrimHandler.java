@@ -71,21 +71,19 @@ public class TrimHandler extends AbstractHandler {
 	}
 
 	private static IContainerEditPart getContainerEditPart(final ISelection selection) {
-		if (selection instanceof final IStructuredSelection structSel) {
-			if (structSel.size() == 1) {
-				final Object firstElement = structSel.getFirstElement();
-				if (firstElement instanceof final IContainerEditPart containerEP) {
-					if (!(containerEP.getModel() instanceof SubApp)) {
-						return containerEP;
-					}
-					// if we have a subapp only accept if it is expanded
-					if (((SubApp) containerEP.getModel()).isUnfolded()) {
-						return containerEP;
-					}
+		if (selection instanceof final IStructuredSelection structSel && structSel.size() == 1) {
+			final Object firstElement = structSel.getFirstElement();
+			if (firstElement instanceof final IContainerEditPart containerEP) {
+				if (!(containerEP.getModel() instanceof SubApp)) {
+					return containerEP;
 				}
-				if (firstElement instanceof AbstractContainerContentEditPart) {
-					return (IContainerEditPart) ((EditPart) firstElement).getParent();
+				// if we have a subapp only accept if it is expanded
+				if (((SubApp) containerEP.getModel()).isUnfolded()) {
+					return containerEP;
 				}
+			}
+			if (firstElement instanceof AbstractContainerContentEditPart) {
+				return (IContainerEditPart) ((EditPart) firstElement).getParent();
 			}
 		}
 		return null;

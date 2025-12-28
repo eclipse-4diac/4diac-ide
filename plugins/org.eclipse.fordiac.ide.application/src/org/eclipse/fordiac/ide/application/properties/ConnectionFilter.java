@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,8 +20,8 @@ public class ConnectionFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		if (toTest instanceof EditPart) {
-			toTest = ((EditPart) toTest).getModel();
+		if (toTest instanceof final EditPart ep) {
+			toTest = ep.getModel();
 		}
 		return toTest instanceof Connection;
 	}
