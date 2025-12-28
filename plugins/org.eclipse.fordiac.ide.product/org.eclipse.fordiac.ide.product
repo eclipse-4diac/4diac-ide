@@ -26,7 +26,7 @@
 -Dswt.autoScale=quarter
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
--Xmn512m
+--add-modules=ALL-SYSTEM
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -51,6 +51,7 @@
    <vm>
    </vm>
 
+
    <plugins>
    </plugins>
 
@@ -67,15 +68,12 @@
       <feature id="org.eclipse.equinox.p2.extras.feature"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
       <feature id="org.eclipse.equinox.p2.rcp.feature"/>
-      <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.platform"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.gef"/>
-      <feature id="org.eclipse.help"/>
       <feature id="org.eclipse.emf.common"/>
       <feature id="org.eclipse.draw2d"/>
       <feature id="org.eclipse.emf.edit"/>
-      <feature id="org.eclipse.rcp"/>
       <feature id="org.eclipse.emf.ecore.edit"/>
       <feature id="org.eclipse.emf.edit.ui"/>
       <feature id="org.eclipse.emf.mapping"/>
@@ -109,7 +107,11 @@
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
-      <property name="eclipse.buildId" value="${project.artifactId}_${unqualifiedVersion}.${buildQualifier}" />
+      <property name="org.eclipse.update.reconcile" value="false" />
+      <property name="eclipse.buildId" value="${unqualifiedVersion}.${buildQualifier}" />
+      <property name="osgi.bundles.defaultStartLevel" value="4" />
+      <property name="osgi.instance.area.default" value="@user.home/workspace" />
+      <property name="osgi.instance.area.default" value="@user.home/Documents/workspace" os="macosx" />
    </configurations>
 
    <preferencesInfo>
