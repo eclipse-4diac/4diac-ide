@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -52,12 +52,9 @@ public class UngroupHandler extends AbstractHandler {
 	}
 
 	private static Group getGroup(final ISelection selection) {
-		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof IAdaptable) {
-				final IAdaptable adapter = (IAdaptable) structuredSelection.getFirstElement();
-				return adapter.getAdapter(Group.class);
-			}
+		if (selection instanceof final IStructuredSelection structSel && structSel.size() == 1
+				&& structSel.getFirstElement() instanceof final IAdaptable adapter) {
+			return adapter.getAdapter(Group.class);
 		}
 		return null;
 	}

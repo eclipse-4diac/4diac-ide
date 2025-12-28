@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -78,12 +78,11 @@ public abstract class AbstractGoToPinHandler extends AbstractHandler {
 	}
 
 	private static IInterfaceElement getSelectedInterfaceElement(final ISelection selection) {
-		if ((selection instanceof final IStructuredSelection structSel && !selection.isEmpty())
-				&& ((structSel.size() == 1) && (structSel.getFirstElement() instanceof final EditPart ep))) {
-			// only if only one element is selected
-			if (ep.getModel() instanceof final IInterfaceElement ie) {
-				return ie;
-			}
+		// only if only one element is selected
+		if ((selection instanceof final IStructuredSelection structSel && structSel.size() == 1
+				&& structSel.getFirstElement() instanceof final EditPart ep)
+				&& (ep.getModel() instanceof final IInterfaceElement ie)) {
+			return ie;
 		}
 		return null;
 	}

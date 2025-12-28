@@ -26,8 +26,8 @@ import org.eclipse.jface.viewers.IFilter;
 public class FBNetworkElementTypeFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
-		if (toTest instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) toTest).getModel().isTyped();
+		if (toTest instanceof final SubAppForFBNetworkEditPart subAppEP) {
+			return subAppEP.getModel().isTyped();
 		}
 		return (toTest instanceof AbstractBlockFBNElementEditPart);
 	}

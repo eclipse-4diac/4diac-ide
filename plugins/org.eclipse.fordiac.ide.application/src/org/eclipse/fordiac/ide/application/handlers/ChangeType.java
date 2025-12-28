@@ -35,11 +35,9 @@ public class ChangeType extends AbstractHandler {
 
 	private static AbstractBlockFBNElementEditPart getSelectedFBElementEditPart(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof StructuredSelection) {
-			final Object selObj = ((StructuredSelection) selection).getFirstElement();
-			if (selObj instanceof AbstractBlockFBNElementEditPart) {
-				return (AbstractBlockFBNElementEditPart) selObj;
-			}
+		if (selection instanceof final StructuredSelection structSel
+				&& structSel.getFirstElement() instanceof final AbstractBlockFBNElementEditPart fbnElEP) {
+			return fbnElEP;
 		}
 		return null;
 	}

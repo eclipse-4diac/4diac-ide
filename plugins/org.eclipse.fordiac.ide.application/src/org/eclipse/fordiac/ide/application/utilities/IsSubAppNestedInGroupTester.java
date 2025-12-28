@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,14 +21,9 @@ public class IsSubAppNestedInGroupTester extends PropertyTester {
 
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-
-		if (receiver instanceof EditPart) {
-			final Object model = ((EditPart) receiver).getModel();
-			if (model instanceof FBNetworkElement) {
-				return !((FBNetworkElement) model).isInGroup();
-			}
+		if (receiver instanceof final EditPart ep && ep.getModel() instanceof final FBNetworkElement fbne) {
+			return !fbne.isInGroup();
 		}
 		return false;
 	}
 }
-

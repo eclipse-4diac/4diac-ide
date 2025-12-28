@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -92,8 +93,11 @@ public class QuickFixWizardDialog {
 
 			try {
 				getContainer().run(false, true, runnable);
-			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
+			} catch (final InvocationTargetException e) {
+				FordiacLogHelper.logError("Quickfix issue", e); //$NON-NLS-1$
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError("Quickfix issue", e); //$NON-NLS-1$
+				Thread.currentThread().interrupt();
 			}
 
 			return true;

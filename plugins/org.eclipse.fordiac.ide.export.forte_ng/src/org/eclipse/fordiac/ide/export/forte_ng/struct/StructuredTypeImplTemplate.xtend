@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
 import java.util.Map
-import java.util.Set
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*

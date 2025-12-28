@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -55,8 +55,7 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 		setBaseEnabled((null != subApp) // the type check has to be done before group containment
-				&& !(subApp.isTyped() || subApp.isContainedInTypedInstance()) 
-				&& !isGroupContainedInSubapp(subApp));
+				&& !(subApp.isTyped() || subApp.isContainedInTypedInstance()) && !isGroupContainedInSubapp(subApp));
 	}
 
 	private static boolean isGroupContainedInSubapp(final SubApp subApp) {
@@ -66,26 +65,20 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structSel = ((IStructuredSelection) selection);
-			if (!structSel.isEmpty() && (structSel.size() == 1)) {
-				return getSubApp(structSel.getFirstElement());
-			}
+		if (selection instanceof final IStructuredSelection structSel && !structSel.isEmpty()
+				&& structSel.size() == 1) {
+			return getSubApp(structSel.getFirstElement());
 		}
 		return null;
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		if (currentElement instanceof SubApp) {
-			return (SubApp) currentElement;
-		}
-		if (currentElement instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
-		}
-		if (currentElement instanceof UISubAppNetworkEditPart) {
-			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
-		}
-		return null;
+		return switch (currentElement) {
+		case final SubApp subApp -> subApp;
+		case final SubAppForFBNetworkEditPart subAppEP -> subAppEP.getModel();
+		case final UISubAppNetworkEditPart uiSubAppEp -> (SubApp) uiSubAppEp.getModel().eContainer();
+		default -> null;
+		};
 	}
 
 	@Override
