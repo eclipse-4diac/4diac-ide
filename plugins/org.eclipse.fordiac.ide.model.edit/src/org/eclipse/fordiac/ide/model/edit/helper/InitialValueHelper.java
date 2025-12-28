@@ -17,9 +17,12 @@
 
 package org.eclipse.fordiac.ide.model.edit.helper;
 
+import java.util.Objects;
+
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -40,8 +43,10 @@ public final class InitialValueHelper {
 			if (hasInitalValue(element)) {
 				return varDec.getValue().getValue();
 			}
-			if (hasDataTypeInitialValue(varDec)) {
-				return getMemberVarValue(varDec);
+
+			final var dtInitialValue = getMemberVarValue(varDec);
+			if (!dtInitialValue.isBlank()) {
+				return dtInitialValue;
 			}
 			return getDefaultValue(element);
 		}
@@ -58,25 +63,54 @@ public final class InitialValueHelper {
 		return ""; //$NON-NLS-1$
 	}
 
-	private static boolean hasDataTypeInitialValue(final VarDeclaration varDec) {
-		if (varDec.getBlockFBNetworkElement() instanceof StructManipulator) {
-			return !getMemberVarValue(varDec).isBlank();
-		}
-		return false;
-	}
-
 	private static String getMemberVarValue(final VarDeclaration v) {
-		if ((v != null) && (v.getName() != null)
-				&& (v.getBlockFBNetworkElement() instanceof final StructManipulator muxer)
-				&& (muxer.getDataType() instanceof final StructuredType structType)) {
+		if (v == null || v.getName() == null || v.getName().isBlank()) {
+			return ""; //$NON-NLS-1$
+		}
+
+		if (v.getBlockFBNetworkElement() instanceof final StructManipulator muxer
+				&& muxer.getDataType() instanceof final StructuredType structType) {
 			final VarDeclaration matchingMember = structType.getMemberVariables().stream()
 					.filter(member -> v.getName().equals(member.getName())).findFirst().orElse(null);
 			if ((matchingMember != null) && (matchingMember.getValue() != null)) {
 				return matchingMember.getValue().getValue();
 			}
+		} else if (v.eContainer() instanceof VarDeclaration) {
+			return getMemberAccessDTInitialValue(v);
 		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	private static String getMemberAccessDTInitialValue(final VarDeclaration v) {
+		final var namePath = v.getBlockRelativePath();
+		final VarDeclaration root = getRootPin(v);
+
+		try {
+			Variable<?> variable = VariableOperations.newVariable(root);
+			for (final String name : namePath.subList(1, namePath.size())) {
+				variable = variable.getChildren().filter(child -> Objects.equals(child.getName(), name)).findFirst()
+						.orElseThrow();
+			}
+			return variable.toString();
+		} catch (final Exception e) {
+			return ""; //$NON-NLS-1$
+		}
+	}
+
+	private static String getValue(final VarDeclaration varDecl) {
+		return (varDecl != null && varDecl.getValue() != null && varDecl.getValue().getValue() != null)
+				? varDecl.getValue().getValue()
+				: ""; //$NON-NLS-1$
+	}
+
+	private static VarDeclaration getRootPin(final VarDeclaration v) {
+		VarDeclaration runner = v;
+		while (runner != null && runner.eContainer() instanceof final VarDeclaration parent) {
+			runner = parent;
+		}
+
+		return runner;
 	}
 
 	public static String getDefaultValue(final Object element) {
@@ -109,8 +143,7 @@ public final class InitialValueHelper {
 
 	public static boolean hasInitalValue(final Object element) {
 		if (element instanceof final VarDeclaration varDec) {
-			return (varDec.getValue() != null) && (varDec.getValue().getValue() != null)
-					&& !varDec.getValue().getValue().isEmpty();
+			return !getValue(varDec).isEmpty();
 		}
 		if (element instanceof final ErrorMarkerInterface marker) {
 			return (marker.getValue() != null) && (marker.getValue().getValue() != null)
