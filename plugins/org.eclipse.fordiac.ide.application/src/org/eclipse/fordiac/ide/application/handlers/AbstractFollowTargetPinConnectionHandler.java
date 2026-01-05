@@ -33,6 +33,8 @@ public abstract class AbstractFollowTargetPinConnectionHandler extends FollowCon
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 
+		editor.getSite().getPage().getNavigationHistory().markLocation(editor);
+
 		final TargetInterfaceElementEditPart targetIEEditPart = (TargetInterfaceElementEditPart) selection
 				.getFirstElement();
 

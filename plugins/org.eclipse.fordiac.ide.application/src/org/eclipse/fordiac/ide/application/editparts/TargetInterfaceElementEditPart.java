@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.preferences.PreferenceInitializer;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPart;
@@ -155,6 +156,10 @@ public class TargetInterfaceElementEditPart extends AbstractGraphicalEditPart {
 		if ((request.getType() == RequestConstants.REQ_OPEN)) {
 			final var viewer = getViewer();
 			final EditPart editPart = viewer.getEditPartForModel(getRefElement());
+
+			final var editor = EditorUtils.getCurrentActiveEditor();
+			editor.getSite().getPage().getNavigationHistory().markLocation(editor);
+
 			if (editPart == null) {
 				// we need to go to another breadcrumb item
 				openInBreadCrumb(getRefElement());

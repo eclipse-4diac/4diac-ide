@@ -42,13 +42,17 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 		final GraphicalViewer viewer = editorPart.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			viewerData = new GraphicalViewerNavigationLocationData(viewer);
+			viewerData = new GraphicalViewerNavigationLocationData(editorPart, viewer);
 		}
 	}
 
 	@Override
 	public String getText() {
-		return generateItemPath(breadCrumbEditor.getBreadcrumb()).substring(1);
+		final String breadCrumbPath = generateItemPath(breadCrumbEditor.getBreadcrumb()).substring(1);
+		if (viewerData != null && viewerData.getSelectedElementQN() != null) {
+			return breadCrumbPath.split("\\.")[0] + '.' + viewerData.getSelectedElementQN(); //$NON-NLS-1$
+		}
+		return breadCrumbPath;
 	}
 
 	public static String generateItemPath(final BreadcrumbWidget breadcrumb) {
