@@ -51,7 +51,7 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	private static GraphicalViewerNavigationLocationData createGraphicalViewerLocationData(
 			final IEditorPart activeEditor) {
 		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
-		return (viewer != null) ? new GraphicalViewerNavigationLocationData(viewer) : null;
+		return (viewer != null) ? new GraphicalViewerNavigationLocationData(activeEditor, viewer) : null;
 	}
 
 	@Override
