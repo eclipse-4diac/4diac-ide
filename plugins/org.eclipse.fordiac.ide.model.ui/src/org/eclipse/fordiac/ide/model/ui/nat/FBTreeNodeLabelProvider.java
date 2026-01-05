@@ -14,9 +14,11 @@ package org.eclipse.fordiac.ide.model.ui.nat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog.TreeNodeLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
@@ -36,6 +38,9 @@ public class FBTreeNodeLabelProvider extends TreeNodeLabelProvider {
 			if (type instanceof BasicFBType) {
 				return FordiacImage.ICON_BASIC_FB.getImage();
 			}
+			if (type instanceof SubAppType) {
+				return FordiacImage.ICON_SUB_APP_TYPE.getImage();
+			}
 			if (type instanceof CompositeFBType) {
 				return FordiacImage.ICON_COMPOSITE_FB.getImage();
 			}
@@ -44,6 +49,9 @@ public class FBTreeNodeLabelProvider extends TreeNodeLabelProvider {
 			}
 			if (type instanceof ServiceInterfaceFBType) {
 				return FordiacImage.ICON_SIFB.getImage();
+			}
+			if (type instanceof FunctionFBType) {
+				return FordiacImage.ICON_FUNCTION.getImage();
 			}
 		}
 		return super.getImage(element);

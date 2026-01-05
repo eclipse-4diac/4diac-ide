@@ -26,8 +26,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.nat.FBSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
-import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
@@ -47,7 +47,7 @@ public class ChangeFBMarkerResolution extends AbstractCommandMarkerResolution<Bl
 	protected boolean prepare(final IMarker[] markers, final IProgressMonitor monitor) throws CoreException {
 		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				FBTypeSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE);
+				FBSelectionTreeContentProvider.INSTANCE, FBTreeNodeLabelProvider.INSTANCE);
 		dialog.setInput(getTypeLibrary());
 		if (dialog.open() == Window.OK && dialog.getFirstResult() instanceof final TypeNode node
 				&& !node.isDirectory()) {
