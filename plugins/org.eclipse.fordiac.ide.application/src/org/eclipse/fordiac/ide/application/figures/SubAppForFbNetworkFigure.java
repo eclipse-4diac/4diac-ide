@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2026 Profactor GmbH, fortiss GmbH,
  *                           Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -40,7 +40,6 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
@@ -52,6 +51,7 @@ import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -223,7 +223,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		};
 		interfaceBar.setMinimumSize(new Dimension(minExpandedInterfaceBarWidth, -1));
 		interfaceBar.setOutline(false);
-		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
+		interfaceBar.setBackgroundColor(UIPreferenceConstants.getInterfaceBarColor());
 
 		interfaceBar.setLayoutManager(new ExpandedSubappInterfaceLayout(interfacePositions, isInput));
 

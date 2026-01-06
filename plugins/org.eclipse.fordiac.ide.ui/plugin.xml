@@ -186,6 +186,14 @@
              label="%FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor"
              value="132, 93, 175">
        </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.InterfaceBarBackgroundColor"
+             label="Interface Bar Background Color"
+             value="235, 245, 255"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
     </extension>
 	<extension
 		point="org.eclipse.e4.ui.css.swt.theme">
