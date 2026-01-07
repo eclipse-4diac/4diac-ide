@@ -10,7 +10,7 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library;
+package org.eclipse.fordiac.ide.library.download;
 
 import java.nio.file.Path;
 import java.util.List;

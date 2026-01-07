@@ -10,7 +10,9 @@
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library;
+package org.eclipse.fordiac.ide.library.download;
+
+import org.eclipse.fordiac.ide.library.Messages;
 
 // result is provided with status OK - it is null in all other cases
 public record DownloadResult<T>(T result, Status status, String message) {
