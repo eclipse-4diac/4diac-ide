@@ -29,6 +29,8 @@ public class Messages extends NLS {
 	public static String ImportFailedOnLinkCreation;
 	public static String InstanceUpdate;
 
+	public static String LibraryManager_BrokenLink;
+
 	public static String LibraryBuilder_CleaningLibrary;
 
 	public static String LibraryBuilder_LibraryBuild;

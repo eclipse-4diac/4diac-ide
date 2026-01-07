@@ -100,6 +100,9 @@ public enum LibraryManager {
 	private final java.net.URI standardLibraryUri = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
 	private final Path standardLibraryPath = getStandardLibPath();
 
+	public static final Set<String> LIBRARY_FOLDERS = Set.of(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME,
+			TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
+
 	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	public static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
 			TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING, TypeLibraryTags.DATA_TYPE_FILE_ENDING,
@@ -769,6 +772,43 @@ public enum LibraryManager {
 		}
 	}
 
+	/**
+	 * Checks if a given link inside the library folders is broken.
+	 *
+	 * <p>
+	 * This method checks if the existing links are broken, creates error markers
+	 * and will eventually abort the build.
+	 *
+	 * @param project selected project
+	 */
+	public static void checkLinkedLibraries(final IProject project) {
+		LIBRARY_FOLDERS.stream().map(project::getFolder).forEach(folder -> {
+			try {
+				folder.accept(resource -> {
+					if (resource.equals(folder)) {
+						return true;
+					}
+					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
+						final IPath location = libFolder.getLocation();
+						if (location != null && location.toFile().exists()) {
+							return false;
+						}
+						final ErrorMarkerBuilder marker = ErrorMarkerBuilder
+								.createErrorMarkerBuilder(Messages.LibraryManager_BrokenLink)
+								.setType(FordiacErrorMarker.LIBRARY_MARKER)
+								.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getName(), //$NON-NLS-1$
+										parseLibraryVersion(libFolder)));
+						FordiacMarkerHelper.createMarkers(resource, List.of(marker));
+						throw new OperationCanceledException();
+					}
+					return false;
+				});
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		});
+	}
+
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
 			final Map<String, Version> preferred, final Queue<String> queue, final SubMonitor progress)
 			throws OperationCanceledException {
@@ -889,13 +929,9 @@ public enum LibraryManager {
 					preferred.put(libFolder.getName(),
 							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
 				} else {
-					final IPath path = libFolder.getRawLocation();
-					final String segment = (path != null && path.segmentCount() >= 2)
-							? path.segment(path.segmentCount() - 2)
-							: ""; //$NON-NLS-1$
-					final int index = segment.lastIndexOf('-');
-					if (index > 0) {
-						preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
+					final Version version = parseLibraryVersion(libFolder);
+					if (!version.equals(Version.emptyVersion)) {
+						preferred.put(libFolder.getName(), version);
 					}
 				}
 			}
@@ -907,6 +943,22 @@ public enum LibraryManager {
 		} catch (final CoreException e) {
 			// empty
 		}
+	}
+
+	/**
+	 * Parses the Library Version of the folders raw location if possible
+	 *
+	 * @param the folder
+	 * @return
+	 */
+	private static Version parseLibraryVersion(final IFolder libraryFolder) {
+		final IPath path = libraryFolder.getRawLocation();
+		final String segment = (path != null && path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+		final int index = segment.lastIndexOf('-');
+		if (index > 0) {
+			return new Version(segment.substring(index + 1));
+		}
+		return Version.emptyVersion;
 	}
 
 	/**
