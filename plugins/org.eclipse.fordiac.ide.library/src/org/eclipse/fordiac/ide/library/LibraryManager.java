@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -89,7 +88,6 @@ public enum LibraryManager {
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
-	public static final String MARKER_ATTRIBUTE = "LIB"; //$NON-NLS-1$
 
 	private final java.net.URI workspaceLibraryURI = java.net.URI.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
@@ -793,12 +791,8 @@ public enum LibraryManager {
 						if (location != null && location.toFile().exists()) {
 							return false;
 						}
-						final ErrorMarkerBuilder marker = ErrorMarkerBuilder
-								.createErrorMarkerBuilder(Messages.LibraryManager_BrokenLink)
-								.setType(FordiacErrorMarker.LIBRARY_MARKER)
-								.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getName(), //$NON-NLS-1$
-										parseLibraryVersion(libFolder)));
-						FordiacMarkerHelper.createMarkers(resource, List.of(marker));
+						FordiacMarkerHelper.createMarkers(resource,
+								List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)));
 						throw new OperationCanceledException();
 					}
 					return false;
@@ -881,10 +875,10 @@ public enum LibraryManager {
 					}
 					linked.remove(rnode.getSymbolicName());
 				} else {
-					markerList.add(createDependencyMarker(projectManifest, rnode, dnode));
+					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
 				}
 			} else if (dnode.isRangeEmpty()) {
-				markerList.add(createDependencyMarker(projectManifest, dnode));
+				markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, dnode));
 			}
 		}
 	}
@@ -951,7 +945,7 @@ public enum LibraryManager {
 	 * @param the folder
 	 * @return
 	 */
-	private static Version parseLibraryVersion(final IFolder libraryFolder) {
+	static Version parseLibraryVersion(final IFolder libraryFolder) {
 		final IPath path = libraryFolder.getRawLocation();
 		final String segment = (path != null && path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
 		final int index = segment.lastIndexOf('-');
@@ -1065,43 +1059,6 @@ public enum LibraryManager {
 			final String symbolicName, final java.net.URI uri) {
 		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream().filter(l -> l.uri().equals(uri))
 				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
-	}
-
-	/**
-	 * Creates error marker based on dependency and resolved node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param rnode    resolved node
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final ResolveNode rnode,
-			final DependencyNode dnode) {
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
-						VersionComparator.formatVersionRange(dnode.getRange()),
-						String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, rnode.getSymbolicName()));
-	}
-
-	/**
-	 * Creates version range error marker based on dependency node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final DependencyNode dnode) {
-		final String causedBy = dnode.getCauses().entrySet().stream()
-				.map(entry -> entry.getKey() + ": " + VersionComparator.formatVersionRange(entry.getValue())) //$NON-NLS-1$
-				.collect(Collectors.joining(", ")); //$NON-NLS-1$
-
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(
-						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
 	}
 
 	private static Path getStandardLibPath() {
