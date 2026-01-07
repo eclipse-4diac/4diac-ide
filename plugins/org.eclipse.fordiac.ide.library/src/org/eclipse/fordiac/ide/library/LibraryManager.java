@@ -64,6 +64,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.library.download.DownloadResult;
+import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
