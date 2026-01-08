@@ -17,12 +17,14 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.text.MessageFormat;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -49,6 +51,7 @@ import org.osgi.framework.FrameworkUtil;
 
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 	private final String pluginId = FrameworkUtil.getBundle(getClass()).getSymbolicName();
+	private final Predicate<LibraryElement> compatibilityCheck;
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider) {
 		this(parent, contentProvider, new TreeNodeLabelProvider());
@@ -56,7 +59,13 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
 	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
 			final IStyledLabelProvider labelProvider) {
+		this(parent, contentProvider, labelProvider, libElement -> true);
+	}
+
+	public DataTypeTreeSelectionDialog(final Shell parent, final ITreeContentProvider contentProvider,
+			final IStyledLabelProvider labelProvider, final Predicate<LibraryElement> compatibilityCheck) {
 		super(parent, new DelegatingStyledCellLabelProvider(labelProvider), contentProvider);
+		this.compatibilityCheck = compatibilityCheck;
 	}
 
 	@Override
@@ -103,6 +112,10 @@ public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
 
 			if (typeNode.getType() == null) {
 				return new Status(IStatus.ERROR, pluginId, Messages.DataTypeDialog_InvalidSelection);
+			}
+
+			if (!compatibilityCheck.test(typeNode.getType())) {
+				return new Status(IStatus.ERROR, pluginId, Messages.DataTypeDialog_IncompatibleType);
 			}
 
 			return new Status(IStatus.OK, pluginId,
