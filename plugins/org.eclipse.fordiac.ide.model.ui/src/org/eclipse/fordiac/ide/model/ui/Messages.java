@@ -59,6 +59,7 @@ public final class Messages extends NLS {
 	public static String DataTypeDialog_OneElement;
 	public static String DataTypeDialog_NoFolder;
 	public static String DataTypeDialog_InvalidSelection;
+	public static String DataTypeDialog_IncompatibleType;
 	public static String DataTypeDialog_Selected;
 
 	static {
