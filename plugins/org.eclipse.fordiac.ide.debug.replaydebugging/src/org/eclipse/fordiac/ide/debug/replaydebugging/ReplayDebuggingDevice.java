@@ -23,6 +23,9 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte.DeviceSimulator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;

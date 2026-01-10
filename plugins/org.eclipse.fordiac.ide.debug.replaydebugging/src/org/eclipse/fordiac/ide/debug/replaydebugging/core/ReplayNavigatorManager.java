@@ -11,7 +11,7 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.debug.replaydebugging;
+package org.eclipse.fordiac.ide.debug.replaydebugging.core;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

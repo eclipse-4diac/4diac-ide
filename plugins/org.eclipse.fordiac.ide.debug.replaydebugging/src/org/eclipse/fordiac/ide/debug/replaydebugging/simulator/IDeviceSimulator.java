@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.simulator;
 
 import java.util.Optional;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
 public interface IDeviceSimulator {

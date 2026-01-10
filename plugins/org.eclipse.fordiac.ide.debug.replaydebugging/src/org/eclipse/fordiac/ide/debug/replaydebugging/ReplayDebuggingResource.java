@@ -19,6 +19,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;

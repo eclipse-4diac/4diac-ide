@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.Utils;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.Utils;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
 import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
