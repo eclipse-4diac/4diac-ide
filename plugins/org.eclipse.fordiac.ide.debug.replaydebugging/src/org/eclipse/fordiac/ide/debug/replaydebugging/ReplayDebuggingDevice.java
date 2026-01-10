@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte.DeviceSimulator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
@@ -65,10 +64,13 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	// they are shown with a different color
 	private final Map<String, IWatch> watches = new ConcurrentSkipListMap<>();
 
-	public ReplayDebuggingDevice(final Device device, final DeploymentDebugTarget debugTarget,
-			final String tracesPath) {
+	private final boolean remote;
+
+	public ReplayDebuggingDevice(final Device device, final DeploymentDebugTarget debugTarget, final String tracesPath,
+			final boolean remote) {
 		super(device, debugTarget, true, Duration.ZERO, List.of());
 		this.tracesPath = tracesPath;
+		this.remote = remote;
 	}
 
 	/**
@@ -100,7 +102,12 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	}
 
 	private IDeviceSimulator createSimulator() {
-		return new DeviceSimulator(getDeviceManagementExecutorService(), getDevice(), tracesPath);
+		if (remote) {
+			return new org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte.DeviceSimulator(
+					getDeviceManagementExecutorService(), getDevice(), tracesPath);
+		}
+		return new org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter.DeviceSimulator(getDevice(),
+				tracesPath);
 	}
 
 	// set the watches of the current changes to error so they are marked with a

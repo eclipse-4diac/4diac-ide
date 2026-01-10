@@ -199,7 +199,6 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 
 			String toLog = "\nEvent triggered " + lastEvent.get() + " with the following data changes:";
 			for (final DataPointChange change : dataPointChanges) {
-				FordiacLogHelper.logInfo("  " + change.datapoint() + ": " + change.newValue()); //$NON-NLS-1$ //$NON-NLS-2$
 				toLog += "  " + change.datapoint() + ": " + change.newValue();
 			}
 

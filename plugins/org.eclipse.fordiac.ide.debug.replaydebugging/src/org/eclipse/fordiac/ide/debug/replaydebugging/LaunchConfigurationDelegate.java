@@ -34,6 +34,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public class LaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
 	public static final String ATTR_TRACE_PATH = "org.eclipse.fordiac.ide.debug.replaydebugging.ATTR_TRACE_PATH"; //$NON-NLS-1$
+	public static final String ATTR_TRACE_PATH_DEFAULT = ""; //$NON-NLS-1$
+
+	public static final String ATTR_REMOTE = "org.eclipse.fordiac.ide.debug.replaydebugging.ATTR_REMOTE"; //$NON-NLS-1$
+	public static final boolean ATTR_REMOTE_DEFAULT = false;
 
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
@@ -45,7 +49,7 @@ public class LaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 			// To be able to handle several devices, this must be a list of paths, but also
 			// matched to the
 			// respective device
-			final String path = configuration.getAttribute(ATTR_TRACE_PATH, ""); //$NON-NLS-1$
+			final String path = configuration.getAttribute(ATTR_TRACE_PATH, ATTR_TRACE_PATH_DEFAULT);
 
 			final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
 			if (system == null) {
@@ -54,7 +58,10 @@ public class LaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 			final Set<INamedElement> selection = DeploymentLaunchConfigurationAttributes.getSelection(configuration,
 					system);
 
-			final ReplayDebuggingTarget debugTarget = new ReplayDebuggingTarget(system, selection, launch, true, path);
+			final boolean remote = configuration.getAttribute(ATTR_REMOTE, ATTR_REMOTE_DEFAULT);
+
+			final ReplayDebuggingTarget debugTarget = new ReplayDebuggingTarget(system, selection, launch, true, path,
+					remote);
 			debugTarget.start();
 
 		} catch (final Exception e) {

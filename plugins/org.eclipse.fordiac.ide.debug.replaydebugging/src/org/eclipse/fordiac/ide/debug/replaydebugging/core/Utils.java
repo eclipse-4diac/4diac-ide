@@ -164,9 +164,9 @@ public class Utils {
 		final TreeIterator<EObject> it = network.eAllContents();
 		while (it.hasNext()) {
 			final EObject obj = it.next();
-			if (obj instanceof final IInterfaceElement varDecl) {
+			if (obj instanceof final IInterfaceElement varDecl
+					&& !(varDecl.getBlockFBNetworkElement() instanceof SubAppImpl)) {
 				result.get(varDecl.getBlockFBNetworkElement().getResource().getName()).add(varDecl);
-
 			}
 		}
 
