@@ -148,7 +148,7 @@
              categoryId="org.eclipse.fordiac.ide.themeCategory"
              id="org.eclipse.fordiac.ide.ui.BoolConnectionConnectorColor"
              label="%FordiacPreferencePage_LABEL_BoolConnectorColor"
-             value="159, 164, 138">
+             value="163, 176, 143">
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
@@ -178,7 +178,7 @@
              categoryId="org.eclipse.fordiac.ide.themeCategory"
              id="org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor"
              label="%FordiacPreferencePage_LABEL_DataConnectorColor"
-             value="0, 0, 255">
+             value="51, 102, 255">
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
@@ -187,6 +187,15 @@
              value="132, 93, 175">
        </colorDefinition>
     </extension>
+	<extension
+		point="org.eclipse.e4.ui.css.swt.theme">
+		<stylesheet
+			uri="css/dark_fordiac_connections.css">
+			<themeid
+				refid="org.eclipse.e4.ui.css.theme.e4_dark">
+			</themeid>
+		</stylesheet>
+	</extension>
  <extension
        point="org.eclipse.ui.preferenceTransfer">
     <transfer
