@@ -74,7 +74,7 @@ public class DeviceSimulator implements IDeviceSimulator {
 			executorService.connect();
 			executorService.readTraces(device, path);
 
-			allPortsByResource = Utils.collectAllPorts(device);
+			allPortsByResource = Utils.collectAllValueHolders(device);
 
 			for (final Resource resource : device.getResource()) {
 				for (final String portName : allPortsByResource.get(resource.getName())) {
