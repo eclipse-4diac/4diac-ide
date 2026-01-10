@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging;
 
-import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,23 +19,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte.DeviceSimulator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
-import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
-import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -81,31 +78,26 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	 */
 	@Override
 	public void connect() throws DebugException {
-		try {
-			final Device device = getDevice();
-			getDeviceManagementExecutorService().connect();
-			getDeviceManagementExecutorService().readTraces(device, tracesPath);
 
-			final Map<String, Set<String>> allPortsByResource = Utils.collectAllPorts(device);
+		final IDeviceSimulator simulator = createSimulator();
+		simulator.start();
+		response.setWatches(DevResponseFactory.eINSTANCE.createWatches());
 
-			response.setWatches(DevResponseFactory.eINSTANCE.createWatches());
-
-			for (final Resource resource : device.getResource()) {
-				final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(resource,
-						allPortsByResource.get(resource.getName()),
-						new ReplayNavigator.Identifier(device.getAutomationSystem().getName(), device.getName(),
-								resource.getName()),
-						getDeviceManagementExecutorService(), this);
-				replayDebuggingResource.load();
-				replayDebuggingResources.add(replayDebuggingResource);
-				response.getWatches().getResources().add(replayDebuggingResource.getResourceResponse());
-			}
-
-			getDeviceManagementExecutorService().disconnect();
-		} catch (final DeploymentException e) {
-			throw new DebugException(Status.error(
-					MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, getDevice().getName()), e));
+		final Device device = getDevice();
+		for (final Resource resource : device.getResource()) {
+			final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(resource,
+					new ReplayNavigator.Identifier(device.getAutomationSystem().getName(), device.getName(),
+							resource.getName()),
+					simulator, this);
+			replayDebuggingResource.load();
+			replayDebuggingResources.add(replayDebuggingResource);
+			response.getWatches().getResources().add(replayDebuggingResource.getResourceResponse());
 		}
+		simulator.stop();
+	}
+
+	private IDeviceSimulator createSimulator() {
+		return new DeviceSimulator(getDeviceManagementExecutorService(), getDevice(), tracesPath);
 	}
 
 	// set the watches of the current changes to error so they are marked with a
