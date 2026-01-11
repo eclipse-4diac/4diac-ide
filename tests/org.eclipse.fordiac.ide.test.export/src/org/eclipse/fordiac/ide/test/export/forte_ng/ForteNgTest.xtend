@@ -249,11 +249,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#pragma once
 						
 						#include "forte/basicfb.h"
-						#include "forte/iec61131_functions.h"
-						#include "forte/datatypes/forte_array_common.h"
-						#include "forte/datatypes/forte_array.h"
-						#include "forte/datatypes/forte_array_fixed.h"
-						#include "forte/datatypes/forte_array_variable.h"
 						
 						namespace forte {
 						  class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
@@ -305,11 +300,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 					
 					#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 					
-					#include "forte/iec61131_functions.h"
-					#include "forte/datatypes/forte_array_common.h"
-					#include "forte/datatypes/forte_array.h"
-					#include "forte/datatypes/forte_array_fixed.h"
-					#include "forte/datatypes/forte_array_variable.h"
 					
 					using namespace std::literals;
 					using namespace forte::literals;

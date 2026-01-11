@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
+
 @FinalFieldsConstructor
 class VarGlobalConstantsSupport extends StructuredTextSupport {
 	final STGlobalConstsSource source
@@ -85,7 +87,7 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 			if (source.constants !== null)
-				source.constants.elements.flatMap[varDeclarations].map[type as INamedElement].toSet
+				source.constants.elements.flatMap[varDeclarations].map[featureType as INamedElement].toSet
 			else
 				emptySet
 		else

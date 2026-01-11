@@ -184,6 +184,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	override getDependencies(Map<?, ?> options) {
 		(super.getDependencies(options) + fbNetworkInitialVariableLanguageSupport.values.filterNull.flatMap [
 			getDependencies(options)
-		]).toSet
+		] + (type.interfaceList.eventOutputs.flatMap[with].map[withVariable].exists [
+			!inOutVar && !inputConnections.empty && inputConnections.first.negated
+		] ? #["iec61131_functions/func_NOT".createDependencyPlaceholder] : emptySet)
+		).toSet
 	}
 }

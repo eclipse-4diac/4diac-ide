@@ -477,7 +477,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	}
 
 	override Set<INamedElement> getDependencies(Map<?, ?> options) {
-		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType]
-			).toSet
+		(super.getDependencies(options) + (type.interfaceList.sockets + type.interfaceList.plugs).map[getType] +
+			(type.interfaceList.eventInputs.exists[!outputParameters.empty] ? #[
+				"forte_st_util".createDependencyPlaceholder] : emptySet)
+		).toSet
 	}
 }

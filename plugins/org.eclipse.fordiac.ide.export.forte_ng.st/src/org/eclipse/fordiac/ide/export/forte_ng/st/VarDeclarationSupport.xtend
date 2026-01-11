@@ -23,6 +23,7 @@ import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
 @FinalFieldsConstructor
@@ -90,7 +91,7 @@ class VarDeclarationSupport extends StructuredTextSupport {
 
 	override getDependencies(Map<?, ?> options) {
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE) {
-			#{varDeclaration.type}
+			#{varDeclaration.featureType}
 		} else if (!varDeclaration.value?.value.nullOrEmpty) {
 			prepareInitialValue
 			parseResult?.containedDependencies ?: emptySet
