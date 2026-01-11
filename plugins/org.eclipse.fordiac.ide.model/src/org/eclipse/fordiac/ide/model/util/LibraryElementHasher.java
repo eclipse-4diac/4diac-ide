@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH
  *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,8 @@
  * Contributors:
  *   Felix Roithmayr - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst - code cleanup
- *                      - use base64 encoding for hashes
+ *                   - use base64 encoding for hashes
+ *   Alois Zoitl     - use IEC 61499 XML serialization as basis for hash
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.util;
 
@@ -22,19 +23,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Base64;
-import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.model.emf.HashMetaData;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 
 public final class LibraryElementHasher {
 	/**
@@ -43,15 +40,14 @@ public final class LibraryElementHasher {
 	 * @implNote increment this whenever anything is changed in the hashing
 	 *           algorithm
 	 */
-	public static final String CURRENT_HASH_VERSION = "v1"; //$NON-NLS-1$
+	public static final String CURRENT_HASH_VERSION = "v2"; //$NON-NLS-1$
 
 	/**
 	 * The default hash algorithm
 	 */
 	public static final String DEFAULT_HASH_ALGORITHM = "SHA3-512"; //$NON-NLS-1$
 
-	private static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
-	private static final String TOHASH_XMI_URI = "tohash.xmi"; //$NON-NLS-1$
+	private static final String TOHASH_URI = "tohash.xml"; //$NON-NLS-1$
 
 	/**
 	 * Calculate hash with default parameters for the given object
@@ -85,26 +81,17 @@ public final class LibraryElementHasher {
 			throw new LibraryElementHashException("could not aquire hashing algorithm", e); //$NON-NLS-1$
 		}
 
-		final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
-				new XMIResourceFactoryImpl());
-		final Resource xmiResource = xmiResourceSet.createResource(URI.createFileURI(TOHASH_XMI_URI));
-		xmiResource.getContents().add(copyForHashing(eObject));
-
 		final StringBuilder sb = new StringBuilder(version);
 		sb.append(':');
 		sb.append(algorithm);
 		sb.append(':');
 
+		final FordiacTypeResource typeRes = new FordiacTypeResource(URI.createFileURI(TOHASH_URI));
+		typeRes.getContents().add(copyForHashing(eObject));
+
 		try (OutputStream nullOut = OutputStream.nullOutputStream();
-				DigestOutputStream dos = new DigestOutputStream(nullOut, digest)
-
-		) {
-			final HashMap<String, Object> options = new HashMap<>();
-			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
-			options.put(XMLResource.OPTION_SKIP_ESCAPE_URI, Boolean.FALSE);
-
-			xmiResource.save(dos, options);
+				DigestOutputStream dos = new DigestOutputStream(nullOut, digest)) {
+			typeRes.save(dos, null);
 			sb.append(Base64.getUrlEncoder().encodeToString(digest.digest()));
 		} catch (final IOException e) {
 			throw new LibraryElementHashException("Problem with generating library element hash", e); //$NON-NLS-1$
