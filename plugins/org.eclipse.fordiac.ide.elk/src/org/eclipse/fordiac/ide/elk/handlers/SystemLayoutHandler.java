@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,15 +18,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -47,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
@@ -129,8 +127,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 				// @formatter:off
 				final var applications = SystemManager.INSTANCE.getProjectSystems(project).stream()
 					.map(AutomationSystem::getApplication)
-					.flatMap(Collection::stream)
-					.collect(Collectors.toList());
+					.flatMap(Collection::stream).toList();
 				// @formatter:on
 				collectElements(elements, applications);
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
@@ -146,21 +143,20 @@ public class SystemLayoutHandler extends AbstractHandler {
 		for (final var elem : elements) {
 			saveList.add(elem);
 
-			final FBNetwork network;
-			if (elem instanceof final SubApp subapp) {
-				network = subapp.getSubAppNetwork();
-			} else if (elem instanceof final Application app) {
-				network = app.getFBNetwork();
-			} else {
+			FBNetwork network;
+			switch (elem) {
+			case final SubApp subapp -> network = subapp.getSubAppNetwork();
+			case final Application app -> network = app.getFBNetwork();
+			default -> {
 				continue;
+			}
 			}
 
 			// @formatter:off
 			final var subapps = network.getNetworkElements().stream()
-					.filter(SubApp.class::isInstance)
+					.filter(UntypedSubApp.class::isInstance)
 					.map(SubApp.class::cast)
-					.filter(Predicate.not(SubApp::isTyped))
-					.collect(Collectors.toList());
+					.toList();
 			// @formatter:on
 
 			collectElements(saveList, subapps);
@@ -198,7 +194,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 					if (elem instanceof final EObject modelElement) {
 						Display.getDefault().syncExec(() -> layoutModel(modelElement, visited, editors));
 					} else if (elem instanceof final IFile file) {
-						Display.getDefault().syncExec(() -> layoutType(file, visited, editors));
+						Display.getDefault().syncExec(() -> layoutType(file, editors));
 					}
 					monitor.worked(1);
 				}
@@ -227,7 +223,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 
 		if (root instanceof final SubAppType type && obj instanceof final SubApp subapp) {
 			// switch to typed layout
-			layoutSubappInTypedSubapp(subapp, type, visited);
+			layoutSubappInTypedSubapp(subapp, type, editors);
 			return;
 		}
 
@@ -250,9 +246,8 @@ public class SystemLayoutHandler extends AbstractHandler {
 	// to open beforehand, therefore this method is called from the layout run
 	// for model objects as this is our default assumption for untyped subapps.
 	private static void layoutSubappInTypedSubapp(final SubApp subapp, final SubAppType type,
-			final Set<Object> visited) {
-		final var file = type.getTypeEntry().getTypeEditable().getTypeEntry().getFile();
-		if (openEditor(file) instanceof final FormEditor multiPageEditor) {
+			final Set<IEditorPart> editors) {
+		if (openEditor(type.getTypeEntry().getFile()) instanceof final FormEditor multiPageEditor) {
 			final var breadcrumbEditor = multiPageEditor.getAdapter(AbstractBreadCrumbEditor.class);
 			multiPageEditor.setActiveEditor(breadcrumbEditor);
 			layoutBreadcrumbEditor(getBreadCrumbRefElement(subapp), breadcrumbEditor);
@@ -263,23 +258,29 @@ public class SystemLayoutHandler extends AbstractHandler {
 				layoutBreadcrumbEditor(getBreadCrumbRefElement(elem), breadcrumbEditor);
 			}
 
-			saveTypeEditor(multiPageEditor, type.getTypeEntry().getTypeEditable());
+			editors.add(multiPageEditor);
 		}
 	}
 
-	private static void layoutType(final IFile file, final Set<Object> visited, final Set<IEditorPart> editors) {
+	private static void layoutType(final IFile file, final Set<IEditorPart> editors) {
 		if (openEditor(file) instanceof final FormEditor multiPageEditor) {
-			final var typeEditable = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file).getTypeEditable();
-			if (typeEditable instanceof final SubAppType subappType) {
-				handleSubappType(multiPageEditor, typeEditable, subappType);
-			} else if (typeEditable instanceof CompositeFBType) {
-				handleCompositeType(multiPageEditor, typeEditable);
+			switch (multiPageEditor.getAdapter(LibraryElement.class)) {
+			case final SubAppType subappType -> {
+				handleSubappType(multiPageEditor, subappType);
+				editors.add(multiPageEditor);
+			}
+			case final CompositeFBType cFBType -> {
+				handleCompositeType(multiPageEditor);
+				editors.add(multiPageEditor);
+			}
+			case null, default -> {
+				// nothing to do
+			}
 			}
 		}
 	}
 
-	private static void handleSubappType(final FormEditor multiPageEditor, final LibraryElement typeEditable,
-			final SubAppType subappType) {
+	private static void handleSubappType(final FormEditor multiPageEditor, final SubAppType subappType) {
 		final var breadcrumbEditor = multiPageEditor.getAdapter(AbstractBreadCrumbEditor.class);
 		multiPageEditor.setActiveEditor(breadcrumbEditor);
 		final var viewer = multiPageEditor.getAdapter(GraphicalViewer.class);
@@ -291,18 +292,14 @@ public class SystemLayoutHandler extends AbstractHandler {
 		for (final var elem : elements) {
 			layoutBreadcrumbEditor(getBreadCrumbRefElement(elem), breadcrumbEditor);
 		}
-
-		saveTypeEditor(multiPageEditor, typeEditable);
 	}
 
-	private static void handleCompositeType(final FormEditor multiPageEditor, final LibraryElement typeEditable) {
+	private static void handleCompositeType(final FormEditor multiPageEditor) {
 		final var networkEditor = multiPageEditor.getAdapter(FBNetworkEditor.class);
 		multiPageEditor.setActiveEditor(networkEditor);
 		final var viewer = multiPageEditor.getAdapter(GraphicalViewer.class);
 		viewer.flush();
 		FordiacLayout.blockLayout(multiPageEditor, (AbstractFBNetworkEditPart) viewer.getRootEditPart().getContents());
-
-		saveTypeEditor(multiPageEditor, typeEditable);
 	}
 
 	private static IEditorPart openEditor(final IFile file) {
@@ -315,24 +312,12 @@ public class SystemLayoutHandler extends AbstractHandler {
 		}
 	}
 
-	private static void saveTypeEditor(final FormEditor multiPageEditor, final LibraryElement typeEditable) {
-		multiPageEditor.getAdapter(org.eclipse.gef.commands.CommandStack.class).markSaveLocation();
-		try {
-			typeEditable.getTypeEntry().save(typeEditable);
-		} catch (final CoreException e) {
-			e.printStackTrace();
-		}
-		multiPageEditor.editorDirtyStateChanged();
-	}
-
 	private static void collectSubapps(final List<EObject> saveList, final FBNetwork network) {
 		// @formatter:off
 		final var subapps = network.getNetworkElements().stream()
-				.filter(SubApp.class::isInstance)
+				.filter(UntypedSubApp.class::isInstance)
 				.map(SubApp.class::cast)
-				.map(SubApp.class::cast)
-				.filter(Predicate.not(SubApp::isTyped))
-				.collect(Collectors.toList());
+				.toList();
 		// @formatter:on
 		saveList.addAll(subapps);
 
