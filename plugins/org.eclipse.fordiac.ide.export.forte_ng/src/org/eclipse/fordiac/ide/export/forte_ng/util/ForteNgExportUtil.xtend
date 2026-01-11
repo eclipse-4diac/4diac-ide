@@ -49,9 +49,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
+
+import static extension org.eclipse.fordiac.ide.model.helpers.PackageNameHelper.setFullTypeName
 
 final class ForteNgExportUtil {
 	public static final CharSequence CONNECTION_EXPORT_PREFIX = "conn_"
@@ -258,10 +261,14 @@ final class ForteNgExportUtil {
 		resource.contents.filter(LibraryElement)?.head?.generateTypeName
 	}
 
-	def static String generateDefiningInclude(EObject object) {
+	def static Iterable<String> generateDefiningIncludes(EObject object) {
 		switch (object) {
-			LibraryElement: object.generateTypeIncludePath
-			default: object.eResource?.generateDefiningInclude
+			ArrayType:
+				#[object.generateTypeIncludePath, object.baseType.generateTypeIncludePath]
+			LibraryElement:
+				#[object.generateTypeIncludePath]
+			default:
+				#[object.eResource?.generateDefiningInclude]
 		}
 	}
 
@@ -313,8 +320,11 @@ final class ForteNgExportUtil {
 				"forte_string"
 			WstringType:
 				"forte_wstring"
-			ArrayType:
-				type.baseType.generateTypeBasename
+			ArrayType case type.typeEntry === null:
+				if(type.subranges.exists[!setLowerLimit || !setUpperLimit])
+					"forte_array_variable"
+				else
+					"forte_array_fixed"
 			AdapterType:
 				type.name + "_adp"
 			AnyDerivedType:
@@ -338,8 +348,6 @@ final class ForteNgExportUtil {
 
 	def static Path generateTypePath(LibraryElement type) {
 		switch (type) {
-			ArrayType:
-				type.baseType.generateTypePath
 			AnyType case type.typeEntry === null:
 				Path.of("datatypes")
 			default:
@@ -393,6 +401,12 @@ final class ForteNgExportUtil {
 			default:
 				type.name
 		}
+	}
+
+	def static LibraryElement createDependencyPlaceholder(CharSequence path) {
+		LibraryElementFactory.eINSTANCE.createLibraryElement => [
+			setFullTypeName(path.toString.replace("/", "::"))
+		]
 	}
 
 	def static CharSequence getFORTEStringId(String s) '''"«s»"_STRID'''
