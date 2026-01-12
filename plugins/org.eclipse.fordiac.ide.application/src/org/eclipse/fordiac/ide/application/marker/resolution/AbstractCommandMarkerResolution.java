@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -61,7 +62,7 @@ import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 public abstract class AbstractCommandMarkerResolution<T extends EObject> extends WorkbenchMarkerResolution {
 
 	private static record LibraryElementInfo(LibraryElement libraryElement, CompoundCommand commands,
-			Optional<CommandStack> commandStack, boolean needsSave) {
+			Optional<IEditorPart> editor, boolean needsSave) {
 	}
 
 	private final IMarker marker;
@@ -201,11 +202,13 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 	}
 
 	private static void commit(final LibraryElementInfo info, final IProgressMonitor monitor) throws CoreException {
-		info.commandStack().ifPresentOrElse(commandStack -> commandStack.execute(info.commands()),
-				info.commands()::execute);
+		info.commands().execute();
 		if (info.needsSave()) {
-			info.libraryElement().getTypeEntry().save(info.libraryElement(), monitor);
-			info.commandStack().ifPresent(CommandStack::markSaveLocation);
+			if (info.editor().isPresent()) {
+				LibraryElementProvider.INSTANCE.saveLibraryElement(info.editor().get().getEditorInput(), monitor);
+			} else {
+				info.libraryElement().getTypeEntry().save(info.libraryElement(), monitor);
+			}
 		}
 	}
 
@@ -254,9 +257,8 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 
 	private LibraryElementInfo createInfo(final IResource resource) {
 		final Optional<IEditorPart> editor = findEditor(resource);
-		final Optional<CommandStack> commandStack = editor.map(AbstractCommandMarkerResolution::getCommandStack);
 		final LibraryElement libraryElement;
-		if (editor.isPresent() && commandStack.isPresent()) {
+		if (editor.isPresent()) {
 			libraryElement = Adapters.adapt(editor.get(), LibraryElement.class);
 		} else if (resource instanceof final IFile file) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
@@ -267,8 +269,8 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 		} else {
 			return null;
 		}
-		return new LibraryElementInfo(libraryElement, new CompoundCommand(), commandStack,
-				commandStack.isEmpty() || editor.filter(this::needsSave).isPresent());
+		return new LibraryElementInfo(libraryElement, new CompoundCommand(), editor,
+				editor.isEmpty() || editor.filter(this::needsSave).isPresent());
 	}
 
 	private static Optional<IEditorPart> findEditor(final IResource resource) {
@@ -279,10 +281,6 @@ public abstract class AbstractCommandMarkerResolution<T extends EObject> extends
 					.filter(Objects::nonNull).findAny();
 		}
 		return Optional.empty();
-	}
-
-	private static CommandStack getCommandStack(final IEditorPart editor) {
-		return Adapters.adapt(editor, CommandStack.class);
 	}
 
 	private final T getElement(final IMarker marker, final LibraryElement libraryElement) {
