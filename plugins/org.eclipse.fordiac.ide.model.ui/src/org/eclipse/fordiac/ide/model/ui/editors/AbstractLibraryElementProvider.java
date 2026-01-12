@@ -255,6 +255,8 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		private IUndoContext undoContext;
 		private IUndoableOperation saveLocation;
 
+		private final LibraryElementDependencyUpdater updater = new LibraryElementDependencyUpdater();
+
 		protected LibraryElementInfo(final IEditorInput input, final LibraryElement libraryElement) {
 			this.input = input;
 			this.libraryElement = libraryElement;
@@ -273,6 +275,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 			if (this.libraryElement != libraryElement) {
 				this.libraryElement = libraryElement;
 				undoContext = new ObjectUndoContext(libraryElement);
+				updater.setLibraryElement(libraryElement);
 			}
 		}
 
