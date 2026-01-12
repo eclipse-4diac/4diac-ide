@@ -488,28 +488,12 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 					notifications = basicSetType(null, notifications);
 					notifications = basicSetTypeEditable(null, notifications);
 				}
-
-				// if there is an editor opened then this notification will be delegated to the
-				// corresponding editor.
-				// If not, then nothing will happen
-				notifications = delegateNotificationToEditor(notification, notifications);
 			}
 
 			if (notifications != null) {
 				notifications.dispatch();
 			}
 		}
-	}
-
-	private NotificationChain delegateNotificationToEditor(final Notification notification,
-			NotificationChain notifications) {
-		if (eNotificationRequired()) {
-			notifications = chainNotification(notifications,
-					new TypeEntryNotificationImpl(this, Notification.SET,
-							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE,
-							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID, null, notification.getNotifier()));
-		}
-		return notifications;
 	}
 
 	@Override

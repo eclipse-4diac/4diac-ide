@@ -18,13 +18,6 @@ import org.eclipse.ui.ISaveablePart;
 public interface STCoreNestedEditor {
 
 	/**
-	 * Block updates in parent editor
-	 *
-	 * @param block true to block updates, false otherwise
-	 */
-	void setBlockUpdates(boolean block);
-
-	/**
 	 * Save the outer editor
 	 *
 	 * @param monitor The progress monitor
