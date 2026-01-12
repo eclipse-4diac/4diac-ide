@@ -30,11 +30,9 @@ import org.eclipse.ui.IEditorPart;
 public class GraphicalViewerNavigationLocationData {
 	private final double zoom;
 	private final Point location;
-	private final IEditorPart editor;
 	private final String selectedElementQN;
 
-	public GraphicalViewerNavigationLocationData(final IEditorPart editor, final GraphicalViewer viewer) {
-		this.editor = editor;
+	public GraphicalViewerNavigationLocationData(final GraphicalViewer viewer) {
 		zoom = getCurrentZoom(viewer);
 		location = getViewerLocation(viewer);
 		selectedElementQN = viewer.getSelection() instanceof final StructuredSelection structuredSelection
@@ -42,7 +40,7 @@ public class GraphicalViewerNavigationLocationData {
 				&& ep.getModel() instanceof final INamedElement ie ? ie.getQualifiedName() : null;
 	}
 
-	public void restoreGraphicalViewerData(final EditPartViewer viewer) {
+	public void restoreGraphicalViewerData(final IEditorPart editor, final EditPartViewer viewer) {
 		if (viewer.getRootEditPart() instanceof final ScalableFreeformRootEditPart rootEP) {
 			rootEP.getZoomManager().setZoom(zoom);
 		}
@@ -57,6 +55,9 @@ public class GraphicalViewerNavigationLocationData {
 
 					if (selectedElementQN != null) {
 						final LibraryElement root = editor.getAdapter(LibraryElement.class);
+						if (root == null) {
+							return;
+						}
 						root.findByQualifiedName(selectedElementQN).map(viewer::getEditPartForModel)
 								.filter(Objects::nonNull).forEach(viewer::select);
 					}

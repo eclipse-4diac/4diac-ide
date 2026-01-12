@@ -336,7 +336,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		// if the editor content could not be loaded the bread crumb can be null
 		if (getBreadcrumb() != null) {
 			memento.putString(TAG_BREADCRUMB_HIERACHY,
-					BreadcrumbNavigationLocation.generateItemPath(getBreadcrumb()).substring(1));
+					BreadcrumbNavigationLocation.generateItemPath(getBreadcrumb().serializePath()).substring(1));
 
 			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
 			if (null != viewer) {
