@@ -20,7 +20,6 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
@@ -28,35 +27,30 @@ import org.eclipse.ui.NavigationLocation;
 
 public class BreadcrumbNavigationLocation extends NavigationLocation {
 
-	// we need to explicitly store the breadcrumb editor as getEditorPart my provide
-	// the wrong editor when we are inside
-	// a type editor
-	private final AbstractBreadCrumbEditor breadCrumbEditor;
 	private final String breadcrumbPath;
 	private GraphicalViewerNavigationLocationData viewerData = null;
 
 	protected BreadcrumbNavigationLocation(final AbstractBreadCrumbEditor editorPart) {
 		super(editorPart);
-		this.breadCrumbEditor = editorPart;
 		this.breadcrumbPath = editorPart.getBreadcrumb().serializePath();
 
 		final GraphicalViewer viewer = editorPart.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			viewerData = new GraphicalViewerNavigationLocationData(editorPart, viewer);
+			viewerData = new GraphicalViewerNavigationLocationData(viewer);
 		}
 	}
 
 	@Override
 	public String getText() {
-		final String breadCrumbPath = generateItemPath(breadCrumbEditor.getBreadcrumb()).substring(1);
+		final String breadCrumbPath = generateItemPath(breadcrumbPath).substring(1);
 		if (viewerData != null && viewerData.getSelectedElementQN() != null) {
 			return breadCrumbPath.split("\\.")[0] + '.' + viewerData.getSelectedElementQN(); //$NON-NLS-1$
 		}
 		return breadCrumbPath;
 	}
 
-	public static String generateItemPath(final BreadcrumbWidget breadcrumb) {
-		return breadcrumb.serializePath().replace('/', '.');
+	public static String generateItemPath(final String breadcrumbPath) {
+		return breadcrumbPath.replace('/', '.');
 	}
 
 	private String getBreadCrumbPath() {
@@ -75,12 +69,14 @@ public class BreadcrumbNavigationLocation extends NavigationLocation {
 
 	@Override
 	public void restoreLocation() {
-		breadCrumbEditor.getBreadcrumb().validateAndOpenPath(breadcrumbPath,
-				breadCrumbEditor.getAdapter(LibraryElement.class));
+		if (getEditorPart() instanceof final AbstractBreadCrumbEditor breadcrumbEditor) {
+			breadcrumbEditor.getBreadcrumb().validateAndOpenPath(breadcrumbPath,
+					breadcrumbEditor.getAdapter(LibraryElement.class));
 
-		final GraphicalViewer viewer = breadCrumbEditor.getAdapter(GraphicalViewer.class);
-		if ((viewer != null) && (viewerData != null)) {
-			viewerData.restoreGraphicalViewerData(viewer);
+			final GraphicalViewer viewer = breadcrumbEditor.getAdapter(GraphicalViewer.class);
+			if ((viewer != null) && (viewerData != null)) {
+				viewerData.restoreGraphicalViewerData(breadcrumbEditor, viewer);
+			}
 		}
 	}
 
