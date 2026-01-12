@@ -20,9 +20,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
@@ -46,12 +44,7 @@ public class CommandUndoChange<T extends EObject> extends AbstractCommandChange<
 	@Override
 	public RefactoringStatus isValid(final T element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-		final CommandStack commandStack = getCommandStack();
-		if ((commandStack != null && commandStack.getUndoCommand() != command) || !command.canUndo()) {
-			status.addFatalError(Messages.CommandUndoChange_CannotUndoCommand);
-		}
-		return status;
+		return new RefactoringStatus();
 	}
 
 	@Override
@@ -62,12 +55,7 @@ public class CommandUndoChange<T extends EObject> extends AbstractCommandChange<
 
 	@Override
 	protected Command performCommand(final T element) {
-		final CommandStack commandStack = getCommandStack();
-		if (commandStack != null) {
-			commandStack.undo();
-		} else {
-			command.undo();
-		}
+		command.undo();
 		return command;
 	}
 

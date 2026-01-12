@@ -26,10 +26,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -182,12 +182,7 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 					Status.error(MessageFormat.format(Messages.AbstractCommandChange_CannotExecuteCommand,
 							command.getClass().getName(), getClass().getName(), elementURI)));
 		}
-		final CommandStack commandStack = getCommandStack();
-		if (commandStack != null) {
-			commandStack.execute(command);
-		} else {
-			command.execute();
-		}
+		command.execute();
 		return command;
 	}
 
@@ -226,27 +221,11 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 * @throws CoreException if there was a problem saving the library element
 	 */
 	private void commit(final LibraryElement libraryElement, final IProgressMonitor pm) throws CoreException {
-		final CommandStack commandStack = getCommandStack();
-		final TypeEntryAdapter typeEntryAdapter = getTypeEntryAdapter();
-		try {
-			// block updates in type entry adapter to avoid unnecessary reloads
-			if (typeEntryAdapter != null) {
-				typeEntryAdapter.setBlockUpdates(true);
-			}
-			// save type entry
-			if (typeEntry != null) {
-				typeEntry.save(libraryElement, pm);
-			}
-			// mark the save location in the command stack to tell the editor that it is not
-			// dirty anymore
-			if (commandStack != null) {
-				commandStack.markSaveLocation();
-			}
-		} finally {
-			// re-enable updates
-			if (typeEntryAdapter != null) {
-				typeEntryAdapter.setBlockUpdates(false);
-			}
+		// save type entry
+		if (editor != null) {
+			LibraryElementProvider.INSTANCE.saveLibraryElement(editor.getEditorInput(), pm);
+		} else if (typeEntry != null) {
+			typeEntry.save(libraryElement, pm);
 		}
 	}
 
@@ -335,24 +314,6 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Get the command stack for the editor
-	 *
-	 * @return The command stack (may be null)
-	 */
-	protected final CommandStack getCommandStack() {
-		return Adapters.adapt(editor, CommandStack.class);
-	}
-
-	/**
-	 * Get the type entry adapter for the editor
-	 *
-	 * @return The typen entry adapter (may be null)
-	 */
-	protected final TypeEntryAdapter getTypeEntryAdapter() {
-		return Adapters.adapt(editor, TypeEntryAdapter.class);
 	}
 
 	/**
