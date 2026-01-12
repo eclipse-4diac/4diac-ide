@@ -678,13 +678,10 @@ public enum LibraryManager {
 					if (resource.equals(folder)) {
 						return true;
 					}
-					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
-						final IPath location = libFolder.getLocation();
-						if (location != null && location.toFile().exists()) {
-							return false;
-						}
-						FordiacMarkerHelper.createMarkers(resource,
-								List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)));
+					if ((resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked())
+							&& (libFolder.getModificationStamp() == IResource.NULL_STAMP)) {
+						FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
+								List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
 						throw new OperationCanceledException();
 					}
 					return false;
