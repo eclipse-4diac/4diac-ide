@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Felix Schmid
+ * Copyright (c) 2025, 2026 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -49,6 +50,8 @@ public class GitIssueCreator {
 	@SuppressWarnings("nls")
 	private static final String[] LABELS = new String[] { "bug", "autoreport" };
 	private static final String SESSION_ID = UUID.randomUUID().toString();
+	private static final String CODE_DELIMITER = "```"; //$NON-NLS-1$
+	private static final int MAX_MANUAL_ISSUE_BODY_SIZE = 4000;
 
 	public static Optional<String> createIssue(final IStatus status) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
@@ -85,10 +88,10 @@ public class GitIssueCreator {
 
 		sb.append("### Stack trace"); //$NON-NLS-1$
 		sb.append(System.lineSeparator()).append(System.lineSeparator());
-		sb.append("```"); //$NON-NLS-1$
+		sb.append(CODE_DELIMITER);
 		sb.append(System.lineSeparator());
 		sb.append(getStackTrace(status.getException()));
-		sb.append("```"); //$NON-NLS-1$
+		sb.append(CODE_DELIMITER);
 
 		return sb.toString();
 	}
@@ -100,9 +103,14 @@ public class GitIssueCreator {
 	}
 
 	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
+		String body = info.body();
+		if (body.length() > MAX_MANUAL_ISSUE_BODY_SIZE) {
+			body = body.substring(0, MAX_MANUAL_ISSUE_BODY_SIZE) + CODE_DELIMITER;
+		}
+
 		final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
 				URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
-				URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
+				URLEncoder.encode(body, StandardCharsets.UTF_8)); // body
 		openLinkInBrowser(reportingURI);
 		return Optional.empty(); // no issue created yet...
 	}
@@ -164,13 +172,13 @@ public class GitIssueCreator {
 			if (response.statusCode() == 201) { // 201 - Created
 				return Optional.of(response.body());
 			}
-			return Optional.empty();
 		} catch (final IOException e) {
-			return Optional.empty();
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		} catch (final InterruptedException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 			Thread.currentThread().interrupt();
-			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 
 	private static String removeLeadingTrailingSlashes(final String s) {
