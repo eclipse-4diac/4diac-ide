@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeXtextEditor;
-import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.LibraryElementXtextDocument;
@@ -129,14 +128,6 @@ public class StructuredTextFBTypeEditor extends FBTypeXtextEditor
 
 	public void setSaveActionsDisabled(final boolean saveActionsDisabled) {
 		this.saveActionsDisabled = saveActionsDisabled;
-	}
-
-	@Override
-	public void setBlockUpdates(final boolean block) {
-		final TypeEntryAdapter typeEntryAdapter = getTypeEntryAdapter();
-		if (typeEntryAdapter != null) {
-			typeEntryAdapter.setBlockUpdates(block);
-		}
 	}
 
 	@Override

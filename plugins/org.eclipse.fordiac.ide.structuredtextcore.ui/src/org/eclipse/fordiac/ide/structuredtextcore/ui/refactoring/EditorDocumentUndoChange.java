@@ -33,18 +33,9 @@ public class EditorDocumentUndoChange extends ProviderDocumentUndoChange {
 
 	@Override
 	protected void commit(final IDocument document, final IProgressMonitor pm) throws CoreException {
-		try {
-			if (editorPart instanceof final STCoreNestedEditor nestedEditor) {
-				nestedEditor.setBlockUpdates(true);
-			}
-			super.commit(document, pm);
-			if (isDoSave() && editorPart instanceof final STCoreNestedEditor nestedEditor) {
-				nestedEditor.doSaveOuterEditor(pm);
-			}
-		} finally {
-			if (editorPart instanceof final STCoreNestedEditor nestedEditor) {
-				nestedEditor.setBlockUpdates(false);
-			}
+		super.commit(document, pm);
+		if (isDoSave() && editorPart instanceof final STCoreNestedEditor nestedEditor) {
+			nestedEditor.doSaveOuterEditor(pm);
 		}
 	}
 
