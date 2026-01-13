@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
-import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -59,6 +58,7 @@ public class FileLibraryElementProvider
 		info.getEditorInput().getFile().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		info.setLibraryElement(copyLibraryElement(info.getEditorInput().getFile()));
 		info.setSynchronizationStamp(info.getEditorInput().getFile().getModificationStamp());
+		info.markSaveLocation();
 		info.setDirty(false);
 		info.getValidationJob().reload();
 		fireLibraryElementStateChange(listener -> listener.elementContentReplaced(info.getEditorInput()));
@@ -69,6 +69,7 @@ public class FileLibraryElementProvider
 			throws CoreException {
 		info.getLibraryElement().getTypeEntry().save(info.getLibraryElement(), monitor);
 		info.setSynchronizationStamp(info.getEditorInput().getFile().getModificationStamp());
+		info.markSaveLocation();
 		info.setDirty(false);
 		info.getValidationJob().reset();
 	}
@@ -169,8 +170,8 @@ public class FileLibraryElementProvider
 			super(input, libraryElement);
 			setSynchronizationStamp(input.getFile().getModificationStamp());
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(input.getFile(), this::getLibraryElement);
-			validationJob = new ValidationJob(PackageNameHelper.getFullTypeName(libraryElement),
-					new ObjectUndoContext(libraryElement), annotationModel);
+			validationJob = new ValidationJob(PackageNameHelper.getFullTypeName(libraryElement), this::getUndoContext,
+					annotationModel);
 		}
 
 		protected boolean isReadOnly() {

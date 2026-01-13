@@ -14,12 +14,22 @@ package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,6 +50,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 	private final Set<LibraryElementStateListener> listeners = ConcurrentHashMap.newKeySet();
 
 	protected AbstractLibraryElementProvider() {
+		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(new LibraryElementUndoManager());
 	}
 
 	@Override
@@ -155,6 +166,13 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 	}
 
 	@Override
+	public IUndoContext getUndoContext(final IEditorInput input) {
+		checkAccess();
+		final T info = getLibraryElementInfo(input);
+		return info != null ? info.getUndoContext() : null;
+	}
+
+	@Override
 	public void addLibraryElementStateListener(final LibraryElementStateListener listener) {
 		listeners.add(listener);
 	}
@@ -208,9 +226,13 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		private int referenceCount;
 		private boolean dirty;
 
+		private IUndoContext undoContext;
+		private IUndoableOperation saveLocation;
+
 		protected LibraryElementInfo(final IEditorInput input, final LibraryElement libraryElement) {
 			this.input = input;
 			this.libraryElement = libraryElement;
+			undoContext = new ObjectUndoContext(libraryElement);
 		}
 
 		protected IEditorInput getEditorInput() {
@@ -222,7 +244,10 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		}
 
 		protected void setLibraryElement(final LibraryElement libraryElement) {
-			this.libraryElement = libraryElement;
+			if (this.libraryElement != libraryElement) {
+				this.libraryElement = libraryElement;
+				undoContext = new ObjectUndoContext(libraryElement);
+			}
 		}
 
 		protected long getSynchronizationStamp() {
@@ -249,6 +274,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 
 		protected void dispose() {
 			libraryElement = null;
+			undoContext = new UndoContext();
 		}
 
 		protected boolean isDirty() {
@@ -260,6 +286,61 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 				this.dirty = dirty;
 				fireLibraryElementStateChange(listener -> listener.elementDirtyStateChanged(input, dirty));
 			}
+		}
+
+		protected void markDirty() {
+			setDirty(true);
+		}
+
+		protected void updateDirty() {
+			setDirty(getLastOperation() != getSaveLocation());
+		}
+
+		protected IUndoableOperation getSaveLocation() {
+			return saveLocation;
+		}
+
+		protected void markSaveLocation() {
+			this.saveLocation = getLastOperation();
+		}
+
+		protected IUndoContext getUndoContext() {
+			return undoContext;
+		}
+
+		protected IUndoableOperation getLastOperation() {
+			return Arrays.asList(OperationHistoryFactory.getOperationHistory().getUndoHistory(undoContext)).reversed()
+					.stream().filter(this::hasContextStrict).findFirst().orElse(null);
+		}
+
+		private boolean hasContextStrict(final IUndoableOperation operation) {
+			return Arrays.stream(operation.getContexts()).anyMatch(undoContext::equals);
+		}
+	}
+
+	protected class LibraryElementUndoManager implements IOperationHistoryListener {
+
+		@Override
+		public void historyNotification(final OperationHistoryEvent event) {
+			switch (event.getEventType()) {
+			case OperationHistoryEvent.DONE -> findInfos(event).forEach(T::markDirty);
+			case OperationHistoryEvent.UNDONE, OperationHistoryEvent.REDONE -> findInfos(event).forEach(T::updateDirty);
+			default -> {
+				// ignore
+			}
+			}
+		}
+
+		protected Stream<T> findInfos(final OperationHistoryEvent event) {
+			return findInfos(event.getOperation().getContexts());
+		}
+
+		protected Stream<T> findInfos(final IUndoContext[] contexts) {
+			return Arrays.stream(contexts).map(this::findInfo).flatMap(Optional::stream);
+		}
+
+		protected Optional<T> findInfo(final IUndoContext context) {
+			return infos.values().stream().filter(info -> info.getUndoContext().equals(context)).findFirst();
 		}
 	}
 

@@ -23,6 +23,7 @@ import java.util.Spliterators;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -54,13 +55,13 @@ public class ValidationJob extends UIJob {
 
 	private static final long DELAY = 500; // in milliseconds
 
-	private final IUndoContext undoContext;
+	private final Supplier<IUndoContext> undoContext;
 	private final GraphicalAnnotationModel annotationModel;
 	private final ValidationOperationHistoryListener listener = new ValidationOperationHistoryListener();
 	private final BlockingQueue<EObject> queue = new LinkedBlockingQueue<>();
 	private boolean enabled = true;
 
-	public ValidationJob(final String name, final IUndoContext undoContext,
+	public ValidationJob(final String name, final Supplier<IUndoContext> undoContext,
 			final GraphicalAnnotationModel annotationModel) {
 		super(MessageFormat.format(Messages.ValidationJob_ValidationJobName, name));
 		this.undoContext = undoContext;
@@ -173,7 +174,7 @@ public class ValidationJob extends UIJob {
 
 		@Override
 		public void historyNotification(final OperationHistoryEvent event) {
-			if (!event.getOperation().hasContext(undoContext)) {
+			if (!event.getOperation().hasContext(undoContext.get())) {
 				return;
 			}
 			switch (event.getEventType()) {
