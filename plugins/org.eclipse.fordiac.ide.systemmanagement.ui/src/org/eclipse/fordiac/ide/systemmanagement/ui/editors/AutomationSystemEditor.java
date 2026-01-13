@@ -523,7 +523,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			}
 			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
 			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile(), () -> system);
-			validationJob = new ValidationJob(getPartName(), new ObjectUndoContext(system), annotationModel);
+			validationJob = new ValidationJob(getPartName(), () -> new ObjectUndoContext(system), annotationModel);
 			// inform child editors about the new file and that they should update the
 			// annotation model. Currently we use for simplicity their existing editor input
 			pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)

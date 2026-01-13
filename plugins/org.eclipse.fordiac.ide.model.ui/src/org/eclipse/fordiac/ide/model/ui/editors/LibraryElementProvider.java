@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -169,6 +170,14 @@ public interface LibraryElementProvider {
 	 * @return The annotation model or {@code null} if none is currently connected
 	 */
 	GraphicalAnnotationModel getAnnotationModel(IEditorInput input);
+
+	/**
+	 * Get the undo context for the given input.
+	 *
+	 * @param input The input
+	 * @return The undo context or {@code null} if none is currently connected
+	 */
+	IUndoContext getUndoContext(IEditorInput input);
 
 	/**
 	 * Adds the given library element state listener to this provider.
