@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
@@ -20,7 +19,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
@@ -59,12 +57,8 @@ public class InterfaceElementSelectionPolicy extends SelectionEditPolicy {
 
 	@Override
 	public void showTargetFeedback(final Request request) {
-		if (request instanceof final SelectionRequest selectionRequest) {
-			final Point pos = selectionRequest.getLocation();
-			getHostFigure().translateToRelative(pos);
-			final int cursorId = UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID,
-					interfaceEditPart.getModel()) != null ? SWT.CURSOR_HAND : SWT.CURSOR_CROSS;
-			getHostFigure().setCursor(Display.getDefault().getSystemCursor(cursorId));
-		}
+		final int cursorId = UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID,
+				interfaceEditPart.getModel()) != null ? SWT.CURSOR_HAND : SWT.CURSOR_CROSS;
+		getHostFigure().setCursor(Display.getDefault().getSystemCursor(cursorId));
 	}
 }
