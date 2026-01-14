@@ -122,7 +122,8 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 			return getExecutionChainEnd();
 		}
 		if (!predecessor.getInterface().getEventOutputs().isEmpty()) {
-			return predecessor.getInterface().getEventOutputs().getFirst();
+			return predecessor.getInterface().getEventOutputs().stream()
+					.filter(oe -> !oe.getOutputConnections().isEmpty()).findFirst().orElse(null);
 		}
 		return null;
 	}
