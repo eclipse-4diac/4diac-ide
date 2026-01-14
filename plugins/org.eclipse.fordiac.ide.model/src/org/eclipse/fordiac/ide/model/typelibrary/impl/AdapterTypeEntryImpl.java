@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -89,6 +90,15 @@ public class AdapterTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<Adapter
 		temp.getInterfaceList().getEventOutputs().addAll(outputEvents);
 		temp.getInterfaceList().getInputVars().addAll(inputVars);
 		temp.getInterfaceList().getOutputVars().addAll(outputVars);
+
+		processVarInOutInWiths(temp.getInterfaceList().getEventInputs());
+		processVarInOutInWiths(temp.getInterfaceList().getEventOutputs());
+
 		return temp;
+	}
+
+	private static void processVarInOutInWiths(final EList<Event> events) {
+		events.stream().flatMap(ev -> ev.getWith().stream()).filter(w -> w.getVariables().isInOutVar())
+				.forEach(w -> w.setVariables(w.getVariables().getInOutVarOpposite()));
 	}
 }
