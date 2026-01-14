@@ -153,7 +153,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
+		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib);
 	}
 
 	@Override
