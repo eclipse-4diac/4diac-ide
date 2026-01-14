@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -112,7 +113,12 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 
 	private static void handleFileSelection(final IWorkbenchPage aPage, final IFile aFile) {
 		if (SystemManager.isSystemFile(aFile)) {
-			handleModelElementSelection(aPage, SystemManager.INSTANCE.getSystem(aFile));
+			LibraryElement libraryElement = LibraryElementProvider.INSTANCE
+					.getLibraryElement(new FileEditorInput(aFile));
+			if (libraryElement == null) {
+				libraryElement = SystemManager.INSTANCE.getSystem(aFile);
+			}
+			handleModelElementSelection(aPage, libraryElement);
 		}
 	}
 

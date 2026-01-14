@@ -25,32 +25,61 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class LibraryElementContentProvider extends AdapterFactoryContentProvider {
 
-	protected List<Notifier> targets = new ArrayList<>();
-
-	protected final Adapter typeEntryAdapter = new AdapterImpl() {
+	private final List<Notifier> targets = new ArrayList<>();
+	private final Adapter typeEntryAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			final Object feature = notification.getFeature();
-			if (TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(feature)
-					|| TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE.equals(feature)) {
-				final TypeEntry entry = (TypeEntry) notification.getNotifier();
+			if (notification.getNotifier() instanceof final TypeEntry entry
+					&& TypeEntry.TYPE_ENTRY_TYPE_FEATURE.equals(notification.getFeature())) {
 				LibraryElementContentProvider.super.notifyChanged(
 						new ViewerNotification(notification, entry.getFile()));
+			}
+		}
+	};
+	private final LibraryElementStateListener elementStateListener = new LibraryElementStateListener() {
+
+		@Override
+		public void elementConnected(final IEditorInput input) {
+			fireElementChanged(input);
+		}
+
+		@Override
+		public void elementDisconnected(final IEditorInput input) {
+			fireElementChanged(input);
+		}
+
+		@Override
+		public void elementContentReplaced(final IEditorInput input) {
+			fireElementChanged(input);
+		}
+
+		private void fireElementChanged(final IEditorInput input) {
+			if (input instanceof final IFileEditorInput fileEditorInput) {
+				LibraryElementContentProvider.super.notifyChanged(new ViewerNotification(
+						new NotificationImpl(Notification.SET, fileEditorInput.getFile(), fileEditorInput.getFile()),
+						fileEditorInput.getFile()));
 			}
 		}
 	};
 
 	public LibraryElementContentProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
+		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
 	}
 
 	@Override
@@ -60,17 +89,31 @@ public class LibraryElementContentProvider extends AdapterFactoryContentProvider
 
 	@Override
 	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof final IFile element) {
-			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
-			if (null != entry) {
-				hookToTypeEntry(entry);
-				return super.getChildren(entry.getTypeEditable());
+		if (parentElement instanceof final IFile file) {
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			if (entry == null) {
+				return new Object[0];
 			}
-			// we don't have a type entry for the full so we don't have children
-			return new Object[0];
+
+			hookToTypeEntry(entry);
+
+			final LibraryElement libraryElement = getLibraryElement(file, entry);
+			if (libraryElement == null) {
+				return new Object[0];
+			}
+			return super.getChildren(libraryElement);
 		}
 
 		return super.getChildren(parentElement);
+	}
+
+	protected static LibraryElement getLibraryElement(final IFile file, final TypeEntry entry) {
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE
+				.getLibraryElement(new FileEditorInput(file));
+		if (libraryElement != null) {
+			return libraryElement;
+		}
+		return entry.getType();
 	}
 
 	@Override
@@ -96,9 +139,10 @@ public class LibraryElementContentProvider extends AdapterFactoryContentProvider
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
 		targets.forEach(entry -> entry.eAdapters().remove(typeEntryAdapter));
-		targets = null;
+		targets.clear();
+		super.dispose();
 	}
 
 	@Override
