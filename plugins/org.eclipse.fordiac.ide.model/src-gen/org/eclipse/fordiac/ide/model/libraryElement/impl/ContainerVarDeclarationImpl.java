@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -105,6 +106,16 @@ public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements C
 	@Override
 	public VarDeclaration getCachedMember(final List<String> path, final boolean demandCreate) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getCachedMember(this, path, demandCreate);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TreeIterator<VarDeclaration> getAllCachedMembers() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getAllCachedMembers(this);
 	}
 
 	/**
