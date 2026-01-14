@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
@@ -31,10 +30,10 @@ import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
-import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
@@ -66,7 +65,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -197,15 +195,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 	}
 
 	private GefPreferenceConstantsCache getPreferenceConstantsCache() {
-		IProject project = null;
-		final IEditorInput input = getEditorInput();
-		if (input instanceof final IContentEditorInput contentInput) {
-			project = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(contentInput.getContent()).getProject();
-		} else if (input instanceof final IFileEditorInput fileInput) {
-			project = fileInput.getFile().getProject();
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
+		if (libraryElement != null && libraryElement.getTypeLibrary() != null) {
+			return new GefPreferenceConstantsCache(libraryElement.getTypeLibrary().getProject());
 		}
-
-		return new GefPreferenceConstantsCache(project);
+		return new GefPreferenceConstantsCache(null);
 	}
 
 	/**
@@ -319,16 +313,6 @@ public abstract class DiagramEditor extends GraphicalEditor
 	 */
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final IContentEditorInput contentEI)) {
-			throw new IllegalArgumentException("Diagram editors only accept IContentEditorInput as valid inputs!"); //$NON-NLS-1$
-		}
-
-		final IContentEditorInput currentEditorInput = (IContentEditorInput) getEditorInput();
-		if (currentEditorInput != null && currentEditorInput.getContent() != contentEI.getContent()) {
-			throw new IllegalArgumentException(
-					"Editor input with new content given to diagram editor. This is currently not supported!"); //$NON-NLS-1$
-		}
-
 		if (getEditorInput() == null) {
 			setupEditDomain();
 		}
@@ -401,6 +385,11 @@ public abstract class DiagramEditor extends GraphicalEditor
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	/**

@@ -19,18 +19,11 @@ import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropT
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.jface.util.TransferDropTargetListener;
 
 public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements IFBTEditorPart {
-
-	private TypeLibrary typeLib;
-
-	public void setTypeLib(final TypeLibrary typeLib) {
-		this.typeLib = typeLib;
-	}
 
 	@Override
 	protected String getPaletteNavigatorID() {
@@ -41,13 +34,8 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	protected TypeLibrary getTypeLibrary() {
-		return typeLib;
-	}
-
-	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(typeLib.getProject(), getEditDomain(), getPaletteNavigatorID());
+		return new FBTypePaletteViewerProvider(getTypeLibrary().getProject(), getEditDomain(), getPaletteNavigatorID());
 	}
 
 	@Override

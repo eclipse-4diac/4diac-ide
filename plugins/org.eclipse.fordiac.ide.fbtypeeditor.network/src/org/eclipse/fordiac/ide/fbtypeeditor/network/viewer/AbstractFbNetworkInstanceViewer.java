@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.GraphicalViewer;
@@ -105,18 +106,25 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final CompositeAndSubAppInstanceViewerInput viewerEI)) {
-			throw new IllegalArgumentException(
-					"Network viewers only accept CompositeAndSubAppInstanceViewerInput as valid inputs!"); //$NON-NLS-1$
+		final FBNetworkElement newElement = LibraryElementProvider.INSTANCE.getElement(input, FBNetworkElement.class);
+		if (newElement == null) {
+			throw new IllegalArgumentException("Network viewers only accept FB network elements as valid inputs!"); //$NON-NLS-1$
 		}
-		if (getEditorInput() == null) {
-			// basic viewer setup that should be done only the first time the viewer is
-			// getting an input
-			fbNetworkElement = viewerEI.getContent();
-			final String name = getNameHierarchy();
-			setPartName(name);
-			// the tooltip will show the whole name when hovering
-			viewerEI.setName(name);
+		removeFBNetworkElementAdapter();
+		fbNetworkElement = newElement;
+		addFBNetworkElementAdapter();
+		setPartName(getNameHierarchy());
+		super.setInput(input);
+	}
+
+	@Override
+	public void dispose() {
+		removeFBNetworkElementAdapter();
+		super.dispose();
+	}
+
+	protected void addFBNetworkElementAdapter() {
+		if (fbNetworkElement != null) {
 			fbNetworkElement.eAdapters().add(fbNetworkElementAdapter);
 			final EObject container = fbNetworkElement.eContainer();
 			if (container != null) {
@@ -124,11 +132,9 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				container.eAdapters().add(fbNetworkAdapter);
 			}
 		}
-		super.setInput(input);
 	}
 
-	@Override
-	public void dispose() {
+	protected void removeFBNetworkElementAdapter() {
 		if (fbNetworkElement != null) {
 			fbNetworkElement.eAdapters().remove(fbNetworkElementAdapter);
 			final EObject container = fbNetworkElement.eContainer();
@@ -136,7 +142,6 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				container.eAdapters().remove(fbNetworkAdapter);
 			}
 		}
-		super.dispose();
 	}
 
 	@Override

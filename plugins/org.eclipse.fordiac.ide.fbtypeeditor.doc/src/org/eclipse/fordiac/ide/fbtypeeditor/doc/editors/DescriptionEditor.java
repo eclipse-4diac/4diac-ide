@@ -29,8 +29,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -77,11 +77,6 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 	private RichTextEditor editor;
 
 	@Override
-	public TypeEditorInput getEditorInput() {
-		return (TypeEditorInput) super.getEditorInput();
-	}
-
-	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		// nothing to be done
 	}
@@ -110,7 +105,7 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 
 	@Override
 	public boolean isDirty() {
-		return commandStack.isDirty();
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	@Override
@@ -248,7 +243,6 @@ public class DescriptionEditor extends EditorPart implements ITypeEditorPage {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		super.setInputWithNotify(input);
 	}
 

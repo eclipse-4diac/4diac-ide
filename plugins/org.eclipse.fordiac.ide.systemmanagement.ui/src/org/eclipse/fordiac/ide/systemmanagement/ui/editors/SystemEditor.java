@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelListener;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.SystemElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -88,7 +88,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 
 public class SystemEditor extends EditorPart
@@ -208,16 +207,15 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (input instanceof final FileEditorInput fileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(fileEditorInput.getFile());
-			if (system != null) {
-				setPartName(system.getName());
-				system.eAdapters().add(appListener);
-				system.getSystemConfiguration().eAdapters().add(sysConfListener);
-				if (system.getCompilerInfo() != null) {
-					system.getCompilerInfo().eAdapters().add(compilerInfoListener);
-				}
-			}
+		system = LibraryElementProvider.INSTANCE.getElement(input, AutomationSystem.class);
+		if (system == null) {
+			throw new IllegalArgumentException("System editors only accept systems as valid inputs!"); //$NON-NLS-1$
+		}
+		setPartName(system.getName());
+		system.eAdapters().add(appListener);
+		system.getSystemConfiguration().eAdapters().add(sysConfListener);
+		if (system.getCompilerInfo() != null) {
+			system.getCompilerInfo().eAdapters().add(compilerInfoListener);
 		}
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			removeAnnotationModelListener();
@@ -241,7 +239,7 @@ public class SystemEditor extends EditorPart
 
 	@Override
 	public boolean isDirty() {
-		return ((null != system) && getCommandStack().isDirty());
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	@Override
