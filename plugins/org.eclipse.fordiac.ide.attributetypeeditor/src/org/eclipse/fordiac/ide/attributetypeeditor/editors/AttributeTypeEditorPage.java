@@ -108,8 +108,6 @@ public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
-
 		if (getSite() instanceof final MultiPageEditorSite mpes) {
 			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}

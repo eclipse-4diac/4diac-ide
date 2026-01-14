@@ -261,10 +261,4 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			cmds.execute();
 		}
 	}
-
-	@Override
-	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
-		super.setInput(input);
-	}
 }

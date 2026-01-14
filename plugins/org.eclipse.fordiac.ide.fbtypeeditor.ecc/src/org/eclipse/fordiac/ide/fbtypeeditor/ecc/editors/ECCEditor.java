@@ -334,7 +334,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		super.setInput(input);
 	}
 
