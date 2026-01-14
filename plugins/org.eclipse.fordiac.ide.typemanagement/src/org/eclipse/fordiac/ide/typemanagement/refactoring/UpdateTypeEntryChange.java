@@ -118,11 +118,7 @@ public class UpdateTypeEntryChange extends Change {
 			entry.setFile(newFile);
 
 			// update type and typeEditable names
-			LibraryElement type = entry.getTypeEditable(); // TODO: use type copy
-			if ((null != type)) {
-				type.setName(newTypeName);
-			}
-			type = entry.getType();
+			final LibraryElement type = entry.copyType();
 			if ((null != type)) {
 				type.setName(newTypeName);
 			}
