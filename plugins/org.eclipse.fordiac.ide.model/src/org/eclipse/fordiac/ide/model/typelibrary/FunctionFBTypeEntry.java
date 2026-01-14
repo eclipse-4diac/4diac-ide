@@ -18,12 +18,4 @@ public interface FunctionFBTypeEntry extends FBTypeEntry {
 
 	@Override
 	FunctionFBType getType();
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	FunctionFBType getTypeEditable();
-
 }

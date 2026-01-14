@@ -22,13 +22,6 @@ public interface SegmentTypeEntry extends TypeEntry {
 	@Override
 	SegmentType getType();
 
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	SegmentType getTypeEditable();
-
 	@Override
 	SegmentType copyType();
 }
