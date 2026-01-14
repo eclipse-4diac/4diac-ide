@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.ITypeEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
@@ -30,55 +30,46 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 	@Override
 	protected boolean setDocumentContent(final IDocument document, final IEditorInput editorInput,
 			final String encoding) throws CoreException {
-		var result = false;
-		if (editorInput instanceof final ITypeEditorInput typeEditorInput) {
-			final LibraryElement libraryElement = typeEditorInput.getContent();
-			if (libraryElement != null) {
-				setDocumentContent(document, libraryElement);
-				result = true;
-			}
-		} else if (editorInput instanceof final IFileEditorInput fileEditorInput) {
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE.getLibraryElement(editorInput);
+		if (libraryElement != null) {
+			setDocumentContent(document, libraryElement);
+			setDocumentResource((XtextDocument) document, editorInput, encoding);
+			return true;
+		}
+		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
 			if (typeEntry != null) {
 				// use type without copying, since we make an internal copy anyway
 				setDocumentContent(document, typeEntry.getType());
-				result = true;
-			} else {
-				result = super.setDocumentContent(document, editorInput, encoding);
+				setDocumentResource((XtextDocument) document, editorInput, encoding);
+				return true;
 			}
 		}
-		if (result) {
-			setDocumentResource((XtextDocument) document, editorInput, encoding);
-		}
-		return result;
+		return super.setDocumentContent(document, editorInput, encoding);
 	}
 
 	@Override
 	protected void doSaveDocument(final IProgressMonitor monitor, final Object element, final IDocument document,
 			final boolean overwrite) throws CoreException {
-		switch (element) {
-		case final ITypeEditorInput typeEditorInput -> {
-			final LibraryElement libraryElement = typeEditorInput.getContent();
+		if (element instanceof final IFileEditorInput fileEditorInput) {
+			LibraryElement libraryElement = LibraryElementProvider.INSTANCE.getLibraryElement(fileEditorInput);
 			if (libraryElement != null) {
-				doSaveDocument(monitor, typeEditorInput, libraryElement, (XtextDocument) document);
-				updateFileInfo(typeEditorInput);
+				doSaveDocument(monitor, fileEditorInput, libraryElement, (XtextDocument) document);
+				updateFileInfo(fileEditorInput);
+				return;
 			}
-		}
-		case final IFileEditorInput fileEditorInput -> {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
 			if (typeEntry != null) {
-				final LibraryElement libraryElement = typeEntry.copyType();
+				libraryElement = typeEntry.copyType();
 				if (libraryElement != null) {
 					doSaveDocument(monitor, fileEditorInput, libraryElement, (XtextDocument) document);
 					typeEntry.save(libraryElement, monitor);
 					updateFileInfo(fileEditorInput);
+					return;
 				}
-			} else {
-				super.doSaveDocument(monitor, element, document, overwrite);
 			}
 		}
-		default -> super.doSaveDocument(monitor, element, document, overwrite);
-		}
+		super.doSaveDocument(monitor, element, document, overwrite);
 	}
 
 	protected void updateFileInfo(final IFileEditorInput fileEditorInput) throws CoreException {
@@ -94,15 +85,16 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 
 	@Override
 	public boolean isSynchronized(final Object element) {
-		if (element instanceof ITypeEditorInput) {
-			return true; // always consider synchronized if in an FB type editor
+		if (element instanceof final IEditorInput editorInput
+				&& LibraryElementProvider.INSTANCE.getLibraryElement(editorInput) != null) {
+			return LibraryElementProvider.INSTANCE.isSynchronized(editorInput);
 		}
 		return super.isSynchronized(element);
 	}
 
 	@Override
 	protected void handleElementContentChanged(final IFileEditorInput fileEditorInput) {
-		if (fileEditorInput instanceof ITypeEditorInput) {
+		if (LibraryElementProvider.INSTANCE.getLibraryElement(fileEditorInput) != null) {
 			return; // update only if opened directly from a file and not in an FB type editor
 		}
 		final FileInfo info = (FileInfo) getElementInfo(fileEditorInput);

@@ -17,7 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.ITypeEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.ui.IEditorInput;
@@ -40,8 +40,9 @@ public class STCoreResourceForIEditorInputFactory extends ResourceForIEditorInpu
 	}
 
 	protected static LibraryElement getLibraryElement(final IEditorInput editorInput) {
-		if (editorInput instanceof final ITypeEditorInput typeEditorInput) {
-			return typeEditorInput.getContent();
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE.getLibraryElement(editorInput);
+		if (libraryElement != null) {
+			return libraryElement;
 		}
 		if (editorInput instanceof final IFileEditorInput fileEditorInput) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.getFile());
