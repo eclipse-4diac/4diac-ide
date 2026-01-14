@@ -229,4 +229,8 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	public void setInvocationLocation(final Point invocationLocation) {
 		this.invocationLocation = invocationLocation;
 	}
+
+	public TypeLibrary getTypeLib() {
+		return typeLib;
+	}
 }
