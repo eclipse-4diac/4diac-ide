@@ -20,12 +20,7 @@ public final class Messages extends NLS {
 
 	public static String BulkEditor;
 
-	public static String Other_Dirty_Editor;
-	public static String Dirty_Editor;
-	public static String Dirty_Editors;
-	public static String Dirty_Editor_IgnoreChange;
-	public static String Dirty_Editor_SaveAndSearch;
-	public static String Dirty_Editors_SaveAndSearch;
+	public static String BulkEditor_ProblemOpeningSearchResult;
 
 	public static String Variable;
 	public static String Attribute;
@@ -65,7 +60,8 @@ public final class Messages extends NLS {
 
 	public static String Search_Changes;
 	public static String Unsaved_Changes;
-	public static String Continue;
+	public static String Save;
+	public static String Discard;
 	public static String Cancel;
 
 	static {
