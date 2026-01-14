@@ -17,10 +17,8 @@ import java.util.stream.Stream;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.debug.preferences.DeploymentDebugPreferences;
 import org.eclipse.fordiac.ide.deployment.debug.ui.annotation.WatchValueAnnotation;
 import org.eclipse.fordiac.ide.deployment.debug.ui.editparts.WatchValueEditPart;
@@ -30,14 +28,12 @@ import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -90,18 +86,13 @@ public class ToggleBoolValueHandler extends AbstractHandler {
 	}
 
 	private static boolean getMonitoringValueWriteThrough(final IEditorPart editor) {
-		IProject project = null;
-		final IEditorInput input = editor.getEditorInput();
-		switch (input) {
-		case final IContentEditorInput contentInput when EcoreUtil
-				.getRootContainer(contentInput.getContent()) instanceof final LibraryElement libElement ->
-			project = libElement.getTypeEntry().getFile().getProject();
-		case final IFileEditorInput fileInput -> project = fileInput.getFile().getProject();
-		default -> {
-			return false;
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE
+				.getLibraryElement(editor.getEditorInput());
+		if (libraryElement != null && libraryElement.getTypeLibrary() != null) {
+			return PreferenceStoreProvider
+					.getStore(DeploymentDebugPreferences.QUALIFIER, libraryElement.getTypeLibrary().getProject())
+					.getBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH);
 		}
-		}
-		return PreferenceStoreProvider.getStore(DeploymentDebugPreferences.QUALIFIER, project)
-				.getBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH);
+		return false;
 	}
 }
