@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 
 /**
  * <!-- begin-user-doc -->
@@ -63,5 +64,13 @@ public interface ContainerVarDeclaration extends VarDeclaration {
 	 * @generated
 	 */
 	VarDeclaration getCachedMember(List<String> path, boolean demandCreate);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	TreeIterator<VarDeclaration> getAllCachedMembers();
 
 } // ContainerVarDeclaration
