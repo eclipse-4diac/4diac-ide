@@ -18,14 +18,25 @@ import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.setArraySize
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.emf.common.util.AbstractTreeIterator;
+import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarDeclarationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
 public class ContainerVarDeclarationAnnotations {
 
@@ -110,6 +121,70 @@ public class ContainerVarDeclarationAnnotations {
 			}
 		}
 		return -1;
+	}
+
+	public static TreeIterator<VarDeclaration> getAllCachedMembers(final ContainerVarDeclaration contVarDeclaration) {
+		return new AbstractTreeIterator<>(contVarDeclaration, false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Iterator<VarDeclaration> getChildren(final Object object) {
+				if (object instanceof final ContainerVarDeclaration container) {
+					return container.getCachedMembers().iterator();
+				}
+				return Collections.emptyIterator();
+			}
+		};
+	}
+
+	public static boolean validateMemberInputConnections(final ContainerVarDeclaration contVarDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (contVarDeclaration.isIsInput() && !contVarDeclaration.getInputConnections().isEmpty()
+				&& hasMemberInputConnection(contVarDeclaration)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONTAINER_VAR_DECLARATION__VALIDATE_MEMBER_INPUT_CONNECTIONS,
+						Messages.ContainerVarDeclarationAnnotations_MemberInputConnection,
+						FordiacMarkerHelper.getDiagnosticData(contVarDeclaration,
+								LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateMemberInitialValues(final ContainerVarDeclaration contVarDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (contVarDeclaration.hasValue() && hasMemberInitialValue(contVarDeclaration)) {
+			if (diagnostics != null) {
+				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+						LibraryElementValidator.CONTAINER_VAR_DECLARATION__VALIDATE_MEMBER_INITIAL_VALUES,
+						Messages.ContainerVarDeclarationAnnotations_MemberInitialValue,
+						FordiacMarkerHelper.getDiagnosticData(contVarDeclaration)));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean hasMemberInputConnection(final ContainerVarDeclaration contVarDeclaration) {
+		final TreeIterator<VarDeclaration> members = contVarDeclaration.getAllCachedMembers();
+		while (members.hasNext()) {
+			if (!members.next().getInputConnections().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasMemberInitialValue(final ContainerVarDeclaration contVarDeclaration) {
+		final TreeIterator<VarDeclaration> members = contVarDeclaration.getAllCachedMembers();
+		while (members.hasNext()) {
+			if (members.next().hasValue()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private ContainerVarDeclarationAnnotations() {
