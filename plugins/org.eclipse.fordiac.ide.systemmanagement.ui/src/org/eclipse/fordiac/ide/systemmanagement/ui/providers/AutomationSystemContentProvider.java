@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.providers;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.navigator.LibraryElementContentProvider;
@@ -22,16 +21,6 @@ public class AutomationSystemContentProvider extends LibraryElementContentProvid
 
 	public AutomationSystemContentProvider() {
 		super(itemAdapterFactory);
-	}
-
-	@Override
-	public Object[] getChildren(final Object parentElement) {
-		if (parentElement instanceof final IFile ifile && SystemManager.isSystemFile(ifile)) {
-			// retrieve the children for the Automation system
-			return super.getChildren(SystemManager.INSTANCE.getSystem(ifile));
-		}
-
-		return super.getChildren(parentElement);
 	}
 
 	@Override
