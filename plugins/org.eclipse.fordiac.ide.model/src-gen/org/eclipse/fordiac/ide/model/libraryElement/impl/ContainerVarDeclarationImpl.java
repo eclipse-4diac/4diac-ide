@@ -19,8 +19,10 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Collection;
 
 import java.util.List;
+import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.common.util.TreeIterator;
@@ -116,6 +118,26 @@ public class ContainerVarDeclarationImpl extends VarDeclarationImpl implements C
 	@Override
 	public TreeIterator<VarDeclaration> getAllCachedMembers() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getAllCachedMembers(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMemberInputConnections(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInputConnections(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateMemberInitialValues(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInitialValues(this, diagnostics, context);
 	}
 
 	/**

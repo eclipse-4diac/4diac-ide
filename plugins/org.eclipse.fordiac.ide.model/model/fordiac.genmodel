@@ -351,6 +351,16 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/getAllCachedMembers"
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getAllCachedMembers(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/validateMemberInputConnections"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInputConnections(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/validateMemberInputConnections/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/validateMemberInputConnections/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ContainerVarDeclaration/validateMemberInitialValues"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInitialValues(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/validateMemberInitialValues/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//ContainerVarDeclaration/validateMemberInitialValues/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//DataConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//DataConnection/fBNetwork"/>
