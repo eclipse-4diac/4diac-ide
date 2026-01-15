@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.deployment.opcua;
 
 import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
-import static org.eclipse.milo.opcua.stack.core.util.ConversionUtil.toList;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -57,12 +56,12 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.milo.opcua.sdk.client.DiscoveryClient;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
+import org.eclipse.milo.opcua.sdk.client.OpcUaClientConfigBuilder;
 import org.eclipse.milo.opcua.sdk.client.SessionActivityListener;
-import org.eclipse.milo.opcua.sdk.client.api.UaSession;
-import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfigBuilder;
-import org.eclipse.milo.opcua.stack.client.DiscoveryClient;
-import org.eclipse.milo.opcua.stack.core.Identifiers;
+import org.eclipse.milo.opcua.sdk.client.UaSession;
+import org.eclipse.milo.opcua.stack.core.NodeIds;
 import org.eclipse.milo.opcua.stack.core.UaException;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
@@ -111,7 +110,6 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			mgrId = mgrId.substring(1, mgrId.length() - 1);
 			final List<EndpointDescription> endpoints = DiscoveryClient.getEndpoints(mgrId).get();
 			final OpcUaClientConfigBuilder cfg = new OpcUaClientConfigBuilder();
-
 			cfg.setEndpoint(endpoints.get(0));
 			final OpcUaClient newClient = OpcUaClient.create(cfg.build());
 
@@ -158,16 +156,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotConnectToDevice);
 		}
 		try {
-			client.connect().get();
+			client.connect();
 			for (final IDeploymentListener listener : listeners) {
 				listener.connectionOpened(device);
 			}
-		} catch (final ExecutionException e) {
+		} catch (final UaException e) {
 			throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotConnectToDevice, e);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 	}
 
@@ -175,16 +169,12 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void disconnect() throws DeploymentException {
 		if (isConnected()) {
 			try {
-				client.disconnect().get();
+				client.disconnect();
 				for (final IDeploymentListener listener : listeners) {
 					listener.connectionClosed(device);
 				}
-			} catch (final ExecutionException e) {
+			} catch (final UaException e) {
 				throw new DeploymentException(Messages.OPCUADeploymentExecutor_CouldNotDisconnectFromDevice, e);
-			} catch (final InterruptedException e) {
-				Thread.currentThread().interrupt();
-				FordiacLogHelper.logError(
-						MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 			}
 		}
 	}
@@ -196,7 +186,8 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	 **/
 	private synchronized CompletableFuture<CallMethodResult> sendREQ(final String destination,
 			final CallMethodRequest request, final String message) {
-		return client.call(request).thenCompose(result -> {
+		return client.callAsync(List.of(request)).thenCompose(response -> {
+			final CallMethodResult result = Arrays.asList(response.getResults()).getFirst();
 			if (!result.getStatusCode().isGood()) {
 				displayCommand(result, destination, message);
 			}
@@ -212,14 +203,9 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	private synchronized List<CallMethodResult> sendREQ(final String destination) throws IOException {
 		CallResponse response;
 		try {
-			response = client.call(requests).get();
-		} catch (final ExecutionException e) {
+			response = client.call(requests);
+		} catch (final UaException e) {
 			throw new IOException(MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestFailed, destination), e);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			FordiacLogHelper.logError(
-					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
-			return Collections.emptyList();
 		}
 		return handleResponse(response, destination);
 	}
@@ -858,10 +844,10 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	 */
 	private CompletableFuture<StatusCode> browseResources() {
 		final BrowseDescription browse = new BrowseDescription(Constants.MGMT_NODE, BrowseDirection.Forward,
-				Identifiers.References, Boolean.TRUE, uint(NodeClass.Object.getValue()),
+				NodeIds.References, Boolean.TRUE, uint(NodeClass.Object.getValue()),
 				uint(BrowseResultMask.All.getValue()));
-		return client.browse(browse).thenCompose(result -> {
-			final List<ReferenceDescription> references = toList(result.getReferences());
+		return client.browseAsync(browse).thenCompose(result -> {
+			final List<ReferenceDescription> references = Arrays.asList(result.getReferences());
 			for (final ReferenceDescription rd : references) {
 				rd.getNodeId().toNodeId(client.getNamespaceTable())
 						.ifPresent(nodeId -> availableResources.put(rd.getBrowseName().getName(), nodeId));
