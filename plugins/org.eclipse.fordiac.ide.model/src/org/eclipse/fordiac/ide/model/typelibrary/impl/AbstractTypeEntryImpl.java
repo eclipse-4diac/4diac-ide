@@ -106,6 +106,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private SoftReference<String> typeHashRef;
 	private SoftReference<LibraryElement> typeEditableRef;
 	private final AtomicReference<Set<TypeEntry>> dependencies = new AtomicReference<>(Collections.emptySet());
+	private boolean loading;
 
 	private TypeLibrary typeLibrary;
 
@@ -386,7 +387,12 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	private LibraryElement loadType() {
+		if (loading) {
+			FordiacLogHelper.logWarning("Circular dependency when loading type " + getFile().getName()); //$NON-NLS-1$
+			return null;
+		}
 		try {
+			loading = true;
 			final CommonElementImporter importer = getImporter();
 			importer.loadElement();
 			updateDependencies(importer.getDependencies());
@@ -396,6 +402,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		} catch (final Exception e) {
 			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 			return null;
+		} finally {
+			loading = false;
 		}
 	}
 
