@@ -17,16 +17,15 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.utilities.CollisionChangeBoundsRequest;
 import org.eclipse.fordiac.ide.gef.utilities.TrackerMarginBoundsHelper;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.DragEditPartsTracker;
-import org.eclipse.swt.events.MouseEvent;
 
 public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 	private final TrackerMarginBoundsHelper boundsHelper = new TrackerMarginBoundsHelper();
+	EditPartViewer initialViewer;
 
 	public ScrollingDragEditPartsTracker(final EditPart sourceEditPart) {
 		super(sourceEditPart);
@@ -41,20 +40,8 @@ public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 	}
 
 	@Override
-	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer scrollingViewer) {
-			final Point oldViewPort = scrollingViewer.getViewLocation();
-			((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
-			final Dimension delta = oldViewPort.getDifference(scrollingViewer.getViewLocation());
-			// Compensate the moved scrolling in the start position for correct dropping of
-			// moved parts
-			setStartLocation(getStartLocation().getTranslated(delta));
-		}
-		super.mouseDrag(me, viewer);
-	}
-
-	@Override
 	protected boolean handleDragStarted() {
+		initialViewer = getCurrentViewer();
 		boundsHelper.initDrag(getSourceEditPart(), getCurrentViewer().getSelectedEditParts());
 		return super.handleDragStarted();
 	}
@@ -73,7 +60,24 @@ public class ScrollingDragEditPartsTracker extends DragEditPartsTracker {
 
 	@Override
 	protected void showSourceFeedback() {
+		if (differentTargetViewer()) {
+			final Point location = getLocation();
+			final Point converted = new Point(initialViewer.getControl()
+					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
+			getTargetRequest().setLocation(converted);
+			getTargetRequest().getExtendedData().clear();
+			final Dimension moveDelta = getLocation().getDifference(converted);
+			getTargetRequest().setMoveDelta(new Point(moveDelta));
+			snapPoint(getTargetRequest());
+		}
 		boundsHelper.createFigures(getTargetEditPart());
 		super.showSourceFeedback();
+		if (differentTargetViewer()) {
+			updateTargetRequest();
+		}
+	}
+
+	private boolean differentTargetViewer() {
+		return initialViewer != null && initialViewer != getCurrentViewer();
 	}
 }
