@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2026 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -43,11 +43,13 @@ import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPosition
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -57,6 +59,7 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -168,21 +171,46 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (!fbEls.isEmpty()) {
 			return new MoveAndReconnectCommand(fbEls, destination, (FBNetwork) getHost().getModel());
 		}
-		return createRemoveFromGroup(editParts, request);
-	}
-
-	private Command createRemoveFromGroup(final List<? extends EditPart> editParts, final ChangeBoundsRequest request) {
 		final GroupContentEditPart groupContent = getGroupContentEditPart(editParts);
 		if (groupContent != null) {
-			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
-			if (!fbEls.isEmpty()) {
-				final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
-				final Point moveDelta = getScaledMoveDelta(request);
-				topLeft.translate(moveDelta.x, moveDelta.y);
-				return new RemoveElementsFromGroup(fbEls, topLeft);
-			}
+			return createRemoveFromGroup(groupContent, request);
+		}
+		return createSplitEditorMoveCommand(request);
+	}
+
+	private Command createRemoveFromGroup(final GroupContentEditPart groupContent, final ChangeBoundsRequest request) {
+		final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(request.getEditParts());
+		if (!fbEls.isEmpty()) {
+			final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
+			final Point moveDelta = getScaledMoveDelta(request);
+			topLeft.translate(moveDelta.x, moveDelta.y);
+			return new RemoveElementsFromGroup(fbEls, topLeft);
 		}
 		return null;
+	}
+
+	private Command createSplitEditorMoveCommand(final ChangeBoundsRequest request) {
+		final List<FBNetworkElement> movedElements = request.getEditParts().stream().filter(
+				ep -> ep.getModel() instanceof final FBNetworkElement fbnel && fbnel.eContainer() == getFBNetwork())
+				.map(ep -> (FBNetworkElement) ep.getModel()).toList();
+
+		if (movedElements.isEmpty()) {
+			return null;
+		}
+
+		final Position topLeftCornerOfFBNetwork = FBNetworkHelper.getTopLeftCornerOfFBNetwork(movedElements);
+		final Point targetPos = getTranslatedAndZoomedPoint(request);
+		final Position iec61499TargetPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(targetPos.x,
+				targetPos.y);
+
+		final CompoundCommand cmd = new CompoundCommand();
+		movedElements.forEach(fbnEl -> {
+			final Position newPos = LibraryElementFactory.eINSTANCE.createPosition();
+			newPos.setX(iec61499TargetPos.getX() + fbnEl.getPosition().getX() - topLeftCornerOfFBNetwork.getX());
+			newPos.setY(iec61499TargetPos.getY() + fbnEl.getPosition().getY() - topLeftCornerOfFBNetwork.getY());
+			cmd.add(new FBNetworkElementSetPositionCommand(fbnEl, newPos));
+		});
+		return cmd;
 	}
 
 	protected Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
@@ -253,7 +281,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	protected Point getScaledMoveDelta(final ChangeBoundsRequest request) {
-		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Point moveDelta = request.getMoveDelta().getCopy();
+		getHost().getFigure().translateToRelative(moveDelta);
+		return moveDelta;
 	}
 
 }
