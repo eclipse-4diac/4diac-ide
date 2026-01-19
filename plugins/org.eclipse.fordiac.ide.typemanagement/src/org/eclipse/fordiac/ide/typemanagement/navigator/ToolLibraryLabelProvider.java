@@ -13,8 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -44,7 +45,7 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof IProject || (element instanceof final IFolder folder && folder.isLinked())) {
+		if (getText(element) != null) {
 			return FordiacImage.ICON_TYPE_NAVIGATOR.getImage();
 		}
 		return null;
@@ -52,7 +53,13 @@ public class ToolLibraryLabelProvider implements ILabelProvider {
 
 	@Override
 	public String getText(final Object element) {
+		if (element instanceof final IFolder folder && folder.getName().equals(TypeLibraryTags.TYPE_LIB_FOLDER_NAME)) {
+			final IContainer parent = folder.getParent();
+			// only for folders that sit at root of project
+			if (parent != null && parent.getFullPath().segmentCount() == 1) {
+				return parent.getName(); // use name of project for its Type Library
+			}
+		}
 		return null;
 	}
-
 }

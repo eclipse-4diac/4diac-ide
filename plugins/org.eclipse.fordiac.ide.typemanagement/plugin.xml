@@ -97,7 +97,6 @@
                   pattern="org.eclipse.ui.navigator.resourceContent"/>
                   <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
                   <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.closedProject"/>
-                  <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"/>
                   <contentExtension pattern="org.eclipse.fordiac.ide.typemanagement.navigator.filters.*"/>
                   <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.workingSet"/>
                   <contentExtension
@@ -208,84 +207,9 @@
                            <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
                            <instanceof value="org.eclipse.emf.ecore.EObject"/>
                            <instanceof value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement"/>
-                           <instanceof
-                                 value="org.eclipse.core.resources.IFolder">
-                           </instanceof>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="dtp">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="fbt">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="fct">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="adp">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="seg">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="res">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="dev">
-                              </test>
-                           </and>
-                           <and>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFile">
-                              </instanceof>
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="sub">
-                              </test>
-                           </and>
-                           <instanceof
-                                 value="org.eclipse.core.resources.IProject">
-                           </instanceof>
+                           <instanceof value="org.eclipse.core.resources.IFolder" />
+                           <reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+                           <instanceof value="org.eclipse.core.resources.IProject" />
                         </or>
                      </not>
                      <adapt
