@@ -1668,8 +1668,8 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
-			"Inputs shall not be be assigned. This will be elevated to an error in the future")
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+			"Inputs may not be be assigned")
 	}
 
 	@Test

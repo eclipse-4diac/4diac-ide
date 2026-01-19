@@ -1123,7 +1123,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_Assignment_Invalid_Left_Side),
 		CALL_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_CallsCannotBeAssignedTo),
 		CONST_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_ConstantsCannotBeAssigned),
-		INPUT_NOT_ASSIGNABLE(Severity.WARNING, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_InputsCannotBeAssigned);
+		INPUT_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_InputsCannotBeAssigned);
 
 		IsAssignableResult(final Severity severity, final String code, final String message) {
 			this.severity = severity;
