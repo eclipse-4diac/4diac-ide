@@ -45,6 +45,9 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 			// this content provider is only required on the lowest level of the tree
 			final List<IResource> libraries = new ArrayList<>();
 			for (final IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+				if (!project.isAccessible() || !project.isOpen()) {
+					continue;
+				}
 				final IResource library = project.findMember(TypeLibraryTags.TYPE_LIB_FOLDER_NAME);
 				if (library != null) {
 					libraries.add(library);

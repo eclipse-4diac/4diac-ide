@@ -207,27 +207,9 @@
                            <instanceof value="org.eclipse.emf.edit.provider.ItemProviderAdapter"/>
                            <instanceof value="org.eclipse.emf.ecore.EObject"/>
                            <instanceof value="org.eclipse.fordiac.ide.typemanagement.navigator.TypeLibRootElement"/>
-                           <instanceof
-                                 value="org.eclipse.core.resources.IFolder">
-                           </instanceof>
-                           <and>
-                              <instanceof value="org.eclipse.core.resources.IFile" />
-                              <or>
-                                 <test property="org.eclipse.core.resources.extension" value="adp"/>
-                                 <test property="org.eclipse.core.resources.extension" value="atp"/>
-                                 <test property="org.eclipse.core.resources.extension" value="dev"/>
-                                 <test property="org.eclipse.core.resources.extension" value="dtp"/>
-                                 <test property="org.eclipse.core.resources.extension" value="fbt"/>
-                                 <test property="org.eclipse.core.resources.extension" value="fct"/>
-                                 <test property="org.eclipse.core.resources.extension" value="gcf"/>
-                                 <test property="org.eclipse.core.resources.extension" value="res"/>
-                                 <test property="org.eclipse.core.resources.extension" value="seg"/>
-                                 <test property="org.eclipse.core.resources.extension" value="sub"/>
-                              </or>
-                           </and>
-                           <instanceof
-                                 value="org.eclipse.core.resources.IProject">
-                           </instanceof>
+                           <instanceof value="org.eclipse.core.resources.IFolder" />
+                           <reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+                           <instanceof value="org.eclipse.core.resources.IProject" />
                         </or>
                      </not>
                      <adapt
