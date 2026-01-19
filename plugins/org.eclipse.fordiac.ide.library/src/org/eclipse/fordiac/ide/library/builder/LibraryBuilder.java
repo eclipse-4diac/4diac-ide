@@ -49,7 +49,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_ResolveProjectDependencies, 1);
 		final IProject project = getProject();
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
-		LibraryManager.checkLinkedLibraries(project);
+
 		if (manifest != null) {
 			if (kind == FULL_BUILD) {
 				fullBuild(project, manifest, progress.split(1));
@@ -67,7 +67,6 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 				}
 			}
 		}
-
 		return new IProject[0];
 	}
 
