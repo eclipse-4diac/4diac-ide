@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -146,6 +147,11 @@ public class ResourceDeploymentData {
 		if (value != null) {
 			params.add(
 					new ParameterDeploymentData(ensurePrefix(prefix, input.getBlockFBNetworkElement()), input, value));
+		}
+		if (input instanceof final ContainerVarDeclaration container) {
+			for (final VarDeclaration member : container.getCachedMembers()) {
+				addInputParam(subAppHierarchy, prefix, member);
+			}
 		}
 	}
 
