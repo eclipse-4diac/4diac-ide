@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Connection
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
@@ -89,14 +88,17 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	def private generateFBNetwork() '''
 		«IF !type.FBNetwork.eventConnections.empty»
+			«type.FBNetwork.eventConnections.generateConnectionEndpointDeclarations»
 			«type.FBNetwork.eventConnections.generateConnections("cEventConnections")»
 			
 		«ENDIF»
 		«IF !type.FBNetwork.dataConnections.empty»
+			«type.FBNetwork.dataConnections.generateConnectionEndpointDeclarations»
 			«type.FBNetwork.dataConnections.generateConnections("cDataConnections")»
 			
 		«ENDIF»
 		«IF !type.FBNetwork.adapterConnections.empty»
+			«type.FBNetwork.adapterConnections.generateConnectionEndpointDeclarations»
 			«type.FBNetwork.adapterConnections.generateConnections("cAdapterConnections")»
 			
 		«ENDIF»
@@ -111,13 +113,6 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 		};
 	'''
 
-	def private generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
-		return if (type.FBNetwork.networkElements.contains(elem))
-			'''«elem.name.FORTEStringId», «iface.name.FORTEStringId»'''
-		else
-			'''{}, «iface.name.FORTEStringId»'''
-	}
-
 	def private generateConnections(EList<? extends Connection> connections, String listName) '''
 		const auto «listName» = std::to_array<SCFB_FBConnectionData>({
 		  «FOR conn : connections»
@@ -127,7 +122,52 @@ class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 	'''
 
 	def private generateConnectionEntry(Connection con) //
-	'''  {«con.source.generateConnectionPortID(con.sourceElement)», «con.destination.generateConnectionPortID(con.destinationElement)»},'''
+	'''{«con.sourceElement.generateConnectionElementId», «con.connectionSourcePath.generateConnectionEndpointReference», «con.destinationElement.generateConnectionElementId», «con.connectionDestinationPath.generateConnectionEndpointReference»},'''
+
+	def private generateConnectionElementId(FBNetworkElement elem) {
+		if (type.FBNetwork.networkElements.contains(elem))
+			elem.name.FORTEStringId
+		else
+			"{}"
+	}
+
+	def private generateConnectionEndpointDeclarations(Iterable<? extends Connection> connections) '''
+		«FOR endpoint : connections.flatMap[connectionEndpointPaths].filter[size > 1].toSet.sortBy[generateConnectionEndpointName.toString]»
+			«endpoint.generateConnectionEndpointDeclaration»
+		«ENDFOR»
+	'''
+
+	def private Iterable<Iterable<String>> getConnectionEndpointPaths(Connection conn) {
+		#[conn.connectionSourcePath, conn.connectionDestinationPath]
+	}
+
+	def private generateConnectionEndpointDeclaration(Iterable<String> path) '''
+		const auto «path.generateConnectionEndpointName» = std::array{«path.generateConnectionEndpointValue»};
+	'''
+	
+	def private generateConnectionEndpointReference(Iterable<String> path) {
+		if(path.size > 1)
+			path.generateConnectionEndpointName
+		else
+			path.head.FORTEStringId
+	}
+
+	def private generateConnectionEndpointName(Iterable<String> path) //
+	'''«FOR segment : path BEFORE "ep_" SEPARATOR "__"»«segment»«ENDFOR»'''
+
+	def private generateConnectionEndpointValue(Iterable<String> path) //
+	'''«FOR segment : path SEPARATOR ", "»«segment.FORTEStringId»«ENDFOR»'''
+
+	def private getConnectionSourcePath(Connection conn) {
+		if (conn.negated)
+			conn.source.blockRelativePath + #["NOT"]
+		else
+			conn.source.blockRelativePath
+	}
+
+	def private getConnectionDestinationPath(Connection conn) {
+		conn.destination.blockRelativePath
+	}
 
 	override protected generateConnectionInitializer() //
 	'''«super.generateConnectionInitializer»«// no newline
