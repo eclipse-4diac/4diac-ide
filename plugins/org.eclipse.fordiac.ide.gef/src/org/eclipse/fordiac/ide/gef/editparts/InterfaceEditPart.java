@@ -217,6 +217,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private final class InterfaceEditPartMouseListener implements MouseListener {
 		private static final int MASK = SWT.SHIFT | SWT.CTRL;
+		private static final int LEFT_CLICK = 1;
 		private static final String COMMAND_ID = "org.eclipse.fordiac.ide.application.commands.markConnectionSource"; //$NON-NLS-1$
 
 		@Override
@@ -233,7 +234,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			}
 
 			// LEFT CLICK
-			if (hasMarker()) {
+			if (me.button == LEFT_CLICK && hasMarker()) {
 				invokeMarkConnectionSourceHandler(null);
 			}
 		}
