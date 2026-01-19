@@ -41,6 +41,8 @@ public class Messages extends NLS {
 
 	public static String LibraryManager_ChekForLibraryChanges;
 
+	public static String LibraryManager_CheckLinks;
+
 	public static String LibraryManager_DownloadJobName;
 
 	public static String LibraryManager_FindingPreferredLibraryVersion;

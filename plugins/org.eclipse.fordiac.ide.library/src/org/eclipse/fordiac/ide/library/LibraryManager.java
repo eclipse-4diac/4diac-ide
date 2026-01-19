@@ -616,6 +616,9 @@ public enum LibraryManager {
 		// remove still linked libraries
 		cleanupLinks(linked, progress.split(2));
 
+		// check if imported library links are broken
+		checkLinkedLibraries(project, progress.split(1));
+
 		if (PreferenceProvider.getBoolean(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID,
 				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
 			// force load explicitly defined dependencies
@@ -671,18 +674,23 @@ public enum LibraryManager {
 	 *
 	 * @param project selected project
 	 */
-	public static void checkLinkedLibraries(final IProject project) {
+	private static void checkLinkedLibraries(final IProject project, final SubMonitor progress) {
+		progress.setTaskName(Messages.LibraryManager_CheckLinks);
+		progress.setWorkRemaining(10);
+
 		LIBRARY_FOLDERS.stream().map(project::getFolder).forEach(folder -> {
 			try {
 				folder.accept(resource -> {
 					if (resource.equals(folder)) {
 						return true;
 					}
-					if ((resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked())
-							&& (libFolder.getModificationStamp() == IResource.NULL_STAMP)) {
-						FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
-								List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
-						throw new OperationCanceledException();
+					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
+						if (libFolder.getModificationStamp() == IResource.NULL_STAMP) {
+							FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
+									List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
+							throw new OperationCanceledException();
+						}
+						progress.worked(1);
 					}
 					return false;
 				});
