@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorPrepareException;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -62,14 +63,17 @@ public abstract class STCallableEvaluator extends StructuredTextEvaluator {
 	protected void evaluateCallableVariables(final List<? extends STVarDeclarationBlock> variables)
 			throws EvaluatorException, InterruptedException {
 		for (final STVarDeclarationBlock block : variables) {
-			if (!isInput(block)) {
-				for (final STVarDeclaration varDeclaration : block.getVarDeclarations()) {
-					final Variable<?> variable = getVariables().get(varDeclaration.getName());
-					if (variable != null) {
-						evaluateInitializerExpression(variable, varDeclaration.getDefaultValue());
-					} else {
-						evaluateVariableInitialization(varDeclaration);
-					}
+			if (isInput(block)) {
+				continue;
+			}
+			for (final STVarDeclaration varDeclaration : block.getVarDeclarations()) {
+				final Variable<?> variable = getVariables().get(varDeclaration.getName());
+				if (variable == null) {
+					evaluateVariableInitialization(varDeclaration);
+				} else if (varDeclaration.getDefaultValue() != null) {
+					evaluateInitializerExpression(variable, varDeclaration.getDefaultValue());
+				} else {
+					variable.setValue(ValueOperations.defaultValue(variable.getType()));
 				}
 			}
 		}

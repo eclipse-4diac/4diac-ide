@@ -247,7 +247,7 @@ final class ForteNgExportUtil {
 	}
 
 	def static CharSequence generateTypeSpec(LibraryElement type) {
-		PackageNameHelper.getFullTypeName(type).FORTEStringId
+		type.generateTypeNameFull.FORTEStringId
 	}
 
 	def static CharSequence generateDefiningTypeName(EObject object) {
@@ -372,6 +372,14 @@ final class ForteNgExportUtil {
 			name + "_"
 		else
 			name
+	}
+
+	def static String generateTypeNameFull(LibraryElement type) {
+		val packageName = PackageNameHelper.getPackageName(type)
+		if (packageName.nullOrEmpty)
+			type.generateTypeNamePlain
+		else
+			'''«packageName»::«type.generateTypeNamePlain»'''
 	}
 
 	def static String generateTypeNamePlain(LibraryElement type) {

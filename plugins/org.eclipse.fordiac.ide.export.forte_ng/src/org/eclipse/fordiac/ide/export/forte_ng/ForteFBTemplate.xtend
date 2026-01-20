@@ -470,9 +470,9 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	def generateInternalFBConfigString(FB fb) {
 		switch (fb) {
 			ConfigurableFB case fb.dataType !== null: //
-			'''«fb.type.generateTypeNamePlain»_1«fb.dataType.generateTypeNamePlain»'''
+			'''«fb.type.generateTypeNameFull»_1«fb.dataType.generateTypeNameFull»'''
 			default:
-				fb.type.generateTypeNamePlain
+				fb.type.generateTypeNameFull
 		}
 	}
 
