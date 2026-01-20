@@ -49,16 +49,21 @@ public class AttributeTypeInstanceSearch extends IEC61499ElementSearch {
 
 	private static IEC61499SearchFilter createSearchFilter(final AttributeTypeEntry attEntry) {
 		return searchCandidate -> {
-			if (searchCandidate instanceof final ConfigurableObject confObj) {
-				final Attribute attribute = confObj.getAttribute(attEntry.getTypeName());
-				if (attribute != null) {
-					final AttributeDeclaration attributeDecl = attribute.getAttributeDeclaration();
-					if (attributeDecl != null) {
-						return attributeDecl.getTypeEntry() == attEntry;
-					}
-				}
+			if (!(searchCandidate instanceof final ConfigurableObject confObj)) {
+				return false;
 			}
-			return false;
+
+			Attribute attribute = confObj.getAttribute(attEntry.getTypeName());
+			if (attribute == null) {
+				attribute = confObj.getAttribute(attEntry.getFullTypeName());
+			}
+
+			if (attribute == null) {
+				return false;
+			}
+
+			final AttributeDeclaration attributeDecl = attribute.getAttributeDeclaration();
+			return attributeDecl != null && attributeDecl.getTypeEntry() == attEntry;
 		};
 	}
 

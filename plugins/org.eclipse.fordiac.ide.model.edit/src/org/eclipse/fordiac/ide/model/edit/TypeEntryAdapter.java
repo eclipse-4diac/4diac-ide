@@ -175,8 +175,11 @@ public class TypeEntryAdapter extends AbstractTypeEntryAdapter {
 
 		result.forEach(at -> {
 			// update attribute here
-			if (at instanceof final ConfigurableObject co) {
-				final Attribute attribute = co.getAttribute(atEntry.getTypeName());
+			if (at instanceof final ConfigurableObject confObj) {
+				Attribute attribute = confObj.getAttribute(atEntry.getTypeName());
+				if (attribute == null) {
+					attribute = confObj.getAttribute(atEntry.getFullTypeName());
+				}
 				ChangeAttributeDeclarationCommand.forEntry(attribute, atEntry).execute();
 			}
 		});
