@@ -12,12 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
+import org.eclipse.draw2d.ColorProvider;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 
 public class BackgroundFreeformFigure extends AbstractFreeformFigure {
 
@@ -28,10 +27,7 @@ public class BackgroundFreeformFigure extends AbstractFreeformFigure {
 	public BackgroundFreeformFigure(final ZoomScalableFreeformRootEditPart zoomScalableFreeformRootEditPart) {
 		this.zoomScalableFreeformRootEditPart = zoomScalableFreeformRootEditPart;
 		setOpaque(true);
-		final Display display = Display.getCurrent();
-		if (null != display) {
-			setBackgroundColor(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-		}
+		setBackgroundColor(ColorProvider.SystemColorFactory.getColorProvider().getMenuBackground());
 	}
 
 	@Override
