@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -39,14 +39,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.wizards.QuickFixWizardDialog;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalMarkerAnnotation;
-import org.eclipse.fordiac.ide.gef.annotation.ResourceMarkerGraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.validation.GraphicalValidationAnnotation;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalMarkerAnnotation;
+import org.eclipse.fordiac.ide.model.ui.annotation.ResourceMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.validation.GraphicalValidationAnnotation;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
@@ -185,8 +185,11 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 							.setType(FordiacErrorMarker.TEMPORARY_MARKER).createMarker(resource);
 				}
 			}.run(new NullProgressMonitor());
-		} catch (final InvocationTargetException | InterruptedException e) {
+		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -220,8 +223,11 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 					});
 				}
 			}.run(new NullProgressMonitor());
-		} catch (final InvocationTargetException | InterruptedException e) {
+		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			Thread.currentThread().interrupt();
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -24,8 +24,7 @@ import org.eclipse.jface.viewers.IFilter;
 public class MultiplexerFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
-		return (toTest instanceof MultiplexerEditPart)
-				|| ((toTest instanceof StructInterfaceEditPart)
-				&& ((StructInterfaceEditPart)toTest).getParent() instanceof MultiplexerEditPart);	
+		return toTest instanceof MultiplexerEditPart || (toTest instanceof final StructInterfaceEditPart structIEP
+				&& structIEP.getParent() instanceof MultiplexerEditPart);
 	}
 }

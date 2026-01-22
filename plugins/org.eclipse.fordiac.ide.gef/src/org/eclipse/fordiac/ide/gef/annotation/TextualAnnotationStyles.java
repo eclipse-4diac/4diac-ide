@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.SWT;

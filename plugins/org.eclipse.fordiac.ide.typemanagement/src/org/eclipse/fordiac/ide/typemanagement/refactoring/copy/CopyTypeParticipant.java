@@ -16,59 +16,58 @@
 
 package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 
-import java.text.MessageFormat;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.CopyParticipant;
 
 public class CopyTypeParticipant extends CopyParticipant {
 
-	private IFile origin;
-	private URI destinationURI;
-	private String newPackageName;
+	private IResource resource;
+	private IContainer destination;
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IFile file
-				&& getArguments().getDestination() instanceof final IContainer destination) {
-			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) == null) {
+		if (element instanceof final IResource res
+				&& getArguments().getDestination() instanceof final IContainer dest) {
+			resource = res;
+			destination = dest;
+			try {
+				if (hasRelevantFile(res)) {
+					return true;
+				}
+			} catch (final CoreException e) {
 				return false;
 			}
-
-			origin = file;
-			destinationURI = URI.createPlatformResourceURI(destination.getFullPath().append(file.getName()).toString(),
-					true);
-			newPackageName = PackageNameHelper.getPackageNameFromURI(destinationURI);
-			return true;
 		}
 		return false;
 	}
 
 	@Override
 	public String getName() {
-		return MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName);
+		return Messages.CopyTypeChange_RenamePackage;
 	}
 
 	@Override
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(newPackageName);
+		final String packageNameContainer = PackageNameHelper.getPackageNameFromContainer(destination);
+		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(packageNameContainer);
 		if (errorMessage.isPresent()) {
 			status.addFatalError(errorMessage.get());
 		}
@@ -77,11 +76,42 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		return new CopyTypeChange(newPackageName, getName(), origin, destinationURI);
+		final CompositeChange change = new CompositeChange(getName());
+		final URI destURI = URI.createPlatformResourceURI(destination.getFullPath().toString(), true);
+		try {
+			addElement(change, resource, destURI);
+		} catch (final CoreException e) {
+			return null;
+		}
+		return change;
 	}
 
-	public static Optional<LibraryElement> getLibraryElement(final Resource resource) {
-		return resource.getContents().stream().filter(LibraryElement.class::isInstance).map(LibraryElement.class::cast)
-				.findFirst();
+	private void addElement(final CompositeChange change, final IResource resource, final URI destination)
+			throws CoreException {
+		if (resource instanceof final IFile file) {
+			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
+				change.add(new CopyTypeChange(destination.appendSegment(file.getName())));
+			}
+		} else if (resource instanceof final IContainer container) {
+			for (final IResource member : container.members()) {
+				addElement(change, member, destination.appendSegment(container.getName()));
+			}
+		}
+	}
+
+	private boolean hasRelevantFile(final IResource resource) throws CoreException {
+		if (resource instanceof final IFile file) {
+			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
+				return true;
+			}
+		} else if (resource instanceof final IContainer container) {
+			for (final IResource member : container.members()) {
+				if (hasRelevantFile(member)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
 	}
 }

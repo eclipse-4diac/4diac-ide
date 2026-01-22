@@ -98,16 +98,6 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// currently nothing to do here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing to do here
-	}
-
-	@Override
 	protected void performRefresh() {
 		nameText.setText(getType().getName());
 		commentText.setText(getType().getComment());

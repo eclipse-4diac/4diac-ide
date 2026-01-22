@@ -99,7 +99,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		if (interfaceList == null) {
 			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
 		} else {
-			interfaceList = interfaceList.copy();
+			interfaceList = interfaceList.instanceCopy();
 		}
 		subApp.setInterface(interfaceList);
 		return subApp;

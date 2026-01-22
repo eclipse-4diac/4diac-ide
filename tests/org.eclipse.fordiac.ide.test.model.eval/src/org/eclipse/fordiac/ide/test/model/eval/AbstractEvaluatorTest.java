@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2025 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -81,7 +80,7 @@ public abstract class AbstractEvaluatorTest {
 		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 		fb.setName(instanceName);
 		fb.setTypeEntry(instanceType.getTypeEntry());
-		fb.setInterface(InterfaceListCopier.copy(instanceType.getInterfaceList()));
+		fb.setInterface(instanceType.getInterfaceList().instanceCopy());
 		return fb;
 	}
 

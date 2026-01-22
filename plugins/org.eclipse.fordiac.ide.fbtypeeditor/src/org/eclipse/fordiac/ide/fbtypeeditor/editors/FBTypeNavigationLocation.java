@@ -99,7 +99,7 @@ public final class FBTypeNavigationLocation extends NavigationLocation {
 	private void restoreGraphicalViewerData(final FBTypeEditor part) {
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
-			graphicalViewerLocationData.restoreGraphicalViewerData(viewer);
+			graphicalViewerLocationData.restoreGraphicalViewerData(part, viewer);
 		}
 	}
 

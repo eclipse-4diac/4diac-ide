@@ -28,8 +28,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
@@ -44,11 +44,16 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 	@Override
 	public IEditorInput getEditorInput(final Object element) {
 		if (element instanceof final EObject object) {
-			final EObject root = EcoreUtil.getRootContainer(object);
-			if (root instanceof final FBType fbType) {
-				return new TypeEditorInput(fbType, fbType.getTypeEntry());
+			if (EcoreUtil.getRootContainer(object) instanceof final LibraryElement libraryElement) {
+				final TypeEntry typeEntry = libraryElement.getTypeEntry();
+				if (typeEntry != null) {
+					final IFile file = typeEntry.getFile();
+					if (file != null) {
+						return new FileEditorInput(file);
+					}
+				}
 			}
-			return getEditorInput(((EObject) element).eResource());
+			return getEditorInput(object.eResource());
 		}
 		if (element instanceof final Resource resource) {
 			final URI uri = resource.getURI();

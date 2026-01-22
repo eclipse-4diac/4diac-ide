@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlo
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 
 class STMethodSupport extends StructuredTextSupport {
 	final org.eclipse.fordiac.ide.model.libraryElement.STMethod method
@@ -112,7 +113,7 @@ class STMethodSupport extends StructuredTextSupport {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
 				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
 					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				].flatMap[varDeclarations].map[type as INamedElement]).toSet
+				].flatMap[varDeclarations].map[featureType as INamedElement]).toSet
 			else
 				parseResult.containedDependencies
 		} else

@@ -122,7 +122,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + (double) 200, y + (double) 150);
 
-		compEl.setInterface(compEl.getType().getInterfaceList().copy());
+		compEl.setInterface(compEl.getType().getInterfaceList().instanceCopy());
 
 		net.getNetworkElements().add(compEl);
 		final String name = NameRepository.createUniqueName(compEl, "TESTAPPFB1");//$NON-NLS-1$
@@ -169,13 +169,13 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	private void createConnToRunAllFB() {
 
 		// connection from the composite to the runallFB
-		InterfaceList runAllInterface = runAllFB.getInterface();
+		final InterfaceList runAllInterface = runAllFB.getInterface();
 		getEventConns().add(createEventConn(compositeFB.getInterfaceList().getEvent(EVENT_RUNALL),
 				(Event) runAllInterface.getInterfaceElement(List.of(EVENT_RUNALL))));
 
 		// connect muxFB outputs to the runallFB, so the runallFB knows, when to start
 		// the next test case
-		InterfaceList muxInterface = muxFB.getInterface();
+		final InterfaceList muxInterface = muxFB.getInterface();
 		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_SUCCESS)),
 				(Event) runAllInterface.getInterfaceElement(List.of(EVENT_LASTCOMPLETE))));
 		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_ERROR)),

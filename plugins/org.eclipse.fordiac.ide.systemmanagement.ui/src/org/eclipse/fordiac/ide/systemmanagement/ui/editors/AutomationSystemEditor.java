@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2026 Primetals Technologies Germany GmbH,
  *                          Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,13 +17,14 @@
  *   Michael Oberlehner, Alois Zoitl
  *               - implemented save and restore state
  *   Daniel Lindhuber - auto reload remembers editor location
+ *   Martin Erich Jobst - use library element provider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
-import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -32,43 +34,37 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
-import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
-import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.commands.QualNameChangeListenerManager;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
+import org.eclipse.fordiac.ide.model.ui.editors.SubEditorInput;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
-import org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
 import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor;
-import org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.ui.providers.AutomationSystemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.StyledSystemLabelProvider;
@@ -76,9 +72,6 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -105,23 +98,22 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	private AutomationSystem system;
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
+	private final LibraryElementStateListener elementStateListener = new EditorStateListener();
+	private LibraryElementActivationListener activationListener;
 	private DiagramOutlinePage outlinePage;
-	private final EditorTabCommandStackListener subEditorCommandStackListener;
-	private GraphicalAnnotationModel annotationModel;
-	private ValidationJob validationJob;
-	private boolean wasDirtyBeforeExecute = false;
 	private Composite mainComposite;
 
 	public AutomationSystemEditor() {
-		subEditorCommandStackListener = new EditorTabCommandStackListener(this);
+		getCommandStack().addCommandStackEventListener(this);
+		getCommandStack().addCommandStackEventListener(new EditorTabCommandStackListener(this));
+		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
 	}
-
-	private TypeEntryAdapter typeEntryAdapter;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		typeEntryAdapter = new TypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
 		super.init(site, input);
+		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
+		activationListener = new LibraryElementActivationListener(this);
 	}
 
 	@Override
@@ -209,66 +201,26 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	protected EditorPart createEditorPart(final Object model) {
-		if (model instanceof IFile) {
-			return new SystemEditor();
-		}
-
-		if (model instanceof CFBInstance) {
-			return new CompositeInstanceViewer();
-		}
-
-		if (model instanceof final SubApp subApp) {
-			if (subApp.isTyped() || subApp.isContainedInTypedInstance()) {
-				return new SubappInstanceViewer();
-			}
-			return new SubAppNetworkEditor();
-		}
-
-		if (model instanceof Application) {
-			return new ApplicationEditor();
-		}
-		if (model instanceof SystemConfiguration) {
-			return new SystemConfigurationEditor();
-		}
-		if (model instanceof Device) {
-			return new SystemConfigurationEditor();
-		}
-		if (model instanceof Resource) {
-			return new ResourceDiagramEditor();
-		}
-
-		return null;
+		return switch (model) {
+		case final IFile file -> new SystemEditor();
+		case final CFBInstance cfb -> new CompositeInstanceViewer();
+		case final TypedSubApp subApp -> new SubappInstanceViewer();
+		case final UntypedSubApp subApp when subApp.isContainedInTypedInstance() -> new SubappInstanceViewer();
+		case final UntypedSubApp subApp -> new SubAppNetworkEditor();
+		case final Application application -> new ApplicationEditor();
+		case final SystemConfiguration systemConfiguration -> new SystemConfigurationEditor();
+		case final Device device -> new SystemConfigurationEditor();
+		case final Resource resource -> new ResourceDiagramEditor();
+		case null, default -> null;
+		};
 	}
 
 	@Override
 	protected IEditorInput createEditorInput(final Object model) {
-		if (model instanceof IFile) {
-			return getEditorInput();
-		}
-		if (model instanceof final SubApp subApp) {
-			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
-				return new CompositeAndSubAppInstanceViewerInput(subApp);
-			}
-			return new SubApplicationEditorInput(subApp);
-		}
-
-		if (model instanceof CFBInstance) {
-			return new CompositeAndSubAppInstanceViewerInput((FB) model);
-		}
-
-		if (model instanceof final Application app) {
-			return new ApplicationEditorInput(app);
-		}
-		if (model instanceof final SystemConfiguration sysConf) {
-			return new SystemConfigurationEditorInput(sysConf);
-		}
-		if (model instanceof final Device dev) {
-			return new SystemConfigurationEditorInput(dev.getSystemConfiguration());
-		}
-		if (model instanceof final Resource res) {
-			return new ResourceEditorInput(res);
-		}
-		return null;
+		return switch (model) {
+		case final Device device -> new SubEditorInput(getEditorInput(), device.getSystemConfiguration());
+		case null, default -> super.createEditorInput(model);
+		};
 	}
 
 	@Override
@@ -279,23 +231,19 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				@Override
 				protected void execute(final IProgressMonitor monitor)
 						throws CoreException, InvocationTargetException, InterruptedException {
-					system.getTypeEntry().save(system, monitor);
+					LibraryElementProvider.INSTANCE.saveLibraryElement(getEditorInput(), monitor);
 				}
 			};
 			try {
-				typeEntryAdapter.setBlockUpdates(true);
 				operation.run(monitor);
 			} catch (final InvocationTargetException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			} catch (final InterruptedException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 				Thread.currentThread().interrupt();
-			} finally {
-				typeEntryAdapter.setBlockUpdates(false);
 			}
 			getCommandStack().markSaveLocation();
 		}
-
 	}
 
 	@Override
@@ -348,15 +296,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
-				final TypeEntry oldSystemEntry = system.getTypeEntry();
-
 				system.setName(TypeEntry.getTypeNameFromFile(file));
 
 				final TypeEntry newSystemEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject())
 						.createTypeEntry(file);
 				newSystemEntry.save(system, monitor);
-				oldSystemEntry.eAdapters().remove(typeEntryAdapter);
-				oldSystemEntry.setType(null);
 				setInput(new FileEditorInput(file));
 			}
 		};
@@ -390,10 +334,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return adapter.cast(system);
 		}
 		if (adapter == GraphicalAnnotationModel.class) {
-			return adapter.cast(annotationModel);
-		}
-		if (adapter == TypeEntryAdapter.class) {
-			return adapter.cast(typeEntryAdapter);
+			return adapter.cast(LibraryElementProvider.INSTANCE.getAnnotationModel(getEditorInput()));
 		}
 		return super.getAdapter(adapter);
 	}
@@ -414,31 +355,16 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void dispose() {
-		if (system != null && system.getTypeEntry() != null
-				&& system.getTypeEntry().eAdapters().contains(typeEntryAdapter)) {
-			system.getTypeEntry().eAdapters().remove(typeEntryAdapter);
-		}
-
-		// get these values here before calling super dispose
-		final boolean dirty = isDirty();
+		super.dispose();
 		if (null != getCommandStack()) {
-			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
 			commandStack.dispose();
 		}
-		if (validationJob != null) {
-			validationJob.dispose();
+		if (activationListener != null) {
+			activationListener.dispose();
+			activationListener = null;
 		}
-		if (annotationModel != null) {
-			annotationModel.dispose();
-		}
-
-		super.dispose();
-
-		if (dirty && system != null) {
-			((SystemEntry) system.getTypeEntry()).setSystem(null);
-			system = null;
-		}
-		typeEntryAdapter.dispose();
+		LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
+		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
 	}
 
 	private SystemEntry getTypeEntry() {
@@ -455,31 +381,27 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void reloadType() {
-		final var typeEntry = getTypeEntry();
-		if (typeEntry == null) {
-			return;
+		try {
+			LibraryElementProvider.INSTANCE.resetLibraryElement(getEditorInput(), null);
+			system = LibraryElementProvider.INSTANCE.getElement(getEditorInput(), AutomationSystem.class);
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+		} catch (ClassCastException | CoreException e) {
+			system = null;
+			commandStack.setUndoContext(new UndoContext());
 		}
 
-		final var entrySystem = typeEntry.getSystem();
-		final boolean hasChanged = system == null && entrySystem != null || system != null && entrySystem == null;
-
-		typeEntry.eAdapters().remove(typeEntryAdapter);
-		typeEntry.setSystem(null);
-		system = typeEntry.getSystem();
-		typeEntry.eAdapters().add(typeEntryAdapter);
-
-		if (hasChanged) {
-			clearEditorContent();
-			createEditorContent();
-		}
+		clearEditorContent();
+		createEditorContent();
 
 		if (system == null) {
 			return;
 		}
 
-		getCommandStack().setUndoContext(new ObjectUndoContext(system));
 		setPartName(system.getName());
+		restoreOpenEditor();
+	}
 
+	protected void restoreOpenEditor() {
 		final String path = getBreadcrumb().serializePath();
 		final boolean opened = getBreadcrumb().openPath(path, system);
 
@@ -497,67 +419,21 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (validationJob != null) {
-			validationJob.dispose();
-			validationJob = null;
+		try {
+			LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
+			LibraryElementProvider.INSTANCE.connect(input);
+			system = LibraryElementProvider.INSTANCE.getElement(input, AutomationSystem.class);
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(input));
+		} catch (ClassCastException | CoreException e) {
+			system = null;
+			commandStack.setUndoContext(new UndoContext());
 		}
-		if (annotationModel != null) {
-			annotationModel.dispose();
-			annotationModel = null;
-		}
-
-		if (input instanceof final FileEditorInput fileEI) {
-			if (getEditorInput() == null) {
-				system = SystemManager.INSTANCE.getSystem(fileEI.getFile());
-				if (system != null) {
-					setupCommandStack();
-				}
-
-				final var entry = system == null ? TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile())
-						: system.getTypeEntry();
-				if (entry != null && !entry.eAdapters().contains(typeEntryAdapter)) {
-					entry.eAdapters().add(typeEntryAdapter);
-				}
-			}
-			setPartName(TypeEntry.getTypeNameFromFile(fileEI.getFile()));
-			annotationModel = new FordiacMarkerGraphicalAnnotationModel(fileEI.getFile(), () -> system);
-			validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-			// inform child editors about the new file and that they should update the
-			// annotation model. Currently we use for simplicity their existing editor input
-			pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-					.forEach(e -> e.setInput(e.getEditorInput()));
-		}
+		// inform child editors about the new file and that they should update the
+		// annotation model. Currently we use for simplicity their existing editor input
+		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+				.forEach(e -> e.setInput(e.getEditorInput()));
 		setInputWithNotify(input);
-	}
-
-	private void setupCommandStack() {
-		commandStack.setUndoContext(new ObjectUndoContext(system));
-		getCommandStack().addCommandStackEventListener(this);
-		getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
-		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
-	}
-
-	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = getCommandStack().isDirty();
-		}
-		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
-				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
-						&& bulkEditor.hasDirtyType(system.getTypeEntry())).length > 0) {
-			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
-					Messages.BulkEditorDirty, MessageDialog.QUESTION,
-					new String[] { Messages.Continue, Messages.Cancel }, 0);
-			if (dialog.open() == 1) {
-				// Cancel
-				getCommandStack().undo();
-				getCommandStack().flush();
-			}
-		}
-		super.stackChanged(null);
-		if (event.isPostChangeEvent()) {
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 	}
 
 	private void selectRootModelOfEditor() {
@@ -582,4 +458,40 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 		return selection;
 	}
 
+	protected class EditorStateListener implements LibraryElementStateListener {
+
+		@Override
+		public void elementDirtyStateChanged(final IEditorInput input, final boolean isDirty) {
+			if (input.equals(getEditorInput())) {
+				firePropertyChange(PROP_DIRTY);
+			}
+		}
+
+		@Override
+		public void elementContentReplaced(final IEditorInput input) {
+			if (!input.equals(getEditorInput())) {
+				return;
+			}
+			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+			clearEditorContent();
+			createEditorContent();
+			setPartName(newType.getName());
+			restoreOpenEditor();
+		}
+
+		@Override
+		public void elementDeleted(final IEditorInput input) {
+			if (input.equals(getEditorInput())) {
+				close(false);
+			}
+		}
+
+		@Override
+		public void elementMoved(final IEditorInput originalInput, final IEditorInput movedInput) {
+			if (originalInput.equals(getEditorInput())) {
+				setInput(movedInput);
+			}
+		}
+	}
 }

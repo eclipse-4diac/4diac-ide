@@ -31,7 +31,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -89,7 +88,7 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 		interfaceType.setName(fbTypeCache.getName());
 		interfaceType.setComment(fbTypeCache.getComment());
 		interfaceType.setCompilerInfo(EcoreUtil.copy(fbTypeCache.getCompilerInfo()));
-		interfaceType.setInterfaceList(InterfaceListCopier.copy(fbTypeCache.getInterfaceList(), true, true));
+		interfaceType.setInterfaceList(fbTypeCache.getInterfaceList().fullCopy());
 		updateInterfaceDependencies(StreamSupport
 				.stream(Spliterators.spliteratorUnknownSize(interfaceType.eAllContents(), 0), false)
 				.map(EObject::eCrossReferences).flatMap(Collection::stream).filter(LibraryElement.class::isInstance)

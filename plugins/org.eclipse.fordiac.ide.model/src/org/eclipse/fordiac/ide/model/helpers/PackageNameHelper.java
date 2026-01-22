@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.helpers;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -109,6 +110,13 @@ public final class PackageNameHelper {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), file.getParent())
 				.orElse(file.getParent().getFullPath());
+		return Stream.of(relativePath.segments()).collect(Collectors.joining(PACKAGE_NAME_DELIMITER));
+	}
+
+	public static String getPackageNameFromContainer(final IContainer container) {
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(container.getProject());
+		final IPath relativePath = BuildpathUtil.findRelativePath(typeLibrary.getBuildpath(), container)
+				.orElse(container.getFullPath());
 		return Stream.of(relativePath.segments()).collect(Collectors.joining(PACKAGE_NAME_DELIMITER));
 	}
 

@@ -85,24 +85,16 @@ public class InterfaceListImporter extends TypeImporter {
 				parseEventList(interfaceList.getEventOutputs(), outputEventListName, false);
 			} else {
 				switch (name) {
-				case LibraryElementTags.INPUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars(), true);
-					break;
-				case LibraryElementTags.OUTPUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars(), false);
-					break;
-				case LibraryElementTags.SOCKETS_ELEMENT:
-					parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
-					break;
-				case LibraryElementTags.PLUGS_ELEMENT:
-					parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
-					break;
-				case LibraryElementTags.INOUT_VARS_ELEMENT:
-					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars(), true);
-					break;
-				default:
+				case LibraryElementTags.INPUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars(), true);
+				case LibraryElementTags.OUTPUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars(), false);
+				case LibraryElementTags.SOCKETS_ELEMENT -> parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
+				case LibraryElementTags.PLUGS_ELEMENT -> parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
+				case LibraryElementTags.INOUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars(), true);
+				default -> {
 					return false;
 				}
+				}
+				;
 			}
 			return true;
 		});
@@ -220,7 +212,7 @@ public class InterfaceListImporter extends TypeImporter {
 		aFB.setName(adapter.getName());
 
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
-			aFB.setInterface(aFB.getType().getInterfaceList().copy());
+			aFB.setInterface(aFB.getType().getInterfaceList().instanceCopy());
 		} else {
 			// if we don't have a type or interface list set an empty interface list to
 			// adapter

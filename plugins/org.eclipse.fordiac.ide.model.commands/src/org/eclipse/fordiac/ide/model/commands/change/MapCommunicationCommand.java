@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
@@ -45,7 +44,7 @@ public class MapCommunicationCommand extends MapToCommand {
 		comm.setName(srcElement.getName());
 		comm.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 		comm.setTypeEntry(srcElement.getTypeEntry());
-		comm.setInterface(InterfaceListCopier.copy(srcElement.getInterface(), true, true));
+		comm.setInterface(srcElement.getInterface().fullCopy());
 		target.getMappedElements().add(comm);
 		return comm;
 	}

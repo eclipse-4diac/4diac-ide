@@ -23,18 +23,15 @@ import org.eclipse.jface.action.IMenuManager;
 
 public class CFBNetworkcontextMenuProvider extends FBNetworkContextMenuProvider {
 
-	private final TypeLibrary typelib;
-
 	public CFBNetworkcontextMenuProvider(final DiagramEditorWithFlyoutPalette editor, final ActionRegistry registry,
 			final ZoomManager zoomManager, final TypeLibrary typelib) {
 		super(editor, registry, zoomManager, typelib);
-		this.typelib = typelib;
 	}
 
 	@Override
 	public void buildContextMenu(final IMenuManager menu) {
 		super.buildContextMenu(menu);
-		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, getRegistry(), typelib.getDataTypeLibrary());
+		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, getRegistry(), getTypeLib());
 	}
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2025 Johannes Kepler University Linz,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -14,28 +14,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
-import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.UIPlugin;
-import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.ConnectionDragCreationTool;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 
 public class FordiacConnectionDragCreationTool extends ConnectionDragCreationTool {
 
-	// Safety border around the canvas to ensure that during dragging connections
-	// the canvas is not growing
-	private static final Insets NEW_CONNECTION_CANVAS_BORDER = new Insets(1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE, 1,
-			1 + MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN + HideableConnection.BEND_POINT_BEVEL_SIZE);
+	EditPartViewer initialViewer;
 
 	public FordiacConnectionDragCreationTool() {
 		setDefaultCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
@@ -49,15 +41,23 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	}
 
 	@Override
-	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-		if (isActive() && viewer instanceof final AdvancedScrollingGraphicalViewer advViewer) {
-			advViewer.checkScrollPositionDuringDragBounded(me,
-					new Point(MoveableRouter.MIN_CONNECTION_FB_DISTANCE_SCREEN
-							+ HideableConnection.BEND_POINT_BEVEL_SIZE + ConnectionPreferenceValues.HANDLE_SIZE,
-							ConnectionPreferenceValues.HANDLE_SIZE));
-			CanvasHelper.bindToContentPane(me, advViewer, NEW_CONNECTION_CANVAS_BORDER);
+	protected boolean handleMove() {
+		// overwritten to disable viewer check
+		if (isInState(STATE_CONNECTION_STARTED | STATE_INITIAL | STATE_ACCESSIBLE_DRAG_IN_PROGRESS)) {
+			updateTargetRequest();
+			updateTargetUnderMouse();
+			showSourceFeedback();
+			showTargetFeedback();
+			setCurrentCommand(getCommand());
 		}
-		super.mouseDrag(me, viewer);
+		return true;
+	}
+
+	@Override
+	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
+		// store the viewer to be used as the viewer for mouse cursor operations
+		initialViewer = viewer;
+		super.mouseDown(me, viewer);
 	}
 
 	@Override
@@ -66,6 +66,36 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			checkCurrentCommandforShiftMask();
 		}
 		super.mouseUp(me, viewer);
+		initialViewer = null;
+	}
+
+	@Override
+	protected void setCursor(final Cursor cursor) {
+		if (isInState(STATE_CONNECTION_STARTED | STATE_DRAG_IN_PROGRESS) && initialViewer != null
+				&& getCurrentViewer() != null && initialViewer != getCurrentViewer()) {
+			initialViewer.setCursor(cursor);
+		} else {
+			super.setCursor(cursor);
+		}
+
+	}
+
+	@Override
+	protected void showSourceFeedback() {
+		if (differentTargetViewer()) {
+			final Point location = getLocation();
+			final Point converted = new Point(initialViewer.getControl()
+					.toControl(getCurrentViewer().getControl().toDisplay(location.x, location.y)));
+			getTargetRequest().setLocation(converted);
+		}
+		super.showSourceFeedback();
+		if (differentTargetViewer()) {
+			getTargetRequest().setLocation(getLocation());
+		}
+	}
+
+	private boolean differentTargetViewer() {
+		return initialViewer != null && initialViewer != getCurrentViewer();
 	}
 
 	private void checkCurrentCommandforShiftMask() {
@@ -89,6 +119,10 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 			stopHover();
 		}
 		super.setCurrentCommand(c);
+	}
+
+	protected void setInitialViewer(final EditPartViewer initialViewer) {
+		this.initialViewer = initialViewer;
 	}
 
 	private static void startHover() {

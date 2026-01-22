@@ -333,7 +333,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fbData,
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String destination = MessageFormat.format(Constants.FB_PORT_NAME_FORMAT, fbData.getPrefix(),
-				fbData.getFb().getName(), varDecl.getName(), ""); //$NON-NLS-1$
+				fbData.getFb().getName(), varDecl.getRelativeName(fbData.getFb()), ""); //$NON-NLS-1$
 		writeFBParameter(resource, destination, value);
 	}
 

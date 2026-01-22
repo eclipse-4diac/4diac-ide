@@ -70,6 +70,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	private LibrarySelectionPage libPage;
 
 	private static final String[] comboLabels = { "current", "old", "none" };
+	@SuppressWarnings("nls")
 	private static final VersionRange[] comboValues = { new VersionRange("3.0.0"), new VersionRange("[1.0.0,1.0.0]"),
 			new VersionRange("(0.0.0,0.0.0)") };
 

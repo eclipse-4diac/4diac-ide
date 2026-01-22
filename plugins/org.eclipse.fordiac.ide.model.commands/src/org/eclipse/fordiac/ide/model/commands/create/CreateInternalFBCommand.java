@@ -66,7 +66,7 @@ public class CreateInternalFBCommand extends CreationCommand implements ScopedCo
 		internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		internalFB.setTypeEntry(fbTypeEntry);
 		internalFB.setComment(""); //$NON-NLS-1$
-		internalFB.setInterface(fbTypeEntry.getInterface().copy());
+		internalFB.setInterface(fbTypeEntry.getInterface().instanceCopy());
 		getInteralFBList().add(index, internalFB);
 		internalFB.setName(NameRepository.createUniqueName(internalFB, name));
 	}

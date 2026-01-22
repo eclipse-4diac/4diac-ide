@@ -89,6 +89,24 @@ public interface XMIExportFactory extends EFactory {
 	XMIExportTypeDeclaration createXMIExportTypeDeclaration();
 
 	/**
+	 * Returns a new object of class '<em>Literal Types</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Literal Types</em>'.
+	 * @generated
+	 */
+	XMIExportLiteralTypes createXMIExportLiteralTypes();
+
+	/**
+	 * Returns a new object of class '<em>Literal Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Literal Type</em>'.
+	 * @generated
+	 */
+	XMIExportLiteralType createXMIExportLiteralType();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

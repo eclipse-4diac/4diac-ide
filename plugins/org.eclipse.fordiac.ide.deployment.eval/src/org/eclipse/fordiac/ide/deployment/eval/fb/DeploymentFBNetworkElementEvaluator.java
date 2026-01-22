@@ -62,7 +62,7 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 		super(type, context, variables, parent);
 		instance.setName(getName() + "_" + UUID.randomUUID().toString()); //$NON-NLS-1$
 		instance.setTypeEntry(getType().getTypeEntry());
-		instance.setInterface(getType().getInterfaceList().copy());
+		instance.setInterface(getType().getInterfaceList().instanceCopy());
 		this.instance = instance;
 		this.eventCounters = instance.getInterface().getEventOutputs().stream()
 				.collect(Collectors.toUnmodifiableMap(Function.identity(), unused -> new AtomicInteger()));

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.ui.swtbot;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Event;
@@ -88,6 +89,8 @@ public class SWTBot4diacFigureCanvas extends SWTBotGefFigureCanvas {
 			try {
 				Thread.sleep(50L);
 			} catch (final InterruptedException e) {
+				FordiacLogHelper.logWarning("Type Text Interupted!", e); //$NON-NLS-1$
+				Thread.currentThread().interrupt();
 			}
 		}
 

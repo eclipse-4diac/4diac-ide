@@ -2,29 +2,29 @@
 <?pde version="3.8"?>
 <target name="4diac IDE Target" sequenceNumber="26">
 	<locations>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/releases/0.11.0/"/>
 			<unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.elk.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.elk.libavoid.feature.feature.group" version="0.0.0"/>
 		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/nebula/updates/release/3.2.0"/>
 			<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
 		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202505141345"/>
 			<unit id="org.eclipse.emf.compare.egit.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.compare.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="0.0.0"/>
 		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/nattable/releases/2.6.0/repository/"/>
 			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="0.0.0"/>
 		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2025-12"/>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/releases/2026-03"/>
 			<unit id="javax.activation" version="1.2.2.v20221203-1659"/>
 			<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -50,16 +50,7 @@
       		<unit id="org.eclipse.swtbot.nebula.nattable.finder" version="0.0.0"/>
     	</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-
 			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.1.0.qualifier">
-
-   
-
-   
-
-   
-
-   
 				<description url="http://www.example.com/description">
       [Enter Feature Description here.]
    </description>

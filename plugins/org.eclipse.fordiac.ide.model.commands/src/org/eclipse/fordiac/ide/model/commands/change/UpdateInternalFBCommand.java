@@ -64,7 +64,7 @@ public class UpdateInternalFBCommand extends Command implements ScopedCommand {
 
 	protected void createNewFB() {
 		newElement = createCopiedFBEntry(oldElement);
-		newElement.setInterface(newElement.getTypeInterface().copy());
+		newElement.setInterface(newElement.getTypeInterface().instanceCopy());
 		newElement.setName(oldElement.getName());
 		createValues();
 		transferInstanceComments();

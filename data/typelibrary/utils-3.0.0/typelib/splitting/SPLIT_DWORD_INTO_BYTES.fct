@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_DWORD_INTO_BYTES" Comment="this Function extracts the 4 BYTE from a dword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2025 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2025-12-21" Remarks="initial Version">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::splitting">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
+				<With Var="BYTE_02"/>
+				<With Var="BYTE_03"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="DWORD"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BYTE_00" Type="BYTE"/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE"/>
+			<VarDeclaration Name="BYTE_02" Type="BYTE"/>
+			<VarDeclaration Name="BYTE_03" Type="BYTE"/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 4 BYTE from a dword *)
+FUNCTION SPLIT_DWORD_INTO_BYTES
+
+VAR_INPUT
+	IN : DWORD;
+END_VAR
+
+VAR_OUTPUT
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
+	BYTE_02 : BYTE;
+	BYTE_03 : BYTE;
+END_VAR
+
+BYTE_00 := IN.%B0;
+BYTE_01 := IN.%B1;
+BYTE_02 := IN.%B2;
+BYTE_03 := IN.%B3;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

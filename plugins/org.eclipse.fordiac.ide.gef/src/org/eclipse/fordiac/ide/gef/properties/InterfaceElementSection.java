@@ -177,14 +177,4 @@ public class InterfaceElementSection extends AbstractSection {
 	protected IInterfaceElement getType() {
 		return (IInterfaceElement) type;
 	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing needs to be done here
-	}
-
-	@Override
-	protected void setInputCode() {
-		// currently nothing needs to be done here
-	}
 }

@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.FordiacCopyProcessor;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.UserCopyRefactoringQueries;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
@@ -181,7 +182,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 				FordiacLogHelper.logWarning("copy refactoring change could not be created"); //$NON-NLS-1$
 			}
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning("performing copy refactoring change failed", e); //$NON-NLS-1$
+			ErrorDialog.openError(shell, null, null, e.getStatus());
 		}
 	}
 

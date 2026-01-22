@@ -273,15 +273,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
 	protected void setInputInit() {
-		provider.setInput(getFilteredAttributeList());
 		buttons.setEnabled(isTypeEditable());
-		table.refresh();
 	}
 
 	@Override

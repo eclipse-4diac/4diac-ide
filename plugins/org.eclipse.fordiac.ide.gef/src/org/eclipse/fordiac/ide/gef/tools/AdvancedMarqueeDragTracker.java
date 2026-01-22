@@ -59,6 +59,8 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 		}
 	}
 
+	private EditPartViewer startingViewer;
+
 	@Override
 	protected boolean handleButtonDown(final int button) {
 		if (3 == button && getCurrentViewer() != null) {
@@ -74,11 +76,28 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 	}
 
 	@Override
+	protected EditPartViewer getCurrentViewer() {
+		// use the viewer in which the selection started as this is where the feedback
+		// figure is located
+		if (startingViewer != null) {
+			return startingViewer;
+		}
+		return super.getCurrentViewer();
+	}
+
+	@Override
 	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
 		if (viewer instanceof final AdvancedScrollingGraphicalViewer advScrollingGraphicalViewer) {
 			CanvasHelper.bindToContentPane(me, advScrollingGraphicalViewer, MARQUEE_DRAG_BORDER);
 		}
+		startingViewer = viewer;
 		super.mouseDown(me, viewer);
+	}
+
+	@Override
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		super.mouseUp(me, startingViewer);
+		startingViewer = null;
 	}
 
 	@Override

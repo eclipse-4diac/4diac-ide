@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.gef.EditPart;
 
 public final class FordiacAnnotationUtil {

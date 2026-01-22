@@ -25,10 +25,8 @@ import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
 import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.^extension.ExtendWith
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.^extension.ExtendWith
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)

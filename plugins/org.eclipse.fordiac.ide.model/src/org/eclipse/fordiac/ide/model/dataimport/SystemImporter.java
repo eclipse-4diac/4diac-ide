@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -263,15 +265,17 @@ public class SystemImporter extends CommonElementImporter {
 			final FBNetworkElement fromElement) {
 		final var devResSeperator = toValue.indexOf('.');
 		if (devResSeperator == -1) {
-			getErrors().add(
-					new TypeImportDiagnostic("Wrong to mapping string", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_WrongString,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
 		final Device dev = getElement().getDeviceNamed(toValue.substring(0, devResSeperator));
 		if (dev == null) {
-			getErrors().add(
-					new TypeImportDiagnostic("Device missing in mapping", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingDevice,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
@@ -281,7 +285,8 @@ public class SystemImporter extends CommonElementImporter {
 
 		final Resource res = dev.getResourceNamed(resName);
 		if (res == null) {
-			getErrors().add(new TypeImportDiagnostic("Resource missing in mapping", fromValue + "->" + toValue, //$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingResource,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
 					getLineNumber()));
 			return null;
 		}
@@ -335,7 +340,7 @@ public class SystemImporter extends CommonElementImporter {
 						comm.setName(copyCommunication.getName());
 						comm.setPosition(EcoreUtil.copy(copyCommunication.getPosition()));
 						comm.setTypeEntry(copyCommunication.getTypeEntry());
-						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
+						comm.setInterface(copyCommunication.getType().getInterfaceList().instanceCopy());
 						channel.getMappedElements().add(comm);
 						return comm;
 					}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Johannes Kepler University Linz
+ * Copyright (c) 2024, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -209,40 +209,38 @@ public class InfoPropertySection extends AbstractSection {
 	}
 
 	@Override
-	protected void setInputCode() {
-		// DO NOTHING
-	}
-
-	@Override
-	protected void setInputInit() {
-		formatPage();
-	}
-
-	@Override
 	protected void performRefresh() {
-		// DO NOTHING
+		formatPage();
 	}
 
 	private void formatPage() {
 		HashMap<String, Integer> fbs = new HashMap<>();
-		final int types;
-		final int subapps;
-		final int instanceCount;
-		final int noc;
+		int types = 0;
+		int subapps = 0;
+		int instanceCount = 0;
+		int noc = 0;
 
-		if (obj instanceof final SubApp subApp) {
+		switch (obj) {
+		case final UntypedSubApp subApp -> {
 			final FBNetwork network = subApp.getSubAppNetwork();
 			noc = numbOfCon(network, fbs);
-			fbs = countFBInstances(network.getNetworkElements(), fbs);
-			subapps = processSubappElements(network.getNetworkElements(), fbs);
-		} else if (obj instanceof final Application application) {
+			if (network != null) {
+				fbs = countFBInstances(network.getNetworkElements(), fbs);
+				subapps = processSubappElements(network.getNetworkElements(), fbs);
+			}
+		}
+		case final Application application -> {
 			final FBNetwork network = application.getFBNetwork();
 			noc = numbOfCon(network, fbs);
-			fbs = countFBInstances(network.getNetworkElements(), fbs);
-			subapps = processSubappElements(network.getNetworkElements(), fbs);
-		} else {
-			throw new IllegalStateException("Unexpected object type: " + obj.getClass().getName()); //$NON-NLS-1$
+			if (network != null) {
+				fbs = countFBInstances(network.getNetworkElements(), fbs);
+				subapps = processSubappElements(network.getNetworkElements(), fbs);
+			}
 		}
+
+		default -> throw new IllegalStateException("Unexpected object type: " + obj.getClass().getName()); //$NON-NLS-1$
+		}
+
 		instanceCount = fbs.values().stream().mapToInt(Integer::intValue).sum();
 		types = fbs.size();
 

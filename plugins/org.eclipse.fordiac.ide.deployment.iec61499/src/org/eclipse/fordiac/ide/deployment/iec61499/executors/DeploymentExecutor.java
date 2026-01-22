@@ -190,7 +190,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
 		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(),
-				varDecl.getName(), encodedValue);
+				varDecl.getRelativeName(fbData.getFb()), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (final IOException e) {
@@ -213,7 +213,8 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		final FBNetworkElement destFB = destination.getBlockFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
 				connData.sourcePrefix() + sourceFB.getName() + "." + source.getRelativeName(sourceFB) //$NON-NLS-1$
-						+ connData.sourceSuffix(), connData.destinationPrefix() + destFB.getName() + "." + destination.getRelativeName(destFB)); //$NON-NLS-1$
+						+ connData.sourceSuffix(),
+				connData.destinationPrefix() + destFB.getName() + "." + destination.getRelativeName(destFB)); //$NON-NLS-1$
 
 		try {
 			sendREQ(resource.getName(), request);

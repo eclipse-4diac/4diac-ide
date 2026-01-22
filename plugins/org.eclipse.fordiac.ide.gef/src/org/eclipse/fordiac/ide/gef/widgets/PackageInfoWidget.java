@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.gef.widgets;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.TextualAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.ImportCellEditor;
 import org.eclipse.fordiac.ide.gef.provider.PackageContentProvider;
@@ -35,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.widgets.PackageSelectionProposalProvider;
 import org.eclipse.fordiac.ide.typemanagement.commands.OrganizeImportsCommand;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;

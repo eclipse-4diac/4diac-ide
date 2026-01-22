@@ -18,12 +18,12 @@ package org.eclipse.fordiac.ide.gef.properties;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -53,9 +53,13 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected abstract Object getInputType(Object input);
 
-	protected abstract void setInputCode();
+	protected void setInputCode() {
+		// do nothing by default
+	}
 
-	protected abstract void setInputInit();
+	protected void setInputInit() {
+		// do nothing by default
+	}
 
 	/**
 	 * Subclasses shall perform all actions to refresh the data in the property

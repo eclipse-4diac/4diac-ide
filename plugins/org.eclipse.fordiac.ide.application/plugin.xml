@@ -435,7 +435,13 @@
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
              description="Mark FB as predecessor"
              id="org.eclipse.fordiac.ide.application.commands.markAsPredecessor"
-             name="%FBMarker_MarkAsPredecessor">
+             name="%command.markAsPredecessor">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
+             description="Mark as Connection Source"
+             id="org.eclipse.fordiac.ide.application.commands.markConnectionSource"
+             name="%command.markAsConnectionSource">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.GotoParentHandler"
@@ -721,16 +727,17 @@
       </activeWhen>
     </handler>
     
-     <handler class="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
-             commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
+   <handler class="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
       <activeWhen>
         <with variable="selection">
           <iterate ifEmpty="false">
             <or>
               <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
               </instanceof>
-              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractBlockFBNElementEditPart">
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
               </instanceof>
+              <instanceof value="org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart" />
             </or>
           </iterate>
         </with>
@@ -1035,7 +1042,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
-      	<visibleWhen checkEnabled="false">
+      	<visibleWhen>
           <and>
 	        <with variable="activeEditor">
 	          <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
@@ -1044,6 +1051,11 @@
 	      </and>
         </visibleWhen>
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
+      	<visibleWhen checkEnabled="true">
+      	   <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
+        </visibleWhen>
+      </command>      
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
@@ -1265,12 +1277,16 @@
       </command>
       
       <command commandId="org.eclipse.fordiac.ide.application.commands.markAsPredecessor">
+        <visibleWhen checkEnabled="true"/>
+      </command>
+      
+      <command commandId="org.eclipse.fordiac.ide.application.commands.markConnectionSource">
         <visibleWhen>
           <and>
             <with variable="activeEditor">
               <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             </with>
-            <reference definitionId="org.eclipse.fordiac.ide.application.FBNelementEditPartSelection" />
+          <reference definitionId="org.eclipse.fordiac.ide.application.NavigrationInterfaceElementSelection" />
           </and>
         </visibleWhen>
       </command>
@@ -1918,8 +1934,8 @@
             type="java.lang.Object">
       </propertyTester>
   </extension>
-    <extension
-          point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
-          <listener class = "org.eclipse.fordiac.ide.application.listeners.PredecessorQualifiedNameListener"/>
-    </extension>
+  <extension
+  		point="org.eclipse.fordiac.ide.model.commands.QualNameChangeListener">
+   		<listener class = "org.eclipse.fordiac.ide.application.listeners.UtilityMarkerListener"/>
+  </extension>
 </plugin>

@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEdi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -47,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.fordiac.ide.util.STStringTokenHandling;
 import org.eclipse.gef.DragTracker;
@@ -208,7 +208,7 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 
 						final CompoundCommand commands = new CompoundCommand();
 						commands.add(new ChangeConditionExpressionCommand(getModel(), values[1]));
-						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1"));
+						commands.add(new ChangeConditionEventCommand(getModel(), ev != null ? ev : "1")); //$NON-NLS-1$
 
 						return commands;
 					}

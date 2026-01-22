@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  */
 public class LaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
-	public static final String ATTR_TRACE_PATH = "org.eclipse.fordiac.ide.debug.replaydebugging.ATTR_TRACE_PATH";
+	public static final String ATTR_TRACE_PATH = "org.eclipse.fordiac.ide.debug.replaydebugging.ATTR_TRACE_PATH"; //$NON-NLS-1$
 
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
@@ -45,7 +45,7 @@ public class LaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 			// To be able to handle several devices, this must be a list of paths, but also
 			// matched to the
 			// respective device
-			final String path = configuration.getAttribute(ATTR_TRACE_PATH, "");
+			final String path = configuration.getAttribute(ATTR_TRACE_PATH, ""); //$NON-NLS-1$
 
 			final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
 			if (system == null) {

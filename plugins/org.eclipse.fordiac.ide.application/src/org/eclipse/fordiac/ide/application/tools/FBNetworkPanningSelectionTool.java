@@ -92,7 +92,10 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 				return;
 			}
 		}
-		checkConnCreationState(evt.keyCode);
+		if (evt.stateMask == 0) {
+			// only when the ctrl key alone is pressed we want to activate
+			checkConnCreationState(evt.keyCode);
+		}
 		super.keyDown(evt, viewer);
 	}
 
@@ -101,6 +104,16 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 		// the super call has to be first so that the target editpart is updated
 		// accordingly
 		super.mouseMove(me, viewer);
+		if (checkConnCreationState(me.stateMask)) {
+			connectionCreationTool.mouseMove(me, viewer);
+		}
+	}
+
+	@Override
+	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
+		// the super call has to be first so that the target editpart is updated
+		// accordingly
+		super.mouseDrag(me, viewer);
 		if (checkConnCreationState(me.stateMask)) {
 			connectionCreationTool.mouseDrag(me, viewer);
 		}
@@ -163,8 +176,7 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 					|| (!isConnectionCreationTarget(getTargetEditPart()))) {
 				deactivateConnectionCreation();
 			}
-		} else if (((stateMask & CONNECTION_CREATION_MOD_KEY) == CONNECTION_CREATION_MOD_KEY)
-				&& (isConnectionCreationTarget(getTargetEditPart()))) {
+		} else if (stateMask == CONNECTION_CREATION_MOD_KEY && isConnectionCreationTarget(getTargetEditPart())) {
 			activateConnectionCreation(getCurrentViewer());
 		}
 		return connectionCreationTool != null;

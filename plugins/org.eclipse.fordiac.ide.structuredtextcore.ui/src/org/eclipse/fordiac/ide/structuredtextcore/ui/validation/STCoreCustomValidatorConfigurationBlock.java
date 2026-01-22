@@ -54,6 +54,8 @@ public class STCoreCustomValidatorConfigurationBlock extends STCoreValidatorConf
 				defaultIndent);
 		addComboBox(STCoreValidator.FOR_CONTROL_VARIABLE_UNDEFINED,
 				Messages.STCoreCustomValidatorConfigurationBlock_UndefinedVariable, composite, defaultIndent);
+		addComboBox(STCoreValidator.NO_SIDE_EFFECTS, Messages.STCoreCustomValidatorConfigurationBlock_NoSideEffects,
+				composite, defaultIndent);
 	}
 
 	protected void fillUnnecessaryCodeSection(final Composite composite, final int defaultIndent) {

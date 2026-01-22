@@ -153,4 +153,12 @@ public interface LibraryElement extends INamedElement, ConfigurableObject {
 	 */
 	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validatePackage(DiagnosticChain diagnostics, Map<Object, Object> context);
+
 } // LibraryElement

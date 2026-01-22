@@ -65,6 +65,10 @@ public final class Messages extends NLS {
 	public static String ConnectionValidator_VarInOutSourceNotWellDefined;
 	public static String ConnectionValidator_VarInOutStringSizeMismatch;
 	public static String ConnectionValidator_NegatedConnectionIsNotValid;
+	public static String ContainerVarDeclarationAnnotations_MemberInitialValue;
+
+	public static String ContainerVarDeclarationAnnotations_MemberInputConnection;
+
 	public static String DataTypeExporter_UNSUPPORTED_DATA_TYPE;
 	public static String DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE;
 	public static String DataTypeLibrary_InvalidMaxLengthInStringType;
@@ -106,6 +110,7 @@ public final class Messages extends NLS {
 	public static String IdentifierVerifier_PackageNameMessage;
 	public static String IdentifierVerifier_QualifiedNameNotValid;
 	public static String IdentifierVerifier_NotMatchingWithFilename;
+	public static String IdentifierVerifier_PackageNameMismatch;
 	public static String Import_ERROR_InputVariableTypeNotDefined;
 	public static String Import_ERROR_NameNotDefined;
 	public static String ImportUtils_ERROR_ParameterNotSet;
@@ -227,6 +232,11 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
 	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
+
+	public static String SystemImporter_Mapping_WrongString;
+	public static String SystemImporter_Mapping_MissingDevice;
+	public static String SystemImporter_Mapping_MissingResource;
+	public static String SystemImporter_Mapping_LocationFormat;
 
 	static {
 		// initialize resource bundle

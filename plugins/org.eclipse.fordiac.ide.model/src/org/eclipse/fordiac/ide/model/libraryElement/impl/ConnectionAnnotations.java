@@ -387,7 +387,7 @@ public class ConnectionAnnotations {
 	}
 
 	private static void setNegated(final Connection connection, final String negated) {
-		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, "");
+		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isNegated(final Connection connection) {

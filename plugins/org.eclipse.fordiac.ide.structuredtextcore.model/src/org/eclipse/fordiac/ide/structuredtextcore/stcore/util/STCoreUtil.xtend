@@ -82,6 +82,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignment
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAttribute
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
@@ -238,7 +239,8 @@ final class STCoreUtil {
 			STWhileStatement case container.condition == expression: AccessMode.READ
 			STAssignment case container.left == expression: AccessMode.WRITE
 			STCallArgument: container.accessMode
-			STMemberAccessExpression: container.accessMode
+			STMemberAccessExpression case container.member == expression: container.accessMode
+			STMemberAccessExpression case container.receiver == expression: AccessMode.READ.max(container.accessMode)
 			STArrayAccessExpression case container.receiver == expression: container.accessMode
 			STExpression,
 			STVarDeclaration,
@@ -256,6 +258,16 @@ final class STCoreUtil {
 			STFeatureExpression case container.mappedOutputArguments.containsValue(argument): AccessMode.WRITE
 			STFeatureExpression case container.mappedInOutArguments.containsValue(argument): AccessMode.READ_WRITE
 			default: AccessMode.NONE
+		}
+	}
+
+	def static boolean hasSideEffects(STExpression expression) {
+		switch(expression) {
+		STAssignment: true
+		STBuiltinFeatureExpression case expression.call: true
+		STFeatureExpression case expression.call: true
+		STMemberAccessExpression: expression.member.hasSideEffects
+		default: expression.accessMode != AccessMode.NONE
 		}
 	}
 

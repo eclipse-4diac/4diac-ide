@@ -19,10 +19,8 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -39,37 +37,26 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class CopyTypeChange extends Change {
 
-	private final String name;
-	private final IFile origin;
 	private final URI destination;
-	private final String newPackageName;
-	private String oldPackageName;
+	private String newPackageName;
 
-	protected CopyTypeChange(final String newPackageName, final String name, final IFile origin,
-			final URI destination) {
-		this.newPackageName = newPackageName;
-		this.name = name;
-		this.origin = origin;
+	protected CopyTypeChange(final URI destination) {
 		this.destination = destination;
 	}
 
 	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
-		oldPackageName = PackageNameHelper.getPackageNameFromFile(origin);
+		newPackageName = PackageNameHelper.getPackageNameFromURI(destination);
 	}
 
 	@Override
 	public RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-		if (Objects.equals(oldPackageName, newPackageName)) {
-			status.addWarning(Messages.MoveTypeToPackage_PackageNameIsTheSame);
-		}
-		return status;
+		return new RefactoringStatus();
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName);
 	}
 
 	@Override
@@ -79,7 +66,7 @@ public class CopyTypeChange extends Change {
 			throw new CoreException(
 					Status.error(MessageFormat.format(Messages.CopyTypeChange_CannotLoadResource, destination)));
 		}
-		final var optElement = CopyTypeParticipant.getLibraryElement(resource.get());
+		final var optElement = getLibraryElement(resource.get());
 		if (optElement.isEmpty()) {
 			return null;
 		}
@@ -123,5 +110,10 @@ public class CopyTypeChange extends Change {
 			return Optional.empty();
 		}
 		return Optional.of(resource);
+	}
+
+	private static Optional<LibraryElement> getLibraryElement(final Resource resource) {
+		return resource.getContents().stream().filter(LibraryElement.class::isInstance).map(LibraryElement.class::cast)
+				.findFirst();
 	}
 }

@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.SystemConfEditPartFactory;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartFactory;
@@ -53,22 +54,14 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		final SystemConfigurationEditorInput sysConfInput = checkEditorInput(input);
-		sysConf = sysConfInput.getContent();
+		final SystemConfiguration systemConfiguration = LibraryElementProvider.INSTANCE.getElement(input,
+				SystemConfiguration.class);
+		if (systemConfiguration == null) {
+			throw new IllegalArgumentException(
+					"SystemConfiguration editors only accept system configurations as valid inputs!"); //$NON-NLS-1$
+		}
+		sysConf = systemConfiguration;
 		super.setInput(input);
-	}
-
-	private SystemConfigurationEditorInput checkEditorInput(final IEditorInput input) {
-		if (!(input instanceof final SystemConfigurationEditorInput sysConfEI)) {
-			throw new IllegalArgumentException(
-					"System configuration editors only accept SystemConfigurationEditorInput as valid inputs!"); //$NON-NLS-1$
-		}
-		final SystemConfigurationEditorInput currentEditorInput = (SystemConfigurationEditorInput) getEditorInput();
-		if (currentEditorInput != null && currentEditorInput.getContent() != sysConfEI.getContent()) {
-			throw new IllegalArgumentException(
-					"Editor input with new content given to system configuration editor. This is currently not supported!"); //$NON-NLS-1$
-		}
-		return sysConfEI;
 	}
 
 	@Override

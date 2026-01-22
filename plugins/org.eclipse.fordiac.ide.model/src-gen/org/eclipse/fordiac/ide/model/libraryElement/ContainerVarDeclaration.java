@@ -17,7 +17,10 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import java.util.List;
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 
 /**
  * <!-- begin-user-doc -->
@@ -63,5 +66,29 @@ public interface ContainerVarDeclaration extends VarDeclaration {
 	 * @generated
 	 */
 	VarDeclaration getCachedMember(List<String> path, boolean demandCreate);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	TreeIterator<VarDeclaration> getAllCachedMembers();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMemberInputConnections(DiagnosticChain diagnostics, Map<Object, Object> context);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateMemberInitialValues(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // ContainerVarDeclaration

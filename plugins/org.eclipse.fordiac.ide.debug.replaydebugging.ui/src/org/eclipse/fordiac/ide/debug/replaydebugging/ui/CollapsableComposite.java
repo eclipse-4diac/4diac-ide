@@ -36,8 +36,8 @@ public class CollapsableComposite {
 		void onCollapse(boolean collapsed);
 	}
 
-	private static final String COLLAPSED_TEXT = "+";
-	private static final String EXPANDED_TEXT = "-";
+	private static final String COLLAPSED_TEXT = "+"; //$NON-NLS-1$
+	private static final String EXPANDED_TEXT = "-"; //$NON-NLS-1$
 
 	private final Group group;
 	private final Button toggleButton;

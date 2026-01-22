@@ -26,6 +26,7 @@ package org.eclipse.fordiac.ide.typeeditor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -138,7 +139,7 @@ public abstract class AbstractTypeEditorPage extends EditorPart implements IType
 
 	@Override
 	public boolean isDirty() {
-		return getCommandStack().isDirty();
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	@Override

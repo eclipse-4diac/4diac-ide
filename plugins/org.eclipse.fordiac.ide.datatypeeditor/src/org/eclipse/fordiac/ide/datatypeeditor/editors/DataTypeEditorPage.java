@@ -26,9 +26,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.widgets.Composite;
@@ -93,7 +93,6 @@ public class DataTypeEditorPage extends AbstractTypeEditorPage {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		if (getSite() instanceof final MultiPageEditorSite mpes) {
 			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}

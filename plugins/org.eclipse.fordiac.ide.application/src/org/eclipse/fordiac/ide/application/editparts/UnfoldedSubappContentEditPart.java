@@ -90,11 +90,10 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
 				Command insertFBCommandChain = AbstractCreateFBNetworkElementCommand.createCreateCommand(value,
 						getModel(), refPoint.x, refPoint.y);
-				if (getRoot() instanceof final FBNetworkRootEditPart root
-						&& insertFBCommandChain instanceof final FBCreateCommand fbcreateCommand && getPreferenceStore()
+				if (insertFBCommandChain instanceof final FBCreateCommand fbcreateCommand && getPreferenceStore()
 						.getBoolean(GefPreferenceConstants.MANAGE_EVENT_CONNECTIONS_AUTOMATICALLY)) {
-					insertFBCommandChain = insertFBCommandChain.chain(new InsertFBIntoExecutionChainCommand(
-							getContainerElement(), fbcreateCommand.getFB(), root));
+					insertFBCommandChain = insertFBCommandChain.chain(
+							new InsertFBIntoExecutionChainCommand(getContainerElement(), fbcreateCommand.getFB()));
 				}
 				return new ResizeGroupOrSubappCommand(getHost(), insertFBCommandChain);
 			}

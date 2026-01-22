@@ -30,7 +30,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeDeclaration" eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STTypeDeclaration"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="resultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportLiteralTypes">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literalTypes" upperBound="-1"
+        eType="#//XMIExportLiteralType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XMIExportLiteralType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literal" eType="ecore:EClass ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.ecore#//STExpression"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement"
         containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

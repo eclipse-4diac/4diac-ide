@@ -113,13 +113,15 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	@Override
 	protected void setInputInit() {
 		super.setInputInit();
-		deSelectAllWidget.setEnabled(true);
-		if (null == getCurrentCommandStack()) { // disable all fields
-			withEventsViewer.setInput(null);
-			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
-		} else {
-			deSelectAllWidget.setCommandStack(getCurrentCommandStack());
-		}
+		deSelectAllWidget.setEnabled(getCurrentCommandStack() != null);
+		deSelectAllWidget.setCommandStack(getCurrentCommandStack());
+	}
+
+	@Override
+	protected void setInputCode() {
+		super.setInputCode();
+		withEventsViewer.setInput(null);
+		Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 	}
 
 	@Override

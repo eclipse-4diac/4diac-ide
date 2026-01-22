@@ -72,7 +72,6 @@ public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection 
 	@Override
 	protected void setInputInit() {
 		setupPinInfoWidget(getType());
-
 	}
 
 	protected void setupPinInfoWidget(final IInterfaceElement ie) {

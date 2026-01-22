@@ -33,6 +33,12 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 
 public final class HandlerHelper {
 	private HandlerHelper() {
@@ -115,6 +121,15 @@ public final class HandlerHelper {
 					.map(FBNetworkElement.class::cast).toList();
 		}
 		return Collections.emptyList();
+	}
+
+	public static IHandlerService getHandlerService() {
+		final IWorkbench wb = PlatformUI.getWorkbench();
+		final IWorkbenchWindow window = wb.getActiveWorkbenchWindow();
+		final IWorkbenchPage page = window.getActivePage();
+
+		final IWorkbenchPart active = page.getActivePart();
+		return active.getSite().getService(IHandlerService.class);
 	}
 
 	public static void showExpandedSubapp(final SubApp subapp, final IEditorPart editor) {

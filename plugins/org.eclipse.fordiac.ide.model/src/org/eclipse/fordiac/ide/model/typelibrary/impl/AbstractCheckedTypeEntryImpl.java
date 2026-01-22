@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends AbstractTypeEntryImpl {
@@ -30,19 +29,6 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 	@Override
 	public T getType() {
 		final LibraryElement type = super.getType();
-		if (typeClass.isInstance(type)) {
-			return typeClass.cast(type);
-		}
-		return null;
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public T getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
 		if (typeClass.isInstance(type)) {
 			return typeClass.cast(type);
 		}

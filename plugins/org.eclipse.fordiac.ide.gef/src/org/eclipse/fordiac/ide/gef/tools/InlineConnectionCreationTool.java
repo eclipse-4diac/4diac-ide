@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Primetals Technologies Germany GmbH,
+ * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -33,12 +33,12 @@ public final class InlineConnectionCreationTool extends FordiacConnectionDragCre
 		final InlineConnectionCreationTool connectionCreationTool = new InlineConnectionCreationTool(originalSource);
 		connectionCreationTool.setViewer(editPartViewer);
 		connectionCreationTool.setEditDomain(editDomain);
+		connectionCreationTool.setInitialViewer(editPartViewer);
 		connectionCreationTool.startup(location);
 		return connectionCreationTool;
 	}
 
 	private InlineConnectionCreationTool(final EditPart sourcePart) {
-		super();
 		this.sourcePart = sourcePart;
 	}
 

@@ -68,14 +68,4 @@ public class CommentPropertySection extends AbstractSection {
 		}
 		return null;
 	}
-
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do for now
-	}
 }

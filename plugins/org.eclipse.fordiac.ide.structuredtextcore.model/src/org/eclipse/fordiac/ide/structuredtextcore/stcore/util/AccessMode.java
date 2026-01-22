@@ -15,11 +15,33 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.util;
 public enum AccessMode {
 	NONE, READ, WRITE, READ_WRITE;
 
-	/** Merge this with the other access mode
+	/**
+	 * Merge this with the other access mode
 	 *
 	 * @param other The other access mode
-	 * @return The common access mode */
+	 * @return The common access mode
+	 */
 	public AccessMode merge(final AccessMode other) {
 		return AccessMode.values()[ordinal() | other.ordinal()];
+	}
+
+	/**
+	 * Get the minimum of this and the other access mode
+	 *
+	 * @param other The other access mode
+	 * @return The minimum access mode
+	 */
+	public AccessMode min(final AccessMode other) {
+		return AccessMode.values()[Math.min(ordinal(), other.ordinal())];
+	}
+
+	/**
+	 * Get the maximum of this and the other access mode
+	 *
+	 * @param other The other access mode
+	 * @return The maximum access mode
+	 */
+	public AccessMode max(final AccessMode other) {
+		return AccessMode.values()[Math.max(ordinal(), other.ordinal())];
 	}
 }

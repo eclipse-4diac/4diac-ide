@@ -344,12 +344,23 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public InterfaceList copy() {
-		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);
+	public InterfaceList instanceCopy() {
+		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, false, false);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InterfaceList fullCopy() {
+		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, true, true);
 	}
 
 	/**

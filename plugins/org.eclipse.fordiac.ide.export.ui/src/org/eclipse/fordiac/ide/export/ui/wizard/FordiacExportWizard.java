@@ -23,19 +23,15 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.fordiac.ide.export.AbstractExporter;
+import org.eclipse.fordiac.ide.export.Exporter;
 import org.eclipse.fordiac.ide.export.IExportFilter;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -69,7 +65,6 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-
 		page = new SelectFBTypesWizardPage(Messages.FordiacExportWizard_WizardPage, selection);
 		page.setDescription(Messages.FordiacExportWizard_DESCRIPTION_WizardPage);
 		page.setTitle(Messages.FordiacExportWizard_TITLE_WizardPage);
@@ -86,61 +81,30 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 			return false;
 		}
 
-		final ExporterRunnable exporter = new ExporterRunnable(page.getSelectedExportFilter(), exportees,
-				page.getDirectory(), page.overwriteWithoutWarning(), page.enableCMakeLists());
+		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), page.getDirectory(),
+				page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
 			setNeedsProgressMonitor(true);
-			getContainer().run(true, true, exporter);
-		} catch (final Exception e) {
-			showExceptionErrorDialog(e);
+			getContainer().run(true, true, monitor -> exporter.exportElements(monitor, exportees));
+			showErrorWarningSummary(exporter.getExportFilter());
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (final InvocationTargetException e) {
+			FordiacLogHelper.logError(e.getMessage(), e.getCause());
 		}
-
 		return true;
 	}
 
-	protected static void showExceptionErrorDialog(final Exception e) {
-		FordiacLogHelper.logError(e.getMessage(), e);
-		final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-		msg.setMessage(e.getMessage()); // TODO add Messages.FordiacExport_ERROR + e.getMessage()
-		msg.open();
+	protected static void showErrorWarningSummary(final IExportFilter filter) {
+		if (filter != null && ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty()))) {
+			new ExportStatusMessageDialog(Display.getDefault().getActiveShell(), filter.getWarnings(),
+					filter.getErrors()).open();
+		}
 	}
 
 	private final List<IFile> collectExportees() {
 		final List<?> resources = page.getSelectedResources();
 		return resources.parallelStream().filter(IFile.class::isInstance).map(IFile.class::cast).toList();
-	}
-
-	private static class ExporterRunnable extends AbstractExporter implements IRunnableWithProgress {
-
-		private final List<IFile> exportees;
-
-		protected ExporterRunnable(final IConfigurationElement filterConfig, final List<IFile> exportees,
-				final String outputDirectory, final boolean overwriteWithoutWarning, final boolean enableCMakeLists) {
-			super(filterConfig, outputDirectory, overwriteWithoutWarning, enableCMakeLists);
-			this.exportees = exportees;
-		}
-
-		@Override
-		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			exportElements(monitor, exportees);
-		}
-
-		@Override
-		protected void showErrorWarningSummary(final IExportFilter filter) {
-			if ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty())) {
-				new ExportStatusMessageDialog(Display.getDefault().getActiveShell(), filter.getWarnings(),
-						filter.getErrors()).open();
-			}
-		}
-
-		@Override
-		protected void processError(final String errorMessage) {
-			FordiacLogHelper.logError(errorMessage);
-			final MessageBox msg = new MessageBox(Display.getDefault().getActiveShell());
-			msg.setMessage(errorMessage);
-			msg.open();
-		}
-
 	}
 
 }
