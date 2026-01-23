@@ -28,6 +28,6 @@
 			<VarDeclaration Name="OUT_2" Type="LREAL" Comment="output number 2"/>
 		</OutputVars>
 	</InterfaceList>
-	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_ARRAY2ARRAY'"/>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_ARRAY2VALUES'"/>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
