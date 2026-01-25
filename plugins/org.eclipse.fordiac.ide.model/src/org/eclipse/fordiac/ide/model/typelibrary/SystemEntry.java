@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -16,13 +16,11 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface SystemEntry extends TypeEntry {
 
-	AutomationSystem getSystem();
-
-	void setSystem(LibraryElement system);
+	@Override
+	AutomationSystem getType();
 
 	@Override
 	AutomationSystem copyType();
