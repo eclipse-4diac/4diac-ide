@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Jose Cabral
+ * Copyright (c) 2025, 2026 Jose Cabral
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -302,7 +302,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	public AutomationSystem getSystem() {
 		if (getSystemResource() instanceof final IFile systemFile && TypeLibraryManager.INSTANCE
 				.getTypeEntryForFile(systemFile) instanceof final SystemEntry systemEntry) {
-			return systemEntry.getSystem();
+			return systemEntry.getType();
 		}
 		return null;
 	}

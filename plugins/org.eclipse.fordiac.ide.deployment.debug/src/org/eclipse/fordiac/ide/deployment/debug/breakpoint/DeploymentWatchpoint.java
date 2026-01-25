@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2024, 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -72,7 +72,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 		if (marker != null && marker.getResource() instanceof final IFile file) {
 			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (typeEntry instanceof final SystemEntry systemEntry) {
-				final AutomationSystem system = systemEntry.getSystem();
+				final AutomationSystem system = systemEntry.getType();
 				if (system != null) {
 					return getTarget(system);
 				}

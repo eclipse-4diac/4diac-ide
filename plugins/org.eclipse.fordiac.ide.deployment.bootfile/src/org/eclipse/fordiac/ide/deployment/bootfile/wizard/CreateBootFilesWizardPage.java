@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2014, 2026 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -116,7 +116,7 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 
 	private List<AutomationSystem> getSelectedSystems() {
 		return ((List<IFile>) getSelectedResources()).stream().map(TypeLibraryManager.INSTANCE::getTypeEntryForFile)
-				.filter(SystemEntry.class::isInstance).map(SystemEntry.class::cast).map(SystemEntry::getSystem)
+				.filter(SystemEntry.class::isInstance).map(SystemEntry.class::cast).map(SystemEntry::getType)
 				.filter(Objects::nonNull).toList();
 	}
 

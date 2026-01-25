@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -30,16 +29,6 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 
 	public SystemEntryImpl() {
 		super(AutomationSystem.class);
-	}
-
-	@Override
-	public AutomationSystem getSystem() {
-		return getType();
-	}
-
-	@Override
-	public void setSystem(final LibraryElement system) {
-		setType(system);
 	}
 
 	@Override
