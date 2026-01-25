@@ -12,14 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -46,18 +41,6 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 	// Safety border around the canvas to ensure that during dragging marquee
 	// selection does not grow the canvas
 	private static final Insets MARQUEE_DRAG_BORDER = new Insets(1, 1, 1, 1);
-
-	private static class MarqueeRectangleFigure extends Figure {
-
-		@Override
-		protected void paintFigure(final Graphics graphics) {
-			graphics.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
-			graphics.setLineStyle(Graphics.LINE_DASH);
-			graphics.setLineWidth(ModifiedMoveHandle.SELECTION_BORDER_WIDTH + 1);
-			final Rectangle bounds = Rectangle.SINGLETON.setBounds(getBounds());
-			graphics.drawRectangle(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
-		}
-	}
 
 	private EditPartViewer startingViewer;
 
@@ -120,11 +103,6 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 			performOpen();
 		}
 		return true;
-	}
-
-	@Override
-	protected IFigure createMarqueeRectangleFigure() {
-		return new MarqueeRectangleFigure();
 	}
 
 	protected void performOpen() {
