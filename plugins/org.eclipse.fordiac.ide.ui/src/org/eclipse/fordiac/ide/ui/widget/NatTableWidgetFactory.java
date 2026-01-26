@@ -13,23 +13,20 @@
 
 package org.eclipse.fordiac.ide.ui.widget;
 
-import java.util.Arrays;
-
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractLayerConfiguration;
-import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
-import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.copy.action.CopyDataAction;
 import org.eclipse.nebula.widgets.nattable.copy.action.PasteDataAction;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
-import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDisplayConverter;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
@@ -50,10 +47,7 @@ import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.IUniqueIndexLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
-import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
-import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderStyleConfiguration;
-import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.BackgroundPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
@@ -62,7 +56,6 @@ import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionLayerConfiguration;
-import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
@@ -70,6 +63,7 @@ import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
+import org.eclipse.nebula.widgets.nattable.style.theme.ModernNatTableThemeConfiguration;
 import org.eclipse.nebula.widgets.nattable.tree.ITreeData;
 import org.eclipse.nebula.widgets.nattable.tree.ITreeRowModel;
 import org.eclipse.nebula.widgets.nattable.tree.TreeLayer;
@@ -84,12 +78,11 @@ import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 public final class NatTableWidgetFactory {
 	public static final String DEFAULT_CELL = "DEFAULT_CELL"; //$NON-NLS-1$
@@ -400,74 +393,13 @@ public final class NatTableWidgetFactory {
 	}
 
 	private static void setNatTableStyle(final NatTable table) {
-		final DefaultNatTableStyleConfiguration tableStyle = new DefaultNatTableStyleConfiguration();
-		final DefaultSelectionStyleConfiguration selectionStyle = new DefaultSelectionStyleConfiguration();
-		final DefaultColumnHeaderStyleConfiguration columnHeaderStyle = new DefaultColumnHeaderStyleConfiguration();
-		final DefaultRowHeaderStyleConfiguration rowHeaderStyle = new DefaultRowHeaderStyleConfiguration();
 
-		tableStyle.bgColor = GUIHelper.COLOR_WHITE;
-		tableStyle.cellPainter = new TextPainter();
-
-		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_TITLE_INACTIVE_BACKGROUND;
-		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
-		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
-		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
-		selectionStyle.selectionFont = GUIHelper.DEFAULT_FONT;
-
-		columnHeaderStyle.font = GUIHelper.DEFAULT_FONT;
-		columnHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
-		columnHeaderStyle.renderGridLines = Boolean.TRUE;
-		columnHeaderStyle.cellPainter = new TextPainter();
-
-		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
-		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
-		rowHeaderStyle.cellPainter = new TextPainter() {
-			@Override
-			protected Color getBackgroundColour(final ILayerCell cell, final IConfigRegistry configRegistry) {
-				if (cell.getDisplayMode() == DisplayMode.SELECT) {
-					final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
-					if (selectionLayer != null && selectionLayer.getSelectionModel() != null && Arrays
-							.stream(selectionLayer.getSelectionModel().getFullySelectedRowPositions(Integer.MAX_VALUE))
-							.anyMatch(i -> i == cell.getRowIndex())) {
-						return selectionStyle.fullySelectedHeaderBgColor;
-					}
-					return selectionStyle.selectedHeaderBgColor;
-				}
-				return super.getBackgroundColour(cell, configRegistry);
-			}
-		};
-
-		table.setBackground(GUIHelper.COLOR_WHITE);
-		table.addOverlayPainter(new NatTableBorderOverlayPainter());
-		table.addConfiguration(new AbstractRegistryConfiguration() {
+		table.addConfiguration(new ModernNatTableThemeConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
-				configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
-						new DefaultDisplayConverter() {
-							@Override
-							public Object displayToCanonicalValue(final Object destinationValue) {
-								if (destinationValue == null) {
-									return ""; //$NON-NLS-1$
-								}
-								return destinationValue.toString();
-							}
-						}, DisplayMode.EDIT, NONE_NULL);
-			}
-		});
-
-		table.addConfiguration(tableStyle);
-		table.addConfiguration(selectionStyle);
-		table.addConfiguration(columnHeaderStyle);
-		table.addConfiguration(rowHeaderStyle);
-		table.addConfiguration(new AbstractRegistryConfiguration() {
-			@Override
-			public void configureRegistry(final IConfigRegistry configRegistry) {
+				super.configureRegistry(configRegistry);
 				Style cellStyle = new Style();
-				cellStyle.setAttributeValue(CellStyleAttributes.FOREGROUND_COLOR, GUIHelper.COLOR_DARK_GRAY);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
-						DEFAULT_CELL);
 
-				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						ERROR_CELL);
@@ -502,15 +434,20 @@ public final class NatTableWidgetFactory {
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						LEFT_ALIGNMENT);
 
-				cellStyle = new Style();
-				final Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
-				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WHITE);
-				cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+				final FontRegistry fontRegistry = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme()
+						.getFontRegistry();
+				final Font boldDialogFont = fontRegistry.getBold(JFaceResources.DIALOG_FONT);
+
+				final Style headerStyle = new Style();
+				headerStyle.setAttributeValue(CellStyleAttributes.FONT, boldDialogFont);
+				headerStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, this.cHeaderBgColor);
+				headerStyle.setAttributeValue(CellStyleAttributes.FOREGROUND_COLOR, this.cHeaderFgColor);
+
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, headerStyle, DisplayMode.NORMAL,
 						GridRegion.COLUMN_HEADER);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, headerStyle, DisplayMode.SELECT,
 						GridRegion.COLUMN_HEADER);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.EDIT,
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, headerStyle, DisplayMode.EDIT,
 						GridRegion.COLUMN_HEADER);
 
 				cellStyle = new Style();
