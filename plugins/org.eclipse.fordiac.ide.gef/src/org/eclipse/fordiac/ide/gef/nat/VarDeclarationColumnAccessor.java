@@ -100,7 +100,7 @@ public class VarDeclarationColumnAccessor
 		};
 	}
 
-	protected static String getInitialValue(final VarDeclaration rowObject) {
+	public static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
 
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject);
