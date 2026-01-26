@@ -123,6 +123,7 @@ public final class Messages extends NLS {
 	public static String STCoreRenameElementRefactoringParticpant_Name;
 	public static String STCoreSaveActionsPreferencePage_EnableFormat;
 	public static String STCoreSaveActionsPreferencePage_EnableSaveActions;
+	public static String STCoreSyncUtil_Building;
 
 	static {
 		// initialize resource bundle
