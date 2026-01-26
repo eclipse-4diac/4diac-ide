@@ -259,8 +259,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 
 		protected LibraryElementInfo(final IEditorInput input, final LibraryElement libraryElement) {
 			this.input = input;
-			this.libraryElement = libraryElement;
-			undoContext = new ObjectUndoContext(libraryElement);
+			setLibraryElement(libraryElement);
 		}
 
 		protected IEditorInput getEditorInput() {
