@@ -366,7 +366,9 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			NotificationChain notifications = null;
 			synchronized (this) {
-				notifications = basicSetType(null, notifications);
+				if (basicGetType() != null) {
+					notifications = basicSetType(null, notifications);
+				}
 			}
 			if (notifications != null) {
 				notifications.dispatch();
