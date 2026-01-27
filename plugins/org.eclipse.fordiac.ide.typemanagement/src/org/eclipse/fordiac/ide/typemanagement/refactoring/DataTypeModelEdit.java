@@ -24,12 +24,12 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class DataTypeChange extends AbstractCommandChange<IInterfaceElement> {
+public class DataTypeModelEdit extends ModelEdit<IInterfaceElement> {
 
 	private final String newTypeDeclaration;
 	private String oldTypeDeclaration;
 
-	public DataTypeChange(final String name, final URI elementURI, final String newTypeDeclaration) {
+	public DataTypeModelEdit(final String name, final URI elementURI, final String newTypeDeclaration) {
 		super(name, elementURI, IInterfaceElement.class);
 		this.newTypeDeclaration = newTypeDeclaration;
 	}

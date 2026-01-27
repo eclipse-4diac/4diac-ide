@@ -26,16 +26,16 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangePackageNameCommand;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class MoveTypeChange extends AbstractCommandChange<LibraryElement> {
+public class MoveTypeModelEdit extends ModelEdit<LibraryElement> {
 
 	private final String newPackageName;
 	private String oldPackageName;
 
-	protected MoveTypeChange(final String newPackageName, final String name, final URI uri) {
+	protected MoveTypeModelEdit(final String newPackageName, final String name, final URI uri) {
 		super(name, uri, LibraryElement.class);
 		this.newPackageName = newPackageName;
 	}

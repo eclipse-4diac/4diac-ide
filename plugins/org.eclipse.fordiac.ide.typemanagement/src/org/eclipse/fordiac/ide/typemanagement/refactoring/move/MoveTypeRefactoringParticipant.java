@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,11 +10,14 @@
  * Contributors:
  *   Mario Kastner
  *     - initial API and implementation and/or initial documentation
+ *   Felix Schmid
+ *     - changed to use ModelEdits
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.typemanagement.refactoring.move;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,8 +46,10 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -102,7 +107,9 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	@Override
 	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new MoveTypeChange(newPackageName, getName(), this.type.getURI()));
+		final Change modelEdit = ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage,
+				List.of(new MoveTypeModelEdit(newPackageName, getName(), this.type.getURI())));
+		parentChange.add(modelEdit);
 		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
 		return parentChange;
 	}
@@ -124,34 +131,33 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	}
 
 	private CompositeChange getDataTypeInstanceChanges(final DataTypeEntry dtEntry) {
-		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
 
 		for (final EObject eObject : searchResult) {
 			if (eObject instanceof final VarDeclaration varDecl
 					&& !(varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB)) { // configurable fb pins are
 																							// updated below
-				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
+				modelEdits.add(new DataTypeModelEdit(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
 			}
 			if (eObject instanceof final BlockFBNetworkElement elem) {
-				change.add(new UpdateInstanceChange(elem, dtEntry));
+				modelEdits.add(new UpdateInstanceModelEdit(elem, dtEntry));
 			}
 		}
-
-		return change;
+		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
 	}
 
 	private static CompositeChange getInstanceChanges(final TypeEntry typeEntry) {
-		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
 
 		for (final EObject eObject : result) {
 			if (eObject instanceof final BlockFBNetworkElement elem) {
-				change.add(new UpdateFBInstanceChange(elem, typeEntry));
+				modelEdits.add(new UpdateFBInstanceModelEdit(elem, typeEntry));
 			}
 		}
-		return change;
+		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
 	}
 
 	private String getNewTypeDeclaration(final VarDeclaration varDeclaration) {
@@ -166,10 +172,10 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		return typeDeclaration.toString();
 	}
 
-	class UpdateInstanceChange extends UpdateFBInstanceChange {
+	class UpdateInstanceModelEdit extends UpdateFBInstanceModelEdit {
 		final String visibleChildrenString;
 
-		public UpdateInstanceChange(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
+		public UpdateInstanceModelEdit(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
 			super(instance, typeEntry);
 			visibleChildrenString = (instance instanceof final StructManipulator structManipulator)
 					? ConfigurableFBManagement.buildVisibleChildrenString(structManipulator.getMemberVars())
