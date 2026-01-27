@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Martin Erich Jobst
+ * Copyright (c) 2024, 2026 Martin Erich Jobst and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,10 +9,12 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Felix Schmid - changed to use ModelEdits
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -31,9 +33,10 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinModelEdit;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.ParticipantManager;
@@ -72,15 +75,17 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange change = new CompositeChange(getProcessorName());
-		change.add(
-				new RenameElementChange(MessageFormat.format(Messages.RenameElementRefactoringProcessor_RenamePinInType,
-						elementURI.lastSegment()), elementURI, newName));
-		createChildChanges(change);
-		return change;
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+
+		modelEdits.add(new RenameElementModelEdit(MessageFormat
+				.format(Messages.RenameElementRefactoringProcessor_RenamePinInType, elementURI.lastSegment()),
+				elementURI, newName));
+		createChildChanges(modelEdits);
+
+		return ModelEditChange.fromModelEdits(getProcessorName(), modelEdits);
 	}
 
-	private void createChildChanges(final CompositeChange change) {
+	private void createChildChanges(final List<ModelEdit<?>> modelEdits) {
 		final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(elementURI);
 		if (typeEntry == null) {
 			return;
@@ -93,14 +98,14 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 		if (eChild instanceof final IInterfaceElement interfaceElement) {
 			result.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
-					.forEach(element -> createRenameInterfaceChanges(change, element, interfaceElement));
+					.forEach(element -> createRenameInterfaceChanges(modelEdits, element, interfaceElement));
 		}
 	}
 
-	private void createRenameInterfaceChanges(final CompositeChange change, final BlockFBNetworkElement element,
+	private void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits, final BlockFBNetworkElement element,
 			final IInterfaceElement interfaceElement) {
-		final String oldName = interfaceElement.getName();
-		change.add(new ReconnectPinChange(EcoreUtil.getURI(element), BlockFBNetworkElement.class, newName, oldName));
+		modelEdits.add(new ReconnectPinModelEdit(EcoreUtil.getURI(element), BlockFBNetworkElement.class, newName,
+				interfaceElement.getName()));
 	}
 
 	public static EObject getChildByURI(final EObject parent, final URI uri) {
@@ -110,7 +115,6 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 			if (uriFragment.equals(uri.fragment())) {
 				found[0] = child;
 			}
-
 		});
 		return found[0];
 	}

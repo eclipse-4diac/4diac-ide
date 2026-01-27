@@ -17,7 +17,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
@@ -36,13 +38,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.IFordiacPreviewChange.ChangeState;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class ReconnectPinChange extends ConfigurableChange<BlockFBNetworkElement> {
+public class ReconnectPinModelEdit extends ConfigurableModelEdit<BlockFBNetworkElement> {
 
 	private final String newName;
 	private final String oldName;
 
-	public ReconnectPinChange(final URI elementURI, final Class<BlockFBNetworkElement> elementClass,
+	public ReconnectPinModelEdit(final URI elementURI, final Class<BlockFBNetworkElement> elementClass,
 			final String newName, final String oldName) {
 		super("Handle connection of : " + oldName, elementURI, elementClass); //$NON-NLS-1$
 		this.newName = newName;
@@ -68,6 +71,12 @@ public class ReconnectPinChange extends ConfigurableChange<BlockFBNetworkElement
 	@Override
 	public void initializeValidationData(final BlockFBNetworkElement element, final IProgressMonitor pm) {
 		// No special initialization required
+	}
+
+	@Override
+	public RefactoringStatus isValid(final BlockFBNetworkElement element, final IProgressMonitor pm)
+			throws CoreException, OperationCanceledException {
+		return new RefactoringStatus();
 	}
 }
 

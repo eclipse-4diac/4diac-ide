@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2026 Primetals Technologies Austria GmbH and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,13 @@
  * Contributors:
  *   Fabio Gandolfi, Michael Oberlehner
  *      - initial API and implementation and/or initial documentation
+ *   Felix Schmid
+ *      - changed to use ModelEdits
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +43,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -134,26 +139,25 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 	}
 
 	private CompositeChange createStructDataChange(final DataTypeEntry dataTypeEntry) {
-
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
-		final CompositeChange structUsageChanges = new CompositeChange(Messages.Refactoring_StructUsers);
-		parentChange.add(structUsageChanges);
 
-		createStructChanges(dataTypeEntry, structUsageChanges);
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+		createStructChanges(dataTypeEntry, modelEdits);
+		parentChange.add(ModelEditChange.fromModelEdits(Messages.Refactoring_StructUsers, modelEdits));
 
 		return parentChange;
 	}
 
-	private void createStructChanges(final DataTypeEntry dataTypeEntry, final CompositeChange structUsageChanges) {
+	private void createStructChanges(final DataTypeEntry dataTypeEntry, final List<ModelEdit<?>> modelEdits) {
 		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(dataTypeEntry);
 		final Set<EObject> rootElements = new HashSet<>();
 		dataTypeInstanceSearch.performSearch().forEach(obj -> {
 			if (obj instanceof final VarDeclaration varDecl) {
-				structUsageChanges.add(createSubChange(varDecl, dataTypeEntry, rootElements));
+				createSubChange(varDecl, dataTypeEntry, rootElements, modelEdits);
 			} else if (obj instanceof final StructManipulator structMan) {
-				structUsageChanges.add(new UpdateFBInstanceChange(structMan, dataTypeEntry));
+				modelEdits.add(new UpdateFBInstanceModelEdit(structMan, dataTypeEntry));
 			}
 		});
 	}
@@ -162,46 +166,43 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		final CompositeChange parentChange = new CompositeChange(
 				MessageFormat.format(Messages.Refactoring_RenameFromTo, typeEntry.getTypeName(), newName));
 		parentChange.add(new UpdateTypeEntryChange(file, typeEntry, newName, oldName));
-		final CompositeChange change = new CompositeChange(Messages.Refactoring_AffectedInstancesOfFB);
 
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		final IEC61499ElementSearch search = new BlockTypeInstanceSearch(typeEntry);
 		final List<? extends EObject> searchResults = search.performSearch();
 		searchResults.stream().filter(BlockFBNetworkElement.class::isInstance).map(BlockFBNetworkElement.class::cast)
-				.map(fbn -> new UpdateFBInstanceChange(fbn, typeEntry)).forEach(change::add);
+				.map(fbn -> new UpdateFBInstanceModelEdit(fbn, typeEntry)).forEach(modelEdits::add);
 
-		if (!searchResults.isEmpty()) {
-			parentChange.add(change);
+		if (!modelEdits.isEmpty()) {
+			parentChange.add(ModelEditChange.fromModelEdits(Messages.Refactoring_AffectedInstancesOfFB, modelEdits));
 		}
 		return parentChange;
 	}
 
-	private Change createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
-			final Set<EObject> rootElements) {
+	private void createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
+			final Set<EObject> rootElements, final List<ModelEdit<?>> modelEdits) {
 		if (varDecl.getBlockFBNetworkElement() != null) {
 			if (varDecl.getBlockFBNetworkElement() instanceof StructManipulator) {
-				return null; // StructManipulators handle varDecls differently...
+				return; // StructManipulators handle varDecls differently...
 			}
 			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
-				return new UpdateFBInstanceChange(varDecl.getBlockFBNetworkElement(), dataTypeEntry);
+				modelEdits.add(new UpdateFBInstanceModelEdit(varDecl.getBlockFBNetworkElement(), dataTypeEntry));
 			}
 		} else {
 			final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
-			if (rootElements.add(rootContainer)) {
-				if (rootContainer instanceof final StructuredType stElement) {
-					final CompositeChange change = new CompositeChange(MessageFormat.format(
-							Messages.Refactoring_AffectedStruct, stElement.getName(), dataTypeEntry.getTypeName()));
-					change.add(new RenameUpdateStructDataTypeMemberVariableChange(varDecl, dataTypeEntry));
-					createStructChanges((DataTypeEntry) stElement.getTypeEntry(), change);
-					return change;
-				}
-				if (rootContainer instanceof AttributeDeclaration) {
-					return new RenameUpdateStructDataTypeMemberVariableChange(varDecl, dataTypeEntry);
-				}
-				if (rootContainer instanceof final FBType fbType && dataTypeEntry.getType() instanceof StructuredType) {
-					return new RenameUpdateFBTypeInterfaceChange(fbType, oldName, newName, packageName);
-				}
+			if (!rootElements.add(rootContainer)) {
+				return;
+			}
+			if (rootContainer instanceof final StructuredType stElement) {
+				modelEdits.add(new RenameUpdateStructDataTypeMemberVariableModelEdit(varDecl, dataTypeEntry));
+				createStructChanges((DataTypeEntry) stElement.getTypeEntry(), modelEdits);
+			}
+			if (rootContainer instanceof AttributeDeclaration) {
+				modelEdits.add(new RenameUpdateStructDataTypeMemberVariableModelEdit(varDecl, dataTypeEntry));
+			}
+			if (rootContainer instanceof final FBType fbType && dataTypeEntry.getType() instanceof StructuredType) {
+				modelEdits.add(new RenameUpdateFBTypeInterfaceModelEdit(fbType, oldName, newName, packageName));
 			}
 		}
-		return null;
 	}
 }
