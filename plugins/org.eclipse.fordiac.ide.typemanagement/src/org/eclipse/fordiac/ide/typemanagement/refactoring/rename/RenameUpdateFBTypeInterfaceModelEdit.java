@@ -28,19 +28,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBType> {
+public class RenameUpdateFBTypeInterfaceModelEdit extends ModelEdit<FBType> {
 
 	private final List<String> affectedVarNames = new ArrayList<>();
 	private final String oldTypeName;
 	private final String newTypeName;
 	private final String packageName;
 
-	public RenameUpdateFBTypeInterfaceChange(final FBType type, final String oldTypeName, final String newTypeName,
+	public RenameUpdateFBTypeInterfaceModelEdit(final FBType type, final String oldTypeName, final String newTypeName,
 			final String packageName) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_DeleteFBTypeInterface, type.getName(),
 				oldTypeName), EcoreUtil.getURI(type), FBType.class);
@@ -68,11 +68,12 @@ public class RenameUpdateFBTypeInterfaceChange extends AbstractCommandChange<FBT
 				.forEach(ie -> affectedVarNames.add(ie.getName()));
 
 		if (affectedVarNames.isEmpty()) {
-			status.addError(oldTypeName + " is not part of the interface of " + getName());
+			status.addError(MessageFormat.format(Messages.RenameUpdateFBTypeInterfaceModelEdit_NotPartOfInterface,
+					oldTypeName, getName()));
 		}
 
 		if (element.getTypeLibrary() == null || element.getTypeLibrary().getDataTypeLibrary() == null) {
-			status.addError("Type Library is null");
+			status.addError(Messages.RenameUpdateFBTypeInterfaceModelEdit_TypelibraryNull);
 		}
 
 		return status;

@@ -22,19 +22,19 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 /**
  * A change for renaming individual {@link INamedElement}s.
  */
-public class RenameElementChange extends AbstractCommandChange<INamedElement> {
+public class RenameElementModelEdit extends ModelEdit<INamedElement> {
 
 	private final String newName;
 	private String oldName;
 
-	public RenameElementChange(final String name, final URI elementURI, final String newName) {
+	public RenameElementModelEdit(final String name, final URI elementURI, final String newName) {
 		super(name, elementURI, INamedElement.class);
 		this.newName = newName;
 	}

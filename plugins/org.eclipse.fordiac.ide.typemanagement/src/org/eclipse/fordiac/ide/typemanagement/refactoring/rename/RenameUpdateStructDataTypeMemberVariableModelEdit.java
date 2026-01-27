@@ -25,15 +25,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RenameUpdateStructDataTypeMemberVariableChange extends AbstractCommandChange<VarDeclaration> {
+public class RenameUpdateStructDataTypeMemberVariableModelEdit extends ModelEdit<VarDeclaration> {
 
 	private final DataTypeEntry newTypeEntry;
 
-	public RenameUpdateStructDataTypeMemberVariableChange(final VarDeclaration varDeclaration,
+	public RenameUpdateStructDataTypeMemberVariableModelEdit(final VarDeclaration varDeclaration,
 			final DataTypeEntry newTypeEntry) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
 				varDeclaration.getName(), varDeclaration.getTypeName(),
