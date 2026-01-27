@@ -85,7 +85,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -428,12 +427,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			system = null;
 			commandStack.setUndoContext(new UndoContext());
 		}
-		// inform child editors about the new file and that they should update the
-		// annotation model. Currently we use for simplicity their existing editor input
-		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-				.forEach(e -> e.setInput(e.getEditorInput()));
-		setInputWithNotify(input);
 		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
+		super.setInput(input);
 	}
 
 	private void selectRootModelOfEditor() {

@@ -70,6 +70,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -136,6 +137,20 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 				restoreGraphicalViewerState(viewer, memento);
 			}
 		}
+	}
+
+	@Override
+	public void setInput(final IEditorInput input) {
+		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+				.forEach(e -> e.setInput(updateInput(e.getEditorInput(), input)));
+		super.setInputWithNotify(input);
+	}
+
+	private static IEditorInput updateInput(final IEditorInput oldInput, final IEditorInput newInput) {
+		if (oldInput instanceof final ISubEditorInput subEditorInput) {
+			return new SubEditorInput(newInput, subEditorInput.getElementClass(), subEditorInput.getFragment());
+		}
+		return newInput;
 	}
 
 	@Override
