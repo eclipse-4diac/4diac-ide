@@ -51,7 +51,7 @@ public abstract class ModelEdit<T extends EObject> extends Change {
 	 * @param libraryElement The library element
 	 * @param pm             The progress monitor
 	 */
-	public final void initializeValidationData(final LibraryElement libraryElement, final IProgressMonitor pm) {
+	public final void initializeValidationDataElement(final LibraryElement libraryElement, final IProgressMonitor pm) {
 		final T element = getElement(libraryElement);
 		if (element != null) {
 			initializeValidationData(element, pm);
@@ -72,7 +72,7 @@ public abstract class ModelEdit<T extends EObject> extends Change {
 	 * @param libraryElement The library element
 	 * @param pm             The progress monitor
 	 */
-	public final RefactoringStatus isValid(final LibraryElement libraryElement, final IProgressMonitor pm)
+	public final RefactoringStatus isValidElement(final LibraryElement libraryElement, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
 		final T element = getElement(libraryElement);
@@ -99,7 +99,7 @@ public abstract class ModelEdit<T extends EObject> extends Change {
 	 * @param libraryElement The library element
 	 * @return The command (will not be null)
 	 */
-	public final Command createCommand(final LibraryElement libraryElement) throws CoreException {
+	public final Command createCommandElement(final LibraryElement libraryElement) throws CoreException {
 		final T element = getElement(libraryElement);
 		if (element == null) {
 			throw new CoreException(
