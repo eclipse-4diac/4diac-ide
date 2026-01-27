@@ -22,15 +22,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.commands.create.CreateApplicationCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
+import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -64,11 +59,12 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 			final WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 				@Override
 				protected void execute(final IProgressMonitor monitor) throws CoreException {
-					final IProgressMonitor monitorToUse = (null == monitor) ? new NullProgressMonitor() : monitor;
-					final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(getSystemLocation(),
-							page.getSystemName(), monitorToUse);
-					TypeManagementPreferencesHelper.setupVersionInfo(system, system.getTypeLibrary().getProject());
-					createInitialApplication(system);
+					final SystemCreator systemCreator = new SystemCreator(getSystemLocation(), page.getSystemName(),
+							page.getInitialApplicationName());
+					systemCreator.createSystem(monitor);
+					if (page.getOpenApplication() && systemCreator.getApplication() != null) {
+						OpenListenerManager.openEditor(systemCreator.getApplication());
+					}
 				}
 			};
 			getContainer().run(false, true, op);
@@ -93,15 +89,4 @@ public class NewSystemWizard extends Wizard implements INewWizard {
 		final IWorkspaceRoot wsr = ResourcesPlugin.getWorkspace().getRoot();
 		return wsr.getFile(new Path(page.getContainerFullPath() + File.separator + sysName));
 	}
-
-	private void createInitialApplication(final AutomationSystem system) {
-		final CreateApplicationCommand cmd = new CreateApplicationCommand(system, page.getInitialApplicationName());
-		cmd.execute();
-
-		final Application app = cmd.getCreatedElement();
-		if (page.getOpenApplication() && null != app) {
-			OpenListenerManager.openEditor(app);
-		}
-	}
-
 }
