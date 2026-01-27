@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
