@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.lexer.InternalSTAlgorithmLexer;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement;
@@ -68,8 +69,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 
 	private String toSTText(final STAlgorithm algorithm) {
 		final String text = algorithm.getText();
-		if (text.contains(grammarAccess.getSTAlgorithmAccess().getALGORITHMKeyword_0().getValue())
-				|| text.contains(grammarAccess.getSTAlgorithmAccess().getEND_ALGORITHMKeyword_3().getValue())) {
+		if (containsToken(text, InternalSTAlgorithmLexer.ALGORITHM)) {
 			return text.trim();
 		}
 		return generateAlgorithmDefinition(algorithm);
@@ -89,8 +89,7 @@ public class STAlgorithmPartitioner extends STRecoveringPartitioner<STAlgorithmS
 		final String name = method.getName();
 		final String text = method.getText();
 		if ((name != null && name.startsWith(LOST_AND_FOUND_NAME))
-				|| text.contains(grammarAccess.getSTMethodAccess().getMETHODKeyword_0().getValue())
-				|| text.contains(grammarAccess.getSTMethodAccess().getEND_METHODKeyword_4().getValue())) {
+				|| containsToken(text, InternalSTAlgorithmLexer.METHOD)) {
 			return text.trim();
 		}
 		return generateMethodDefinition(method);

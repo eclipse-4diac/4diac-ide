@@ -69,17 +69,6 @@ class STAlgorithmPartitionerTest {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String text = """
 				ALGORITHM REQ
-				END_ALGORITHM
-				""";
-		fbType.getCallables().add(createSTAlgorithm("REQ", text));
-		assertEquals(text, partitioner.combine(fbType));
-	}
-
-	@Test
-	void testCombineLegacy() {
-		final SimpleFBType fbType = createSimpleFBType();
-		final String text = """
-				ALGORITHM REQ
 				// content
 				END_ALGORITHM
 				""";
@@ -88,7 +77,51 @@ class STAlgorithmPartitionerTest {
 	}
 
 	@Test
+	void testCombineCommentsAndStrings() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				// ALGORITHM
+				OUT := "ALGORITHM";
+				""";
+		final String text = """
+				ALGORITHM REQ
+				// ALGORITHM
+				OUT := "ALGORITHM";
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", algorithm));
+		assertEquals(text, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineLegacy() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String text = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", text));
+		assertEquals(text, partitioner.combine(fbType));
+	}
+
+	@Test
 	void testCombineMethod() {
+		final SimpleFBType fbType = createSimpleFBType();
+		final String algorithm = """
+				ALGORITHM REQ
+				END_ALGORITHM
+				""";
+		fbType.getCallables().add(createSTAlgorithm("REQ", ""));
+		final String method = """
+				METHOD TEST
+				END_METHOD
+				""";
+		fbType.getCallables().add(createSTMethod("TEST", ""));
+		assertEquals(algorithm + CommonElementExporter.LINE_END + method, partitioner.combine(fbType));
+	}
+
+	@Test
+	void testCombineMethodLegacy() {
 		final SimpleFBType fbType = createSimpleFBType();
 		final String algorithm = """
 				ALGORITHM REQ
