@@ -36,8 +36,10 @@ public class PreferenceStoreProvider {
 
 	private final IPreferenceStore instanceStore;
 	private final IPreferenceStore projectStore;
+	private final IProject project;
 
 	public PreferenceStoreProvider(final String qualifier, final IProject project) {
+		this.project = project;
 		this.instanceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, qualifier);
 		this.projectStore = (project != null) ? new ScopedPreferenceStore(new ProjectScope(project), qualifier) : null;
 	}
@@ -114,7 +116,13 @@ public class PreferenceStoreProvider {
 	 */
 	public void removePropertyChangeListener(final IPropertyChangeListener listener) {
 		instanceStore.removePropertyChangeListener(listener);
+
 		if (projectStore != null) {
+			// Project preferences node may already be removed during project deletion
+			if (project == null || !project.exists() || !project.isAccessible()) {
+				return;
+			}
+
 			projectStore.removePropertyChangeListener(listener);
 		}
 	}
