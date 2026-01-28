@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -193,8 +192,10 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				final IFigure viewPort = super.createFigure();
 				final IFigure backGround = viewPort.getChildren().get(0);
 				final IFigure drawingAreaContainer = backGround.getChildren().get(0);
+				// switch colors between background and editor to indicate that this is not
+				// editable
 				final Color backGroundColor = backGround.getBackgroundColor();
-				backGround.setBackgroundColor(ColorHelper.lighter(backGroundColor));
+				backGround.setBackgroundColor(drawingAreaContainer.getBackgroundColor());
 				drawingAreaContainer.setBackgroundColor(backGroundColor);
 				return viewPort;
 			}

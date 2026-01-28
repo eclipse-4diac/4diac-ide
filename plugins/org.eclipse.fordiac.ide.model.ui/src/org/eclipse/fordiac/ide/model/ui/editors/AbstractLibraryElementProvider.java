@@ -259,8 +259,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 
 		protected LibraryElementInfo(final IEditorInput input, final LibraryElement libraryElement) {
 			this.input = input;
-			this.libraryElement = libraryElement;
-			undoContext = new ObjectUndoContext(libraryElement);
+			setLibraryElement(libraryElement);
 		}
 
 		protected IEditorInput getEditorInput() {
@@ -369,7 +368,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		}
 
 		protected Optional<T> findInfo(final IUndoContext context) {
-			return infos.values().stream().filter(info -> info.getUndoContext().equals(context)).findFirst();
+			return infos.values().stream().filter(info -> info.getUndoContext().matches(context)).findFirst();
 		}
 	}
 

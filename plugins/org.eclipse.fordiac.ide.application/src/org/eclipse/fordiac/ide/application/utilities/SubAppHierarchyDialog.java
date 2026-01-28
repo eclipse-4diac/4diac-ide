@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -154,7 +154,7 @@ public class SubAppHierarchyDialog {
 	}
 
 	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
-		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getSystem),
+		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getType),
 				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
 		return buildNodeList(stream, Collections.emptyList());
 	}

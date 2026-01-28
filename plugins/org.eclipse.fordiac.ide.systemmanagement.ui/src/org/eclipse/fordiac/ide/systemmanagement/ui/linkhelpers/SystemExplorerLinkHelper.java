@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,6 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -116,7 +119,10 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 			LibraryElement libraryElement = LibraryElementProvider.INSTANCE
 					.getLibraryElement(new FileEditorInput(aFile));
 			if (libraryElement == null) {
-				libraryElement = SystemManager.INSTANCE.getSystem(aFile);
+				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(aFile);
+				if (typeEntry instanceof final SystemEntry sysEntry) {
+					libraryElement = sysEntry.getType();
+				}
 			}
 			handleModelElementSelection(aPage, libraryElement);
 		}

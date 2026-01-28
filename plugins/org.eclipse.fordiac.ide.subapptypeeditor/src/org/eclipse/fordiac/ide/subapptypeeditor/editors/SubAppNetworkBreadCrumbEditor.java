@@ -47,7 +47,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -208,9 +207,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
 		}
-		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-				.forEach(e -> e.setInput(e.getEditorInput()));
-		super.setInputWithNotify(input);
+		super.setInput(input);
 	}
 
 	@Override

@@ -42,8 +42,8 @@ public class StructuredDataTypeDataHandler extends AbstractTypeEntryDataHandler<
 			final HashMap<EObject, DataTypeEntry> inputElementsSet, final DataTypeEntry inputDataTypeEntry) {
 		if (varDecl.eContainer() instanceof final StructuredType st) {
 			final DataTypeEntry stTypeEntry = (DataTypeEntry) st.getTypeEntry();
-			inputElementsSet.put(st, inputDataTypeEntry);
-			if (stTypeEntry != null) {
+			final DataTypeEntry previous = inputElementsSet.put(st, inputDataTypeEntry);
+			if (stTypeEntry != null && previous == null) {
 				// for attributes the type entry is null and therefore we do not need to
 				// continue our search
 				handleStruct(stTypeEntry, inputElementsSet);

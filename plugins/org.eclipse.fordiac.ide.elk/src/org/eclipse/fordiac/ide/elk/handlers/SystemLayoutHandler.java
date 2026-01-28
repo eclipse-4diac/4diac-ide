@@ -14,10 +14,10 @@
 package org.eclipse.fordiac.ide.elk.handlers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.elk.Messages;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.helpers.ModelHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -45,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
@@ -92,11 +92,10 @@ public class SystemLayoutHandler extends AbstractHandler {
 			} else if (obj instanceof final IFile file) {
 				files.add(file);
 			} else if (obj instanceof final IProject project) {
-				final List<AutomationSystem> systems = SystemManager.INSTANCE.getProjectSystems(project);
-				systems.forEach(sys -> files.add(sys.getTypeEntry().getFile()));
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-				typeLibrary.getCompositeFBTypes().forEach(typeEntry -> files.add(typeEntry.getFile()));
-				typeLibrary.getSubAppTypes().forEach(typeEntry -> files.add(typeEntry.getFile()));
+				Stream.of(typeLibrary.getSystems().stream(), typeLibrary.getCompositeFBTypes(),
+						typeLibrary.getSubAppTypes().stream()).flatMap(s -> s)
+						.forEach(typeEntry -> files.add(typeEntry.getFile()));
 			}
 		}
 
@@ -117,20 +116,17 @@ public class SystemLayoutHandler extends AbstractHandler {
 				collectElements(elements, List.of(subapp));
 			} else if (obj instanceof final IFile file) {
 				if (SystemManager.isSystemFile(file)) {
-					final var system = SystemManager.INSTANCE.getSystem(file);
-					collectElements(elements, system.getApplication());
+					if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) instanceof final SystemEntry sysEntry) {
+						collectElements(elements, sysEntry.getType().getApplication());
+					}
 				} else {
 					// cfb and typed subapp
 					elements.add(file);
 				}
 			} else if (obj instanceof final IProject project) {
-				// @formatter:off
-				final var applications = SystemManager.INSTANCE.getProjectSystems(project).stream()
-					.map(AutomationSystem::getApplication)
-					.flatMap(Collection::stream).toList();
-				// @formatter:on
-				collectElements(elements, applications);
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+				typeLibrary.getSystems().stream().map(SystemEntry::getType)
+						.forEach(sys -> collectElements(elements, sys.getApplication()));
 				typeLibrary.getCompositeFBTypes().forEach(typeEntry -> elements.add(typeEntry.getFile()));
 				typeLibrary.getSubAppTypes().forEach(typeEntry -> elements.add(typeEntry.getFile()));
 			}

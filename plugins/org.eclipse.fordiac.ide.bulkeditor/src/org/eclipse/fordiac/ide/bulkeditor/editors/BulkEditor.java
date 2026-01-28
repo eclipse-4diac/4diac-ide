@@ -25,7 +25,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -43,6 +46,7 @@ import org.eclipse.fordiac.ide.application.utilities.SubAppHierarchyDialog;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.ScopeOption;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
+import org.eclipse.fordiac.ide.model.commands.ScopedOperation;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -120,6 +124,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	private IProject project;
 	private final Set<IEditorInput> editorInputs = new HashSet<>();
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
+	private final OperationContextUpdater operationContextUpdater = new OperationContextUpdater();
 	private final LibraryElementStateListener elementStateListener = new EditorStateListener();
 	private MultiLibraryElementActivationListener activationListener;
 	private ActionRegistry actionRegistry;
@@ -167,6 +172,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		setSite(site);
 		setInput(input);
 		commandStack.addCommandStackEventListener(this);
+		OperationHistoryFactory.getOperationHistory().addOperationHistoryListener(operationContextUpdater);
 		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
 		activationListener = new MultiLibraryElementActivationListener(this, editorInputs);
 
@@ -838,6 +844,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 	public void dispose() {
 		disconnectEditorInputs();
 		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
+		OperationHistoryFactory.getOperationHistory().removeOperationHistoryListener(operationContextUpdater);
+		commandStack.dispose();
 		activationListener.dispose();
 		super.dispose();
 	}
@@ -905,6 +913,20 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 				connectEditorInputs(editableSearchResult);
 				editableSearchResult = findEditableResults(editableSearchResult);
 				natTable.updateList(editableSearchResult);
+			}
+		}
+	}
+
+	private class OperationContextUpdater implements IOperationHistoryListener {
+
+		@Override
+		public void historyNotification(final OperationHistoryEvent event) {
+			if (event.getEventType() == OperationHistoryEvent.ABOUT_TO_EXECUTE
+					&& event.getOperation().hasContext(commandStack.getUndoContext())
+					&& event.getOperation() instanceof final ScopedOperation scopedOperation) {
+				scopedOperation.getAffectedObjects().stream().map(EcoreUtil::getRootContainer)
+						.filter(LibraryElement.class::isInstance).distinct().map(ObjectUndoContext::new)
+						.forEachOrdered(event.getOperation()::addContext);
 			}
 		}
 	}
