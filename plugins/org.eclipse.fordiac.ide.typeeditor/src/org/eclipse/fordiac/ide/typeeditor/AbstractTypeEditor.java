@@ -180,10 +180,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			activationListener = null;
 		}
 
+		super.dispose();
+
 		LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
 		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
-
-		super.dispose();
 	}
 
 	@Override
