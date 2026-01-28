@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalCon
 import org.eclipse.fordiac.ide.globalconstantseditor.resource.GlobalConstantsResource;
 import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.structuredtextcore.resource.STCoreResource;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreParseUtil;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.IResourceFactory;
@@ -80,9 +81,9 @@ public final class GlobalConstantsParseUtil {
 		resource.setIncludeInternalLibraryElement(false);
 		resourceSet.getResources().add(resource);
 		try {
-			resource.load(new LazyStringInputStream(GlobalConstantsPartitioner.combine(type)),
+			resource.load(new LazyStringInputStream(getPartitioner().combine(type)),
 					Map.of(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS, Boolean.TRUE,
-							GlobalConstantsResource.OPTION_PLAIN_ST, Boolean.TRUE));
+							STCoreResource.OPTION_PLAIN_ST, Boolean.TRUE));
 		} catch (final IOException e) {
 			return null;
 		}
@@ -90,6 +91,10 @@ public final class GlobalConstantsParseUtil {
 		final var validator = resource.getResourceServiceProvider().getResourceValidator();
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl));
 		return resource.getParseResult();
+	}
+
+	private static GlobalConstantsPartitioner getPartitioner() {
+		return SERVICE_PROVIDER_GCF.get(GlobalConstantsPartitioner.class);
 	}
 
 	private GlobalConstantsParseUtil() {

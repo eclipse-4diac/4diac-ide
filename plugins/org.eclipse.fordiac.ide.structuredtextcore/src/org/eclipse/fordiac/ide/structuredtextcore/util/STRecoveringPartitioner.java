@@ -131,7 +131,7 @@ public abstract class STRecoveringPartitioner<S extends EObject, E extends IName
 			builder.append(CommonElementExporter.LINE_END);
 		}
 		builder.append(text);
-		if (!text.endsWith(CommonElementExporter.LINE_END)) {
+		if (!text.endsWith(CommonElementExporter.LINE_END) && !text.isEmpty()) {
 			builder.append(CommonElementExporter.LINE_END);
 		}
 	}
