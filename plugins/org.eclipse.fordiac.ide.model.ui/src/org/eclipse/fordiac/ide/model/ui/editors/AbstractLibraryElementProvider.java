@@ -368,7 +368,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		}
 
 		protected Optional<T> findInfo(final IUndoContext context) {
-			return infos.values().stream().filter(info -> info.getUndoContext().equals(context)).findFirst();
+			return infos.values().stream().filter(info -> info.getUndoContext().matches(context)).findFirst();
 		}
 	}
 
