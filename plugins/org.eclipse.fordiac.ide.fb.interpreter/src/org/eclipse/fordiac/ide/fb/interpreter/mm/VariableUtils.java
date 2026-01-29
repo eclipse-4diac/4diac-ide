@@ -70,7 +70,7 @@ public final class VariableUtils {
 		initializeFbType(functionFBType);
 	}
 
-	private static void initializeFbType(final FBType fbType) {
+	public static void initializeFbType(final FBType fbType) {
 		initInputVars(fbType);
 		initOutputVars(fbType);
 		initPlugs(fbType);
