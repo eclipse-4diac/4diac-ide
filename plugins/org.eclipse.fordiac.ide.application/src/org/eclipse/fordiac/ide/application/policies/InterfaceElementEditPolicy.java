@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.application.policies;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.fordiac.ide.application.commands.BorderCrossingReconnectCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
+import org.eclipse.fordiac.ide.application.commands.TargetLabelReconnectCommand;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
@@ -54,6 +55,11 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
+		if (request.getStartCommand() instanceof final TargetLabelReconnectCommand reconnectCommand) {
+			reconnectCommand.setSource(getHost().getModel());
+			return reconnectCommand;
+		}
+
 		if (!(request.getStartCommand() instanceof final AbstractConnectionCreateCommand connCreateCmd)) {
 			return null;
 		}
