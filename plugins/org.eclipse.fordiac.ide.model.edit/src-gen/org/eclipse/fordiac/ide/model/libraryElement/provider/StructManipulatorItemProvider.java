@@ -25,8 +25,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.StructManipulator} object.
  * <!-- begin-user-doc -->
@@ -60,28 +58,14 @@ public class StructManipulatorItemProvider extends ConfigurableFBItemProvider {
 	}
 
 	/**
-	 * This returns StructManipulator.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/StructManipulator")); //$NON-NLS-1$
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((StructManipulator)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_StructManipulator_type") : //$NON-NLS-1$
-			getString("_UI_StructManipulator_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return super.getText(object);
 	}
 
 
