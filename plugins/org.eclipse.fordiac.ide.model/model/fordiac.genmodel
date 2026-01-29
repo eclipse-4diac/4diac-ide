@@ -1019,6 +1019,15 @@
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isVisible" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.isVisible(this);"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/hasValue" body="return value != null &amp;&amp; value.getValue() != null &amp;&amp; !value.getValue().isBlank();"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getValueString" body="return value != null ? value.getValue() : &quot;&quot;;"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setValueString" body="if (valueString != null &amp;&amp; !valueString.isBlank()) {&#xA;&#x9;if (value == null) {&#xA;&#x9;&#x9;setValue(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createValue());&#xA;&#x9;}&#xA;&#x9;value.setValue(valueString);&#xA;} else if (value != null) {&#xA;&#x9;value.setValue(&quot;&quot;);&#xA;}">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setValueString/valueString"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/getArraySizeString"
+          body="return arraySize != null ? arraySize.getValue() : &quot;&quot;;"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setArraySizeString"
+          body="if (arraySizeString != null &amp;&amp; !arraySizeString.isBlank()) {&#xA;&#x9;if (arraySize == null) {&#xA;&#x9;&#x9;setArraySize(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createArraySize());&#xA;&#x9;}&#xA;&#x9;arraySize.setValue(arraySizeString);&#xA;} else if (arraySize != null) {&#xA;&#x9;arraySize.setValue(&quot;&quot;);&#xA;}">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setArraySizeString/arraySizeString"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>
