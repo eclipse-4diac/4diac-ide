@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,11 +13,13 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 
-public class InitialValueEditorConfiguration extends InitialValueGenericEditorConfiguration<ITypedElement> {
+public interface InitialValueStructuredElementAccessor<T> extends InitialValueElementAccessor<T> {
 
-	public InitialValueEditorConfiguration(final IRowDataProvider<? extends ITypedElement> dataProvider) {
-		super(dataProvider, InitialValueTypedElementAccessor.INSTANCE);
-	}
+	/**
+	 * Get the reference element for the element
+	 *
+	 * @return the reference element (may be null)
+	 */
+	ITypedElement getReferenceElement(T element);
 }

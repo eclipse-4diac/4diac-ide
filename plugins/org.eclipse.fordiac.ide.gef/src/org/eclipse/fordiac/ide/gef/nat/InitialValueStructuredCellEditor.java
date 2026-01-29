@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.gef.dialogs.VariableDialog;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -29,19 +28,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
-public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
+public class InitialValueStructuredCellEditor<T> extends InitialValueCellEditor<T> {
 
 	private Composite composite;
 	private StyledText textControl;
 	private Button dialogButton;
 
-	public InitialValueStructuredCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider) {
-		super(dataProvider);
+	public InitialValueStructuredCellEditor(final IRowDataProvider<? extends T> dataProvider,
+			final InitialValueStructuredElementAccessor<T> elementAccessor) {
+		super(dataProvider, elementAccessor);
 	}
 
-	public InitialValueStructuredCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider,
-			final boolean moveSelectionOnEnter) {
-		super(dataProvider, moveSelectionOnEnter);
+	public InitialValueStructuredCellEditor(final IRowDataProvider<? extends T> dataProvider,
+			final InitialValueStructuredElementAccessor<T> elementAccessor, final boolean moveSelectionOnEnter) {
+		super(dataProvider, elementAccessor, moveSelectionOnEnter);
 	}
 
 	@Override
@@ -68,7 +68,9 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 		try {
 			final String initialValue = FordiacMessages.ValueTooLarge.equals(getEditorValue()) ? null
 					: getEditorValue();
-			VariableDialog.open(composite.getShell(), getRowObject(), initialValue).ifPresent(this::setEditorValue);
+			VariableDialog
+					.open(composite.getShell(), getElementAccessor().getReferenceElement(getRowObject()), initialValue)
+					.ifPresent(this::setEditorValue);
 		} finally {
 			if (textControl != null && !textControl.isDisposed()) {
 				textControl.forceFocus();
@@ -103,6 +105,11 @@ public class InitialValueStructuredCellEditor extends InitialValueCellEditor {
 	@Override
 	public Control getEditorControl() {
 		return composite;
+	}
+
+	@Override
+	protected InitialValueStructuredElementAccessor<T> getElementAccessor() {
+		return (InitialValueStructuredElementAccessor<T>) super.getElementAccessor();
 	}
 
 	protected class CompositeFocusListener extends InlineFocusListener {
