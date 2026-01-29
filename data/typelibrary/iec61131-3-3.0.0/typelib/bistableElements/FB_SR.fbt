@@ -29,7 +29,10 @@
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
-		<Algorithm Name="REQ" Comment="">
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="REQ">
 			<ST><![CDATA[ALGORITHM REQ
 Q1 := S1 OR ((NOT R) AND Q1);
 END_ALGORITHM
