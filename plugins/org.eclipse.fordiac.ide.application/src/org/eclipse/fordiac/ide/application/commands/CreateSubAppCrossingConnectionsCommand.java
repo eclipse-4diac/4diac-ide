@@ -71,8 +71,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		this.match = Objects.requireNonNull(match);
 	}
 
-	public static Command createProcessBorderCrossingConnection(final IInterfaceElement source,
-			final IInterfaceElement destination) {
+	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
+			final IInterfaceElement source, final IInterfaceElement destination) {
 		Objects.requireNonNull(source);
 		Objects.requireNonNull(destination);
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);

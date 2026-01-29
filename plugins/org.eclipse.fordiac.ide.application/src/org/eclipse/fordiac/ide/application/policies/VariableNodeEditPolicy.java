@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import org.eclipse.fordiac.ide.application.commands.TargetLabelReconnectCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -60,6 +61,11 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
+		if (request.getStartCommand() instanceof final TargetLabelReconnectCommand reconnectCommand) {
+			reconnectCommand.setSource(getHost().getModel());
+			return reconnectCommand;
+		}
+
 		if (!(request.getStartCommand() instanceof final AbstractConnectionCreateCommand connCreateCmd)) {
 			return null;
 		}
