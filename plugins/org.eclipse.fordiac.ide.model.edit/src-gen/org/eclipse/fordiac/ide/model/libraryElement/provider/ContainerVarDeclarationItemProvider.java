@@ -95,28 +95,14 @@ public class ContainerVarDeclarationItemProvider extends VarDeclarationItemProvi
 	}
 
 	/**
-	 * This returns ContainerVarDeclaration.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContainerVarDeclaration")); //$NON-NLS-1$
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ContainerVarDeclaration)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ContainerVarDeclaration_type") : //$NON-NLS-1$
-			getString("_UI_ContainerVarDeclaration_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return super.getText(object);
 	}
 
 

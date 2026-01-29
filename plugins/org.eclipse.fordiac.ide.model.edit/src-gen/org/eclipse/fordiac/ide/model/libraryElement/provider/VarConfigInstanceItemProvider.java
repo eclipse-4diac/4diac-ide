@@ -25,8 +25,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
-import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
-
 /**
  * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance} object.
  * <!-- begin-user-doc -->
@@ -74,14 +72,11 @@ public class VarConfigInstanceItemProvider extends VarDeclarationItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VarConfigInstance)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_VarConfigInstance_type") : //$NON-NLS-1$
-			getString("_UI_VarConfigInstance_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return super.getText(object);
 	}
 
 
