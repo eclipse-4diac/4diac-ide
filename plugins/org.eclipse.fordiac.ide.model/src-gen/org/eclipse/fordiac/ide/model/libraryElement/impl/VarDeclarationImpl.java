@@ -701,6 +701,50 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setValueString(final String valueString) {
+		if (valueString != null && !valueString.isBlank()) {
+			if (value == null) {
+				setValue(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createValue());
+			}
+			value.setValue(valueString);
+		} else if (value != null) {
+			value.setValue("");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getArraySizeString() {
+		return arraySize != null ? arraySize.getValue() : "";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setArraySizeString(final String arraySizeString) {
+		if (arraySizeString != null && !arraySizeString.isBlank()) {
+			if (arraySize == null) {
+				setArraySize(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createArraySize());
+			}
+			arraySize.setValue(arraySizeString);
+		} else if (arraySize != null) {
+			arraySize.setValue("");
+		}
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */

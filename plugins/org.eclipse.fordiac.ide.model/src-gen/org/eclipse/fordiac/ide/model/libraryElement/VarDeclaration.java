@@ -267,4 +267,28 @@ public interface VarDeclaration extends IInterfaceElement {
 	 */
 	String getValueString();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setValueString(String valueString);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getArraySizeString();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setArraySizeString(String arraySizeString);
+
 } // VarDeclaration
