@@ -2,11 +2,11 @@ name: 4diac IDE verification build
 
 on:
   push:
-    branches: [ "release", "develop", "3.0.x", "3.1.x"]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "release", "develop", "3.0.x", "3.1.x"]
+    branches: [ "**" ]
 
-permissions: {}	
+permissions: {}
 
 jobs:
   event_file:
@@ -24,7 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         java: [21]
-    runs-on: ${{ matrix.os }} 
+    runs-on: ${{ matrix.os }}
     name: OS ${{ matrix.os }} Java ${{ matrix.java }} compile
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -41,7 +41,7 @@ jobs:
     - name: Build with Maven
       uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3 # v1.0.1
       with:
-       run: >- 
+       run: >-
         mvn -V -B -fae -ntp clean verify
     - name: Upload Test Results for Java-${{ matrix.java }}
       if: always()
