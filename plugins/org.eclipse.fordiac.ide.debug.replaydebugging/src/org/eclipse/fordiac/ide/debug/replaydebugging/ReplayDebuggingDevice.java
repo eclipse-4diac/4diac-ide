@@ -26,6 +26,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.response.DeviceResponse;
 import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
@@ -34,11 +35,8 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAtt
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
-import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
@@ -54,11 +52,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	// to know which datapoints to mark with a different color
 	private final Map<String, String> allCurentChanges = new HashMap<>();
 
-	// to simulate the response from the device, we gather all
-	// deployment.devResponse.Resource from the ReplayDebuggingResource
-	// the information in the response is used to update the watches and to show the
-	// current changes in the UI
-	private final Response response = DevResponseFactory.eINSTANCE.createResponse();
+	private DeviceResponse response;
 
 	// this is needed mainly to be able to set the error on the current changes so
 	// they are shown with a different color
@@ -85,19 +79,23 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	public void connect() throws DebugException {
 
 		final IDeviceSimulator simulator = createSimulator();
-		simulator.start();
-		response.setWatches(DevResponseFactory.eINSTANCE.createWatches());
+		final var resourceSimulators = simulator.start();
 
 		final Device device = getDevice();
-		for (final Resource resource : device.getResource()) {
-			final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(resource,
+		for (final var entry : resourceSimulators.entrySet()) {
+			final var resource = entry.getKey();
+			final var resourceSimulator = entry.getValue();
+			final ReplayDebuggingResource replayDebuggingResource = new ReplayDebuggingResource(
 					new ReplayNavigator.Identifier(device.getAutomationSystem().getName(), device.getName(),
 							resource.getName()),
-					simulator, this);
+					resourceSimulator, this);
 			replayDebuggingResource.load();
 			replayDebuggingResources.add(replayDebuggingResource);
-			response.getWatches().getResources().add(replayDebuggingResource.getResourceResponse());
+
 		}
+
+		response = new DeviceResponse(
+				replayDebuggingResources.stream().map(ReplayDebuggingResource::getResourceResponse).toList());
 		simulator.stop();
 	}
 
@@ -170,7 +168,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	// and we need to act on the local watches and not from the parent class.
 	protected void updateWatches() {
 		incrementVariableUpdateCount();
-		final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(response);
+		final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(response.getResponse());
 		watches.values().forEach(watch -> {
 			watch.updateValue(watchData);
 			setError(watch);

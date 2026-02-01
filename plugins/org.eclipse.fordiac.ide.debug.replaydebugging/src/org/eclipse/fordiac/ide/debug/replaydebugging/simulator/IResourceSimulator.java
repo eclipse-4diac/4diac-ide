@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Jose Cabral
+ * Copyright (c) 2026 Jose Cabral
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,14 +14,13 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.simulator;
 
-import java.util.Map;
+import java.util.Optional;
 
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 
-public interface IDeviceSimulator {
+public interface IResourceSimulator {
 
-	Map<Resource, IResourceSimulator> start();
+	Optional<String> replayNextEvent();
 
-	boolean stop();
-
+	ReplayNavigator.DatapointsState getCurrentState();
 }
