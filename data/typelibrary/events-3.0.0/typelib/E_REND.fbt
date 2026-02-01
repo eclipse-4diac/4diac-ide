@@ -1,40 +1,46 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<FBType Comment="Rendezvous (AND) of two events" Name="E_REND">
-  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_REND" Comment="Rendezvous (AND) of two events">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-20" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="first event to wait for" Name="EI1" Type="Event"/>
-      <Event Comment="second event to wait for" Name="EI2" Type="Event"/>
-      <Event Comment="reset the FB to inital state (i.e., wait again for both events)" Name="R" Type="Event"/>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="triggered when both EI1 and EI2 occured at least once" Name="EO" Type="Event"/>
-    </EventOutputs>
-    <InputVars/>
-    <OutputVars/>
-  </InterfaceList>
-  <BasicFB>
-    <ECC>
-      <ECState Comment="Initial State" Name="START" x="400.0" y="1000.0"/>
-      <ECState Comment="EI1 occured at least once" Name="EI1" x="1155.0" y="340.0"/>
-      <ECState Comment="Both input events occured at least once send output event" Name="EO" x="1685.0" y="1010.0">
-        <ECAction Output="EO"/>
-      </ECState>
-      <ECState Comment="EI2 occured at least once" Name="EI2" x="1145.0" y="1585.0"/>
-      <ECTransition Comment="" Condition="EI2" Destination="EI2" Source="START" x="1020.0" y="1180.0"/>
-      <ECTransition Comment="" Condition="EI1" Destination="EI1" Source="START" x="1040.0" y="865.0"/>
-      <ECTransition Comment="" Condition="R" Destination="START" Source="EI2" x="655.0" y="1485.0"/>
-      <ECTransition Comment="" Condition="R" Destination="START" Source="EI1" x="800.0" y="695.0"/>
-      <ECTransition Comment="" Condition="EI2" Destination="EO" Source="EI1" x="1465.0" y="705.0"/>
-      <ECTransition Comment="" Condition="EI1" Destination="EO" Source="EI2" x="1440.0" y="1325.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="1165.0" y="1065.0"/>
-    </ECC>
-  </BasicFB>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="first event to wait for">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="second event to wait for">
+			</Event>
+			<Event Name="R" Type="Event" Comment="reset the FB to inital state (i.e., wait again for both events)">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="triggered when both EI1 and EI2 occured at least once">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="400" y="1000">
+			</ECState>
+			<ECState Name="EI1" Comment="EI1 occured at least once" x="1155" y="340">
+			</ECState>
+			<ECState Name="EO" Comment="Both input events occured at least once send output event" x="1685" y="1010">
+				<ECAction Output="EO"/>
+			</ECState>
+			<ECState Name="EI2" Comment="EI2 occured at least once" x="1145" y="1585">
+			</ECState>
+			<ECTransition Source="START" Destination="EI2" Condition="EI2" Comment="" x="1020" y="1180"/>
+			<ECTransition Source="START" Destination="EI1" Condition="EI1" Comment="" x="1040" y="865"/>
+			<ECTransition Source="EI2" Destination="START" Condition="R" Comment="" x="655" y="1485"/>
+			<ECTransition Source="EI1" Destination="START" Condition="R" Comment="" x="800" y="695"/>
+			<ECTransition Source="EI1" Destination="EO" Condition="EI2" Comment="" x="1465" y="705"/>
+			<ECTransition Source="EI2" Destination="EO" Condition="EI1" Comment="" x="1440" y="1325"/>
+			<ECTransition Source="EO" Destination="START" Condition="1" Comment="" x="1165" y="1065"/>
+		</ECC>
+	</BasicFB>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
