@@ -15,33 +15,44 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalLong;
+import java.util.Set;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
+/**
+ * @brief Process an event manager using different modes
+ *
+ *        Takes care of the context of given network runtime and process the
+ *        transactions in the event manager in different modes: - infinite:
+ *        execute all transactions and incoming ones until no one is left -
+ *        existing: execute the number of already existing transactions in the
+ *        event manager and no new ones. - one: execute one transaction and
+ *        return the executed event (if any was executed)
+ *
+ *        Executed transactions are removed from the internal memory.
+ */
 public class EventManagerProcessor {
 
 	public enum ProcessMode {
@@ -55,9 +66,9 @@ public class EventManagerProcessor {
 	private final List<Event> lastOutputEvents = new ArrayList<>();
 	private Event lastInjectedEvent = null;
 
-	public EventManagerProcessor(final EventManager eventManager, final FBNetwork network) {
+	public EventManagerProcessor(final EventManager eventManager, final FBNetworkRuntime networkRuntime) {
 		this.eventManager = eventManager;
-		this.networkRuntime = RuntimeFactory.createFrom(network);
+		this.networkRuntime = networkRuntime;
 		DefaultRunFBType.clearCaches();
 	}
 
@@ -107,80 +118,56 @@ public class EventManagerProcessor {
 
 		if (transaction instanceof final FBTransaction fbTransaction) {
 
-			var fbRuntime = getFBNetworkRuntime(networkRuntime, fbTransaction.getInputEventOccurrence().getParentFB(),
-					false);
-			if (fbRuntime == null) {
-				fbRuntime = getFBNetworkRuntime(networkRuntime,
-						fbTransaction.getInputEventOccurrence().getParentFB().getOuterFBNetworkElement(), true);
-				if (fbRuntime == null) {
-					fbRuntime = networkRuntime; // createMissingNetworkRuntimes(fbTransaction.getInputEventOccurrence().getParentFB());
-				} else if (fbRuntime instanceof final CompositeFBTypeRuntime compositeFBTypeRuntime) {
-					fbRuntime = compositeFBTypeRuntime.getNetworkRuntime();
-				}
+			try (final var contextKeeper = new RuntimeContextHandler(networkRuntime,
+					fbTransaction.getInputEventOccurrence())) {
+				final var transactionProcessor = new FBTransactionProcessor(fbTransaction);
+				transactionProcessor.process(startTime.isPresent() ? startTime.getAsLong() : 0);
 			}
-			final var copiedRT = EcoreUtil.copy(fbRuntime);
-			fbTransaction.getInputEventOccurrence().setFbRuntime(copiedRT);
-			final var transactionProcessor = new FBTransactionProcessor(fbTransaction);
 
-			transactionProcessor.process(startTime.isPresent() ? startTime.getAsLong() : 0);
-
-			((FBNetworkRuntime) fbRuntime).getTypeRuntimes().putAll(((FBNetworkRuntime) copiedRT).getTypeRuntimes());
-			((FBNetworkRuntime) fbRuntime).setFbnetwork((((FBNetworkRuntime) copiedRT).getFbnetwork()));
+			final var isSubApp = fbTransaction.getInputEventOccurrence().getParentFB() instanceof UntypedSubApp;
 
 			fbTransaction.getOutputEventOccurrences()
-					.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+					.forEach(outputEO -> addTransactions(outputEO.getCreatedTransactions(), isSubApp));
 
 			for (final var outputEO : fbTransaction.getOutputEventOccurrences()) {
-				lastOutputEvents.add(outputEO.getEvent()); // TODO: this works only because in the default runtime
-															// runner, the mapped event from the network is assigned to
-															// the returned type event
+				lastOutputEvents.add(outputEO.getEvent());
 			}
 
-			eventCounter++;
+			if (isSubApp) {
+				return processOne(OptionalLong.of(startTime.orElse(0) + transaction.getDuration()));
+			}
 		}
 		time += transaction.getDuration();
 		return Optional.of(transaction.getInputEventOccurrence().getEvent());
 	}
 
-	private FBRuntimeAbstract getFBNetworkRuntime(final FBNetworkRuntime fbNetworkRuntime, final FBNetworkElement fb,
-			final boolean lookingForParent) {
-		if (fbNetworkRuntime.getTypeRuntimes().get(fb) != null) {
-			if (lookingForParent) {
-				return fbNetworkRuntime.getTypeRuntimes().get(fb);
-			}
-			return fbNetworkRuntime;
+	private void addTransactions(final EList<Transaction> transactions, final boolean atStart) {
+		if (atStart) {
+			eventManager.getTransactions().addAll(0, transactions);
+		} else {
+			eventManager.getTransactions().addAll(transactions);
+			eventCounter += transactions.size();
 		}
-
-		for (final var entry : fbNetworkRuntime.getTypeRuntimes()) {
-			if (entry.getValue() instanceof final FBNetworkRuntime fbNetwork) {
-				final var possibleRuntime = getFBNetworkRuntime(fbNetwork, fb, lookingForParent);
-				if (possibleRuntime != null) {
-					return possibleRuntime;
-				}
-			} else if (entry.getValue() instanceof final CompositeFBTypeRuntime compositeFBTypeRuntime) {
-				final var possibleRuntime = getFBNetworkRuntime(compositeFBTypeRuntime.getNetworkRuntime(), fb,
-						lookingForParent);
-				if (possibleRuntime != null) {
-					return possibleRuntime;
-				}
-			}
-		}
-
-		return null;
 	}
 
-	public void injectOutputEvent(final FB fb, final Event event, final Map<String, String> outputValues) {
-		final String toLog = "\nEvent injected " + event.getQualifiedName();
-		FordiacLogHelper.logInfo(toLog);
+	public void injectOutputEvent(final BlockFBNetworkElement fb, final Event event,
+			final Map<String, String> outputValues) {
 
-		// copy output values to the model.
-		for (final var output : fb.getInterface().getOutputVars()) {
-			final var value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(outputValues.get(output.getName()));
-			output.setValue(value);
+		for (final var entry : outputValues.entrySet()) {
+			final var name = entry.getKey();
+			final var value = entry.getValue();
+			// copy output values to the model.
+			for (final var output : fb.getInterface().getOutputVars()) {
+				if (!output.getName().equals(name)) {
+					continue;
+				}
+				final var newValue = LibraryElementFactory.eINSTANCE.createValue();
+				newValue.setValue(value);
+				output.setValue(newValue);
+			}
 		}
 
-		final List<FBTransaction> generatedT = new ArrayList<>();
+		final EList<Transaction> generatedT = new BasicEList<>();
 		for (final Connection conn : event.getOutputConnections()) {
 			final var dest = (Event) conn.getDestination();
 			final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom(dest, null);
@@ -189,11 +176,13 @@ public class EventManagerProcessor {
 			generatedT.add(transaction);
 		}
 		lastInjectedEvent = event;
-		eventManager.getTransactions().addAll(generatedT);
+		addTransactions(generatedT, false);
 	}
 
 	private class FBTransactionProcessor {
 		private final FBTransaction transaction;
+
+		private static final Set<String> sifbInForte = new HashSet<>(Arrays.asList("E_CYCLE")); //$NON-NLS-1$
 
 		public FBTransactionProcessor(final FBTransaction transaction) {
 			this.transaction = transaction;
@@ -206,8 +195,15 @@ public class EventManagerProcessor {
 				setInputVariable(inputVar, element);
 			}
 			transaction.getInputEventOccurrence().setStartTime(startTime);
+			if (isSifb()) {
+				return;
+			}
 			final var result = transaction.getInputEventOccurrence().getFbRuntime().run();
 			transaction.getOutputEventOccurrences().addAll(result);
+		}
+
+		private boolean isSifb() {
+			return sifbInForte.contains(transaction.getInputEventOccurrence().getParentFB().getTypeName());
 		}
 
 		private static void setInputVariable(final VarDeclaration inputVar, final FBType type) {
