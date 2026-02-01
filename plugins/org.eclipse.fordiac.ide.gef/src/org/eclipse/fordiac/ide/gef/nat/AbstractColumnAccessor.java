@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 

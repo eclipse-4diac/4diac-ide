@@ -15,7 +15,7 @@
  *     Prankur Agarwal - handle the case where the whole row is selected
  *     		using the serial number and the width sets to Integer.MAX_VALUE
  ******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.ArrayList;
 import java.util.List;

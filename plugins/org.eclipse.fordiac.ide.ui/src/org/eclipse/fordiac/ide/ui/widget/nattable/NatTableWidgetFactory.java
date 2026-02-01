@@ -11,7 +11,7 @@
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.jface.layout.GridDataFactory;

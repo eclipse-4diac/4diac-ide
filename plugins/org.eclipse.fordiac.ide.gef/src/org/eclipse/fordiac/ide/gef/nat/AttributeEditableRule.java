@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
 

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 
 public enum DirectlyDerivedTypeTableColumn implements NatTableColumn {
 	BASE_TYPE(FordiacMessages.BaseType), INITIAL_VALUE(FordiacMessages.InitialValue), COMMENT(FordiacMessages.Comment);

@@ -13,7 +13,7 @@
  *    Dirk Fauth <dirk.fauth@googlemail.com> - Bug 459246
  *    Martin Erich Jobst - copied from SafeCalculatedValueCache and changed to be safe for concurrent requests
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.Map;
 import java.util.Objects;

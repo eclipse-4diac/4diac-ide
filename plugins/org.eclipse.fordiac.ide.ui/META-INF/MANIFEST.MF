@@ -7,7 +7,8 @@ Export-Package: org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.ui.imageprovider,
  org.eclipse.fordiac.ide.ui.preferences,
  org.eclipse.fordiac.ide.ui.providers,
- org.eclipse.fordiac.ide.ui.widget
+ org.eclipse.fordiac.ide.ui.widget,
+ org.eclipse.fordiac.ide.ui.widget.nattable
 Require-Bundle: org.eclipse.gef,
  org.eclipse.core.runtime,
  org.eclipse.jface,

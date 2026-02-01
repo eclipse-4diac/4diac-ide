@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 
 public enum VariableTableColumn implements NatTableColumn {
 	NAME(FordiacMessages.Name), TYPE(FordiacMessages.Type), VALUE(FordiacMessages.Value);
