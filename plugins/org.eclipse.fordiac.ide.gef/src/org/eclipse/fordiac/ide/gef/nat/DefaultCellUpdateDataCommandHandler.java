@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.event.DataUpdateEvent;

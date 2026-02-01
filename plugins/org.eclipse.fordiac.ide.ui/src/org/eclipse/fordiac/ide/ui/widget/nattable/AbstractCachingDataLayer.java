@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import org.eclipse.nebula.widgets.nattable.command.DisposeResourcesCommand;
 import org.eclipse.nebula.widgets.nattable.command.ILayerCommand;

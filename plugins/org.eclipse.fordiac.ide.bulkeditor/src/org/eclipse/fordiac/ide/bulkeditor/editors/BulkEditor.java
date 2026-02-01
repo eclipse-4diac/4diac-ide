@@ -68,7 +68,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;

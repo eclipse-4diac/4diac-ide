@@ -10,13 +10,14 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.DataObjectTransfer;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.nattable.command.AbstractLayerCommandHandler;

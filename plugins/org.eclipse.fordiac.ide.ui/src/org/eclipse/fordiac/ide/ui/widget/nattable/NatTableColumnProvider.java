@@ -12,7 +12,7 @@
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *   Martin Jobst - refactor to generic implementation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.List;
 

@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortDirectionEnum;
 

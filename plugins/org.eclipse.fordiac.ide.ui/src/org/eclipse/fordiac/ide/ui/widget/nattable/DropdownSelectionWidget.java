@@ -12,7 +12,7 @@
  *   Mario Kastner - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.List;
 

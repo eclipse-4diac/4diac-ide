@@ -51,11 +51,11 @@ import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionContentProvider
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportContentProposal;
 import org.eclipse.fordiac.ide.model.ui.widgets.ImportTypeSelectionProposalProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposal;

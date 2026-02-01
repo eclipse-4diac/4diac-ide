@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
