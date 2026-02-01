@@ -1,35 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<FBType Comment="permissive propagation of an event" Name="E_PERMIT">
-  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_PERMIT" Comment="permissive propagation of an event">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-20" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-20" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment=" Event input" Name="EI" Type="Event">
-        <With Var="PERMIT"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Event output" Name="EO" Type="Event"/>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="" Name="PERMIT" Type="BOOL"/>
-    </InputVars>
-    <OutputVars/>
-  </InterfaceList>
-  <BasicFB>
-    <ECC>
-      <ECState Comment="Initial State" Name="START" x="550.0" y="500.0"/>
-      <ECState Comment="Event propagration permited" Name="EO" x="1500.0" y="500.0">
-        <ECAction Output="EO"/>
-      </ECState>
-      <ECTransition Comment="" Condition="EI[PERMIT]" Destination="EO" Source="START" x="1100.0" y="515.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="EO" x="1200.0" y="885.0"/>
-    </ECC>
-  </BasicFB>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment=" Event input">
+				<With Var="PERMIT"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Event output">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PERMIT" Type="BOOL"/>
+		</InputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="500">
+			</ECState>
+			<ECState Name="EO" Comment="Event propagration permited" x="1500" y="500">
+				<ECAction Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="EO" Condition="EI[PERMIT]" Comment="" x="1100" y="515"/>
+			<ECTransition Source="EO" Destination="START" Condition="1" Comment="" x="1200" y="885"/>
+		</ECC>
+	</BasicFB>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
