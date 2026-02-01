@@ -202,6 +202,13 @@
              isEditable="false"> 
              <!-- the label does not need to be translatable --> 
        </colorDefinition>
+       <colorDefinition
+				categoryId="org.eclipse.fordiac.ide.themeCategory"
+				id="org.eclipse.fordiac.ide.ui.NatTableDefaultBackground"
+				label="Nattable defaualt background color"
+				value="COLOR_LIST_BACKGROUND">
+             <!-- the label does not need to be translatable --> 
+		</colorDefinition>
     </extension>
 	<extension
 		point="org.eclipse.e4.ui.css.swt.theme">
