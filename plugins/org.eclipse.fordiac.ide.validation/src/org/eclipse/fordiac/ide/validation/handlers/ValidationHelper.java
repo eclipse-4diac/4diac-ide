@@ -50,6 +50,14 @@ import org.eclipse.ocl.expressions.Variable;
 
 public final class ValidationHelper {
 
+	public static void validate(final INamedElement namedElement) {
+		final Job job = new OCLJob("OCL validation", namedElement);
+		job.setUser(true);
+		job.setPriority(Job.BUILD);
+		job.setRule(getFile(namedElement));
+		job.schedule();
+	}
+
 	private static class OCLJob extends Job {
 		private static final String ECC = "ECC"; //$NON-NLS-1$
 		private final INamedElement namedElement;
@@ -130,13 +138,6 @@ public final class ValidationHelper {
 			FordiacMarkerHelper.createMarkers(iresource,
 					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
 							.setSeverity(severity).setLocation(location).setLineNumber(lineNumber).setTarget(context)));
-		}
-
-		private static IResource getFile(final INamedElement element) {
-			if (element instanceof final FBType fbtype) {
-				return fbtype.getTypeEntry().getFile();
-			}
-			return ModelHelper.getFileFromContext(element);
 		}
 
 		private static String createHierarchicalName(final EObject object) {
@@ -222,9 +223,11 @@ public final class ValidationHelper {
 
 	}
 
-	public static void validate(final INamedElement namedElement) {
-		final Job job = new OCLJob("OCL validation", namedElement);
-		job.schedule();
+	private static IResource getFile(final INamedElement element) {
+		if (element instanceof final FBType fbtype) {
+			return fbtype.getTypeEntry().getFile();
+		}
+		return ModelHelper.getFileFromContext(element);
 	}
 
 	private ValidationHelper() {

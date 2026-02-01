@@ -33,17 +33,14 @@ public class ValidationHandler extends AbstractHandler {
 
 	private static INamedElement getSelectedElement(final StructuredSelection currentSelection) {
 		final Object obj = currentSelection.getFirstElement();
-		if (obj instanceof IFile) {
-			return checkSelectedFile((IFile) obj);
+		if (obj instanceof final IFile file) {
+			return checkSelectedFile(file);
 		}
-		return (obj instanceof INamedElement) ? (INamedElement) obj : null;
+		return (obj instanceof final INamedElement ne) ? ne : null;
 	}
 
 	private static INamedElement checkSelectedFile(final IFile file) {
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (entry instanceof FBTypeEntry) {
-			return ((FBTypeEntry) entry).getType();
-		}
-		return null;
+		return (entry instanceof final FBTypeEntry typeEntry) ? typeEntry.getType() : null;
 	}
 }
