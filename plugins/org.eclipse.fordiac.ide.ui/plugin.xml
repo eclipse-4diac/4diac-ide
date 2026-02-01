@@ -194,6 +194,14 @@
              isEditable="false"> 
              <!-- the label does not need to be translatable --> 
        </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PageCommentBackgroundColor"
+             label="Page Comment Background Color"
+             value="248, 248, 252"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
     </extension>
 	<extension
 		point="org.eclipse.e4.ui.css.swt.theme">
