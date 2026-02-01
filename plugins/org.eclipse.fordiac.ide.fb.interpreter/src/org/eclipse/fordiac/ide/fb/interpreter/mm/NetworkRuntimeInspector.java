@@ -16,12 +16,14 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.SubAppImpl;
@@ -65,6 +67,18 @@ public class NetworkRuntimeInspector {
 
 	public BlockFBNetworkElement getRealFB(final String name) {
 		return realBlockNames.get(name);
+	}
+
+	public Optional<Event> getRealEvent(final Optional<Event> originalEvent) {
+		if (!originalEvent.isPresent()) {
+			return Optional.empty();
+		}
+
+		final var eventInRuntime = getRuntimeInterfaceElement(originalEvent.get());
+		if (eventInRuntime == null) {
+			return originalEvent;
+		}
+		return Optional.of((Event) eventInRuntime);
 	}
 
 	public IInterfaceElement getRuntimeInterfaceElement(final IInterfaceElement realInterfaceElement) {
