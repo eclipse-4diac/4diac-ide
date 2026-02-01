@@ -18,16 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
-import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
+import org.eclipse.fordiac.ide.debug.replaydebugging.response.ResourceResponse;
+import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IResourceSimulator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
  * @brief Handles the replay navigator of a resource and transforms the data
@@ -51,29 +48,20 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 
 	private final ReplayNavigator.Identifier replayNavigatorIdentifier;
 
-	private final Resource resource;
-
 	private final UpdateListener updateListener;
 
-	private final IDeviceSimulator simulator;
+	private final IResourceSimulator simulator;
 
-	// response data for the resources being replayed
-	org.eclipse.fordiac.ide.deployment.devResponse.Resource resourceResponse = DevResponseFactory.eINSTANCE
-			.createResource();
+	private ResourceResponse resourceResponse;
 
-	// map from the datapoints coming from the replay navigator to the data values
-	// in the response
-	private final Map<String, org.eclipse.fordiac.ide.deployment.devResponse.Data> dataValues = new HashMap<>();
-
-	public ReplayDebuggingResource(final Resource resource, final ReplayNavigator.Identifier reaplayNavigatorIdentifier,
-			final IDeviceSimulator simulator, final UpdateListener updateListener) {
+	public ReplayDebuggingResource(final ReplayNavigator.Identifier reaplayNavigatorIdentifier,
+			final IResourceSimulator simulator, final UpdateListener updateListener) {
 		this.replayNavigatorIdentifier = reaplayNavigatorIdentifier;
-		this.resource = resource;
 		this.updateListener = updateListener;
 		this.simulator = simulator;
 	}
 
-	public org.eclipse.fordiac.ide.deployment.devResponse.Resource getResourceResponse() {
+	public ResourceResponse getResourceResponse() {
 		return resourceResponse;
 	}
 
@@ -91,71 +79,14 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	}
 
 	private void createReplayNavigator() {
-		final ReplayNavigator.DatapointsState initialState = simulator.getCurrentState(resource);
+		final ReplayNavigator.DatapointsState initialState = simulator.getCurrentState();
 
-		createResourceResponse(initialState);
+		resourceResponse = new ResourceResponse(replayNavigatorIdentifier.resourceName(), initialState);
 
 		final List<EventChange> eventChanges = iterateOverAllEvents(initialState);
 		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState, eventChanges);
 		replayNavigator.addStateChangeListener(this);
 		ReplayNavigatorManager.getDefault().registerNavigator(replayNavigator);
-	}
-
-	/**
-	 * @brief Creates the resource response based on the initial state of the replay
-	 *        navigator.
-	 *
-	 *        This method iterates over the initial state of the replay navigator,
-	 *        creates FBs and ports in the response, and stores the data values for
-	 *        each datapoint.
-	 *
-	 * @param initialState The initial state of the replay navigator containing
-	 *                     datapoints and their values.
-	 */
-	private void createResourceResponse(final ReplayNavigator.DatapointsState initialState) {
-		resourceResponse.setName(resource.getName());
-
-		// handle FBs in the response
-		final EList<org.eclipse.fordiac.ide.deployment.devResponse.FB> responseFBs = resourceResponse.getFbs();
-
-		// list of already added FBs
-		final HashMap<String, org.eclipse.fordiac.ide.deployment.devResponse.FB> existingResponseFBs = new HashMap<>();
-		for (final Map.Entry<String, String> entry : initialState.entrySet()) {
-			final String datapoint = entry.getKey();
-			final String value = entry.getValue();
-
-			final int lastDot = datapoint.lastIndexOf('.');
-			final String fbName = datapoint.substring(0, lastDot);
-			final String portName = datapoint.substring(lastDot + 1);
-
-			org.eclipse.fordiac.ide.deployment.devResponse.FB responseFB;
-			if (!existingResponseFBs.containsKey(fbName)) {
-				// create response FB if first time seeing it
-				responseFB = DevResponseFactory.eINSTANCE.createFB();
-				responseFB.setName(fbName);
-				responseFBs.add(responseFB);
-
-				// add it to the list of existing FBs
-				existingResponseFBs.put(fbName, responseFB);
-			} else {
-				responseFB = existingResponseFBs.get(fbName);
-			}
-			final EList<org.eclipse.fordiac.ide.deployment.devResponse.Port> responseFBPorts = responseFB.getPorts();
-			final org.eclipse.fordiac.ide.deployment.devResponse.Port responsePort = DevResponseFactory.eINSTANCE
-					.createPort();
-			responsePort.setName(portName);
-			responseFBPorts.add(responsePort);
-
-			final EList<org.eclipse.fordiac.ide.deployment.devResponse.Data> responsePortDataValues = responsePort
-					.getDataValues();
-			final org.eclipse.fordiac.ide.deployment.devResponse.Data dataValuesValue = DevResponseFactory.eINSTANCE
-					.createData();
-			dataValuesValue.setValue(value);
-			responsePortDataValues.add(dataValuesValue);
-
-			// store the quick access to the data values
-			dataValues.put(datapoint, dataValuesValue);
-		}
 	}
 
 	/**
@@ -178,15 +109,14 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		final List<EventChange> eventChanges = new ArrayList<>();
 		Map<String, String> previousState = new HashMap<>(initialState);
 
-		for (Optional<String> lastEvent = simulator.replayNextEvent(resource); lastEvent
-				.isPresent(); lastEvent = simulator.replayNextEvent(resource)) {
+		for (Optional<String> lastEvent = simulator.replayNextEvent(); lastEvent
+				.isPresent(); lastEvent = simulator.replayNextEvent()) {
 
-			final Map<String, String> currentState = simulator.getCurrentState(resource);
+			final Map<String, String> currentState = simulator.getCurrentState();
 
 			// Process the value
 			final List<DataPointChange> dataPointChanges = new ArrayList<>();
 			for (final Map.Entry<String, String> entry : currentState.entrySet()) {
-//				System.out.println(entry.getKey() + " : " + entry.getValue());
 				final String key = entry.getKey();
 				final String currentStateValue = entry.getValue();
 				if (!previousState.get(key).equals(currentStateValue)) {
@@ -197,13 +127,6 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 			eventChanges.add(new EventChange(eventCounter, lastEvent.get(), dataPointChanges));
 			previousState = new HashMap<>(currentState);
 
-			String toLog = "\nEvent triggered " + lastEvent.get() + " with the following data changes:";
-			for (final DataPointChange change : dataPointChanges) {
-				toLog += "  " + change.datapoint() + ": " + change.newValue();
-			}
-
-			FordiacLogHelper.logInfo(toLog);
-
 		}
 		return eventChanges;
 	}
@@ -211,14 +134,7 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	// callback from the replay navigator when the state changes
 	@Override
 	public void update(final ReplayNavigator replayNavigator, final ReplayNavigator.DatapointsState changedValues) {
-		for (final Map.Entry<String, String> entry : changedValues.entrySet()) {
-			final String datapoint = entry.getKey();
-			final String value = entry.getValue();
-
-			final org.eclipse.fordiac.ide.deployment.devResponse.Data dataValue = dataValues.get(datapoint);
-			dataValue.setValue(value);
-
-		}
+		resourceResponse.updateResponse(changedValues);
 		updateListener.onUpdate(this);
 	}
 }

@@ -13,69 +13,68 @@
 
 package org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 
 import org.eclipse.fordiac.debug.replaydebugging.trace.SendOutputEvent;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.Utils;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerProcessor;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IResourceSimulator;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-public class ResourceSimulator {
-	private final Resource resource;
+/**
+ * @brief Implementation of the replay algorithm for a resource
+ *
+ *        It leverages the EventManagementProccessor for injecting events and
+ *        processing them. A NetworkRuntimeInspector is used to get the the
+ *        fb/interface instances of the network of the resource itself or the
+ *        ones used by the runtimes.
+ */
+public class ResourceSimulator implements IResourceSimulator {
+
 	private final List<SendOutputEvent> externalEvents;
 	private int externalEventCounter = 0;
-
-	private final EventManagerProcessor eventManagerProcessor;
+	private final ResourceExecutor resourceExecutor;
 
 	public ResourceSimulator(final Resource resource, final List<SendOutputEvent> externalEvents) {
-		this.resource = resource;
 		this.externalEvents = externalEvents;
-		eventManagerProcessor = new EventManagerProcessor(EventManagerFactory.createFrom(List.of()),
-				resource.getFBNetwork());
+		this.resourceExecutor = new ResourceExecutor(resource);
 	}
 
-	public List<Event> getLastOutputEvents() {
-		return eventManagerProcessor.getLastOutputEvents();
+	@Override
+	public Optional<String> replayNextEvent() {
+		final var event = replayNextEventInternal();
+		if (!event.isPresent()) {
+			return Optional.empty();
+		}
+		return Optional.of(event.get().getQualifiedName());
+
 	}
 
-	public Optional<Event> reproduceNextEvent() {
+	@Override
+	public ReplayNavigator.DatapointsState getCurrentState() {
+		return resourceExecutor.getCurrentState();
+	}
+
+	private Optional<Event> replayNextEventInternal() {
 
 		// check if we reached the end of the list of events
 		if (externalEvents.size() <= externalEventCounter) {
 			// keep processing internal events
-			return eventManagerProcessor.processOne(OptionalLong.empty());
+			return resourceExecutor.executeNextEvent();
 		}
 
 		final var externalEvent = externalEvents.get(externalEventCounter);
 		final int eventCounter = externalEvent.eventCounter();
 
-		if (eventManagerProcessor.getEventCounter() < eventCounter) {
-			return eventManagerProcessor.processOne(OptionalLong.empty());
+		if (resourceExecutor.getEventCounter() < eventCounter) {
+			return resourceExecutor.executeNextEvent();
 		}
 
 		externalEventCounter++;
-		final var instanceFB = Utils.getInstanceFB(resource, externalEvent.instanceName());
-		if (instanceFB == null) {
-			// could not find FB
-			return Optional.empty();
-		}
-		final var event = instanceFB.getInterface().getEventOutputs().get(externalEvent.eventId());
+		resourceExecutor.injectEvent(externalEvent.instanceName(), externalEvent.eventId(), externalEvent.outputs());
+		return resourceExecutor.executeNextEvent();
 
-		// set outputs
-		final List<String> outputValues = externalEvent.outputs();
-		final var fbDataOutput = instanceFB.getInterface().getOutputVars();
-		final var dataOutputValues = new HashMap<String, String>();
-		for (int i = 0; i < fbDataOutput.size(); i++) {
-			dataOutputValues.put(fbDataOutput.get(i).getName(), outputValues.get(i));
-		}
-
-		eventManagerProcessor.injectOutputEvent(instanceFB, event, dataOutputValues);
-		return eventManagerProcessor.processOne(OptionalLong.empty());
 	}
 
 }
