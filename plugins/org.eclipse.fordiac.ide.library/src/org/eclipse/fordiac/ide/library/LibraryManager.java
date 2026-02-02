@@ -177,10 +177,9 @@ public enum LibraryManager {
 	/**
 	 * Initialize map with all libraries contained in the folder specified
 	 *
-	 * @param map      map to initialize
-	 * @param path     path to folder
-	 * @param standard if libraries are standard
-	 * @param baseURI  URI to use as base
+	 * @param map     map to initialize
+	 * @param path    path to folder
+	 * @param baseURI URI to use as base
 	 */
 	private static void initLibraryMap(final Map<String, List<LibraryRecord>> map, final Path path,
 			final java.net.URI baseURI) {
@@ -197,10 +196,9 @@ public enum LibraryManager {
 	/**
 	 * Add {@link LibraryRecord} to the given map based on the {@link Path}
 	 *
-	 * @param map      target map
-	 * @param path     path of the library folder
-	 * @param baseUri  URI to use as base
-	 * @param standard if record belongs to standard library
+	 * @param map     target map
+	 * @param path    path of the library folder
+	 * @param baseUri URI to use as base
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static void addLibrary(final Map<String, List<LibraryRecord>> map, final Path path,
