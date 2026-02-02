@@ -44,6 +44,7 @@ import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.IUniqueIndexLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
+import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -378,6 +379,7 @@ public final class NatTableWidgetFactory {
 
 	private static void setNatTableStyle(final NatTable table) {
 		table.addConfiguration(new FordiacNatTableConfiguration());
+		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 		table.configure();
 	}
 
