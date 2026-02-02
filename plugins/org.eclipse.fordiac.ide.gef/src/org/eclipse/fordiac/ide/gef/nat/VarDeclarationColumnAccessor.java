@@ -23,10 +23,10 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
@@ -41,7 +41,8 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
-public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDeclaration, VarDeclarationTableColumn> {
+public class VarDeclarationColumnAccessor
+		extends AbstractCommandColumnAccessor<VarDeclaration, VarDeclarationTableColumn> {
 
 	public VarDeclarationColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, VarDeclarationTableColumn.DEFAULT_COLUMNS);

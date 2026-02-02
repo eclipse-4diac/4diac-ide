@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
-public class AttributeColumnAccessor extends AbstractColumnAccessor<Attribute, AttributeTableColumn> {
+public class AttributeColumnAccessor extends AbstractCommandColumnAccessor<Attribute, AttributeTableColumn> {
 
 	private static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 

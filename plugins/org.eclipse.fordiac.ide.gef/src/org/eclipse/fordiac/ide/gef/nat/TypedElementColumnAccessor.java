@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
 public class TypedElementColumnAccessor<T extends ITypedElement>
-		extends AbstractColumnAccessor<T, TypedElementTableColumn> {
+		extends AbstractCommandColumnAccessor<T, TypedElementTableColumn> {
 
 	protected TypedElementColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, TypedElementTableColumn.DEFAULT_COLUMNS);

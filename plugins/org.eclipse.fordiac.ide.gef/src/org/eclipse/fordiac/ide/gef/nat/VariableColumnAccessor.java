@@ -18,7 +18,7 @@ import java.util.Objects;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.fordiac.ide.ui.widget.nattable.AbstractColumnAccessor;
 
 public class VariableColumnAccessor extends AbstractColumnAccessor<Variable<?>, VariableTableColumn> {
 
@@ -29,7 +29,7 @@ public class VariableColumnAccessor extends AbstractColumnAccessor<Variable<?>, 
 	}
 
 	public VariableColumnAccessor(final List<VariableTableColumn> columns) {
-		super(null, columns);
+		super(columns);
 	}
 
 	@Override
@@ -48,17 +48,12 @@ public class VariableColumnAccessor extends AbstractColumnAccessor<Variable<?>, 
 	}
 
 	@Override
-	public void setDataValue(final Variable<?> rowObject, final int columnIndex, final Object newValue) {
-		switch (getColumns().get(columnIndex)) {
+	public void setDataValue(final Variable<?> rowObject, final VariableTableColumn column, final Object newValue) {
+		switch (column) {
 		case VALUE -> rowObject.setValue(Objects.toString(newValue, NULL_DEFAULT));
-		case NAME, TYPE -> throw new UnsupportedOperationException(
-				"Cannot set value for column: " + getColumns().get(columnIndex).getDisplayName()); //$NON-NLS-1$
-		default -> throw new IllegalArgumentException("Unexpected value: " + getColumns().get(columnIndex)); //$NON-NLS-1$
+		case NAME, TYPE ->
+			throw new UnsupportedOperationException("Cannot set value for column: " + column.getDisplayName()); //$NON-NLS-1$
+		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		}
-	}
-
-	@Override
-	public Command createCommand(final Variable<?> rowObject, final VariableTableColumn column, final Object newValue) {
-		throw new UnsupportedOperationException("Cannot create command for changing variable"); //$NON-NLS-1$
 	}
 }
