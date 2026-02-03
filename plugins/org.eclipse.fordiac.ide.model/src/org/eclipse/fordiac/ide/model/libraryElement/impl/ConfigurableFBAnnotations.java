@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
@@ -30,7 +31,7 @@ public final class ConfigurableFBAnnotations {
 
 	public static boolean validateDataType(final ConfigurableFB element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (element.getDataType() == null) {
+		if (element.getDataType() == null && !(element instanceof ConfigurableMoveFB)) {
 			if (diagnostics != null) {
 				diagnostics.add(createTypeValidationDiagnostic(Messages.TypedElementAnnotations_TypeNotSet, element));
 			}

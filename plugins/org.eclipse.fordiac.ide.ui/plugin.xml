@@ -6,7 +6,7 @@
       <page
             class="org.eclipse.fordiac.ide.ui.preferences.FordiacPreferencePage"
             id="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
-            name="4diac IDE">
+            name="%FordiacPreferencePage_name">
       </page>
    </extension>
    <extension
@@ -15,7 +15,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.ui.preferences.ModelPreferences"
             id="org.eclipse.fordiac.ide.ui.preferences.ModelPreferences"
-            name="Model Preferences">
+            name="%ModelPreferences_name">
       </page>
    </extension>
    <extension
@@ -23,7 +23,7 @@
       <page
             class="org.eclipse.fordiac.ide.ui.preferences.EmptyPropertyPage"
             id="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
-            name="4diac IDE">
+            name="%FordiacPreferencePage_name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -45,9 +45,9 @@
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="org.eclipse.fordiac.ide.ui.handlers.ContributeHandler"
-            description="Information on how to contribute to Eclipse 4diac"
+            description="%Contribute_description"
             id="org.eclipse.fordiac.ide.ui.contribute"
-            name="Contribute">
+            name="%Contribute_name">
       </command>
    </extension>
     <extension point="org.eclipse.ui.menus">
@@ -64,8 +64,8 @@
         <menuContribution
                 locationURI="menu:org.eclipse.ui.main.menu?after=edit">                
             <menu
-               label="Source"
-               mnemonic="S"
+               label="%SourceMenu_label"
+               mnemonic="%SourceMenu_mnemonic"
                id="org.eclipse.4diac.ide.source.menu">
                  <separator
                        name="commentGroup"
@@ -101,8 +101,8 @@
        	<!-- Refactor menu definitions to be used by the different plugins of Eclipse 4diac or external contributions.
           -->
 		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=org.eclipse.4diac.ide.source.menu">                
-			<menu label="Refactor"
-					mnemonic="t"
+			<menu label="%RefactorMenu_label"
+					mnemonic="%RefactorMenu_mnemonic"
 			   		id="org.eclipse.4diac.ide.refactor.menu">
 				<separator name="typeGroup" visible="true"/>
 			</menu>
