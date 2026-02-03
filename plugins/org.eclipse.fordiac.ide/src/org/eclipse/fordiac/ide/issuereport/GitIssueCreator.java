@@ -36,7 +36,7 @@ import com.google.gson.Gson;
 
 public class GitIssueCreator {
 
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&body=%s"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&labels=%s&body=%s"; //$NON-NLS-1$
 
 	private static record IssueInfo(String title, String body, String[] labels) {
 	}
@@ -51,7 +51,8 @@ public class GitIssueCreator {
 	private static final String[] LABELS = new String[] { "bug", "autoreport" };
 	private static final String SESSION_ID = UUID.randomUUID().toString();
 	private static final String CODE_DELIMITER = "```"; //$NON-NLS-1$
-	private static final int MAX_MANUAL_ISSUE_BODY_SIZE = 4000;
+	private static final String TRUNCATE_INIDCATER = "[truncated]"; //$NON-NLS-1$
+	private static final int MAX_MANUAL_ISSUE_URL_SIZE = 8000;
 
 	public static Optional<String> createIssue(final IStatus status) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
@@ -103,15 +104,11 @@ public class GitIssueCreator {
 	}
 
 	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
-		String body = info.body();
-		if (body.length() > MAX_MANUAL_ISSUE_BODY_SIZE) {
-			body = body.substring(0, MAX_MANUAL_ISSUE_BODY_SIZE) + CODE_DELIMITER;
-		}
-
 		final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
-				URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
-				URLEncoder.encode(body, StandardCharsets.UTF_8)); // body
-		openLinkInBrowser(reportingURI);
+				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
+				URLEncoder.encode(String.join(",", info.labels()), StandardCharsets.UTF_8), //$NON-NLS-1$
+				URLEncoder.encode(info.body(), StandardCharsets.UTF_8));
+		openLinkInBrowser(truncateStacktraceURL(reportingURI, MAX_MANUAL_ISSUE_URL_SIZE));
 		return Optional.empty(); // no issue created yet...
 	}
 
@@ -183,5 +180,18 @@ public class GitIssueCreator {
 
 	private static String removeLeadingTrailingSlashes(final String s) {
 		return s.replaceAll("^/+|/+$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	private static String truncateStacktraceURL(final String url, final int maxLength) {
+		if (url.length() <= maxLength) {
+			return url;
+		}
+		final String lineBreak = URLEncoder.encode(System.lineSeparator(), StandardCharsets.UTF_8);
+		final String epilogue = URLEncoder.encode(
+				System.lineSeparator() + TRUNCATE_INIDCATER + System.lineSeparator() + CODE_DELIMITER,
+				StandardCharsets.UTF_8);
+		// find the last line break that is inside the length limit
+		final int idx = url.lastIndexOf(lineBreak, maxLength - lineBreak.length() - epilogue.length());
+		return url.substring(0, idx).concat(epilogue);
 	}
 }
