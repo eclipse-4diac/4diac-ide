@@ -14,11 +14,11 @@ package org.eclipse.fordiac.ide.deployment.eval;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
@@ -82,10 +82,8 @@ public class DeploymentEvaluatorSharedState implements Closeable {
 		for (final FBDeploymentData fb : deploymentData.getFbs()) {
 			deviceManagementInteractor.createFBInstance(fb, deploymentData.getRes());
 		}
-		for (final ParameterDeploymentData param : deploymentData.getParams()) {
-			deviceManagementInteractor.writeFBParameter(deploymentData.getRes(), param.value(),
-					new FBDeploymentData(param.prefix(), param.variable().getBlockFBNetworkElement()),
-					param.variable());
+		for (final Map.Entry<String, String> param : deploymentData.getParams().entrySet()) {
+			deviceManagementInteractor.writeFBParameter(deploymentData.getRes(), param.getKey(), param.getValue());
 		}
 		for (final ConnectionDeploymentData connection : deploymentData.getConnections()) {
 			deviceManagementInteractor.createConnection(deploymentData.getRes(), connection);
