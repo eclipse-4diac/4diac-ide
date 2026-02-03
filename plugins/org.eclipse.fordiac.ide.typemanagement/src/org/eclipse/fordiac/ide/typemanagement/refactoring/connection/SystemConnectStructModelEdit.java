@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -37,7 +37,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
  * broken) Connections are seleted. Grouping by System is needed, as creating a
  * Change for each individually leads to longer execution times.
  */
-public class SystemConnectStructChange extends AbstractCommandChange<AutomationSystem> {
+public class SystemConnectStructModelEdit extends ModelEdit<AutomationSystem> {
 	private final Map<String, String> replaceableConMap;
 	private final String sourceVarName;
 	private final String destinationVarName;
@@ -55,7 +55,7 @@ public class SystemConnectStructChange extends AbstractCommandChange<AutomationS
 	 * @param destinationVarName Name of the Struct Variable Input at the
 	 *                           Destination
 	 */
-	public SystemConnectStructChange(final URI elementURI, final List<URI> list,
+	public SystemConnectStructModelEdit(final URI elementURI, final List<URI> list,
 			final Map<String, String> replaceableConMap, final String sourceVarName, final String destinationVarName) {
 		super(Objects.requireNonNull(elementURI).trimFileExtension().lastSegment()
 				+ Messages.SystemConnectStructChange_Name, elementURI, AutomationSystem.class);
