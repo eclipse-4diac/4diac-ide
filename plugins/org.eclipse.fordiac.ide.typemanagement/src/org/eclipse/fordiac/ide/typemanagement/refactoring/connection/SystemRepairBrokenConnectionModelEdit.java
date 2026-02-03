@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.RepairBrokenConnectionCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -44,7 +44,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
  * RepairBrokenConnectionCommands}. Grouping by System is needed, as creating a
  * Change for each individually leads to longer execution times.
  */
-public class SystemRepairBrokenConnectionChange extends AbstractCommandChange<AutomationSystem> {
+public class SystemRepairBrokenConnectionModelEdit extends ModelEdit<AutomationSystem> {
 	private final URI structURI;
 	private final Map<String, String> replaceableConMap;
 	private final List<URI> list;
@@ -61,7 +61,7 @@ public class SystemRepairBrokenConnectionChange extends AbstractCommandChange<Au
 	 * @param isSource          Whether the FB is the Source for the broken
 	 *                          Connection
 	 */
-	public SystemRepairBrokenConnectionChange(final URI elementURI, final URI structURI,
+	public SystemRepairBrokenConnectionModelEdit(final URI elementURI, final URI structURI,
 			final Map<String, String> replaceableConMap, final List<URI> list, final boolean isSource) {
 		super(Objects.requireNonNull(elementURI).trimFileExtension().lastSegment()
 				+ Messages.RepairBrokenConnectionChange_Name, elementURI, AutomationSystem.class);

@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.connection.commands.ReplaceVarsWithStructCommand;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -36,7 +36,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
  * ReplaceVarsWithStructCommand}
  *
  */
-public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
+public class ReplaceVarsWithStructModelEdit extends ModelEdit<FBType> {
 	private final Collection<String> vars;
 	final URI structURI;
 	private final String name;
@@ -54,7 +54,7 @@ public class ReplaceVarsWithStructChange extends AbstractCommandChange<FBType> {
 	 *                   In/Output is an Input
 	 * @param position   Position in the respective List
 	 */
-	protected ReplaceVarsWithStructChange(final URI elementURI, final Collection<String> vars, final URI structURI,
+	protected ReplaceVarsWithStructModelEdit(final URI elementURI, final Collection<String> vars, final URI structURI,
 			final String name, final boolean isInput, final int position) {
 		super(elementURI.trimFileExtension().lastSegment() + Messages.ReplaceVarsWithStructChange_Replace
 				+ (isInput ? Messages.ReplaceVarsWithStructChange_Inputs : Messages.ReplaceVarsWithStructChange_Outputs)

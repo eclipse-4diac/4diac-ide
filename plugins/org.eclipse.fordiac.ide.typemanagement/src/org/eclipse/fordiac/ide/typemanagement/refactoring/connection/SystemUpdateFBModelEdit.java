@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.AbstractCommandChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -35,7 +35,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
  * @see org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand
  * @see org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange
  */
-public class SystemUpdateFBChange extends AbstractCommandChange<AutomationSystem> {
+public class SystemUpdateFBModelEdit extends ModelEdit<AutomationSystem> {
 	private final List<URI> updateURIs;
 
 	/**
@@ -45,7 +45,7 @@ public class SystemUpdateFBChange extends AbstractCommandChange<AutomationSystem
 	 *                   contained
 	 * @param list       FB URIs which should be updated
 	 */
-	protected SystemUpdateFBChange(final URI elementURI, final List<URI> list) {
+	protected SystemUpdateFBModelEdit(final URI elementURI, final List<URI> list) {
 		super(Objects.requireNonNull(elementURI).trimFileExtension().lastSegment() + Messages.SystemUpdateFBChange_Name,
 				elementURI, AutomationSystem.class);
 		updateURIs = Objects.requireNonNull(list);
