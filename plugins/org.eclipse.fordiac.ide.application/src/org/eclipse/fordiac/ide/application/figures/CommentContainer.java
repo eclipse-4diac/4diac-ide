@@ -25,7 +25,7 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 
-public final class CommentContainer extends Figure {
+public class CommentContainer extends Figure {
 
 	public CommentContainer() {
 		setBorder(new MarginBorder(5));
@@ -41,13 +41,16 @@ public final class CommentContainer extends Figure {
 	protected void paintFigure(final Graphics graphics) {
 		super.paintFigure(graphics);
 		// draw a line separator at the bottom
+		paintBottomLine(graphics);
+	}
+
+	protected void paintBottomLine(final Graphics graphics) {
 		final int alpha = graphics.getAlpha();
 		final Rectangle bounds = getBounds();
 		final int bottom = bounds.y + bounds.height - 1;
 		graphics.setAlpha(25);
 		graphics.drawLine(bounds.x, bottom, bounds.x + bounds.width, bottom);
 		graphics.setAlpha(alpha);
-
 	}
 
 }
