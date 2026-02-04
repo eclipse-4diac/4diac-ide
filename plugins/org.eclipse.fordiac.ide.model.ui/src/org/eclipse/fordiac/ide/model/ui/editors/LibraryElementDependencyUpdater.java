@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.widgets.Display;
 
 public class LibraryElementDependencyUpdater extends LibraryElementDependencyTracker {
 
@@ -49,7 +50,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	public void notifyChanged(final Notification notification) {
 		if (notification.getNotifier() instanceof final TypeEntry dependency) {
 			if (getDependencies().contains(notification.getNotifier()) && isRelevant(notification)) {
-				updateDependency(dependency);
+				Display.getDefault().execute(() -> updateDependency(dependency));
 			}
 		} else {
 			super.notifyChanged(notification);
