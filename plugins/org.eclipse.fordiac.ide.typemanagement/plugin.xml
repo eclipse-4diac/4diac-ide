@@ -198,7 +198,7 @@
       <commonFilter
             activeByDefault="true"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.showonly61499Types"
-            name="Show only IEC 61499 Types"
+            name="%Navigator_filters_showonly61499Types_name"
             visibleInUI="true">
          <filterExpression>
                   <or>
@@ -225,7 +225,7 @@
       <commonFilter
             activeByDefault="false"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.hideAdapters"
-            name="Adapters"
+            name="%Navigator_filters_hideAdapters_name"
             visibleInUI="true">
          <filterExpression>                  
            <and>
@@ -242,7 +242,7 @@
       <commonFilter
             activeByDefault="false"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.hideDevices"
-            name="Devices"
+            name="%Navigator_filters_hideDevices_name"
             visibleInUI="true">
          <filterExpression>                  
            <and>
@@ -259,7 +259,7 @@
       <commonFilter
             activeByDefault="false"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.hideResources"
-            name="Resources"
+            name="%Navigator_filters_hideResources_name"
             visibleInUI="true">
          <filterExpression>                  
            <and>
@@ -276,7 +276,7 @@
       <commonFilter
             activeByDefault="false"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.hideFBs"
-            name="Function Blocks"
+            name="%Navigator_filters_hideFBs_name"
             visibleInUI="true">
          <filterExpression>                  
            <and>
@@ -293,7 +293,7 @@
       <commonFilter
             activeByDefault="false"
             id="org.eclipse.fordiac.ide.typemanagement.navigator.filters.hideSegments"
-            name="Segments"
+            name="%Navigator_filters_hideSegments_name"
             visibleInUI="true">
          <filterExpression>                  
            <and>
@@ -315,7 +315,7 @@
             id="org.eclipse.fordiac.ide.typemanagement.fbTypeContent"
             contentProvider="org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeContentProvider"
             labelProvider="org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider"
-            name="FB Type Content"
+            name="%Navigator_FBTypeLabelProvider_name"
             priority="highest">
             <possibleChildren>
 	           <or>     
@@ -353,7 +353,7 @@
             contentProvider="org.eclipse.fordiac.ide.typemanagement.navigator.ToolLibraryContentProvider"
             id="org.eclipse.fordiac.ide.typemanagement.toolLibraryContent"
             labelProvider="org.eclipse.fordiac.ide.typemanagement.navigator.ToolLibraryLabelProvider"
-            name="Toollibrary">
+            name="%Navigator_ToolLibraryLabelProvider_name">
             <possibleChildren>
            <or>         
               <instanceof 
@@ -395,7 +395,7 @@
       <renameParticipant
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
-            name="Rename Type handler">
+            name="%RenameType_name">
          <enablement>
            <or>
              <reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
@@ -408,7 +408,7 @@
       <renameParticipant
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.rename.RenameElementRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.renameElement"
-            name="Rename Model Element">
+            name="%RenameElement_name">
          <enablement>
             <with
                   variable="processorIdentifier">
@@ -431,7 +431,7 @@
        <copyParticipant
            class="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.CopyTypeParticipant"
            id="org.eclipse.fordiac.ide.typemanagement.refactoring.copy.copyTypeParticipant"
-           name="Copy Type Participant">
+           name="%Refactoring_copy_copyTypeParticipant_name">
            <enablement></enablement>
        </copyParticipant>
    </extension>
@@ -440,7 +440,7 @@
       <deleteParticipant
             class="org.eclipse.fordiac.ide.typemanagement.refactoring.delete.DeleteTypeRefactoringParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
-            name="Delete FB Type Handler">
+            name="%DeleteFBType_name">
      	<enablement>
      		<and>
      			<instanceof 
@@ -493,7 +493,7 @@
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
             id="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
-            name="Type Management Preferences">
+            name="%Properties_TypeManagementPreferencePage_name">
       </page>
    </extension>
    <extension
@@ -508,7 +508,7 @@
             class="org.eclipse.fordiac.ide.typemanagement.navigator.TypeDecorator"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.typemanagement.TypeDecorator"
-            label="4diac Type Decoration"
+            label="%TypeDecorator_label"
             lightweight="true"
             state="true">
             <enablement>
@@ -551,7 +551,7 @@
             category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
             class="org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencePage"
             id="org.eclipse.fordiac.ide.typemanagement.properties.TypeManagementPreferencePage"
-            name="Type Management Preferences">
+            name="%Properties_TypeManagementPreferencePage_name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -565,7 +565,7 @@
       <page
             class="org.eclipse.fordiac.ide.typemanagement.properties.BuildPathPropertyPage"
             id="org.eclipse.fordiac.ide.typemanagement.properties.buildPathPropertyPage"
-            name="4diac Build Path">
+            name="%Properties_buildPathPropertyPage_name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -605,7 +605,7 @@
             locationURI="menu:org.eclipse.4diac.ide.refactor.menu">
          <command
                commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
-               label="Rename Element"
+               label="%RenameElement_label"
                style="push">
          </command>
       </menuContribution>
@@ -613,10 +613,10 @@
             locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
          <menu
                id="org.eclipse.fordiac.ide.typemanagement.refactor"
-               label="Refactor">
+               label="%Refactor_label">
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
-                  label="Rename Element"
+                  label="%RenameElement_label"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
@@ -624,7 +624,7 @@
             </command>
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
-                  label="Connections to Struct"
+                  label="%ConnectionsToStruct_label"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
@@ -632,7 +632,7 @@
             </command>
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
-                  label="Repair broken Connection"
+                  label="%RepairBrokenConnection_label"
                   style="push">
                <visibleWhen
                      checkEnabled="true">
@@ -646,7 +646,7 @@
          <command
                commandId="org.eclipse.fordiac.ide.typemanagement.renameElement"
                icon="platform:/plugin/org.eclipse.ui/icons/full/etool16/tricks.png"
-               label="Rename Element"
+               label="%RenameElement_label"
                style="push">
          </command>
       </menuContribution>
@@ -687,7 +687,7 @@
 			locationURI="toolbar:org.eclipse.ui.workbench.file?after=new.group">
         <command
             commandId="org.eclipse.ui.newWizard"
-            label="New Type"
+            label="%NewTypeWizard_label"
             tooltip="Create a new type"
             icon="fordiacimage://ICON_NEW_FUNCTIONBLOCK">
             <parameter
@@ -704,7 +704,7 @@
 	  <moveParticipant
 	        class="org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeRefactoringParticipant"
 	        id="org.eclipse.fordiac.ide.typemanagement.moveParticipant1"
-	        name="Move To Package Handler">
+	        name="%MoveParticipant1_name">
 	     <enablement>
 	     	<reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
 	     </enablement>
