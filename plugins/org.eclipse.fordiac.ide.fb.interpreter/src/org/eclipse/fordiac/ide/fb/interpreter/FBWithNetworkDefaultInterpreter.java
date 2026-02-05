@@ -64,14 +64,15 @@ public class FBWithNetworkDefaultInterpreter {
 	}
 
 	protected static IInterfaceElement getEquivalentNetworkPin(final FBNetworkRuntime runtime,
-			final FBNetworkElement parentFB, final VarDeclaration pin) {
+			final FBNetworkElement parentFB, final IInterfaceElement pin) {
 		final var equivalentFb = runtime.getFbnetwork().getFBNamed(parentFB.getName());
 		return InterfacePinUtils.findPinInInterface(equivalentFb, pin);
 	}
 
 	protected EList<EventOccurrence> switchNetwork(final Event event, final FBNetworkRuntime runtime) {
 		final EList<Connection> outputs = ConnectionUtils.getOutputConnections(event);
-		final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(), runtime);
+		final EventOccurrence outputEO = EventOccFactory.createFrom(eventOccurrence.getEvent(),
+				EcoreUtil.copy(runtime));
 		for (final Connection conn : outputs) {
 			// add transactions
 			final EventConnection eventConn = (EventConnection) conn;
