@@ -9,27 +9,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 
 public class UntypedSubApplicationDefaultInterpreter extends FBWithNetworkDefaultInterpreter {
 
-	public UntypedSubApplicationDefaultInterpreter(final EventOccurrence eventOccurrence) {
+	private final UntypedSubApp uSubApp;
+
+	public UntypedSubApplicationDefaultInterpreter(final EventOccurrence eventOccurrence, final UntypedSubApp uSubApp) {
 		super(eventOccurrence);
+		this.uSubApp = uSubApp;
 	}
 
-	public EList<EventOccurrence> run(final FBNetworkRuntime fBNetworkRuntime, final UntypedSubApp uSubApp) {
+	public EList<EventOccurrence> run(final FBNetworkRuntime fBNetworkRuntime) {
+
 		FBNetworkRuntime runtime;
+
 		if (InterfacePinUtils.isInput(eventOccurrence.getEvent())) { // we are entering the inner SubApp network
-			// try to get existing network runtime for this SubApp or create new
-			runtime = (FBNetworkRuntime) fBNetworkRuntime.getTypeRuntimes().get(uSubApp);
-			if (runtime == null) {
-				runtime = RuntimeFactory.createFrom(uSubApp.getSubAppNetwork());
-				runtime.setOuterNetworkRuntime(fBNetworkRuntime);
-				fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
-			}
+			runtime = RuntimeFactory.getOrCreateNetworkRuntime(fBNetworkRuntime, uSubApp);
 		} else { // we are leaving the inner SubApp network
-			runtime = fBNetworkRuntime.getOuterNetworkRuntime();
-			// can still be null if we started the trace in the inner network
-			if (runtime == null) {
-				runtime = RuntimeFactory.createFrom(uSubApp.getFbNetwork());
-			}
+			runtime = RuntimeFactory.getOrCreateOuterNetworkRuntime(fBNetworkRuntime, uSubApp);
 		}
+
 		return switchNetwork(eventOccurrence.getEvent(), runtime);
 	}
 }

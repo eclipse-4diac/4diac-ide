@@ -42,23 +42,22 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
 		if (eventOccurrence.getParentFB() instanceof final UntypedSubApp uSubApp) {
-			return new UntypedSubApplicationDefaultInterpreter(eventOccurrence).run(fBNetworkRuntime, uSubApp);
+			return new UntypedSubApplicationDefaultInterpreter(eventOccurrence, uSubApp).run(fBNetworkRuntime);
 		}
 
-		// run FB Type to get the output events for the instance in the network
-		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
-		if (runtime == null) {
-			final FBType copiedType = EcoreUtil.copy(eventOccurrence.getParentFB().getType());
-			runtime = RuntimeFactory.createFrom(copiedType);
-			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
-		}
+		final FBRuntimeAbstract runtime = RuntimeFactory.getOrCreateRuntime(fBNetworkRuntime,
+				eventOccurrence.getParentFB());
 
 		// sampling input & writing output is special for composite types
 		if (runtime instanceof final CompositeFBTypeRuntime compTypeRT) {
 			if (compTypeRT.getNetworkRuntime().getOuterNetworkRuntime() == null) {
+				// TODO: won't this move the fBNetworkRuntime from a possible
+				// composite/network parent runtime of it? or do we need to create a copy of it?
 				compTypeRT.getNetworkRuntime().setOuterNetworkRuntime(fBNetworkRuntime);
 				// put the composite runtime into the inner network, so we will find our way
 				// back to the outer network
+				// TODO: At this point compTypeRT is inside fBNetworkRuntime.getTypeRuntimes(),
+				// won't this move the compTypeRT from it?
 				compTypeRT.getNetworkRuntime().getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
 			}
 			return DefaultRunFBType.runFBType(runtime, eventOccurrence);
@@ -215,7 +214,7 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 		if (!(dest instanceof Event)) {
 			throw new IllegalArgumentException("cannot trigger FB with pin " + dest.getName()); //$NON-NLS-1$
 		}
-		final EventOccurrence destEO = EventOccFactory.createFrom((Event) dest, null);
+		final EventOccurrence destEO = EventOccFactory.createFrom((Event) dest);
 
 		// if the destination EO does not have a parent, it might be the outgoing
 		// connection for the network inside a composite
