@@ -124,8 +124,16 @@ public final class FBValue implements Value, Iterable<Value> {
 			return false;
 		}
 		final FBValue other = (FBValue) obj;
-		return members.values().stream()
-				.allMatch(member -> Objects.equals(member.getValue(), other.get(member.getName()).getValue()));
+		if (type != other.getType()) {
+			return false;
+		}
+		for (final Variable<?> member : members.values()) {
+			final Variable<?> otherMember = other.get(member.getName());
+			if (otherMember == null || !member.getValue().equals(otherMember.getValue())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
