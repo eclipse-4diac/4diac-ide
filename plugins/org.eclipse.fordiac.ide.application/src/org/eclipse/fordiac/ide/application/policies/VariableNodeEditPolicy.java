@@ -60,9 +60,9 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
-		if (request.getStartCommand() instanceof final TargetLabelReconnectCommand reconnectCommand) {
-			reconnectCommand.setSource(getHost().getModel());
-			return reconnectCommand;
+		if (request.getStartCommand() instanceof final TargetLabelReconnectCommand cmd) {
+			cmd.setSource(getHost().getModel());
+			return cmd;
 		}
 
 		if (!(request.getStartCommand() instanceof final AbstractConnectionCreateCommand connCreateCmd)) {
