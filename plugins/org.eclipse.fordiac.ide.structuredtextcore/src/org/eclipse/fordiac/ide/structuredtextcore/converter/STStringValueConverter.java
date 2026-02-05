@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.converter;
 
-import org.eclipse.fordiac.ide.model.value.AbstractStringValueConverter;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
+import org.eclipse.fordiac.ide.model.value.ValueConverter;
+import org.eclipse.fordiac.ide.model.value.WStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString;
 import org.eclipse.xtext.conversion.ValueConverterException;
 import org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter;
@@ -23,9 +25,8 @@ public class STStringValueConverter extends AbstractLexerBasedConverter<STString
 	@Override
 	public STString toValue(final String string, final INode node) throws ValueConverterException {
 		try {
-			final var value = STInternalStringValueConverter.INSTANCE.toValue(string);
-			final boolean wide = string.charAt(0) == '"';
-			return new STString(value, wide);
+			final boolean wide = !string.isEmpty() && string.charAt(0) == '"';
+			return new STString(getValueConverter(wide).toValue(string), wide);
 		} catch (final Exception e) {
 			throw new ValueConverterException(e.getMessage(), node, (Exception) e.getCause());
 		}
@@ -33,15 +34,10 @@ public class STStringValueConverter extends AbstractLexerBasedConverter<STString
 
 	@Override
 	protected String toEscapedString(final STString value) {
-		return AbstractStringValueConverter.toString(value.toString(), value.isWide());
+		return getValueConverter(value.isWide()).toString(value.toString());
 	}
 
-	private static class STInternalStringValueConverter extends AbstractStringValueConverter {
-		private static final STInternalStringValueConverter INSTANCE = new STInternalStringValueConverter();
-
-		@Override
-		public String toString(final String value) {
-			throw new UnsupportedOperationException();
-		}
+	protected static ValueConverter<String> getValueConverter(final boolean wide) {
+		return wide ? WStringValueConverter.INSTANCE : StringValueConverter.INSTANCE;
 	}
 }

@@ -106,7 +106,7 @@ public final class StringValue implements AnyStringValue, AnySCharsValue {
 
 	@Override
 	public String toString() {
-		return StringValueConverter.toString(stringValue(), false);
+		return StringValueConverter.INSTANCE.toString(stringValue());
 	}
 
 	private static byte[] truncate(final byte[] value, final int maxLength) {

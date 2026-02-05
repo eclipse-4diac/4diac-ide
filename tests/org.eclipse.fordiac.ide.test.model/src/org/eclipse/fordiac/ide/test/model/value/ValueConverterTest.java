@@ -85,7 +85,14 @@ class ValueConverterTest {
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac$''IDE'"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac'$'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac IDE'error"), //
+				arguments(StringValueConverter.INSTANCE, IllegalArgumentException.class, "'4diac$XYerror'"), //
 				arguments(StringValueConverter.INSTANCE, "abc", "'abc'"), //
+				arguments(StringValueConverter.INSTANCE, "17°C", "'17°C'"), //
+				arguments(StringValueConverter.INSTANCE, "17°C", "'17$C2$B0C'"), //
+				arguments(StringValueConverter.INSTANCE, "21 €", "'21 €'"), //
+				arguments(StringValueConverter.INSTANCE, "21 €", "'21 $E2$82$AC'"), //
+				arguments(StringValueConverter.INSTANCE, "a \uD83E\uDFC5-figure", "'a \uD83E\uDFC5-figure'"), //
+				arguments(StringValueConverter.INSTANCE, "a \uD83E\uDFC5-figure", "'a $F0$9F$AF$85-figure'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_ACUTE, "'4diac$'IDE'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_BACKSLASH, "'4diac\"IDE'"), //
 				arguments(StringValueConverter.INSTANCE, NAME_DOLLAR, NAME_TWO_DOLLAR), //
@@ -103,7 +110,14 @@ class ValueConverterTest {
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac\"$\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac$\"\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac IDE\"error"), //
+				arguments(WStringValueConverter.INSTANCE, IllegalArgumentException.class, "\"4diac$XYZWerror\""), //
 				arguments(WStringValueConverter.INSTANCE, "abc", "\"abc\""), //
+				arguments(WStringValueConverter.INSTANCE, "17°C", "\"17°C\""), //
+				arguments(WStringValueConverter.INSTANCE, "17°C", "\"17$00B0C\""), //
+				arguments(WStringValueConverter.INSTANCE, "21 €", "\"21 €\""), //
+				arguments(WStringValueConverter.INSTANCE, "21 €", "\"21 $20AC\""), //
+				arguments(WStringValueConverter.INSTANCE, "a \uD83E\uDFC5-figure", "\"a \uD83E\uDFC5-figure\""), //
+				arguments(WStringValueConverter.INSTANCE, "a \uD83E\uDFC5-figure", "\"a $D83E$DFC5-figure\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_ACUTE, "\"4diac'IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_BACKSLASH, "\"4diac$\"IDE\""), //
 				arguments(WStringValueConverter.INSTANCE, NAME_DOLLAR, "\"4diac$$IDE\""), //
@@ -218,6 +232,9 @@ class ValueConverterTest {
 				arguments(NumericValueConverter.INSTANCE_LWORD, "16#000000000000002A", BigInteger.valueOf(42)), //
 				arguments(StringValueConverter.INSTANCE, "''", ""), //
 				arguments(StringValueConverter.INSTANCE, "'abc'", "abc"), //
+				arguments(StringValueConverter.INSTANCE, "'17$C2$B0C'", "17°C"), //
+				arguments(StringValueConverter.INSTANCE, "'21 $E2$82$AC'", "21 €"), //
+				arguments(StringValueConverter.INSTANCE, "'a $F0$9F$AF$85-figure'", "a \uD83E\uDFC5-figure"), //
 				arguments(StringValueConverter.INSTANCE, "'4diac$'IDE'", NAME_ACUTE), //
 				arguments(StringValueConverter.INSTANCE, "'4diac\"IDE'", NAME_BACKSLASH), //
 				arguments(StringValueConverter.INSTANCE, NAME_TWO_DOLLAR, NAME_DOLLAR), //
@@ -226,6 +243,9 @@ class ValueConverterTest {
 				arguments(StringValueConverter.INSTANCE, "'4diac$00IDE'", "4diac\u0000IDE"), //
 				arguments(WStringValueConverter.INSTANCE, "\"\"", ""), //
 				arguments(WStringValueConverter.INSTANCE, "\"abc\"", "abc"), //
+				arguments(WStringValueConverter.INSTANCE, "\"17$00B0C\"", "17°C"), //
+				arguments(WStringValueConverter.INSTANCE, "\"21 $20AC\"", "21 €"), //
+				arguments(WStringValueConverter.INSTANCE, "\"a $D83E$DFC5-figure\"", "a \uD83E\uDFC5-figure"), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac'IDE\"", NAME_ACUTE), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$\"IDE\"", NAME_BACKSLASH), //
 				arguments(WStringValueConverter.INSTANCE, "\"4diac$$IDE\"", NAME_DOLLAR), //
