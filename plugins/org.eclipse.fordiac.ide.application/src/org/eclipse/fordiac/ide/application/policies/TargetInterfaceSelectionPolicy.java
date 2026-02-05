@@ -33,12 +33,15 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -73,22 +76,6 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 	}
 
 	@Override
-	public Command getCommand(final Request request) {
-		if (REQ_CONNECTION_START.equals(request.getType())) {
-			return getConnectionCreateCommand((CreateConnectionRequest) request);
-		}
-
-		return super.getCommand(request);
-	}
-
-	protected final Command getConnectionCreateCommand(final CreateConnectionRequest request) {
-		final TargetLabelReconnectCommand cmd = new TargetLabelReconnectCommand(null,
-				getHost().getModel().getRefElement());
-		request.setStartCommand(cmd);
-		return cmd;
-	}
-
-	@Override
 	public TargetInterfaceElementEditPart getHost() {
 		return (TargetInterfaceElementEditPart) super.getHost();
 	}
@@ -115,6 +102,7 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 
 		line = newCon;
 		addFeedback(line);
+		newCon.layout(); // layout so the handle gets the correct coordinates
 	}
 
 	private void deleteLine() {
@@ -122,7 +110,6 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 		line = null;
 	}
 
-	// TODO: cleanup this class (maybe extract)
 	private class ConnectionHandle extends SquareHandle {
 		public ConnectionHandle(final GraphicalEditPart host, final Connection connectionLine) {
 			super(host, null);
@@ -139,18 +126,15 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 
 		@Override
 		protected DragTracker createDragTracker() {
-			return new FordiacConnectionDragCreationTool() {
-				@Override
-				protected boolean updateTargetUnderMouse() {
-					if (isInState(STATE_INITIAL)) {
-						// we are the first target under mouse
-						setTargetEditPart(getHost());
-						return true;
-					}
+			final List<TargetInterfaceElementEditPart> selections = getHost().getViewer().getSelectedEditParts()
+					.stream().filter(TargetInterfaceElementEditPart.class::isInstance)
+					.map(TargetInterfaceElementEditPart.class::cast).toList();
 
-					return super.updateTargetUnderMouse();
-				}
-			};
+			final var sourceEP = ((AbstractGraphicalEditPart) getHost().getParent()).getTargetConnections().stream()
+					.map(ConnectionEditPart::getSource).filter(InterfaceEditPart.class::isInstance)
+					.map(InterfaceEditPart.class::cast).findFirst().orElse(null);
+
+			return new MultiDragTool(selections, sourceEP);
 		}
 
 		@Override
@@ -206,6 +190,34 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 				shrinkVal = (int) (2 / getZoomFactor());
 			}
 			return shrinkVal;
+		}
+	}
+
+	private class MultiDragTool extends FordiacConnectionDragCreationTool {
+		private final List<TargetInterfaceElementEditPart> selections;
+		private final InterfaceEditPart source;
+
+		public MultiDragTool(final List<TargetInterfaceElementEditPart> selections, final InterfaceEditPart source) {
+			this.selections = selections;
+			this.source = source;
+		}
+
+		@Override
+		protected Command getCommand() {
+			if (getTargetEditPart() == null) {
+				return null;
+			}
+			final CompoundCommand cmd = new CompoundCommand();
+			final CreateConnectionRequest targetRequest = getTargetRequest();
+
+			selections.forEach(destinationEP -> {
+				final var targetCmd = new TargetLabelReconnectCommand(this.source.getModel(), null,
+						destinationEP.getModel().getRefElement());
+				targetRequest.setStartCommand(targetCmd);
+				cmd.add(getTargetEditPart().getCommand(targetRequest));
+			});
+
+			return cmd;
 		}
 	}
 }

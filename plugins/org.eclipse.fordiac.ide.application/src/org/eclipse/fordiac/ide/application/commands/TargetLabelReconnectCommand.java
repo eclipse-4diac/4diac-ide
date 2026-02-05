@@ -14,10 +14,14 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.text.MessageFormat;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -27,14 +31,17 @@ import org.eclipse.gef.commands.Command;
 public class TargetLabelReconnectCommand extends Command {
 
 	private IInterfaceElement source;
+	private final IInterfaceElement oldSource;
 	private final IInterfaceElement destination;
 
 	private AggressiveDeleteConnectionCommand deleteCommand;
 	private CreateSubAppCrossingConnectionsCommand createCommand;
 
-	public TargetLabelReconnectCommand(final IInterfaceElement source, final IInterfaceElement destination) {
-		this.source = source;
+	public TargetLabelReconnectCommand(final IInterfaceElement oldSource, final IInterfaceElement newSource,
+			final IInterfaceElement destination) {
+		this.oldSource = oldSource;
 		this.destination = destination;
+		this.source = newSource;
 	}
 
 	@Override
@@ -51,9 +58,8 @@ public class TargetLabelReconnectCommand extends Command {
 		}
 
 		// source and dest check
-		if (!LinkConstraints.isValidConnSource(source, source.getBlockFBNetworkElement().getFbNetwork())
-				|| !LinkConstraints.isValidConnDestination(destination,
-						destination.getBlockFBNetworkElement().getFbNetwork())) {
+		if (!LinkConstraints.isValidConnSource(source, getHostNetwork(source))
+				|| !LinkConstraints.isValidConnDestination(destination, getHostNetwork(destination))) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 			return false;
 		}
@@ -96,7 +102,8 @@ public class TargetLabelReconnectCommand extends Command {
 			deleteCommand.execute();
 		}
 		if (destination instanceof Event) {
-			// TODO: Events: get correct input connection and delete it
+			deleteCommand = new AggressiveDeleteConnectionCommand(getEventConnection());
+			deleteCommand.execute();
 		}
 		createCommand = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
 				destination);
@@ -113,6 +120,36 @@ public class TargetLabelReconnectCommand extends Command {
 	public void undo() {
 		createCommand.undo();
 		deleteCommand.undo();
+	}
+
+	private static FBNetwork getHostNetwork(final IInterfaceElement source) {
+		EObject current = source.eContainer();
+		while (current != null) {
+			if (current instanceof final FBNetwork currentFbNetwork) {
+				return currentFbNetwork;
+			}
+			if (current instanceof final SubAppType satype) {
+				return satype.getFBNetwork();
+			}
+			current = current.eContainer();
+		}
+		return null;
+	}
+
+	private Connection getEventConnection() {
+		if (destination.getInputConnections().size() == 1) {
+			return destination.getInputConnections().getFirst();
+		}
+
+		final var conns = destination.getInputConnections().stream().filter(this::traceConnection).toList();
+		return conns.getFirst();
+	}
+
+	private boolean traceConnection(final Connection connection) {
+		if (connection.getSource() == oldSource) {
+			return true;
+		}
+		return connection.getSource().getInputConnections().stream().anyMatch(this::traceConnection);
 	}
 
 	public void setSource(final IInterfaceElement source) {
