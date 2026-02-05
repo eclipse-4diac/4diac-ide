@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -424,13 +425,18 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	protected Response parseResponse(final String result) throws IOException {
 		if (null != result) {
-			final InputSource source = new InputSource(new StringReader(result));
-			final XMLResource xmlResource = new XMLResourceImpl();
-			xmlResource.load(source, respMapping.getLoadOptions());
-			for (final EObject object : xmlResource.getContents()) {
-				if (object instanceof final Response response) {
-					return response;
+			try {
+				final InputSource source = new InputSource(new StringReader(result));
+				final XMLResource xmlResource = new XMLResourceImpl();
+				xmlResource.load(source, respMapping.getLoadOptions());
+				for (final EObject object : xmlResource.getContents()) {
+					if (object instanceof final Response response) {
+						return response;
+					}
 				}
+			} catch (final IOException e) {
+				FordiacLogHelper.logWarning(MessageFormat.format("{0}\n{1}", e.getMessage(), result), e); //$NON-NLS-1$
+				throw e;
 			}
 		}
 		return EMPTY_RESPONSE;
