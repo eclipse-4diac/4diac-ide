@@ -141,7 +141,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements Annotable
 	private Point calculatePos() {
 		if (null != referencedInterface) {
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
-			final InterfaceList interfaceList = ((InterfaceList) getInterfaceElement().eContainer());
+			final InterfaceList interfaceList = getInterfaceElement().getInterfaceList();
 			int dx = 0;
 			if (getInterfaceElement().isIsInput()) {
 				final int countInputEvWITH = getNrEvWITH(interfaceList.getEventInputs());

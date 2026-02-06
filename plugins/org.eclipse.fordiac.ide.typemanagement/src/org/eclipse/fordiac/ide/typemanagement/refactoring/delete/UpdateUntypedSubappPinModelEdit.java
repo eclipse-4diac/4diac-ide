@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -40,7 +39,7 @@ public class UpdateUntypedSubappPinModelEdit extends ConfigurableModelEdit<VarDe
 	}
 
 	private static String getSubappName(final VarDeclaration varDecl) {
-		return ((SubApp) varDecl.eContainer().eContainer()).getQualifiedName();
+		return varDecl.getBlockFBNetworkElement().getQualifiedName();
 	}
 
 	@Override
@@ -73,7 +72,7 @@ public class UpdateUntypedSubappPinModelEdit extends ConfigurableModelEdit<VarDe
 	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!(element.eContainer() != null && element.eContainer().eContainer() instanceof UntypedSubApp)) {
+		if (!(element.getBlockFBNetworkElement() instanceof UntypedSubApp)) {
 			status.addFatalError(element.getQualifiedName() + Messages.UpdateUntypedSubappPinChange_0);
 		}
 		return status;
