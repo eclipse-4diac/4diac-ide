@@ -181,7 +181,7 @@ public class ChangeDestinationSourceDialog extends MessageDialog {
 				fbs.filter(currentFb -> !currentFb.getName().equals(ie.getBlockFBNetworkElement().getName())).toList()
 						.stream().map(BlockFBNetworkElement::getInterface).toList());
 
-		if (subapp != null && !((ie.eContainer().eContainer() instanceof final SubApp subappContainer)
+		if (subapp != null && !((ie.getBlockFBNetworkElement() instanceof final SubApp subappContainer)
 				&& subappContainer.equals(subapp))) {
 			possibleInterfaceLists.add(subapp.getInterface());
 		}

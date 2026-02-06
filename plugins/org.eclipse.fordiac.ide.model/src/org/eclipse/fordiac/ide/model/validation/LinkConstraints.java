@@ -276,8 +276,8 @@ public final class LinkConstraints {
 	}
 
 	private static FBNetwork getContainingFBNetwork(final IInterfaceElement target) {
-		if ((null != target.eContainer() && target.eContainer().eContainer() != null)
-				&& (target.eContainer().eContainer().eContainer() instanceof final FBNetwork fbNetwork)) {
+		if (target.getBlockFBNetworkElement() != null
+				&& target.getBlockFBNetworkElement().eContainer() instanceof final FBNetwork fbNetwork) {
 			return fbNetwork;
 		}
 		return null;
