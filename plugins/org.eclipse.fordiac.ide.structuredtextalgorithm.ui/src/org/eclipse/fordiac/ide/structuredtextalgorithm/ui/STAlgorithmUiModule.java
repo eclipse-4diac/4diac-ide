@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.quickfix.STCoreQuick
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.reconciler.STCoreDocumentReconcileStrategy;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivator;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.FilterHeadingsContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.OutlineTreeContribution;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlinePage;
@@ -95,6 +96,7 @@ import org.eclipse.xtext.ui.editor.IURIEditorOpener;
 import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
+import org.eclipse.xtext.ui.editor.actions.IActionContributor;
 import org.eclipse.xtext.ui.editor.contentassist.AbstractJavaBasedContentProposalProvider;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
@@ -129,6 +131,7 @@ import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
 import org.eclipse.xtext.ui.validation.MarkerTypeProvider;
 
 import com.google.inject.Binder;
+import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 
@@ -227,6 +230,14 @@ public class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		if (PlatformUI.isWorkbenchRunning()) {
 			binder.bind(IURIEditorOpener.class).annotatedWith(LanguageSpecific.class).to(STCoreURIEditorOpener.class);
 		}
+	}
+
+	@Override
+	public void configureMarkOccurrencesAction(final Binder binder) {
+		binder.bind(IActionContributor.class).annotatedWith(Names.named("markOccurrences")) //$NON-NLS-1$
+				.toProvider(() -> StructuredtextcoreActivator.getInstance()
+						.getInjector(StructuredtextcoreActivator.ORG_ECLIPSE_FORDIAC_IDE_STRUCTUREDTEXTCORE_STCORE)
+						.getInstance(Key.get(IActionContributor.class, Names.named("markOccurrences")))); //$NON-NLS-1$
 	}
 
 	public Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
