@@ -825,6 +825,44 @@
       <eParameters name="path" eType="#//StringList"/>
       <eParameters name="demandCreate" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eOperations>
+    <eOperations name="getAllCachedMembers">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.getAllCachedMembers(this);"/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ETreeIterator">
+        <eTypeArguments eClassifier="#//VarDeclaration"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="validateMemberInputConnections" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInputConnections(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="validateMemberInitialValues" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.ContainerVarDeclarationAnnotations.validateMemberInitialValues(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cachedMembers" upperBound="-1"
         eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
@@ -2654,12 +2692,39 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.isVisible(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="hasValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return value != null &amp;&amp; value.getValue() != null &amp;&amp; !value.getValue().isBlank();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getValueString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return value != null ? value.getValue() : &quot;&quot;;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setValueString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (valueString != null &amp;&amp; !valueString.isBlank()) {&#xA;&#x9;if (value == null) {&#xA;&#x9;&#x9;setValue(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createValue());&#xA;&#x9;}&#xA;&#x9;value.setValue(valueString);&#xA;} else if (value != null) {&#xA;&#x9;value.setValue(&quot;&quot;);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="valueString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getArraySizeString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return arraySize != null ? arraySize.getValue() : &quot;&quot;;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setArraySizeString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (arraySizeString != null &amp;&amp; !arraySizeString.isBlank()) {&#xA;&#x9;if (arraySize == null) {&#xA;&#x9;&#x9;setArraySize(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createArraySize());&#xA;&#x9;}&#xA;&#x9;arraySize.setValue(arraySizeString);&#xA;} else if (arraySize != null) {&#xA;&#x9;arraySize.setValue(&quot;&quot;);&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="arraySizeString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arraySize" eType="#//ArraySize"
-        containment="true" eOpposite="#//ArraySize/varDeclaration"/>
+        containment="true" resolveProxies="false" eOpposite="#//ArraySize/varDeclaration"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="withs" upperBound="-1"
         eType="#//With" eOpposite="#//With/variables"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
-        containment="true"/>
+        containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VersionInfo">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" lowerBound="1"

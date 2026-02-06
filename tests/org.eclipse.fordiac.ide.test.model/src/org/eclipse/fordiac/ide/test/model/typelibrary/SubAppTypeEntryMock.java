@@ -60,15 +60,6 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 		subAppType = (SubAppType) value;
 	}
 
-	/**
-	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public void setTypeEditable(final LibraryElement value) {
-		// currently not needed in mock
-	}
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typelib;
@@ -87,16 +78,6 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	@Override
 	public InterfaceList getInterface() {
 		return subAppType.getInterfaceList();
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public SubAppType getTypeEditable() {
-		// currently not needed in mock
-		return null;
 	}
 
 	@Override

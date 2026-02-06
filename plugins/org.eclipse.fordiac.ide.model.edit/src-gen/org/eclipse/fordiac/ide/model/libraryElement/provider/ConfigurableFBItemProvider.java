@@ -25,8 +25,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -88,14 +86,11 @@ public class ConfigurableFBItemProvider extends FBItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated not
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ConfigurableFB)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ConfigurableFB_type") : //$NON-NLS-1$
-			getString("_UI_ConfigurableFB_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+		return super.getText(object);
 	}
 
 

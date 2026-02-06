@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2017, 2026 fortiss GmbH, Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
@@ -212,7 +211,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			@Override
 			protected void paintFigure(final Graphics graphics) {
 				if (!getChildren().isEmpty()) {
-					graphics.fillRoundRectangle(getBounds(), 8, 8);
+					graphics.setAlpha(150);
+					graphics.fillRectangle(getBounds());
 				}
 				super.paintFigure(graphics);
 			}
@@ -263,7 +263,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			tbLayout.verticalSpacing = 2;
 			tbLayout.horizontalSpacing = 0;
 			epFigure.setLayoutManager(tbLayout);
-			epFigure.setBackgroundColor(ColorConstants.white);
+			epFigure.setBackgroundColor(epFigure.getParent().getParent().getBackgroundColor());
 		}
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);

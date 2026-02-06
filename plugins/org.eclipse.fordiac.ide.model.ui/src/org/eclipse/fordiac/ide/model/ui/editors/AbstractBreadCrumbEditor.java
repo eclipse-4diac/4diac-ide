@@ -27,6 +27,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.draw2d.FigureCanvas;
@@ -69,6 +70,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -138,6 +140,20 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	}
 
 	@Override
+	public void setInput(final IEditorInput input) {
+		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
+				.forEach(e -> e.setInput(updateInput(e.getEditorInput(), input)));
+		super.setInputWithNotify(input);
+	}
+
+	private static IEditorInput updateInput(final IEditorInput oldInput, final IEditorInput newInput) {
+		if (oldInput instanceof final ISubEditorInput subEditorInput) {
+			return new SubEditorInput(newInput, subEditorInput.getElementClass(), subEditorInput.getFragment());
+		}
+		return newInput;
+	}
+
+	@Override
 	protected Composite createPageContainer(final Composite parent) {
 		final Composite pageContainer = new Composite(parent, SWT.NONE);
 		pageContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -180,8 +196,8 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	private int createEditor(final Object model) {
 		final EditorPart part = createEditorPart(model);
-		if (null != part) {
-			final IEditorInput input = createEditorInput(model);
+		final IEditorInput input = createEditorInput(model);
+		if (part != null && input != null) {
 			try {
 				return addPage(part, input);
 			} catch (final PartInitException e) {
@@ -189,6 +205,14 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 			}
 		}
 		return -1;
+	}
+
+	protected IEditorInput createEditorInput(final Object model) {
+		return switch (model) {
+		case final IFile file -> getEditorInput();
+		case final EObject subElement -> new SubEditorInput(getEditorInput(), subElement);
+		case null, default -> null;
+		};
 	}
 
 	@Override
@@ -223,7 +247,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 
 	@Override
 	public boolean isDirty() {
-		return ((null != getCommandStack()) && getCommandStack().isDirty());
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	@Override
@@ -336,7 +360,7 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 		// if the editor content could not be loaded the bread crumb can be null
 		if (getBreadcrumb() != null) {
 			memento.putString(TAG_BREADCRUMB_HIERACHY,
-					BreadcrumbNavigationLocation.generateItemPath(getBreadcrumb()).substring(1));
+					BreadcrumbNavigationLocation.generateItemPath(getBreadcrumb().serializePath()).substring(1));
 
 			final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
 			if (null != viewer) {
@@ -421,8 +445,6 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	public abstract CommandStack getCommandStack();
 
 	protected abstract EditorPart createEditorPart(final Object model);
-
-	protected abstract IEditorInput createEditorInput(final Object model);
 
 	protected abstract AdapterFactoryContentProvider createBreadcrumbContentProvider();
 

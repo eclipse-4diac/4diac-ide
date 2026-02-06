@@ -22,8 +22,6 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -41,6 +39,8 @@ import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelListener;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
 import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;

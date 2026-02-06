@@ -43,17 +43,33 @@ import org.eclipse.fordiac.ide.ui.contentoutline.MultiPageEditorContentOutlinePa
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
+import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocationProvider {
+public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocationProvider, CommandStackEventListener {
 
 	private IContentOutlinePage contentOutline = null;
 
 	private int interfaceChanges = 0; // number of interface changes happend since the last save
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
+		super.init(site, editorInput);
+		getCommandStack().addCommandStackEventListener(this);
+	}
+
+	@Override
+	public void dispose() {
+		getCommandStack().removeCommandStackEventListener(this);
+		super.dispose();
+	}
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
@@ -113,8 +129,6 @@ public class FBTypeEditor extends AbstractTypeEditor implements INavigationLocat
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		super.stackChanged(event);
-
 		if (isInterfaceChangeCommand(event.getCommand())) {
 			switch (event.getDetail()) {
 			case CommandStack.POST_EXECUTE, CommandStack.POST_REDO:

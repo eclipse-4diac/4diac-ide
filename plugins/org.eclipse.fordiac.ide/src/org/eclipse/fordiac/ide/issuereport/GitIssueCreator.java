@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Felix Schmid
+ * Copyright (c) 2025, 2026 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.fordiac.ide.Activator;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -35,7 +36,7 @@ import com.google.gson.Gson;
 
 public class GitIssueCreator {
 
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&body=%s"; //$NON-NLS-1$
+	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&labels=%s&body=%s"; //$NON-NLS-1$
 
 	private static record IssueInfo(String title, String body, String[] labels) {
 	}
@@ -49,6 +50,9 @@ public class GitIssueCreator {
 	@SuppressWarnings("nls")
 	private static final String[] LABELS = new String[] { "bug", "autoreport" };
 	private static final String SESSION_ID = UUID.randomUUID().toString();
+	private static final String CODE_DELIMITER = "```"; //$NON-NLS-1$
+	private static final String TRUNCATE_INIDCATER = "[truncated]"; //$NON-NLS-1$
+	private static final int MAX_MANUAL_ISSUE_URL_SIZE = 8000;
 
 	public static Optional<String> createIssue(final IStatus status) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
@@ -85,10 +89,10 @@ public class GitIssueCreator {
 
 		sb.append("### Stack trace"); //$NON-NLS-1$
 		sb.append(System.lineSeparator()).append(System.lineSeparator());
-		sb.append("```"); //$NON-NLS-1$
+		sb.append(CODE_DELIMITER);
 		sb.append(System.lineSeparator());
 		sb.append(getStackTrace(status.getException()));
-		sb.append("```"); //$NON-NLS-1$
+		sb.append(CODE_DELIMITER);
 
 		return sb.toString();
 	}
@@ -101,9 +105,10 @@ public class GitIssueCreator {
 
 	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
 		final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
-				URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
-				URLEncoder.encode(info.body(), StandardCharsets.UTF_8)); // body
-		openLinkInBrowser(reportingURI);
+				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
+				URLEncoder.encode(String.join(",", info.labels()), StandardCharsets.UTF_8), //$NON-NLS-1$
+				URLEncoder.encode(info.body(), StandardCharsets.UTF_8));
+		openLinkInBrowser(truncateStacktraceURL(reportingURI, MAX_MANUAL_ISSUE_URL_SIZE));
 		return Optional.empty(); // no issue created yet...
 	}
 
@@ -164,16 +169,29 @@ public class GitIssueCreator {
 			if (response.statusCode() == 201) { // 201 - Created
 				return Optional.of(response.body());
 			}
-			return Optional.empty();
 		} catch (final IOException e) {
-			return Optional.empty();
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		} catch (final InterruptedException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 			Thread.currentThread().interrupt();
-			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 
 	private static String removeLeadingTrailingSlashes(final String s) {
 		return s.replaceAll("^/+|/+$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	private static String truncateStacktraceURL(final String url, final int maxLength) {
+		if (url.length() <= maxLength) {
+			return url;
+		}
+		final String lineBreak = URLEncoder.encode(System.lineSeparator(), StandardCharsets.UTF_8);
+		final String epilogue = URLEncoder.encode(
+				System.lineSeparator() + TRUNCATE_INIDCATER + System.lineSeparator() + CODE_DELIMITER,
+				StandardCharsets.UTF_8);
+		// find the last line break that is inside the length limit
+		final int idx = url.lastIndexOf(lineBreak, maxLength - lineBreak.length() - epilogue.length());
+		return url.substring(0, idx).concat(epilogue);
 	}
 }

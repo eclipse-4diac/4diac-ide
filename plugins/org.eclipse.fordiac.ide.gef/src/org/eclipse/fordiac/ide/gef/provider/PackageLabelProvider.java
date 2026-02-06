@@ -18,9 +18,9 @@ package org.eclipse.fordiac.ide.gef.provider;
 
 import java.util.function.Supplier;
 
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.TextualAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.Import;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;

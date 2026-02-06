@@ -25,7 +25,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
@@ -48,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;

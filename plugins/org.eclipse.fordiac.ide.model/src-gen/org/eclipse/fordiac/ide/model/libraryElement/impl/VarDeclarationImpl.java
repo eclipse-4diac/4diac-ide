@@ -360,28 +360,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 */
 	@Override
 	public ArraySize getArraySize() {
-		if (arraySize != null && arraySize.eIsProxy()) {
-			InternalEObject oldArraySize = (InternalEObject)arraySize;
-			arraySize = (ArraySize)eResolveProxy(oldArraySize);
-			if (arraySize != oldArraySize) {
-				InternalEObject newArraySize = (InternalEObject)arraySize;
-				NotificationChain msgs =  oldArraySize.eInverseRemove(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, null);
-				if (newArraySize.eInternalContainer() == null) {
-					msgs =  newArraySize.eInverseAdd(this, LibraryElementPackage.ARRAY_SIZE__VAR_DECLARATION, ArraySize.class, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE, oldArraySize, arraySize));
-			}
-		}
-		return arraySize;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ArraySize basicGetArraySize() {
 		return arraySize;
 	}
 
@@ -436,28 +414,6 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	 */
 	@Override
 	public Value getValue() {
-		if (value != null && value.eIsProxy()) {
-			InternalEObject oldValue = (InternalEObject)value;
-			value = (Value)eResolveProxy(oldValue);
-			if (value != oldValue) {
-				InternalEObject newValue = (InternalEObject)value;
-				NotificationChain msgs = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, null);
-				if (newValue.eInternalContainer() == null) {
-					msgs = newValue.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.VAR_DECLARATION__VALUE, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.VAR_DECLARATION__VALUE, oldValue, value));
-			}
-		}
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Value basicGetValue() {
 		return value;
 	}
 
@@ -725,6 +681,70 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean hasValue() {
+		return value != null && value.getValue() != null && !value.getValue().isBlank();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getValueString() {
+		return value != null ? value.getValue() : "";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setValueString(final String valueString) {
+		if (valueString != null && !valueString.isBlank()) {
+			if (value == null) {
+				setValue(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createValue());
+			}
+			value.setValue(valueString);
+		} else if (value != null) {
+			value.setValue("");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getArraySizeString() {
+		return arraySize != null ? arraySize.getValue() : "";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setArraySizeString(final String arraySizeString) {
+		if (arraySizeString != null && !arraySizeString.isBlank()) {
+			if (arraySize == null) {
+				setArraySize(org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createArraySize());
+			}
+			arraySize.setValue(arraySizeString);
+		} else if (arraySize != null) {
+			arraySize.setValue("");
+		}
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -920,13 +940,11 @@ public class VarDeclarationImpl extends EObjectImpl implements VarDeclaration {
 				if (resolve) return getType();
 				return basicGetType();
 			case LibraryElementPackage.VAR_DECLARATION__ARRAY_SIZE:
-				if (resolve) return getArraySize();
-				return basicGetArraySize();
+				return getArraySize();
 			case LibraryElementPackage.VAR_DECLARATION__WITHS:
 				return getWiths();
 			case LibraryElementPackage.VAR_DECLARATION__VALUE:
-				if (resolve) return getValue();
-				return basicGetValue();
+				return getValue();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}

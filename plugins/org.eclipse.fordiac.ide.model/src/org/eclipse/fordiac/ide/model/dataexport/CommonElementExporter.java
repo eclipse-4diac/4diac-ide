@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -519,8 +520,11 @@ public class CommonElementExporter {
 						|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
 	}
 
-	protected void addXYAttributes(final PositionableElement fb) throws XMLStreamException {
-		addXYAttributes(fb.getPosition().getX(), fb.getPosition().getY());
+	protected void addXYAttributes(final PositionableElement posEl) throws XMLStreamException {
+		final Position position = posEl.getPosition();
+		final double xPos = (position != null) ? position.getX() : 0.0;
+		final double yPos = (position != null) ? position.getY() : 0.0;
+		addXYAttributes(xPos, yPos);
 	}
 
 	protected void addXYAttributes(final double x, final double y) throws XMLStreamException {

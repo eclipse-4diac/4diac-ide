@@ -48,7 +48,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @see #setArraySize(ArraySize)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_ArraySize()
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.ArraySize#getVarDeclaration
-	 * @model opposite="varDeclaration" containment="true" resolveProxies="true"
+	 * @model opposite="varDeclaration" containment="true"
 	 * @generated
 	 */
 	ArraySize getArraySize();
@@ -84,7 +84,7 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @return the value of the '<em>Value</em>' containment reference.
 	 * @see #setValue(Value)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getVarDeclaration_Value()
-	 * @model containment="true" resolveProxies="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	Value getValue();
@@ -250,5 +250,45 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	boolean isVisible();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	boolean hasValue();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getValueString();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setValueString(String valueString);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getArraySizeString();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setArraySizeString(String arraySizeString);
 
 } // VarDeclaration

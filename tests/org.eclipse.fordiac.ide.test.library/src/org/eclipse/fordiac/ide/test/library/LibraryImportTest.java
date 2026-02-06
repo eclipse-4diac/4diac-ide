@@ -35,8 +35,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.fordiac.ide.library.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.LibraryMarkerFactory;
+import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
@@ -341,7 +342,7 @@ class LibraryImportTest {
 	}
 
 	static Optional<String> findFirstDependencyMarker(final IMarker[] markers) {
-		return Stream.of(markers).map(marker -> marker.getAttribute(LibraryManager.MARKER_ATTRIBUTE, null))
+		return Stream.of(markers).map(marker -> marker.getAttribute(LibraryMarkerFactory.MARKER_ATTRIBUTE, null))
 				.filter(Objects::nonNull).findFirst();
 	}
 }

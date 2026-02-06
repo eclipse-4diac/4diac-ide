@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,9 +27,6 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.DosFileAttributeView;
-import java.nio.file.attribute.PosixFileAttributeView;
-import java.nio.file.attribute.PosixFilePermission;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -65,6 +60,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.library.download.DownloadResult;
+import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -89,7 +86,6 @@ public enum LibraryManager {
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
-	public static final String MARKER_ATTRIBUTE = "LIB"; //$NON-NLS-1$
 
 	private final java.net.URI workspaceLibraryURI = java.net.URI.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
@@ -99,6 +95,9 @@ public enum LibraryManager {
 
 	private final java.net.URI standardLibraryUri = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
 	private final Path standardLibraryPath = getStandardLibPath();
+
+	public static final Set<String> LIBRARY_FOLDERS = Set.of(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME,
+			TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
 
 	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	public static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
@@ -138,7 +137,7 @@ public enum LibraryManager {
 			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
 
-		setStandardLibsReadOnly();
+		LibraryPermission.setLibReadOnly(standardLibraryPath);
 	}
 
 	/**
@@ -176,9 +175,9 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Initialise map with all libraries contained in the folder specified
+	 * Initialize map with all libraries contained in the folder specified
 	 *
-	 * @param map      map to initialise
+	 * @param map      map to initialize
 	 * @param path     path to folder
 	 * @param standard if libraries are standard
 	 * @param baseURI  URI to use as base
@@ -295,7 +294,7 @@ public enum LibraryManager {
 							fileOutputStream.write(buffer, 0, len);
 						}
 					}
-					setPathReadOnly(newFile);
+					LibraryPermission.setPathReadOnly(newFile);
 				}
 				entry = zipInputStream.getNextEntry();
 			}
@@ -321,14 +320,14 @@ public enum LibraryManager {
 			Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-					setPathEditable(file);
+					LibraryPermission.setPathEditable(file);
 					Files.delete(file);
 					return FileVisitResult.CONTINUE;
 				}
 
 				@Override
 				public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-					setPathEditable(dir);
+					LibraryPermission.setPathEditable(dir);
 					Files.delete(dir);
 					return FileVisitResult.CONTINUE;
 				}
@@ -353,112 +352,6 @@ public enum LibraryManager {
 			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
 		}
 		return destPath;
-	}
-
-	/**
-	 * Sets a specific path read only
-	 *
-	 * @param path Path to set read only
-	 */
-	private static void setPathReadOnly(final Path path) {
-		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
-		if (dosView != null) {
-			try {
-				dosView.setReadOnly(true);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
-		if (posixView != null) {
-			try {
-				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
-				permissions.remove(PosixFilePermission.OWNER_WRITE);
-				permissions.remove(PosixFilePermission.GROUP_WRITE);
-				permissions.remove(PosixFilePermission.OTHERS_WRITE);
-				posixView.setPermissions(permissions);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-	}
-
-	/**
-	 * Sets a specific path editable
-	 *
-	 * @param path Path to set editable
-	 */
-	private static void setPathEditable(final Path path) {
-		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
-		if (dosView != null) {
-			try {
-				dosView.setReadOnly(false);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
-		if (posixView != null) {
-			try {
-				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
-				permissions.add(PosixFilePermission.OWNER_WRITE);
-				permissions.add(PosixFilePermission.GROUP_WRITE);
-				permissions.add(PosixFilePermission.OTHERS_WRITE);
-				posixView.setPermissions(permissions);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-	}
-
-	private void setStandardLibsReadOnly() {
-		final WorkspaceJob job = new WorkspaceJob(Messages.LibraryManager_SetStandardLibrariesReadOnly) {
-
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-
-				try {
-					Files.walkFileTree(standardLibraryPath, new FileVisitor<Path>() {
-
-						@Override
-						public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-								throws IOException {
-							setPathReadOnly(file);
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult visitFileFailed(final Path file, final IOException exc)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-					});
-				} catch (final IOException e) {
-					// empty
-				}
-				return Status.OK_STATUS;
-			}
-
-			@Override
-			public boolean belongsTo(final Object family) {
-				return family == FAMILY_FORDIAC_LIBRARY;
-			}
-		};
-		job.setRule(null);
-		job.setPriority(Job.DECORATE);
-		job.schedule();
 	}
 
 	/**
@@ -723,6 +616,9 @@ public enum LibraryManager {
 		// remove still linked libraries
 		cleanupLinks(linked, progress.split(2));
 
+		// check if imported library links are broken
+		checkLinkedLibraries(project, progress.split(1));
+
 		if (PreferenceProvider.getBoolean(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID,
 				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
 			// force load explicitly defined dependencies
@@ -767,6 +663,41 @@ public enum LibraryManager {
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
 			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
 		}
+	}
+
+	/**
+	 * Checks if a given link inside the library folders is broken.
+	 *
+	 * <p>
+	 * This method checks if the existing links are broken, creates error markers
+	 * and will eventually abort the build.
+	 *
+	 * @param project selected project
+	 */
+	private static void checkLinkedLibraries(final IProject project, final SubMonitor progress) {
+		progress.setTaskName(Messages.LibraryManager_CheckLinks);
+		progress.setWorkRemaining(10);
+
+		LIBRARY_FOLDERS.stream().map(project::getFolder).forEach(folder -> {
+			try {
+				folder.accept(resource -> {
+					if (resource.equals(folder)) {
+						return true;
+					}
+					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
+						if (libFolder.getModificationStamp() == IResource.NULL_STAMP) {
+							FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
+									List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
+							throw new OperationCanceledException();
+						}
+						progress.worked(1);
+					}
+					return false;
+				});
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		});
 	}
 
 	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
@@ -841,10 +772,10 @@ public enum LibraryManager {
 					}
 					linked.remove(rnode.getSymbolicName());
 				} else {
-					markerList.add(createDependencyMarker(projectManifest, rnode, dnode));
+					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
 				}
 			} else if (dnode.isRangeEmpty()) {
-				markerList.add(createDependencyMarker(projectManifest, dnode));
+				markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, dnode));
 			}
 		}
 	}
@@ -889,13 +820,9 @@ public enum LibraryManager {
 					preferred.put(libFolder.getName(),
 							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
 				} else {
-					final IPath path = libFolder.getRawLocation();
-					final String segment = (path != null && path.segmentCount() >= 2)
-							? path.segment(path.segmentCount() - 2)
-							: ""; //$NON-NLS-1$
-					final int index = segment.lastIndexOf('-');
-					if (index > 0) {
-						preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
+					final Version version = parseLibraryVersion(libFolder);
+					if (!version.equals(Version.emptyVersion)) {
+						preferred.put(libFolder.getName(), version);
 					}
 				}
 			}
@@ -907,6 +834,22 @@ public enum LibraryManager {
 		} catch (final CoreException e) {
 			// empty
 		}
+	}
+
+	/**
+	 * Parses the Library Version of the folders raw location if possible
+	 *
+	 * @param the folder
+	 * @return
+	 */
+	static Version parseLibraryVersion(final IFolder libraryFolder) {
+		final IPath path = libraryFolder.getRawLocation();
+		final String segment = (path != null && path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+		final int index = segment.lastIndexOf('-');
+		if (index > 0) {
+			return new Version(segment.substring(index + 1));
+		}
+		return Version.emptyVersion;
 	}
 
 	/**
@@ -1013,43 +956,6 @@ public enum LibraryManager {
 			final String symbolicName, final java.net.URI uri) {
 		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream().filter(l -> l.uri().equals(uri))
 				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
-	}
-
-	/**
-	 * Creates error marker based on dependency and resolved node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param rnode    resolved node
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final ResolveNode rnode,
-			final DependencyNode dnode) {
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
-						VersionComparator.formatVersionRange(dnode.getRange()),
-						String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, rnode.getSymbolicName()));
-	}
-
-	/**
-	 * Creates version range error marker based on dependency node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final DependencyNode dnode) {
-		final String causedBy = dnode.getCauses().entrySet().stream()
-				.map(entry -> entry.getKey() + ": " + VersionComparator.formatVersionRange(entry.getValue())) //$NON-NLS-1$
-				.collect(Collectors.joining(", ")); //$NON-NLS-1$
-
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(
-						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
 	}
 
 	private static Path getStandardLibPath() {

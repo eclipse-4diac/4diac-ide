@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
@@ -53,6 +53,7 @@ import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -63,9 +64,6 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		if (input instanceof final TypeEditorInput untypedInput) {
-			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
-		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
 		setTitleImage(FordiacImage.ICON_INTERFACE_EDITOR.getImage());
@@ -153,7 +151,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib.getDataTypeLibrary());
+		return new InterfaceContextMenuProvider(viewer, zoomManager, getActionRegistry(), typeLib);
 	}
 
 	@Override
@@ -227,7 +225,9 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
+		if (input instanceof final IFileEditorInput fileEditorInput) {
+			typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(fileEditorInput.getFile().getProject());
+		}
 		super.setInput(input);
 	}
 

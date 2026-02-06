@@ -46,7 +46,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
@@ -70,6 +69,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -217,6 +217,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 
 	private final class InterfaceEditPartMouseListener implements MouseListener {
 		private static final int MASK = SWT.SHIFT | SWT.CTRL;
+		private static final int LEFT_CLICK = 1;
 		private static final String COMMAND_ID = "org.eclipse.fordiac.ide.application.commands.markConnectionSource"; //$NON-NLS-1$
 
 		@Override
@@ -233,7 +234,7 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 			}
 
 			// LEFT CLICK
-			if (hasMarker()) {
+			if (me.button == LEFT_CLICK && hasMarker()) {
 				invokeMarkConnectionSourceHandler(null);
 			}
 		}

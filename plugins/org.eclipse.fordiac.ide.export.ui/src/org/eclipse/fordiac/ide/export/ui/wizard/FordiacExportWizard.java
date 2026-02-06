@@ -96,9 +96,10 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	}
 
 	protected static void showErrorWarningSummary(final IExportFilter filter) {
-		if (filter != null && ((!filter.getErrors().isEmpty()) || (!filter.getWarnings().isEmpty()))) {
+		if (filter != null
+				&& (!filter.getErrors().isEmpty() || !filter.getWarnings().isEmpty() || !filter.getInfos().isEmpty())) {
 			new ExportStatusMessageDialog(Display.getDefault().getActiveShell(), filter.getWarnings(),
-					filter.getErrors()).open();
+					filter.getErrors(), filter.getInfos()).open();
 		}
 	}
 

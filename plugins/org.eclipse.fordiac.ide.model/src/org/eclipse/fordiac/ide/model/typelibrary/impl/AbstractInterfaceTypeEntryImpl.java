@@ -184,7 +184,9 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 
 			NotificationChain notifications = null;
 			synchronized (this) {
-				notifications = basicSetInterface(null, notifications);
+				if (basicGetInterface() != null) {
+					notifications = basicSetInterface(null, notifications);
+				}
 			}
 
 			if (notifications != null) {

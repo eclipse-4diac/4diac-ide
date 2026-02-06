@@ -109,7 +109,7 @@ public abstract class TemplateExportFilter extends ExportFilter {
 	public void export(final IFile typeFile, final String destination, final boolean forceOverwrite, EObject source)
 			throws ExportException.UserInteraction {
 		if (source == null && typeFile != null && TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile) == null) {
-			getWarnings().add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
+			getInfos().add(MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
 					typeFile.getFullPath(), Messages.TemplateExportFilter_FILE_IGNORED));
 			return; // Do not export files passed to the export that are not in the TypeLibrary
 		}

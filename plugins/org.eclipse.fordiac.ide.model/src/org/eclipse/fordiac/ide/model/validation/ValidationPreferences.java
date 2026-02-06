@@ -33,6 +33,8 @@ public final class ValidationPreferences {
 	public static final String COLLISION_SEVERITY = "collisionSeverity"; //$NON-NLS-1$
 	public static final String RIGHT_INTERFACE_BAR_COLLISION_SEVERITY = "rightInterfaceBarCollisionSeverity"; //$NON-NLS-1$
 	public static final String PACKAGENAME_MISMATCH_FOLDER = "packagenameMismatchFolder"; //$NON-NLS-1$
+	public static final String NO_VALUE_FOR_GENERIC_TYPE_VARIABLE = "noValueForGenericTypeVariable"; //$NON-NLS-1$
+	public static final String VALUE_FOR_GENERIC_INSTANCE_VARIABLE = "valueForGenericInstanceVariable"; //$NON-NLS-1$
 
 	public static int getDiagnosticSeverity(final String key, final int defaultValue, final EObject context) {
 		final Resource resource = context != null ? context.eResource() : null;

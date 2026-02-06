@@ -14,10 +14,10 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**

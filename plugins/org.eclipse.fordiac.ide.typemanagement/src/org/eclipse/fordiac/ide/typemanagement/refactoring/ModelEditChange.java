@@ -45,7 +45,7 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 		final SubMonitor subMonitor = SubMonitor.convert(pm, edits.size());
 		for (final ModelEdit<?> edit : edits) {
 			if (edit.isEnabled()) {
-				edit.initializeValidationData(element, subMonitor.newChild(1));
+				edit.initializeValidationDataElement(element, subMonitor.newChild(1));
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 		final SubMonitor subMonitor = SubMonitor.convert(pm, edits.size());
 		for (final ModelEdit<?> edit : edits) {
 			if (edit.isEnabled()) {
-				result.merge(edit.isValid(element, subMonitor.split(1)));
+				result.merge(edit.isValidElement(element, subMonitor.split(1)));
 			}
 		}
 		return result;
@@ -68,7 +68,7 @@ public final class ModelEditChange extends AbstractCommandChange<LibraryElement>
 		final CompoundCommand result = new CompoundCommand(getName());
 		for (final ModelEdit<?> edit : edits) {
 			if (edit.isEnabled()) {
-				result.add(edit.createCommand(element));
+				result.add(edit.createCommandElement(element));
 			}
 		}
 		return result;

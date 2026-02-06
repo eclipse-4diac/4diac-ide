@@ -342,7 +342,8 @@ public final class FBNetworkHelper {
 	private static boolean containsType(final FBType editorType,
 			final EList<? extends FBNetworkElement> networkElementList) {
 		for (final FBNetworkElement elem : networkElementList) {
-			if (editorType.equals(elem.getType()) || containsType(editorType, getChildFBNElements(elem))) {
+			if (editorType.getTypeEntry().equals(elem.getTypeEntry())
+					|| containsType(editorType, getChildFBNElements(elem))) {
 				return true;
 			}
 		}

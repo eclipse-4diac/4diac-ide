@@ -184,7 +184,7 @@ public class DeploymentLaunchShortcut implements ILaunchShortcut2 {
 			return collectDeployableObjects(TypeLibraryManager.INSTANCE.getTypeEntryForFile(file));
 		}
 		if (object instanceof final SystemEntry systemEntry) {
-			return collectDeployableObjects(systemEntry.getSystem());
+			return collectDeployableObjects(systemEntry.getType());
 		}
 		if (object instanceof final AutomationSystem automationSystem) {
 			return collectDeployableObjects(automationSystem.getSystemConfiguration());

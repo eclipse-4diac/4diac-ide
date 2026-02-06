@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 							Johannes Kepler University, Linz,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                          Johannes Kepler University, Linz,
+ *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +17,7 @@
  *   Daniel Lindhuber, Bianca Wiesmayr - cleanup
  *   Patrick Aigner  - change dialog integration
  *   Alois Zoitl     - extracted and generalized from FBTypeEditor
+ *   Martin Erich Jobst - use library element provider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
@@ -24,7 +26,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Objects;
 
-import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.commands.operations.UndoContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
@@ -33,13 +35,8 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditor;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
-import org.eclipse.fordiac.ide.gef.validation.ValidationJob;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
-import org.eclipse.fordiac.ide.model.edit.TypeEntryAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -48,7 +45,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.dialog.AbstractTypeEntryDataHandler;
 import org.eclipse.fordiac.ide.model.search.dialog.FBTypeUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.typeeditor.internal.TypeEditorPageFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
@@ -56,8 +56,6 @@ import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.SelectionTabbedPropertySheetPage;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -76,7 +74,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -90,8 +87,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
-public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor implements IGotoMarker,
-		CommandStackEventListener, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
+public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
+		implements IGotoMarker, ITabbedPropertySheetPageContributor, ITypeEntryEditor, ISelectionListener {
 
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save Button
 	private static final int CANCEL_BUTTON_INDEX = 1;
@@ -99,56 +96,24 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	private static TypeEditorPageFactory typeEditorPageFactory = new TypeEditorPageFactory();
 
 	private final OperationHistoryCommandStack commandStack = new OperationHistoryCommandStack();
+	private final LibraryElementStateListener elementStateListener = new EditorStateListener();
+	private LibraryElementActivationListener activationListener;
 	private Collection<ITypeEditorPage> editorPages;
-	private TypeEntryAdapter typeEntryAdapter;
-	private GraphicalAnnotationModel annotationModel;
-	private ValidationJob validationJob;
 	private boolean readOnly = false;
-	private boolean wasDirtyBeforeExecute = false;
 	private Composite mainComposite;
 
 	@Override
 	protected void addPages() {
-		final TypeEditorInput ei = getTypeEditorInput();
 		editorPages = typeEditorPageFactory.getEditors(getType());
 		for (final ITypeEditorPage typeEditorPage : editorPages) {
 			try {
-				final int index = addPage(typeEditorPage, ei);
+				final int index = addPage(typeEditorPage, getEditorInput());
 				setPageText(index, typeEditorPage.getTitle());
 				setPageImage(index, typeEditorPage.getTitleImage());
 			} catch (final PartInitException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
-	}
-
-	private TypeEditorInput checkEditorInput(final IEditorInput editorInput) {
-		if (editorInput instanceof final TypeEditorInput typeEI) {
-			return typeEI;
-		}
-
-		if (editorInput instanceof final IFileEditorInput fileEI) {
-			final TypeEditorInput curEditorInput = getTypeEditorInput();
-			if (curEditorInput != null) {
-				// when we already had an input it means the file for our type has changed,
-				// provide a new TypeEditorInput with the new file
-				return new TypeEditorInput(curEditorInput.getContent(), curEditorInput.getTypeEntry(),
-						fileEI.getFile());
-			}
-			if (!fileEI.getFile().exists()) {
-				return null;
-			}
-
-			final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEI.getFile());
-			if (typeEntry != null) {
-				final LibraryElement type = typeEntry.getTypeEditable();
-				// FIXME replace with typeEntry.copyType() when type editable is
-				// removed
-				return new TypeEditorInput(type, typeEntry);
-			}
-		}
-
-		return null;
 	}
 
 	@Override
@@ -204,35 +169,21 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void dispose() {
-		final TypeEntry typeEntry = getTypeEntry();
-		if ((typeEntry != null) && typeEntry.eAdapters().contains(typeEntryAdapter)) {
-			typeEntry.eAdapters().remove(typeEntryAdapter);
-		}
-		if (validationJob != null) {
-			validationJob.dispose();
-		}
-		if (annotationModel != null) {
-			annotationModel.dispose();
-		}
-
-		// get these values here before calling super dispose
-		final boolean dirty = isDirty();
-
 		if (null != getSite()) {
 			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		}
 
-		super.dispose();
+		getCommandStack().dispose();
 
-		if (dirty && typeEntry != null) {
-			// purge editable type from typelib after super.dispose() so that no notifiers
-			// will be called
-			typeEntry.setTypeEditable(null);
+		if (activationListener != null) {
+			activationListener.dispose();
+			activationListener = null;
 		}
 
-		getCommandStack().removeCommandStackEventListener(this);
-		getCommandStack().dispose();
-		typeEntryAdapter.dispose();
+		super.dispose();
+
+		LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
+		LibraryElementProvider.INSTANCE.removeLibraryElementStateListener(elementStateListener);
 	}
 
 	@Override
@@ -278,22 +229,17 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 				// allow each editor to save back changes before saving to file
 				getEditorPages().stream().filter(IEditorPart::isDirty)
 						.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
-				getTypeEntry().save(getType(), monitor);
+				LibraryElementProvider.INSTANCE.saveLibraryElement(getEditorInput(), monitor);
 			}
 		};
 		try {
-			typeEntryAdapter.setBlockUpdates(true);
 			operation.run(monitor);
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		} catch (final InterruptedException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			Thread.currentThread().interrupt();
-		} finally {
-			typeEntryAdapter.setBlockUpdates(false);
 		}
-
-		getCommandStack().markSaveLocation();
 	}
 
 	/**
@@ -323,10 +269,7 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 			return adapter.cast(this);
 		}
 		if (adapter == GraphicalAnnotationModel.class) {
-			return adapter.cast(annotationModel);
-		}
-		if (adapter == TypeEntryAdapter.class) {
-			return adapter.cast(typeEntryAdapter);
+			return adapter.cast(LibraryElementProvider.INSTANCE.getAnnotationModel(getEditorInput()));
 		}
 		if (isEditorActive()) {
 			// we should only call super if the editor is active otherwise we may get
@@ -341,10 +284,6 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return null;
 	}
 
-	private TypeEditorInput getTypeEditorInput() {
-		return (super.getEditorInput() instanceof final TypeEditorInput typeEI) ? typeEI : null;
-	}
-
 	protected Collection<ITypeEditorPage> getEditorPages() {
 		return editorPages;
 	}
@@ -356,13 +295,12 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 	}
 
 	protected LibraryElement getType() {
-		final TypeEditorInput ei = getTypeEditorInput();
-		return (ei != null) ? ei.getContent() : null;
+		return LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
 	}
 
 	protected TypeEntry getTypeEntry() {
-		final TypeEditorInput ei = getTypeEditorInput();
-		return (ei != null) ? ei.getTypeEntry() : null;
+		final LibraryElement type = getType();
+		return type != null ? type.getTypeEntry() : null;
 	}
 
 	@Override
@@ -406,10 +344,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput editorInput) throws PartInitException {
-		typeEntryAdapter = new TypeEntryAdapter(this, site.getWorkbenchWindow().getPartService());
-		getCommandStack().addCommandStackEventListener(this);
 		super.init(site, editorInput);
 		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+		LibraryElementProvider.INSTANCE.addLibraryElementStateListener(elementStateListener);
+		activationListener = new LibraryElementActivationListener(this);
 	}
 
 	private boolean isEditorActive() {
@@ -430,43 +368,19 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void reloadType() {
-		final var entry = getTypeEntry();
-		final var entryType = entry.getType();
-		final var currentType = getType();
-
-		if (entryType == null && currentType != null || entryType != null && currentType == null) {
-			// type appeared or vanished
-			final var typeInput = getTypeEditorInput();
-			if (typeInput != null) {
-				typeInput.setType(entryType == null ? null : entry.copyType());
+		try {
+			LibraryElementProvider.INSTANCE.resetLibraryElement(getEditorInput(), null);
+			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+			getEditorPages().forEach(ITypeEditorPage::reloadType);
+			if (getActiveEditor() instanceof final ITypeEditorPage page) {
+				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+						page.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
 			}
-
+			setPartName(newType.getName());
+		} catch (final CoreException e) {
 			clearEditorContent();
 			createEditorContent();
-			return;
-		}
-
-		if (entryType != currentType) {
-			// type of typeEntry changed
-			entry.eAdapters().remove(typeEntryAdapter);
-
-			final var newType = entry.copyType();
-			final var typeInput = getTypeEditorInput();
-			if (typeInput != null) {
-				typeInput.setType(newType);
-			}
-
-			commandStack.setUndoContext(new ObjectUndoContext(newType));
-			getEditorPages().forEach(ITypeEditorPage::reloadType);
-
-			final var active = getActiveEditor();
-			if (active instanceof final ITypeEditorPage page) {
-				Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-						active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
-			}
-
-			entry.eAdapters().add(typeEntryAdapter);
-			setPartName(entry.getTypeName());
 		}
 	}
 
@@ -489,38 +403,19 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (validationJob != null) {
-			validationJob.dispose();
-			validationJob = null;
+		try {
+			LibraryElementProvider.INSTANCE.disconnect(getEditorInput());
+			LibraryElementProvider.INSTANCE.connect(input);
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(input));
+		} catch (final CoreException e) {
+			commandStack.setUndoContext(new UndoContext());
 		}
-		if (annotationModel != null) {
-			annotationModel.dispose();
-			annotationModel = null;
+		if (getEditorPages() != null) {
+			getEditorPages().forEach(e -> e.setInput(input));
+			getEditorPages().forEach(ITypeEditorPage::reloadType);
 		}
-		if (input != null) {
-			setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
-		}
-
-		final TypeEditorInput typeEditorInput = checkEditorInput(input);
-		if (typeEditorInput != null && typeEditorInput.getTypeEntry() != null) {
-			if (typeEditorInput.getContent() != null) {
-				// we have a type
-				annotationModel = new FordiacMarkerGraphicalAnnotationModel(typeEditorInput.getFile(),
-						typeEditorInput::getContent);
-				validationJob = new ValidationJob(getPartName(), getCommandStack(), annotationModel);
-				if (getEditorPages() != null) {
-					getEditorPages().forEach(e -> e.setInput(typeEditorInput));
-				}
-				commandStack.setUndoContext(new ObjectUndoContext(typeEditorInput.getContent()));
-			}
-			final TypeEntry typeEntry = typeEditorInput.getTypeEntry();
-			if (!typeEntry.eAdapters().contains(typeEntryAdapter)) {
-				typeEntry.eAdapters().add(typeEntryAdapter);
-			}
-			setInputWithNotify(typeEditorInput);
-		} else {
-			setInputWithNotify(input);
-		}
+		setInputWithNotify(input);
+		setPartName(TypeEntry.getTypeNameFromFileName(input.getName()));
 	}
 
 	private void clearEditorContent() {
@@ -564,25 +459,45 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor imp
 		return (adapter == ITextEditor.class) || (adapter == XtextEditor.class) || (adapter == FBNetworkEditor.class);
 	}
 
-	@Override
-	public void stackChanged(final CommandStackEvent event) {
-		if (event.getDetail() == CommandStack.PRE_EXECUTE) {
-			wasDirtyBeforeExecute = getCommandStack().isDirty();
-		}
-		if (event.getDetail() == CommandStack.POST_EXECUTE && !wasDirtyBeforeExecute
-				&& EditorUtils.findEditor(part -> part instanceof final BulkEditor bulkEditor
-						&& bulkEditor.hasDirtyType(getTypeEntry())).length > 0) {
-			final MessageDialog dialog = new MessageDialog(getSite().getShell(), "", null, //$NON-NLS-1$
-					Messages.BulkEditorDirty, MessageDialog.QUESTION,
-					new String[] { Messages.Continue, Messages.Cancel }, 0);
-			if (dialog.open() == 1) {
-				// Cancel
-				getCommandStack().undo();
-				getCommandStack().flush();
+	protected class EditorStateListener implements LibraryElementStateListener {
+
+		@Override
+		public void elementDirtyStateChanged(final IEditorInput input, final boolean isDirty) {
+			if (input.equals(getEditorInput())) {
+				firePropertyChange(PROP_DIRTY);
 			}
 		}
-		if (event.isPostChangeEvent()) {
-			firePropertyChange(IEditorPart.PROP_DIRTY);
+
+		@Override
+		public void elementContentReplaced(final IEditorInput input) {
+			if (!input.equals(getEditorInput())) {
+				return;
+			}
+			final var newType = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
+			commandStack.setUndoContext(LibraryElementProvider.INSTANCE.getUndoContext(getEditorInput()));
+			getEditorPages().forEach(ITypeEditorPage::reloadType);
+			setPartName(newType.getName());
+
+			final var active = getActiveEditor();
+			if (active instanceof final ITypeEditorPage page) {
+				Display.getDefault()
+						.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(AbstractTypeEditor.this,
+								active.getAdapter(GraphicalViewer.class), page.getSelectableObject()));
+			}
+		}
+
+		@Override
+		public void elementDeleted(final IEditorInput input) {
+			if (input.equals(getEditorInput())) {
+				close(false);
+			}
+		}
+
+		@Override
+		public void elementMoved(final IEditorInput originalInput, final IEditorInput movedInput) {
+			if (originalInput.equals(getEditorInput())) {
+				setInput(movedInput);
+			}
 		}
 	}
 }

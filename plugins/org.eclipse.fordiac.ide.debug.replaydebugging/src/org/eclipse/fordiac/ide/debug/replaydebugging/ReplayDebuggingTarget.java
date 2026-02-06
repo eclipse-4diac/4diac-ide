@@ -36,11 +36,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 
 	private final Map<String, String> deviceNameToPath = new HashMap<>();
+	private final boolean remote;
 
 	public ReplayDebuggingTarget(final AutomationSystem system, final Set<INamedElement> selection,
-			final ILaunch launch, final boolean allowTerminate, final String tracesPath) throws DeploymentException {
-		super(system, selection, launch, allowTerminate, Duration.ofSeconds(30), List.of());
-
+			final ILaunch launch, final boolean allowTerminate, final String tracesPath, final boolean remote)
+			throws DeploymentException {
+		// pass empty list to deploy if not remote, as we do not want to deploy
+		super(system, remote ? selection : Set.of(), launch, allowTerminate, Duration.ofSeconds(30), List.of());
+		this.remote = remote;
 		for (final INamedElement element : selection) {
 			if (element instanceof final Device device) {
 				this.deviceNameToPath.put(device.getName(), tracesPath);
@@ -51,7 +54,7 @@ public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 	@Override
 	protected void doConnect(final Device device) throws DebugException {
 		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, this,
-				deviceNameToPath.get(device.getName()));
+				deviceNameToPath.get(device.getName()), remote);
 
 		replayDebuggingDevice.connect();
 	}

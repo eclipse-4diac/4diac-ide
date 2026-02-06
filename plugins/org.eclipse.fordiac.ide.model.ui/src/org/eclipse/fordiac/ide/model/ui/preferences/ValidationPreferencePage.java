@@ -63,6 +63,14 @@ public class ValidationPreferencePage extends FordiacPropertyPreferencePage {
 		final Composite typeSection = createSection(Messages.Validation_Section_TypeManagement, parent, true);
 		addField(new ComboFieldEditor(ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER,
 				Messages.Validation_PackagenameMismatchFolder, SEVERITIES, typeSection));
+
+		final Composite potentialProblemsSection = createSection(
+				Messages.ValidationPreferencePage_PotentialProgrammingProblems, parent, true);
+		addField(new ComboFieldEditor(ValidationPreferences.NO_VALUE_FOR_GENERIC_TYPE_VARIABLE,
+				Messages.ValidationPreferencePage_NoValueForGenericTypeVariable, SEVERITIES, potentialProblemsSection));
+		addField(new ComboFieldEditor(ValidationPreferences.VALUE_FOR_GENERIC_INSTANCE_VARIABLE,
+				Messages.ValidationPreferencePage_ValueForGenericInstanceVariable, SEVERITIES,
+				potentialProblemsSection));
 	}
 
 	private static Composite createSection(final String label, final Composite composite, final boolean expanded) {

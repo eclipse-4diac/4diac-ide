@@ -123,17 +123,15 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 		final Event inputEvent = newEvent("REQ", true);
 		final Event outputEvent = newEvent("CNF", false);
 		final STAlgorithm alg = newSTAlgorithm("""
-					DI1 := DI1 - 1;
-					DI2 := DI2 + 1;
-					DO1 := DI2;
+					DO1 := DO1 + DI2;
 				""", "REQ");
 		final ECState init = newState("INIT");
 		final ECState state = newState("STATE", newAction(alg, outputEvent));
-		final ECC ecc = newECC(List.of(init, state), List.of(newTransition(init, state, inputEvent, "DI1 > 0"),
-				newTransition(state, state, null, "DI1 > 0")));
-		assertTrace(toDIntValue(21), repeatEvent(outputEvent, 17), repeatState(state, 17),
+		final ECC ecc = newECC(List.of(init, state), List.of(newTransition(init, state, inputEvent, "DO1 < DI1"),
+				newTransition(state, state, null, "DO1 < DI1")));
+		assertTrace(toDIntValue(17), repeatEvent(outputEvent, 17), repeatState(state, 17),
 				evaluateBasicFB(ecc, List.of(inputEvent),
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(1), "DI2")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
 
@@ -141,16 +139,18 @@ class BasicFBEvaluatorTest extends AbstractFBEvaluatorTest {
 	void testBasicFBMultiStateLoop() throws EvaluatorException, InterruptedException {
 		final Event inputEvent = newEvent("REQ", true);
 		final Event outputEvent = newEvent("CNF", false);
-		final STAlgorithm alg = newSTAlgorithm("DI1 := DI1 - 1;", "REQ");
-		final STAlgorithm alg2 = newSTAlgorithm("DI2 := DI2 + 1; DO1 := DI2;", "REQ2");
+		final STAlgorithm alg = newSTAlgorithm("DO1 := DO1 + DI2;", "REQ");
+		final STAlgorithm alg2 = newSTAlgorithm("DO1 := DO1 * DI3;", "REQ2");
 		final ECState init = newState("INIT");
 		final ECState state = newState("STATE", newAction(alg, outputEvent));
 		final ECState state2 = newState("STATE2", newAction(alg2, outputEvent));
-		final ECC ecc = newECC(List.of(init, state, state2), List.of(newTransition(init, state, inputEvent, "DI1 > 0"),
-				newTransition(state, state2, null, null), newTransition(state2, state, null, "DI1 > 0")));
-		assertTrace(toDIntValue(21), repeatEvent(outputEvent, (17 * 2)), repeatStates(List.of(state, state2), 17),
+		final ECC ecc = newECC(List.of(init, state, state2),
+				List.of(newTransition(init, state, inputEvent, "DO1 < DI1"), newTransition(state, state2, null, null),
+						newTransition(state2, state, null, "DO1 < DI1")));
+		assertTrace(toDIntValue(60), repeatEvent(outputEvent, (4 * 2)), repeatStates(List.of(state, state2), 4),
 				evaluateBasicFB(ecc, List.of(inputEvent),
-						List.of(newVariable(toDIntValue(17), "DI1"), newVariable(toDIntValue(4), "DI2")),
+						List.of(newVariable(toDIntValue(60), "DI1"), newVariable(toDIntValue(2), "DI2"),
+								newVariable(toDIntValue(2), "DI3")),
 						newVarDeclaration("DO1", ElementaryTypes.DINT, false)));
 	}
 

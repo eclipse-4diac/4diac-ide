@@ -235,21 +235,21 @@ public final class Annotations {
 
 	public static void addConnectionWithIndex(final FBNetwork fbn, final Connection connection, final int index) {
 		if (connection instanceof final EventConnection evCon) {
-			if (index != -1) {
+			if (index >= 0 && index < fbn.getEventConnections().size()) {
 				fbn.getEventConnections().add(index, evCon);
 			} else {
 				fbn.getEventConnections().add(evCon);
 			}
 		}
 		if (connection instanceof final DataConnection dataCon) {
-			if (index != -1) {
+			if (index >= 0 && index < fbn.getDataConnections().size()) {
 				fbn.getDataConnections().add(index, dataCon);
 			} else {
 				fbn.getDataConnections().add(dataCon);
 			}
 		}
 		if (connection instanceof final AdapterConnection adpCon) {
-			if (index != -1) {
+			if (index >= 0 && index < fbn.getAdapterConnections().size()) {
 				fbn.getAdapterConnections().add(index, adpCon);
 			} else {
 				fbn.getAdapterConnections().add(adpCon);

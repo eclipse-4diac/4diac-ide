@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.annotation;
 
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.gef.GraphicalEditPart;
 
 public interface AnnotableGraphicalEditPart extends GraphicalEditPart {

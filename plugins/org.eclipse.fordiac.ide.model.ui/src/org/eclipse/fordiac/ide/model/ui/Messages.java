@@ -18,6 +18,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "plugin"; //$NON-NLS-1$
+	public static String AbstractLibraryElementProvider_CannotHandleInput;
 	public static String AutoReloadError_PathNotFound_Title;
 	public static String AutoReloadError_PathNotFound;
 
@@ -62,7 +63,28 @@ public final class Messages extends NLS {
 	public static String DataTypeDialog_OneElement;
 	public static String DataTypeDialog_NoFolder;
 	public static String DataTypeDialog_InvalidSelection;
+	public static String DataTypeDialog_IncompatibleType;
 	public static String DataTypeDialog_Selected;
+
+	public static String FileLibraryElementProvider_LibraryElementCannotBeLoaded;
+	public static String FileLibraryElementProvider_LibraryElementDoesNotExist;
+	public static String LibraryElementActivationListener_FileChangedMessage;
+	public static String LibraryElementActivationListener_FileChangedTitle;
+	public static String LibraryElementActivationListener_IgnoreChangeButton;
+	public static String LibraryElementActivationListener_ReplaceContentButton;
+	public static String LibraryElementActivationListener_SyncErrorMessage;
+	public static String LibraryElementActivationListener_SyncErrorTitle;
+	public static String MultiLibraryElementActivationListener_FilesChangedMessage;
+	public static String MultiLibraryElementActivationListener_ReplaceContentButton;
+	public static String MultiLibraryElementActivationListener_SyncErrorMessage;
+	public static String ValidationJob_RefreshJobName;
+	public static String ValidationJob_ReloadJobName;
+	public static String ValidationJob_UpdateJobName;
+	public static String ValidationJob_ValidationJobName;
+
+	public static String ValidationPreferencePage_NoValueForGenericTypeVariable;
+	public static String ValidationPreferencePage_PotentialProgrammingProblems;
+	public static String ValidationPreferencePage_ValueForGenericInstanceVariable;
 
 	static {
 		// initialize resource bundle

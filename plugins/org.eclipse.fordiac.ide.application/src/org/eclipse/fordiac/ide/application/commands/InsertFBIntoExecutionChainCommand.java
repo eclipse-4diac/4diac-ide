@@ -38,13 +38,11 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 
 	private final SubApp subApp;
 	private final FB insertedFB;
-	private final IInterfaceElement predecessorOutputPin;
 	private final CompoundCommand commands = new CompoundCommand();
 
 	public InsertFBIntoExecutionChainCommand(final SubApp subApp, final FB insertedFB) {
 		this.subApp = subApp;
 		this.insertedFB = insertedFB;
-		this.predecessorOutputPin = getPredecessorEventOutput(getCurrentPredecessor(subApp));
 	}
 
 	@Override
@@ -55,25 +53,29 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 	@Override
 	public void execute() {
 		if (insertedFB.getInterface() == null || insertedFB.getInterface().getEventInputs().isEmpty()
-				|| insertedFB.getInterface().getEventOutputs().isEmpty() || predecessorOutputPin == null
-				|| predecessorOutputPin.getOutputConnections().isEmpty()) {
-			return;
-		}
-		final Optional<IInterfaceElement> inputInsertedFB = Optional
-				.ofNullable(insertedFB.getInterface().getEventInputs().getFirst());
-		final Optional<IInterfaceElement> outputInsertedFB = Optional
-				.ofNullable(insertedFB.getInterface().getEventOutputs().getFirst());
-
-		if (inputInsertedFB.isEmpty() || outputInsertedFB.isEmpty()) {
+				|| insertedFB.getInterface().getEventOutputs().isEmpty()) {
 			return;
 		}
 
-		commands.add(
-				getCreateConnectionCommand(insertedFB.getFbNetwork(), predecessorOutputPin, inputInsertedFB.get()));
-		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB.get(),
-				predecessorOutputPin.getOutputConnections().getFirst().getDestination()));
-		commands.add(new DeleteConnectionCommand(predecessorOutputPin.getOutputConnections().getFirst()));
-		commands.add(new SetPredecessorCommand(insertedFB));
+		final BlockFBNetworkElement predecessor = getValidActivePredecessor(subApp);
+		final IInterfaceElement eventOutput = predecessor != null ? getPredecessorEventOutput(predecessor)
+				: getExecutionChainEnd();
+
+		if (!hasOutputConnections(eventOutput)) {
+			return;
+		}
+
+		final IInterfaceElement inputInsertedFB = insertedFB.getInterface().getEventInputs().getFirst();
+		final IInterfaceElement outputInsertedFB = insertedFB.getInterface().getEventOutputs().getFirst();
+
+		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), eventOutput, inputInsertedFB));
+		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB,
+				eventOutput.getOutputConnections().getFirst().getDestination()));
+		commands.add(new DeleteConnectionCommand(eventOutput.getOutputConnections().getFirst()));
+
+		if (predecessor != null) {
+			commands.add(new SetPredecessorCommand(insertedFB));
+		}
 
 		if (commands.canExecute()) {
 			commands.execute();
@@ -97,6 +99,10 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 				.collect(Collectors.toUnmodifiableSet());
 	}
 
+	private static boolean hasOutputConnections(final IInterfaceElement output) {
+		return output != null && !output.getOutputConnections().isEmpty();
+	}
+
 	private static Command getCreateConnectionCommand(final FBNetwork network, final IInterfaceElement source,
 			final IInterfaceElement target) {
 		if (source.getBlockFBNetworkElement().getFbNetwork() != target.getBlockFBNetworkElement().getFbNetwork()) {
@@ -109,22 +115,24 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return createConnectionCommand;
 	}
 
-	private static BlockFBNetworkElement getCurrentPredecessor(final SubApp subApp) {
+	private static BlockFBNetworkElement getValidActivePredecessor(final SubApp subApp) {
 		if (UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.PREDECESSOR_MARKER_ID,
-				subApp) instanceof final BlockFBNetworkElement block) {
+				subApp) instanceof final BlockFBNetworkElement block && isContainedInSubappNetwork(block, subApp)) {
 			return block;
 		}
 		return null;
 	}
 
-	private IInterfaceElement getPredecessorEventOutput(final BlockFBNetworkElement predecessor) {
-		if (predecessor == null) {
-			return getExecutionChainEnd();
-		}
+	private static IInterfaceElement getPredecessorEventOutput(final BlockFBNetworkElement predecessor) {
 		if (!predecessor.getInterface().getEventOutputs().isEmpty()) {
-			return predecessor.getInterface().getEventOutputs().getFirst();
+			return predecessor.getInterface().getEventOutputs().stream()
+					.filter(oe -> !oe.getOutputConnections().isEmpty()).findFirst().orElse(null);
 		}
 		return null;
+	}
+
+	private static boolean isContainedInSubappNetwork(final BlockFBNetworkElement elem, final SubApp sa) {
+		return sa.getSubAppNetwork() == elem.getFbNetwork();
 	}
 
 	private IInterfaceElement getExecutionChainEnd() {

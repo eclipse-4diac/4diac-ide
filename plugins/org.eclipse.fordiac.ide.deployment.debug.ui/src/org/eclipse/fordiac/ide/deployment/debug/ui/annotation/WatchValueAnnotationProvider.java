@@ -27,16 +27,16 @@ import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IInterfaceElementWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
-import org.eclipse.fordiac.ide.gef.annotation.FordiacMarkerGraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotation;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.fordiac.ide.model.ui.annotation.FordiacMarkerGraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotation;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationProvider;
 
 public class WatchValueAnnotationProvider implements GraphicalAnnotationProvider, IDebugEventSetListener {
 

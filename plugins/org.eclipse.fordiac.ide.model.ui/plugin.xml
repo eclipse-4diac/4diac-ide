@@ -3,7 +3,8 @@
 
 <!--
 ********************************************************************************
- * Copyright (c) 2020 Primetals Austria GmbH
+ * Copyright (c) 2020, 2026 Primetals Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,10 +15,13 @@
  * Contributors:
  * Michael Jäger
  *    - initial API and implementation and/or initial documentation
+ * Martin Erich Jobst
+ *    - add graphical annotation provider
  ********************************************************************************
 -->
 
 <plugin>
+   <extension-point id="graphicalAnnotationProvider" name="Graphical Annotation Provider" schema="schema/graphicalAnnotationProvider.exsd"/>
    <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/>
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
@@ -123,4 +127,11 @@
           value="false">
     </persistent>
   </extension>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory"
+            id="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory">
+      </factory>
+   </extension>
 </plugin>

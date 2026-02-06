@@ -61,6 +61,13 @@ public abstract class AbstractChangeInterfaceElementCommand extends Command impl
 
 	@Override
 	public Set<EObject> getAffectedObjects() {
-		return Set.of(interfaceElement);
+		return Set.of(getRootVariable(interfaceElement));
+	}
+
+	public static IInterfaceElement getRootVariable(IInterfaceElement element) {
+		while (element.eContainer() instanceof final IInterfaceElement parent) {
+			element = parent;
+		}
+		return element;
 	}
 }

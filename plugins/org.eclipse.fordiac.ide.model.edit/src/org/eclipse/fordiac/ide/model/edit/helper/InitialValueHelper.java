@@ -21,7 +21,6 @@ import java.util.Objects;
 
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -114,16 +113,14 @@ public final class InitialValueHelper {
 	}
 
 	public static String getDefaultValue(final Object element) {
-		if ((element instanceof final VarDeclaration varDec)
-				&& ((varDec.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(varDec.getType()))) {
+		if (element instanceof final VarDeclaration varDec && varDec.getType() instanceof AnyType) {
 			try {
 				return VariableOperations.newVariable(varDec).toString();
 			} catch (final Exception exc) {
 				// fall though (NO LOGGING NECESSARY!!!)
 			}
 		}
-		if ((element instanceof final Attribute attr)
-				&& ((attr.getType() instanceof AnyType) && !IecTypes.GenericTypes.isAnyType(attr.getType()))) {
+		if (element instanceof final Attribute attr && attr.getType() instanceof AnyType) {
 			try {
 				return VariableOperations.newVariable(attr).toString();
 			} catch (final Exception exc) {

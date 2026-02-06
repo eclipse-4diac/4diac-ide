@@ -12,14 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -47,17 +42,7 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 	// selection does not grow the canvas
 	private static final Insets MARQUEE_DRAG_BORDER = new Insets(1, 1, 1, 1);
 
-	private static class MarqueeRectangleFigure extends Figure {
-
-		@Override
-		protected void paintFigure(final Graphics graphics) {
-			graphics.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
-			graphics.setLineStyle(Graphics.LINE_DASH);
-			graphics.setLineWidth(ModifiedMoveHandle.SELECTION_BORDER_WIDTH + 1);
-			final Rectangle bounds = Rectangle.SINGLETON.setBounds(getBounds());
-			graphics.drawRectangle(bounds.x, bounds.y, bounds.width - 1, bounds.height - 1);
-		}
-	}
+	private EditPartViewer startingViewer;
 
 	@Override
 	protected boolean handleButtonDown(final int button) {
@@ -74,11 +59,28 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 	}
 
 	@Override
+	protected EditPartViewer getCurrentViewer() {
+		// use the viewer in which the selection started as this is where the feedback
+		// figure is located
+		if (startingViewer != null) {
+			return startingViewer;
+		}
+		return super.getCurrentViewer();
+	}
+
+	@Override
 	public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
 		if (viewer instanceof final AdvancedScrollingGraphicalViewer advScrollingGraphicalViewer) {
 			CanvasHelper.bindToContentPane(me, advScrollingGraphicalViewer, MARQUEE_DRAG_BORDER);
 		}
+		startingViewer = viewer;
 		super.mouseDown(me, viewer);
+	}
+
+	@Override
+	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
+		super.mouseUp(me, startingViewer);
+		startingViewer = null;
 	}
 
 	@Override
@@ -101,11 +103,6 @@ public class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
 			performOpen();
 		}
 		return true;
-	}
-
-	@Override
-	protected IFigure createMarqueeRectangleFigure() {
-		return new MarqueeRectangleFigure();
 	}
 
 	protected void performOpen() {

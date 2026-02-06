@@ -14,10 +14,7 @@ package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
@@ -37,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class FordiacErrorMarker {
 
@@ -221,46 +217,6 @@ public final class FordiacErrorMarker {
 	public static EObject getTarget(final IMarker marker) {
 		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
 		if (targetUri != null && targetUri.isPlatformResource()) {
-			final ResourceSet resourceSet = new ResourceSetImpl();
-			return resourceSet.getEObject(targetUri, true);
-		}
-		return null;
-	}
-
-	/**
-	 * Get the originating model element from the
-	 * {@link TypeEntry#getTypeEditable()}.
-	 *
-	 * @param marker The marker
-	 * @return The target or null if no valid attribute is present.
-	 * @see Diagnostic#getData()
-	 * @implNote This can be a resource-intensive operation since it may force to
-	 *           load the target file.
-	 * @deprecated The "editable" type may not be identical to the type currently
-	 *             used in editors due to automatic reload from disk on changes.
-	 *             However, it was often used this way. In the future, use
-	 *             {@link #getTargetRelative(IMarker, EObject)} and either get a
-	 *             private copy to edit the type via {@link #copyType()} or get the
-	 *             type directly from an editor via
-	 *             {@code Adapters.adapt(editor, LibraryElement.class)}.
-	 */
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public static EObject getTargetEditable(final IMarker marker) {
-		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
-		if (targetUri != null) {
-			if (targetUri.isPlatformResource()) {
-				final IFile file = ResourcesPlugin.getWorkspace().getRoot()
-						.getFile(new Path(targetUri.toPlatformString(true)));
-				if (file.exists()) {
-					final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-					if (typeEntry != null) {
-						final Resource resource = typeEntry.getTypeEditable().eResource();
-						if (resource != null) {
-							return resource.getEObject(targetUri.fragment());
-						}
-					}
-				}
-			}
 			final ResourceSet resourceSet = new ResourceSetImpl();
 			return resourceSet.getEObject(targetUri, true);
 		}

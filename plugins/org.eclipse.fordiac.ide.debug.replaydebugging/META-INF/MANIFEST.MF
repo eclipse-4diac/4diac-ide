@@ -6,7 +6,8 @@ Bundle-Version: 3.0.100.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.replaydebugging
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
-Export-Package: org.eclipse.fordiac.ide.debug.replaydebugging
+Export-Package: org.eclipse.fordiac.ide.debug.replaydebugging,
+ org.eclipse.fordiac.ide.debug.replaydebugging.core
 Require-Bundle: org.eclipse.debug.core,
  org.eclipse.equinox.common,
  org.eclipse.fordiac.ide.deployment.debug,
@@ -15,4 +16,6 @@ Require-Bundle: org.eclipse.debug.core,
  org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.model.eval,
- org.eclipse.fordiac.ide.ui
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.tracecompass.ctf.core;bundle-version="5.0.0",
+ org.eclipse.fordiac.ide.fb.interpreter

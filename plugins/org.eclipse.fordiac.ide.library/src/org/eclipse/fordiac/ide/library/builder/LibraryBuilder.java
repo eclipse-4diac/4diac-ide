@@ -49,6 +49,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_ResolveProjectDependencies, 1);
 		final IProject project = getProject();
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
+
 		if (manifest != null) {
 			if (kind == FULL_BUILD) {
 				fullBuild(project, manifest, progress.split(1));
@@ -66,15 +67,22 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 				}
 			}
 		}
-
 		return new IProject[0];
 	}
 
 	@Override
 	protected void clean(final IProgressMonitor monitor) throws CoreException {
-		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 1);
+		final SubMonitor progress = SubMonitor.convert(monitor, Messages.LibraryBuilder_CleaningLibrary, 2);
+
+		// clean manifest library marker
 		FordiacMarkerHelper.updateMarkers(getProject().getFile(LibraryManager.MANIFEST),
 				FordiacErrorMarker.LIBRARY_MARKER, Collections.emptyList(), true);
+		progress.worked(1);
+
+		// clean broken link markers
+		LibraryManager.LIBRARY_FOLDERS.stream().map(name -> getProject().getFolder(name))
+				.forEach(folder -> FordiacMarkerHelper.updateMarkers(folder, FordiacErrorMarker.LIBRARY_MARKER,
+						Collections.emptyList(), true));
 		progress.worked(1);
 
 		SubMonitor.done(monitor);

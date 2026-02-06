@@ -39,7 +39,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 	protected Rectangle calculateFreeformExtent() {
 		// adjust size to be a multiple of the base width/height
 		Rectangle contentsExtent = getUnscaledContentsExtent();
-		contentsExtent.shrink(getInsets());  // take any border into our calculation
+		contentsExtent.shrink(getInsets()); // take any border into our calculation
 		final int x = calcAxisOrigin(contentsExtent.x, BASE_WIDTH);
 		final int y = calcAxisOrigin(contentsExtent.y, BASE_HEIGHT);
 		final int width = calcAxisExtent(contentsExtent.x, x, contentsExtent.width, BASE_WIDTH);
@@ -53,7 +53,8 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 		final Rectangle contentsExtent = ((FreeformFigure) getZoomScalableFreeformRootEditPart().getContentPane())
 				.getFreeformExtent().getCopy();
 		if (useFeedbackLayer) {
-			// add handle and feedback layer so that dragging elements result in growing the modulo extend
+			// add handle and feedback layer so that dragging elements result in growing the
+			// modulo extend
 			contentsExtent.union(
 					((FreeformFigure) getZoomScalableFreeformRootEditPart().getLayer(LayerConstants.HANDLE_LAYER))
 							.getFreeformExtent());
@@ -72,7 +73,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 			final int baseUnit) {
 		final int startExtent = sourceExtent + PADDING + baseOrigin - newOrigin;
 
-		int newExtend = (startExtent / baseUnit + 1) * baseUnit;
+		int newExtend = (startExtent / baseUnit) * baseUnit;
 		if (newExtend < (3 * baseUnit)) {
 			newExtend = 3 * baseUnit;
 		}
@@ -82,7 +83,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 	private static int calcAxisOrigin(final int axisPos, final int baseUnit) {
 		if (axisPos < 0) {
 			// when negative we need to go one beyond to have the correct origin
-			return (axisPos / baseUnit - 1) * baseUnit;
+			return (axisPos / baseUnit) * baseUnit;
 		}
 		return (axisPos / baseUnit) * baseUnit;
 	}

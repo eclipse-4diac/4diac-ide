@@ -31,6 +31,8 @@ public final class Messages extends NLS {
 
 	public static String ExportStatusMessageDialog_ExportStatusMessageDialog;
 
+	public static String ExportStatusMessageDialog_InfosNotEmpty;
+
 	public static String ExportStatusMessageDialog_WarningsNotEmpty;
 
 	public static String FordiacExportWizard_DESCRIPTION_WizardPage;

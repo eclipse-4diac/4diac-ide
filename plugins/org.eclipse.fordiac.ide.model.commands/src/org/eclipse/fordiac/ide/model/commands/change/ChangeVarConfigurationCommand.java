@@ -36,6 +36,11 @@ public class ChangeVarConfigurationCommand extends Command implements ScopedComm
 
 	@Override
 	public boolean canExecute() {
+		if (varDeclaration.getFBType() != null) {
+			// check for direct parent to not interfere with FB's inside CFB's
+			return super.canExecute();
+		}
+
 		final EObject root = EcoreUtil.getRootContainer(varDeclaration);
 		if (root instanceof AutomationSystem || root instanceof SubAppType) {
 			return super.canExecute();

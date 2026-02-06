@@ -18,11 +18,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -32,11 +29,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.subapptypeeditor.providers.TypedSubappProviderAdapterFactory;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -50,7 +47,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -64,19 +60,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		if (!(input instanceof TypeEditorInput)) {
-			throw new IllegalArgumentException("SubAppNetworkBreadCrumbEditor is only suitable for TypeEditorInputs"); //$NON-NLS-1$
-		}
-
 		super.init(site, input);
-
 		setTitleImage(FordiacImage.ICON_FB_NETWORK.getImage());
 		setPartName("FB Network"); //$NON-NLS-1$
-	}
-
-	@Override
-	public TypeEditorInput getEditorInput() {
-		return (TypeEditorInput) super.getEditorInput();
 	}
 
 	@Override
@@ -119,30 +105,13 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			if (subApp.isTyped()) {
 				return new SubappInstanceViewer();
 			}
-			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
-			editor.setTypeLib(getEditorInput().getTypeEntry().getTypeLibrary());
-			return editor;
+			return new UnTypedSubAppNetworkEditor();
 		}
 
 		if (model instanceof CFBInstance) {
 			return new CompositeInstanceViewer();
 		}
 
-		return null;
-	}
-
-	@Override
-	protected IEditorInput createEditorInput(final Object model) {
-		if (model instanceof final SubApp subApp) {
-			if ((subApp.isTyped()) || (subApp.isContainedInTypedInstance())) {
-				return new CompositeAndSubAppInstanceViewerInput(subApp);
-			}
-			return new SubApplicationEditorInput(subApp);
-		}
-
-		if (model instanceof CFBInstance) {
-			return new CompositeAndSubAppInstanceViewerInput((FB) model);
-		}
 		return null;
 	}
 
@@ -234,14 +203,11 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
 		if (getSite() instanceof final MultiPageEditorSite multiPageEditorSite) {
 			annotationModel = multiPageEditorSite.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 			commandStack = multiPageEditorSite.getMultiPageEditor().getAdapter(CommandStack.class);
 		}
-		pages.stream().filter(IReusableEditor.class::isInstance).map(IReusableEditor.class::cast)
-				.forEach(e -> e.setInput(e.getEditorInput()));
-		super.setInputWithNotify(input);
+		super.setInput(input);
 	}
 
 	@Override
