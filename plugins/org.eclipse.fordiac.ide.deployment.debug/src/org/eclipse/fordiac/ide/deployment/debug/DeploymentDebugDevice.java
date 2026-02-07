@@ -73,18 +73,20 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 
 	public DeploymentDebugDevice(final Device device, final DeploymentDebugTarget debugTarget,
 			final boolean allowTerminate, final Duration pollingInterval,
-			final List<DeploymentLaunchWatchpoint> launchWatches) {
+			final List<DeploymentLaunchWatchpoint> launchWatches, final String profile) {
 		super(debugTarget);
 		this.device = Objects.requireNonNull(device);
 		this.allowTerminate = allowTerminate;
 		this.pollingInterval = pollingInterval;
 		this.launchWatches = launchWatches;
 
+		debugTarget.getLaunch().addDebugTarget(this);
 		deviceManagementExecutor = IDeviceManagementExecutorService.of(new SharedWatchDeviceManagementInteractor(
-				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device)));
+				DeviceManagementInteractorFactory.INSTANCE.getDeviceManagementInteractor(device, null, profile)));
 
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
 		debugTarget.getLaunch().addDebugTarget(this);
+
 		fireCreationEvent();
 	}
 

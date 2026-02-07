@@ -132,7 +132,7 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 
 	protected void doConnect(final Device device) throws DebugException {
 		final DeploymentDebugDevice deploymentDevice = new DeploymentDebugDevice(device, this, allowTerminate,
-				pollingInterval, launchWatches);
+				pollingInterval, launchWatches, null);
 		try {
 			deploymentDevice.connect();
 		} catch (final DebugException e) {
