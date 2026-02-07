@@ -41,6 +41,10 @@ public class ResourceSimulator implements IResourceSimulator {
 		this.resourceExecutor = new ResourceExecutor(resource);
 	}
 
+	public ResourceExecutor getResourceExecutor() {
+		return resourceExecutor;
+	}
+
 	@Override
 	public Optional<String> replayNextEvent() {
 		final var event = replayNextEventInternal();
@@ -67,7 +71,7 @@ public class ResourceSimulator implements IResourceSimulator {
 		final var externalEvent = externalEvents.get(externalEventCounter);
 		final int eventCounter = externalEvent.eventCounter();
 
-		if (resourceExecutor.getEventCounter() < eventCounter) {
+		if (resourceExecutor.getCurrentEventCounter() < eventCounter) {
 			return resourceExecutor.executeNextEvent();
 		}
 
@@ -75,6 +79,11 @@ public class ResourceSimulator implements IResourceSimulator {
 		resourceExecutor.injectEvent(externalEvent.instanceName(), externalEvent.eventId(), externalEvent.outputs());
 		return resourceExecutor.executeNextEvent();
 
+	}
+
+	@Override
+	public void injectEvent(final String name) {
+		resourceExecutor.injectEvent(name);
 	}
 
 }

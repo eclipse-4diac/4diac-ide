@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Slider;
@@ -48,7 +49,7 @@ import org.eclipse.swt.widgets.Slider;
  * forward in the timeline
  *
  */
-public class TimelineWidget extends Composite {
+public class TimelineWidget extends Composite implements ReplayNavigator.NavigatorConfigListener {
 
 	// slider and control
 	private Canvas lineCanvas;
@@ -88,10 +89,14 @@ public class TimelineWidget extends Composite {
 		setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		createControlGroup(name, collapsableListener);
 		updateCurrentPositionInfo();
+		replayNavigator.addNavigatorConfigListener(this);
 	}
 
 	@Override
 	public boolean setFocus() {
+		if (lineCanvas.isDisposed()) {
+			return false;
+		}
 		return lineCanvas.setFocus();
 	}
 
@@ -382,6 +387,8 @@ public class TimelineWidget extends Composite {
 	// Update the current position information and the button state accordingly
 	private void updateCurrentPositionInfo() {
 		final int current = timelineSlider.getSelection();
+		// in case new events were added, update the maximum of the slider
+		timelineSlider.setMaximum(replayNavigator.getAmountOfEvents() + timelineSlider.getThumb());
 		final int total = timelineSlider.getMaximum() - timelineSlider.getThumb();
 		positionLabel.setText(current + " / " + total); //$NON-NLS-1$
 		lineCanvas.redraw();
@@ -401,5 +408,10 @@ public class TimelineWidget extends Composite {
 			nextButton.setEnabled(true);
 			jumpForwardButton.setEnabled(true);
 		}
+	}
+
+	@Override
+	public void update(final ReplayNavigator replayNavigator) {
+		Display.getDefault().asyncExec(this::updateCurrentPositionInfo);
 	}
 }

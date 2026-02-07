@@ -23,4 +23,6 @@ public interface IResourceSimulator {
 	Optional<String> replayNextEvent();
 
 	ReplayNavigator.DatapointsState getCurrentState();
+
+	void injectEvent(final String name);
 }

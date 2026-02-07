@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging;
 
+import java.text.MessageFormat;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
@@ -32,11 +33,14 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.watch.WatchFactoryReplay;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugTarget;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
+import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
@@ -47,7 +51,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 
 	private final String tracesPath;
 
-	private final List<ReplayDebuggingResource> replayDebuggingResources = new ArrayList<>();
+	private final Map<String, ReplayDebuggingResource> replayDebuggingResources = new HashMap<>();
 
 	// to know which datapoints to mark with a different color
 	private final Map<String, String> allCurentChanges = new HashMap<>();
@@ -62,9 +66,21 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 
 	public ReplayDebuggingDevice(final Device device, final DeploymentDebugTarget debugTarget, final String tracesPath,
 			final boolean remote) {
-		super(device, debugTarget, true, Duration.ZERO, List.of());
+		super(device, debugTarget, true, Duration.ZERO, List.of(), "Interpreter"); //$NON-NLS-1$
 		this.tracesPath = tracesPath;
 		this.remote = remote;
+	}
+
+	public DeviceResponse getDeviceResponse() {
+		return response;
+	}
+
+	public void triggerEvent(final Resource resource, final String name) {
+		final var replayResource = replayDebuggingResources.get(resource.getName());
+		if (replayResource == null) {
+			return;
+		}
+		replayResource.triggerEvent(name);
 	}
 
 	/**
@@ -90,13 +106,22 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 							resource.getName()),
 					resourceSimulator, this);
 			replayDebuggingResource.load();
-			replayDebuggingResources.add(replayDebuggingResource);
+			replayDebuggingResources.put(resource.getName(), replayDebuggingResource);
 
 		}
 
 		response = new DeviceResponse(
-				replayDebuggingResources.stream().map(ReplayDebuggingResource::getResourceResponse).toList());
+				replayDebuggingResources.values().stream().map(ReplayDebuggingResource::getResourceResponse).toList());
 		simulator.stop();
+
+		// we don't need all the boilerplate from connect in the parent class, just to
+		// make sure the device management executor obtains this instance
+		try {
+			getDeviceManagementExecutorService().connect();
+		} catch (final DeploymentException e) {
+			throw new DebugException(Status
+					.error(MessageFormat.format(Messages.DeploymentDebugDevice_ConnectError, device.getName()), e));
+		}
 	}
 
 	private IDeviceSimulator createSimulator() {
@@ -138,7 +163,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	}
 
 	private void unloadAllReplayDebuggingResources() {
-		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources) {
+		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources.values()) {
 			replayDebuggingResource.unload();
 		}
 		replayDebuggingResources.clear();
@@ -149,7 +174,7 @@ public class ReplayDebuggingDevice extends DeploymentDebugDevice implements Repl
 	@Override
 	public void onUpdate(final ReplayDebuggingResource notUsed) {
 		allCurentChanges.clear();
-		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources) {
+		for (final ReplayDebuggingResource replayDebuggingResource : replayDebuggingResources.values()) {
 			final EventChange eventChange = replayDebuggingResource.getCurrentEventChange();
 			if (eventChange == null) {
 				continue;

@@ -51,11 +51,19 @@ public class ReplayNavigator {
 		void update(ReplayNavigator replayNavigator, ReplayNavigator.DatapointsState changedValues);
 	}
 
+	/**
+	 * Interface for listening for navigator changes not related to the state of the
+	 * datapoints, such as the amount of events.
+	 */
+	public interface NavigatorConfigListener {
+		void update(ReplayNavigator replayNavigator);
+	}
+
 	// all the datapoints with their current values
 	private DatapointsState currentState = new DatapointsState();
 
 	// sequence of events that changed the were triggered
-	private final List<EventChange> eventChanges;
+	private final List<EventChange> eventChanges = new ArrayList<>();
 
 	// current event number (position) in the sequence of events
 	private int currentEventNumber;
@@ -68,24 +76,28 @@ public class ReplayNavigator {
 
 	private final List<StateListener> stateListeners = new ArrayList<>();
 
-	public ReplayNavigator(final Identifier identifier, final DatapointsState initialState,
-			final List<EventChange> eventChanges) {
+	private final List<NavigatorConfigListener> navigatorConfigListeners = new ArrayList<>();
+
+	public ReplayNavigator(final Identifier identifier, final DatapointsState initialState) {
 		this.identifier = identifier;
 		this.currentState = initialState;
-		this.eventChanges = eventChanges;
 		currentEventNumber = 0;
+	}
+
+	public void addEventChange(final String triggeredEvent, final List<DataPointChange> newValues) {
+		final var eventNumber = eventChanges.size() + 1;
+		eventChanges.add(new EventChange(eventNumber, triggeredEvent, newValues));
 
 		// store at which event numbers the events were triggered
-		for (int i = 0; i < eventChanges.size(); i++) {
-			for (final DataPointChange datapoint : eventChanges.get(i).newValues()) {
-				List<Integer> indices = datapointsChangedAt.get(datapoint.datapoint());
-				if (indices == null) {
-					indices = new ArrayList<>();
-					datapointsChangedAt.put(datapoint.datapoint(), indices);
-				}
-				indices.add(Integer.valueOf(i));
+		for (final DataPointChange datapoint : newValues) {
+			List<Integer> indices = datapointsChangedAt.get(datapoint.datapoint());
+			if (indices == null) {
+				indices = new ArrayList<>();
+				datapointsChangedAt.put(datapoint.datapoint(), indices);
 			}
+			indices.add(Integer.valueOf(eventNumber));
 		}
+		notifyNavigatorChange();
 	}
 
 	/**
@@ -100,6 +112,14 @@ public class ReplayNavigator {
 
 	public void removeStateChangeListener(final StateListener stateListener) {
 		stateListeners.remove(stateListener);
+	}
+
+	public void addNavigatorConfigListener(final NavigatorConfigListener navigatorConfigListener) {
+		navigatorConfigListeners.add(navigatorConfigListener);
+	}
+
+	public void removeNavigatorConfigListener(final NavigatorConfigListener navigatorConfigListener) {
+		navigatorConfigListeners.remove(navigatorConfigListener);
 	}
 
 	/**
@@ -230,6 +250,12 @@ public class ReplayNavigator {
 	private void notifyStateChange(final DatapointsState changedValues) {
 		for (final StateListener listener : stateListeners) {
 			listener.update(this, changedValues);
+		}
+	}
+
+	private void notifyNavigatorChange() {
+		for (final NavigatorConfigListener listener : navigatorConfigListeners) {
+			listener.update(this);
 		}
 	}
 

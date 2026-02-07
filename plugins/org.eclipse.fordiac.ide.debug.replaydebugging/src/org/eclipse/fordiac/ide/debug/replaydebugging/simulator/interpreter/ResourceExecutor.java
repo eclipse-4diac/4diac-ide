@@ -73,7 +73,7 @@ public class ResourceExecutor {
 		return state.getCurrentState();
 	}
 
-	public int getEventCounter() {
+	public int getCurrentEventCounter() {
 		return eventManagerProcessor.getEventCounter();
 	}
 
