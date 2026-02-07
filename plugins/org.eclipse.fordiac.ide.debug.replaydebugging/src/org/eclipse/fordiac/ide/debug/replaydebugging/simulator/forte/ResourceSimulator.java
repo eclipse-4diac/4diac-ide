@@ -53,7 +53,6 @@ public class ResourceSimulator implements IResourceSimulator {
 			e.printStackTrace();
 			return Optional.empty();
 		}
-
 	}
 
 	@Override
@@ -87,4 +86,8 @@ public class ResourceSimulator implements IResourceSimulator {
 		}
 	}
 
+	@Override
+	public void injectEvent(final String name) {
+		// TODO Auto-generated method stub
+	}
 }

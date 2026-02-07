@@ -65,6 +65,11 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		return resourceResponse;
 	}
 
+	public void triggerEvent(final String name) {
+		simulator.injectEvent(name);
+		runAllEvents();
+	}
+
 	public EventChange getCurrentEventChange() {
 		return replayNavigator.getCurrentEventChange();
 	}
@@ -82,11 +87,10 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		final ReplayNavigator.DatapointsState initialState = simulator.getCurrentState();
 
 		resourceResponse = new ResourceResponse(replayNavigatorIdentifier.resourceName(), initialState);
-
-		final List<EventChange> eventChanges = iterateOverAllEvents(initialState);
-		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState, eventChanges);
+		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState);
 		replayNavigator.addStateChangeListener(this);
 		ReplayNavigatorManager.getDefault().registerNavigator(replayNavigator);
+		runAllEvents();
 	}
 
 	/**
@@ -103,32 +107,27 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	 *
 	 * @throws DeploymentException If an error occurs during the replay of events.
 	 */
-	private List<EventChange> iterateOverAllEvents(final ReplayNavigator.DatapointsState initialState) {
+	private void runAllEvents() {
 		// simulate all events and gather all data
-		int eventCounter = 0;
-		final List<EventChange> eventChanges = new ArrayList<>();
-		Map<String, String> previousState = new HashMap<>(initialState);
+		HashMap<String, String> previousState = new HashMap<>(simulator.getCurrentState());
 
 		for (Optional<String> lastEvent = simulator.replayNextEvent(); lastEvent
 				.isPresent(); lastEvent = simulator.replayNextEvent()) {
 
-			final Map<String, String> currentState = simulator.getCurrentState();
+			final var currentState = simulator.getCurrentState();
 
 			// Process the value
 			final List<DataPointChange> dataPointChanges = new ArrayList<>();
 			for (final Map.Entry<String, String> entry : currentState.entrySet()) {
-				final String key = entry.getKey();
-				final String currentStateValue = entry.getValue();
-				if (!previousState.get(key).equals(currentStateValue)) {
-					dataPointChanges.add(new DataPointChange(key, previousState.get(key), currentStateValue));
+				final var datapoint = entry.getKey();
+				final var currentValue = entry.getValue();
+				if (!previousState.get(datapoint).equals(currentValue)) {
+					dataPointChanges.add(new DataPointChange(datapoint, previousState.get(datapoint), currentValue));
 				}
 			}
-			eventCounter = eventCounter + 1;
-			eventChanges.add(new EventChange(eventCounter, lastEvent.get(), dataPointChanges));
+			replayNavigator.addEventChange(lastEvent.get(), dataPointChanges);
 			previousState = new HashMap<>(currentState);
-
 		}
-		return eventChanges;
 	}
 
 	// callback from the replay navigator when the state changes

@@ -21,9 +21,10 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.deployment,
- org.eclipse.fordiac.ide.deployment.iec61499,
  org.eclipse.fordiac.ide.debug.replaydebugging;bundle-version="3.0.100"
 Export-Package: org.eclipse.fordiac.ide.deployment.interpreter
-Import-Package: org.eclipse.fordiac.ide.debug.replaydebugging.core,
+Import-Package: org.eclipse.debug.core,
+ org.eclipse.fordiac.ide.debug.replaydebugging.core,
  org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter,
+ org.eclipse.fordiac.ide.deployment.debug,
  org.eclipse.fordiac.ide.fb.interpreter.mm

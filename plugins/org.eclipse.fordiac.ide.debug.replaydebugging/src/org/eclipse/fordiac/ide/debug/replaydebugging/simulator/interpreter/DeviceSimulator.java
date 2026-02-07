@@ -49,15 +49,17 @@ public class DeviceSimulator implements IDeviceSimulator {
 
 	@Override
 	public Map<Resource, IResourceSimulator> start() {
-		final TracesReader tracerReader = new TracesReader(path);
 		final Map<Resource, IResourceSimulator> result = new HashMap<>();
+		Map<String, List<SendOutputEvent>> externalEvents = new HashMap<>();
 
-		Map<String, List<SendOutputEvent>> externalEvents;
-		try {
-			externalEvents = tracerReader.read();
-		} catch (final CTFException e) {
-			FordiacLogHelper.logError("Error reading traces: " + e.getMessage()); //$NON-NLS-1$
-			return result;
+		if (!path.isEmpty()) {
+			final TracesReader tracerReader = new TracesReader(path);
+			try {
+				externalEvents = tracerReader.read();
+			} catch (final CTFException e) {
+				FordiacLogHelper.logError("Error reading traces: " + e.getMessage()); //$NON-NLS-1$
+				return result;
+			}
 		}
 
 		for (final var resource : device.getResource()) {
