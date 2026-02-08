@@ -95,7 +95,11 @@ public final class InterfaceElementAnnotations {
 	}
 
 	public static InterfaceList getInterfaceList(final IInterfaceElement element) {
-		return element.eContainer() instanceof final InterfaceList interfaceList ? interfaceList : null;
+		return switch (element.eContainer()) {
+		case final InterfaceList interfaceList -> interfaceList;
+		case final IInterfaceElement parent -> parent.getInterfaceList();
+		case null, default -> null;
+		};
 	}
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,

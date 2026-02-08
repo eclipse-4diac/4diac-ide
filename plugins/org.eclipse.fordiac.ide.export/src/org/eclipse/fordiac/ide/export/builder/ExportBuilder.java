@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
@@ -111,13 +112,16 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		final List<SourceFolder> buildPathFolders = getExportableFoldersFromBuildpath();
 		for (final SourceFolder folder : buildPathFolders) {
 			BuildpathUtil.acceptMatches(folder, getProject(), (IResourceVisitor) resource -> {
-				if (!isExportCanceled(progress)) {
-					if ((resource instanceof final IFile file) && isExportableFileType(file)) {
-						exportElement(progress, file, context);
-					} else if (resource instanceof IFolder || resource instanceof IProject) {
-						return true;
-					}
+				if (isExportCanceled(progress)) {
+					throw new OperationCanceledException();
 				}
+
+				if ((resource instanceof final IFile file) && isExportableFileType(file)) {
+					exportElement(progress, file, context);
+				} else if (resource instanceof IFolder || resource instanceof IProject) {
+					return true;
+				}
+
 				return false;
 			});
 		}
@@ -172,12 +176,14 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 			throws CoreException {
 		for (final IResourceDelta delta : rootDelta
 				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED)) {
-			if (!isExportCanceled(monitor)) {
-				if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
-					exportElement(monitor, file, context);
-				} else if (delta.getResource() instanceof IFolder) {
-					incrementalBuild(delta, monitor, context);
-				}
+			if (isExportCanceled(monitor)) {
+				throw new OperationCanceledException();
+			}
+
+			if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
+				exportElement(monitor, file, context);
+			} else if (delta.getResource() instanceof IFolder) {
+				incrementalBuild(delta, monitor, context);
 			}
 		}
 	}
@@ -218,8 +224,11 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	}
 
 	private void exportCmakeLists(final IProgressMonitor monitor, final BuildContext context) {
-		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID) //$NON-NLS-1$
-				&& !isExportCanceled(monitor)) {
+		if (isExportCanceled(monitor)) {
+			throw new OperationCanceledException();
+		}
+
+		if (getProjectPreferenceNode().get(PreferenceConstants.EXPORT_FILTER_ID, "").equals(FORTE_NG_FILTER_ID)) { //$NON-NLS-1$
 			final IPath location = getProject().getLocation().append(new Path(context.outputDirectory));
 			final CMakeListsMarker marker = new CMakeListsMarker(getProject(), location.toPath());
 			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, marker.getName()));

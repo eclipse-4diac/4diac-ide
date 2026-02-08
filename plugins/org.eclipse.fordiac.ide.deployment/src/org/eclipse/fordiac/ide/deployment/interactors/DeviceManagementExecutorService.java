@@ -17,10 +17,12 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
@@ -44,152 +46,152 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 
 	@Override
 	public void connect() throws DeploymentException {
-		unwrap(connectAsync());
+		unwrap(this::connectAsync);
 	}
 
 	@Override
 	public void disconnect() throws DeploymentException {
-		unwrap(disconnectAsync());
+		unwrap(this::disconnectAsync);
 	}
 
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
-		unwrap(createResourceAsync(resource));
+		unwrap(() -> createResourceAsync(resource));
 	}
 
 	@Override
 	public void writeResourceParameter(final Resource resource, final String parameter, final String value)
 			throws DeploymentException {
-		unwrap(writeResourceParameterAsync(resource, parameter, value));
+		unwrap(() -> writeResourceParameterAsync(resource, parameter, value));
 	}
 
 	@Override
 	public void writeDeviceParameter(final Device device, final String parameter, final String value)
 			throws DeploymentException {
-		unwrap(writeDeviceParameterAsync(device, parameter, value));
+		unwrap(() -> writeDeviceParameterAsync(device, parameter, value));
 	}
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fb, final Resource res) throws DeploymentException {
-		unwrap(createFBInstanceAsync(fb, res));
+		unwrap(() -> createFBInstanceAsync(fb, res));
 	}
 
 	@Override
 	public void writeFBParameter(final Resource resource, final String name, final String value)
 			throws DeploymentException {
-		unwrap(writeFBParameterAsync(resource, name, value));
+		unwrap(() -> writeFBParameterAsync(resource, name, value));
 	}
 
 	@Override
 	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fb,
 			final VarDeclaration varDecl) throws DeploymentException {
-		unwrap(writeFBParameterAsync(resource, value, fb, varDecl));
+		unwrap(() -> writeFBParameterAsync(resource, value, fb, varDecl));
 	}
 
 	@Override
 	public void createConnection(final Resource res, final ConnectionDeploymentData connectionData)
 			throws DeploymentException {
-		unwrap(createConnectionAsync(res, connectionData));
+		unwrap(() -> createConnectionAsync(res, connectionData));
 	}
 
 	@Override
 	public void startFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
-		unwrap(startFBAsync(res, fb));
+		unwrap(() -> startFBAsync(res, fb));
 	}
 
 	@Override
 	public void startResource(final Resource res) throws DeploymentException {
-		unwrap(startResourceAsync(res));
+		unwrap(() -> startResourceAsync(res));
 	}
 
 	@Override
 	public void resetResource(final String resName) throws DeploymentException {
-		unwrap(resetResourceAsync(resName));
+		unwrap(() -> resetResourceAsync(resName));
 	}
 
 	@Override
 	public void killResource(final String resName) throws DeploymentException {
-		unwrap(killResourceAsync(resName));
+		unwrap(() -> killResourceAsync(resName));
 	}
 
 	@Override
 	public void stopResource(final Resource res) throws DeploymentException {
-		unwrap(stopResourceAsync(res));
+		unwrap(() -> stopResourceAsync(res));
 	}
 
 	@Override
 	public void startDevice(final Device dev) throws DeploymentException {
-		unwrap(startDeviceAsync(dev));
+		unwrap(() -> startDeviceAsync(dev));
 	}
 
 	@Override
 	public void deleteResource(final String resName) throws DeploymentException {
-		unwrap(deleteResourceAsync(resName));
+		unwrap(() -> deleteResourceAsync(resName));
 	}
 
 	@Override
 	public void deleteFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
-		unwrap(deleteFBAsync(res, fb));
+		unwrap(() -> deleteFBAsync(res, fb));
 	}
 
 	@Override
 	public void deleteConnection(final Resource res, final ConnectionDeploymentData con) throws DeploymentException {
-		unwrap(deleteConnectionAsync(res, con));
+		unwrap(() -> deleteConnectionAsync(res, con));
 	}
 
 	@Override
 	public void killDevice(final Device dev) throws DeploymentException {
-		unwrap(killDeviceAsync(dev));
+		unwrap(() -> killDeviceAsync(dev));
 	}
 
 	@Override
 	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
-		return unwrap(queryResourcesAsync());
+		return unwrap(this::queryResourcesAsync);
 	}
 
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
-		return unwrap(queryFBTypeAsync(entry));
+		return unwrap(() -> queryFBTypeAsync(entry));
 	}
 
 	@Override
 	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
-		return unwrap(queryDataTypeAsync(entry));
+		return unwrap(() -> queryDataTypeAsync(entry));
 	}
 
 	@Override
 	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
-		return unwrap(queryGlobalConstTypeAsync(entry));
+		return unwrap(() -> queryGlobalConstTypeAsync(entry));
 	}
 
 	@Override
 	public Response readWatches() throws DeploymentException {
-		return unwrap(readWatchesAsync());
+		return unwrap(this::readWatchesAsync);
 	}
 
 	@Override
 	public boolean addWatch(final Resource resource, final String name) throws DeploymentException {
-		return unwrap(addWatchAsync(resource, name)).booleanValue();
+		return unwrap(() -> addWatchAsync(resource, name)).booleanValue();
 	}
 
 	@Override
 	public boolean removeWatch(final Resource resource, final String name) throws DeploymentException {
-		return unwrap(removeWatchAsync(resource, name)).booleanValue();
+		return unwrap(() -> removeWatchAsync(resource, name)).booleanValue();
 	}
 
 	@Override
 	public void triggerEvent(final Resource resource, final String name) throws DeploymentException {
-		unwrap(triggerEventAsync(resource, name));
+		unwrap(() -> triggerEventAsync(resource, name));
 	}
 
 	@Override
 	public void forceValue(final Resource resource, final String name, final String value) throws DeploymentException {
-		unwrap(forceValueAsync(resource, name, value));
+		unwrap(() -> forceValueAsync(resource, name, value));
 	}
 
 	@Override
 	public void clearForce(final Resource resource, final String name) throws DeploymentException {
-		unwrap(clearForceAsync(resource, name));
+		unwrap(() -> clearForceAsync(resource, name));
 	}
 
 	@Override
@@ -242,8 +244,7 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 	}
 
 	@Override
-	public Future<Void> writeFBParameterAsync(final Resource resource, final String name, final String value)
-			throws DeploymentException {
+	public Future<Void> writeFBParameterAsync(final Resource resource, final String name, final String value) {
 		return executorService.submit(() -> {
 			getDelegate().writeFBParameter(resource, name, value);
 			return null;
@@ -252,7 +253,7 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 
 	@Override
 	public Future<Void> writeFBParameterAsync(final Resource resource, final String value, final FBDeploymentData fb,
-			final VarDeclaration varDecl) throws DeploymentException {
+			final VarDeclaration varDecl) {
 		return executorService.submit(() -> {
 			getDelegate().writeFBParameter(resource, value, fb, varDecl);
 			return null;
@@ -496,11 +497,13 @@ public class DeviceManagementExecutorService extends AbstractDelegatingDeviceMan
 		return executorService.submit(() -> getDelegate().replayNextEvent(resource));
 	}
 
-	private static <T> T unwrap(final Future<T> future) throws DeploymentException {
+	private static <T> T unwrap(final Supplier<Future<T>> future) throws DeploymentException {
 		try {
-			return future.get();
+			return future.get().get();
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
+			throw new DeploymentException(e.getMessage(), e);
+		} catch (final RejectedExecutionException e) {
 			throw new DeploymentException(e.getMessage(), e);
 		} catch (final ExecutionException e) {
 			if (e.getCause() instanceof final DeploymentException de) {
