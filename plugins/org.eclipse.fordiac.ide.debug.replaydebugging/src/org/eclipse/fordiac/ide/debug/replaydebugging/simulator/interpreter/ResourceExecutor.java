@@ -45,7 +45,7 @@ public class ResourceExecutor {
 
 	public ResourceExecutor(final Resource resource) {
 
-		final FBNetworkRuntime networkRuntime = RuntimeFactory.createFrom(resource.getFBNetwork());
+		final FBNetworkRuntime networkRuntime = RuntimeFactory.createRecursiveFrom(resource.getFBNetwork());
 		networkRuntimeInspector = new NetworkRuntimeInspector(networkRuntime, Utils.getDeviceResourcePrefix(resource));
 
 		eventManagerProcessor = new EventManagerProcessor(EventManagerFactory.createFrom(List.of()), networkRuntime);
