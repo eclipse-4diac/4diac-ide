@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,17 +16,16 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Error Marker Data Type</b></em>'.
+ * A representation of the model object '<em><b>Error Device Type</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerDataType()
+ * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorDeviceType()
  * @model
  * @generated
  */
-public interface ErrorMarkerDataType extends DataType {
-} // ErrorMarkerDataType
+public interface ErrorDeviceType extends DeviceType, ErrorLibraryElement {
+} // ErrorDeviceType

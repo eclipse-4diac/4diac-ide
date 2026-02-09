@@ -19,11 +19,11 @@ import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
@@ -37,7 +37,7 @@ public final class ConfigurableFBAnnotations {
 			}
 			return false;
 		}
-		if (element.getDataType() instanceof ErrorMarkerDataType) {
+		if (element.getDataType() instanceof ErrorDataType) {
 			if (diagnostics != null) {
 				diagnostics.add(createTypeValidationDiagnostic(
 						MessageFormat.format(Messages.TypedElementAnnotations_TypeNotFound, getFullTypeName(element)),

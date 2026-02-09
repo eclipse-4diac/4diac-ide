@@ -62,7 +62,7 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractBlockFBN
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorMarkerDataTypeEditPart) {
+		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorDataTypeEditPart) {
 			getFigure().getMiddle().add(((AbstractGraphicalEditPart) childEditPart).getFigure(),
 					new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		} else {
@@ -72,7 +72,7 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractBlockFBN
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorMarkerDataTypeEditPart) {
+		if (childEditPart instanceof StructuredTypeEditPart || childEditPart instanceof ErrorDataTypeEditPart) {
 			getFigure().getMiddle().remove(((AbstractGraphicalEditPart) childEditPart).getFigure());
 		} else {
 			super.removeChildVisual(childEditPart);

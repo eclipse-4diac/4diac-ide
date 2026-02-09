@@ -68,9 +68,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -623,12 +633,32 @@ public class LibraryElementValidator extends EObjectValidator {
 				return validateECState((ECState)value, diagnostics, context);
 			case LibraryElementPackage.EC_TRANSITION:
 				return validateECTransition((ECTransition)value, diagnostics, context);
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE:
-				return validateErrorMarkerDataType((ErrorMarkerDataType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_ADAPTER_TYPE:
+				return validateErrorAdapterType((ErrorAdapterType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_ATTRIBUTE_DECLARATION:
+				return validateErrorAttributeDeclaration((ErrorAttributeDeclaration)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_AUTOMATION_SYSTEM:
+				return validateErrorAutomationSystem((ErrorAutomationSystem)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_DEVICE_TYPE:
+				return validateErrorDeviceType((ErrorDeviceType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_FB_TYPE:
+				return validateErrorFBType((ErrorFBType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_FUNCTION_FB_TYPE:
+				return validateErrorFunctionFBType((ErrorFunctionFBType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_GLOBAL_CONSTANTS:
+				return validateErrorGlobalConstants((ErrorGlobalConstants)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_LIBRARY_ELEMENT:
+				return validateErrorLibraryElement((ErrorLibraryElement)value, diagnostics, context);
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT:
 				return validateErrorMarkerFBNElement((ErrorMarkerFBNElement)value, diagnostics, context);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE:
 				return validateErrorMarkerInterface((ErrorMarkerInterface)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_RESOURCE_TYPE:
+				return validateErrorResourceType((ErrorResourceType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_SEGMENT_TYPE:
+				return validateErrorSegmentType((ErrorSegmentType)value, diagnostics, context);
+			case LibraryElementPackage.ERROR_SUB_APP_TYPE:
+				return validateErrorSubAppType((ErrorSubAppType)value, diagnostics, context);
 			case LibraryElementPackage.EVENT:
 				return validateEvent((Event)value, diagnostics, context);
 			case LibraryElementPackage.EVENT_CONNECTION:
@@ -1657,18 +1687,159 @@ public class LibraryElementValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateErrorMarkerDataType(ErrorMarkerDataType errorMarkerDataType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(errorMarkerDataType, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorMarkerDataType, diagnostics, context);
-		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorMarkerDataType, diagnostics, context);
+	public boolean validateErrorAdapterType(ErrorAdapterType errorAdapterType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorAdapterType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorAdapterType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorAdapterType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorAttributeDeclaration(ErrorAttributeDeclaration errorAttributeDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorAttributeDeclaration, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateINamedElement_validateName(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateITypedElement_validateType(errorAttributeDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorAttributeDeclaration, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorAutomationSystem(ErrorAutomationSystem errorAutomationSystem, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorAutomationSystem, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorAutomationSystem, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorAutomationSystem, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorDeviceType(ErrorDeviceType errorDeviceType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorDeviceType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorDeviceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorDeviceType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorFBType(ErrorFBType errorFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorFBType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorFBType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorFunctionFBType(ErrorFunctionFBType errorFunctionFBType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorFunctionFBType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorFunctionFBType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorFunctionFBType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorGlobalConstants(ErrorGlobalConstants errorGlobalConstants, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorGlobalConstants, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorGlobalConstants, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorGlobalConstants, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorLibraryElement(ErrorLibraryElement errorLibraryElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorLibraryElement, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorLibraryElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorLibraryElement, diagnostics, context);
 		return result;
 	}
 
@@ -1732,6 +1903,66 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateErrorMarkerInterface_validateAttributes(ErrorMarkerInterface errorMarkerInterface, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return errorMarkerInterface.validateAttributes(diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorResourceType(ErrorResourceType errorResourceType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorResourceType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorResourceType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorResourceType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorSegmentType(ErrorSegmentType errorSegmentType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorSegmentType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorSegmentType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorSegmentType, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateErrorSubAppType(ErrorSubAppType errorSubAppType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(errorSubAppType, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validateName(errorSubAppType, diagnostics, context);
+		if (result || diagnostics != null) result &= validateLibraryElement_validatePackage(errorSubAppType, diagnostics, context);
+		return result;
 	}
 
 	/**

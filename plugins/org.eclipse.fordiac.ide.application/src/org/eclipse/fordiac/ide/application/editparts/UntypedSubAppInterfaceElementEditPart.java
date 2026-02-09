@@ -40,11 +40,11 @@ import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.data.impl.ErrorDataTypeImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -274,10 +274,9 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 		if (key == UntypedSubAppInterfaceElementEditPart.class) {
 			return key.cast(this);
 		}
-		if (key == ErrorMarkerDataTypeImpl.class) {
+		if (key == ErrorDataTypeImpl.class) {
 			final IInterfaceElement model = getModel();
-			final ErrorMarkerDataTypeImpl marker = model instanceof VarDeclaration
-					? (ErrorMarkerDataTypeImpl) model.getType()
+			final ErrorDataTypeImpl marker = model instanceof VarDeclaration ? (ErrorDataTypeImpl) model.getType()
 					: null;
 			return key.cast(marker);
 		}

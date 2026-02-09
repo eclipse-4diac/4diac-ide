@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 
 public interface ErrorDataTypeEntry extends ErrorTypeEntry {
 
 	@Override
-	ErrorMarkerDataType getType();
+	ErrorDataType getType();
 }

@@ -441,13 +441,96 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: {
-				ErrorMarkerDataType errorMarkerDataType = (ErrorMarkerDataType)theEObject;
-				T result = caseErrorMarkerDataType(errorMarkerDataType);
-				if (result == null) result = caseDataType(errorMarkerDataType);
-				if (result == null) result = caseLibraryElement(errorMarkerDataType);
-				if (result == null) result = caseINamedElement(errorMarkerDataType);
-				if (result == null) result = caseConfigurableObject(errorMarkerDataType);
+			case LibraryElementPackage.ERROR_ADAPTER_TYPE: {
+				ErrorAdapterType errorAdapterType = (ErrorAdapterType)theEObject;
+				T result = caseErrorAdapterType(errorAdapterType);
+				if (result == null) result = caseAdapterType(errorAdapterType);
+				if (result == null) result = caseErrorLibraryElement(errorAdapterType);
+				if (result == null) result = caseDataType(errorAdapterType);
+				if (result == null) result = caseFBType(errorAdapterType);
+				if (result == null) result = caseLibraryElement(errorAdapterType);
+				if (result == null) result = caseICallable(errorAdapterType);
+				if (result == null) result = caseINamedElement(errorAdapterType);
+				if (result == null) result = caseConfigurableObject(errorAdapterType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_ATTRIBUTE_DECLARATION: {
+				ErrorAttributeDeclaration errorAttributeDeclaration = (ErrorAttributeDeclaration)theEObject;
+				T result = caseErrorAttributeDeclaration(errorAttributeDeclaration);
+				if (result == null) result = caseAttributeDeclaration(errorAttributeDeclaration);
+				if (result == null) result = caseErrorLibraryElement(errorAttributeDeclaration);
+				if (result == null) result = caseITypedElement(errorAttributeDeclaration);
+				if (result == null) result = caseLibraryElement(errorAttributeDeclaration);
+				if (result == null) result = caseINamedElement(errorAttributeDeclaration);
+				if (result == null) result = caseConfigurableObject(errorAttributeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_AUTOMATION_SYSTEM: {
+				ErrorAutomationSystem errorAutomationSystem = (ErrorAutomationSystem)theEObject;
+				T result = caseErrorAutomationSystem(errorAutomationSystem);
+				if (result == null) result = caseAutomationSystem(errorAutomationSystem);
+				if (result == null) result = caseErrorLibraryElement(errorAutomationSystem);
+				if (result == null) result = caseLibraryElement(errorAutomationSystem);
+				if (result == null) result = caseINamedElement(errorAutomationSystem);
+				if (result == null) result = caseConfigurableObject(errorAutomationSystem);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_DEVICE_TYPE: {
+				ErrorDeviceType errorDeviceType = (ErrorDeviceType)theEObject;
+				T result = caseErrorDeviceType(errorDeviceType);
+				if (result == null) result = caseDeviceType(errorDeviceType);
+				if (result == null) result = caseErrorLibraryElement(errorDeviceType);
+				if (result == null) result = caseLibraryElement(errorDeviceType);
+				if (result == null) result = caseINamedElement(errorDeviceType);
+				if (result == null) result = caseConfigurableObject(errorDeviceType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_FB_TYPE: {
+				ErrorFBType errorFBType = (ErrorFBType)theEObject;
+				T result = caseErrorFBType(errorFBType);
+				if (result == null) result = caseFBType(errorFBType);
+				if (result == null) result = caseErrorLibraryElement(errorFBType);
+				if (result == null) result = caseLibraryElement(errorFBType);
+				if (result == null) result = caseICallable(errorFBType);
+				if (result == null) result = caseINamedElement(errorFBType);
+				if (result == null) result = caseConfigurableObject(errorFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_FUNCTION_FB_TYPE: {
+				ErrorFunctionFBType errorFunctionFBType = (ErrorFunctionFBType)theEObject;
+				T result = caseErrorFunctionFBType(errorFunctionFBType);
+				if (result == null) result = caseFunctionFBType(errorFunctionFBType);
+				if (result == null) result = caseErrorLibraryElement(errorFunctionFBType);
+				if (result == null) result = caseFBType(errorFunctionFBType);
+				if (result == null) result = caseLibraryElement(errorFunctionFBType);
+				if (result == null) result = caseICallable(errorFunctionFBType);
+				if (result == null) result = caseINamedElement(errorFunctionFBType);
+				if (result == null) result = caseConfigurableObject(errorFunctionFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_GLOBAL_CONSTANTS: {
+				ErrorGlobalConstants errorGlobalConstants = (ErrorGlobalConstants)theEObject;
+				T result = caseErrorGlobalConstants(errorGlobalConstants);
+				if (result == null) result = caseGlobalConstants(errorGlobalConstants);
+				if (result == null) result = caseErrorLibraryElement(errorGlobalConstants);
+				if (result == null) result = caseLibraryElement(errorGlobalConstants);
+				if (result == null) result = caseINamedElement(errorGlobalConstants);
+				if (result == null) result = caseConfigurableObject(errorGlobalConstants);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_LIBRARY_ELEMENT: {
+				ErrorLibraryElement errorLibraryElement = (ErrorLibraryElement)theEObject;
+				T result = caseErrorLibraryElement(errorLibraryElement);
+				if (result == null) result = caseLibraryElement(errorLibraryElement);
+				if (result == null) result = caseINamedElement(errorLibraryElement);
+				if (result == null) result = caseConfigurableObject(errorLibraryElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -472,6 +555,42 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseHiddenElement(errorMarkerInterface);
 				if (result == null) result = caseINamedElement(errorMarkerInterface);
 				if (result == null) result = caseConfigurableObject(errorMarkerInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_RESOURCE_TYPE: {
+				ErrorResourceType errorResourceType = (ErrorResourceType)theEObject;
+				T result = caseErrorResourceType(errorResourceType);
+				if (result == null) result = caseResourceType(errorResourceType);
+				if (result == null) result = caseErrorLibraryElement(errorResourceType);
+				if (result == null) result = caseLibraryElement(errorResourceType);
+				if (result == null) result = caseINamedElement(errorResourceType);
+				if (result == null) result = caseConfigurableObject(errorResourceType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_SEGMENT_TYPE: {
+				ErrorSegmentType errorSegmentType = (ErrorSegmentType)theEObject;
+				T result = caseErrorSegmentType(errorSegmentType);
+				if (result == null) result = caseSegmentType(errorSegmentType);
+				if (result == null) result = caseErrorLibraryElement(errorSegmentType);
+				if (result == null) result = caseLibraryElement(errorSegmentType);
+				if (result == null) result = caseINamedElement(errorSegmentType);
+				if (result == null) result = caseConfigurableObject(errorSegmentType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_SUB_APP_TYPE: {
+				ErrorSubAppType errorSubAppType = (ErrorSubAppType)theEObject;
+				T result = caseErrorSubAppType(errorSubAppType);
+				if (result == null) result = caseSubAppType(errorSubAppType);
+				if (result == null) result = caseErrorLibraryElement(errorSubAppType);
+				if (result == null) result = caseCompositeFBType(errorSubAppType);
+				if (result == null) result = caseFBType(errorSubAppType);
+				if (result == null) result = caseLibraryElement(errorSubAppType);
+				if (result == null) result = caseICallable(errorSubAppType);
+				if (result == null) result = caseINamedElement(errorSubAppType);
+				if (result == null) result = caseConfigurableObject(errorSubAppType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1664,17 +1783,122 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Error Adapter Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Error Adapter Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseErrorMarkerDataType(ErrorMarkerDataType object) {
+	public T caseErrorAdapterType(ErrorAdapterType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Attribute Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorAttributeDeclaration(ErrorAttributeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Automation System</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Automation System</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorAutomationSystem(ErrorAutomationSystem object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Device Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Device Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorDeviceType(ErrorDeviceType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorFBType(ErrorFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Function FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Function FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorFunctionFBType(ErrorFunctionFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Global Constants</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Global Constants</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorGlobalConstants(ErrorGlobalConstants object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Library Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorLibraryElement(ErrorLibraryElement object) {
 		return null;
 	}
 
@@ -1705,6 +1929,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseErrorMarkerInterface(ErrorMarkerInterface object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Resource Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Resource Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorResourceType(ErrorResourceType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Segment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Segment Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorSegmentType(ErrorSegmentType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Sub App Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Sub App Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorSubAppType(ErrorSubAppType object) {
 		return null;
 	}
 

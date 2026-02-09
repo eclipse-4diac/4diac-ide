@@ -831,26 +831,187 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType} instances.
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ErrorMarkerDataTypeItemProvider errorMarkerDataTypeItemProvider;
+	protected ErrorAdapterTypeItemProvider errorAdapterTypeItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType}.
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createErrorMarkerDataTypeAdapter() {
-		if (errorMarkerDataTypeItemProvider == null) {
-			errorMarkerDataTypeItemProvider = new ErrorMarkerDataTypeItemProvider(this);
+	public Adapter createErrorAdapterTypeAdapter() {
+		if (errorAdapterTypeItemProvider == null) {
+			errorAdapterTypeItemProvider = new ErrorAdapterTypeItemProvider(this);
 		}
 
-		return errorMarkerDataTypeItemProvider;
+		return errorAdapterTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorAttributeDeclarationItemProvider errorAttributeDeclarationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorAttributeDeclarationAdapter() {
+		if (errorAttributeDeclarationItemProvider == null) {
+			errorAttributeDeclarationItemProvider = new ErrorAttributeDeclarationItemProvider(this);
+		}
+
+		return errorAttributeDeclarationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorAutomationSystemItemProvider errorAutomationSystemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorAutomationSystemAdapter() {
+		if (errorAutomationSystemItemProvider == null) {
+			errorAutomationSystemItemProvider = new ErrorAutomationSystemItemProvider(this);
+		}
+
+		return errorAutomationSystemItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorDeviceTypeItemProvider errorDeviceTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorDeviceTypeAdapter() {
+		if (errorDeviceTypeItemProvider == null) {
+			errorDeviceTypeItemProvider = new ErrorDeviceTypeItemProvider(this);
+		}
+
+		return errorDeviceTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorFBTypeItemProvider errorFBTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorFBTypeAdapter() {
+		if (errorFBTypeItemProvider == null) {
+			errorFBTypeItemProvider = new ErrorFBTypeItemProvider(this);
+		}
+
+		return errorFBTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorFunctionFBTypeItemProvider errorFunctionFBTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorFunctionFBTypeAdapter() {
+		if (errorFunctionFBTypeItemProvider == null) {
+			errorFunctionFBTypeItemProvider = new ErrorFunctionFBTypeItemProvider(this);
+		}
+
+		return errorFunctionFBTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorGlobalConstantsItemProvider errorGlobalConstantsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorGlobalConstantsAdapter() {
+		if (errorGlobalConstantsItemProvider == null) {
+			errorGlobalConstantsItemProvider = new ErrorGlobalConstantsItemProvider(this);
+		}
+
+		return errorGlobalConstantsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorLibraryElementItemProvider errorLibraryElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorLibraryElementAdapter() {
+		if (errorLibraryElementItemProvider == null) {
+			errorLibraryElementItemProvider = new ErrorLibraryElementItemProvider(this);
+		}
+
+		return errorLibraryElementItemProvider;
 	}
 
 	/**
@@ -897,6 +1058,75 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		}
 
 		return errorMarkerInterfaceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorResourceTypeItemProvider errorResourceTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorResourceTypeAdapter() {
+		if (errorResourceTypeItemProvider == null) {
+			errorResourceTypeItemProvider = new ErrorResourceTypeItemProvider(this);
+		}
+
+		return errorResourceTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorSegmentTypeItemProvider errorSegmentTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorSegmentTypeAdapter() {
+		if (errorSegmentTypeItemProvider == null) {
+			errorSegmentTypeItemProvider = new ErrorSegmentTypeItemProvider(this);
+		}
+
+		return errorSegmentTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorSubAppTypeItemProvider errorSubAppTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorSubAppTypeAdapter() {
+		if (errorSubAppTypeItemProvider == null) {
+			errorSubAppTypeItemProvider = new ErrorSubAppTypeItemProvider(this);
+		}
+
+		return errorSubAppTypeItemProvider;
 	}
 
 	/**

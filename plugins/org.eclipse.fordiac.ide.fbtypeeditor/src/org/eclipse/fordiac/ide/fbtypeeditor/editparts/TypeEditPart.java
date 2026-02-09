@@ -37,13 +37,13 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.impl.ErrorDataTypeImpl;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -260,9 +260,9 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 
 	@Override
 	public <T> T getAdapter(final Class<T> key) {
-		if (key == ErrorMarkerDataTypeImpl.class) {
+		if (key == ErrorDataTypeImpl.class) {
 			final DataType marker = getCastedModel().getType();
-			return marker instanceof ErrorMarkerDataTypeImpl ? key.cast(marker) : null;
+			return marker instanceof ErrorDataTypeImpl ? key.cast(marker) : null;
 		}
 		return super.getAdapter(key);
 	}
