@@ -663,14 +663,14 @@
       		allPopups="false"
       		locationURI="toolbar:org.eclipse.fordiac.ide.toolbar.table">
            <command
-                   commandId="org.eclipse.fordiac.ide.model.search.searchPinReference"
+                   commandId="org.eclipse.fordiac.ide.model.search.searchReference"
                    icon="platform:/plugin/org.eclipse.search/icons/full/etool16/search.png" >
            </command>
 	  </menuContribution>
 	  <menuContribution
          locationURI="popup:org.eclipse.ui.popup.any?after=org.eclipse.gef.group.find">
          <command 
-            commandId="org.eclipse.fordiac.ide.model.search.searchPinReference" />
+            commandId="org.eclipse.fordiac.ide.model.search.searchReference" />
             <visibleWhen>
 			   <with variable="selection">
 			      <count value="1"/>

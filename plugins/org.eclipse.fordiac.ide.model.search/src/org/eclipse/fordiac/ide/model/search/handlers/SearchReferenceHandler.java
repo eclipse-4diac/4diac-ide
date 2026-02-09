@@ -16,7 +16,9 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
@@ -28,12 +30,12 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class SearchPinReferenceHandler extends AbstractHandler {
+public class SearchReferenceHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
-		final IInterfaceElement ie = getElementFromSelection(selection);
+		final INamedElement ie = getElementFromSelection(selection);
 
 		if (ie != null && EcoreUtil.getRootContainer(ie) instanceof final LibraryElement libElement) {
 			final TypeEntry typeEntry = libElement.getTypeEntry();
@@ -67,12 +69,16 @@ public class SearchPinReferenceHandler extends AbstractHandler {
 				&& getElementFromSelection(selection) != null);
 	}
 
-	private static IInterfaceElement getElementFromSelection(final IStructuredSelection selection) {
+	private static INamedElement getElementFromSelection(final IStructuredSelection selection) {
 		if (selection.getFirstElement() instanceof final IInterfaceElement ie) {
 			return ie;
 		}
-		if (selection.getFirstElement() instanceof final EditPart ep && ep.getModel() instanceof final IInterfaceElement ie) {
+		if (selection.getFirstElement() instanceof final EditPart ep
+				&& ep.getModel() instanceof final IInterfaceElement ie) {
 			return ie;
+		}
+		if (selection.getFirstElement() instanceof final FB fb) {
+			return fb;
 		}
 		return null;
 	}
