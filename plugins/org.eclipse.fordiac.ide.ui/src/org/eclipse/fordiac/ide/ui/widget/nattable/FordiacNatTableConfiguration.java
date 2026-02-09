@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget.nattable;
 
+import org.eclipse.draw2d.colors.HSL;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
@@ -135,6 +136,15 @@ final class FordiacNatTableConfiguration extends ModernNatTableThemeConfiguratio
 				NatTableWidgetFactory.DISABLED_HEADER);
 		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 				NatTableWidgetFactory.DISABLED_HEADER);
+	}
+
+	@Override
+	public void createPainterInstances() {
+		super.createPainterInstances();
+
+		if (HSL.fromColor(defaultBgColor).isDark()) {
+			this.treeStructurePainter = treeStructureSelectionPainter;
+		}
 	}
 
 	@Override
