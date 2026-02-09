@@ -166,6 +166,29 @@ public final class ManifestHelper {
 		return getManifest(URI.createURI(manifest.toUri().toString()));
 	}
 
+	public static Manifest getReferencedManifest(final IProject project, final String symbolicName) {
+		try {
+			final IProject[] projects = project.getReferencedProjects();
+			for (final IProject refProject : projects) {
+				if (!refProject.isAccessible()) {
+					continue;
+				}
+				final Manifest manifest = getContainerManifest(refProject);
+				if (manifest != null && manifest.getProduct() != null) {
+					final String sym = manifest.getProduct().getSymbolicName() != null
+							? manifest.getProduct().getSymbolicName()
+							: refProject.getName();
+					if (sym.equals(symbolicName)) {
+						return manifest;
+					}
+				}
+			}
+		} catch (final CoreException e) {
+			// do nothing
+		}
+		return null;
+	}
+
 	/**
 	 * Creates a new {@link Manifest} for the specified {@link IProject}
 	 *
