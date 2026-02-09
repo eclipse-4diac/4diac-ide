@@ -34,16 +34,16 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorDataTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.DataTypeEntryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
@@ -53,7 +53,6 @@ public final class DataTypeLibrary {
 
 	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
-	private final Map<String, ErrorDataTypeEntry> errorTypes = new ConcurrentHashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
@@ -63,19 +62,30 @@ public final class DataTypeLibrary {
 
 	public boolean addTypeEntry(final DataTypeEntry entry) {
 		final String uppercaseName = entry.getFullTypeName().toUpperCase();
-		removeErrorTypeEntry(uppercaseName); // remove stale error marker data type
-		return derivedTypes.putIfAbsent(uppercaseName, entry) == null;
+		// remove stale error data type
+		final DataTypeEntry oldEntry = removeErrorTypeEntry(uppercaseName);
+		// add new type entry
+		final boolean added = derivedTypes.putIfAbsent(uppercaseName, entry) == null;
+		// trigger transitive refresh after new entry has been added
+		if (oldEntry != null) {
+			oldEntry.setTypeLibrary(null);
+		}
+		return added;
 	}
 
 	public void removeTypeEntry(final DataTypeEntry entry) {
 		derivedTypes.remove(entry.getFullTypeName().toUpperCase(), entry);
 	}
 
-	private void removeErrorTypeEntry(final String uppercaseName) {
-		final ErrorDataTypeEntry entry = errorTypes.remove(uppercaseName);
-		if (entry != null) {
-			entry.setTypeLibrary(null); // trigger transitive refresh
+	private DataTypeEntry removeErrorTypeEntry(final String uppercaseName) {
+		DataTypeEntry oldEntry = derivedTypes.get(uppercaseName);
+		while (oldEntry != null && oldEntry.getFile() == null) {
+			if (derivedTypes.remove(uppercaseName, oldEntry)) {
+				return oldEntry;
+			}
+			oldEntry = derivedTypes.get(uppercaseName);
 		}
+		return null;
 	}
 
 	private void addToTypeMap(final DataType type) {
@@ -203,13 +213,13 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
-	public ErrorDataType createErrorMarkerType(final String typeName, final String message) {
-		return errorTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
+	private AnyDerivedType createErrorMarkerType(final String typeName, final String message) {
+		return derivedTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
 			FordiacLogHelper.logInfo(message);
-			final ErrorDataType type = DataFactory.eINSTANCE.createErrorDataType();
+			final DataTypeEntry entry = new DataTypeEntryImpl();
+			final DataType type = entry.getType();
 			PackageNameHelper.setFullTypeName(type, typeName);
-			final ErrorDataTypeEntry entry = new ErrorDataTypeEntryImpl();
-			entry.setType(type);
+			entry.setType(type); // update type name in entry
 			return entry;
 		}).getType();
 	}
