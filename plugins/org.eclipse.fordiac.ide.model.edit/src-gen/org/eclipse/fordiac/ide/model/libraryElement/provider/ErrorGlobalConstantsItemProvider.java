@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022-2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,27 +23,24 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.fordiac.ide.model.data.provider.DataTypeItemProvider;
-import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
+public class ErrorGlobalConstantsItemProvider extends GlobalConstantsItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ErrorMarkerDataTypeItemProvider(AdapterFactory adapterFactory) {
+	public ErrorGlobalConstantsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,14 +60,14 @@ public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
 	}
 
 	/**
-	 * This returns ErrorMarkerDataType.gif.
+	 * This returns ErrorGlobalConstants.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ErrorMarkerDataType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ErrorGlobalConstants")); //$NON-NLS-1$
 	}
 
 	/**
@@ -81,10 +78,10 @@ public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ErrorMarkerDataType)object).getName();
+		String label = ((ErrorGlobalConstants)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ErrorMarkerDataType_type") : //$NON-NLS-1$
-			getString("_UI_ErrorMarkerDataType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_ErrorGlobalConstants_type") : //$NON-NLS-1$
+			getString("_UI_ErrorGlobalConstants_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -111,17 +108,6 @@ public class ErrorMarkerDataTypeItemProvider extends DataTypeItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return FordiacEditPlugin.INSTANCE;
 	}
 
 }

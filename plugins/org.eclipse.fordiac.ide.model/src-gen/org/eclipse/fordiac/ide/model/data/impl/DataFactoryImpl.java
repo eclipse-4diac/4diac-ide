@@ -76,6 +76,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 			case DataPackage.DIRECTLY_DERIVED_TYPE: return createDirectlyDerivedType();
 			case DataPackage.ENUMERATED_TYPE: return createEnumeratedType();
 			case DataPackage.ENUMERATED_VALUE: return createEnumeratedValue();
+			case DataPackage.ERROR_DATA_TYPE: return createErrorDataType();
 			case DataPackage.STRUCTURED_TYPE: return createStructuredType();
 			case DataPackage.SUBRANGE: return createSubrange();
 			case DataPackage.SUBRANGE_TYPE: return createSubrangeType();
@@ -214,6 +215,17 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	public EnumeratedValue createEnumeratedValue() {
 		EnumeratedValueImpl enumeratedValue = new EnumeratedValueImpl();
 		return enumeratedValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorDataType createErrorDataType() {
+		ErrorDataTypeImpl errorDataType = new ErrorDataTypeImpl();
+		return errorDataType;
 	}
 
 	/**

@@ -165,6 +165,29 @@ public class DataItemProviderAdapterFactory extends DataAdapterFactory
 		return enumeratedValueItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.ErrorDataType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ErrorDataTypeItemProvider errorDataTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.data.ErrorDataType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createErrorDataTypeAdapter() {
+		if (errorDataTypeItemProvider == null) {
+			errorDataTypeItemProvider = new ErrorDataTypeItemProvider(this);
+		}
+
+		return errorDataTypeItemProvider;
+	}
+
 	/** This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.data.StructuredType}
 	 * instances. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *

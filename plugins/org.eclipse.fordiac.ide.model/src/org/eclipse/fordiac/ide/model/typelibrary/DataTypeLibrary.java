@@ -37,13 +37,12 @@ import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorDataTypeEntryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -204,10 +203,10 @@ public final class DataTypeLibrary {
 		return null;
 	}
 
-	public ErrorMarkerDataType createErrorMarkerType(final String typeName, final String message) {
+	public ErrorDataType createErrorMarkerType(final String typeName, final String message) {
 		return errorTypes.computeIfAbsent(typeName.toUpperCase(), name -> {
 			FordiacLogHelper.logInfo(message);
-			final ErrorMarkerDataType type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
+			final ErrorDataType type = DataFactory.eINSTANCE.createErrorDataType();
 			PackageNameHelper.setFullTypeName(type, typeName);
 			final ErrorDataTypeEntry entry = new ErrorDataTypeEntryImpl();
 			entry.setType(type);

@@ -17,16 +17,16 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.application.figures.StructuredTypeFigure;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationFeedbackBorder;
 import org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
-public class ErrorMarkerDataTypeEditPart extends AbstractGraphicalEditPart {
+public class ErrorDataTypeEditPart extends AbstractGraphicalEditPart {
 
 	@Override
-	public ErrorMarkerDataType getModel() {
-		return (ErrorMarkerDataType) super.getModel();
+	public ErrorDataType getModel() {
+		return (ErrorDataType) super.getModel();
 	}
 
 	void refreshValue() {

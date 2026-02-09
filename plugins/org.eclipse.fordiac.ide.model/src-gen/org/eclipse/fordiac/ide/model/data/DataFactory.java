@@ -81,6 +81,15 @@ public interface DataFactory extends EFactory {
 	EnumeratedValue createEnumeratedValue();
 
 	/**
+	 * Returns a new object of class '<em>Error Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Data Type</em>'.
+	 * @generated
+	 */
+	ErrorDataType createErrorDataType();
+
+	/**
 	 * Returns a new object of class '<em>Structured Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

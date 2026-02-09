@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles.AnnotationBorder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.data.impl.ErrorDataTypeImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
@@ -185,10 +185,10 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 
 	@Override
 	public <T> T getAdapter(final Class<T> key) {
-		if (key == ErrorMarkerDataTypeImpl.class) {
+		if (key == ErrorDataTypeImpl.class) {
 			final Adapter a = getContentAdapter();
 			if (a.getTarget() instanceof final VarDeclaration vd
-					&& vd.getType() instanceof final ErrorMarkerDataTypeImpl em) {
+					&& vd.getType() instanceof final ErrorDataTypeImpl em) {
 				return key.cast(em);
 			}
 		}

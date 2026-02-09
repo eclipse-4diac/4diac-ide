@@ -17,18 +17,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
-public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMarkerDataType>
-		implements ErrorDataTypeEntry {
+public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorDataType> implements ErrorDataTypeEntry {
 
 	public ErrorDataTypeEntryImpl() {
-		super(ErrorMarkerDataType.class);
+		super(ErrorDataType.class);
 	}
 
 	@Override
@@ -47,7 +46,7 @@ public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorMa
 	}
 
 	@Override
-	protected AbstractTypeExporter getTypeExporter(final ErrorMarkerDataType type) {
+	protected AbstractTypeExporter getTypeExporter(final ErrorDataType type) {
 		throw new UnsupportedOperationException();
 	}
 

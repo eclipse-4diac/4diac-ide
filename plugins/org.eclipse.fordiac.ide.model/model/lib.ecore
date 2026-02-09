@@ -1043,7 +1043,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="eCC" lowerBound="1" eType="#//ECC"
         eOpposite="#//ECC/eCTransition"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorAdapterType" eSuperTypes="#//AdapterType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorAttributeDeclaration" eSuperTypes="#//AttributeDeclaration #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorAutomationSystem" eSuperTypes="#//AutomationSystem #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorDeviceType" eSuperTypes="#//DeviceType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorFBType" eSuperTypes="#//FBType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorFunctionFBType" eSuperTypes="#//FunctionFBType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorGlobalConstants" eSuperTypes="#//GlobalConstants #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorLibraryElement" eSuperTypes="#//LibraryElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//BlockFBNetworkElement">
     <eOperations name="getWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -1091,6 +1098,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorResourceType" eSuperTypes="#//ResourceType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorSegmentType" eSuperTypes="#//SegmentType #//ErrorLibraryElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorSubAppType" eSuperTypes="#//SubAppType #//ErrorLibraryElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//IInterfaceElement #//ICallable">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//ITypedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
