@@ -119,6 +119,15 @@ public enum LibraryManager {
 
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
+	private record LibraryManagerData(Map<String, DependencyNode> dependencyNodes,
+			Map<String, ResolveNode> resolveNodes, Map<String, Version> preferred, Map<String, IFolder> linked,
+			Map<String, List<Version>> referenced) {
+		public static LibraryManagerData init() {
+			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+					new HashMap<>());
+		}
+	}
+
 	LibraryManager() {
 		initLibraryMap(stdlibraries, standardLibraryPath, standardLibraryUri);
 		if (!Files.exists(libraryPath)) {
@@ -578,10 +587,8 @@ public enum LibraryManager {
 	 */
 	public void resolveDependencies(final IProject project, final Manifest projectManifest,
 			final IProgressMonitor monitor) throws OperationCanceledException, CoreException {
-		final Map<String, DependencyNode> deps = new HashMap<>();
-		final Map<String, ResolveNode> res = new HashMap<>();
-		final Map<String, Version> preferred = new HashMap<>();
-		final Map<String, IFolder> linked = new HashMap<>();
+
+		final LibraryManagerData libManagerData = LibraryManagerData.init();
 
 		final Queue<String> queue = new LinkedList<>(); // symbolicNames
 
@@ -598,23 +605,26 @@ public enum LibraryManager {
 			return;
 		}
 
-		findPreferred(project, preferred, linked, progress.split(5));
+		collectReferencedDependencies(project, libManagerData.referenced());
+
+		findPreferred(project, libManagerData, progress.split(5));
 
 		projectManifest.getDependencies().getRequired().forEach(req -> {
-			deps.put(req.getSymbolicName(), new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
-					VersionComparator.parseVersionRange(req.getVersion())));
+			libManagerData.dependencyNodes().put(req.getSymbolicName(),
+					new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
+							VersionComparator.parseVersionRange(req.getVersion())));
 			queue.add(req.getSymbolicName());
 		});
 
-		buildDependencies(deps, res, preferred, queue, progress.split(70));
+		buildDependencies(project, libManagerData, queue, progress.split(70));
 
 		final List<ErrorMarkerBuilder> markerList = new LinkedList<>();
 
 		// import valid nodes
-		importDependencyNodes(project, deps, res, preferred, linked, projectManifest, markerList, progress.split(15));
+		importDependencyNodes(project, libManagerData, projectManifest, markerList, progress.split(15));
 
 		// remove still linked libraries
-		cleanupLinks(linked, progress.split(2));
+		cleanupLinks(libManagerData.linked(), progress.split(2));
 
 		// check if imported library links are broken
 		checkLinkedLibraries(project, progress.split(1));
@@ -623,10 +633,12 @@ public enum LibraryManager {
 				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
 			// force load explicitly defined dependencies
 			final List<Required> explicitDeps = projectManifest.getDependencies().getRequired().stream()
-					.filter(r -> !r.getVersion().contains("-") && !deps.get(r.getSymbolicName()).isValid()).toList(); //$NON-NLS-1$
+					.filter(r -> !r.getVersion().contains("-") //$NON-NLS-1$
+							&& !libManagerData.dependencyNodes().get(r.getSymbolicName()).isValid())
+					.toList();
 			progress.setWorkRemaining(explicitDeps.size());
 			for (final Required req : explicitDeps) {
-				linked.remove(req.getSymbolicName());
+				libManagerData.linked().remove(req.getSymbolicName());
 				final Version version = Version.parseVersion(req.getVersion());
 				LibraryRecord lib = getLibraryRecord(stdlibraries, req.getSymbolicName(), version);
 				// check if library is already downloaded
@@ -700,25 +712,24 @@ public enum LibraryManager {
 		});
 	}
 
-	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
-			final Map<String, Version> preferred, final Queue<String> queue, final SubMonitor progress)
-			throws OperationCanceledException {
+	private void buildDependencies(final IProject project, final LibraryManagerData data, final Queue<String> queue,
+			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(Messages.LibraryManager_BuildingDependencyGraph);
 		while (!queue.isEmpty()) {
 			progress.setWorkRemaining(Math.max(queue.size(), 10));
 			final String symbolicName = queue.poll();
 
-			final var dnode = deps.get(symbolicName);
+			final var dnode = data.dependencyNodes().get(symbolicName);
 
 			if (!dnode.isChanged()) {
 				continue;
 			}
 
 			if (!dnode.isValid()) {
-				final var rnode = res.get(symbolicName);
+				final var rnode = data.resolveNodes().get(symbolicName);
 				if (rnode != null) {
 					rnode.getDependencies().keySet().forEach(symb -> {
-						final var dn = deps.get(symb);
+						final var dn = data.dependencyNodes().get(symb);
 						if (dn != null) {
 							dn.removeCause(symbolicName);
 							if (dn.isChanged()) {
@@ -731,23 +742,23 @@ public enum LibraryManager {
 			}
 
 			// resolve dependency
-			final var rnode = resolveDependency(symbolicName, dnode.getRange(), preferred.get(symbolicName),
-					progress.split(1));
+			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(),
+					data.preferred().get(symbolicName), progress.split(1), data.referenced());
 
-			if (res.containsKey(symbolicName)) {
-				final var oldRNode = res.get(symbolicName);
+			if (data.resolveNodes().containsKey(symbolicName)) {
+				final var oldRNode = data.resolveNodes().get(symbolicName);
 				oldRNode.getDependencies().keySet().forEach(old -> {
 					if (!rnode.getDependencies().containsKey(old)) {
-						deps.get(old).removeCause(symbolicName);
+						data.dependencyNodes().get(old).removeCause(symbolicName);
 					}
 				});
 			}
 
-			res.put(symbolicName, rnode);
+			data.resolveNodes().put(symbolicName, rnode);
 
 			// updated dependencies
 			rnode.getDependencies().forEach((symb, val) -> {
-				final var dn = deps.computeIfAbsent(symb, s -> new DependencyNode(symb));
+				final var dn = data.dependencyNodes().computeIfAbsent(symb, s -> new DependencyNode(symb));
 				dn.putCause(symbolicName, val);
 				if (dn.isChanged()) {
 					queue.add(symb);
@@ -756,21 +767,19 @@ public enum LibraryManager {
 		}
 	}
 
-	private void importDependencyNodes(final IProject project, final Map<String, DependencyNode> deps,
-			final Map<String, ResolveNode> res, final Map<String, Version> preferred, final Map<String, IFolder> linked,
+	private void importDependencyNodes(final IProject project, final LibraryManagerData data,
 			final Manifest projectManifest, final List<ErrorMarkerBuilder> markerList, final SubMonitor progress) {
-		for (final var dnode : deps.values()) {
+		for (final var dnode : data.dependencyNodes().values()) {
 			if (dnode.isValid()) {
-				final var rnode = res.get(dnode.getSymbolicName());
+				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 
 				if (rnode.isValid()) {
-					// no need to import the same version again
-					if (!linked.containsKey(rnode.getSymbolicName())
-							|| !preferred.get(rnode.getSymbolicName()).equals(rnode.getVersion())) {
+					if (rnode.requireImport(data.linked(), data.preferred())) {
 						importLibrary(project, rnode.getUri(), false, false);
-
 					}
-					linked.remove(rnode.getSymbolicName());
+					if (!rnode.isReferenced()) {
+						data.linked().remove(rnode.getSymbolicName());
+					}
 				} else {
 					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
 				}
@@ -797,8 +806,8 @@ public enum LibraryManager {
 	 * @param linked    set to fill with symbolic names of linked libraries
 	 * @param progress  SubMonitor for progress reporting
 	 */
-	private static void findPreferred(final IProject project, final Map<String, Version> preferred,
-			final Map<String, IFolder> linked, final SubMonitor progress) {
+	private static void findPreferred(final IProject project, final LibraryManagerData data,
+			final SubMonitor progress) {
 		final IFolder standardLibFolder = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
 		final IFolder externalLibFolder = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		if (!standardLibFolder.exists() || !externalLibFolder.exists()) {
@@ -816,13 +825,13 @@ public enum LibraryManager {
 				}
 				final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
 				if (libManifest != null) {
-					linked.put(libFolder.getName(), libFolder);
-					preferred.put(libFolder.getName(),
+					data.linked().put(libFolder.getName(), libFolder);
+					data.preferred().put(libFolder.getName(),
 							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
 				} else {
 					final Version version = parseLibraryVersion(libFolder);
 					if (!version.equals(Version.emptyVersion)) {
-						preferred.put(libFolder.getName(), version);
+						data.preferred().put(libFolder.getName(), version);
 					}
 				}
 			}
@@ -861,13 +870,17 @@ public enum LibraryManager {
 	 * @param progress     SubMonitor for progress report
 	 * @return
 	 */
-	private ResolveNode resolveDependency(final String symbolicName, final VersionRange range,
-			final Version prefVersion, final SubMonitor progress) {
+	private ResolveNode resolveDependency(final IProject project, final String symbolicName, final VersionRange range,
+			final Version prefVersion, final SubMonitor progress, final Map<String, List<Version>> referenced) {
 		final boolean usePref = prefVersion != null && range.includes(prefVersion);
 		LibraryRecord rec;
 
 		progress.setTaskName(Messages.LibraryManager_ResolvingDependency + symbolicName);
 		progress.setWorkRemaining(100);
+
+		if (isProvidedByReference(referenced, symbolicName, range)) {
+			return new ResolveNode(symbolicName, prefVersion, project);
+		}
 
 		if (stdlibraries.containsKey(symbolicName)) {
 			if (usePref) {
@@ -913,6 +926,35 @@ public enum LibraryManager {
 		}
 
 		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable + dlResult.message());
+	}
+
+	private static boolean isProvidedByReference(final Map<String, List<Version>> referenced, final String symbolicName,
+			final VersionRange versionRange) {
+		return referenced.getOrDefault(symbolicName, Collections.emptyList()).stream().anyMatch(versionRange::includes);
+
+	}
+
+	/**
+	 * Collect provided libraries from referenced projects
+	 *
+	 */
+	private static void collectReferencedDependencies(final IProject project,
+			final Map<String, List<Version>> referenced) throws CoreException {
+		final IProject[] projects = project.getReferencedProjects();
+
+		for (final IProject refProject : projects) {
+			if (refProject.isAccessible()) {
+				final Manifest manifest = ManifestHelper.getContainerManifest(refProject);
+				if (manifest != null && manifest.getProduct() != null) {
+					final String sym = manifest.getProduct().getSymbolicName() != null
+							? manifest.getProduct().getSymbolicName()
+							: refProject.getName();
+					referenced.computeIfAbsent(sym, name -> new ArrayList<>())
+							.add(new Version(manifest.getProduct().getVersionInfo().getVersion()));
+				}
+			}
+		}
+
 	}
 
 	/**

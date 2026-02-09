@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.library;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
@@ -27,26 +29,44 @@ class ResolveNode {
 	private final java.net.URI uri;
 	private final String error;
 	private final Map<String, VersionRange> dependencies;
+	private final boolean isReferenced;
 
 	public ResolveNode(final String symbolicName, final String error) {
-		this(symbolicName, Version.emptyVersion, null, error);
+		this(symbolicName, Version.emptyVersion, null, error, false);
 	}
 
-	public ResolveNode(final String symbolicName, final Version version, final java.net.URI uri, final String error) {
+	public ResolveNode(final String symbolicName, final Version version, final java.net.URI uri, final String error,
+			final boolean isReferenced) {
 		this.symbolicName = symbolicName;
 		this.version = version;
 		this.uri = uri;
 		this.error = error;
+		this.isReferenced = isReferenced;
 		dependencies = new HashMap<>();
 	}
 
 	public ResolveNode(final LibraryRecord lib) {
-		this(lib.symbolicName(), lib.version(), lib.uri(), null);
+		this(lib.symbolicName(), lib.version(), lib.uri(), null, false);
 		final Manifest manifest = ManifestHelper.getFolderManifest(lib.path());
+		addDependencies(dependencies, manifest);
+	}
+
+	public ResolveNode(final String symbolicName, final Version version, final IProject project) {
+		this(symbolicName, version, null, null, true);
+		final Manifest manifest = ManifestHelper.getReferencedManifest(project, symbolicName);
+		addDependencies(dependencies, manifest);
+	}
+
+	private static void addDependencies(final Map<String, VersionRange> dependencies, final Manifest manifest) {
 		if (manifest != null && manifest.getDependencies() != null) {
 			manifest.getDependencies().getRequired().forEach(req -> dependencies.put(req.getSymbolicName(),
 					VersionComparator.parseVersionRange(req.getVersion())));
 		}
+	}
+
+	public boolean requireImport(final Map<String, IFolder> linked, final Map<String, Version> preferred) {
+		return (!linked.containsKey(this.getSymbolicName())
+				|| !preferred.get(this.getSymbolicName()).equals(this.getVersion())) && !this.isReferenced();
 	}
 
 	public Version getVersion() {
@@ -66,10 +86,14 @@ class ResolveNode {
 	}
 
 	public boolean isValid() {
-		return uri != null && error == null;
+		return isReferenced || (uri != null && error == null);
 	}
 
 	public String getError() {
 		return error;
+	}
+
+	public boolean isReferenced() {
+		return isReferenced;
 	}
 }
