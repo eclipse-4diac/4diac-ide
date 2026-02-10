@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.LayerConstants;
@@ -46,6 +47,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.gef.requests.CreateConnectionRequest;
+import org.eclipse.jface.viewers.StructuredSelection;
 
 public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPolicy {
 	private final List<Connection> lines = new ArrayList<>();
@@ -77,8 +79,13 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 	private void addConnectionLine() {
 		if (getHost().getParent() instanceof final InterfaceEditPart iep && !iep.isInput()) {
 			if (iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance).limit(2)
-					.count() < 2) {
-				// user can use the existing connection
+					.count() == 1) {
+				final var viewer = getHost().getViewer();
+				final List<EditPart> selectedEditParts = new ArrayList<>(
+						viewer.getSelectedEditParts().stream().filter(ep -> ep != getHost()).toList());
+				selectedEditParts.addAll(iep.getTargetConnections());
+				selectedEditParts.add(getHost()); // add Host last for Primary Selection
+				viewer.setSelection(new StructuredSelection(selectedEditParts));
 				return;
 			}
 
