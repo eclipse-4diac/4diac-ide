@@ -59,10 +59,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	}
 
 	private static boolean isRelevant(final Notification notification) {
-		return ((notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_FEATURE
-				&& !(notification.getNotifier() instanceof InterfaceTypeEntry))
-				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_INTERFACE_FEATURE
-				|| notification.getFeature() == TypeEntry.TYPE_ENTRY_TYPE_LIBRARY_FEATURE);
+		return TypeEntry.TYPE_ENTRY_FILE_CONTENT_FEATURE.equals(notification.getFeature());
 	}
 
 	public void updateDependency(final TypeEntry dependency) {
