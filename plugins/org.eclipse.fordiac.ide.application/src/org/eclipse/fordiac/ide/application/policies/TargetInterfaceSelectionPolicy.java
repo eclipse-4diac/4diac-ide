@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ConnectionLocator;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -47,32 +48,25 @@ import org.eclipse.gef.handles.SquareHandle;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 
 public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPolicy {
-	private Connection line;
+	private final List<Connection> lines = new ArrayList<>();
 
 	@Override
 	protected List<Handle> createSelectionHandles() {
 		final List<Handle> list = new ArrayList<>(super.createSelectionHandles());
-		if (line != null) {
-			list.add(new ConnectionHandle(getHost(), line));
-		}
+		lines.forEach(connection -> list.add(new ConnectionHandle(getHost(), connection)));
 		return list;
 	}
 
 	@Override
 	protected void showSelection() {
-		if (line == null) {
-			addConnectionLine();
-		}
+		addConnectionLine();
 		super.showSelection();
 	}
 
 	@Override
 	protected void hideSelection() {
 		super.hideSelection();
-
-		if (line != null) {
-			deleteLine();
-		}
+		clearLines();
 	}
 
 	@Override
@@ -81,33 +75,37 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 	}
 
 	private void addConnectionLine() {
-		final PolylineConnection newCon = new PolylineConnection();
-		newCon.setConnectionRouter(((ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER)).getConnectionRouter());
-		newCon.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
-		newCon.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
-
 		if (getHost().getParent() instanceof final InterfaceEditPart iep && !iep.isInput()) {
-			if (iep.getTargetConnections().isEmpty() || iep.getChildren().stream()
-					.filter(TargetInterfaceElementEditPart.class::isInstance).limit(2).count() < 2) {
-				// we don't want a connection if pin has no connection or only 1 TargetLabel
+			if (iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance).limit(2)
+					.count() < 2) {
+				// user can use the existing connection
 				return;
 			}
 
-			newCon.setTargetAnchor(new FixedAnchor(getHostFigure(), true));
-			if (iep.getTargetConnections().getFirst()
-					.getSource() instanceof final InterfaceEditPart connectionSourceIEP) {
-				newCon.setSourceAnchor(connectionSourceIEP.getSourceConnectionAnchor(new Request()));
-			}
-		}
+			clearLines();
+			final ConnectionRouter connectionRouter = ((ConnectionLayer) getLayer(LayerConstants.CONNECTION_LAYER))
+					.getConnectionRouter();
+			iep.getTargetConnections().forEach(connectionEP -> {
+				final PolylineConnection newCon = new PolylineConnection();
+				newCon.setConnectionRouter(connectionRouter);
+				newCon.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
+				newCon.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 
-		line = newCon;
-		addFeedback(line);
-		newCon.layout(); // layout so the handle gets the correct coordinates
+				newCon.setTargetAnchor(new FixedAnchor(getHostFigure(), true));
+				if (connectionEP.getSource() instanceof final InterfaceEditPart connectionSourceIEP) {
+					newCon.setSourceAnchor(connectionSourceIEP.getSourceConnectionAnchor(new Request()));
+				}
+
+				addFeedback(newCon);
+				lines.add(newCon);
+				newCon.layout(); // layout so the handle gets the correct coordinates
+			});
+		}
 	}
 
-	private void deleteLine() {
-		removeFeedback(line);
-		line = null;
+	private void clearLines() {
+		lines.forEach(this::removeFeedback);
+		lines.clear();
 	}
 
 	private class ConnectionHandle extends SquareHandle {
