@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz, Martin Erich Jobst
+ * Copyright (c) 2020, 2026 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,18 +10,23 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst - add preference qualifier and issue URL parameter
+ *   Malte Grave - added filters to show error dialog based on plugin id
  *******************************************************************************/
 package org.eclipse.fordiac.ide;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
@@ -36,9 +41,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 public class FordiacLogListener implements ILogListener {
+	private static HashMap<String, String> cachedFilters = null;
 
 	private static final class LogErrorDialog extends ErrorDialog {
 
@@ -126,9 +131,8 @@ public class FordiacLogListener implements ILogListener {
 
 	@Override
 	public void logging(final IStatus status, final String plugin) {
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
-				&& (status.getPlugin().startsWith(Activator.PLUGIN_ID)
-						|| status.getPlugin().equals(PlatformUI.PLUGIN_ID))
+		if (status.getSeverity() == IStatus.ERROR && status.getException() != null
+				&& isPluginInFilterMap(status.getPlugin())
 				// checking/setting the flag must be last, so that we only set it when actually
 				// showing an error dialog and resetting the flag afterwards
 				&& !singleWindow.getAndSet(true)) {
@@ -141,6 +145,34 @@ public class FordiacLogListener implements ILogListener {
 			} finally {
 				singleWindow.set(false);
 			}
+		}
+	}
+
+	private static boolean isPluginInFilterMap(final String pluginID) {
+		if (cachedFilters == null) {
+			loadFilterExtensions();
+		}
+		final String idFilter = cachedFilters.get(pluginID);
+		if (idFilter != null) {
+			// Now check if the id of the rule starts with the plugin id, if so we will also
+			// show the error dialog
+			if (pluginID.startsWith(idFilter)) {
+				return true;
+			}
+			// The exact plugin id is in the filter
+			return true;
+		}
+		return false;
+	}
+
+	private static void loadFilterExtensions() {
+		cachedFilters = new HashMap<>();
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] config = registry
+				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
+		for (final IConfigurationElement e : config) {
+			final String id = e.getAttribute("id"); //$NON-NLS-1$
+			cachedFilters.put(id, id);
 		}
 	}
 
