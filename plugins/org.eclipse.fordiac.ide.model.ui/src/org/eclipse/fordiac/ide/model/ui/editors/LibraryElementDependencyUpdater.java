@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Display;
 public class LibraryElementDependencyUpdater extends LibraryElementDependencyTracker {
 
 	private LibraryElement libraryElement;
+	private boolean updating;
 
 	@Override
 	public void notifyChanged(final Notification notification) {
@@ -65,14 +66,23 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	}
 
 	public void updateDependency(final TypeEntry dependency) {
-		switch (dependency) {
-		case final AttributeTypeEntry attributeTypeEntry -> updateAttributeDependency(attributeTypeEntry);
-		case final DataTypeEntry dataTypeEntry -> updateDataTypeDependency(dataTypeEntry);
-		case final AdapterTypeEntry adapterTypeEntry -> updateAdapterDependency(adapterTypeEntry);
-		case final InterfaceTypeEntry interfaceTypeEntry -> updateBlockDependency(interfaceTypeEntry);
-		case null, default -> {
-			// do nothing
+		if (updating) {
+			throw new IllegalStateException(
+					"Already updating dependencies for " + libraryElement.getTypeEntry().getFile()); //$NON-NLS-1$
 		}
+		try {
+			updating = true;
+			switch (dependency) {
+			case final AttributeTypeEntry attributeTypeEntry -> updateAttributeDependency(attributeTypeEntry);
+			case final DataTypeEntry dataTypeEntry -> updateDataTypeDependency(dataTypeEntry);
+			case final AdapterTypeEntry adapterTypeEntry -> updateAdapterDependency(adapterTypeEntry);
+			case final InterfaceTypeEntry interfaceTypeEntry -> updateBlockDependency(interfaceTypeEntry);
+			case null, default -> {
+				// do nothing
+			}
+			}
+		} finally {
+			updating = false;
 		}
 	}
 
