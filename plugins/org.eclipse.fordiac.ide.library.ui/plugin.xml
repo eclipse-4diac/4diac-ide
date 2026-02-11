@@ -65,6 +65,16 @@
             Import an existing file into the workspace.
          </description>
       </wizard>
+      <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"
+      name="UAO Library Importer">
+	   <description>
+	      Import a UAO module folder by loading Manifest.mf as UAO EMF and converting it to a 4diac library.
+	   </description>
+	</wizard>
+      
    </extension>
    <extension
          point="org.eclipse.ui.activities">
@@ -107,6 +117,9 @@
   		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
   		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard">
 	</activityPatternBinding>
+	<activityPatternBinding
+      activityId="org.eclipse.fordiac.ide.ui.wizardDisabling"
+      pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.UAOLibraryImportWizard"/>
    </extension>
    <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
@@ -134,4 +147,6 @@
          </enablement>
       </changePreviewViewer>
    </extension>
+   
+
 </plugin>
