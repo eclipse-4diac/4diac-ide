@@ -305,7 +305,11 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	public static boolean shouldStructDataConnCreationBeUsed(final IInterfaceElement pin,
 			final IInterfaceElement other) {
-		return isStructManipulatorDefPin(pin) && other != null && other.getType() instanceof StructuredType;
+		return isStructManipulatorDefPin(pin) && other != null && isSimpleStructPin(other);
+	}
+
+	public static boolean isSimpleStructPin(final IInterfaceElement pin) {
+		return pin.getType() instanceof StructuredType && !((VarDeclaration) pin).isArray();
 	}
 
 	private static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
