@@ -130,4 +130,9 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 	public String getFileExtension() {
 		return TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING;
 	}
+
+	@Override
+	public boolean hasError() {
+		return false;
+	}
 }

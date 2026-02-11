@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -319,7 +318,7 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
-		if (!(type.getTypeEntry() instanceof ErrorTypeEntry)) {
+		if (type.getTypeEntry() != null && !type.getTypeEntry().hasError()) {
 			if (type instanceof final BaseFBType baseFBType) { // basic and simple fb type
 				return baseFBType.getInternalFbs();
 			}

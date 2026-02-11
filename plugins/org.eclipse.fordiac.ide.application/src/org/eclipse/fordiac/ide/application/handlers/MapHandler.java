@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -196,7 +195,7 @@ public class MapHandler extends AbstractHandler {
 		for (final FBNetworkElement fb : fbs) {
 			if (fb.getOuterFBNetworkElement() instanceof SubApp
 					|| !(fb instanceof final BlockFBNetworkElement bfb && bfb.getInterface().getErrorMarker().isEmpty())
-					|| fb.getTypeEntry() instanceof ErrorTypeEntry) {
+					|| (fb.getTypeEntry() != null && fb.getTypeEntry().hasError())) {
 				return false;
 			}
 		}
