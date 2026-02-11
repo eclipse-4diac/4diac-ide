@@ -115,11 +115,9 @@ class STFunctionSupport extends StructuredTextSupport {
 	override getDependencies(Map<?, ?> options) {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			(source.functions.map[returnType].filterNull + source.functions.flatMap [
-				varDeclarations.filter [
-					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				]
-			].flatMap[varDeclarations].map[featureType as INamedElement]).toSet
+			(source.functions.map[returnType].filterNull + source.functions.flatMap[varDeclarations].flatMap [
+				varDeclarations
+			].flatMap[parameterDependencies]).toSet
 		else
 			source.containedDependencies
 	}
