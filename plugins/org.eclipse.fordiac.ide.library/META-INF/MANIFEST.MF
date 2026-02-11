@@ -11,6 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.equinox.p2.operations,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.fordiac.ide.library.model,
+ org.eclipse.fordiac.ide.library.model.uao,
  org.eclipse.fordiac.ide.model,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.services,
@@ -18,5 +19,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Export-Package: org.eclipse.fordiac.ide.library,
  org.eclipse.fordiac.ide.library.download,
  org.eclipse.fordiac.ide.library.preferences,
- org.eclipse.fordiac.ide.library.provider
-Import-Package: org.eclipse.fordiac.ide.util
+ org.eclipse.fordiac.ide.library.provider,
+ org.eclipse.fordiac.ide.library.uao
+Import-Package: org.eclipse.fordiac.ide.util,
+ org.tempuri.library.mgmt
