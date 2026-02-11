@@ -85,6 +85,8 @@ public interface TypeEntry extends Notifier {
 
 	void refresh();
 
+	boolean hasError();
+
 	static String getTypeNameFromFile(final IFile element) {
 		return getTypeNameFromFileName(element.getName());
 	}

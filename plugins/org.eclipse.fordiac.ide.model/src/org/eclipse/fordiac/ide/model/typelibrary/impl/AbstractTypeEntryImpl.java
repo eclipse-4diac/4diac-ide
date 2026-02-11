@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
@@ -463,6 +464,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			}
 		}
 		return notifications;
+	}
+
+	@Override
+	public boolean hasError() {
+		return file == null || !file.exists() || basicGetType() instanceof ErrorLibraryElement;
 	}
 
 	@Override

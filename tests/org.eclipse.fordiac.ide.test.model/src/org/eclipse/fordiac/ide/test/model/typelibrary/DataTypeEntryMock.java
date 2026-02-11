@@ -125,4 +125,9 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	public String getFileExtension() {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING;
 	}
+
+	@Override
+	public boolean hasError() {
+		return false;
+	}
 }

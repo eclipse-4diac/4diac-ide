@@ -124,4 +124,9 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	public String getFileExtension() {
 		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING;
 	}
+
+	@Override
+	public boolean hasError() {
+		return false;
+	}
 }

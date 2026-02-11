@@ -129,4 +129,9 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	public String getFileExtension() {
 		return TypeLibraryTags.FB_TYPE_FILE_ENDING;
 	}
+
+	@Override
+	public boolean hasError() {
+		return false;
+	}
 }

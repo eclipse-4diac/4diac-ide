@@ -23,11 +23,11 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 public final class TypedElementAnnotations {
 
@@ -39,8 +39,7 @@ public final class TypedElementAnnotations {
 			}
 			return false;
 		}
-		if (element.getType() instanceof final LibraryElement libraryElement
-				&& libraryElement.getTypeEntry() instanceof ErrorTypeEntry) {
+		if (element.getType() instanceof ErrorLibraryElement) {
 			if (diagnostics != null) {
 				diagnostics.add(createTypeValidationDiagnostic(
 						MessageFormat.format(Messages.TypedElementAnnotations_TypeNotFound, getFullTypeName(element)),

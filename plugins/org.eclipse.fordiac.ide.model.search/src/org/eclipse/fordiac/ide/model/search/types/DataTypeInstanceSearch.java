@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.LiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -43,7 +42,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				new DataTypeInstanceSearchChildrenProvider());
 	}
 
-	public DataTypeInstanceSearch(final ErrorTypeEntry dtEntry, final TypeLibrary library) {
+	public DataTypeInstanceSearch(final DataTypeEntry dtEntry, final TypeLibrary library) {
 		super(new LiveSearchContext(library), createSearchFilter(dtEntry),
 				new DataTypeInstanceSearchChildrenProvider());
 	}
