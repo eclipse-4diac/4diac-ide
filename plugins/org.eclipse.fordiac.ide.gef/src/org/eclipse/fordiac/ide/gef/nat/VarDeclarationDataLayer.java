@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.ui.widget.ColumnCachingDataLayer;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ColumnCachingDataLayer;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 

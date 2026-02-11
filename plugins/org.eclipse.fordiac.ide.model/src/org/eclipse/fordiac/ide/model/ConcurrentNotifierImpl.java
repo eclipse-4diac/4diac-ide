@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -40,7 +41,7 @@ public class ConcurrentNotifierImpl implements Notifier {
 	@Override
 	public void eNotify(final Notification notification) {
 		if (deliver) {
-			adapters.forEach(adapter -> adapter.notifyChanged(notification));
+			adapters.forEach(adapter -> SafeRunner.run(() -> adapter.notifyChanged(notification)));
 		}
 	}
 

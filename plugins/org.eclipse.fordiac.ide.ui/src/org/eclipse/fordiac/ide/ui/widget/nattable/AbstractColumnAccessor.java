@@ -10,29 +10,21 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.gef.nat;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
+import org.eclipse.swt.internal.C;
 
 public abstract class AbstractColumnAccessor<T, C extends NatTableColumn> implements IColumnPropertyAccessor<T> {
-	private final CommandExecutor commandExecutor;
 	private final List<C> columns;
 
 	protected static final String NULL_DEFAULT = ""; //$NON-NLS-1$
 
-	protected AbstractColumnAccessor(final CommandExecutor commandExecutor, final List<C> columns) {
-		this.commandExecutor = commandExecutor;
+	protected AbstractColumnAccessor(final List<C> columns) {
 		this.columns = columns;
-	}
-
-	protected CommandExecutor getCommandExecutor() {
-		return commandExecutor;
 	}
 
 	public List<C> getColumns() {
@@ -48,13 +40,10 @@ public abstract class AbstractColumnAccessor<T, C extends NatTableColumn> implem
 
 	@Override
 	public void setDataValue(final T rowObject, final int columnIndex, final Object newValue) {
-		final Command cmd = createCommand(rowObject, getColumns().get(columnIndex), newValue);
-		if (cmd.canExecute()) {
-			commandExecutor.executeCommand(cmd);
-		}
+		setDataValue(rowObject, getColumns().get(columnIndex), newValue);
 	}
 
-	public abstract Command createCommand(final T rowObject, final C column, final Object newValue);
+	public abstract void setDataValue(final T rowObject, final C column, final Object newValue);
 
 	@Override
 	public String getColumnProperty(final int columnIndex) {

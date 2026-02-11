@@ -61,20 +61,22 @@ public class DeploymentLaunchConfigurationDelegate extends LaunchConfigurationDe
 		final AllowTerminate allowTerminate = DeploymentLaunchConfigurationAttributes.getAllowTerminate(configuration);
 		final List<DeploymentLaunchWatchpoint> launchWatches = DeploymentLaunchConfigurationAttributes
 				.getWatches(configuration);
+		final List<DeploymentLaunchValue> launchValues = DeploymentLaunchConfigurationAttributes
+				.getValues(configuration);
 
 		launch.setAttribute(SYSTEM_FILE_ATTRIBUTE, resource.getFullPath().toString());
 
 		try {
 			if (ILaunchManager.RUN_MODE.equals(mode)) {
-				final DeploymentProcess process = new DeploymentProcess(system, selection, launch);
+				final DeploymentProcess process = new DeploymentProcess(system, selection, launchValues, launch);
 				process.start();
 			} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launch,
-						allowTerminate != AllowTerminate.NEVER, pollingInterval, launchWatches);
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, selection, launchValues,
+						launch, allowTerminate != AllowTerminate.NEVER, pollingInterval, launchWatches);
 				debugTarget.start();
 			} else if (MONITOR_MODE.equals(mode)) {
-				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launch,
-						allowTerminate == AllowTerminate.ALWAYS, pollingInterval, launchWatches);
+				final DeploymentDebugTarget debugTarget = new DeploymentDebugTarget(system, Set.of(), launchValues,
+						launch, allowTerminate == AllowTerminate.ALWAYS, pollingInterval, launchWatches);
 				debugTarget.start();
 			} else {
 				throw new CoreException(Status.error(

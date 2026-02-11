@@ -161,21 +161,17 @@ public class CompareDeviceHandler extends AbstractHandler {
 	private void compareParameters(final ResourceDeploymentData offlineResource,
 			final ResourceDeploymentData onlineResource) {
 
-		onlineResource.getParams().forEach(onlineParam -> {
-			if (offlineResource.getParams().stream()
-					.noneMatch(offlineParam -> offlineParam.variable().equals(onlineParam.variable())
-							&& offlineParam.prefix().equals(onlineParam.prefix()))) {
+		onlineResource.getParams().forEach((onlineName, onlineValue) -> {
+			if (!offlineResource.getParams().containsKey(onlineValue)) {
 				differenceDataDeltaPlus.getResData().get(differenceDataDeltaPlus.getResData().size() - 1)
-						.addParameter(onlineParam);
+						.addParameter(onlineName, onlineValue);
 			}
 		});
 
-		offlineResource.getParams().forEach(offlineParam -> {
-			if (onlineResource.getParams().stream()
-					.noneMatch(onlineParam -> onlineParam.variable().equals(offlineParam.variable())
-							&& onlineParam.prefix().equals(offlineParam.prefix()))) {
+		offlineResource.getParams().forEach((offlineName, offlineValue) -> {
+			if (!onlineResource.getParams().containsKey(offlineName)) {
 				differenceDataDeltaMinus.getResData().get(differenceDataDeltaMinus.getResData().size() - 1)
-						.addParameter(offlineParam);
+						.addParameter(offlineName, offlineValue);
 			}
 		});
 	}
@@ -236,8 +232,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("++ fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
 			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("++ con: " + con.sourcePrefix() //$NON-NLS-1$
 					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
-			res.getParams()
-					.forEach(con -> FordiacLogHelper.logInfo("++ param: " + con.prefix() + con.variable().getName())); //$NON-NLS-1$
+			res.getParams().forEach((name, value) -> FordiacLogHelper.logInfo("++ param: " + name)); //$NON-NLS-1$
 		});
 
 		differenceDataDeltaMinus.getResData().forEach(res -> {
@@ -245,8 +240,7 @@ public class CompareDeviceHandler extends AbstractHandler {
 			res.getFbs().forEach(fb -> FordiacLogHelper.logInfo("-- fb: " + fb.getPrefix() + fb.getFb().getName())); //$NON-NLS-1$
 			res.getConnections().forEach(con -> FordiacLogHelper.logInfo("-- con: " + con.sourcePrefix() //$NON-NLS-1$
 					+ con.source().getName() + " -> " + con.destinationPrefix() + con.destination().getName())); //$NON-NLS-1$
-			res.getParams()
-					.forEach(con -> FordiacLogHelper.logInfo("-- param: " + con.prefix() + con.variable().getName())); //$NON-NLS-1$
+			res.getParams().forEach((name, value) -> FordiacLogHelper.logInfo("-- param: " + name)); //$NON-NLS-1$
 		});
 	}
 }

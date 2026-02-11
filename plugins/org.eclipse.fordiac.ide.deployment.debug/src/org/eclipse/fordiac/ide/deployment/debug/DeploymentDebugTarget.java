@@ -72,13 +72,20 @@ public class DeploymentDebugTarget extends DeploymentDebugElement implements IDe
 	public DeploymentDebugTarget(final AutomationSystem system, final Set<INamedElement> selection,
 			final ILaunch launch, final boolean allowTerminate, final Duration pollingInterval,
 			final List<DeploymentLaunchWatchpoint> launchWatches) throws DeploymentException {
+		this(system, selection, List.of(), launch, allowTerminate, pollingInterval, launchWatches);
+	}
+
+	public DeploymentDebugTarget(final AutomationSystem system, final Set<INamedElement> selection,
+			final List<DeploymentLaunchValue> launchValues, final ILaunch launch, final boolean allowTerminate,
+			final Duration pollingInterval, final List<DeploymentLaunchWatchpoint> launchWatches)
+			throws DeploymentException {
 		super(null);
 		this.launch = launch;
 		this.system = system;
 		this.allowTerminate = allowTerminate;
 		this.pollingInterval = pollingInterval;
 		this.launchWatches = launchWatches;
-		process = new DeploymentProcess(system, selection, launch);
+		process = new DeploymentProcess(system, selection, launchValues, launch);
 		process.getJob().addJobChangeListener(IJobChangeListener.onDone(this::deploymentDone));
 		thread = new DeploymentDebugThread(this);
 		launch.addDebugTarget(this);

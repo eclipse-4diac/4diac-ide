@@ -121,7 +121,7 @@ public class FollowLeftConnectionHandler extends FollowConnectionHandler {
 			// we are at a type interface border in the type editor
 			return false;
 		}
-		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
+		final InterfaceList il = pin.getModel().getInterfaceList();
 		return !(il.getEventInputs().isEmpty() && il.getInputVars().isEmpty() && il.getSockets().isEmpty()
 				&& il.getOutMappedInOutVars().isEmpty());
 	}

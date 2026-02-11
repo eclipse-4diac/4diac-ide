@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - Extracted the class from NatTableWidgetFactory
  *******************************************************************************/
-package org.eclipse.fordiac.ide.ui.widget;
+package org.eclipse.fordiac.ide.ui.widget.nattable;
 
 import java.util.List;
 import java.util.Map;

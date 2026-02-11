@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
@@ -22,17 +21,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 
 @SuppressWarnings("restriction")
-public class InitialValueCellEditor extends XtextStyledTextCellEditor {
-	private final IRowDataProvider<? extends ITypedElement> dataProvider;
+public class InitialValueCellEditor<T> extends XtextStyledTextCellEditor {
+	private final IRowDataProvider<? extends T> dataProvider;
+	private final InitialValueElementAccessor<T> elementAccessor;
 
-	public InitialValueCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider) {
+	public InitialValueCellEditor(final IRowDataProvider<? extends T> dataProvider,
+			final InitialValueElementAccessor<T> elementAccessor) {
 		this.dataProvider = dataProvider;
+		this.elementAccessor = elementAccessor;
 	}
 
-	public InitialValueCellEditor(final IRowDataProvider<? extends ITypedElement> dataProvider,
-			final boolean moveSelectionOnEnter) {
+	public InitialValueCellEditor(final IRowDataProvider<? extends T> dataProvider,
+			final InitialValueElementAccessor<T> elementAccessor, final boolean moveSelectionOnEnter) {
 		super(moveSelectionOnEnter);
 		this.dataProvider = dataProvider;
+		this.elementAccessor = elementAccessor;
 	}
 
 	@Override
@@ -42,7 +45,8 @@ public class InitialValueCellEditor extends XtextStyledTextCellEditor {
 
 	@Override
 	protected IEditedResourceProvider createEditedResourceProvider() {
-		return new STAlgorithmInitialValueEditedResourceProvider(getRowObject());
+		return new STAlgorithmInitialValueEditedResourceProvider(elementAccessor.getContext(getRowObject()),
+				elementAccessor.getType(getRowObject()));
 	}
 
 	@Override
@@ -54,7 +58,11 @@ public class InitialValueCellEditor extends XtextStyledTextCellEditor {
 		}
 	}
 
-	protected ITypedElement getRowObject() {
+	protected T getRowObject() {
 		return dataProvider.getRowObject(getRowIndex());
+	}
+
+	protected InitialValueElementAccessor<T> getElementAccessor() {
+		return elementAccessor;
 	}
 }

@@ -181,7 +181,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 					selectedElement = refElement.eContainer().eContainer();
 				} else if (selectedElement instanceof final VarDeclaration varDecl) {
 					refElement = varDecl;
-					selectedElement = varDecl.eContainer().eContainer();
+					selectedElement = varDecl.getBlockFBNetworkElement();
 				}
 				getBreadcrumb().setInput(selectedElement);
 				if (null != refElement) {

@@ -13,27 +13,11 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.data.IRowDataProvider;
-import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
-import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 
-public class InitialValueEditorConfiguration extends AbstractRegistryConfiguration {
-	public static final String INITIAL_VALUE_CELL = "INITIAL_VALUE_CELL"; //$NON-NLS-1$
-	public static final String INITIAL_VALUE_STRUCTURED_CELL = "INITIAL_VALUE_STRUCTURED_CELL"; //$NON-NLS-1$
-
-	final IRowDataProvider<? extends ITypedElement> dataProvider;
+public class InitialValueEditorConfiguration extends InitialValueGenericEditorConfiguration<ITypedElement> {
 
 	public InitialValueEditorConfiguration(final IRowDataProvider<? extends ITypedElement> dataProvider) {
-		this.dataProvider = dataProvider;
-	}
-
-	@Override
-	public void configureRegistry(final IConfigRegistry configRegistry) {
-		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-				new InitialValueCellEditor(dataProvider), DisplayMode.EDIT, INITIAL_VALUE_CELL);
-		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-				new InitialValueStructuredCellEditor(dataProvider), DisplayMode.EDIT, INITIAL_VALUE_STRUCTURED_CELL);
+		super(dataProvider, InitialValueTypedElementAccessor.INSTANCE);
 	}
 }

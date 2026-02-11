@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumn;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumn;
 
 public class AttributeDeclarationTableColumn implements NatTableColumn {
 	public static final AttributeDeclarationTableColumn TYPE = new AttributeDeclarationTableColumn(
