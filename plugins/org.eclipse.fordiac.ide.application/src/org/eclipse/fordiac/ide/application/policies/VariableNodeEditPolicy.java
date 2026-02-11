@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionComm
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -71,7 +70,7 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			// if we drag from a struct manipulater but target is not a struct or
 			// configureable F_MOVE pin use normal
 			// data connection creation
-			if (!(pin.getType() instanceof StructuredType)
+			if (!AbstractConnectionCreateCommand.isSimpleStructPin(pin)
 					&& !(pin.eContainer().eContainer() instanceof ConfigurableMoveFB)) {
 				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(
 						connCreateCmd.getParent());
@@ -86,4 +85,5 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 		}
 		return super.getConnectionCompleteCommand(request);
 	}
+
 }
