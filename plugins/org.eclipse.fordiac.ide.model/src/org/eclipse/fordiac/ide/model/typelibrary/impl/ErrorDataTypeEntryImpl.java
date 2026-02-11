@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -42,6 +43,11 @@ public class ErrorDataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<ErrorDa
 
 	@Override
 	protected CommonElementImporter getImporter() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected ErrorLibraryElement createErrorLibraryElement() {
 		throw new UnsupportedOperationException();
 	}
 

@@ -17,7 +17,9 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -34,6 +36,11 @@ public class DataTypeEntryImpl extends AbstractCheckedTypeEntryImpl<AnyDerivedTy
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DataTypeImporter(getFile());
+	}
+
+	@Override
+	protected ErrorDataType createErrorLibraryElement() {
+		return DataFactory.eINSTANCE.createErrorDataType();
 	}
 
 	@Override

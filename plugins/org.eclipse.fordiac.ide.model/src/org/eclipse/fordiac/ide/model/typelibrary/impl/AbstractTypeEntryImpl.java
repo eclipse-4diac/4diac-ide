@@ -190,23 +190,30 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				return type; // concurrent update
 			}
 
-			// get and check file
-			final IFile fileCached = getFile();
-			if (fileCached == null) {
-				return null; // no file, no type
-			}
-
 			// _we_ need to (re-)load the type
 
-			// read modification stamp at the beginning to ensure the loaded type is at
-			// least as recent as the read modification stamp
-			final long modificationStamp = fileCached.getModificationStamp();
+			final long modificationStamp;
+			final IFile fileCached = getFile();
+			if (fileCached != null) {
+				// read modification stamp at the beginning to ensure the loaded type is at
+				// least as recent as the read modification stamp
+				modificationStamp = fileCached.getModificationStamp();
 
-			// load and set the type
-			type = loadType();
-			if (type == null) {
-				return null;
+				// load the type
+				type = loadType();
+			} else {
+				// set modification stamp to NULL_STAMP to ensure the type is reloaded as soon
+				// as a file becomes available
+				modificationStamp = IResource.NULL_STAMP;
 			}
+
+			// create error type if it could not be loaded (no file or error)
+			if (type == null) {
+				type = createErrorLibraryElement();
+				PackageNameHelper.setFullTypeName(type, getFullTypeName());
+			}
+
+			// set type
 			notifications = basicSetType(type, notifications);
 
 			// update the last modification stamp _after_ setting the type to ensure other
@@ -397,6 +404,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	protected abstract CommonElementImporter getImporter();
+
+	protected abstract ErrorLibraryElement createErrorLibraryElement();
 
 	@Override
 	public TypeLibrary getTypeLibrary() {
