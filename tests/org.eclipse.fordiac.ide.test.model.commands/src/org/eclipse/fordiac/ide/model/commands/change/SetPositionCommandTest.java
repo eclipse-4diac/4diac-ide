@@ -16,31 +16,33 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 
 public class SetPositionCommandTest extends FBNetworkTestBase {
 
-	public static State executeCommand(final State state, final int dx, final int dy) {
-		prepareCommand(state, dx, dy);
+	public static State executeCommand(final State state, final double newX, final double newY) {
+		prepareCommand(state, newX, newY);
 		return commandExecution(state);
 	}
 
-	private static void prepareCommand(final State state, final int dx, final int dy) {
+	private static void prepareCommand(final State state, final double newX, final double newY) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(newX);
+		pos.setY(newY);
 		state.setCommand(
-				new SetPositionCommand(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME), dx, dy));
+				new SetPositionCommand(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME), pos));
 	}
 
-	public static void verifyState(final State state, final TestFunction t, final int x, final int y) {
+	public static void verifyState(final State state, final TestFunction t, final double x, final double y) {
 		final double epsilon = 0.01d; // we are storing two digits of position this is our current epsilon
-		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getX(),
-				CoordinateConverter.INSTANCE.screenToIEC61499(x), epsilon);
-		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getY(),
-				CoordinateConverter.INSTANCE.screenToIEC61499(y), epsilon);
+		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getX(), x, epsilon);
+		t.test(state.getFbNetwork().getElementNamed(State.FUNCTIONBLOCK_NAME).getPosition().getY(), y, epsilon);
 	}
 
 	// parameter creation function
@@ -52,16 +54,16 @@ public class SetPositionCommandTest extends FBNetworkTestBase {
 						FBCreateCommandTest::executeCommand, //
 						(final State s, final State o, final TestFunction t) -> { //
 							FBCreateCommandTest.verifyState(s, o, t); //
-							verifyState(s, t, 0, 0);
+							verifyState(s, t, 0.0, 0.0);
 						}), //
-				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, 10, 20), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 10, 20) //
+				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, 10.0, 20.0), //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 10.0, 20.0) //
 				), //
-				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, 15, 25), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 25, 45) //
+				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, 25.0, 45.0), //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 25.0, 45.0) //
 				), //
-				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, -5, -10), //
-						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 20, 35) //
+				new ExecutionDescription<>(MOVE_FB, (final State s) -> executeCommand(s, 20.0, 35.0), //
+						(final State s, final State o, final TestFunction t) -> verifyState(s, t, 20.0, 35.0) //
 				) //
 		);
 
