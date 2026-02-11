@@ -111,9 +111,8 @@ class STMethodSupport extends StructuredTextSupport {
 		prepare()
 		if (parseResult !== null) {
 			if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-				(#[parseResult.returnType].filterNull + parseResult.body.varDeclarations.filter [
-					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				].flatMap[varDeclarations].map[featureType as INamedElement]).toSet
+				(#[parseResult.returnType].filterNull +
+					parseResult.body.varDeclarations.flatMap[varDeclarations].flatMap[parameterDependencies]).toSet
 			else
 				parseResult.containedDependencies
 		} else

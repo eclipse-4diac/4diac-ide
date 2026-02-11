@@ -675,6 +675,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
+	def protected Iterable<INamedElement> getParameterDependencies(STVarDeclaration parameter) {
+		switch (parameter.eContainer) {
+			STVarInputDeclarationBlock,
+			STVarInOutDeclarationBlock:
+				#[parameter.featureType]
+			STVarOutputDeclarationBlock:
+				#[parameter.featureType, "forte_st_util".createDependencyPlaceholder]
+			default:
+				emptySet
+		}
+	}
+
 	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
