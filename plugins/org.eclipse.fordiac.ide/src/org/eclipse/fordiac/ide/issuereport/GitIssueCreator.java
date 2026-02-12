@@ -37,8 +37,6 @@ import com.google.gson.Gson;
 
 public class GitIssueCreator {
 
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&labels=%s&body=%s"; //$NON-NLS-1$
-
 	private static record IssueInfo(String title, String body, String[] labels) {
 	}
 
@@ -60,7 +58,7 @@ public class GitIssueCreator {
 		return switch (PreferenceConstants.getReportDestination(preferenceQualifier)) {
 		case GITLAB -> createGitLabIssue(info, preferenceQualifier);
 		case GITHUB -> createGitHubIssue(info, preferenceQualifier);
-		case GITHUB_MANUAL -> createGitHubIssueManual(info);
+		case GITHUB_MANUAL -> createGitHubIssueManual(info, preferenceQualifier);
 		};
 	}
 
@@ -104,8 +102,9 @@ public class GitIssueCreator {
 		return writer.toString();
 	}
 
-	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
-		final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
+	private static Optional<String> createGitHubIssueManual(final IssueInfo info, final String preferenceQualifier) {
+		final String reportingURLFormatString = PreferenceConstants.getReportGitHubManualURL(preferenceQualifier);
+		final String reportingURI = reportingURLFormatString.formatted(
 				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
 				URLEncoder.encode(String.join(",", info.labels()), StandardCharsets.UTF_8), //$NON-NLS-1$
 				URLEncoder.encode(info.body(), StandardCharsets.UTF_8));
