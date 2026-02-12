@@ -159,7 +159,7 @@ public class FordiacLogListener implements ILogListener {
 			// We have to put the correct issue URL of the filter extension into the
 			// GitIssueCreator, but currently the GitIssueCreator only supports one URL for
 			// all issues.
-			return floor.getValue() != null ? true : false;
+			return true;
 		}
 		return false;
 	}
@@ -174,7 +174,7 @@ public class FordiacLogListener implements ILogListener {
 			String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
 			// If not plugin reporting URL is not specified, use the default 4diac issue URL
 			if (pluginIssueURL == null) {
-				pluginIssueURL = GitIssueCreator.FORDIAC_IDE_ISSUE_URL;
+				pluginIssueURL = ""; //$NON-NLS-1$
 			}
 			cachedFilters.put(pluginID, pluginIssueURL);
 		}
