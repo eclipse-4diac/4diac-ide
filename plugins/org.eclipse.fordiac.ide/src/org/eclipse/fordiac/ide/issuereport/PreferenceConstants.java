@@ -50,6 +50,8 @@ public final class PreferenceConstants {
 
 	public static final String P_BUG_REPORT_GITHUB_TOKEN = "bugReportingGitHubToken"; //$NON-NLS-1$
 
+	public static final String P_BUG_REPORT_GITHUB_MANUAL_URL = "bugReportingGitHubManualURL"; //$NON-NLS-1$
+
 	public static ReportMode getReportMode() {
 		return getReportMode(P_BUG_REPORT_PREFERENCE_ID);
 	}
@@ -120,6 +122,14 @@ public final class PreferenceConstants {
 
 	public static String getReportGitHubToken(final String qualifier) {
 		return getPrefString(qualifier, P_BUG_REPORT_GITHUB_TOKEN);
+	}
+
+	public static String getReportGitHubManualURL() {
+		return getReportGitHubManualURL(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitHubManualURL(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITHUB_MANUAL_URL);
 	}
 
 	private static String getPrefString(final String qualifier, final String key) {
