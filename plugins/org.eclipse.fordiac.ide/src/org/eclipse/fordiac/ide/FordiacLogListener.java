@@ -17,8 +17,9 @@ package org.eclipse.fordiac.ide;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -43,7 +44,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 
 public class FordiacLogListener implements ILogListener {
-	private static HashMap<String, String> cachedFilters = null;
+	private static TreeMap<String, String> cachedFilters = null;
 
 	private static final class LogErrorDialog extends ErrorDialog {
 
@@ -152,27 +153,30 @@ public class FordiacLogListener implements ILogListener {
 		if (cachedFilters == null) {
 			loadFilterExtensions();
 		}
-		final String idFilter = cachedFilters.get(pluginID);
-		if (idFilter != null) {
-			// Now check if the id of the rule starts with the plugin id, if so we will also
-			// show the error dialog
-			if (pluginID.startsWith(idFilter)) {
-				return true;
-			}
-			// The exact plugin id is in the filter
-			return true;
+		final Map.Entry<String, String> floor = cachedFilters.floorEntry(pluginID);
+		if (floor != null && pluginID.startsWith(floor.getKey())) {
+			// TODO: The issue reporting layer needs to be changed
+			// We have to put the correct issue URL of the filter extension into the
+			// GitIssueCreator, but currently the GitIssueCreator only supports one URL for
+			// all issues.
+			return floor.getValue() != null ? true : false;
 		}
 		return false;
 	}
 
 	private static void loadFilterExtensions() {
-		cachedFilters = new HashMap<>();
+		cachedFilters = new TreeMap<>();
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IConfigurationElement[] config = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
 		for (final IConfigurationElement e : config) {
-			final String id = e.getAttribute("id"); //$NON-NLS-1$
-			cachedFilters.put(id, id);
+			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
+			String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
+			// If not plugin reporting URL is not specified, use the default 4diac issue URL
+			if (pluginIssueURL == null) {
+				pluginIssueURL = GitIssueCreator.FORDIAC_IDE_ISSUE_URL;
+			}
+			cachedFilters.put(pluginID, pluginIssueURL);
 		}
 	}
 

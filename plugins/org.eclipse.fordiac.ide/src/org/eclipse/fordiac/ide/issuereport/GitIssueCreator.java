@@ -199,3 +199,4 @@ public class GitIssueCreator {
 		return url.substring(0, idx).concat(epilogue);
 	}
 }
+
