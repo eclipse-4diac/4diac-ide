@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Felix Schmid
+ * Copyright (c) 2025 Felix Schmid, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Felix Schmid - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - add preference qualifier parameter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.issuereport;
 
@@ -50,51 +51,83 @@ public final class PreferenceConstants {
 	public static final String P_BUG_REPORT_GITHUB_TOKEN = "bugReportingGitHubToken"; //$NON-NLS-1$
 
 	public static ReportMode getReportMode() {
+		return getReportMode(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static ReportMode getReportMode(final String qualifier) {
 		try {
-			return ReportMode.valueOf(getPrefString(P_BUG_REPORT_MODE));
+			return ReportMode.valueOf(getPrefString(qualifier, P_BUG_REPORT_MODE));
 		} catch (final Exception e) {
 			return ReportMode.PROMPT_REPORT;
 		}
 	}
 
 	public static ReportDestination getReportDestination() {
+		return getReportDestination(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static ReportDestination getReportDestination(final String qualifier) {
 		try {
-			return ReportDestination.valueOf(getPrefString(P_BUG_REPORT_DESTINATION));
+			return ReportDestination.valueOf(getPrefString(qualifier, P_BUG_REPORT_DESTINATION));
 		} catch (final Exception e) {
 			return ReportDestination.GITHUB_MANUAL;
 		}
 	}
 
 	public static String getReportGitLabURL() {
-		return getPrefString(P_BUG_REPORT_GITLAB_URL);
+		return getReportGitLabURL(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitLabURL(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITLAB_URL);
 	}
 
 	public static String getReportGitLabProjectPath() {
-		return getPrefString(P_BUG_REPORT_GITLAB_PROJECT_PATH);
+		return getReportGitLabProjectPath(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitLabProjectPath(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITLAB_PROJECT_PATH);
 	}
 
 	public static String getReportGitLabToken() {
-		return getPrefString(P_BUG_REPORT_GITLAB_TOKEN);
+		return getReportGitLabToken(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitLabToken(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITLAB_TOKEN);
 	}
 
 	public static String getReportGitHubURL() {
-		return getPrefString(P_BUG_REPORT_GITHUB_URL, "https://api.github.com/"); //$NON-NLS-1$
+		return getReportGitHubURL(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitHubURL(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITHUB_URL, "https://api.github.com/"); //$NON-NLS-1$
 	}
 
 	public static String getReportGitHubProjectPath() {
-		return getPrefString(P_BUG_REPORT_GITHUB_PROJECT_PATH);
+		return getReportGitHubProjectPath(P_BUG_REPORT_PREFERENCE_ID);
+	}
+
+	public static String getReportGitHubProjectPath(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITHUB_PROJECT_PATH);
 	}
 
 	public static String getReportGitHubToken() {
-		return getPrefString(P_BUG_REPORT_GITHUB_TOKEN);
+		return getReportGitHubToken(P_BUG_REPORT_PREFERENCE_ID);
 	}
 
-	private static String getPrefString(final String key) {
-		return getPrefString(key, ""); //$NON-NLS-1$
+	public static String getReportGitHubToken(final String qualifier) {
+		return getPrefString(qualifier, P_BUG_REPORT_GITHUB_TOKEN);
 	}
 
-	private static String getPrefString(final String key, final String defaultValue) {
-		return Platform.getPreferencesService().getString(P_BUG_REPORT_PREFERENCE_ID, key, defaultValue,
+	private static String getPrefString(final String qualifier, final String key) {
+		return getPrefString(qualifier, key, ""); //$NON-NLS-1$
+	}
+
+	private static String getPrefString(final String qualifier, final String key, final String defaultValue) {
+		return Platform.getPreferencesService().getString(qualifier, key, defaultValue,
 				new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE });
 	}
 }

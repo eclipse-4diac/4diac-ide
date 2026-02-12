@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Johannes Kepler University Linz
+ * Copyright (c) 2025 Johannes Kepler University Linz, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Felix Schmid - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - add preference qualifier and issue URL parameter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.issuereport;
 
@@ -54,11 +55,11 @@ public class GitIssueCreator {
 	private static final String TRUNCATE_INIDCATER = "[truncated]"; //$NON-NLS-1$
 	private static final int MAX_MANUAL_ISSUE_URL_SIZE = 8000;
 
-	public static Optional<String> createIssue(final IStatus status) {
+	public static Optional<String> createIssue(final IStatus status, final String preferenceQualifier) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
-		return switch (PreferenceConstants.getReportDestination()) {
-		case GITLAB -> createGitLabIssue(info);
-		case GITHUB -> createGitHubIssue(info);
+		return switch (PreferenceConstants.getReportDestination(preferenceQualifier)) {
+		case GITLAB -> createGitLabIssue(info, preferenceQualifier);
+		case GITHUB -> createGitHubIssue(info, preferenceQualifier);
 		case GITHUB_MANUAL -> createGitHubIssueManual(info);
 		};
 	}
@@ -112,14 +113,16 @@ public class GitIssueCreator {
 		return Optional.empty(); // no issue created yet...
 	}
 
-	private static Optional<String> createGitLabIssue(final IssueInfo info) {
+	private static Optional<String> createGitLabIssue(final IssueInfo info, final String preferenceQualifier) {
 		if (info.body().length() > 1048575) { // ~max GitLab description length
 			return Optional.empty();
 		}
 
-		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabURL());
-		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabProjectPath());
-		final String accessToken = PreferenceConstants.getReportGitLabToken();
+		final String baseURI = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitLabURL(preferenceQualifier));
+		final String projectPath = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitLabProjectPath(preferenceQualifier));
+		final String accessToken = PreferenceConstants.getReportGitLabToken(preferenceQualifier);
 		final String labels = String.join(",", info.labels()); //$NON-NLS-1$
 
 		final String uri = "%s/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
@@ -141,10 +144,12 @@ public class GitIssueCreator {
 	}
 
 	@SuppressWarnings("nls")
-	private static Optional<String> createGitHubIssue(final IssueInfo info) {
-		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubURL());
-		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubProjectPath());
-		final String token = PreferenceConstants.getReportGitHubToken();
+	private static Optional<String> createGitHubIssue(final IssueInfo info, final String preferenceQualifier) {
+		final String baseURI = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitHubURL(preferenceQualifier));
+		final String projectPath = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitHubProjectPath(preferenceQualifier));
+		final String token = PreferenceConstants.getReportGitHubToken(preferenceQualifier);
 
 		final Gson gson = new Gson();
 		final String jsonBody = gson.toJson(info);

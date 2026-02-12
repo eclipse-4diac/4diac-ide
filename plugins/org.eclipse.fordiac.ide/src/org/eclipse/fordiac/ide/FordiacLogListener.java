@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020 Johannes Kepler University Linz, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - add preference qualifier and issue URL parameter
  *******************************************************************************/
 package org.eclipse.fordiac.ide;
 
@@ -42,13 +43,15 @@ public class FordiacLogListener implements ILogListener {
 	private static final class LogErrorDialog extends ErrorDialog {
 
 		private final IStatus status;
+		private final String preferenceQualifier;
 		private Link reportInfo;
 
-		private LogErrorDialog(final Shell parentShell, final IStatus status) {
+		private LogErrorDialog(final Shell parentShell, final IStatus status, final String preferenceQualifier) {
 			super(parentShell, Messages.FordiacLogListener_ErrorDialogTitle,
 					Messages.FordiacLogListener_ErrorDialogRestartSave, status,
 					IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR);
 			this.status = status;
+			this.preferenceQualifier = preferenceQualifier;
 		}
 
 		@Override
@@ -68,7 +71,7 @@ public class FordiacLogListener implements ILogListener {
 				}
 			});
 
-			if (PreferenceConstants.getReportMode() == PreferenceConstants.ReportMode.AUTO_REPORT) {
+			if (PreferenceConstants.getReportMode(preferenceQualifier) == PreferenceConstants.ReportMode.AUTO_REPORT) {
 				report(); // immediately start report in this mode
 			} else {
 				reportInfo.setText(Messages.FordiacLogListener_ErrorDialogReportPrompt);
@@ -79,13 +82,13 @@ public class FordiacLogListener implements ILogListener {
 		private void report() {
 			reportInfo.setText(Messages.FordiacLogListener_ReportInProgress);
 			new Thread(() -> {
-				final Optional<String> url = GitIssueCreator.createIssue(status);
+				final Optional<String> url = GitIssueCreator.createIssue(status, preferenceQualifier);
 				Display.getDefault().asyncExec(() -> {
 					if (reportInfo == null || reportInfo.isDisposed()) {
 						return; // dialog was already closed
 					}
-					if (PreferenceConstants
-							.getReportDestination() == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
+					if (PreferenceConstants.getReportDestination(
+							preferenceQualifier) == PreferenceConstants.ReportDestination.GITHUB_MANUAL) {
 						reportInfo.setText(Messages.FordiacLogListener_BrowserOpened);
 					} else if (url.isEmpty()) {
 						reportInfo.setText(Messages.FordiacLogListener_ReportingError);
@@ -99,7 +102,7 @@ public class FordiacLogListener implements ILogListener {
 
 		@Override
 		protected void createButtonsForButtonBar(final Composite parent) {
-			switch (PreferenceConstants.getReportMode()) {
+			switch (PreferenceConstants.getReportMode(preferenceQualifier)) {
 			case AUTO_REPORT: // "this will be reported" -> OK, Details
 				createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 				break;
@@ -134,7 +137,7 @@ public class FordiacLogListener implements ILogListener {
 			// Platform UI plug-in as noteworthy
 			// if a error dialog is already showing we will not show another one.
 			try {
-				showErrorDialog(createStatusWithStackTrace(status));
+				showErrorDialog(createStatusWithStackTrace(status), PreferenceConstants.P_BUG_REPORT_PREFERENCE_ID);
 			} finally {
 				singleWindow.set(false);
 			}
@@ -156,9 +159,9 @@ public class FordiacLogListener implements ILogListener {
 		return writer.toString();
 	}
 
-	private static void showErrorDialog(final IStatus displayStatus) {
+	private static void showErrorDialog(final IStatus displayStatus, final String preferenceQualifier) {
 		if ((null != Display.getCurrent()) && (null != Display.getCurrent().getActiveShell())) {
-			new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus).open();
+			new LogErrorDialog(Display.getCurrent().getActiveShell(), displayStatus, preferenceQualifier).open();
 		}
 	}
 }
