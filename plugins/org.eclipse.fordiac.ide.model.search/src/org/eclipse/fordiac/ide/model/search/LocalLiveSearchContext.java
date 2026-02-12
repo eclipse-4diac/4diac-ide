@@ -37,7 +37,7 @@ public class LocalLiveSearchContext extends AbstractLiveSearchContext {
 
 	@Override
 	public Stream<URI> getTypes() {
-		return getTypelib().getAllTypes().stream().filter(e -> !e.getFile().isLinked(IResource.CHECK_ANCESTORS))
+		return getTypelib().getAllTypes().filter(e -> !e.getFile().isLinked(IResource.CHECK_ANCESTORS))
 				.map(TypeEntry::getURI).filter(Objects::nonNull);
 	}
 

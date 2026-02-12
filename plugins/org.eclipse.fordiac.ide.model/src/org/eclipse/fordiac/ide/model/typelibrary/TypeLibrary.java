@@ -98,62 +98,61 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 			Comparator.comparing(IProject::getName));
 	private final TypeLibraryAdapter typeLibraryAdapter = new TypeLibraryAdapter();
 
-	public Collection<AdapterTypeEntry> getAdapterTypes() {
-		return Collections.unmodifiableCollection(adapterTypes.values());
+	public Stream<AdapterTypeEntry> getAdapterTypes() {
+		return adapterTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public List<AdapterTypeEntry> getAdapterTypesSorted() {
-		return adapterTypes.values().stream()
-				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()))
-				.toList();
+	public Stream<AdapterTypeEntry> getAdapterTypesSorted() {
+		return adapterTypes.values().stream().filter(Predicate.not(TypeEntry::hasError))
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()));
 	}
 
-	public Collection<AttributeTypeEntry> getAttributeTypes() {
-		return Collections.unmodifiableCollection(attributeTypes.values());
+	public Stream<AttributeTypeEntry> getAttributeTypes() {
+		return attributeTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<DeviceTypeEntry> getDeviceTypes() {
-		return Collections.unmodifiableCollection(deviceTypes.values());
+	public Stream<DeviceTypeEntry> getDeviceTypes() {
+		return deviceTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<FBTypeEntry> getFbTypes() {
-		return Collections.unmodifiableCollection(fbTypes.values());
+	public Stream<FBTypeEntry> getFbTypes() {
+		return fbTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<ResourceTypeEntry> getResourceTypes() {
-		return Collections.unmodifiableCollection(resourceTypes.values());
+	public Stream<ResourceTypeEntry> getResourceTypes() {
+		return resourceTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SegmentTypeEntry> getSegmentTypes() {
-		return Collections.unmodifiableCollection(segmentTypes.values());
+	public Stream<SegmentTypeEntry> getSegmentTypes() {
+		return segmentTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SubAppTypeEntry> getSubAppTypes() {
-		return Collections.unmodifiableCollection(subAppTypes.values());
+	public Stream<SubAppTypeEntry> getSubAppTypes() {
+		return subAppTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SystemEntry> getSystems() {
-		return Collections.unmodifiableCollection(systems.values());
+	public Stream<SystemEntry> getSystems() {
+		return systems.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<GlobalConstantsEntry> getGlobalConstants() {
-		return Collections.unmodifiableCollection(globalConstants.values());
+	public Stream<GlobalConstantsEntry> getGlobalConstants() {
+		return globalConstants.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<TypeEntry> getProgramTypes() {
-		return Collections.unmodifiableCollection(programTypes.values());
+	public Stream<TypeEntry> getProgramTypes() {
+		return programTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
 	public Set<String> getPackages() {
 		return Collections.unmodifiableSet(packages.keySet());
 	}
 
-	public Collection<TypeEntry> getAllTypes() {
-		return Collections.unmodifiableCollection(fileMap.values());
+	public Stream<TypeEntry> getAllTypes() {
+		return fileMap.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
 	public Stream<FBTypeEntry> getCompositeFBTypes() {
-		return fbTypes.values().stream()
+		return fbTypes.values().stream().filter(Predicate.not(TypeEntry::hasError))
 				.filter(entry -> LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass()));
 	}
 
@@ -403,21 +402,25 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private void checkDeletions() {
 		checkReferencedProjectDeletions();
-		checkDeletionsForTypeGroup(adapterTypes.values());
-		checkDeletionsForTypeGroup(attributeTypes.values());
-		checkDeletionsForTypeGroup(deviceTypes.values());
-		checkDeletionsForTypeGroup(fbTypes.values());
-		checkDeletionsForTypeGroup(resourceTypes.values());
-		checkDeletionsForTypeGroup(segmentTypes.values());
-		checkDeletionsForTypeGroup(subAppTypes.values());
-		checkDeletionsForTypeGroup(systems.values());
-		checkDeletionsForTypeGroup(globalConstants.values());
+		checkDeletionsForTypeGroup(adapterTypes);
+		checkDeletionsForTypeGroup(attributeTypes);
+		checkDeletionsForTypeGroup(deviceTypes);
+		checkDeletionsForTypeGroup(fbTypes);
+		checkDeletionsForTypeGroup(resourceTypes);
+		checkDeletionsForTypeGroup(segmentTypes);
+		checkDeletionsForTypeGroup(subAppTypes);
+		checkDeletionsForTypeGroup(systems);
+		checkDeletionsForTypeGroup(globalConstants);
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(Predicate.not(this::exists));
 	}
 
-	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.stream().filter(Predicate.not(this::exists)).forEachOrdered(this::removeTypeEntry);
+	private void checkDeletionsForTypeGroup(final Map<String, ? extends TypeEntry> typeEntries) {
+		checkDeletionsForTypeGroup(typeEntries.values().stream());
+	}
+
+	private void checkDeletionsForTypeGroup(final Stream<? extends TypeEntry> typeEntries) {
+		typeEntries.filter(Predicate.not(this::exists)).forEachOrdered(this::removeTypeEntry);
 	}
 
 	private boolean exists(final TypeEntry entry) {

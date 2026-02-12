@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.ui.nat;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -57,13 +58,13 @@ public abstract class TypeSelectionTreeContentProvider implements ITreeContentPr
 		return ""; //$NON-NLS-1$
 	}
 
-	protected static void addPathSubtree(final TypeNode node, final Collection<? extends TypeEntry> entries) {
+	protected static void addPathSubtree(final TypeNode node, final Stream<? extends TypeEntry> entries) {
 		addPathSubtree(node, entries, 1);
 	}
 
-	private static void addPathSubtree(final TypeNode node, final Collection<? extends TypeEntry> entries,
+	private static void addPathSubtree(final TypeNode node, final Stream<? extends TypeEntry> entries,
 			final int level) {
-		entries.stream().collect(Collectors.groupingBy(entry -> {
+		entries.collect(Collectors.groupingBy(entry -> {
 			final IPath path = entry.getFile().getFullPath();
 			return path.segmentCount() > level + 1 ? path.segment(level) : ""; //$NON-NLS-1$
 		})).forEach((segment, subEntries) -> {
@@ -71,7 +72,7 @@ public abstract class TypeSelectionTreeContentProvider implements ITreeContentPr
 				subEntries.stream().map(TypeNode::new).forEachOrdered(node::addChild);
 			} else {
 				final TypeNode subNode = new TypeNode(segment);
-				addPathSubtree(subNode, subEntries, level + 1);
+				addPathSubtree(subNode, subEntries.stream(), level + 1);
 				node.addChild(subNode);
 			}
 		});

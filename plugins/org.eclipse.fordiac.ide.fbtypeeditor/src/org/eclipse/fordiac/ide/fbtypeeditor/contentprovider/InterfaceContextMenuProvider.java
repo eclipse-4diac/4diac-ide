@@ -86,7 +86,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		MenuManager submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataInput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
+		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted().toList()) {
 			action = registry.getAction(CreateInputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateInputVariableAction(part, fbType, dataType);
@@ -98,7 +98,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataOutput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
+		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted().toList()) {
 			action = registry.getAction(CreateOutputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateOutputVariableAction(part, fbType, dataType);
@@ -139,7 +139,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 			final ActionRegistry registry, final IWorkbenchPart part, final FBType fbType, final TypeLibrary typeLib) {
 		IAction action;
 
-		for (final AdapterTypeEntry entry : typeLib.getAdapterTypesSorted()) {
+		for (final AdapterTypeEntry entry : typeLib.getAdapterTypesSorted().toList()) {
 			// add socket entry
 			action = registry.getAction(CreateSocketAction.getID(entry));
 			if (null == action) {

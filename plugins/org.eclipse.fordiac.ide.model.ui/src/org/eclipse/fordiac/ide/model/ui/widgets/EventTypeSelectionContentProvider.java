@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -27,12 +27,12 @@ public class EventTypeSelectionContentProvider implements ITypeSelectionContentP
 	}
 
 	@Override
-	public Collection<LibraryElement> getTypes(final Object input) {
-		return Collections.unmodifiableCollection(EventTypeLibrary.getInstance().getEventTypes());
+	public Stream<LibraryElement> getTypes(final Object input) {
+		return EventTypeLibrary.getInstance().getEventTypes().map(Function.identity());
 	}
 
 	@Override
-	public Collection<TypeEntry> getTypeEntries(final Object input) {
-		return Collections.emptyList();
+	public Stream<TypeEntry> getTypeEntries(final Object input) {
+		return Stream.empty();
 	}
 }

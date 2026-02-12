@@ -154,8 +154,8 @@ public class SubAppHierarchyDialog {
 	}
 
 	private List<TreeNode> buildNodeList(final TypeLibrary typeLib) {
-		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().stream().map(SystemEntry::getType),
-				typeLib.getSubAppTypes().stream().map(SubAppTypeEntry::getType));
+		final Stream<EObject> stream = Stream.concat(typeLib.getSystems().map(SystemEntry::getType),
+				typeLib.getSubAppTypes().map(SubAppTypeEntry::getType));
 		return buildNodeList(stream, Collections.emptyList());
 	}
 

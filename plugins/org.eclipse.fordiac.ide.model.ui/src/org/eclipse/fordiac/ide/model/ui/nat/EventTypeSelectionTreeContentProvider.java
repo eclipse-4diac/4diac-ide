@@ -28,8 +28,7 @@ public class EventTypeSelectionTreeContentProvider extends TypeSelectionTreeCont
 	@Override
 	protected List<TypeNode> createTree(final TypeLibrary typeLibrary) {
 		final TypeNode elementaryTypes = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
-		EventTypeLibrary.getInstance().getEventTypes().stream().map(TypeNode::new)
-				.forEachOrdered(elementaryTypes::addChild);
+		EventTypeLibrary.getInstance().getEventTypes().map(TypeNode::new).forEachOrdered(elementaryTypes::addChild);
 		elementaryTypes.sortChildren();
 
 		return elementaryTypes.getChildren();

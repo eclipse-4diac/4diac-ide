@@ -173,8 +173,8 @@ public class STCoreProposalProvider extends AbstractSTCoreProposalProvider {
 		if (typeLibrary != null) {
 			createSimpleProposals(typeLibrary.getPackages(), acceptor, value -> createWildcardImportProposal(value,
 					PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER), context));
-			createSimpleProposals(typeLibrary.getGlobalConstants().stream().map(TypeEntry::getFullTypeName).toList(),
-					acceptor, value -> createWildcardImportProposal(value,
+			createSimpleProposals(typeLibrary.getGlobalConstants().map(TypeEntry::getFullTypeName).toList(), acceptor,
+					value -> createWildcardImportProposal(value,
 							PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE), context));
 		}
 	}

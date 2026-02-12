@@ -144,15 +144,15 @@ public class SearchHelper {
 									blockTypesRecord.typePattern)
 							&& matchesString(entry.getComment(), blockTypesRecord.commentFilter,
 									blockTypesRecord.commentPattern));
-					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().stream().filter(filter),
-							getTypelib().getSubAppTypes().stream().filter(filter)));
+					s = Stream.concat(s, Stream.concat(getTypelib().getFbTypes().filter(filter),
+							getTypelib().getSubAppTypes().filter(filter)));
 				}
 				if (blockInstanceRecord.selected || untypedSubappRecord.selected) {
-					s = Stream.concat(s, getTypelib().getSystems().stream());
+					s = Stream.concat(s, getTypelib().getSystems());
 				}
 				if (dataTypesRecord.selected) {
 					s = Stream.concat(s,
-							getTypelib().getDataTypeLibrary().getDerivedDataTypes().stream()
+							getTypelib().getDataTypeLibrary().getDerivedDataTypes()
 									.filter(dtEntry -> (matchesString(dtEntry.getFullTypeName(),
 											dataTypesRecord.nameFilter, dataTypesRecord.namePattern)
 											&& matchesString(dtEntry.getTypeName(), dataTypesRecord.typeFilter,
@@ -162,7 +162,7 @@ public class SearchHelper {
 				}
 				if (attributeTypesRecord.selected) {
 					s = Stream.concat(s,
-							getTypelib().getAttributeTypes().stream()
+							getTypelib().getAttributeTypes()
 									.filter(atEntry -> (matchesString(atEntry.getFullTypeName(),
 											attributeTypesRecord.nameFilter, attributeTypesRecord.namePattern)
 											&& matchesString(atEntry.getTypeName(), attributeTypesRecord.typeFilter,
