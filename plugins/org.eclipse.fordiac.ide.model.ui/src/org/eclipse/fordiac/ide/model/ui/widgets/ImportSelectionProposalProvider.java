@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
@@ -55,12 +54,12 @@ public class ImportSelectionProposalProvider implements IContentProposalProvider
 		return Stream
 				.of(typeLibrary.getDataTypeLibrary().getDerivedDataTypes(), typeLibrary.getAdapterTypes(),
 						typeLibrary.getFbTypes(), typeLibrary.getAttributeTypes())
-				.flatMap(Collection::stream).map(TypeEntry::getFullTypeName)
+				.flatMap(Function.identity()).map(TypeEntry::getFullTypeName)
 				.filter(fullName -> fullName.contains(PackageNameHelper.PACKAGE_NAME_DELIMITER)).distinct();
 	}
 
 	protected static Stream<String> getGlobalConstantImportableNames(final TypeLibrary typeLibrary) {
-		return typeLibrary.getGlobalConstants().stream().map(GlobalConstantsEntry::getType).filter(Objects::nonNull)
+		return typeLibrary.getGlobalConstants().map(GlobalConstantsEntry::getType).filter(Objects::nonNull)
 				.flatMap(ImportSelectionProposalProvider::getGlobalConstantImportableNames);
 	}
 

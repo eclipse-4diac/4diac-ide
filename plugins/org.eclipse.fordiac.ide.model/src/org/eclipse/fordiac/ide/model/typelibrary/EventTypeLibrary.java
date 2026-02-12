@@ -13,10 +13,9 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
@@ -45,8 +44,8 @@ public final class EventTypeLibrary {
 		getType(EINIT);
 	}
 
-	public Collection<EventType> getEventTypes() {
-		return Collections.unmodifiableCollection(typeMap.values());
+	public Stream<EventType> getEventTypes() {
+		return typeMap.values().stream();
 	}
 
 	public static boolean isGenericEventType(final DataType type) {

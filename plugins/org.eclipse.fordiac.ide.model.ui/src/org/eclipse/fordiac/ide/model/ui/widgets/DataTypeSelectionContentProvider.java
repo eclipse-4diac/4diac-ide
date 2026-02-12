@@ -12,8 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -30,17 +29,16 @@ public class DataTypeSelectionContentProvider implements ITypeSelectionContentPr
 	}
 
 	@Override
-	public Collection<LibraryElement> getTypes(final Object input) {
-		return Collections.unmodifiableCollection(Stream
-				.concat(ElementaryTypes.getAllElementaryType().stream(), GenericTypes.getAllGenericTypes().stream())
-				.toList());
+	public Stream<LibraryElement> getTypes(final Object input) {
+		return Stream.concat(ElementaryTypes.getAllElementaryType().stream(),
+				GenericTypes.getAllGenericTypes().stream());
 	}
 
 	@Override
-	public Collection<TypeEntry> getTypeEntries(final Object input) {
+	public Stream<TypeEntry> getTypeEntries(final Object input) {
 		if (input instanceof final TypeLibrary typeLibrary) {
-			return Collections.unmodifiableCollection(typeLibrary.getDataTypeLibrary().getDerivedDataTypes());
+			return typeLibrary.getDataTypeLibrary().getDerivedDataTypes().map(Function.identity());
 		}
-		return Collections.emptyList();
+		return Stream.empty();
 	}
 }

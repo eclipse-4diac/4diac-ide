@@ -229,13 +229,11 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 		if (editManager instanceof final ComboDirectEditManager comboEditManager) {
 			final List<String> dataTypeNames;
 			if (getCastedModel() instanceof Event) {
-				dataTypeNames = EventTypeLibrary.getInstance().getEventTypes().stream().map(EventType::getName)
-						.toList();
+				dataTypeNames = EventTypeLibrary.getInstance().getEventTypes().map(EventType::getName).toList();
 			} else if (getCastedModel() instanceof AdapterDeclaration) {
-				dataTypeNames = typeLib.getAdapterTypesSorted().stream().map(TypeEntry::getTypeName).toList();
+				dataTypeNames = typeLib.getAdapterTypesSorted().map(TypeEntry::getTypeName).toList();
 			} else {
-				dataTypeNames = typeLib.getDataTypeLibrary().getDataTypesSorted().stream().map(DataType::getName)
-						.toList();
+				dataTypeNames = typeLib.getDataTypeLibrary().getDataTypesSorted().map(DataType::getName).toList();
 			}
 			comboEditManager.updateComboData(dataTypeNames);
 			comboEditManager.setSelectedItem(dataTypeNames.indexOf(getTypeName()));
