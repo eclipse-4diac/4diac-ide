@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -172,7 +173,9 @@ public class FordiacLogListener implements ILogListener {
 		for (final IConfigurationElement e : config) {
 			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
 			final String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
-			if (pluginID == null || pluginID.isBlank() || pluginIssueURL == null || pluginIssueURL.isBlank()) {
+			if (pluginID.isBlank() || pluginIssueURL.isBlank()) {
+				FordiacLogHelper.logInfo("Invalid error dialog filter extension, missing id or issue_url attribute: " //$NON-NLS-1$
+						+ e.getContributor().getName());
 				continue;
 			}
 			cachedFilters.put(pluginID, pluginIssueURL);
