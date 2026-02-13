@@ -239,9 +239,9 @@
          point="org.eclipse.fordiac.ide.errorDialogFilters">
 		<plugin
         id="org.eclipse.ui"
-        issue_url="https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&amp;labels=%s&amp;body=%s"/>
+        preference_qualifier="org.eclipse.fordiac.ide.issuereport"/>
 		<plugin
         id="org.eclipse.fordiac.ide"
-        issue_url="https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&amp;labels=%s&amp;body=%s"/>
+        preference_qualifier="org.eclipse.fordiac.ide.issuereport"/>
    </extension>
 </plugin>

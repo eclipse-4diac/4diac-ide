@@ -143,7 +143,8 @@ public class FordiacLogListener implements ILogListener {
 			// Platform UI plug-in as noteworthy
 			// if a error dialog is already showing we will not show another one.
 			try {
-				showErrorDialog(createStatusWithStackTrace(status), PreferenceConstants.P_BUG_REPORT_PREFERENCE_ID);
+				showErrorDialog(createStatusWithStackTrace(status),
+						cachedFilters.floorEntry(status.getPlugin()).getValue());
 			} finally {
 				singleWindow.set(false);
 			}
@@ -156,10 +157,6 @@ public class FordiacLogListener implements ILogListener {
 		}
 		final Map.Entry<String, String> floor = cachedFilters.floorEntry(pluginID);
 		if (floor != null && pluginID.startsWith(floor.getKey())) {
-			// TODO: The issue reporting layer needs to be changed
-			// We have to put the correct issue URL of the filter extension into the
-			// GitIssueCreator, but currently the GitIssueCreator only supports one URL for
-			// all issues.
 			return true;
 		}
 		return false;
@@ -172,13 +169,14 @@ public class FordiacLogListener implements ILogListener {
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
 		for (final IConfigurationElement e : config) {
 			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
-			final String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
-			if (pluginID.isBlank() || pluginIssueURL.isBlank()) {
-				FordiacLogHelper.logInfo("Invalid error dialog filter extension, missing id or issue_url attribute: " //$NON-NLS-1$
-						+ e.getContributor().getName());
+			final String pluginPreferenceQualifier = e.getAttribute("preference_qualifier"); //$NON-NLS-1$
+			if (pluginID.isBlank() || pluginPreferenceQualifier.isBlank()) {
+				FordiacLogHelper
+						.logInfo("Invalid error dialog filter extension, missing id or preference_qualifier attribute: " //$NON-NLS-1$
+								+ e.getContributor().getName());
 				continue;
 			}
-			cachedFilters.put(pluginID, pluginIssueURL);
+			cachedFilters.put(pluginID, pluginPreferenceQualifier);
 		}
 	}
 
