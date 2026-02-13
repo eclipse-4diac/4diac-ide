@@ -57,7 +57,14 @@ Usefull when you want to provide a error reporting dialog.
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="issue_url" type="string">
+         <attribute name="issue_url" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="preference_qualifier" type="string" use="default" value="org.eclipse.fordiac.ide.issuereport">
             <annotation>
                <documentation>
                   
@@ -83,8 +90,8 @@ Usefull when you want to provide a error reporting dialog.
       <documentation>
          &lt;extension
          point=&quot;org.eclipse.fordiac.ide.errorDialogFilters&quot;&gt;
-  &lt;plugin id=&quot;org.eclipse.ui&quot;/&gt;
-  &lt;plugin id=&quot;org.eclipse.fordiac.ide&quot;/ issue_url=&quot;https://github.com/myuser/myrepo/&quot;&gt;
+  &lt;plugin id=&quot;org.eclipse.ui&quot;/ issue_url=&quot;https://github.com/myuser/myrepo1/&quot;&gt;
+  &lt;plugin id=&quot;org.eclipse.fordiac.ide&quot;/ issue_url=&quot;https://github.com/myuser/myrepo2/&quot;&gt;
 &lt;/extension&gt;
 
 This ensure that the plugin &quot;org.eclipse.ui&quot; and &quot;org.eclipse.fordiac.ide&quot; are registered for filtering.

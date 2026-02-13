@@ -171,10 +171,9 @@ public class FordiacLogListener implements ILogListener {
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
 		for (final IConfigurationElement e : config) {
 			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
-			String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
-			// If not plugin reporting URL is not specified, use the default 4diac issue URL
-			if (pluginIssueURL == null) {
-				pluginIssueURL = ""; //$NON-NLS-1$
+			final String pluginIssueURL = e.getAttribute("issue_url"); //$NON-NLS-1$
+			if (pluginID == null || pluginID.isBlank() || pluginIssueURL == null || pluginIssueURL.isBlank()) {
+				continue;
 			}
 			cachedFilters.put(pluginID, pluginIssueURL);
 		}
