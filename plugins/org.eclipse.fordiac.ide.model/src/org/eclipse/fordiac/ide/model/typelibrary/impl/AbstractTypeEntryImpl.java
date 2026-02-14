@@ -95,7 +95,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
 
 	private IFile file;
-	private String typeName;
 	private String fullTypeName;
 	private final AtomicReference<String> comment = new AtomicReference<>();
 
@@ -119,59 +118,130 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (typeLibrary != null) {
 			throw new IllegalStateException("Cannot change file while added to type library"); //$NON-NLS-1$
 		}
+		final NotificationChain notifications = basicSetFile(newFile, null);
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+	}
+
+	protected synchronized NotificationChain basicSetFile(final IFile newFile, NotificationChain notifications) {
 		final IFile oldFile = file;
+		if (Objects.equals(oldFile, newFile)) {
+			return notifications; // skip if files are equal
+		}
+
+		// set file
 		file = newFile;
+
+		// set URL in type resource
 		final LibraryElement type = basicGetType();
 		if (type != null) {
 			type.eResource().setURI(getURI());
 		}
+
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE,
-					TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, file));
+			notifications = chainNotification(notifications, new TypeEntryNotificationImpl(this, Notification.SET,
+					TypeEntry.TYPE_ENTRY_FILE_FEATURE, TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, newFile));
 		}
+		return notifications;
 	}
 
 	@Override
 	public String getTypeName() {
-		if (typeName == null) {
-			loadTypeNameFromFile();
-		}
-		return typeName;
-	}
-
-	private void setTypeName(final String typeName) {
-		this.typeName = typeName;
+		return PackageNameHelper.extractPlainTypeName(getFullTypeName());
 	}
 
 	@Override
 	public String getFullTypeName() {
-		if (fullTypeName == null) {
-			loadTypeNameFromFile();
+		// check if type name is present
+		String result = fullTypeName;
+		if (result != null) {
+			return result; // simple, non-contended case
 		}
-		return fullTypeName;
+
+		// the hard way
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// check again
+			result = fullTypeName;
+			if (result != null) {
+				return result; // concurrent update
+			}
+
+			// _we_ need to load the type name
+
+			// load the type name
+			result = loadTypeNameFromFile();
+
+			// set type name
+			notifications = basicSetFullTypeName(result, notifications);
+		}
+
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+		return result;
 	}
 
-	private void setFullTypeName(final String fullTypeName) {
-		if (!Objects.equals(this.fullTypeName, fullTypeName)) {
-			if (typeLibrary != null && this.fullTypeName != null) {
-				typeLibrary.removeTypeEntryNameReference(this);
-			}
-			this.fullTypeName = fullTypeName;
-			if (typeLibrary != null && fullTypeName != null) {
-				typeLibrary.addTypeEntryNameReference(this);
-			}
+	protected synchronized NotificationChain basicSetFullTypeName(final String newFullTypeName,
+			NotificationChain notifications) {
+		Objects.requireNonNull(newFullTypeName, "New full type name must not be null"); //$NON-NLS-1$
+		final String oldFullTypeName = fullTypeName;
+		if (Objects.equals(oldFullTypeName, newFullTypeName)) {
+			return notifications; // skip if names are equal
 		}
+
+		// remove from type library (if name is set)
+		if (typeLibrary != null && fullTypeName != null) {
+			typeLibrary.removeTypeEntryNameReference(this);
+		}
+
+		// set type name
+		fullTypeName = newFullTypeName;
+
+		// add (back) to type library
+		if (typeLibrary != null) {
+			typeLibrary.addTypeEntryNameReference(this);
+		}
+
+		if (eNotificationRequired()) {
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE,
+							TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE_ID, oldFullTypeName, newFullTypeName));
+		}
+		return notifications;
 	}
 
 	@Override
 	public String getComment() {
+		// check if comment is present
 		String result = comment.get();
-		if (result == null) {
-			result = loadTypeCommentFromFile();
-			comment.compareAndSet(null, result); // only set if still null
-			// we do not care about a (slightly) stale result here
+		if (result != null) {
+			return result;
+		}
+
+		// load comment from file
+		NotificationChain notifications = null;
+		result = loadTypeCommentFromFile();
+		notifications = basicSetComment(result, notifications);
+
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
 		}
 		return result;
+	}
+
+	protected NotificationChain basicSetComment(final String newComment, NotificationChain notifications) {
+		Objects.requireNonNull(newComment, "New comment must not be null"); //$NON-NLS-1$
+		final String oldComment = comment.getAndSet(newComment);
+		if (!Objects.equals(oldComment, newComment) && eNotificationRequired()) {
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_COMMENT_FEATURE,
+							TypeEntry.TYPE_ENTRY_COMMENT_FEATURE_ID, oldComment, newComment));
+		}
+		return notifications;
 	}
 
 	@Override
@@ -253,18 +323,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
 			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
-		typeHashRef = null; // our type is invalidated clear the hash
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
 			encloseInResource(newType);
 			newType.setTypeEntry(this);
-			setTypeName(newType.getName());
-			setFullTypeName(PackageNameHelper.getFullTypeName(newType));
-			comment.set(newType.getComment());
+			notifications = basicSetFullTypeName(PackageNameHelper.getFullTypeName(newType), notifications);
+			notifications = basicSetComment(newType.getComment(), notifications);
 			typeRef = new SoftReference<>(newType);
 		} else {
 			typeRef = null;
 		}
+		typeHashRef = null; // our type is invalidated clear the hash
 		if (eNotificationRequired()) {
 			notifications = chainNotification(notifications, new TypeEntryNotificationImpl(this, Notification.SET,
 					TypeEntry.TYPE_ENTRY_TYPE_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE_ID, oldType, newType));
@@ -557,34 +626,32 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
-	private void loadTypeNameFromFile() {
-		if (getFile() != null) {
-			if (getFile().exists()) {
-				try (Scanner scanner = new Scanner(getFile().getContents())) {
+	private String loadTypeNameFromFile() {
+		final IFile cachedFile = getFile();
+		if (cachedFile != null) {
+			if (cachedFile.exists()) {
+				try (Scanner scanner = new Scanner(cachedFile.getContents())) {
 					if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
-						setTypeName(scanner.match().group(1));
+						final String foundTypeName = scanner.match().group(1);
 						if (scanner.findWithinHorizon(TYPE_PACKAGE_NAME_PATTERN, 0) != null) {
-							final String packageName = scanner.match().group(1);
-							setFullTypeName(packageName + "::" + typeName); //$NON-NLS-1$
-						} else {
-							setFullTypeName(typeName);
+							final String foundPackageName = scanner.match().group(1);
+							return foundPackageName + "::" + foundTypeName; //$NON-NLS-1$
 						}
-						return;
+						return foundTypeName;
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logWarning(e.getMessage(), e);
 				}
 			}
-			setTypeName(TypeEntry.getTypeNameFromFile(getFile()));
-		} else {
-			setTypeName(""); //$NON-NLS-1$
+			return TypeEntry.getTypeNameFromFile(cachedFile);
 		}
-		setFullTypeName(typeName);
+		return ""; //$NON-NLS-1$
 	}
 
 	private String loadTypeCommentFromFile() {
-		if (getFile() != null && getFile().exists()) {
-			try (Scanner scanner = new Scanner(getFile().getContents())) {
+		final IFile cachedFile = getFile();
+		if (cachedFile != null && cachedFile.exists()) {
+			try (Scanner scanner = new Scanner(cachedFile.getContents())) {
 				if (scanner.findWithinHorizon(TYPE_COMMENT_PATTERN, 0) != null) {
 					return scanner.match().group(1);
 				}
