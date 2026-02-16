@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -283,7 +284,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 
 		@Override
 		public void setBackgroundColor(final Color bg) {
-			final Color deviceColor = ColorHelper.darker(bg);
+			final Color deviceColor = FigureUtilities.darker(bg);
 			upperSeparator.setColor(deviceColor);
 			lowerSeparator.setColor(deviceColor);
 			super.setBackgroundColor(bg);
