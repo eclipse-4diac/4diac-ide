@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Geometry;
@@ -31,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.swt.graphics.Color;
 
 public class HideableConnection extends PolylineConnection {
@@ -79,7 +79,7 @@ public class HideableConnection extends PolylineConnection {
 	public void setForegroundColor(final Color fg) {
 		super.setForegroundColor(fg);
 		if (isAdapterOrStructConnection()) {
-			lighterColor = ColorHelper.lighter(fg);
+			lighterColor = FigureUtilities.lighter(fg);
 		}
 	}
 
