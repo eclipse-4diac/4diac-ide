@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Connection;
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.ConnectionRouter;
@@ -40,23 +41,71 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Handle;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.handles.SquareHandle;
+import org.eclipse.gef.editpolicies.FeedbackHelper;
+import org.eclipse.gef.handles.ConnectionHandle;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPolicy {
-	private final List<Connection> lines = new ArrayList<>();
+	private final List<PolylineConnection> lines = new ArrayList<>();
+
+	private ConnectionAnchor originalAnchor;
+	private FeedbackHelper feedbackHelper;
 
 	@Override
 	protected List<Handle> createSelectionHandles() {
-		final List<Handle> list = new ArrayList<>(super.createSelectionHandles());
-		lines.forEach(connection -> list.add(new ConnectionHandle(getHost(), connection)));
-		return list;
+		final List<Handle> handles = new ArrayList<>(super.createSelectionHandles());
+		lines.forEach(connection -> handles.add(new TargetLabelConnectionHandle(getHost(), connection)));
+		return handles;
+	}
+
+	@Override
+	public void showSourceFeedback(final Request request) {
+		super.showSourceFeedback(request);
+		if (request instanceof final CreateConnectionRequest req) {
+			final NodeEditPart node = req.getTargetEditPart() instanceof final NodeEditPart nodeEP ? nodeEP : null;
+
+			if (originalAnchor == null) {
+				originalAnchor = lines.getFirst().getSourceAnchor();
+			}
+
+			final ConnectionAnchor anchor = node == null ? null : node.getSourceConnectionAnchor(request);
+			final FeedbackHelper helper = getFeedbackHelper();
+			lines.forEach(line -> {
+				helper.setConnection(line);
+				helper.update(anchor, req.getLocation());
+			});
+		}
+	}
+
+	@Override
+	public void eraseSourceFeedback(final Request request) {
+		super.eraseSourceFeedback(request);
+		if (originalAnchor == null) {
+			return;
+		}
+		lines.forEach(line -> {
+			line.setSourceAnchor(originalAnchor);
+			line.revalidate();
+			line.validate();
+		});
+
+		originalAnchor = null;
+		feedbackHelper = null;
+	}
+
+	protected FeedbackHelper getFeedbackHelper() {
+		if (feedbackHelper == null) {
+			feedbackHelper = new FeedbackHelper();
+			feedbackHelper.setMovingStartAnchor(true);
+		}
+		return feedbackHelper;
 	}
 
 	@Override
@@ -115,18 +164,26 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 		lines.clear();
 	}
 
-	private class ConnectionHandle extends SquareHandle {
-		public ConnectionHandle(final GraphicalEditPart host, final Connection connectionLine) {
-			super(host, null);
+	private class TargetLabelConnectionHandle extends ConnectionHandle {
+		private Connection connection;
+
+		public TargetLabelConnectionHandle(final GraphicalEditPart host, final Connection connectionLine) {
+			this.connection = connectionLine;
+			setOwner(host);
 			setLocator(new ConnectionLocator(connectionLine, ConnectionLocator.SOURCE) {
 				@Override
 				protected Point getLocation(final PointList points) {
 					final Point p = super.getLocation(points);
 					// Offset for Source connection endpoint
-					p.x += ((getPreferredSize().width / 2) - 4);
+					p.x += getPreferredSize().width / 2;
 					return p;
 				}
 			});
+		}
+
+		@Override
+		public Connection getConnection() {
+			return connection;
 		}
 
 		@Override
@@ -205,6 +262,22 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 		public MultiDragTool(final List<TargetInterfaceElementEditPart> selections, final InterfaceEditPart source) {
 			this.selections = selections;
 			this.source = source;
+		}
+
+		@Override
+		protected void showSourceFeedback() {
+			final CreateConnectionRequest targetRequest = getTargetRequest();
+			targetRequest.setLocation(getLocation());
+			selections.forEach(con -> con.showSourceFeedback(targetRequest));
+			super.showSourceFeedback();
+		}
+
+		@Override
+		protected void eraseSourceFeedback() {
+			final CreateConnectionRequest targetRequest = getTargetRequest();
+			targetRequest.setLocation(getLocation());
+			selections.forEach(con -> con.eraseSourceFeedback(targetRequest));
+			super.eraseSourceFeedback();
 		}
 
 		@Override
