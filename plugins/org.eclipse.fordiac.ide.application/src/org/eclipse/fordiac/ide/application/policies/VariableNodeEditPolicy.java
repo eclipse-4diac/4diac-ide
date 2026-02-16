@@ -61,23 +61,27 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
-		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
+		if (!(request.getStartCommand() instanceof final AbstractConnectionCreateCommand connCreateCmd)) {
+			return null;
+		}
+
 		final IInterfaceElement pin = getHost().getModel();
 
-		if (command instanceof StructDataConnectionCreateCommand) {
+		if (connCreateCmd instanceof StructDataConnectionCreateCommand) {
 			// if we drag from a struct manipulater but target is not a struct or
 			// configureable F_MOVE pin use normal
 			// data connection creation
 			if (!(pin.getType() instanceof StructuredType)
 					&& !(pin.getBlockFBNetworkElement() instanceof ConfigurableMoveFB)) {
-				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(command.getParent());
-				structCmd.setSource(command.getSource());
+				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(
+						connCreateCmd.getParent());
+				structCmd.setSource(connCreateCmd.getSource());
 				request.setStartCommand(structCmd);
 			}
-		} else if (AbstractConnectionCreateCommand.shouldStructDataConnCreationBeUsed(pin, command.getSource())) {
+		} else if (AbstractConnectionCreateCommand.shouldStructDataConnCreationBeUsed(pin, connCreateCmd.getSource())) {
 			final StructDataConnectionCreateCommand structCmd = new StructDataConnectionCreateCommand(
-					command.getParent());
-			structCmd.setSource(command.getSource());
+					connCreateCmd.getParent());
+			structCmd.setSource(connCreateCmd.getSource());
 			request.setStartCommand(structCmd);
 		}
 		return super.getConnectionCompleteCommand(request);
