@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -46,13 +47,7 @@ public class CopyTypeParticipant extends CopyParticipant {
 				&& getArguments().getDestination() instanceof final IContainer dest) {
 			resource = res;
 			destination = dest;
-			try {
-				if (hasRelevantFile(res)) {
-					return true;
-				}
-			} catch (final CoreException e) {
-				return false;
-			}
+			return RefactoringUtil.containsTypeEntryFile(res);
 		}
 		return false;
 	}
@@ -97,21 +92,5 @@ public class CopyTypeParticipant extends CopyParticipant {
 				addElement(change, member, destination.appendSegment(container.getName()));
 			}
 		}
-	}
-
-	private boolean hasRelevantFile(final IResource resource) throws CoreException {
-		if (resource instanceof final IFile file) {
-			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
-				return true;
-			}
-		} else if (resource instanceof final IContainer container) {
-			for (final IResource member : container.members()) {
-				if (hasRelevantFile(member)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return false;
 	}
 }

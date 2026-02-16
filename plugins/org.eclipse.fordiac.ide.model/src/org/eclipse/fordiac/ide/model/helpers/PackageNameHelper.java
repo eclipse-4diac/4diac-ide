@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -63,13 +64,20 @@ public final class PackageNameHelper {
 
 	public static String getFullTypeName(final LibraryElement libraryElement) {
 		if (libraryElement != null) {
-			final String packageName = getPackageName(libraryElement);
-			if (!packageName.isEmpty()) {
-				return packageName + PACKAGE_NAME_DELIMITER + libraryElement.getName();
-			}
-			return libraryElement.getName();
+			return getFullTypeName(getPackageName(libraryElement), libraryElement.getName());
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	public static String getFullTypeNameFromFile(final IFile file) {
+		return getFullTypeName(getPackageNameFromFile(file), TypeEntry.getTypeNameFromFile(file));
+	}
+
+	private static String getFullTypeName(final String packageName, final String typeName) {
+		if (!packageName.isEmpty()) {
+			return packageName + PACKAGE_NAME_DELIMITER + typeName;
+		}
+		return typeName;
 	}
 
 	public static void setFullTypeName(final LibraryElement libraryElement, final String fullTypeName) {
