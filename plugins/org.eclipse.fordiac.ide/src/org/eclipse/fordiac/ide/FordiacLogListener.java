@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -46,7 +45,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 
 public class FordiacLogListener implements ILogListener {
-	private static TreeMap<String, String> cachedFilters = null;
+	private static final TreeMap<String, String> cachedFilters = loadFilterExtensions();
 
 	private static final class LogErrorDialog extends ErrorDialog {
 
@@ -153,18 +152,12 @@ public class FordiacLogListener implements ILogListener {
 	}
 
 	private static boolean isPluginInFilterMap(final String pluginID) {
-		if (cachedFilters == null) {
-			loadFilterExtensions();
-		}
-		final Map.Entry<String, String> floor = cachedFilters.floorEntry(pluginID);
-		if (floor != null && pluginID.startsWith(floor.getKey())) {
-			return true;
-		}
-		return false;
+		final String floor = cachedFilters.floorKey(pluginID);
+		return floor != null && pluginID.startsWith(floor);
 	}
 
-	private static void loadFilterExtensions() {
-		cachedFilters = new TreeMap<>();
+	private static TreeMap<String, String> loadFilterExtensions() {
+		final TreeMap<String, String> filters = new TreeMap<>();
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final IConfigurationElement[] config = registry
 				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
@@ -177,8 +170,9 @@ public class FordiacLogListener implements ILogListener {
 								+ e.getContributor().getName());
 				continue;
 			}
-			cachedFilters.put(pluginID, pluginPreferenceQualifier);
+			filters.put(pluginID, pluginPreferenceQualifier);
 		}
+		return filters;
 	}
 
 	private static IStatus createStatusWithStackTrace(final IStatus status) {
