@@ -101,6 +101,15 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 	private final IResourceDeltaVisitor visitor = delta -> {
 		switch (delta.getResource().getType()) {
+		case IResource.PROJECT:
+			// check if another project has been referenced or a reference has been removed
+			// TODO project description also contains other cases, not only referenced
+			// projects
+			if (delta.getResource() instanceof final IProject project
+					&& (delta.getFlags() & IResourceDelta.DESCRIPTION) != 0) {
+				changedLibs.add(project.getName());
+			}
+			return true;
 		case IResource.FILE:
 			// check library manifest files
 			// information on previous linked status is not available on delete
