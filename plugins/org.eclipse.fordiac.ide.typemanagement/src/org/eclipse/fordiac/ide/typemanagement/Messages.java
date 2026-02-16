@@ -178,7 +178,6 @@ public final class Messages extends NLS {
 	public static String RenameElementRefactoringProcessor_RenamePinInType;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
-	public static String RenameType_TypeExists;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
 	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
@@ -192,9 +191,7 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageDescription;
 
 	public static String Refactoring_StructUsers;
-	public static String Refactoring_RenameFromTo;
-	public static String Refactoring_AffectedStruct;
-	public static String Refactoring_AffectedInstancesOfFB;
+	public static String Refactoring_RenameChangeName;
 	public static String Refactoring_UpdateTypeEntryChange;
 
 	public static String RepairBrokenConnectionWizardPage_Description;

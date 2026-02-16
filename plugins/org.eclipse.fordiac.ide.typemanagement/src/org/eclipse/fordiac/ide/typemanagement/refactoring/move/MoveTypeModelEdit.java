@@ -35,7 +35,7 @@ public class MoveTypeModelEdit extends ModelEdit<LibraryElement> {
 	private final String newPackageName;
 	private String oldPackageName;
 
-	protected MoveTypeModelEdit(final String newPackageName, final String name, final URI uri) {
+	public MoveTypeModelEdit(final String newPackageName, final String name, final URI uri) {
 		super(name, uri, LibraryElement.class);
 		this.newPackageName = newPackageName;
 	}
