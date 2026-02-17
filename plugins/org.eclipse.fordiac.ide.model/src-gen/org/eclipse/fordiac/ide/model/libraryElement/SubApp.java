@@ -53,6 +53,7 @@ public interface SubApp extends BlockFBNetworkElement {
 	 * @see #setWidth(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Width()
 	 * @model default="3000" dataType="org.eclipse.emf.ecore.xml.type.Double"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	double getWidth();
@@ -76,6 +77,7 @@ public interface SubApp extends BlockFBNetworkElement {
 	 * @see #setHeight(double)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Height()
 	 * @model default="1700" dataType="org.eclipse.emf.ecore.xml.type.Double"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	double getHeight();
@@ -99,6 +101,7 @@ public interface SubApp extends BlockFBNetworkElement {
 	 * @see #setLocked(boolean)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSubApp_Locked()
 	 * @model default="false" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	boolean isLocked();

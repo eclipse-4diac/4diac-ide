@@ -142,6 +142,7 @@ public interface Connection extends ConfigurableObject, HiddenElement {
 	 * @see #setComment(String)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getConnection_Comment()
 	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	String getComment();
