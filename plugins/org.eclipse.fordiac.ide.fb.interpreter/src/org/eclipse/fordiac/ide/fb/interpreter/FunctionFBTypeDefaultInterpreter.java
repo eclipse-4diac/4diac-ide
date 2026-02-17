@@ -19,7 +19,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class FunctionFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInterpreter {
 
-	public FunctionFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence, final Map<String, Evaluator> evaluatorCache) {
+	public FunctionFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence,
+			final Map<String, Evaluator> evaluatorCache) {
 		super(eventOccurrence, evaluatorCache);
 	}
 
@@ -35,7 +36,7 @@ public class FunctionFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefault
 		processFunctionWithEvaluator(functionFBType, this.eventOccurrence);
 		Utils.isConsumed(this.eventOccurrence);
 
-		return ECollections.newBasicEList(createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
+		return ECollections.newBasicEList(Utils.createOutputEventOccurrence(fBTypeRuntime, event, functionFBType));
 	}
 
 	private void processFunctionWithEvaluator(final FunctionFBType functionFBType,

@@ -36,7 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInterpreter {
 
-	public BasicFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence, final Map<String, Evaluator> evaluatorCache) {
+	public BasicFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence,
+			final Map<String, Evaluator> evaluatorCache) {
 		super(eventOccurrence, evaluatorCache);
 	}
 
@@ -87,7 +88,7 @@ public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInt
 						eventOccurrence);
 			}
 			if (action.getOutput() != null) {
-				outputEvents.add(createOutputEventOccurrence(basicFBTypeRuntime, action.getOutput(),
+				outputEvents.add(Utils.createOutputEventOccurrence(basicFBTypeRuntime, action.getOutput(),
 						basicFBTypeRuntime.getBasicfbtype()));
 			}
 		}
@@ -110,7 +111,8 @@ public class BasicFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInt
 		final FBVariable fbVar = new FBVariable("THIS", basicFBType, Collections.emptyList()); //$NON-NLS-1$
 		final Class<? extends FBType> baseFBClass = BasicFBType.class;
 
-		final List<Variable<?>> vars = varDecls.stream().map(BasicFBTypeDefaultInterpreter::mapVar).collect(Collectors.toList());
+		final List<Variable<?>> vars = varDecls.stream().map(BasicFBTypeDefaultInterpreter::mapVar)
+				.collect(Collectors.toList());
 		final Evaluator fbEval = EvaluatorFactory.createEvaluator(basicFBType, baseFBClass, fbVar, vars, null);
 		if (fbEval instanceof final BasicFBEvaluator fbEvaluator) {
 			final Map<ECTransition, Evaluator> ecTransitionToEvaluator = fbEvaluator.getTransitionEvaluators();

@@ -16,7 +16,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 public class SimpleFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultInterpreter {
 
-	public SimpleFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence, final Map<String, Evaluator> evaluatorCache) {
+	public SimpleFBTypeDefaultInterpreter(final EventOccurrence eventOccurrence,
+			final Map<String, Evaluator> evaluatorCache) {
 		super(eventOccurrence, evaluatorCache);
 	}
 
@@ -34,7 +35,7 @@ public class SimpleFBTypeDefaultInterpreter extends FBTypeWithEvaluatorDefaultIn
 		for (final SimpleECAction action : actions) {
 			simpleFBType.getAlgorithm().stream().filter(a -> a.getName().equals(action.getAlgorithm())).findAny()
 					.ifPresent(a -> processAlgorithmWithEvaluator(simpleFBType, a, eventOccurrence));
-			outputEvents.add(createOutputEventOccurrence(simpleFBTypeRuntime, action.getOutput(), simpleFBType));
+			outputEvents.add(Utils.createOutputEventOccurrence(simpleFBTypeRuntime, action.getOutput(), simpleFBType));
 		}
 		Utils.isConsumed(this.eventOccurrence);
 		return outputEvents;

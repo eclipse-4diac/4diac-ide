@@ -55,18 +55,17 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 
 		// sampling input & writing output is special for composite types
 		if (runtime instanceof final CompositeFBTypeRuntime compTypeRT) {
-			if (compTypeRT.getNetworkRuntime() == null) {
-				final FBNetworkRuntime rt = RuntimeFactory.createFrom(compTypeRT.getCompositeFBType().getFBNetwork());
-				rt.setOuterNetworkRuntime(fBNetworkRuntime);
+			if (compTypeRT.getNetworkRuntime().getOuterNetworkRuntime() == null) {
+				compTypeRT.getNetworkRuntime().setOuterNetworkRuntime(fBNetworkRuntime);
 				// put the composite runtime into the inner network, so we will find our way
 				// back to the outer network
-				rt.getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
-				compTypeRT.setNetworkRuntime(rt);
+				compTypeRT.getNetworkRuntime().getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
 			}
 			return DefaultRunFBType.runFBType(runtime, eventOccurrence);
 		}
 
-		// handle initial triggers at outputs of FBs (e.g., for SIFBs)
+		// handle initial triggers at outputs of FBs (e.g., for SIFBs, but not for
+		// Composite Types)
 		if (!InterfacePinUtils.isInput(eventOccurrence.getEvent())) {
 			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
