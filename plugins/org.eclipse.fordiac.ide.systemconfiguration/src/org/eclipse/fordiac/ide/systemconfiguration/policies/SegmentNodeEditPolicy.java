@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.systemconfiguration.policies;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.LinkCreateCommand;
@@ -24,20 +25,17 @@ import org.eclipse.gef.requests.ReconnectRequest;
 public class SegmentNodeEditPolicy extends org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy {
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
-		if (request.getStartCommand() instanceof LinkCreateCommand) {
-			LinkCreateCommand command = (LinkCreateCommand) request.getStartCommand();
+		if (request.getStartCommand() instanceof final LinkCreateCommand command) {
 			if (command.isSegmentDeviceLink()) {
-				if (getHost().getModel() instanceof Device) {
-					command.setDestination((Device) getHost().getModel());
+				if (getHost().getModel() instanceof final Device device) {
+					command.setDestination(device);
 				} else if (getHost().getModel() instanceof Segment) {
 					command.setDestination(null);
 				}
-			} else {
-				if (getHost().getModel() instanceof Segment) {
-					command.setSource((Segment) getHost().getModel());
-				} else if (getHost().getModel() instanceof Device) {
-					command.setSource(null);
-				}
+			} else if (getHost().getModel() instanceof final Segment segment) {
+				command.setSource(segment);
+			} else if (getHost().getModel() instanceof Device) {
+				command.setSource(null);
 			}
 			return command;
 		}
@@ -46,16 +44,22 @@ public class SegmentNodeEditPolicy extends org.eclipse.gef.editpolicies.Graphica
 
 	@Override
 	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
-		LinkCreateCommand cmd = new LinkCreateCommand();
-		if (getHost().getModel() instanceof Segment) {
-			cmd.setSource((Segment) getHost().getModel());
-			cmd.setSegmentDeviceLink(true);
-		} else if (getHost().getModel() instanceof Device) {
-			cmd.setDestination((Device) getHost().getModel());
-		}
+		final LinkCreateCommand cmd = new LinkCreateCommand();
 		Object parentModel = getHost().getParent().getModel();
-		if (parentModel instanceof SystemConfiguration) {
-			cmd.setSystemConfigurationNetwork((SystemConfiguration) parentModel);
+
+		if (getHost().getModel() instanceof final Segment segment) {
+			cmd.setSource(segment);
+			cmd.setSegmentDeviceLink(true);
+		} else if (getHost().getModel() instanceof final Device device) {
+			cmd.setDestination(device);
+		} else if (getHost().getModel() instanceof IInterfaceElement
+				&& getHost().getParent().getModel() instanceof final Device device) {
+			cmd.setDestination(device);
+			parentModel = device.eContainer();
+		}
+
+		if (parentModel instanceof final SystemConfiguration sysConfig) {
+			cmd.setSystemConfigurationNetwork(sysConfig);
 		}
 		request.setStartCommand(cmd);
 		return cmd;
