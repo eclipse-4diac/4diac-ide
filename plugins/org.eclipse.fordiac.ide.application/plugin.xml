@@ -7,13 +7,13 @@
             default="true"
             icon="fordiacimage://ICON_APPLICATION"
             id="org.eclipse.fordiac.ide.application.editors.FBNetworkEditor"
-            name="FBNetworkEditor"/>
+            name="%Application_editors_FBNetworkEditor_name"/>
     <editor class="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"
             contributorClass="org.eclipse.fordiac.ide.gef.ZoomUndoRedoActionBarContributor"
             default="true"
             icon="fordiacimage://ICON_SUB_APP"
             id="org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor"
-            name="SubapplicationEditor">
+            name="%Application_editors_SubAppNetworkEditor_name">
     </editor>
   </extension>
   
@@ -51,121 +51,121 @@
     <propertyTabs contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertyTab category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
-                   label="Instance">
+                   label="%application_propertyInterfaceTab_label">
       </propertyTab>
       <propertyTab category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyStructManipulatorTab"
-                   label="Struct Handling">
+                   label="%application_propertyStructManipulatorTab_label">
       </propertyTab>
       <propertyTab category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
-                   label="Struct Handling">
+                   label="%application_propertyStructManipulatorTab_label">
       </propertyTab>
       <propertyTab category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyCommentTab"
-                   label="Comment">
+                   label="%application_propertyCommentTab_label">
       </propertyTab>
       <propertyTab category="Resource"
                    id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
-                   label="Instance">
+                   label="%application_propertyResourceInterfaceTab_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                    category="FB"
                    image="fordiacimage://ICON_EVENT"
                    id="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                    indented="true"
-                   label="Edit Events">
+                   label="%application_property_tab_EditEvents_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditEvents"
                    category="FB"
                    image="fordiacimage://ICON_DATA"
                    id="org.eclipse.fordiac.ide.application.property.tab.EditData"
                    indented="true"
-                   label="Edit Data">
+                   label="%application_property_tab_EditData_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditData"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
                    indented="true"
-                   label="Edit Var In/Out">
+                   label="%application_property_tab_EditVarInOut_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut"
                    category="FB"
                    image="fordiacimage://ICON_ADAPTER_LIST"
                    id="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                    indented="true"
-                   label="Edit Adapters">
+                   label="%application_property_tab_EditAdapters_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                    image="fordiacimage://ICON_FB_TYPE"
-                   label="Type Info">
+                   label="%application_propertyFBTypeInfoTab_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
                    image="fordiacimage://ICON_EVENT"
-                   label="Events"
+                   label="%application_property_tab_ShowEvent_label"
                    indented="true">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.property.tab.ShowEvent"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.property.tab.ShowData"
                    image="fordiacimage://ICON_DATA"
-                   label="Data"
+                   label="%application_property_tab_ShowData_label"
                    indented="true">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyFBTypeInfoTab"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.property.tab.ShowAdapter"
                    image="fordiacimage://ICON_ADAPTER_LIST"
-                   label="Adapter"
+                   label="%application_property_tab_ShowAdapter_label"
                    indented="true">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
                    category="FB"
                    id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
-                   label="Appearance">
+                   label="%application_propertyAppearanceTab_label">
       </propertyTab>
       <propertyTab category="Connection"
                    id="org.eclipse.fordiac.ide.application.propertyConnectionTab"
-                   label="Connection">
+                   label="%application_propertyConnectionTab_label">
       </propertyTab>
       <propertyTab category="Connection"
                    id="org.eclipse.fordiac.ide.application.CreateConnection"
-                   label="Create Connection">
+                   label="%application_CreateConnection_label">
       </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
-                   label="Pin">
+                   label="%application_propertyInterfaceElementTab_label">
       </propertyTab>
       <propertyTab category="Application"
                    id="org.eclipse.fordiac.ide.application.propertyAttributeTab"
                    indented="false"
-                   label="Attributes">
+                   label="%application_propertyAttributeTab_label">
       </propertyTab>
       <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
        			   category="Application"
                    id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
                    indented="false"
-                   label="Var Config">
+                   label="%application_propertyVarConfigTab_label">
       </propertyTab>
 	  <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
       			   category="Application"
                    id="org.eclipse.fordiac.ide.application.propertyInfoTab"
                    indented="false"
-                   label="Info">
+                   label="%application_propertyInfoTab_label">
       </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
                    indented="false"
-                   label="Struct Element">
+                   label="%application_propertyStructInterfaceElementTab_label">
       </propertyTab>
       <propertyTab
             category="FB"
             id="org.eclipse.fordiac.ide.application.propertyConfigurableFBTab"
-            label="Config">
+            label="%application_propertyConfigurableFBTab_label">
       </propertyTab>
     </propertyTabs>
   </extension>
@@ -358,7 +358,7 @@
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
                   icon="fordiacimage://ICON_APPLICATION"
                   id="org.eclipse.fordiac.ide.application.actions.OpenApplicationEditorAction"
-                  label="Open Application">
+                  label="%application_actions_OpenApplicationEditorAction_label">
     </openListener>
   </extension>
   
@@ -366,80 +366,80 @@
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
                   icon="fordiacimage://ICON_SUB_APP"
                   id="org.eclipse.fordiac.ide.application.actions.OpenSubApplicationEditorAction"
-                  label="Open Subapplication">
+                  label="%application_actions_OpenSubApplicationEditorAction_label">
     </openListener>
   </extension>
   
   <extension point="org.eclipse.fordiac.ide.model.ui.openListener">
     <openListener class="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
                   id="org.eclipse.fordiac.ide.application.actions.OpenGroupEditorAction"
-                  label="Select Group">
+                  label="%application_actions_OpenGroupEditorAction_label">
     </openListener>
   </extension>
   
   <extension point="org.eclipse.ui.commands">
     <category id="org.eclipse.fordiac.ide.commands.category"
-              name="4diac IDE Commands">
+              name="%commands_category_name">
     </category>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewSubApplication"
              id="org.eclipse.fordiac.ide.application.commands.newSubApp"
-             name="New Subapplication">
+             name="%application_commands_newSubApp_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewGroupHandler"
              id="org.eclipse.fordiac.ide.application.commands.newGroup"
-             name="Group">
+             name="%application_commands_newGroup_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewCommentHandler"
              id="org.eclipse.fordiac.ide.application.commands.newComment"
-             name="New Comment">
+             name="%application_commands_newComment_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.UngroupHandler"
              id="org.eclipse.fordiac.ide.application.commands.ungroup"
-             name="Ungroup">
+             name="%application_commands_ungroup_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.flattenSubApp"
-             name="Flatten Subapplication">
+             name="%application_commands_flattenSubApp_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.expandSubApp"
-             name="Expand Subapp">
+             name="%application_commands_expandSubApp_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.SaveAsSubappTypeHandler"
              id="org.eclipse.fordiac.ide.application.commands.saveAsSubappType"
-             name="Save to Type Library">
+             name="%application_commands_saveAsSubappType_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.UntypeSubApplicationHandler"
              id="org.eclipse.fordiac.ide.application.commands.untypeSubApp"
-             name="Detach from Subapplication Type">
+             name="%application_commands_untypeSubApp_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConnectThroughHandler"
-             description="Take the connection going into this FB and connect them through the target of the output"
+             description="%application_commands_connectThrough_description"
              id="org.eclipse.fordiac.ide.application.commands.connectThrough"
-             name="Bypass FB">
+             name="%application_commands_connectThrough_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.UpdateFBTypeHandler"
-             description="Update selected function block type to the filesystem state"
+             description="%application_commands_updateFBType_description"
              id="org.eclipse.fordiac.ide.application.commands.updateFBType"
-             name="Update Type">
+             name="%application_commands_updateFBType_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkPredecessorHandler"
-             description="Mark FB as predecessor"
+             description="%application_commands_markAsPredecessor_description"
              id="org.eclipse.fordiac.ide.application.commands.markAsPredecessor"
              name="%command.markAsPredecessor">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.MarkConnectionSourceHandler"
-             description="Mark as Connection Source"
+             description="%application_commands_markConnectionSource_description"
              id="org.eclipse.fordiac.ide.application.commands.markConnectionSource"
              name="%command.markAsConnectionSource">
     </command>
@@ -471,12 +471,12 @@
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.commands.createConnectionAtSubappInterface"
-             name="Create Connection to Subapp Interface">
+             name="%application_commands_createConnectionAtSubappInterface_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideDataConnections"
              id="org.eclipse.fordiac.ide.application.commands.hideDataConnections"
-             name="Hide Data Connections">
+             name="%application_commands_hideDataConnections_name">
       <state class="org.eclipse.ui.handlers.RegistryToggleState"
              id="org.eclipse.ui.commands.toggleState">
       </state>
@@ -484,7 +484,7 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.HideEventConnections"
              id="org.eclipse.fordiac.ide.application.commands.hideEventConnections"
-             name="Hide Event Connections">
+             name="%application_commands_hideEventConnections_name">
       <state class="org.eclipse.ui.handlers.RegistryToggleState"
              id="org.eclipse.ui.commands.toggleState">
       </state>
@@ -492,12 +492,12 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleConnectionsHandler"
              id="org.eclipse.fordiac.ide.application.commands.toggleConnections"
-             name="Toggle Connections Visibility">
+             name="%application_commands_toggleConnections_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleConnectionBendpointHandler"
              id="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
-             name="Toggle Connection Bendpoints">
+             name="%application_commands_toggleConnectionBendpoints_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
 
@@ -508,88 +508,88 @@
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.InsertFB"
              id="org.eclipse.fordiac.ide.application.commands.insertFB"
-             name="Insert FB">
+             name="%application_commands_insertFB_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.ChangeType"
              id="org.eclipse.fordiac.ide.application.commands.changeType"
-             name="Change Type">
+             name="%application_commands_changeType_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Update all FB types"
+             description="%application_commands_updateAllFBTypes_description"
              id="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"
-             name="Update All Types">
+             name="%application_commands_updateAllFBTypes_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Transfer all instance comments"
+             description="%application_commands_transferInstanceComments_description"
              id="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
-             name="Transfer all instance comments">
+             name="%application_commands_transferInstanceComments_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Transfer all instance comments"
+             description="%application_commands_transferCommentsOfConnectedPins_description"
              id="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"
-             name="Transfer comments of connected pins on output">
+             name="%application_commands_transferCommentsOfConnectedPins_name">
     </command>
     <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
-            description="Map Element to Resource"
+            description="%application_commands_mapTo_description"
             id="org.eclipse.fordiac.ide.application.commands.mapTo"
-            name="Map To ...">
+            name="%application_commands_mapTo_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.unmap"
-             name="Unmap">
+             name="%application_unmap_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.unmapAll"
-             name="Unmap All">
+             name="%application_unmapAll_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Move FBs to the subapps parent"
+             description="%application_commands_moveToParent_description"
              id="org.eclipse.fordiac.ide.application.commands.moveToParent"
-             name="Move to Parent">
+             name="%application_commands_moveToParent_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Navigate to instance in editor"
+             description="%application_commands_showInstance_description"
              id="org.eclipse.fordiac.ide.application.commands.showInstance"
-             name="Go To">
+             name="%application_commands_showInstance_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Open type associated with this instance in editor"
+             description="%application_commands_openType_description"
              id="org.eclipse.fordiac.ide.application.commands.openType"
-             name="Open Type in Editor">
+             name="%application_commands_openType_name">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Trim the size of a container to the minimum size required by its contents"
+             description="%application_commands_trim_description"
              id="org.eclipse.fordiac.ide.application.commands.trim"
-             name="Trim">
+             name="%application_commands_trim_name">
     </command>
     <command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConvertToGroupHandler"
           id="org.eclipse.fordiac.ide.application.commands.convertToGroup"
-          name="Convert Untyped Subapp To Group">
+          name="%application_commands_convertToGroup_name">
     </command>
     <command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConvertToSubappHandler"
           id="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
-          name="Convert Group to Untyped Subapp">
+          name="%application_commands_convertToSubapp_name">
     </command>
 	<command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           id="org.eclipse.fordiac.ide.application.commands.aggressiveConDelete"
-          name="Aggressive Connection Delete">
+          name="%application_commands_aggressiveConDelete_name">
     </command>
 	<command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           id="org.eclipse.fordiac.ide.application.commands.moveThroughHierarchy"
-          name="Move elements through hierarchy">
+          name="%application_commands_moveThroughHierarchy_name">
     </command>
     <command
           categoryId="org.eclipse.fordiac.ide.commands.category"
           id="org.eclipse.fordiac.ide.application.commands.toggleJumpStep"
-          name="Toggle Step Mode"
+          name="%application_commands_toggleJumpStep_name"
           defaultHandler="org.eclipse.fordiac.ide.application.handlers.ToggleJumpStepHandler">
       <state class="org.eclipse.ui.handlers.RegistryToggleState"
              id="org.eclipse.ui.commands.toggleState">
@@ -1060,7 +1060,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
-               label="Extract Struct">
+               label="%application_commands_convertToStruct_label">
         <visibleWhen checkEnabled="false">
           <and>
 	        <with variable="activeEditor">
@@ -1072,7 +1072,7 @@
       </command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToGroup"
-            label="Convert Subapp To Group">
+            label="%application_commands_convertToGroup_label">
          <visibleWhen checkEnabled="false">
           <with variable="activeEditor">
             <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
@@ -1081,7 +1081,7 @@
       </command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
-            label="Convert Group To Subapp">
+            label="%application_commands_convertToSubapp_label">
         <visibleWhen checkEnabled="false">
           <with variable="activeEditor">
             <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork"/>
@@ -1108,7 +1108,7 @@
       <separator name="layouting stuff"
                  visible="true"/>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
-               label="Extract Struct"
+               label="%application_commands_convertToStruct_label"
                style="push">
         <visibleWhen checkEnabled="true">
           <and>
@@ -1129,57 +1129,57 @@
     </menuContribution>
     <menuContribution locationURI="menu:org.eclipse.4diac.ide.source.menu?after=editGroup">
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               label="New subapplication"
+               label="%application_commands_newSubApp_label"
                tooltip="Create a new subapplication">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
-               label="Quick Fix">
+               label="%jdt_ui_edit_text_java_correction_assist_proposals_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="Group"
+               label="%application_commands_newGroup_label"
                tooltip="Create a new group">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               label="Comment"
+               label="%application_commands_newComment_label"
                tooltip="Create a new comment">
         <visibleWhen checkEnabled="true">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
-               label="Ungroup"
+               label="%application_commands_ungroup_label"
                tooltip="Remove group">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.changeType"
-               label="Change Type">
+               label="%application_commands_changeType_label">
         <visibleWhen checkEnabled="false">
           <test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
         </visibleWhen>
       </command>
       
       <command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
-               label="Map To ...">
+               label="%application_commands_mapTo_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.unmap"
-               label="Unmap">
+               label="%application_unmap_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.unmapAll"
-               label="Unmap All">
+               label="%application_unmapAll_label">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
-               label="Toggle Connection Visibility">
+               label="%application_commands_toggleConnections_label">
         <visibleWhen checkEnabled="false">
           <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
-               label="Toggle Connection Bendpoints">
+               label="%application_commands_toggleConnectionBendpoints_label">
         <visibleWhen checkEnabled="false">
         <and>
             <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
@@ -1323,7 +1323,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newSubApp"
-               label="New subapplication"
+               label="%application_commands_newSubApp_label"
                tooltip="Create a new subapplication">
         <visibleWhen checkEnabled="false">
           <and>
@@ -1360,7 +1360,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.jdt.ui.edit.text.java.correction.assist.proposals"
-               label="Quick Fix">
+               label="%jdt_ui_edit_text_java_correction_assist_proposals_label">
         <visibleWhen checkEnabled="false">
           <and>
             <with variable="activeEditor">
@@ -1385,7 +1385,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="New Group"
+               label="%application_commands_newGroup_label"
                tooltip="Create a new group">
         <visibleWhen checkEnabled="false">
           <and>
@@ -1411,7 +1411,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
-               label="New Comment"
+               label="%application_commands_newComment_label"
                tooltip="Create a new Comment">
         <visibleWhen checkEnabled="false">
           <and>
@@ -1422,7 +1422,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
-               label="Ungroup"
+               label="%application_commands_ungroup_label"
                tooltip="Remove group">
         <visibleWhen checkEnabled="false">
           <with variable="selection">
@@ -1453,13 +1453,13 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
-               label="Toggle Connection Visibility">
+               label="%application_commands_toggleConnections_label">
         <visibleWhen checkEnabled="false">
         	<test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/> 
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnectionBendpoints"
-               label="Toggle Connection Bendpoints">
+               label="%application_commands_toggleConnectionBendpoints_label">
         <visibleWhen checkEnabled="false">
         <and>
             <test property="org.eclipse.fordiac.ide.application.utilities.isNoReadOnlyEditor"/>
@@ -1509,7 +1509,7 @@
       </command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToGroup"
-            label="Convert Subapp To Group">
+            label="%application_commands_convertToGroup_label">
 		<visibleWhen
                checkEnabled="true">
         	<with variable="selection">
@@ -1526,7 +1526,7 @@
       </command>
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
-            label="Convert Group To Subapp">
+            label="%application_commands_convertToSubapp_label">
         <visibleWhen
                checkEnabled="true">
            <with variable="selection">
@@ -1543,16 +1543,16 @@
     </menuContribution>
 	<menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
     	<command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
-        		label="Map To ...">
+        		label="%application_commands_mapTo_label">
 			<visibleWhen checkEnabled="true"/>
       	</command> 
       	<command commandId="org.eclipse.fordiac.ide.application.unmap"
-        		label="Unmap"
+        		label="%application_unmap_label"
         		style="push">
         	<visibleWhen checkEnabled="true"/>
       	</command>
       	<command commandId="org.eclipse.fordiac.ide.application.unmapAll"
-        		label="Unmap All"
+        		label="%application_unmapAll_label"
         		style="push">
         	<visibleWhen>
         		<and>
@@ -1657,7 +1657,7 @@
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=group.add">
 
       <command commandId="org.eclipse.fordiac.ide.application.commands.changeType"
-               label="Change Type">
+               label="%application_commands_changeType_label">
         <visibleWhen checkEnabled="false">
           <test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
         </visibleWhen>
@@ -1716,7 +1716,7 @@
   <extension point="org.eclipse.ui.navigator.navigatorContent">
     <commonFilter activeByDefault="true"
                   id="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"
-                  name="Show only IEC 61499 FB Types and Subapp Types"
+                  name="%fbpaletteviewer_filters_showonlyFBTypesAndSubAppTypes_name"
                   visibleInUI="true">
       <filterExpression>
         <or>
@@ -1751,7 +1751,7 @@
     <navigatorContent contentProvider="org.eclipse.ui.model.BaseWorkbenchContentProvider"
                       id="org.eclipse.fordiac.ide.fbPaletteContent"
                       labelProvider="org.eclipse.fordiac.ide.application.editors.FBPaletteLabelProvider"
-                      name="FB Palette Content">
+                      name="%application_editors_FBPaletteLabelProvider_name">
       <triggerPoints>
         <instanceof value="org.eclipse.core.resources.IResource">
         </instanceof>
