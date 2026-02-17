@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.AbstractBorder;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -22,8 +21,6 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
@@ -44,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
@@ -58,11 +56,13 @@ import org.eclipse.swt.widgets.Composite;
 
 public class CommentEditPart extends AbstractPositionableElementEditPart {
 
-	private static final int DOG_EAR_SIZE = 9;
+	private static final int DOG_EAR_SIZE = 13;
 
 	public static final class StickyNoteCommentFigure extends Figure {
 
-		private static final Color STICKY_NOTE_YELLOW = new Color(255, 255, 210);
+		private static final int[] STICKY_NOTE_SHAPE_POINTS = new int[10];
+		private static final int[] STICKY_NOTE_DOG_EAR_POINTS = new int[6];
+		private static Color borderColor;
 		private final TextFlow textFlow;
 
 		public StickyNoteCommentFigure() {
@@ -81,8 +81,9 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 		}
 
 		private void setupFigure() {
-			setBorder(new DogEar());
 			setOpaque(true);
+			setBackgroundColor(UIPreferenceConstants.getStickyNoteBGColor());
+			setForegroundColor(UIPreferenceConstants.getStickyNoteFGColor());
 		}
 
 		private void setupRootLayout() {
@@ -99,47 +100,52 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 		@Override
 		public void paintFigure(final Graphics g) {
-			if (getLocalBackgroundColor() != STICKY_NOTE_YELLOW) {
-				setBackgroundColor(STICKY_NOTE_YELLOW);
-			}
 			final Rectangle r = getBounds();
-			final PointList pl = new PointList(5);
-			pl.addPoint(r.getTopLeft());
-			pl.addPoint(r.getTopRight().translate(-DOG_EAR_SIZE, 0));
-			pl.addPoint(r.getTopRight().translate(0, DOG_EAR_SIZE));
-			pl.addPoint(r.getBottomRight());
-			pl.addPoint(r.getBottomLeft());
-			g.fillPolygon(pl);
-		}
-	}
 
-	public static class DogEar extends AbstractBorder {
-		private static final Insets INSETS = new Insets(2, 3, 1, 3);
+			updateStickNoteShapePoints(r);
+			g.fillPolygon(STICKY_NOTE_SHAPE_POINTS);
 
-		/** @see org.eclipse.draw2d.Border#getInsets(org.eclipse.draw2d.IFigure) */
-		@Override
-		public Insets getInsets(final IFigure figure) {
-			return INSETS;
+			updateDogEarPoints(r);
+			g.setBackgroundColor(getBorderBolor());
+			g.fillPolygon(STICKY_NOTE_DOG_EAR_POINTS);
+
+			g.setForegroundColor(getBorderBolor());
+			g.drawPolygon(STICKY_NOTE_SHAPE_POINTS);
 		}
 
-		/**
-		 * @see org.eclipse.draw2d.Border#paint(org.eclipse.draw2d.IFigure,
-		 *      org.eclipse.draw2d.Graphics, org.eclipse.draw2d.geometry.Insets)
-		 */
-		@Override
-		public void paint(final IFigure figure, final Graphics g, final Insets insets) {
-			final Rectangle r = getPaintRectangle(figure, insets);
-			r.resize(-1, -1);
-			final PointList pl = new PointList(
-					new int[] { -DOG_EAR_SIZE, DOG_EAR_SIZE, 0, DOG_EAR_SIZE, -DOG_EAR_SIZE, 0 });
-			pl.translate(r.getTopRight());
-			g.drawPolygon(pl);
-			g.drawLine(r.getTopLeft(), r.getTopRight().translate(-DOG_EAR_SIZE, 0));
-			g.drawLine(r.getTopLeft(), r.getTopLeft());
-			g.drawLine(r.getBottomLeft(), r.getBottomRight());
-			g.drawLine(r.getTopRight().translate(0, DOG_EAR_SIZE), r.getBottomRight());
-			g.drawLine(r.getTopLeft(), r.getBottomLeft());
+		private static void updateStickNoteShapePoints(final Rectangle r) {
+			STICKY_NOTE_SHAPE_POINTS[0] = r.x;
+			STICKY_NOTE_SHAPE_POINTS[1] = r.y;
 
+			STICKY_NOTE_SHAPE_POINTS[2] = r.x + r.width - DOG_EAR_SIZE - 1;
+			STICKY_NOTE_SHAPE_POINTS[3] = r.y;
+
+			STICKY_NOTE_SHAPE_POINTS[4] = r.x + r.width - 1;
+			STICKY_NOTE_SHAPE_POINTS[5] = r.y + DOG_EAR_SIZE;
+
+			STICKY_NOTE_SHAPE_POINTS[6] = r.x + r.width - 1;
+			STICKY_NOTE_SHAPE_POINTS[7] = r.y + r.height - 1;
+
+			STICKY_NOTE_SHAPE_POINTS[8] = r.x;
+			STICKY_NOTE_SHAPE_POINTS[9] = r.y + r.height - 1;
+		}
+
+		private static void updateDogEarPoints(final Rectangle r) {
+			STICKY_NOTE_DOG_EAR_POINTS[0] = r.x + r.width - DOG_EAR_SIZE - 1;
+			STICKY_NOTE_DOG_EAR_POINTS[1] = r.y;
+
+			STICKY_NOTE_DOG_EAR_POINTS[2] = r.x + r.width - DOG_EAR_SIZE - 1;
+			STICKY_NOTE_DOG_EAR_POINTS[3] = r.y + DOG_EAR_SIZE;
+
+			STICKY_NOTE_DOG_EAR_POINTS[4] = r.x + r.width - 1;
+			STICKY_NOTE_DOG_EAR_POINTS[5] = r.y + DOG_EAR_SIZE;
+		}
+
+		private static Color getBorderBolor() {
+			if (borderColor == null) {
+				borderColor = UIPreferenceConstants.getStickyNoteBorderColor();
+			}
+			return borderColor;
 		}
 	}
 
@@ -273,6 +279,11 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 				}
 			}
 		};
+	}
+
+	@Override
+	protected void backgroundColorChanged(final IFigure figure) {
+		// we have a static background color don't change it.
 	}
 
 }
