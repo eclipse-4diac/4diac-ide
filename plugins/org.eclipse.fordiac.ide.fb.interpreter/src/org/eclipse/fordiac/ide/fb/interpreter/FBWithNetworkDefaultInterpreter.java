@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.CompositeFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -50,7 +52,15 @@ public class FBWithNetworkDefaultInterpreter {
 	// type
 	protected static Event getEquivalentEventTypePin(final EventOccurrence sourceEventOccurrence) {
 		final BlockFBNetworkElement fbElem = sourceEventOccurrence.getParentFB();
-		return InterfacePinUtils.findEventInInterface(fbElem, sourceEventOccurrence.getEvent());
+		if (fbElem != null) {
+			return InterfacePinUtils.findEventInInterface(fbElem, sourceEventOccurrence.getEvent());
+		}
+		// otherwise it might be an interpretation of a composite fb type, where we
+		// reuse this code
+		if (sourceEventOccurrence.getFbRuntime() instanceof CompositeFBTypeRuntime) {
+			return sourceEventOccurrence.getEvent();
+		}
+		return null;
 	}
 
 	protected static IInterfaceElement getEquivalentNetworkPin(final FBNetworkRuntime runtime,
@@ -66,7 +76,7 @@ public class FBWithNetworkDefaultInterpreter {
 			// add transactions
 			final EventConnection eventConn = (EventConnection) conn;
 			final EventOccurrence inputEO = EventOccFactory.createFrom(eventConn.getEventDestination());
-			inputEO.setResultFBRuntime(runtime);
+			inputEO.setFbRuntime(EcoreUtil.copy(runtime));
 			final FBTransaction fbTrans = TransactionFactory.createFrom(inputEO);
 			outputEO.getCreatedTransactions().add(fbTrans);
 		}
