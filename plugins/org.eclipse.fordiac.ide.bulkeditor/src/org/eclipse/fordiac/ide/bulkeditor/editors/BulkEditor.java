@@ -270,6 +270,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 			changedSearchParameter = false;
 			searchInformation.setText(""); //$NON-NLS-1$
 			commandStack.flush();
+			disconnectEditorInputs();
+			firePropertyChange(PROP_DIRTY);
 		});
 
 		advancedButton = WidgetFactory.button(SWT.TOGGLE).text(Messages.Advanced).onSelect(event -> {
@@ -715,6 +717,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		changedSearchParameter = false;
 		searchInformation.setText(""); //$NON-NLS-1$
 		commandStack.flush();
+		firePropertyChange(PROP_DIRTY);
 		return true;
 	}
 
