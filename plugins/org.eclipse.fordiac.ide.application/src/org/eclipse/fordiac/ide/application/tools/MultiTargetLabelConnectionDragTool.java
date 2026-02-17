@@ -36,6 +36,7 @@ public class MultiTargetLabelConnectionDragTool extends FordiacConnectionDragCre
 	protected void showSourceFeedback() {
 		final CreateConnectionRequest targetRequest = getTargetRequest();
 		targetRequest.setLocation(getLocation());
+		targetRequest.setSourceEditPart(originalSource); // used to identify the handle
 		selections.forEach(con -> con.showSourceFeedback(targetRequest));
 		super.showSourceFeedback();
 	}

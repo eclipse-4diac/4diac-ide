@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.ConnectionLocator;
+import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -44,16 +45,17 @@ public class TargetLabelConnectionHandle extends ConnectionHandle {
 	private InterfaceEditPart originalSourceEP;
 	private FeedbackHelper feedbackHelper;
 
-	public TargetLabelConnectionHandle(final GraphicalEditPart host, final InterfaceEditPart source) {
+	public TargetLabelConnectionHandle(final GraphicalEditPart host, final InterfaceEditPart originalSourcePin,
+			final ConnectionRouter connectionRouter) {
 		setOwner(host);
-		this.originalSourceEP = source;
-		this.connection = createConnection(source);
+		this.originalSourceEP = originalSourcePin;
+		this.connection = createConnection(originalSourcePin, connectionRouter);
 
 		this.feedbackHelper = new FeedbackHelper();
 		this.feedbackHelper.setMovingStartAnchor(true);
 		this.feedbackHelper.setConnection(this.connection);
 
-		setLocator(new ConnectionLocator(connection, ConnectionLocator.SOURCE) {
+		setLocator(new ConnectionLocator(this.connection, ConnectionLocator.SOURCE) {
 			@Override
 			protected Point getLocation(final PointList points) {
 				final Point p = super.getLocation(points);
@@ -64,23 +66,29 @@ public class TargetLabelConnectionHandle extends ConnectionHandle {
 		});
 	}
 
-	private Connection createConnection(final InterfaceEditPart originalSource) {
+	private Connection createConnection(final InterfaceEditPart originalSource,
+			final ConnectionRouter connectionRouter) {
 		final PolylineConnection newCon = new PolylineConnection();
 		newCon.setLineWidth(ConnectionPreferenceValues.NORMAL_LINE_WIDTH);
 		newCon.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		newCon.setTargetAnchor(new FixedAnchor(getOwnerFigure(), true));
 		newCon.setSourceAnchor(originalSource.getSourceConnectionAnchor(new Request()));
+		newCon.setConnectionRouter(connectionRouter);
 		newCon.layout();
 		return newCon;
 	}
 
-	public void update(final CreateConnectionRequest request) {
+	public void updatePosition(final CreateConnectionRequest request) {
+		if (request.getSourceEditPart() != originalSourceEP) {
+			return; // only update if we are the source
+		}
+
 		final NodeEditPart node = request.getTargetEditPart() instanceof final NodeEditPart nodeEP ? nodeEP : null;
 		final ConnectionAnchor anchor = node == null ? null : node.getSourceConnectionAnchor(request);
 		feedbackHelper.update(anchor, request.getLocation());
 	}
 
-	public void reset() {
+	public void setInitialPosition() {
 		feedbackHelper.update(originalSourceEP.getSourceConnectionAnchor(new Request()), null);
 	}
 
@@ -91,10 +99,10 @@ public class TargetLabelConnectionHandle extends ConnectionHandle {
 
 	@Override
 	protected DragTracker createDragTracker() {
-		// TODO: check for selection on different Interfaces
 		final List<TargetInterfaceElementEditPart> selections = getOwner().getViewer().getSelectedEditParts().stream()
 				.filter(TargetInterfaceElementEditPart.class::isInstance)
-				.map(TargetInterfaceElementEditPart.class::cast).toList();
+				.map(TargetInterfaceElementEditPart.class::cast)
+				.filter(targetIE -> (targetIE.getParent() == getOwner().getParent())).toList();
 
 		return new MultiTargetLabelConnectionDragTool(selections, originalSourceEP);
 	}

@@ -42,15 +42,14 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 	public void showSourceFeedback(final Request request) {
 		super.showSourceFeedback(request);
 		if (request instanceof final CreateConnectionRequest req) {
-			// TODO: only update the selected handle
-			connectionHandles.forEach(handle -> handle.update(req));
+			connectionHandles.forEach(handle -> handle.updatePosition(req));
 		}
 	}
 
 	@Override
 	public void eraseSourceFeedback(final Request request) {
 		super.eraseSourceFeedback(request);
-		connectionHandles.forEach(TargetLabelConnectionHandle::reset);
+		connectionHandles.forEach(TargetLabelConnectionHandle::setInitialPosition);
 	}
 
 	@Override
@@ -73,15 +72,11 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 		connectionHandles.clear();
 	}
 
-	@Override
-	public TargetInterfaceElementEditPart getHost() {
-		return (TargetInterfaceElementEditPart) super.getHost();
-	}
-
 	private void createHandles() {
 		if (getHost().getParent() instanceof final InterfaceEditPart iep && !iep.isInput()) {
 			if (iep.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance).limit(2)
 					.count() == 1) {
+				// for 1 TargetLabel per Pin we select the Connection
 				final var viewer = getHost().getViewer();
 				final List<EditPart> selectedEditParts = new ArrayList<>(
 						viewer.getSelectedEditParts().stream().filter(ep -> ep != getHost()).toList());
@@ -95,8 +90,8 @@ public class TargetInterfaceSelectionPolicy extends ModifiedNonResizeableEditPol
 					.getConnectionRouter();
 			iep.getTargetConnections().forEach(connectionEP -> {
 				if (connectionEP.getSource() instanceof final InterfaceEditPart connectionSourceIEP) {
-					final var newHandle = new TargetLabelConnectionHandle(getHost(), connectionSourceIEP);
-					newHandle.getConnection().setConnectionRouter(connectionRouter);
+					final var newHandle = new TargetLabelConnectionHandle(getHost(), connectionSourceIEP,
+							connectionRouter);
 					connectionHandles.add(newHandle);
 				}
 			});
