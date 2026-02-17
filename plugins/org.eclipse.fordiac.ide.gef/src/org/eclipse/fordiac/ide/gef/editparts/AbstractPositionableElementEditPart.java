@@ -53,6 +53,9 @@ public abstract class AbstractPositionableElementEditPart extends AbstractViewEd
 
 	@Override
 	public DragTracker getDragTracker(final Request request) {
+		if (useConnectionTool()) {
+			return super.getDragTracker(request);
+		}
 		return new ScrollingDragEditPartsTracker(this);
 	}
 
