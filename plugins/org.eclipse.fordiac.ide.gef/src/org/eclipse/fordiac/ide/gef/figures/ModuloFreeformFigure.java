@@ -73,7 +73,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 			final int baseUnit) {
 		final int startExtent = sourceExtent + PADDING + baseOrigin - newOrigin;
 
-		int newExtend = (startExtent / baseUnit) * baseUnit;
+		int newExtend = Math.ceilDiv(startExtent, baseUnit) * baseUnit;
 		if (newExtend < (3 * baseUnit)) {
 			newExtend = 3 * baseUnit;
 		}
@@ -81,11 +81,7 @@ public class ModuloFreeformFigure extends AbstractFreeformFigure {
 	}
 
 	private static int calcAxisOrigin(final int axisPos, final int baseUnit) {
-		if (axisPos < 0) {
-			// when negative we need to go one beyond to have the correct origin
-			return (axisPos / baseUnit) * baseUnit;
-		}
-		return (axisPos / baseUnit) * baseUnit;
+		return Math.floorDiv(axisPos, baseUnit) * baseUnit;
 	}
 
 }
