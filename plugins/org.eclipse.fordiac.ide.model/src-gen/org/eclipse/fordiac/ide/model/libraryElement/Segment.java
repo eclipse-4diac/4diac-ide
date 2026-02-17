@@ -47,6 +47,7 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_Width()
 	 * @model default="200" dataType="org.eclipse.emf.ecore.xml.type.Double"
 	 *        extendedMetaData="kind='attribute' name='dx1'"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	double getWidth();

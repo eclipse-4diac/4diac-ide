@@ -7114,7 +7114,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	protected void createHashMetaDataAnnotations() {
 		String source = "http:///org/eclipse/fordiac/ide/model/HashMetaData"; //$NON-NLS-1$
 		addAnnotation
+		  (getConnection_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (connectionRoutingDataEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getECTransition_Comment(),
 		   source,
 		   new String[] {
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -7124,6 +7136,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (identificationEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getINamedElement_Comment(),
@@ -7138,7 +7156,31 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (getSegment_Width(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (getService_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Width(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Height(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Locked(),
 		   source,
 		   new String[] {
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -7166,6 +7208,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (versionInfoEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 
