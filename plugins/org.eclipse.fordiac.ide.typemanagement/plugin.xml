@@ -707,7 +707,10 @@
 	        id="org.eclipse.fordiac.ide.typemanagement.moveParticipant1"
 	        name="%MoveParticipant1_name">
 	     <enablement>
-	     	<reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+	        <or>
+	           <reference definitionId="org.eclipse.fordiac.ide.typemanagement.typeFile" />
+	           <instanceof value="org.eclipse.core.resources.IFolder" />
+	        </or>
 	     </enablement>
 	  </moveParticipant>
    </extension>   

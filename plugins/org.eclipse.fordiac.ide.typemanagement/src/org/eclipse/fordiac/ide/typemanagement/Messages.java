@@ -134,13 +134,10 @@ public final class Messages extends NLS {
 
 	public static String InitialValueChange_InitialValueChanged;
 
-	public static String MoveToPackageChangePreview_EnterPackageName;
 	public static String MoveTypeToPackage;
 	public static String MoveTypeToPackage_UpdateDataTypeInstance;
 	public static String MoveTypeToPackage_RenamePackageTo;
 	public static String MoveTypeToPackage_PackageNameIsTheSame;
-	public static String MoveTypeToPackage_PackageNameIsEmpty;
-	public static String MoveTypeToPackage_InvalidDestination;
 	public static String MoveTypeToPackage_UpdateInstances;
 	public static String MoveTypeToPackage_NameChanged;
 	public static String MoveTypeToPackage_UpdateTypeEntryFile;
