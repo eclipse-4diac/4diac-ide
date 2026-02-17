@@ -17,12 +17,13 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
@@ -56,6 +57,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
@@ -240,20 +242,35 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCloneCommand(final ChangeBoundsRequest request) {
 		final CopyPasteData copyPasteData = new CopyPasteData(getFBNetwork());
-		request.getEditParts().stream().map(n -> (EObject) (n.getModel())).forEach(m -> {
-			if (m instanceof final FBNetworkElement el) {
-				copyPasteData.elements().add(el);
-			}
-			if (m instanceof final Connection conn) {
-				copyPasteData.conns().add(new ConnectionReference(conn));
-			}
-		});
-		final Point scaledPoint = getDestinationPoint(request);
-		return new PasteCommand(copyPasteData, getFBNetwork(), scaledPoint.x, scaledPoint.y);
-	}
 
-	private Point getDestinationPoint(final ChangeBoundsRequest request) {
-		return getScaledMoveDelta(request);
+		Rectangle originalBounds = null;
+
+		for (final EditPart ep : request.getEditParts()) {
+			switch (ep.getModel()) {
+			case final FBNetworkElement el -> {
+				copyPasteData.elements().add(el);
+				final IFigure fig = ((GraphicalEditPart) ep).getFigure();
+				final Rectangle bounds = new PrecisionRectangle(fig.getBounds());
+				fig.translateToAbsolute(bounds);
+
+				if (originalBounds == null) {
+					originalBounds = bounds;
+				} else {
+					originalBounds.union(bounds);
+				}
+			}
+			case final Connection conn -> copyPasteData.conns().add(new ConnectionReference(conn));
+			default -> {
+				// do nothing
+			}
+			}
+		}
+
+		final Rectangle targetBounds = request.getTransformedRectangle(originalBounds);
+		translateFromAbsoluteToLayoutRelative(targetBounds);
+
+		return new PasteCommand(copyPasteData, getFBNetwork(),
+				new org.eclipse.swt.graphics.Point(targetBounds.x, targetBounds.y));
 	}
 
 	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {
