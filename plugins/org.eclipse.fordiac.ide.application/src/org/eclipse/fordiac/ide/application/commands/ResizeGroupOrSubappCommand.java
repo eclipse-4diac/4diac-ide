@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
@@ -165,7 +166,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				fbBounds.union(containerBounds);
 				final FBNetworkElement container = getContainer(containerEP);
 				if (container != null) {
-					return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
+					return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, fbBounds);
 				}
 			}
 		}
@@ -186,7 +187,7 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 					+ subappFigure.getInsets().right;
 			if (fullContainerBounds.width < newFig1.width) {
 				final FBNetworkElement container = getSubappContainer(fullContentGraphicalEditPart);
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, fullContainerBounds, newFig1);
+				return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, newFig1);
 			}
 		}
 		return null;

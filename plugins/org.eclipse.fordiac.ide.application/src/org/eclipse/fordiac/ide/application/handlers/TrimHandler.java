@@ -26,7 +26,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
-import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -50,13 +50,12 @@ public class TrimHandler extends AbstractHandler {
 			final GraphicalEditPart contentEP = containerEditPart.getContentEP();
 
 			if (contentEP != null) {
-				final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
 				final Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
 				final int adjustedCommentWidth = adjustCommentWidth(containerEditPart.getCommentWidth(),
 						containerEditPart.getChildren());
 				groupContentBounds.setWidth(Math.max(groupContentBounds.width, adjustedCommentWidth));
-				final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						(FBNetworkElement) containerEditPart.getModel(), contentContainerBounds, groupContentBounds);
+				final Command cmd = FBNetworkXYLayoutEditPolicy
+						.createChangeBoundsCommand((FBNetworkElement) containerEditPart.getModel(), groupContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
 		}

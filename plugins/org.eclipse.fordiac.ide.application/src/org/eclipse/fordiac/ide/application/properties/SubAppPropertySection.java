@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -70,16 +70,16 @@ public class SubAppPropertySection extends InstancePropertySection {
 		heightText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
 		heightText.addModifyListener(e -> {
 			if (getType() != null) {
-				final int heightDelta;
+				final double newHeight;
 				try {
-					heightDelta = Integer.parseInt(heightText.getText())
-							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight());
+					newHeight = CoordinateConverter.INSTANCE.screenToIEC61499(Integer.parseInt(heightText.getText()));
 				} catch (final NumberFormatException exception) {
 					return;
 				}
 
 				removeContentAdapter();
-				executeCommand(new ChangeSubAppBoundsCommand(getType(), 0, 0, 0, heightDelta));
+				executeCommand(new ChangeSubAppBoundsCommand(getType(), getType().getPosition(), getType().getWidth(),
+						newHeight));
 				addContentAdapter();
 			}
 		});
@@ -91,17 +91,16 @@ public class SubAppPropertySection extends InstancePropertySection {
 		widthText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
 		widthText.addModifyListener(e -> {
 			if (getType() != null) {
-
-				final int widthDelta;
+				final double newWidth;
 				try {
-					widthDelta = Integer.parseInt(widthText.getText())
-							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth());
+					newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(Integer.parseInt(widthText.getText()));
 				} catch (final NumberFormatException exception) {
 					return;
 				}
 
 				removeContentAdapter();
-				executeCommand(new ChangeSubAppBoundsCommand(getType(), 0, 0, widthDelta, 0));
+				executeCommand(new ChangeSubAppBoundsCommand(getType(), getType().getPosition(), newWidth,
+						getType().getHeight()));
 				addContentAdapter();
 			}
 		});

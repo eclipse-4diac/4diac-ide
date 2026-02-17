@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
@@ -128,9 +126,9 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 		final int expandedIOHeight = subAppEP.getFigure().getExpandedIOHeight();
 		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subAppEP.getContentEP());
 		if (containerBounds.height < expandedIOHeight) {
-			final int heightDelta = expandedIOHeight - containerBounds.height;
+			containerBounds.height = expandedIOHeight;
 			changeSubappHeightCmd = FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(subAppEP.getModel(),
-					new Dimension(0, heightDelta), new Point());
+					containerBounds);
 			changeSubappHeightCmd.execute();
 		}
 	}

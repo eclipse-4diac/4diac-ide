@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Primetals Technologies Germany GmbH,
- * 							Primetals Technologies Austria GmbH
+ * Copyright (c) 2020 Primetals Technologies Germany GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -27,7 +26,6 @@ import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEdi
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
-import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -83,15 +81,6 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 			contentBounds.height = containerBounds.height - dy - borderSize;
 		}
 		return contentBounds;
-	}
-
-	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
-			final Rectangle contentContainerBounds, final Rectangle contentBounds) {
-		final Point moveDelta = new Point(contentBounds.x - contentContainerBounds.x,
-				contentBounds.y - contentContainerBounds.y);
-		final Dimension sizeDelta = new Dimension(contentBounds.width - contentContainerBounds.width,
-				contentBounds.height - contentContainerBounds.height);
-		return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, sizeDelta, moveDelta);
 	}
 
 	protected static void translateToRelative(final GraphicalEditPart graphicalEditPart, final Point topLeft) {
