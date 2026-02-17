@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ConvertGroupToSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
-import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -63,13 +63,12 @@ public class ConvertToSubappHandler extends AbstractHandler {
 		final IContainerEditPart containerEditPart = (IContainerEditPart) subappEP;
 		final GraphicalEditPart contentEP = containerEditPart.getContentEP();
 
-		final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
 		final Rectangle subappContentBounds = containerEditPart.getMinContentBounds();
 		subappContentBounds.setWidth(Math.max(subappContentBounds.width, contentEP.getFigure().getSize().width));
 		subappContentBounds.setHeight(Math.max(subappContentBounds.height, contentEP.getFigure().getSize().height));
 
-		final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-				(FBNetworkElement) containerEditPart.getModel(), contentContainerBounds, subappContentBounds);
+		final Command cmd = FBNetworkXYLayoutEditPolicy
+				.createChangeBoundsCommand((FBNetworkElement) containerEditPart.getModel(), subappContentBounds);
 		if (cmd.canExecute()) {
 			cmdStack.execute(cmd);
 		}

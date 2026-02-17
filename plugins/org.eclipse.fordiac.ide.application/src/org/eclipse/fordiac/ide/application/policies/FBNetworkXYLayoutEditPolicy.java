@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2026 Profactor GmbH, fortiss GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, fortiss GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
@@ -37,9 +36,6 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
@@ -93,7 +89,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp
 				|| child.getModel() instanceof Comment) && RequestUtil.isResizeRequest(request)) {
-			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request, (Rectangle) constraint);
+			return createChangeSizeCommand((GraphicalEditPart) child, (Rectangle) constraint, request);
 		}
 		if ((child.getModel() instanceof final PositionableElement pe) && (RequestUtil.isMoveRequest(request))) {
 			return createMoveCommand(pe, (Rectangle) constraint);
@@ -101,29 +97,31 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request,
-			final Rectangle constraint) {
-		final Dimension sizeDelta = getScaledSizeDelta(request);
-		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
+	private static Command createChangeSizeCommand(final GraphicalEditPart child, final Rectangle constraint,
+			final ChangeBoundsRequest request) {
+		final FBNetworkElement fbnEl = (FBNetworkElement) child.getModel();
+		final Rectangle origBounds = child.getFigure().getBounds();
+
+		if (constraint.width == origBounds.width && constraint.height == origBounds.height) {
 			// we hit the min size and we are just moving, return a set position command
-			return createMoveCommand(container, constraint);
+			return createMoveCommand(fbnEl, constraint);
 		}
-		final Point moveDelta = getScaledMoveDelta(request);
-		return createChangeBoundsCommand(container, sizeDelta, moveDelta);
+		// if we resize the snap to grid gives as a pixel to much
+		if (request.getMoveDelta().x == 0 && request.getSizeDelta().width != 0) {
+			constraint.width -= 1;
+		}
+		if (request.getMoveDelta().y == 0 && request.getSizeDelta().height != 0) {
+			constraint.height -= 1;
+		}
+		return createChangeBoundsCommand(fbnEl, constraint);
 	}
 
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
-			final Dimension sizeDelta, final Point moveDelta) {
-		if (container instanceof final Group group) {
-			return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		if (container instanceof final SubApp subApp) {
-			return new ChangeSubAppBoundsCommand(subApp, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		if (container instanceof final Comment comment) {
-			return new ChangeCommentBoundsCommand(comment, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		return null;
+			final Rectangle constraint) {
+		final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(constraint.x, constraint.y);
+		final double newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(constraint.width);
+		final double newHeight = CoordinateConverter.INSTANCE.screenToIEC61499(constraint.height);
+		return AbstractChangeContainerBoundsCommand.getCommandFor(container, newPos, newWidth, newHeight);
 	}
 
 	@Override
@@ -291,10 +289,6 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return new FBNetworkElementSetPositionCommand(fbnEl, newPos);
 		}
 		return new SetPositionCommand(model, newPos);
-	}
-
-	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {
-		return request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
 	}
 
 	protected Point getScaledMoveDelta(final ChangeBoundsRequest request) {
