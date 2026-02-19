@@ -105,6 +105,8 @@ import org.eclipse.xtext.ui.refactoring2.ChangeConverter;
 import org.eclipse.xtext.ui.refactoring2.rename.ISimpleNameProvider;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.ui.shared.Access;
+import org.eclipse.xtext.ui.tasks.LanguageAwareTaskMarkerTypeProvider;
+import org.eclipse.xtext.ui.tasks.TaskMarkerTypeProvider;
 import org.eclipse.xtext.ui.validation.AbstractValidatorConfigurationBlock;
 import org.eclipse.xtext.ui.validation.IResourceUIValidatorExtension;
 import org.eclipse.xtext.ui.validation.MarkerTypeProvider;
@@ -242,6 +244,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 	@Override
 	public Class<? extends MarkerTypeProvider> bindMarkerTypeProvider() {
 		return STCoreMarkerTypeProvider.class;
+	}
+
+	public Class<? extends TaskMarkerTypeProvider> bindTaskMarkerTypeProvider() {
+		return LanguageAwareTaskMarkerTypeProvider.class;
 	}
 
 	public Class<? extends IResourceUIValidatorExtension> bindIResourceUIValidatorExtension() {

@@ -306,6 +306,20 @@
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+ <extension
+       id="globalconstants.task"
+       name="4diac IDE Global Constants Task"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.task">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
