@@ -215,11 +215,22 @@
 			uriExtension="stcore">
 		</resourceServiceProvider>
 	</extension>
+ <extension
+       id="stcore"
+       name="4diac IDE Structured Text Marker"
+       point="org.eclipse.core.resources.markers">
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextcore.STCore -->
 	<extension
 			id="stcore.check.fast"
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
     <super
           type="org.eclipse.emf.ecore.diagnostic">
     </super>
@@ -234,6 +245,9 @@
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
     <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
+    <super
           type="org.eclipse.emf.ecore.diagnostic">
     </super>
 		<super type="org.eclipse.xtext.ui.check.normal"/>
@@ -246,6 +260,9 @@
 			id="stcore.check.expensive"
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
     <super
           type="org.eclipse.emf.ecore.diagnostic">
     </super>

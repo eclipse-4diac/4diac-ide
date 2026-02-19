@@ -264,11 +264,25 @@
 			uriExtension="gcf">
 		</resourceServiceProvider>
 	</extension>
+ <extension
+       id="globalconstants"
+       name="4diac IDE Global Constants Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants -->
 	<extension
 			id="globalconstants.check.fast"
 			name="GlobalConstants Problem"
 			point="org.eclipse.core.resources.markers">
+  <super
+        type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+  </super>
 		<super type="org.eclipse.xtext.ui.check.fast"/>
 		<persistent value="true"/>
 	</extension>
@@ -276,6 +290,9 @@
 			id="globalconstants.check.normal"
 			name="GlobalConstants Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.normal"/>
 		<persistent value="true"/>
 	</extension>
@@ -283,6 +300,9 @@
 			id="globalconstants.check.expensive"
 			name="GlobalConstants Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
