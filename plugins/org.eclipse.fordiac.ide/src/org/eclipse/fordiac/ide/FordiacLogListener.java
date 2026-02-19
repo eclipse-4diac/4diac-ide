@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz, Martin Erich Jobst
+ * Copyright (c) 2020, 2026 Johannes Kepler University Linz, Martin Erich Jobst
+ * 							Malte Grave
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Erich Jobst - add preference qualifier and issue URL parameter
+ *   Malte Grave - added filters to show error dialog based on plugin id
  *******************************************************************************/
 package org.eclipse.fordiac.ide;
 
@@ -17,14 +19,19 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ILogListener;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.issuereport.GitIssueCreator;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -36,9 +43,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 public class FordiacLogListener implements ILogListener {
+	private static final TreeMap<String, String> cachedFilters = loadFilterExtensions();
 
 	private static final class LogErrorDialog extends ErrorDialog {
 
@@ -126,9 +133,8 @@ public class FordiacLogListener implements ILogListener {
 
 	@Override
 	public void logging(final IStatus status, final String plugin) {
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
-				&& (status.getPlugin().startsWith(Activator.PLUGIN_ID)
-						|| status.getPlugin().equals(PlatformUI.PLUGIN_ID))
+		if (status.getSeverity() == IStatus.ERROR && status.getException() != null
+				&& isPluginInFilterMap(status.getPlugin())
 				// checking/setting the flag must be last, so that we only set it when actually
 				// showing an error dialog and resetting the flag afterwards
 				&& !singleWindow.getAndSet(true)) {
@@ -137,11 +143,36 @@ public class FordiacLogListener implements ILogListener {
 			// Platform UI plug-in as noteworthy
 			// if a error dialog is already showing we will not show another one.
 			try {
-				showErrorDialog(createStatusWithStackTrace(status), PreferenceConstants.P_BUG_REPORT_PREFERENCE_ID);
+				showErrorDialog(createStatusWithStackTrace(status),
+						cachedFilters.floorEntry(status.getPlugin()).getValue());
 			} finally {
 				singleWindow.set(false);
 			}
 		}
+	}
+
+	private static boolean isPluginInFilterMap(final String pluginID) {
+		final String floor = cachedFilters.floorKey(pluginID);
+		return floor != null && pluginID.startsWith(floor);
+	}
+
+	private static TreeMap<String, String> loadFilterExtensions() {
+		final TreeMap<String, String> filters = new TreeMap<>();
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IConfigurationElement[] config = registry
+				.getConfigurationElementsFor("org.eclipse.fordiac.ide.errorDialogFilters"); //$NON-NLS-1$
+		for (final IConfigurationElement e : config) {
+			final String pluginID = e.getAttribute("id"); //$NON-NLS-1$
+			final String pluginPreferenceQualifier = e.getAttribute("preference_qualifier"); //$NON-NLS-1$
+			if (pluginID.isBlank() || pluginPreferenceQualifier.isBlank()) {
+				FordiacLogHelper
+						.logInfo("Invalid error dialog filter extension, missing id or preference_qualifier attribute: " //$NON-NLS-1$
+								+ e.getContributor().getName());
+				continue;
+			}
+			filters.put(pluginID, pluginPreferenceQualifier);
+		}
+		return filters;
 	}
 
 	private static IStatus createStatusWithStackTrace(final IStatus status) {
