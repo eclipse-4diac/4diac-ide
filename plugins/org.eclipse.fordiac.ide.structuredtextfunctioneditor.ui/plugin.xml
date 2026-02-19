@@ -232,11 +232,25 @@
         uriExtension="fct">
   </resourceServiceProvider>
 	</extension>
+ <extension
+       id="stfunction"
+       name="4diac IDE Structured Text Function Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction -->
 	<extension
 			id="stfunction.check.fast"
 			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
+    </super>
 		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.fast"/>
 		<persistent value="true"/>
 	</extension>
@@ -244,6 +258,9 @@
 			id="stfunction.check.normal"
 			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
+    </super>
 		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.normal"/>
 		<persistent value="true"/>
 	</extension>
@@ -251,6 +268,9 @@
 			id="stfunction.check.expensive"
 			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
+    </super>
 		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
