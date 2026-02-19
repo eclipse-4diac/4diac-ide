@@ -22,7 +22,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
@@ -169,7 +168,7 @@ public class InterfaceEditPartForFBNetwork extends InterfaceEditPart {
 	private static boolean needsOppositeSubapp(final SubApp subapp) {
 		// if a subapp is mapped and we are at the resource side we would like to get
 		// the opposite subapp
-		return (subapp.isMapped() && EcoreUtil.isAncestor(subapp.getResource(), subapp));
+		return (subapp.isMapped() && subapp.getMapping().getTo() == subapp);
 	}
 
 	protected boolean isUnfoldedSubapp() {
