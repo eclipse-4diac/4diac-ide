@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: %GlobalConstEditorUI.bundleName
-Bundle-Vendor: Eclipse 4diac
+Bundle-Vendor: %Bundle-Vendor
 Bundle-Version: 3.0.100.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
