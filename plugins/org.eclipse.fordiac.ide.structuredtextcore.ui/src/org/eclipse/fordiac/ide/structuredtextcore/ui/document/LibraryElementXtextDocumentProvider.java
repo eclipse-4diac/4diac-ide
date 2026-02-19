@@ -20,13 +20,33 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.resource.LibraryElementXtextResource;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
+import org.eclipse.xtext.LanguageInfo;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
+import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider;
+import org.eclipse.xtext.ui.util.IssueUtil;
+
+import com.google.inject.Inject;
 
 public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentProvider {
+
+	@Inject
+	private LanguageInfo languageInfo;
+
+	@Inject
+	private AbstractUIPlugin languageUIPlugin;
+
+	@Inject
+	private IssueResolutionProvider issueResolutionProvider;
+
+	@Inject
+	private IssueUtil issueUtil;
+
 	@Override
 	protected boolean setDocumentContent(final IDocument document, final IEditorInput editorInput,
 			final String encoding) throws CoreException {
@@ -46,6 +66,19 @@ public abstract class LibraryElementXtextDocumentProvider extends XtextDocumentP
 			}
 		}
 		return super.setDocumentContent(document, editorInput, encoding);
+	}
+
+	@Override
+	protected IAnnotationModel createAnnotationModel(final Object element) throws CoreException {
+		if (element instanceof final IFileEditorInput input) {
+			return new LibraryElementXtextResourceMarkerAnnotationModel(input.getFile(), issueResolutionProvider,
+					issueUtil, getLanguageMarkerType());
+		}
+		return super.createAnnotationModel(element);
+	}
+
+	protected String getLanguageMarkerType() {
+		return languageUIPlugin.getBundle().getSymbolicName() + "." + languageInfo.getShortName().toLowerCase(); //$NON-NLS-1$
 	}
 
 	@Override
