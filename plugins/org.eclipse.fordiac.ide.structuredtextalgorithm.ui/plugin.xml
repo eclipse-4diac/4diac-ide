@@ -564,6 +564,20 @@
 		<persistent value="true"/>
 	</extension>
  <extension
+       id="stalgorithm.task"
+       name="4diac IDE Structured Text Algorithm Task"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.stalgorithm">
+    </super>
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.task">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
+ <extension
        point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
           name="4diac IDE Structured Text Problem">
