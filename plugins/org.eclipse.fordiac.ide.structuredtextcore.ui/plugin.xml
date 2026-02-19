@@ -9,7 +9,7 @@
 			default="true"
 			extensions="stcore"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			name="STCore Editor">
+			name="%editor.name">
 		</editor>
 	</extension>
 	<extension
@@ -81,7 +81,7 @@
 			category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			name="Structured Text">
+			name="%page.name.structuredText">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 		</page>
 	</extension>
@@ -91,7 +91,7 @@
 			category="org.eclipse.fordiac.ide.properties.FordiacPropertyPage"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore"
-			name="Structured Text">
+			name="%page.name.structuredText">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -103,27 +103,27 @@
 		point="org.eclipse.ui.keywords">
 		<keyword
 			id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"
-			label="STCore"/>
+			label="%keyword.label"/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Trigger expensive validation"
+			description="%command.description.triggerExpensiveValidation"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.validate"
-			name="Validate">
+			name="%command.name.triggerExpensiveValidation">
 		</command>
 		<!-- copy qualified name -->
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -132,7 +132,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.structuredtextcore.STCore.validate"
 				style="push"
-				tooltip="Trigger expensive validation">
+				tooltip="%command.tooltip.triggerExpensiveValidation">
 				<visibleWhen checkEnabled="false">
 					<reference
 						definitionId="org.eclipse.fordiac.ide.structuredtextcore.STCore.Editor.opened">
@@ -143,7 +143,7 @@
 		<!-- copy qualified name -->
 		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextcore.STCore.Editor.opened" />
 				</visibleWhen>
@@ -151,7 +151,7 @@
 		</menuContribution>
 		<menuContribution locationURI="menu:edit?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextcore.STCore.Editor.opened" />
 				</visibleWhen>
@@ -159,7 +159,7 @@
 		</menuContribution>
 		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<and>
 						<reference definitionId="org.eclipse.fordiac.ide.structuredtextcore.STCore.XtextEditor.opened" />
@@ -197,7 +197,7 @@
 			base-type="org.eclipse.core.runtime.text"
 			file-extensions="stcore"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.contenttype"
-			name="STCore File"
+			name="%content-type.name"
 			priority="normal">
 		</content-type>
 	</extension>
@@ -217,7 +217,7 @@
 	</extension>
  <extension
        id="stcore"
-       name="4diac IDE Structured Text Marker"
+       name="%marker.name.stcore"
        point="org.eclipse.core.resources.markers">
     <persistent
           value="true">
@@ -226,7 +226,7 @@
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextcore.STCore -->
 	<extension
 			id="stcore.check.fast"
-			name="4diac IDE Structured Text Problem"
+			name="%marker.name.stcore.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
@@ -242,7 +242,7 @@
 	</extension>
 	<extension
 			id="stcore.check.normal"
-			name="4diac IDE Structured Text Problem"
+			name="%marker.name.stcore.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
@@ -258,7 +258,7 @@
 	</extension>
 	<extension
 			id="stcore.check.expensive"
-			name="4diac IDE Structured Text Problem"
+			name="%marker.name.stcore.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
@@ -274,7 +274,7 @@
 	</extension>
  <extension
        id="stcore.task"
-       name="4diac IDE Structured Text Task"
+       name="%marker.name.stcore.task"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
@@ -289,7 +289,7 @@
  <extension
        point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
-          name="4diac IDE Structured Text Problem">
+          name="%markerTypeCategory.name.stcore.problem">
        <markerTypeReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.fast">
        </markerTypeReference>
@@ -343,9 +343,9 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Open the quick outline."
+			description="%command.description.openQuickOutline"
 			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
-			name="Quick Outline">
+			name="%command.name.openQuickOutline">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -353,7 +353,7 @@
 			locationURI="popup:#TextEditorContext?after=group.open">
 			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
 				style="push"
-				tooltip="Open Quick Outline">
+				tooltip="%command.tooltip.openQuickOutline">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextcore.STCore.Editor.opened"/>
 				</visibleWhen>
@@ -391,9 +391,9 @@
 	<extension
 		point="org.eclipse.ui.contexts">
 		<context
-			description="Structured Text Editor"
+			description="%context.description"
 			id="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
-			name="ST Editor"
+			name="%context.name"
 			parentId="org.eclipse.xtext.ui.XtextEditorScope">
 		</context>
 	</extension>
@@ -402,12 +402,12 @@
 		<command
 			categoryId="org.eclipse.xtext.ui.category.refactoring"
 			id="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
-			name="Extract Callable">
+			name="%command.name.extractCallable">
 		</command>
 		<command
 			categoryId="org.eclipse.xtext.ui.category.refactoring"
 			id="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
-			name="Move Element">
+			name="%command.name.moveElement">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.bindings">
@@ -524,7 +524,7 @@
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.refactoring"
-			name="Refactoring">
+			name="%page.name.refactoring">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore"/>
 		</page>
 	</extension>
@@ -540,7 +540,7 @@
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.eclipse.fordiac.ide.structuredtextcore.STCore.compare.contentMergeViewers"
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-			extensions="stcore" label="STCore Compare">
+			extensions="stcore" label="%contentMergeViewer.label">
 		</viewer>
 		<contentTypeBinding
 			contentTypeId="org.eclipse.fordiac.ide.structuredtextcore.STCore.contenttype"
@@ -563,7 +563,7 @@
 		<codeMiningProvider
 			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.jface.text.codemining.ICodeMiningProvider"
 			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.CodeMiningProvider"
-			label="STCore Codemining">
+			label="%codeMiningProvider.label">
 			<enabledWhen>
 				<with variable="editorInput">
 					<adapt type="org.eclipse.core.resources.IFile">
@@ -583,7 +583,7 @@
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferencePage"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.codeMining"
-          name="Code Minings">
+          name="%page.name.codeMinings">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
@@ -592,7 +592,7 @@
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentAssistPreferencePage"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.contentAssist"
-          name="Content Assist">
+          name="%page.name.contentAssist">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
@@ -601,7 +601,7 @@
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
           id="org.eclipse.fordiac.ide.structuredtextcore.STCore.saveActions.preferencePage"
-          name="Save Actions">
+          name="%page.name.saveActions">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
@@ -610,7 +610,7 @@
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferencePage"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.editor"
-          name="Editor">
+          name="%page.name.editor">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
@@ -622,7 +622,7 @@
           category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsPreferencePage"
           id="org.eclipse.fordiac.ide.structuredtextcore.STCore.saveActions.propertyPage"
-          name="Save Actions">
+          name="%page.name.saveActions">
        <keywordReference
              id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
        </keywordReference>
@@ -642,7 +642,7 @@
     <renameParticipant
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRenameResourceParticipant"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.renameParticipant"
-          name="ST Rename Resource Participant">
+          name="%renameParticipant.name">
        <enablement>
           <adapt
                 type="org.eclipse.core.resources.IFile">
@@ -655,7 +655,7 @@
     <moveParticipant
           class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreMoveResourceParticipant"
           id="org.eclipse.fordiac.ide.structuredtextcore.ui.moveParticipant"
-          name="ST Move Resource Participant">
+          name="%moveParticipant.name">
        <enablement>
           <adapt
                 type="org.eclipse.core.resources.IFile">
