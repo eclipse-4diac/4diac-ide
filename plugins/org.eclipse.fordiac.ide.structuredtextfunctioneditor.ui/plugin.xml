@@ -10,7 +10,7 @@
 			extensions="stfunc"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			icon="fordiacimage://ICON_FUNCTION"
-			name="ST Function Editor">
+			name="%editor.name">
 		</editor>
 	</extension>
 	<extension
@@ -82,21 +82,21 @@
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			name="Functions">
+			name="%page.name.functions">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 		<page
 			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.coloring"
-			name="Syntax Coloring">
+			name="%page.name.syntaxColoring">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 		<page
 			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.templates"
-			name="Templates">
+			name="%page.name.templates">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 	</extension>
@@ -106,7 +106,7 @@
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
-			name="Functions">
+			name="%page.name.functions">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -118,27 +118,27 @@
 		point="org.eclipse.ui.keywords">
 		<keyword
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"
-			label="STFunction"/>
+			label="%keyword.label"/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Trigger expensive validation"
+			description="%command.description.triggerExpensiveValidation"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.validate"
-			name="Validate">
+			name="%command.name.triggerExpensiveValidation">
 		</command>
 		<!-- copy qualified name -->
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -147,7 +147,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.validate"
 				style="push"
-				tooltip="Trigger expensive validation">
+				tooltip="%command.tooltip.triggerExpensiveValidation">
 				<visibleWhen checkEnabled="false">
 					<reference
 						definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
@@ -158,7 +158,7 @@
 		<!-- copy qualified name -->
 		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened" />
 				</visibleWhen>
@@ -166,7 +166,7 @@
 		</menuContribution>
 		<menuContribution locationURI="menu:edit?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened" />
 				</visibleWhen>
@@ -174,7 +174,7 @@
 		</menuContribution>
 		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<and>
 						<reference definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.XtextEditor.opened" />
@@ -210,7 +210,7 @@
 			base-type="org.eclipse.core.runtime.text"
 			file-extensions="stfunc"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.contenttype"
-			name="STFunction File"
+			name="%content-type.name"
 			priority="normal">
 		</content-type>
 	</extension>
@@ -234,7 +234,7 @@
 	</extension>
  <extension
        id="stfunction"
-       name="4diac IDE Structured Text Function Marker"
+       name="%marker.name.stfunction"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
@@ -246,7 +246,7 @@
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction -->
 	<extension
 			id="stfunction.check.fast"
-			name="4diac IDE Structured Text Function Problem"
+			name="%marker.name.stfunction.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
@@ -256,7 +256,7 @@
 	</extension>
 	<extension
 			id="stfunction.check.normal"
-			name="4diac IDE Structured Text Function Problem"
+			name="%marker.name.stfunction.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
@@ -266,7 +266,7 @@
 	</extension>
 	<extension
 			id="stfunction.check.expensive"
-			name="4diac IDE Structured Text Function Problem"
+			name="%marker.name.stfunction.problem"
 			point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
@@ -276,7 +276,7 @@
 	</extension>
  <extension
        id="stfunction.task"
-       name="4diac IDE Structured Text Function Task"
+       name="%marker.name.stfunction.task"
        point="org.eclipse.core.resources.markers">
     <super
           type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
@@ -291,7 +291,7 @@
  <extension
        point="org.eclipse.ui.ide.markerSupport">
     <markerTypeCategory
-          name="4diac IDE Structured Text Problem">
+          name="%markerTypeCategory.name.stfunction.problem">
        <markerTypeReference
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction.check.fast">
        </markerTypeReference>
@@ -308,7 +308,7 @@
 			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.validator.preferencePage"
-			name="Errors/Warnings">
+			name="%page.name.validation">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 		</page>
 	</extension>
@@ -317,7 +317,7 @@
 			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.validator.propertyPage"
-			name="Errors/Warnings">
+			name="%page.name.validation">
 			<keywordReference id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.keyword_STFunction"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -367,9 +367,9 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Open the quick outline."
+			description="%command.description.openQuickOutline"
 			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
-			name="Quick Outline">
+			name="%command.name.openQuickOutline">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -377,7 +377,7 @@
 			locationURI="popup:#TextEditorContext?after=group.open">
 			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
 				style="push"
-				tooltip="Open Quick Outline">
+				tooltip="%command.tooltip.openQuickOutline">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened"/>
 				</visibleWhen>
@@ -447,10 +447,10 @@
         locationURI="popup:#TextEditorContext?after=xtext.ui.SourceMenu">
      <menu
            id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.RefactoringMenu"
-           label="Refactor">
+           label="%menu.label.refactor">
         <command
               commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
-              label="Rename ..."
+              label="%command.label.rename"
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -461,7 +461,7 @@
         </command>
         <command
               commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
-              label="Move ..."
+              label="%command.label.move"
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -472,7 +472,7 @@
         </command>
         <command
               commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
-              label="Extract Function"
+              label="%command.label.extractFunction"
               style="push">
            <visibleWhen
                  checkEnabled="false">
@@ -496,7 +496,7 @@
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.compare.contentMergeViewers"
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-			extensions="stfunc" label="STFunction Compare">
+			extensions="stfunc" label="%contentMergeViewer.label">
 		</viewer>
 		<contentTypeBinding
 			contentTypeId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.contenttype"
@@ -519,7 +519,7 @@
 		<codeMiningProvider
 			class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.jface.text.codemining.ICodeMiningProvider"
 			id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.CodeMiningProvider"
-			label="STFunction Codemining">
+			label="%codeMiningProvider.label">
 			<enabledWhen>
       <and>
          <with
@@ -549,7 +549,7 @@
              actionID="RulerDoubleClick"
              class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.doubleClickBreakpointAction"
-             label="Toggle Breakpoint"
+             label="%action.label.toggleBreakpoint"
              style="push">
        </action>
     </editorContribution>
@@ -563,13 +563,13 @@
        <action
              class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.rulerContextMenu.toggleBreakpointAction"
-             label="Toggle Breakpoint"
+             label="%action.label.toggleBreakpoint"
              menubarPath="debug">
        </action>
        <action
              class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerEnableDisableBreakpointActionDelegate"
              id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.rulerContextMenu.enableDisableBreakpointAction"
-             label="Enable/Disable Breakpoint"
+             label="%action.label.enableDisableBreakpoint"
              menubarPath="debug">
        </action>
     </viewerContribution>
@@ -591,7 +591,7 @@
     <renameParticipant
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameTypeRefactoringParticipant"
           id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameFunctionParticipant"
-          name="Rename Function">
+          name="%renameParticipant.name">
        <enablement>
           <adapt
                 type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
@@ -607,7 +607,7 @@
     <renameParticipant
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameFunctionParameterRefactoringParticipant"
           id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameFunctionParameterParticipant"
-          name="Rename Function Parameters">
+          name="%renameParticipant.name.parameters">
        <enablement>
           <adapt
                 type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
@@ -623,7 +623,7 @@
     <renameParticipant
           class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.refactoring.STFunctionRenameInterfaceParameterRefactoringParticipant"
           id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.renameInterfaceParameterParticipant"
-          name="Rename Interface References">
+          name="%renameParticipant.name.interface">
        <enablement>
           <adapt
                 type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">
