@@ -37,7 +37,6 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
-import org.eclipse.fordiac.ide.model.data.impl.ErrorDataTypeImpl;
 import org.eclipse.fordiac.ide.model.emf.SingleRecursiveContentAdapter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -254,14 +253,5 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 	@Override
 	public boolean isConnectable() {
 		return false;
-	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		if (key == ErrorDataTypeImpl.class) {
-			final DataType marker = getCastedModel().getType();
-			return marker instanceof ErrorDataTypeImpl ? key.cast(marker) : null;
-		}
-		return super.getAdapter(key);
 	}
 }
