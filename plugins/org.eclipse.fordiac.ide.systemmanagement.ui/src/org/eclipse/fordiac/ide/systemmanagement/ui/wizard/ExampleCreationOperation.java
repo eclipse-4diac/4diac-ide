@@ -120,12 +120,15 @@ public class ExampleCreationOperation extends WorkspaceModifyOperation {
 			throws IOException, InterruptedException {
 
 		final Enumeration<? extends ZipEntry> e = zipFile.entries();
+		final java.nio.file.Path targetDirPath = projectFolderFile.toPath().toRealPath();
 
 		while (e.hasMoreElements()) {
 			final ZipEntry zipEntry = e.nextElement();
-			final File file = new File(projectFolderFile, zipEntry.getName());
 
-			if (!zipEntry.isDirectory()) {
+			final File file = safeZipEntryDestination(targetDirPath, zipEntry);
+			if (zipEntry.isDirectory()) {
+				file.mkdirs();
+			} else {
 
 				// Copy files (and make sure parent directory exist)
 				final File parentFile = file.getParentFile();
@@ -144,6 +147,17 @@ public class ExampleCreationOperation extends WorkspaceModifyOperation {
 				throw new InterruptedException();
 			}
 		}
+	}
+
+	private static File safeZipEntryDestination(final java.nio.file.Path targetDir, final ZipEntry zipEntry)
+			throws IOException {
+		// Normalize separators to avoid Windows-style traversal (e.g. "..\\..\\evil")
+		final String entryName = zipEntry.getName().replace('\\', '/');
+		final java.nio.file.Path destPath = targetDir.resolve(entryName).normalize();
+		if (!destPath.startsWith(targetDir)) {
+			throw new IOException("Blocked zip entry outside target directory: " + entryName); //$NON-NLS-1$
+		}
+		return destPath.toFile();
 	}
 
 	private static void renameProject(final IProject project, final String projectName) throws CoreException {
