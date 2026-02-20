@@ -346,9 +346,11 @@ public enum LibraryManager {
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static Path newPath(final Path destinationDir, final ZipEntry zipEntry) throws IOException {
-		final Path destPath = destinationDir.resolve(zipEntry.getName());
+		final Path normalizedDestinationDir = destinationDir.toAbsolutePath().normalize();
+		final String entryName = zipEntry.getName().replace('\\', '/');
+		final Path destPath = normalizedDestinationDir.resolve(entryName).normalize();
 
-		if (!destPath.startsWith(destinationDir)) {
+		if (!destPath.startsWith(normalizedDestinationDir)) {
 			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
 		}
 		return destPath;

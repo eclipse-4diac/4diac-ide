@@ -767,7 +767,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="routingData" lowerBound="1"
         eType="#//ConnectionRoutingData" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
-        defaultValueLiteral=""/>
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
     <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
@@ -1023,6 +1027,9 @@
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Comment"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
@@ -1532,6 +1539,9 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Identification">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="applicationDomain" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
@@ -2142,6 +2152,9 @@
         <details key="kind" value="attribute"/>
         <details key="name" value="dx1"/>
       </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outConnections" upperBound="-1"
         eType="#//Link" eOpposite="#//Link/segment"/>
@@ -2296,11 +2309,23 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
-        defaultValueLiteral="3000"/>
+        defaultValueLiteral="3000">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
-        defaultValueLiteral="1700"/>
+        defaultValueLiteral="1700">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
-        defaultValueLiteral="false"/>
+        defaultValueLiteral="false">
+      <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+        <details key="ignored" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubAppType" eSuperTypes="#//CompositeFBType"/>
   <eClassifiers xsi:type="ecore:EClass" name="SystemConfiguration">
@@ -2737,6 +2762,9 @@
         containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VersionInfo">
+    <eAnnotations source="http:///org/eclipse/fordiac/ide/model/HashMetaData">
+      <details key="ignored" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String" defaultValueLiteral="">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
