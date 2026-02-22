@@ -34,6 +34,7 @@ import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -41,7 +42,6 @@ import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
-import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
@@ -257,7 +257,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 			bottomLayout.setStretchMinorAxis(true);
 			deviceRectangle.setLayoutManager(bottomLayout);
 			deviceRectangle.setOutline(DEVICE_HAS_OUTER_BORDER);
-			deviceRectangle.setBorder(new RoundedRectangleShadowBorder());
+			deviceRectangle.setBorder(new RectangleDropShadowBorder(GefPreferenceConstants.CORNER_DIM));
 			add(deviceRectangle);
 
 			createDeviceInfoSection(deviceRectangle);
