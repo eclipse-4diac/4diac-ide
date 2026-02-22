@@ -46,18 +46,14 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Color;
-import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -104,8 +100,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		}
 	}
 
-	private ColorizableElement referencedDevice;
-
 	private DiagramFontChangeListener fontChangeListener;
 
 	protected AbstractBlockFBNElementEditPart() {
@@ -146,15 +140,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		return (FBNetworkElementFigure) super.getFigure();
 	}
 
-	private final Adapter colorChangeListener = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()) {
-				backgroundColorChanged(getFigure());
-			}
-		}
-	};
-
 	@Override
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
@@ -170,24 +155,9 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		};
 	}
 
-	protected void updateDeviceListener() {
-		final ColorizableElement device = findDevice();
-		if (device != referencedDevice) {
-			if (referencedDevice != null) {
-				referencedDevice.eAdapters().remove(colorChangeListener);
-			}
-			referencedDevice = device;
-			if (referencedDevice != null) {
-				referencedDevice.eAdapters().add(colorChangeListener);
-			}
-			backgroundColorChanged(getFigure());
-		}
-	}
-
 	@Override
 	public void activate() {
 		super.activate();
-		updateDeviceListener();
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
 		if (getColorChangeListener() != null) {
 			JFaceResources.getColorRegistry().addListener(getColorChangeListener());
@@ -200,9 +170,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (referencedDevice != null) {
-			referencedDevice.eAdapters().remove(colorChangeListener);
-		}
 		JFaceResources.getFontRegistry().removeListener(getFontChangeListener());
 		if (getColorChangeListener() != null) {
 			JFaceResources.getColorRegistry().removeListener(getColorChangeListener());
@@ -289,25 +256,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 
 	@Override
 	protected void backgroundColorChanged(final IFigure figure) {
-		Color color = null;
-		if (getModel() != null) {
-			final ColorizableElement dev = findDevice();
-			if (dev != null) {
-				color = LibraryElementFactory.eINSTANCE.createColor();
-				color.setRed(dev.getColor().getRed());
-				color.setGreen(dev.getColor().getGreen());
-				color.setBlue(dev.getColor().getBlue());
-			}
-		}
-		// setColor(figure, color);
-	}
-
-	protected ColorizableElement findDevice() {
-		Resource res = null;
-		if ((null != getModel()) && getModel().isMapped()) {
-			res = getModel().getResource();
-		}
-		return (null != res) ? res.getDevice() : null;
+		// don't do anything
 	}
 
 	@Override

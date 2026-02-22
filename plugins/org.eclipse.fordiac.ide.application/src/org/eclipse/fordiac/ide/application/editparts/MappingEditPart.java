@@ -16,12 +16,35 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 public class MappingEditPart extends AbstractGraphicalEditPart {
+
+	private final Adapter colorChangeListener = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getColorizableElement_Color()
+					&& notification.getNewValue() instanceof final Color col) {
+				setColor(getFigure(), col);
+			}
+		}
+	};
+
+	@Override
+	public void activate() {
+		getColorizeableElement().eAdapters().add(colorChangeListener);
+		super.activate();
+	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -38,13 +61,26 @@ public class MappingEditPart extends AbstractGraphicalEditPart {
 		fig.setPreferredSize(new Dimension(-1, 7));
 		fig.setBorder(new MarginBorder(0, 0, -1, 0));
 
-		setColor(fig, getModel().getTo().getResource().getDevice().getColor());
+		setColor(fig, getColorizeableElement().getColor());
 		return fig;
 	}
 
 	@Override
 	protected void createEditPolicies() {
 		// no edit interaction should be done with mapping elements
+	}
+
+	@Override
+	public void deactivate() {
+		getColorizeableElement().eAdapters().remove(colorChangeListener);
+		super.deactivate();
+	}
+
+	private ColorizableElement getColorizeableElement() {
+		if (getModel().getTo().eContainer() instanceof final CommunicationMappingTarget commTarget) {
+			return (Segment) commTarget.eContainer().eContainer();
+		}
+		return getModel().getTo().getResource().getDevice();
 	}
 
 	@Override
