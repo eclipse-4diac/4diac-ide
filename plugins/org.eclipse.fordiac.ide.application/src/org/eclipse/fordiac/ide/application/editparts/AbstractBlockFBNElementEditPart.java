@@ -163,7 +163,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				super.notifyChanged(notification);
 				refreshToolTip(); // TODO add here checks that better define when the tooltip should be refreshed
 				if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-					updateDeviceListener();
+					refreshChildren();
 				}
 			}
 

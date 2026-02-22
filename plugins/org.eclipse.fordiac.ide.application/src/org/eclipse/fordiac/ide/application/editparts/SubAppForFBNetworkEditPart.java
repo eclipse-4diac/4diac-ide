@@ -119,7 +119,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 			}
 			refreshToolTip();
 			if (notification.getFeature() == LibraryElementPackage.eINSTANCE.getFBNetworkElement_Mapping()) {
-				updateDeviceListener();
+				refreshChildren();
 			}
 		}
 
