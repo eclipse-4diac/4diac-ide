@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020        Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Alois Zoitl
  *     - redesigned ECC
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
@@ -20,21 +21,22 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_HORIZONTAL;
 import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants.MARGIN_VERTICAL;
 
+import org.eclipse.draw2d.AbstractBackground;
+import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.OrderedLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
-import org.eclipse.fordiac.ide.gef.figures.HorizontalLineFigure;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.swt.SWT;
@@ -42,12 +44,15 @@ import org.eclipse.swt.graphics.Color;
 
 public final class ECStateFigure extends Figure implements InteractionStyleFigure {
 
-	private static final int STATE_ACTION_CONNECTOR_LENGTH = 15;
+	private static final int ACTION_SEPERATION = 1;
+
+	private static final int SPINE_WIDTH = 4;
+
 	private static final Insets STATE_INSET = new Insets(MARGIN_VERTICAL, MARGIN_HORIZONTAL, MARGIN_VERTICAL,
 			MARGIN_HORIZONTAL);
 
-	private Label nameLabel;
-	private final Figure stateActionConnector = new HorizontalLineFigure(STATE_ACTION_CONNECTOR_LENGTH);
+	private ECStateNameLabel nameLabel;
+	private final Figure spine = new Figure();
 	private final Figure actionContainer = new Figure() {
 		@Override
 		public void add(final IFigure figure, final Object constraint, final int index) {
@@ -60,28 +65,12 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		final ToolbarLayout tbLayout = new ToolbarLayout();
 		tbLayout.setStretchMinorAxis(false);
 		tbLayout.setHorizontal(true);
+		tbLayout.setSpacing(-SPINE_WIDTH / 2); // this makes state name label overlap the spine
 		setLayoutManager(tbLayout);
 
-		final Figure stateRect = createStateRectangle();
-		stateRect.add(createStateNameLabel(state));
-		stateActionConnector.setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
-		stateRect.add(stateActionConnector);
-		add(stateRect);
-
-		createActionContainerFigure();
+		add(createStateNameLabel(state));
+		add(createActionContainerFigure());
 		createStateCommentToolTip();
-	}
-
-	private static Figure createStateRectangle() {
-		final Figure stateRect = new Figure();
-		final FlowLayout layout = new FlowLayout();
-		layout.setStretchMinorAxis(true);
-		layout.setMajorSpacing(0);
-		layout.setMinorSpacing(0);
-		layout.setHorizontal(true);
-		layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
-		stateRect.setLayoutManager(layout);
-		return stateRect;
 	}
 
 	private void createStateCommentToolTip() {
@@ -90,44 +79,45 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		setToolTip(stateTooltip);
 	}
 
-	private void createActionContainerFigure() {
-		add(actionContainer);
+	private IFigure createActionContainerFigure() {
+		final Figure actionRootFigure = new Figure();
 
-		final GridLayout gl = new GridLayout(2, false);
-		gl.horizontalSpacing = -1;
-		gl.verticalSpacing = 1;
+		final ToolbarLayout layout = new ToolbarLayout(true);
+		layout.setSpacing(0);
+		layout.setStretchMinorAxis(true);
+		actionRootFigure.setLayoutManager(layout);
+
+		spine.setPreferredSize(new Dimension(SPINE_WIDTH, -1));
+		spine.setOpaque(true);
+		spine.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateSpineColor());
+		actionRootFigure.add(spine);
+
+		final GridLayout gl = new GridLayout(2, false); // two columns one for algorithms one for output events
+		gl.horizontalSpacing = ACTION_SEPERATION;
+		gl.verticalSpacing = ACTION_SEPERATION;
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 
 		actionContainer.setLayoutManager(gl);
+		actionContainer.setOpaque(true);
+		actionContainer.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateSpineColor());
+		actionRootFigure.add(actionContainer);
+		return actionRootFigure;
 	}
 
 	private Label createStateNameLabel(final ECState state) {
-		nameLabel = new Label() {
-			@Override
-			public Insets getInsets() {
-				if (getBorder() != null) {
-					return getBorder().getInsets(this);
-				}
-				return STATE_INSET;
-			}
-
-			@Override
-			public void setBackgroundColor(final Color bg) {
-				if (getBorder() instanceof final StartStateBorder startStateBorder) {
-					startStateBorder.setColor(bg);
-				} else {
-					super.setBackgroundColor(bg);
-				}
-			}
-		};
+		nameLabel = new ECStateNameLabel();
 		nameLabel.setText(state.getName());
-		nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		nameLabel.setOpaque(true);
 		if (state.isStartState()) {
-			nameLabel.setBorder(new StartStateBorder(FBTypeEditorPreferenceConstants.getEccStateColor()));
+			nameLabel.setBorder(new CompoundBackground(new RectangleDropShadowBorder(),
+					new StartStateBorder(FBTypeEditorPreferenceConstants.getEccStateColor())));
+			nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
+			nameLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
 		} else {
+			nameLabel.setBorder(new RectangleDropShadowBorder());
 			nameLabel.setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateColor());
+			nameLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
 		}
 		return nameLabel;
 	}
@@ -138,7 +128,8 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 	}
 
 	public void setHasAction(final boolean hasAction) {
-		stateActionConnector.setVisible(hasAction);
+		spine.setVisible(hasAction);
+		actionContainer.setVisible(hasAction);
 	}
 
 	public Figure getContentPane() {
@@ -149,8 +140,11 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 		return nameLabel;
 	}
 
-	public Figure getLine() {
-		return stateActionConnector;
+	@Override
+	protected void paintChildren(final Graphics graphics) {
+		super.paintChildren(graphics);
+		// draw name label body last so that it partly covers the spine
+		nameLabel.paintBody(graphics);
 	}
 
 	@Override
@@ -164,6 +158,47 @@ public final class ECStateFigure extends Figure implements InteractionStyleFigur
 			return InteractionStyleFigure.REGION_CONNECTION; // connection
 		}
 		return InteractionStyleFigure.REGION_DRAG; // move/drag
+	}
+
+	private static final class ECStateNameLabel extends Label {
+		@Override
+		public Insets getInsets() {
+			if (getBorder() instanceof CompoundBorder) {
+				return getBorder().getInsets(this);
+			}
+			return STATE_INSET;
+		}
+
+		@Override
+		protected void paintFigure(final Graphics graphics) {
+			// draw only background border
+			if (getBorder() instanceof final AbstractBackground abstractBackground) {
+				abstractBackground.paintBackground(this, graphics, NO_INSETS);
+			}
+			if (getBorder() instanceof CompoundBackground) {
+				// if we are the start state the body has to be painted first to be covered by
+				// the start state border
+				doPaintBody(graphics);
+			}
+		}
+
+		public void paintBody(final Graphics graphics) {
+			if (!(getBorder() instanceof CompoundBackground)) {
+				// if we are not the start state we draw the body last to get the overlap with
+				// the spine
+				doPaintBody(graphics);
+			}
+		}
+
+		private void doPaintBody(final Graphics graphics) {
+			graphics.setForegroundColor(getForegroundColor());
+			graphics.setBackgroundColor(getBackgroundColor());
+			graphics.fillRectangle(getBounds());
+			final Point curTextLocation = getTextLocation();
+			final int tx = bounds.x + curTextLocation.x;
+			final int ty = bounds.y + curTextLocation.y;
+			graphics.drawText(getSubStringText(), tx, ty);
+		}
 	}
 
 	private static class StartStateBorder extends LineBorder {

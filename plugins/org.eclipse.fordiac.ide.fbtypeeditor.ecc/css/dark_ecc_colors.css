@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+IEclipsePreferences#org-eclipse-ui-workbench:org-eclipse-fordiac-fbtypeeditor_ecc {
+	preferences:
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateColor=75,115,190'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorStateTextColor=240, 245, 255'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCStateSpineColor=120,160,230'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmColor=48,54,60'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorAlgorithmTextColor=220, 225, 235'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventColor=120,170,85'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorEventTextColor=20,35,20'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionColor=150,160,175'
+		'org.eclipse.fordiac.ide.fbtypeeditor.ecc.ECCEditorTransitionTextColor=205,215,230'
+}

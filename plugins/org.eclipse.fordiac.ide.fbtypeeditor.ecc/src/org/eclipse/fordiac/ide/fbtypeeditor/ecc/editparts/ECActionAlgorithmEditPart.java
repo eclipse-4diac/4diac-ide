@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- * 								Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2011 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                    Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,8 @@
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit, redesign ECC
+ *               -  consistent dropdown menu edit, redesign ECC
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -55,8 +56,6 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
@@ -90,16 +89,6 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		}
 	};
 
-	/** The property change listener. */
-	private final IPropertyChangeListener colorChangeListener = event -> {
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_COLOR)) {
-			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmColor());
-		}
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_ALGORITHM_TEXT_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
-		}
-	};
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -117,7 +106,6 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			}
 			// addapt to the fbtype so that we get informed on alg name changes
 			ECCContentAndLabelProvider.getFBType(getAction()).eAdapters().add(fbAdapter);
-			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -135,7 +123,6 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 			if (fbtype != null) {
 				fbtype.eAdapters().remove(fbAdapter);
 			}
-			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -176,14 +163,9 @@ public class ECActionAlgorithmEditPart extends AbstractDirectEditableEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy() {
 			@Override
 			protected Command getCreateCommand(final CreateRequest request) {
-				if ((request != null) && (null != request.getNewObject())) {
-					final Object object = request.getNewObject();
-					if (getHost() instanceof ECActionAlgorithmEditPart) {
-						final ECActionAlgorithmEditPart editPart = (ECActionAlgorithmEditPart) getHost();
-						if (object instanceof STAlgorithm) {
-							return new CreateAlgorithmCommand(editPart.getBFB(), editPart.getAction());
-						}
-					}
+				if (request != null && request.getNewObject() instanceof STAlgorithm
+						&& getHost() instanceof final ECActionAlgorithmEditPart ep) {
+					return new CreateAlgorithmCommand(ep.getBFB(), ep.getAction());
 				}
 				return null;
 			}

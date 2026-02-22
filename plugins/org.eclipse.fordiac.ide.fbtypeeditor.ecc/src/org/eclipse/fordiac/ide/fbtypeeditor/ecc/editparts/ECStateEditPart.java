@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2020        Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Virendra Ashiwal, Bianca Wiesmayr
  *     - added tooltip functionality at state
  *     - added refresh tooltip at state
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionNodeEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -51,8 +51,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECStateEditPart extends AbstractDirectEditableEditPart implements NodeEditPart {
 	private List<Object> stateChildren;
@@ -84,7 +82,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (!isActive()) {
 			super.activate();
 			getModel().eAdapters().add(adapter);
-			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -93,7 +90,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if (isActive()) {
 			super.deactivate();
 			getModel().eAdapters().remove(adapter);
-			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
@@ -214,17 +210,6 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	public INamedElement getINamedElement() {
 		return getModel();
 	}
-
-	/** The property change listener. */
-	private final IPropertyChangeListener colorChangeListener = event -> {
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_COLOR)) {
-			getNameLabel().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccStateColor());
-		}
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_STATE_TEXT_COLOR)) {
-			getNameLabel().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
-			getFigure().getLine().setForegroundColor(FBTypeEditorPreferenceConstants.getEccStateTextColor());
-		}
-	};
 
 	public void highlightTransitions(final boolean highlight) {
 		for (final Object obj : getSourceConnections()) {
