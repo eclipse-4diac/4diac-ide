@@ -18,6 +18,8 @@
  *                 direct editing of instance names
  *               - added separate colors for different data types
  *   Bianca Wiesmayr, Alois Zoitl - forward direct editing request to instance name
+ *   Alois Zoitl - reworked mapping representation
+ *               - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -252,11 +254,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			};
 		}
 		return listener;
-	}
-
-	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		// don't do anything
 	}
 
 	@Override
