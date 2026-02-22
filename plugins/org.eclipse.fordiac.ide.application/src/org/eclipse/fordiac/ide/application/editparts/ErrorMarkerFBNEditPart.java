@@ -30,7 +30,7 @@ public class ErrorMarkerFBNEditPart extends AbstractBlockFBNElementEditPart {
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		errorMarkerFBNeworkElementFigure = new ErrorMarkerFBNeworkElementFigure(getModel(),
 				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 		updateErrorText();

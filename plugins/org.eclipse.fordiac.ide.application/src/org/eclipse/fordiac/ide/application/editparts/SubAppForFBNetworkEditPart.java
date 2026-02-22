@@ -244,7 +244,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final var prefCache = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache();
 		return new SubAppForFbNetworkFigure(getModel(), this, prefCache.getMinInterfaceBarSize(),
 				prefCache.getMaxTypeLabelSize());

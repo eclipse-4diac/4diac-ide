@@ -192,7 +192,7 @@ public class DeviceEditPart extends AbstractPositionableElementEditPart implemen
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final DeviceFigure deviceFigure = new DeviceFigure();
 		setColor(deviceFigure, getModel().getColor());
 		return deviceFigure;

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2025 Johannes Kepler University Linz,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2020 Johannes Kepler University Linz,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,7 +37,7 @@ public abstract class AbstractStructManipulatorEditPart extends AbstractBlockFBN
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		return new FBNetworkElementFigure(getModel(),
 				((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache().getMaxTypeLabelSize());
 	}

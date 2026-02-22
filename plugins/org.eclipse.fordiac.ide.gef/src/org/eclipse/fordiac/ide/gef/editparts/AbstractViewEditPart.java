@@ -24,21 +24,18 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
-	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
 
 	private Adapter adapter;
 
@@ -120,27 +117,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 			}
 			((Notifier) getModel()).eAdapters().remove(getContentAdapter());
 		}
-	}
-
-	protected abstract IFigure createFigureForModel();
-
-	/**
-	 * Creates the <code>Figure</code> to be used as this part's <i>visuals</i>.
-	 *
-	 * @return a figure
-	 *
-	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
-	 * @see #createFigureForModel()
-	 */
-	@Override
-	protected IFigure createFigure() {
-		IFigure f = null;
-		try {
-			f = createFigureForModel();
-		} catch (final IllegalArgumentException e) {
-			FordiacLogHelper.logError(ERROR_IN_CREATE_FIGURE, e);
-		}
-		return f;
 	}
 
 	@Override

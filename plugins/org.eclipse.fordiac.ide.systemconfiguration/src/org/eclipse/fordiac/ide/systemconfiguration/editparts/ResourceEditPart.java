@@ -119,7 +119,7 @@ public class ResourceEditPart extends AbstractViewEditPart {
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		return new ResourceFigure();
 	}
 
