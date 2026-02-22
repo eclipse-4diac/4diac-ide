@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2011 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University
+ * Copyright (c) 2008 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,8 +11,9 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added diagram font preference
+ *   Alois Zoitl     - added diagram font preference
  *   Bianca Wiesmayr - removed gradient
+ *   Alois Zoitl     - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
@@ -48,7 +49,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.DeleteSegmentEditPolicy;
 import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
-import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -86,7 +86,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 	@Override
 	protected IFigure createFigureForModel() {
-		return new SegmentFigure();
+		final SegmentFigure segmentFigure = new SegmentFigure();
+		setColor(segmentFigure, getModel().getColor());
+		return segmentFigure;
 	}
 
 	@Override
@@ -100,8 +102,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			@Override
 			public void notifyChanged(final Notification notification) {
 				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature)) {
-					backgroundColorChanged(getFigure());
+				if (LibraryElementPackage.eINSTANCE.getColorizableElement_Color().equals(feature) && notification
+						.getNewValue() instanceof final org.eclipse.fordiac.ide.model.libraryElement.Color col) {
+					AbstractViewEditPart.setColor(getFigure(), col);
 				}
 				if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getSegment_Width().equals(feature)) {
@@ -124,24 +127,9 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 		return getModel();
 	}
 
-	private SegmentFigure getCastedFigure() {
-		return getFigure();
-	}
-
-	@Override
-	protected void backgroundColorChanged(final IFigure figure) {
-		// TODO model refactoring - default value for colors if not persisted
-		org.eclipse.fordiac.ide.model.libraryElement.Color fordiacColor = getModel().getColor();
-		if (fordiacColor == null) {
-			fordiacColor = ColorHelper.createRandomColor();
-			getModel().setColor(fordiacColor);
-		}
-		setColor(figure, fordiacColor);
-	}
-
 	@Override
 	public Label getNameLabel() {
-		return getCastedFigure().getName();
+		return getFigure().getName();
 	}
 
 	@Override

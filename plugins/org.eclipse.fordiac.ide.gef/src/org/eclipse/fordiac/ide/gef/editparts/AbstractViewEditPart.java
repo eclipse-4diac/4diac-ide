@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GbmH, TU Wien ACIN, AIT, fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GbmH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,9 +10,10 @@
  *
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Monika Wenger
- *     - initial API and implementation and/or initial documentation
+ *               - initial API and implementation and/or initial documentation
  *   Alois Zoitl - separated FBNetworkElement from instance name for better
  *                 direct editing of instance names
+ *   Alois Zoitl - reworked background color handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
@@ -31,12 +32,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.swt.graphics.RGB;
 
 public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 	private static final String ERROR_IN_CREATE_FIGURE = Messages.AbstractViewEditPart_ERROR_createFigure;
@@ -69,16 +68,11 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		}
 	};
 
-	protected void backgroundColorChanged(final IFigure figure) {
-		setColor(figure, null);
-	}
-
-	@SuppressWarnings("static-method")
-	protected void setColor(final IFigure figure, final Color fordiacColor) {
+	protected static void setColor(final IFigure figure, final Color fordiacColor) {
 		org.eclipse.swt.graphics.Color newColor;
 		if (fordiacColor != null) {
-			newColor = ColorManager
-					.getColor(new RGB(fordiacColor.getRed(), fordiacColor.getGreen(), fordiacColor.getBlue()));
+			newColor = new org.eclipse.swt.graphics.Color(fordiacColor.getRed(), fordiacColor.getGreen(),
+					fordiacColor.getBlue());
 		} else {
 			newColor = null;
 		}
@@ -143,9 +137,6 @@ public abstract class AbstractViewEditPart extends AbstractConnectableEditPart {
 		IFigure f = null;
 		try {
 			f = createFigureForModel();
-			if (f != null) {
-				backgroundColorChanged(f);
-			}
 		} catch (final IllegalArgumentException e) {
 			FordiacLogHelper.logError(ERROR_IN_CREATE_FIGURE, e);
 		}
