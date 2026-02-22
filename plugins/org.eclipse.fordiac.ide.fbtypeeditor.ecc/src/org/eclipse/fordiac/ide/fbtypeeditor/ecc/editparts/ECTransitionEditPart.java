@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				            Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,7 @@
  *   Alois Zoitl - reworked transition and handle widths
  *   Bianca Wiesmayr, Ernst Blecha - added tooltip
  *   Lisa Sonnleitner - Inital implementation of DirectEdit
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -34,7 +35,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLab
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECTransitionFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECTransitionFeedbackEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.TransitionBendPointEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
@@ -65,8 +65,6 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.IPropertyChangeListener;
 
 public class ECTransitionEditPart extends AbstractConnectionEditPart implements AnnotableGraphicalEditPart {
 
@@ -89,13 +87,6 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 				refreshTransitionTooltip();
 				refresh();
 			}
-		}
-	};
-
-	/** The property change listener. */
-	private final IPropertyChangeListener colorChangeListener = event -> {
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_TRANSITION_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionColor());
 		}
 	};
 
@@ -324,8 +315,6 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 
 			// Adapt to the fbtype so that we get informed on interface changes
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().add(interfaceAdapter);
-
-			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -336,8 +325,6 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart implements 
 			getModel().eAdapters().remove(adapter);
 			getModel().getECC().eAdapters().remove(adapter);
 			getModel().getECC().getBasicFBType().getInterfaceList().eAdapters().remove(interfaceAdapter);
-
-			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted TransitionFigure code and changed to cubic spline
  *   Bianca Wiesmayr, Ernst Blecha - added tooltip
+ *   Alois Zoitl - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
@@ -22,15 +23,17 @@ import java.util.List;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
 import org.eclipse.draw2d.Bendpoint;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolygonDecoration;
+import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -56,7 +59,7 @@ public class ECTransitionFigure extends SplineConnection {
 
 			orderLabel = new Label();
 			orderLabel.setOpaque(false);
-			orderLabel.setForegroundColor(ColorConstants.white);
+			orderLabel.setForegroundColor(FBTypeEditorPreferenceConstants.getEccAlgorithmTextColor());
 			orderLabel.setFont(getOrderLabelFont());
 			add(orderLabel);
 		}
@@ -76,9 +79,25 @@ public class ECTransitionFigure extends SplineConnection {
 
 		@Override
 		public void setLocation(final Point p) {
+			final Dimension size = getSize();
 			// Position the decorator centered on the start of the transition
-			p.x -= getSize().width() / 2;
-			p.y -= getSize().height() / 2;
+			final int radius = size.width() / 2;
+			p.x -= radius;
+			p.y -= radius;
+
+			if (getParent() instanceof final PolylineConnection conn) {
+				final PointList points = conn.getPoints();
+
+				if (points.size() >= 2) {
+					final Point start = points.getFirstPoint();
+					final Point next = points.getPoint(1);
+					final double angle = Math.atan2((double) next.x - start.x, (double) next.y - start.y);
+
+					p.x += (int) Math.cos(angle) * radius;
+					p.y += (int) Math.sin(angle) * radius;
+				}
+			}
+
 			super.setLocation(p);
 		}
 
@@ -146,12 +165,13 @@ public class ECTransitionFigure extends SplineConnection {
 		condition = new Label(conditionText);
 		condition.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		condition.setOpaque(false);
+		condition.setForegroundColor(FBTypeEditorPreferenceConstants.getEccTransitionTextColor());
 
 		conditionBackground = new SetableAlphaLabel();
 		conditionBackground.setText(conditionText); // needed for correct size
 		conditionBackground
 				.setBorder(new MarginBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
-		conditionBackground.setAlpha(190);
+		conditionBackground.setAlpha(210);
 		conditionBackground.setOpaque(true);
 
 		add(conditionBackground, new ConnectionLocator(this, ConnectionLocator.MIDDLE));

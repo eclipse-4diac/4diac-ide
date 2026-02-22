@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2011 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr -  consistent dropdown menu edit, redesign ECC
  *   Alois Zoitl     - updated for new adapter FB handling
+ *   Alois Zoitl     - modernized and reworked ECC look
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -52,8 +53,6 @@ import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 
 public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart {
@@ -116,15 +115,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		return false;
 	}
 
-	private final IPropertyChangeListener colorChangeListener = event -> {
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_COLOR)) {
-			getFigure().setBackgroundColor(FBTypeEditorPreferenceConstants.getEccEventColor());
-		}
-		if (event.getProperty().equals(FBTypeEditorPreferenceConstants.P_ECC_EVENT_TEXT_COLOR)) {
-			getFigure().setForegroundColor(FBTypeEditorPreferenceConstants.getEccEventTextColor());
-		}
-	};
-
 	@Override
 	public void activate() {
 		if (!isActive()) {
@@ -132,8 +122,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			getAction().eAdapters().add(adapter);
 			// Adapt to the fbtype so that we get informed on interface changes
 			ECCContentAndLabelProvider.getFBType(getAction()).getInterfaceList().eAdapters().add(interfaceAdapter);
-
-			JFaceResources.getColorRegistry().addListener(colorChangeListener);
 		}
 	}
 
@@ -146,7 +134,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			if (fbType != null) {
 				fbType.getInterfaceList().eAdapters().remove(interfaceAdapter);
 			}
-			JFaceResources.getColorRegistry().removeListener(colorChangeListener);
 		}
 	}
 
