@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Germany GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -75,6 +75,7 @@ import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
@@ -298,7 +299,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				color.setBlue(dev.getColor().getBlue());
 			}
 		}
-		setColor(figure, color);
+		// setColor(figure, color);
 	}
 
 	protected ColorizableElement findDevice() {
@@ -317,8 +318,17 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
+		case final MappingEditPart mapping -> addMappingFigure(child);
 		default -> getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
 		}
+	}
+
+	protected void addMappingFigure(final IFigure child) {
+		final GridData gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = SWT.FILL;
+		getFigure().getBottom().add(child, gridData, -1);
 	}
 
 	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart,
@@ -450,6 +460,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 		}
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			removePinIndicatorFigure(hiddenPinIndicatorEditPart, child);
+		case final MappingEditPart mapping -> getFigure().getBottom().remove(child);
 		default -> super.removeChildVisual(childEditPart);
 		}
 	}
@@ -467,8 +478,12 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
+		elements.addAll(
+				getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
 		addPinIndicators(elements);
+		if (getModel().isMapped()) {
+			elements.add(getModel().getMapping());
+		}
 		return elements;
 	}
 
