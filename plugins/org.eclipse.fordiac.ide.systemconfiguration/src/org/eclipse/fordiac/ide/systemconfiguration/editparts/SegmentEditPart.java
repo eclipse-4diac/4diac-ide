@@ -85,7 +85,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final SegmentFigure segmentFigure = new SegmentFigure();
 		setColor(segmentFigure, getModel().getColor());
 		return segmentFigure;

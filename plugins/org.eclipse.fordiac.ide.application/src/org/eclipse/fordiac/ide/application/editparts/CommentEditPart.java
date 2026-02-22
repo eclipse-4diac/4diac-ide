@@ -202,7 +202,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final StickyNoteCommentFigure mainFigure = new StickyNoteCommentFigure();
 		mainFigure.setCommentText(getModel().getComment());
 		return mainFigure;

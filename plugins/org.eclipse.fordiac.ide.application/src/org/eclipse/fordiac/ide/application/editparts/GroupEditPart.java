@@ -170,7 +170,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart
 	}
 
 	@Override
-	protected IFigure createFigureForModel() {
+	protected IFigure createFigure() {
 		final GroupFigure groupFigure = new GroupFigure();
 		groupFigure.getCommentFigure().setText(getModel().getComment());
 
