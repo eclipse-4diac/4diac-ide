@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, AIT, fortiss GmbH,
- *                          Johannes Kepler University Linz,
- *                          Primetals Technologies Germany GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, AIT, fortiss GmbH,
+ *                    Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -372,6 +372,19 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 	}
 
 	@Override
+	protected void addMappingFigure(final IFigure child) {
+		if (getModel().isUnfolded()) {
+			final GridData gridData = new GridData();
+			gridData.horizontalSpan = 3;
+			gridData.grabExcessHorizontalSpace = true;
+			gridData.horizontalAlignment = SWT.FILL;
+			getFigure().getExpandedMainFigure().add(child, gridData, -1);
+		} else {
+			super.addMappingFigure(child);
+		}
+	}
+
+	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		switch (childEditPart) {
 		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP when getFigure()
@@ -384,6 +397,8 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 				getFigure().getExpandedOutputFigure().remove(interfaceEditPart.getFigure());
 			}
 		}
+		case final MappingEditPart mapping when getModel().isUnfolded() ->
+			getFigure().getExpandedMainFigure().remove(mapping.getFigure());
 		default -> super.removeChildVisual(childEditPart);
 		}
 	}
