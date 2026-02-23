@@ -148,7 +148,7 @@ public class ResourceDeploymentData {
 			final VarDeclaration input, final FB fb) throws DeploymentException {
 		final String value = findInitialValue(subAppHierarchy, input);
 		if (value != null) {
-			params.put(ensurePrefix(prefix, fb) + fb.getName() + "." + input.getName(), value); //$NON-NLS-1$
+			params.put(ensurePrefix(prefix, fb) + fb.getName() + "." + input.getRelativeName(fb), value); //$NON-NLS-1$
 		}
 		if (input instanceof final ContainerVarDeclaration container) {
 			for (final VarDeclaration member : container.getCachedMembers()) {
