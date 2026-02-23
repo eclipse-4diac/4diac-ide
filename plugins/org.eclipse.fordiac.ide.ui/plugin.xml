@@ -188,6 +188,30 @@
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.FBBackgroundColor"
+             label="Function Block Background Color"
+             value="247, 252, 255"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.TypeNameColor"
+             label="Type Name Color"
+             value="60, 90, 120"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.UntypedSubappBackgroundColor"
+             label="Untyped Subapplication Background Color"
+             value="252, 250, 245"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
              id="org.eclipse.fordiac.ide.ui.InterfaceBarBackgroundColor"
              label="Interface Bar Background Color"
              value="235, 245, 255"

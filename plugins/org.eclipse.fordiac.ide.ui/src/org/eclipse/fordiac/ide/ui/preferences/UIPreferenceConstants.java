@@ -38,6 +38,9 @@ public final class UIPreferenceConstants {
 	public static final String P_ANY_REAL_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyRealConnectionConnectorColor"; //$NON-NLS-1$
 	public static final String P_ANY_STRING_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyStringConnectionConnectorColor"; //$NON-NLS-1$
 	public static final String P_REMAINING_DATA_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor";//$NON-NLS-1$
+	private static final String P_FB_COLOR = "org.eclipse.fordiac.ide.ui.FBBackgroundColor";//$NON-NLS-1$
+	private static final String P_FB_TYPE_NAME_COLOR = "org.eclipse.fordiac.ide.ui.TypeNameColor";//$NON-NLS-1$
+	private static final String P_UNTYPED_SUBAPP_COLOR = "org.eclipse.fordiac.ide.ui.UntypedSubappBackgroundColor";//$NON-NLS-1$
 	private static final String P_INTERFACE_BAR_COLOR = "org.eclipse.fordiac.ide.ui.InterfaceBarBackgroundColor";//$NON-NLS-1$
 	private static final String P_PAGE_COMMENT_COLOR = "org.eclipse.fordiac.ide.ui.PageCommentBackgroundColor";//$NON-NLS-1$
 	private static final String P_STICKY_NOTE_BG_COLOR = "org.eclipse.fordiac.ide.ui.StickNoteCommentBackgroundColor"; //$NON-NLS-1$
@@ -119,6 +122,18 @@ public final class UIPreferenceConstants {
 
 	public static Color getAdapterConnectorColor() {
 		return JFaceResources.getColorRegistry().get(P_ADAPTER_CONNECTOR_COLOR);
+	}
+
+	public static Color getFBColor() {
+		return JFaceResources.getColorRegistry().get(P_FB_COLOR);
+	}
+
+	public static Color getFBTypeNameColor() {
+		return JFaceResources.getColorRegistry().get(P_FB_TYPE_NAME_COLOR);
+	}
+
+	public static Color getUntypedSubAppColor() {
+		return JFaceResources.getColorRegistry().get(P_UNTYPED_SUBAPP_COLOR);
 	}
 
 	public static Color getInterfaceBarColor() {
