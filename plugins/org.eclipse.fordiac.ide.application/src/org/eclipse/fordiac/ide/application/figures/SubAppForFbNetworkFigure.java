@@ -78,6 +78,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		interfacePositions = editPart.getInterfacePositionMap();
 		updateTypeLabel(model);
 		updateExpandedFigure();
+		if (!model.isTyped()) {
+			setBackgroundColor(UIPreferenceConstants.getUntypedSubAppColor());
+		}
 	}
 
 	public InstanceCommentFigure getCommentFigure() {
@@ -147,8 +150,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
+			setBackgroundColor(null);
 		} else if (expandedMainFigure != null) {
 			transformToCollapsedSubapp();
+			setBackgroundColor(UIPreferenceConstants.getUntypedSubAppColor());
 		}
 	}
 

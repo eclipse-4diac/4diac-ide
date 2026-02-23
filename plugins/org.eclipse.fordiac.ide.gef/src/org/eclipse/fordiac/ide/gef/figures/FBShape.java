@@ -113,6 +113,7 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		createFBFigureShape(typeEntry);
 		setTypeLabelFont();
 		setBorder(new FBShapeShadowBorder());
+		setBackgroundColor(UIPreferenceConstants.getFBColor());
 	}
 
 	/**
@@ -431,9 +432,10 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		typeLabel = new OverlayAlphaLabel();
 		changeTypeLabelText((null != typeEntry) ? typeEntry.getTypeName() : Messages.FBFigure_TYPE_NOT_SET);
 		typeLabel.setTextAlignment(PositionConstants.CENTER);
-		typeLabel.setOpaque(true);
 		typeLabel.setIcon((null != typeEntry) ? TypeImageProvider.getImageForTypeEntry(typeEntry) : null);
 		typeLabel.setIconTextGap(2);
+		typeLabel.setForegroundColor(UIPreferenceConstants.getFBTypeNameColor());
+
 		middle.add(typeLabel);
 		middle.setConstraint(typeLabel, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
