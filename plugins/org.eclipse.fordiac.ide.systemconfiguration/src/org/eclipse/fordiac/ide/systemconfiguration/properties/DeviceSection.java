@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2017 fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *      - initial API and implementation and/or initial documentation
  *    Bianca Wiesmayr
  *      - merged two DeviceInterfaceSection plus Abstract Class into DeviceSection
+ *   Alois Zoitl - fixed layout, reduced code duplication
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
@@ -20,15 +21,12 @@ import java.util.List;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
 import org.eclipse.fordiac.ide.gef.commands.ChangeProfileCommand;
 import org.eclipse.fordiac.ide.gef.properties.AbstractInterfaceSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 public class DeviceSection extends AbstractInterfaceSection {
@@ -64,30 +62,10 @@ public class DeviceSection extends AbstractInterfaceSection {
 	}
 
 	@Override
-	protected void createFBInfoGroup(final Composite parent) {
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, "Instance Name:");
-		nameText = createGroupText(composite, true);
-		nameText.addModifyListener(event -> {
-			removeContentAdapter();
-			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
-			addContentAdapter();
-		});
-
-		getWidgetFactory().createCLabel(composite, "Instance Comment:");
-		commentText = createGroupText(composite, true);
-		final GridData gridData = new GridData(SWT.FILL, 0, true, false);
-		commentText.setLayoutData(gridData);
-		commentText.addModifyListener(event -> {
-			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-			addContentAdapter();
-		});
-
-		getWidgetFactory().createCLabel(composite, "Profile:");
-		profile = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), composite);
+	protected void createInfoGroup(final Composite container) {
+		super.createInfoGroup(container);
+		getWidgetFactory().createCLabel(container, Messages.DeviceSection_Profile + ":"); //$NON-NLS-1$
+		profile = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), container);
 		profile.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
 			executeCommand(new ChangeProfileCommand((Device) getType(), profile.getText()));
