@@ -18,15 +18,15 @@ package org.eclipse.fordiac.ide.systemconfiguration;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.systemconfiguration.messages"; //$NON-NLS-1$
 
-	/** The Device create command_ labe l_ create device. */
 	public static String DeviceCreateCommand_LABEL_CreateDevice;
 
-	/** The Device edit part_ labe l_ not defined. */
 	public static String DeviceEditPart_LABEL_NotDefined;
+
+	public static String DeviceSection_Profile;
 
 	public static String OpenSystemConfEditorAction_Name;
 
