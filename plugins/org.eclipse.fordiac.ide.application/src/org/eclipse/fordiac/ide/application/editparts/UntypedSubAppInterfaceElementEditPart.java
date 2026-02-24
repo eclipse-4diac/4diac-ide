@@ -66,8 +66,12 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			if (getUntypedSubAppInterfaceElementEditPart().getParent() != null) {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)) {
+					refresh();
+					if (getParent() instanceof final SubAppForFBNetworkEditPart subappEP) {
+						subappEP.layoutExpandedInterface();
+					}
+				} else if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 					refresh();
 				} else if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {

@@ -12,6 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.search;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -31,11 +38,18 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 	// Once the setInput() method on the viewer is called, it uses the content provider to convert it.
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if (inputElement instanceof ModelSearchResult) {
-			// Parse the data
-			result = (ModelSearchResult) inputElement;
-			return result.getResults().toArray();
-
+		if (inputElement instanceof final ModelSearchResult modelResult) {
+			result = modelResult;
+			// split up multiple line matches
+			return result.getResults().stream().flatMap(eObj -> {
+				if (eObj instanceof TextAlgorithm || eObj instanceof TextMethod || eObj instanceof FunctionFBType) {
+					final var uri = EcoreUtil.getURI(eObj);
+					if (result.hasFordiacMatch(uri)) {
+						return Arrays.stream(result.getFordiacMatches(uri));
+					}
+				}
+				return Stream.of(eObj);
+			}).toArray();
 		}
 		return EMPTY_ARR;
 	}

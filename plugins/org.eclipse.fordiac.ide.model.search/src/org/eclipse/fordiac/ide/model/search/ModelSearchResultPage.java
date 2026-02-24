@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -155,7 +155,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 				if (element instanceof IInterfaceElement) {
 					return "Pin"; //$NON-NLS-1$
 				}
-				final String kind = element.getClass().getSimpleName();
+				final String kind = element instanceof final SearchResultTextMatch textMatch
+						? textMatch.getElementKind()
+						: element.getClass().getSimpleName();
 				return kind.substring(0, kind.length() - 4);
 			}
 		});
@@ -165,6 +167,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
+				if (element instanceof final SearchResultTextMatch textMatch) {
+					return textMatch.getElementName();
+				}
 				if (element instanceof final INamedElement ne) {
 					return ne.getName();
 				}
@@ -177,6 +182,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colComment.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
+				if (element instanceof final SearchResultTextMatch textMatch) {
+					return textMatch.getElementComment();
+				}
+
 				if (element instanceof final INamedElement ne) {
 					return ne.getComment();
 				}
@@ -189,8 +198,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final EObject eobj) {
-					return eobj.eResource().getURI().lastSegment();
+				final URI uri = getUri(element);
+				if (uri != null) {
+					return uri.lastSegment();
 				}
 				return super.getText(element);
 			}
@@ -201,8 +211,9 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		path.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof final EObject eobj) {
-					final var segments = eobj.eResource().getURI().segmentsList();
+				final URI uri = getUri(element);
+				if (uri != null) {
+					final var segments = uri.segmentsList();
 					if (segments.size() > 2) {
 						return segments.stream().skip(1).limit(segments.size() - 2).map(URI::decode)
 								.collect(Collectors.joining("/")); //$NON-NLS-1$
@@ -217,16 +228,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		location.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof TextAlgorithm || element instanceof TextMethod
-						|| element instanceof FunctionFBType) {
-					return Arrays
-							.stream(contentProvider.getSearchResult()
-									.getFordiacMatches(EcoreUtil.getURI((EObject) element)))
-							.filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-							.map(match -> Integer.toString(match.getLine()))
-							.collect(Collectors.collectingAndThen(Collectors.joining(", "), //$NON-NLS-1$
-									result -> result.isEmpty() ? "" //$NON-NLS-1$
-											: (result.contains(", ") ? "Lines: " + result : "Line: " + result)));
+				if (element instanceof final TextMatch textMatch) {
+					return "Line: " + textMatch.getLine(); //$NON-NLS-1$
 				}
 
 				final ModelSearchResult searchResult = contentProvider.getSearchResult();
@@ -235,11 +238,27 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		});
 	}
 
+	private static URI getUri(final Object object) {
+		if (object instanceof final EObject eObj) {
+			return EcoreUtil.getURI(eObj);
+		}
+		if (object instanceof final TextMatch textMatch) {
+			return textMatch.getUri();
+		}
+		return null;
+	}
+
 	// Double click to access the element we looked for
 	private void jumpToBlock(final OpenEvent doubleClick) {
 		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
 		if (!selectionList.isEmpty()) {
 			final Object selection = selectionList.getFirstElement();
+			if (selection instanceof final TextMatch textMatch) {
+				final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForURI(textMatch.getUri());
+				final IEditorPart editor = OpenListenerManager.openEditor(entry.getType());
+				showWithMarker(editor, entry.getFile(), textMatch);
+			}
+
 			if (selection instanceof final EObject eobj) {
 				jumpHelper(eobj);
 			}
