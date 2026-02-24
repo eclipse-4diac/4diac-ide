@@ -28,6 +28,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -39,21 +40,23 @@ public final class ElementSelector {
 	 * @param viewObjects list with objects to select
 	 */
 	public static void selectViewObjects(final Collection<? extends Object> viewObjects) {
-		final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActivePart();
-		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
-		if (viewer != null) {
-			viewer.flush();
-			final List<EditPart> editParts = getSelectableEditParts(viewer, viewObjects);
-			if (!editParts.isEmpty()) {
-				viewer.setSelection(new StructuredSelection(editParts));
-				if (viewer instanceof final AdvancedScrollingGraphicalViewer asViewer) {
-					asViewer.revealEditPart(editParts.get(0));
-				} else {
-					viewer.reveal(editParts.get(0));
+		Display.getDefault().execute(() -> {
+			final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getActivePart();
+			final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
+			if (viewer != null) {
+				viewer.flush();
+				final List<EditPart> editParts = getSelectableEditParts(viewer, viewObjects);
+				if (!editParts.isEmpty()) {
+					viewer.setSelection(new StructuredSelection(editParts));
+					if (viewer instanceof final AdvancedScrollingGraphicalViewer asViewer) {
+						asViewer.revealEditPart(editParts.get(0));
+					} else {
+						viewer.reveal(editParts.get(0));
+					}
 				}
 			}
-		}
+		});
 
 	}
 
