@@ -18,9 +18,8 @@ package org.eclipse.fordiac.ide.fbrtlauncher.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.fbrtlauncher.Messages;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FileFieldEditor;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -55,9 +54,7 @@ public class FBRTPreferencePage extends FieldEditorPreferencePage implements IWo
 	 */
 	@Override
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(FbrtPreferenceConstants.P_PATH, Messages.FBRTPreferencePage_FBRTLocation,
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(FbrtPreferenceConstants.P_LIB, Messages.FBRTPreferencePage_FBRTLibrary,
+		addField(new DirectoryFieldEditor(FbrtPreferenceConstants.P_PATH, Messages.FBRTPreferencePage_FBRTLocation,
 				getFieldEditorParent()));
 	}
 

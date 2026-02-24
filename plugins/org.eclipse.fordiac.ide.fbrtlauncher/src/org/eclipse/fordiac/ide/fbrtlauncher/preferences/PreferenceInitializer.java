@@ -36,8 +36,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		final IEclipsePreferences preferences = DefaultScope.INSTANCE
 				.getNode(FbrtPreferenceConstants.FBRTLAUNCHER_PREFERENCES_ID);
 		preferences.put(FbrtPreferenceConstants.P_PATH, ""); //$NON-NLS-1$
-		preferences.put(FbrtPreferenceConstants.P_LIB,
-				"convert;crypt;events;hmi;ita;mach;math;mva;net;plc;process;student;template;test;"); //$NON-NLS-1$
 	}
 
 }
