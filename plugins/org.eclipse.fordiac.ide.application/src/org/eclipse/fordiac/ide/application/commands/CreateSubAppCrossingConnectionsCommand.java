@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
@@ -73,12 +74,26 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
 			final IInterfaceElement source, final IInterfaceElement destination) {
+		return createProcessBorderCrossingConnection(source, destination, true);
+	}
+
+	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
+			final IInterfaceElement source, final IInterfaceElement destination, final boolean checkSwap) {
 		Objects.requireNonNull(source);
 		Objects.requireNonNull(destination);
+
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
+
+		if (source.isIsInput() && source.getBlockFBNetworkElement() instanceof final UntypedSubApp usa) {
+			sourceNetworks.addFirst(usa.getSubAppNetwork());
+		}
+		if (!destination.isIsInput() && destination.getBlockFBNetworkElement() instanceof final UntypedSubApp usa) {
+			destinationNetworks.addFirst(usa.getSubAppNetwork());
+		}
+
 		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
-		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
+		if (checkSwap && isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
 			return new CreateSubAppCrossingConnectionsCommand(destination, source, destinationNetworks, sourceNetworks,
 					match);
 		}
@@ -278,7 +293,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		return existingSubAppPin(ie, oppositePin, isRightPath);
 	}
 
-	IInterfaceElement existingSubAppPin(final IInterfaceElement ie, final IInterfaceElement oppositePin,
+	private IInterfaceElement existingSubAppPin(final IInterfaceElement ie, final IInterfaceElement oppositePin,
 			final boolean isRightPath) {
 		final Optional<IInterfaceElement> subappPin;
 		if (isRightPath) {
