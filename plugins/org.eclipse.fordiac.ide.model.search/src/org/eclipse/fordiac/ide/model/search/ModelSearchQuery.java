@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -414,10 +413,9 @@ public class ModelSearchQuery implements ISearchQuery {
 					? new CompositeMatcher(List.of(new STMatcher(this::compareStrings), globalConstMatcher))
 					: new STMatcher(this::compareStrings);
 
-			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength(),
-							match.getType()))
+					.map(match -> new SearchResultTextMatch(modelElement, match.getLine() + 1, match.getOffset(),
+							match.getLength(), match.getType()))
 					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}
