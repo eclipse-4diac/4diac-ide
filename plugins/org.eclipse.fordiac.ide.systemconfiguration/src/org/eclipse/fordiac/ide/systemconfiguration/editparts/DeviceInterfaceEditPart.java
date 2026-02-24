@@ -88,4 +88,9 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 		};
 	}
 
+	@Override
+	protected String getLabelText() {
+		return getModel().getName();
+	}
+
 }
