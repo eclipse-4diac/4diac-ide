@@ -55,7 +55,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
@@ -251,7 +250,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	public void createResource(final Resource resource) throws DeploymentException {
 		combinedRequest = true;
 		final String resName = resource.getName();
-		final String resType = ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry());
+		final String resType = ForteTypeNameCreator.TYPE_NAME_CREATOR.getTypeName(resource.getTypeEntry());
 		final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.CREATE_RESOURCE_NODE,
 				new Variant[] { new Variant(resName), new Variant(resType) });
 		final String message = MessageFormat.format(Constants.CREATE_RESOURCE_INSTANCE, resName, resType);
@@ -314,7 +313,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 		if (resourceNode == null) {
 			return;
 		}
-		final String fbType = ForteTypeNameCreator.getForteTypeName(fbData.getFb());
+		final String fbType = ForteTypeNameCreator.TYPE_NAME_CREATOR.getTypeName(fbData.getFb());
 		final String fullFbName = MessageFormat.format(Constants.FB_NAME_FORMAT, fbData.getPrefix(),
 				fbData.getFb().getName());
 		if (fbType.isEmpty()) {
@@ -576,7 +575,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
 		try {
-			final String hashedFBType = getTypeNameWithHash(entry);
+			final String hashedFBType = ForteTypeNameCreator.TYPE_NAME_CREATOR.getTypeNameWithHash(entry);
 			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_FB_TYPE_NODE,
 					new Variant[] { new Variant(hashedFBType) });
 			final String message = MessageFormat.format(Constants.QUERY_FB_TYPE, hashedFBType);
@@ -600,7 +599,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
 		try {
-			final String hashedDataType = getTypeNameWithHash(entry);
+			final String hashedDataType = ForteTypeNameCreator.TYPE_NAME_CREATOR.getTypeNameWithHash(entry);
 			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE, Constants.QUERY_DATA_TYPE_NODE,
 					new Variant[] { new Variant(hashedDataType) });
 			final String message = MessageFormat.format(Constants.QUERY_DATA_TYPE, hashedDataType);
@@ -624,7 +623,7 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 	@Override
 	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
 		try {
-			final String hashedGlobalConstType = getTypeNameWithHash(entry);
+			final String hashedGlobalConstType = ForteTypeNameCreator.TYPE_NAME_CREATOR.getTypeNameWithHash(entry);
 			final CallMethodRequest request = new CallMethodRequest(Constants.MGMT_NODE,
 					Constants.QUERY_GLOBAL_CONST_TYPE_NODE, new Variant[] { new Variant(hashedGlobalConstType) });
 			final String message = MessageFormat.format(Constants.QUERY_GLOBAL_CONST_TYPE, hashedGlobalConstType);
@@ -643,14 +642,6 @@ public class OPCUADeploymentExecutor implements IDeviceManagementInteractor {
 					MessageFormat.format(Messages.OPCUADeploymentExecutor_RequestInterrupted, e.getMessage()), e);
 		}
 		return Constants.EMPTY_RESPONSE;
-	}
-
-	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
-		final String hash = entry.getTypeHash();
-		if (hash.isEmpty()) {
-			return ForteTypeNameCreator.getForteTypeName(entry);
-		}
-		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
 	}
 
 	@Override
