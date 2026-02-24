@@ -14,14 +14,13 @@ package org.eclipse.fordiac.ide.application.commands;
 
 import java.text.MessageFormat;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -57,9 +56,9 @@ public class TargetLabelReconnectCommand extends Command {
 			return false;
 		}
 
-		// source and dest check
-		if (!LinkConstraints.isValidConnSource(source, getHostNetwork(source))
-				|| !LinkConstraints.isValidConnDestination(destination, getHostNetwork(destination))) {
+		// valid Input-Output combination
+		if (source.isIsInput() && !supportsSwitchedPins(source)
+				|| !destination.isIsInput() && !supportsSwitchedPins(destination)) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 			return false;
 		}
@@ -75,12 +74,19 @@ public class TargetLabelReconnectCommand extends Command {
 		return false;
 	}
 
+	private static boolean supportsSwitchedPins(final IInterfaceElement pin) {
+		if (pin.getBlockFBNetworkElement() instanceof final UntypedSubApp usa && usa.isUnfolded()) {
+			return true;
+		}
+		return pin.getFBType() instanceof SubAppType;
+	}
+
 	private boolean dataConnectionChecks() {
 		if (!(source.getType() instanceof StructuredType && destination.getType() instanceof StructuredType)
-				&& (!LinkConstraints.typeCheck(source, destination))) {
+				&& !LinkConstraints.typeCheck(source, destination)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
-					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
-					(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.NA));
+					null != source.getType() ? source.getType().getName() : FordiacMessages.NA,
+					null != destination.getType() ? destination.getType().getName() : FordiacMessages.NA));
 			return false;
 
 		}
@@ -106,7 +112,7 @@ public class TargetLabelReconnectCommand extends Command {
 			deleteCommand.execute();
 		}
 		createCommand = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
-				destination);
+				destination, false);
 		createCommand.execute();
 	}
 
@@ -120,20 +126,6 @@ public class TargetLabelReconnectCommand extends Command {
 	public void undo() {
 		createCommand.undo();
 		deleteCommand.undo();
-	}
-
-	private static FBNetwork getHostNetwork(final IInterfaceElement source) {
-		EObject current = source.eContainer();
-		while (current != null) {
-			if (current instanceof final FBNetwork currentFbNetwork) {
-				return currentFbNetwork;
-			}
-			if (current instanceof final SubAppType satype) {
-				return satype.getFBNetwork();
-			}
-			current = current.eContainer();
-		}
-		return null;
 	}
 
 	private Connection getEventConnection() {
