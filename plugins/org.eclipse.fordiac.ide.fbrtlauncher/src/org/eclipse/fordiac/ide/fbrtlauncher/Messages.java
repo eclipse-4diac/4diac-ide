@@ -49,7 +49,7 @@ public final class Messages extends NLS {
 	public static String FBRTLaunchTab_DeviceType;
 	public static String FBRTLaunchTab_Port;
 
-	public static String FBRTLaunchTab_NoFBRTJarSet;
+	public static String FBRTLaunchTab_NoFBRTDirectorySet;
 
 	static {
 		// initialize resource bundle
