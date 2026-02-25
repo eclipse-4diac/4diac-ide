@@ -2,6 +2,7 @@
  * Copyright (c) 2008, 2009, 2015, 2016 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
@@ -13,8 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -39,11 +38,11 @@ public class CreateECStateCommand extends Command {
 	 * Instantiates a new creates the ec state command.
 	 *
 	 * @param ecState  the ec state
-	 * @param location the location
+	 * @param position the position (IEC 61499 model coordinates)
 	 * @param parent   the parent
 	 */
-	public CreateECStateCommand(final ECState ecState, final Point location, final ECC parent) {
-		this.pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(location.x, location.y);
+	public CreateECStateCommand(final ECState ecState, final Position position, final ECC parent) {
+		this.pos = position;
 		this.ecState = ecState;
 		this.parent = parent;
 	}
@@ -71,13 +70,12 @@ public class CreateECStateCommand extends Command {
 	@Override
 	public void undo() {
 		parent.getECState().remove(ecState);
-
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.gef.commands.Co mmand#redo()
+	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override
 	public void redo() {
