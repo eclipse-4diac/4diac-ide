@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
-import org.eclipse.gef.DragTracker;
+import org.eclipse.fordiac.ide.systemconfiguration.policies.SegmentNodeEditPolicy;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -33,7 +33,6 @@ import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.tools.SelectEditPartTracker;
 
 /**
  * The Class DeviceInterfaceEditPart.
@@ -44,12 +43,7 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 
 	@Override
 	protected GraphicalNodeEditPolicy getNodeEditPolicy() {
-		return null;
-	}
-
-	@Override
-	public DragTracker getDragTracker(final Request request) {
-		return new SelectEditPartTracker(this);
+		return new SegmentNodeEditPolicy();
 	}
 
 	@Override
@@ -92,6 +86,11 @@ public class DeviceInterfaceEditPart extends InterfaceEditPart {
 				return command.unwrap();
 			}
 		};
+	}
+
+	@Override
+	protected String getLabelText() {
+		return getModel().getName();
 	}
 
 }

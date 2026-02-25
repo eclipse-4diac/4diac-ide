@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
 public class AttributeDeclarationColumnAccessor
-		extends AbstractColumnAccessor<Attribute, AttributeDeclarationTableColumn> {
+		extends AbstractCommandColumnAccessor<Attribute, AttributeDeclarationTableColumn> {
 	public AttributeDeclarationColumnAccessor(final CommandExecutor commandExecutor,
 			final List<AttributeDeclarationTableColumn> columns) {
 		super(commandExecutor, columns);

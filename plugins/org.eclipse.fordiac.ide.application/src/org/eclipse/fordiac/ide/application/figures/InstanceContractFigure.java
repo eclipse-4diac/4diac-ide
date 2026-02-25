@@ -17,11 +17,11 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.editparts.InstanceContract;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
-import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
@@ -41,7 +41,7 @@ public class InstanceContractFigure extends Figure {
 		final var main = new BorderedRoundedRectangle();
 		main.setOutline(false);
 		main.setCornerDimensions(new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
-		main.setBorder(new RoundedRectangleShadowBorder());
+		main.setBorder(new RectangleDropShadowBorder(GefPreferenceConstants.CORNER_DIM));
 		main.setLayoutManager(new StackLayout());
 
 		flowPage = new FlowPage();
@@ -77,16 +77,12 @@ public class InstanceContractFigure extends Figure {
 				final TextFlow tf = new TextFlow(t.value());
 
 				switch (t.type()) {
-				case COMMENT:
-					tf.setForegroundColor(ContractScanner.COMMENT);
-					break;
-				case KEYWORD:
+				case COMMENT -> tf.setForegroundColor(ContractScanner.COMMENT);
+				case KEYWORD -> {
 					tf.setForegroundColor(ContractScanner.KEYWORD);
 					tf.setFont(boldFont);
-					break;
-				default:
-					tf.setForegroundColor(ContractScanner.NORMAL);
-					break;
+				}
+				default -> tf.setForegroundColor(ContractScanner.NORMAL);
 				}
 				flowPage.add(tf);
 			}
@@ -99,6 +95,6 @@ public class InstanceContractFigure extends Figure {
 	public Dimension getPreferredSize(final int wHint, final int hHint) {
 		final int w = CoordinateConverter.INSTANCE.iec61499ToScreen(instanceContract.getSubApp().getWidth());
 		final int h = flowPage.getPreferredSize(w, -1).height;
-		return new Dimension(w, h + PADDING * 2);
+		return new Dimension(w, h);
 	}
 }

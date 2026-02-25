@@ -53,7 +53,7 @@ public class CheckUnusedDependencies extends Task {
 
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(fordiacProject);
 
-		for (final var typeEntry : typeLibrary.getAllTypes()) {
+		for (final var typeEntry : typeLibrary.getAllTypes().toList()) {
 			if (unused.isEmpty()) {
 				break;
 			}

@@ -22,7 +22,9 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.SEGExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
@@ -42,6 +44,11 @@ public class SegmentTypeEntryImpl extends AbstractCheckedTypeEntryImpl<SegmentTy
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SEGImporter(getFile());
+	}
+
+	@Override
+	protected ErrorSegmentType createErrorLibraryElement() {
+		return LibraryElementFactory.eINSTANCE.createErrorSegmentType();
 	}
 
 	@Override

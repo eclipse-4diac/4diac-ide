@@ -30,13 +30,12 @@ public class FBSelectionTreeContentProvider extends TypeSelectionTreeContentProv
 
 	@Override
 	protected List<TypeNode> createTree(final TypeLibrary typeLibrary) {
-		if (typeLibrary.getFbTypes().isEmpty() && typeLibrary.getSubAppTypes().isEmpty()) {
+		if (typeLibrary.getFbTypes().findAny().isEmpty() && typeLibrary.getSubAppTypes().findAny().isEmpty()) {
 			return Collections.emptyList();
 		}
 
 		final TypeNode fbTypes = new TypeNode(Messages.DataTypeDropdown_FB_Types);
-		addPathSubtree(fbTypes,
-				Stream.concat(typeLibrary.getFbTypes().stream(), typeLibrary.getSubAppTypes().stream()).toList());
+		addPathSubtree(fbTypes, Stream.concat(typeLibrary.getFbTypes(), typeLibrary.getSubAppTypes()));
 		fbTypes.sortChildren();
 
 		return fbTypes.getChildren();

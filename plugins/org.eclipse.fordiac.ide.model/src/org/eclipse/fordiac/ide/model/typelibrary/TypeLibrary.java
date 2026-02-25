@@ -63,24 +63,12 @@ import org.eclipse.fordiac.ide.model.buildpath.Buildpath;
 import org.eclipse.fordiac.ide.model.buildpath.BuildpathAttributes;
 import org.eclipse.fordiac.ide.model.buildpath.SourceFolder;
 import org.eclipse.fordiac.ide.model.buildpath.util.BuildpathUtil;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
-import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAdapterTypeEntryImpl;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorAttributeTypeEntryImpl;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -103,7 +91,6 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	private final Map<String, SystemEntry> systems = new ConcurrentHashMap<>();
 	private final Map<String, GlobalConstantsEntry> globalConstants = new ConcurrentHashMap<>();
 	private final Map<String, TypeEntry> programTypes = new ConcurrentHashMap<>();
-	private final Map<String, TypeEntry> errorTypes = new ConcurrentHashMap<>();
 	private final Map<IFile, TypeEntry> fileMap = new ConcurrentHashMap<>();
 	private final Map<String, AtomicInteger> packages = new ConcurrentHashMap<>();
 	private final Queue<TypeEntry> duplicates = new ConcurrentLinkedQueue<>();
@@ -111,62 +98,61 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 			Comparator.comparing(IProject::getName));
 	private final TypeLibraryAdapter typeLibraryAdapter = new TypeLibraryAdapter();
 
-	public Collection<AdapterTypeEntry> getAdapterTypes() {
-		return Collections.unmodifiableCollection(adapterTypes.values());
+	public Stream<AdapterTypeEntry> getAdapterTypes() {
+		return adapterTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public List<AdapterTypeEntry> getAdapterTypesSorted() {
-		return adapterTypes.values().stream()
-				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()))
-				.toList();
+	public Stream<AdapterTypeEntry> getAdapterTypesSorted() {
+		return adapterTypes.values().stream().filter(Predicate.not(TypeEntry::hasError))
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getFullTypeName(), o2.getFullTypeName()));
 	}
 
-	public Collection<AttributeTypeEntry> getAttributeTypes() {
-		return Collections.unmodifiableCollection(attributeTypes.values());
+	public Stream<AttributeTypeEntry> getAttributeTypes() {
+		return attributeTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<DeviceTypeEntry> getDeviceTypes() {
-		return Collections.unmodifiableCollection(deviceTypes.values());
+	public Stream<DeviceTypeEntry> getDeviceTypes() {
+		return deviceTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<FBTypeEntry> getFbTypes() {
-		return Collections.unmodifiableCollection(fbTypes.values());
+	public Stream<FBTypeEntry> getFbTypes() {
+		return fbTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<ResourceTypeEntry> getResourceTypes() {
-		return Collections.unmodifiableCollection(resourceTypes.values());
+	public Stream<ResourceTypeEntry> getResourceTypes() {
+		return resourceTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SegmentTypeEntry> getSegmentTypes() {
-		return Collections.unmodifiableCollection(segmentTypes.values());
+	public Stream<SegmentTypeEntry> getSegmentTypes() {
+		return segmentTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SubAppTypeEntry> getSubAppTypes() {
-		return Collections.unmodifiableCollection(subAppTypes.values());
+	public Stream<SubAppTypeEntry> getSubAppTypes() {
+		return subAppTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<SystemEntry> getSystems() {
-		return Collections.unmodifiableCollection(systems.values());
+	public Stream<SystemEntry> getSystems() {
+		return systems.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<GlobalConstantsEntry> getGlobalConstants() {
-		return Collections.unmodifiableCollection(globalConstants.values());
+	public Stream<GlobalConstantsEntry> getGlobalConstants() {
+		return globalConstants.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
-	public Collection<TypeEntry> getProgramTypes() {
-		return Collections.unmodifiableCollection(programTypes.values());
+	public Stream<TypeEntry> getProgramTypes() {
+		return programTypes.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
 	public Set<String> getPackages() {
 		return Collections.unmodifiableSet(packages.keySet());
 	}
 
-	public Collection<TypeEntry> getAllTypes() {
-		return Collections.unmodifiableCollection(fileMap.values());
+	public Stream<TypeEntry> getAllTypes() {
+		return fileMap.values().stream().filter(Predicate.not(TypeEntry::hasError));
 	}
 
 	public Stream<FBTypeEntry> getCompositeFBTypes() {
-		return fbTypes.values().stream()
+		return fbTypes.values().stream().filter(Predicate.not(TypeEntry::hasError))
 				.filter(entry -> LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass()));
 	}
 
@@ -262,52 +248,27 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	public TypeEntry createErrorTypeEntry(final String typeName, final EClass typeClass) {
-		final String resolvedTypeName = typeName == null ? "" : typeName; //$NON-NLS-1$
-		return errorTypes.computeIfAbsent(resolvedTypeName.toLowerCase(), name -> {
-			final LibraryElement libraryElement = createErrorType(resolvedTypeName, typeClass);
-			final TypeEntry entry = createErrorTypeEntry(libraryElement);
-			entry.setType(libraryElement);
-			entry.setTypeLibrary(this);
-			return entry;
-		});
-	}
-
-	private static LibraryElement createErrorType(final String typeName, final EClass typeClass) {
-		final LibraryElement libraryElement = (LibraryElement) LibraryElementFactory.eINSTANCE.create(typeClass);
+		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(typeClass);
+		if (entry == null) {
+			throw new IllegalArgumentException("Unknown type class " + typeClass.getName()); //$NON-NLS-1$
+		}
+		final LibraryElement libraryElement = entry.getType();
 		PackageNameHelper.setFullTypeName(libraryElement, typeName);
-		if (libraryElement instanceof final FBType fbType) {
-			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		} else if (libraryElement instanceof final AttributeDeclaration attributeDeclaration) {
-			final DirectlyDerivedType type = DataFactory.eINSTANCE.createDirectlyDerivedType();
-			type.setName(libraryElement.getName());
-			type.setBaseType(ElementaryTypes.STRING);
-			attributeDeclaration.setType(type);
-		}
-		return libraryElement;
+		entry.setType(libraryElement); // update type name in entry
+		entry.setTypeLibrary(this);
+		final TypeEntry oldEntry = putBlockTypeEntryIfAbsent(entry);
+		return oldEntry != null ? oldEntry : entry;
 	}
 
-	private static TypeEntry createErrorTypeEntry(final LibraryElement libraryElement) {
-		if (libraryElement instanceof AdapterType) {
-			return new ErrorAdapterTypeEntryImpl();
+	private TypeEntry removeErrorTypeEntry(final TypeEntry entry) {
+		TypeEntry oldEntry = getBlockTypeEntry(entry);
+		while (oldEntry != null && oldEntry.getFile() == null) {
+			if (removeBlockTypeEntry(oldEntry)) {
+				return oldEntry;
+			}
+			oldEntry = getBlockTypeEntry(entry);
 		}
-		if (libraryElement instanceof SubAppType) {
-			return new ErrorSubAppTypeEntryImpl();
-		}
-		if (libraryElement instanceof FBType) {
-			return new ErrorFBTypeEntryImpl();
-		}
-		if (libraryElement instanceof AttributeDeclaration) {
-			return new ErrorAttributeTypeEntryImpl();
-		}
-		throw new UnsupportedOperationException(
-				"Cannot create error type entry for " + libraryElement.eClass().getName()); //$NON-NLS-1$
-	}
-
-	private void removeErrorTypeEntry(final String typeName) {
-		final TypeEntry entry = errorTypes.remove(typeName.toLowerCase());
-		if (entry != null) {
-			entry.setTypeLibrary(null);
-		}
+		return null;
 	}
 
 	public void addTypeEntry(final TypeEntry entry) {
@@ -327,9 +288,15 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 				handleDuplicateTypeName(entry);
 			}
 		} else {
-			removeErrorTypeEntry(entry.getFullTypeName());
+			// remove stale error marker data type
+			final TypeEntry oldEntry = removeErrorTypeEntry(entry);
+			// add new type entry
 			if (!addBlockTypeEntry(entry)) {
 				handleDuplicateTypeName(entry);
+			}
+			// trigger transitive refresh after new entry has been added
+			if (oldEntry != null) {
+				oldEntry.setTypeLibrary(null);
 			}
 		}
 		if (isProgramTypeEntry(entry) && !addProgramTypeEntry(entry)) {
@@ -435,21 +402,25 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private void checkDeletions() {
 		checkReferencedProjectDeletions();
-		checkDeletionsForTypeGroup(adapterTypes.values());
-		checkDeletionsForTypeGroup(attributeTypes.values());
-		checkDeletionsForTypeGroup(deviceTypes.values());
-		checkDeletionsForTypeGroup(fbTypes.values());
-		checkDeletionsForTypeGroup(resourceTypes.values());
-		checkDeletionsForTypeGroup(segmentTypes.values());
-		checkDeletionsForTypeGroup(subAppTypes.values());
-		checkDeletionsForTypeGroup(systems.values());
-		checkDeletionsForTypeGroup(globalConstants.values());
+		checkDeletionsForTypeGroup(adapterTypes);
+		checkDeletionsForTypeGroup(attributeTypes);
+		checkDeletionsForTypeGroup(deviceTypes);
+		checkDeletionsForTypeGroup(fbTypes);
+		checkDeletionsForTypeGroup(resourceTypes);
+		checkDeletionsForTypeGroup(segmentTypes);
+		checkDeletionsForTypeGroup(subAppTypes);
+		checkDeletionsForTypeGroup(systems);
+		checkDeletionsForTypeGroup(globalConstants);
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes());
 		fileMap.values().removeIf(Predicate.not(this::exists));
 	}
 
-	private void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
-		typeEntries.stream().filter(Predicate.not(this::exists)).forEachOrdered(this::removeTypeEntry);
+	private void checkDeletionsForTypeGroup(final Map<String, ? extends TypeEntry> typeEntries) {
+		checkDeletionsForTypeGroup(typeEntries.values().stream());
+	}
+
+	private void checkDeletionsForTypeGroup(final Stream<? extends TypeEntry> typeEntries) {
+		typeEntries.filter(Predicate.not(this::exists)).forEachOrdered(this::removeTypeEntry);
 	}
 
 	private boolean exists(final TypeEntry entry) {
@@ -515,21 +486,24 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 	}
 
 	private boolean addBlockTypeEntry(final TypeEntry entry) {
+		return putBlockTypeEntryIfAbsent(entry) == null;
+	}
+
+	private TypeEntry putBlockTypeEntryIfAbsent(final TypeEntry entry) {
 		final String fullTypeName = entry.getFullTypeName().toLowerCase();
 		return switch (entry) {
-		case final AdapterTypeEntry adpEntry -> adapterTypes.putIfAbsent(fullTypeName, adpEntry) == null;
-		case final AttributeTypeEntry atpEntry -> attributeTypes.putIfAbsent(fullTypeName, atpEntry) == null;
-		case final DeviceTypeEntry devEntry -> deviceTypes.putIfAbsent(fullTypeName, devEntry) == null;
-		case final FBTypeEntry fbtEntry -> fbTypes.putIfAbsent(fullTypeName, fbtEntry) == null;
-		case final ResourceTypeEntry resEntry -> resourceTypes.putIfAbsent(fullTypeName, resEntry) == null;
-		case final SegmentTypeEntry segEntry -> segmentTypes.putIfAbsent(fullTypeName, segEntry) == null;
-		case final SubAppTypeEntry subAppEntry -> subAppTypes.putIfAbsent(fullTypeName, subAppEntry) == null;
-		case final SystemEntry sysEntry -> systems.putIfAbsent(fullTypeName, sysEntry) == null;
-		case final GlobalConstantsEntry globalConstEntry ->
-			globalConstants.putIfAbsent(fullTypeName, globalConstEntry) == null;
+		case final AdapterTypeEntry adpEntry -> adapterTypes.putIfAbsent(fullTypeName, adpEntry);
+		case final AttributeTypeEntry atpEntry -> attributeTypes.putIfAbsent(fullTypeName, atpEntry);
+		case final DeviceTypeEntry devEntry -> deviceTypes.putIfAbsent(fullTypeName, devEntry);
+		case final FBTypeEntry fbtEntry -> fbTypes.putIfAbsent(fullTypeName, fbtEntry);
+		case final ResourceTypeEntry resEntry -> resourceTypes.putIfAbsent(fullTypeName, resEntry);
+		case final SegmentTypeEntry segEntry -> segmentTypes.putIfAbsent(fullTypeName, segEntry);
+		case final SubAppTypeEntry subAppEntry -> subAppTypes.putIfAbsent(fullTypeName, subAppEntry);
+		case final SystemEntry sysEntry -> systems.putIfAbsent(fullTypeName, sysEntry);
+		case final GlobalConstantsEntry globalConstEntry -> globalConstants.putIfAbsent(fullTypeName, globalConstEntry);
 		default -> {
 			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
-			yield true;
+			yield null;
 		}
 		};
 	}
@@ -549,6 +523,25 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 		default -> {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 			yield true;
+		}
+		};
+	}
+
+	private TypeEntry getBlockTypeEntry(final TypeEntry entry) {
+		final String fullTypeName = entry.getFullTypeName().toLowerCase();
+		return switch (entry) {
+		case final AdapterTypeEntry adpEntry -> adapterTypes.get(fullTypeName);
+		case final AttributeTypeEntry atpEntry -> attributeTypes.get(fullTypeName);
+		case final DeviceTypeEntry devEntry -> deviceTypes.get(fullTypeName);
+		case final FBTypeEntry fbtEntry -> fbTypes.get(fullTypeName);
+		case final ResourceTypeEntry resEntry -> resourceTypes.get(fullTypeName);
+		case final SegmentTypeEntry segEntry -> segmentTypes.get(fullTypeName);
+		case final SubAppTypeEntry subAppEntry -> subAppTypes.get(fullTypeName);
+		case final SystemEntry sysEntry -> systems.get(fullTypeName);
+		case final GlobalConstantsEntry globalConstEntry -> globalConstants.get(fullTypeName);
+		default -> {
+			FordiacLogHelper.logError("Unknown type entry to be retrieved from library: " + entry.getClass().getName()); //$NON-NLS-1$
+			yield null;
 		}
 		};
 	}

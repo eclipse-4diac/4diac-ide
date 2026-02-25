@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
+import org.eclipse.fordiac.ide.deployment.interactors.TypeNameCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -93,7 +94,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	private final Set<String> genFBs = new HashSet<>();
 	private int id = 0;
 
-	String getNextId() {
+	protected String getNextId() {
 		return Integer.toString(id++);
 	}
 
@@ -123,7 +124,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
 		final String request = MessageFormat.format(CREATE_RESOURCE_INSTANCE, getNextId(), resource.getName(),
-				ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry()));
+				getTypeNameCreator().getTypeName(resource.getTypeEntry()));
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final EOFException e) {
@@ -329,7 +330,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
-		final String fbType = ForteTypeNameCreator.getForteTypeName(fbData.getFb());
+		final String fbType = getTypeNameCreator().getTypeName(fbData.getFb());
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
 		if (fbType.isEmpty()) {
 			throw new DeploymentException((MessageFormat
@@ -415,12 +416,12 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		}
 	}
 
-	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+	private String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
 		final String hash = entry.getTypeHash();
 		if (hash.isEmpty()) {
-			return ForteTypeNameCreator.getForteTypeName(entry);
+			return getTypeNameCreator().getTypeName(entry);
 		}
-		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
+		return getTypeNameCreator().getTypeName(entry) + '#' + hash;
 	}
 
 	protected Response parseResponse(final String result) throws IOException {
@@ -519,5 +520,10 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
 		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReplayNextEventNotSupported);
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected TypeNameCreator getTypeNameCreator() {
+		return ForteTypeNameCreator.TYPE_NAME_CREATOR;
 	}
 }

@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
@@ -164,11 +163,11 @@ public class CreateConnectionSection extends AbstractSection {
 	}
 
 	private String getInterfaceName(final boolean source) {
-		final Object element = getInterfaceElement(source);
-		return getFBName((INamedElement) element) + "." + ((INamedElement) element).getName(); //$NON-NLS-1$
+		final IInterfaceElement element = getInterfaceElement(source);
+		return getFBName(element) + "." + (element).getName(); //$NON-NLS-1$
 	}
 
-	private static String getFBName(final INamedElement element) {
-		return ((INamedElement) element.eContainer().eContainer()).getName();
+	private static String getFBName(final IInterfaceElement element) {
+		return element.getBlockFBNetworkElement().getName();
 	}
 }

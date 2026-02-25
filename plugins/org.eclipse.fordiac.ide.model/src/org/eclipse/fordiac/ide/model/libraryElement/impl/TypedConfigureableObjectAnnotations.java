@@ -23,13 +23,12 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 public final class TypedConfigureableObjectAnnotations {
 
 	public static boolean validateType(final TypedConfigureableObject element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (element.getTypeEntry() instanceof ErrorTypeEntry) {
+		if (element.getTypeEntry() != null && element.getTypeEntry().hasError()) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE,

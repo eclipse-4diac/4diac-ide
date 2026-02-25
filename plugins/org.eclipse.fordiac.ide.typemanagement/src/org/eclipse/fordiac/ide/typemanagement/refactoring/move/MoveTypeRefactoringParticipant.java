@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024 Primetals Technologies Austria GmbH and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,22 +10,26 @@
  * Contributors:
  *   Mario Kastner
  *     - initial API and implementation and/or initial documentation
+ *   Felix Schmid
+ *     - changed to use ModelEdits and add support for moving folders
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.typemanagement.refactoring.move;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
@@ -43,8 +47,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
@@ -54,45 +61,31 @@ import org.eclipse.ltk.core.refactoring.participants.MoveParticipant;
 
 public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
-	private String oldPackageName;
-	private String newPackageName;
-	private TypeEntry type;
-	private IFile destinationFile;
-	private IFile currentFile;
+	private IResource resource;
+	private IContainer destination;
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IFile file) {
-			this.currentFile = file;
-			this.type = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-			this.oldPackageName = type.getPackageName();
-			if (getArguments().getDestination() instanceof final IResource folder) {
-				final URI destinationURI = URI.createPlatformResourceURI(folder.getFullPath().toString(), true)
-						.appendSegment(type.getURI().lastSegment());
-				this.destinationFile = getFileFromURI(destinationURI);
-				this.newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
-				return true;
-			}
+		if (element instanceof final IResource res
+				&& getArguments().getDestination() instanceof final IContainer dest) {
+			resource = res;
+			destination = dest;
+			return RefactoringUtil.containsTypeEntryFile(res);
 		}
 		return false;
 	}
 
 	@Override
 	public String getName() {
-		return MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName);
+		return Messages.MoveTypeToPackage;
 	}
 
 	@Override
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (oldPackageName.contentEquals(newPackageName)) {
-			status.addWarning(Messages.MoveTypeToPackage_PackageNameIsTheSame);
-		}
-		if (!(getArguments().getDestination() instanceof IResource)) {
-			status.addError(Messages.MoveTypeToPackage_InvalidDestination);
-		}
-		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(newPackageName);
+		final String packageNameContainer = PackageNameHelper.getPackageNameFromContainer(destination);
+		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(packageNameContainer);
 		if (errorMessage.isPresent()) {
 			status.addFatalError(errorMessage.get());
 		}
@@ -101,75 +94,81 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 	@Override
 	public Change createPreChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final CompositeChange parentChange = new CompositeChange(Messages.MoveTypeToPackage);
-		parentChange.add(new MoveTypeChange(newPackageName, getName(), this.type.getURI()));
-		parentChange.add(new UpdateTypeEntryFileChange(currentFile, type, destinationFile));
-		return parentChange;
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+		final List<Change> changes = new ArrayList<>();
+		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
+			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			final String newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
+
+			modelEdits.add(new MoveTypeModelEdit(newPackageName,
+					MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName),
+					typeEntry.getURI()));
+			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, newFile));
+		});
+		// add model edits before(!) UpdateTypeEntryFileChange
+		changes.addFirst(ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage, modelEdits));
+		return new CompositeChange(Messages.MoveTypeToPackage, changes.toArray(Change[]::new));
 	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		if (type instanceof final DataTypeEntry dtEntry) {
-			return getDataTypeInstanceChanges(dtEntry);
-		}
-		return getInstanceChanges(type);
+		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
+			if (typeEntry instanceof final DataTypeEntry dtEntry) {
+				addDataTypeInstanceChanges(modelEdits, dtEntry, path);
+			} else {
+				addInstanceChanges(modelEdits, typeEntry);
+			}
+		});
+		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
 	}
 
-	static IFile getFileFromURI(final URI uri) {
-		if (uri.isPlatformResource()) {
-			final Path filePath = new Path(uri.toPlatformString(true));
-			return ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+	private void processTypeFiles(final IResource resource, final IPath newPath,
+			final BiConsumer<TypeEntry, IPath> processor) throws CoreException {
+		if (resource instanceof final IFile file) {
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+			if (entry != null) {
+				processor.accept(entry, newPath.append(file.getName()));
+			}
+		} else if (resource instanceof final IContainer container) {
+			for (final IResource member : container.members()) {
+				processTypeFiles(member, newPath.append(container.getName()), processor);
+			}
 		}
-		return null;
 	}
 
-	private CompositeChange getDataTypeInstanceChanges(final DataTypeEntry dtEntry) {
-		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+	private static void addDataTypeInstanceChanges(final List<ModelEdit<?>> modelEdits, final DataTypeEntry dtEntry,
+			final IPath newPath) {
 		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
 
 		for (final EObject eObject : searchResult) {
 			if (eObject instanceof final VarDeclaration varDecl
 					&& !(varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB)) { // configurable fb pins are
 																							// updated below
-				change.add(new DataTypeChange(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
-						EcoreUtil.getURI(eObject), getNewTypeDeclaration(varDecl)));
+				final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(newPath);
+				modelEdits.add(new DataTypeModelEdit(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
+						EcoreUtil.getURI(eObject), PackageNameHelper.getFullTypeNameFromFile(newFile)));
 			}
 			if (eObject instanceof final BlockFBNetworkElement elem) {
-				change.add(new UpdateInstanceChange(elem, dtEntry));
+				modelEdits.add(new UpdateInstanceModelEdit(elem, dtEntry));
 			}
 		}
-
-		return change;
 	}
 
-	private static CompositeChange getInstanceChanges(final TypeEntry typeEntry) {
-		final CompositeChange change = new CompositeChange(Messages.MoveTypeToPackage_UpdateInstances);
+	private static void addInstanceChanges(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry) {
 		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
 
 		for (final EObject eObject : result) {
 			if (eObject instanceof final BlockFBNetworkElement elem) {
-				change.add(new UpdateFBInstanceChange(elem, typeEntry));
+				modelEdits.add(new UpdateFBInstanceModelEdit(elem, typeEntry));
 			}
 		}
-		return change;
 	}
 
-	private String getNewTypeDeclaration(final VarDeclaration varDeclaration) {
-		final StringBuilder typeDeclaration = new StringBuilder(varDeclaration.getFullTypeName());
-		final int packageNameEnd = typeDeclaration.lastIndexOf(PackageNameHelper.PACKAGE_NAME_DELIMITER);
-		if (packageNameEnd == -1) {
-			typeDeclaration.insert(typeDeclaration.indexOf(varDeclaration.getTypeName()),
-					newPackageName + PackageNameHelper.PACKAGE_NAME_DELIMITER);
-		} else {
-			typeDeclaration.replace(packageNameEnd - oldPackageName.length(), packageNameEnd, newPackageName);
-		}
-		return typeDeclaration.toString();
-	}
-
-	class UpdateInstanceChange extends UpdateFBInstanceChange {
+	private static class UpdateInstanceModelEdit extends UpdateFBInstanceModelEdit {
 		final String visibleChildrenString;
 
-		public UpdateInstanceChange(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
+		public UpdateInstanceModelEdit(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
 			super(instance, typeEntry);
 			visibleChildrenString = (instance instanceof final StructManipulator structManipulator)
 					? ConfigurableFBManagement.buildVisibleChildrenString(structManipulator.getMemberVars())

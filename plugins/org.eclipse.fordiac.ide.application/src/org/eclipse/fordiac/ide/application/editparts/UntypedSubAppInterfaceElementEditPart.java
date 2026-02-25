@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2025 fortiss GmbH, Johannes Kepler University,
+ * Copyright (c) 2017, 2026 fortiss GmbH, Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
@@ -41,11 +40,8 @@ import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -216,7 +212,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			@Override
 			protected void paintFigure(final Graphics graphics) {
 				if (!getChildren().isEmpty()) {
-					graphics.fillRoundRectangle(getBounds(), 8, 8);
+					graphics.setAlpha(150);
+					graphics.fillRectangle(getBounds());
 				}
 				super.paintFigure(graphics);
 			}
@@ -267,26 +264,10 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			tbLayout.verticalSpacing = 2;
 			tbLayout.horizontalSpacing = 0;
 			epFigure.setLayoutManager(tbLayout);
-			epFigure.setBackgroundColor(ColorConstants.white);
+			epFigure.setBackgroundColor(epFigure.getParent().getParent().getBackgroundColor());
 		}
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		getContentPane().add(child, new GridData(SWT.FILL, SWT.BEGINNING, true, false), index);
-	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		if (key == UntypedSubAppInterfaceElementEditPart.class) {
-			return key.cast(this);
-		}
-		if (key == ErrorMarkerDataTypeImpl.class) {
-			final IInterfaceElement model = getModel();
-			final ErrorMarkerDataTypeImpl marker = model instanceof VarDeclaration
-					? (ErrorMarkerDataTypeImpl) model.getType()
-					: null;
-			return key.cast(marker);
-		}
-
-		return super.getAdapter(key);
 	}
 
 	@Override

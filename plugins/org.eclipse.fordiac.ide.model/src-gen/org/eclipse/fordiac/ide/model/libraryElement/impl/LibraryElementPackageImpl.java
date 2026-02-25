@@ -324,7 +324,56 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass errorMarkerDataTypeEClass = null;
+	private EClass errorAdapterTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorAttributeDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorAutomationSystemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorDeviceTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorFBTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorFunctionFBTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorGlobalConstantsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorLibraryElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -339,6 +388,27 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass errorMarkerInterfaceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorResourceTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorSegmentTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorSubAppTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2190,8 +2260,78 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getErrorMarkerDataType() {
-		return errorMarkerDataTypeEClass;
+	public EClass getErrorAdapterType() {
+		return errorAdapterTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorAttributeDeclaration() {
+		return errorAttributeDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorAutomationSystem() {
+		return errorAutomationSystemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorDeviceType() {
+		return errorDeviceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorFBType() {
+		return errorFBTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorFunctionFBType() {
+		return errorFunctionFBTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorGlobalConstants() {
+		return errorGlobalConstantsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorLibraryElement() {
+		return errorLibraryElementEClass;
 	}
 
 	/**
@@ -2232,6 +2372,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getErrorMarkerInterface_Value() {
 		return (EReference)errorMarkerInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorResourceType() {
+		return errorResourceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorSegmentType() {
+		return errorSegmentTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorSubAppType() {
+		return errorSubAppTypeEClass;
 	}
 
 	/**
@@ -4508,13 +4678,33 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(ecTransitionEClass, EC_TRANSITION__CONDITION_EVENT);
 		createEReference(ecTransitionEClass, EC_TRANSITION__ECC);
 
-		errorMarkerDataTypeEClass = createEClass(ERROR_MARKER_DATA_TYPE);
+		errorAdapterTypeEClass = createEClass(ERROR_ADAPTER_TYPE);
+
+		errorAttributeDeclarationEClass = createEClass(ERROR_ATTRIBUTE_DECLARATION);
+
+		errorAutomationSystemEClass = createEClass(ERROR_AUTOMATION_SYSTEM);
+
+		errorDeviceTypeEClass = createEClass(ERROR_DEVICE_TYPE);
+
+		errorFBTypeEClass = createEClass(ERROR_FB_TYPE);
+
+		errorFunctionFBTypeEClass = createEClass(ERROR_FUNCTION_FB_TYPE);
+
+		errorGlobalConstantsEClass = createEClass(ERROR_GLOBAL_CONSTANTS);
+
+		errorLibraryElementEClass = createEClass(ERROR_LIBRARY_ELEMENT);
 
 		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
 		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
 
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__VALUE);
+
+		errorResourceTypeEClass = createEClass(ERROR_RESOURCE_TYPE);
+
+		errorSegmentTypeEClass = createEClass(ERROR_SEGMENT_TYPE);
+
+		errorSubAppTypeEClass = createEClass(ERROR_SUB_APP_TYPE);
 
 		eventEClass = createEClass(EVENT);
 		createEReference(eventEClass, EVENT__WITH);
@@ -4867,9 +5057,29 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		ecStateEClass.getESuperTypes().add(this.getINamedElement());
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
-		errorMarkerDataTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
+		errorAdapterTypeEClass.getESuperTypes().add(this.getAdapterType());
+		errorAdapterTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorAttributeDeclarationEClass.getESuperTypes().add(this.getAttributeDeclaration());
+		errorAttributeDeclarationEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorAutomationSystemEClass.getESuperTypes().add(this.getAutomationSystem());
+		errorAutomationSystemEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorDeviceTypeEClass.getESuperTypes().add(this.getDeviceType());
+		errorDeviceTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorFBTypeEClass.getESuperTypes().add(this.getFBType());
+		errorFBTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorFunctionFBTypeEClass.getESuperTypes().add(this.getFunctionFBType());
+		errorFunctionFBTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorGlobalConstantsEClass.getESuperTypes().add(this.getGlobalConstants());
+		errorGlobalConstantsEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorLibraryElementEClass.getESuperTypes().add(this.getLibraryElement());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getBlockFBNetworkElement());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
+		errorResourceTypeEClass.getESuperTypes().add(this.getResourceType());
+		errorResourceTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorSegmentTypeEClass.getESuperTypes().add(this.getSegmentType());
+		errorSegmentTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorSubAppTypeEClass.getESuperTypes().add(this.getSubAppType());
+		errorSubAppTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
 		eventEClass.getESuperTypes().add(this.getIInterfaceElement());
 		eventEClass.getESuperTypes().add(this.getICallable());
 		eventConnectionEClass.getESuperTypes().add(this.getConnection());
@@ -5414,7 +5624,21 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(ecTransitionEClass, ecorePackage.getEInt(), "getPriority", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(errorMarkerDataTypeEClass, ErrorMarkerDataType.class, "ErrorMarkerDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEClass(errorAdapterTypeEClass, ErrorAdapterType.class, "ErrorAdapterType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorAttributeDeclarationEClass, ErrorAttributeDeclaration.class, "ErrorAttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorAutomationSystemEClass, ErrorAutomationSystem.class, "ErrorAutomationSystem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorDeviceTypeEClass, ErrorDeviceType.class, "ErrorDeviceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorFBTypeEClass, ErrorFBType.class, "ErrorFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorFunctionFBTypeEClass, ErrorFunctionFBType.class, "ErrorFunctionFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorGlobalConstantsEClass, ErrorGlobalConstants.class, "ErrorGlobalConstants", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorLibraryElementEClass, ErrorLibraryElement.class, "ErrorLibraryElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5443,6 +5667,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(errorResourceTypeEClass, ErrorResourceType.class, "ErrorResourceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorSegmentTypeEClass, ErrorSegmentType.class, "ErrorSegmentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorSubAppTypeEClass, ErrorSubAppType.class, "ErrorSubAppType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getEvent_With(), this.getWith(), null, "with", null, 0, -1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -6202,6 +6432,14 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(varDeclarationEClass, ecorePackage.getEBoolean(), "hasValue", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(varDeclarationEClass, ecorePackage.getEString(), "getValueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(varDeclarationEClass, null, "setValueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "valueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(varDeclarationEClass, ecorePackage.getEString(), "getArraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(varDeclarationEClass, null, "setArraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "arraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(versionInfoEClass, VersionInfo.class, "VersionInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getVersionInfo_Author(), theXMLTypePackage.getString(), "author", "", 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$

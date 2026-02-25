@@ -64,9 +64,9 @@ public class BlockTypeInstanceSearch extends IEC61499ElementSearch {
 		return new AbstractLiveSearchContext(entry.getFile().getProject()) {
 			@Override
 			public Stream<URI> getTypes() {
-				final Stream<SystemEntry> systems = getTypelib().getSystems().stream();
-				final Stream<FBTypeEntry> fbs = getTypelib().getFbTypes().stream();
-				final Stream<SubAppTypeEntry> subApps = getTypelib().getSubAppTypes().stream();
+				final Stream<SystemEntry> systems = getTypelib().getSystems();
+				final Stream<FBTypeEntry> fbs = getTypelib().getFbTypes();
+				final Stream<SubAppTypeEntry> subApps = getTypelib().getSubAppTypes();
 				return Stream.concat(systems, Stream.concat(fbs, subApps)).map(TypeEntry::getURI)
 						.filter(Objects::nonNull);
 			}

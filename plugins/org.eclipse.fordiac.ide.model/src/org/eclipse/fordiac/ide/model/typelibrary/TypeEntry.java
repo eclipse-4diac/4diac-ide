@@ -35,6 +35,8 @@ public interface TypeEntry extends Notifier {
 	String TYPE_ENTRY_TYPE_FEATURE = "TYPE_ENTRY_TYPE_FEATURE"; //$NON-NLS-1$
 	String TYPE_ENTRY_TYPE_LIBRARY_FEATURE = "TYPE_ENTRY_TYPE_LIBRARY"; //$NON-NLS-1$
 	String TYPE_ENTRY_INTERFACE_FEATURE = "TYPE_ENTRY_INTERFACE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_FULL_TYPE_NAME_FEATURE = "TYPE_ENTRY_FULL_TYPE_NAME_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_COMMENT_FEATURE = "TYPE_ENTRY_COMMENT_FEATURE"; //$NON-NLS-1$
 
 	int TYPE_ENTRY_FILE_FEATURE_ID = 1;
 	int TYPE_ENTRY_FILE_CONTENT_FEATURE_ID = 2;
@@ -42,6 +44,8 @@ public interface TypeEntry extends Notifier {
 	int TYPE_ENTRY_TYPE_LIBRARY_FEATURE_ID = 4;
 	int TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID = 5;
 	int TYPE_ENTRY_INTERFACE_FEATURE_ID = 6;
+	int TYPE_ENTRY_FULL_TYPE_NAME_FEATURE_ID = 7;
+	int TYPE_ENTRY_COMMENT_FEATURE_ID = 8;
 
 	IFile getFile();
 
@@ -84,6 +88,8 @@ public interface TypeEntry extends Notifier {
 	String getTypeHash() throws LibraryElementHashException;
 
 	void refresh();
+
+	boolean hasError();
 
 	static String getTypeNameFromFile(final IFile element) {
 		return getTypeNameFromFileName(element.getName());

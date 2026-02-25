@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2024  Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025  Primetals Technologies Austria GmbH
+ *                           Monika Wenger
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,9 +16,17 @@ package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
@@ -25,34 +34,36 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
 public class LibrarySelectionPage extends WizardPage {
-	private List<LibDisplay> libraries;
-	private Map<String, List<LibDisplay>> libGroupings;
-	private CheckboxTableViewer tableViewer;
-	private boolean showStandard;
-	private boolean showWorkspace;
+	private final List<LibraryRecord> libraries = new ArrayList<>();
+	private CheckboxTreeViewer treeViewer;
+	private Button libraryNameSort;
+	private final boolean showStandard;
+	private final boolean showWorkspace;
 	private VersionRange range;
+	private SelectionAdapter listener;
 
 	public LibrarySelectionPage(final String pageName, final boolean alwaysComplete, final boolean showStandard,
 			final boolean showWorkspace) {
@@ -65,33 +76,21 @@ public class LibrarySelectionPage extends WizardPage {
 	@Override
 	public void createControl(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NULL);
-
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(1, true));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
+		createTreeViewer(composite);
+
+		final Composite compositeConfiguring = new Composite(composite, SWT.NULL);
+		compositeConfiguring.setLayout(new GridLayout(2, true));
+		compositeConfiguring.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		createTreeGroupConfiguring(compositeConfiguring);
+		createColumnConfiguring(compositeConfiguring);
+
 		findLibs();
-
+		fillViewer(true);
 		selectRange();
-
-		final Composite tableComposite = new Composite(composite, SWT.NONE);
-		tableComposite.setLayout(new GridLayout(1, true));
-		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		tableViewer = CheckboxTableViewer.newCheckList(tableComposite, SWT.NONE);
-		configureTableViewer(tableViewer);
-		tableViewer.setInput(libraries);
-
-		configureSelectionListener();
-
-		final Composite buttonComposite = new Composite(composite, SWT.NONE);
-		buttonComposite.setFont(parent.getFont());
-		buttonComposite.setLayout(new GridLayout(1, false));
-		buttonComposite.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-
-		createButtons(buttonComposite);
-
-		buttonComposite.layout();
-		tableComposite.layout();
 
 		// Show description on opening
 		setErrorMessage(null);
@@ -100,275 +99,367 @@ public class LibrarySelectionPage extends WizardPage {
 		Dialog.applyDialogFont(composite);
 	}
 
-	@Override
-	public boolean isPageComplete() {
-		return super.isPageComplete() || libraries.stream().anyMatch(LibDisplay::isSelected);
-	}
+	private void createColumnConfiguring(final Composite parent) {
+		final Group group = new Group(parent, SWT.NONE);
+		group.setText(Messages.LibraryPage_Columns);
+		group.setLayout(new RowLayout(SWT.HORIZONTAL));
 
-	private void configureSelectionListener() {
-		tableViewer.getTable().addSelectionListener(new SelectionAdapter() {
+		final Button showPath = new Button(group, SWT.CHECK);
+		showPath.setText(Messages.LibraryPage_Path);
+		showPath.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				setPageComplete(isPageComplete());
+				final Button button = (Button) e.widget;
+				final TreeColumn[] columns = treeViewer.getTree().getColumns();
+				if (button.getSelection()) {
+					createPathColumn();
+					treeViewer.refresh();
+				} else {
+					columns[3].dispose();
+				}
 			}
 		});
 	}
 
-	private void findLibs() {
-		libGroupings = new HashMap<>();
-		if (showStandard) {
-			LibraryManager.INSTANCE.getStandardLibraries().forEach((symbolicName, reclist) -> {
-				final List<LibDisplay> libd = libGroupings.computeIfAbsent(symbolicName,
-						s -> new ArrayList<LibDisplay>());
-				reclist.forEach(rec -> libd.add(new LibDisplay(rec, true)));
-			});
-		}
+	private void createTreeViewer(final Composite parent) {
+		final Composite tableComposite = new Composite(parent, SWT.NONE);
+		tableComposite.setLayout(new GridLayout(1, true));
+		tableComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		if (showWorkspace) {
-			LibraryManager.INSTANCE.getExtractedLibraries().forEach((symbolicName, reclist) -> {
-				final List<LibDisplay> libd = libGroupings.computeIfAbsent(symbolicName,
-						s -> new ArrayList<LibDisplay>());
-				reclist.forEach(rec -> libd.add(new LibDisplay(rec, false)));
-			});
+		treeViewer = new CheckboxTreeViewer(tableComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		final Tree tree = treeViewer.getTree();
+		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		tree.setHeaderVisible(true);
+
+		tableComposite.layout();
+
+		treeViewer.setContentProvider(new ITreeContentProvider() {
+			@Override
+			public Object[] getElements(final Object inputElement) {
+				if (inputElement instanceof Collection) {
+					return ((Collection<?>) inputElement).toArray();
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+				if (libraryNameSort.getSelection()) {
+					if (parentElement instanceof final String name) {
+						return libraries.stream().filter(lib -> lib.name().equals(name))
+								.sorted(Comparator.comparing(LibraryRecord::version).reversed()).toArray();
+					}
+				} else if (parentElement instanceof final String version) {
+					return libraries.stream().filter(lib -> lib.version().toString().equals(version))
+							.sorted(Comparator.comparing(LibraryRecord::name)).toArray();
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				if (element instanceof final LibraryRecord lib) {
+					if (libraryNameSort.getSelection()) {
+						return lib.name();
+					}
+					return lib.version().toString();
+				}
+				return null;
+			}
+
+			@Override
+			public boolean hasChildren(final Object element) {
+				return element instanceof String;
+			}
+		});
+	}
+
+	private void createTreeGroupConfiguring(final Composite parent) {
+		final Group group = new Group(parent, SWT.NONE);
+		group.setText(Messages.LibraryPage_Sorting);
+		group.setLayout(new RowLayout(SWT.HORIZONTAL));
+
+		libraryNameSort = new Button(group, SWT.RADIO);
+		libraryNameSort.setText(Messages.LibraryPage_Name);
+		libraryNameSort.setSelection(true);
+
+		final Button versionSort = new Button(group, SWT.RADIO);
+		versionSort.setText(Messages.LibraryPage_Version);
+
+		final SelectionListener sortListener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Button button = (Button) e.widget;
+				if (button.getSelection()) {
+					fillViewer(button == libraryNameSort);
+				}
+			}
+		};
+		libraryNameSort.addSelectionListener(sortListener);
+		versionSort.addSelectionListener(sortListener);
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		return super.isPageComplete() || treeViewer.getCheckedElements().length > 0;
+	}
+
+	private void findLibs() {
+		libraries.clear();
+		if (showStandard) {
+			LibraryManager.INSTANCE.getStandardLibraries()
+					.forEach((symbolicName, reclist) -> reclist.forEach(libraries::add));
 		}
-		libraries = new ArrayList<>();
-		libGroupings.values().forEach(libraries::addAll);
+		if (showWorkspace) {
+			LibraryManager.INSTANCE.getExtractedLibraries()
+					.forEach((symbolicName, reclist) -> reclist.forEach(libraries::add));
+		}
 	}
 
 	public Map<Required, URI> getChosenLibraries() {
 		final Map<Required, URI> libs = new HashMap<>();
-		libraries.stream().filter(LibDisplay::isSelected).forEach(lib -> libs
-				.put(ManifestHelper.createRequired(lib.getSymbolicName(), lib.getVersionString()), lib.getUri()));
+		Stream.of(treeViewer.getCheckedElements()).filter(LibraryRecord.class::isInstance)
+				.map(LibraryRecord.class::cast).forEach(lib -> libs
+						.put(ManifestHelper.createRequired(lib.symbolicName(), lib.version().toString()), lib.uri()));
 		return libs;
 	}
 
 	public void setStandardLibRange(final VersionRange range) {
 		this.range = range;
 		selectRange();
-		if (tableViewer != null) {
-			tableViewer.refresh();
-		}
 	}
 
-	private void selectAll() {
-		deselectAll();
-		libGroupings.forEach((symb, list) -> list.stream().max((l1, l2) -> l1.getVersion().compareTo(l2.getVersion()))
-				.ifPresent(lib -> lib.setSelected(true)));
-	}
-
-	public void selectRange() {
-		if (libraries == null || range == null) {
+	private void selectRange() {
+		if (range == null || treeViewer == null || libraries.isEmpty()) {
 			return;
 		}
-		deselectAll();
-		libGroupings.forEach((symb, list) -> list.stream()
-				.filter(lib -> lib.isStandard() && range.includes(lib.getVersion()))
-				.max((l1, l2) -> l1.getVersion().compareTo(l2.getVersion())).ifPresent(lib -> lib.setSelected(true)));
+		treeViewer.setCheckedElements(
+				libraries.stream().filter(l -> range.includes(l.version())).toArray(LibraryRecord[]::new));
+		treeViewer.refresh();
 	}
 
-	private void deselectAll() {
-		libraries.forEach(lib -> lib.setSelected(false));
-	}
-
-	private void selectLib(final LibDisplay lib, final boolean selected) {
-		if (!lib.isSelected()) {
-			libGroupings.get(lib.getSymbolicName()).forEach(l -> l.setSelected(false));
+	private void fillViewer(final boolean isLibrary) {
+		final Object[] tempSelection = treeViewer.getCheckedElements();
+		treeViewer.getTree().clearAll(true);
+		final String version = null != range ? range.getLeft().toString() : ""; //$NON-NLS-1$
+		createColumns(isLibrary);
+		if (null != listener) {
+			treeViewer.getTree().removeSelectionListener(listener);
 		}
-		lib.setSelected(selected);
-	}
-
-	private void configureTableViewer(final CheckboxTableViewer viewer) {
-		viewer.setContentProvider(new ArrayContentProvider());
-
-		final Table table = viewer.getTable();
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		table.setLayout(createTableLayout());
-		table.setSortDirection(SWT.DOWN);
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		final TableViewerColumn nameColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		nameColumn.getColumn().setText(Messages.LibraryPage_Name);
-		nameColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((LibDisplay) element).getName();
+		if (isLibrary) {
+			treeViewer.setInput(libraries.stream().map(LibraryRecord::name).distinct().sorted().toList());
+			treeViewer.setCheckedElements(tempSelection);
+			if (range != null && Collections.max(libraries, Comparator.comparing(LibraryRecord::version)).version()
+					.equals(range.getLeft())) {
+				Stream.of(treeViewer.getTree().getItems())
+						.filter(r -> Stream.of(r.getItems()).anyMatch(d -> d.getText().equals(version)))
+						.forEach(r -> treeViewer.setChecked(r, true));
 			}
-		});
-
-		final TableViewerColumn versionColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		versionColumn.getColumn().setText(Messages.LibraryPage_Version);
-		versionColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((LibDisplay) element).getVersionString();
-			}
-		});
-
-		final TableViewerColumn commentColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		commentColumn.getColumn().setText(Messages.LibraryPage_Comment);
-		commentColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((LibDisplay) element).getComment();
-			}
-		});
-
-		final TableViewerColumn symNameColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		symNameColumn.getColumn().setText(Messages.LibraryPage_SymbolicName);
-		symNameColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((LibDisplay) element).getSymbolicName();
-			}
-		});
-
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				final LibDisplay lib1 = (LibDisplay) e1;
-				final LibDisplay lib2 = (LibDisplay) e2;
-				int comp = lib1.getSymbolicName().compareTo(lib2.getSymbolicName());
-				if (comp == 0) {
-					comp = lib1.getVersion().compareTo(lib2.getVersion());
+			treeViewer.getTree().addSelectionListener(getLibraryNameListener());
+		} else {
+			treeViewer.setInput(libraries.stream().map(LibraryRecord::version).distinct()
+					.sorted(Comparator.reverseOrder()).map(Version::toString).toList());
+			if (range != null) {
+				final Object[] children = ((ITreeContentProvider) treeViewer.getContentProvider()).getChildren(version);
+				treeViewer.setCheckedElements(tempSelection);
+				if (Arrays.stream(children).allMatch(child -> treeViewer.getChecked(child))) {
+					treeViewer.setChecked(version, true);
 				}
-				return comp;
+			}
+			treeViewer.getTree().addSelectionListener(getVersionListener());
+		}
+		treeViewer.refresh();
+	}
+
+	private SelectionAdapter getLibraryNameListener() {
+		listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				if (event.detail == SWT.CHECK && event.item instanceof final TreeItem item) {
+					removeListener();
+					final boolean checked = item.getChecked();
+					if (item.getParentItem() instanceof final TreeItem parent && checked) {
+						// when this child is checked all other children have to be unchecked
+						Stream.of(parent.getItems()).filter(i -> i != item).forEach(c -> c.setChecked(false));
+						Stream.of(parent.getItems())
+								.max(Comparator.comparing(ti -> ((LibraryRecord) ti.getData()).version()))
+								.ifPresent(p -> parent.setChecked(p.equals(item)));
+					}
+					if (item.getItemCount() > 0) {
+						// when parent is check the first ordered child is set all other have to be
+						// unchecked
+						Stream.of(item.getItems()).forEach(ti -> ti.setChecked(false));
+						if (checked) {
+							Stream.of(item.getItems())
+									.max(Comparator.comparing(ti -> ((LibraryRecord) ti.getData()).version()))
+									.ifPresent(r -> r.setChecked(true));
+						}
+					}
+					addListener();
+				}
+			}
+		};
+		return listener;
+	}
+
+	private void addListener() {
+		treeViewer.getTree().addSelectionListener(listener);
+		treeViewer.getTree().setRedraw(true);
+	}
+
+	private void removeListener() {
+		treeViewer.getTree().removeSelectionListener(listener);
+		treeViewer.getTree().setRedraw(false);
+	}
+
+	private SelectionAdapter getVersionListener() {
+		listener = new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				if (event.detail == SWT.CHECK && event.item instanceof final TreeItem item) {
+					removeListener();
+					final boolean checked = item.getChecked();
+					final TreeItem[] children = item.getItems();
+					if (children.length > 0) {
+						checkParentForVersionListener(item, checked, children);
+					} else {
+						checkChildForVersionListener(item);
+					}
+					treeViewer.refresh();
+					setPageComplete(isPageComplete());
+					addListener();
+				}
+			}
+
+			private void checkChildForVersionListener(final TreeItem item) {
+				final TreeItem parent = item.getParentItem();
+				parent.setChecked(Stream.of(parent.getItems()).allMatch(TreeItem::getChecked));
+				Stream.of(item.getParent().getItems()).filter(i -> i != parent)
+						.flatMap(e -> Arrays.stream(e.getItems()))
+						.filter(c -> c.getData() != null
+								&& ((LibraryRecord) c.getData()).name().equals(((LibraryRecord) item.getData()).name()))
+						.forEach(d -> d.setChecked(false));
+			}
+
+			private void checkParentForVersionListener(final TreeItem item, final boolean checked,
+					final TreeItem[] children) {
+				Stream.of(children).forEach(c -> c.setChecked(checked));
+				final Set<String> childrenNames = Stream.of(children).map(TreeItem::getData)
+						.map(LibraryRecord.class::cast).filter(Objects::nonNull).map(LibraryRecord::name)
+						.collect(Collectors.toSet());
+				Stream.of(item.getParent().getItems()).filter(i -> i != item && i.getChecked()).forEach(p -> {
+					for (final TreeItem child : p.getItems()) {
+						final LibraryRecord childItem = (LibraryRecord) child.getData();
+						if (childrenNames.contains(childItem.name())) {
+							child.setChecked(false);
+						}
+					}
+					p.setChecked(false);
+				});
+			}
+		};
+		return listener;
+	}
+
+	private void createColumns(final boolean isLibrary) {
+		Stream.of(treeViewer.getTree().getColumns()).forEach(TreeColumn::dispose);
+
+		final TreeViewerColumn col1 = new TreeViewerColumn(treeViewer, SWT.NONE);
+		final TreeViewerColumn col2 = new TreeViewerColumn(treeViewer, SWT.NONE);
+		final TreeViewerColumn col3 = new TreeViewerColumn(treeViewer, SWT.NONE);
+
+		if (isLibrary) {
+			createLibraryFirstColumn(col1, col2);
+		} else {
+			createVersionFirstColumn(col1, col2);
+		}
+
+		col3.getColumn().setText(Messages.LibraryPage_Comment);
+		col3.getColumn().setWidth(200);
+		col3.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final LibraryRecord libdisplay) {
+					return libdisplay.comment();
+				}
+				return ""; //$NON-NLS-1$
+			}
+		});
+	}
+
+	private void createPathColumn() {
+		final TreeViewerColumn col4 = new TreeViewerColumn(treeViewer, SWT.NONE);
+		col4.getColumn().setText(Messages.LibraryPage_Path);
+		col4.getColumn().setWidth(200);
+		col4.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final LibraryRecord libdisplay) {
+					return libdisplay.path().toString();
+				}
+				return ""; //$NON-NLS-1$
+			}
+		});
+	}
+
+	private static void createVersionFirstColumn(final TreeViewerColumn col1, final TreeViewerColumn col2) {
+		col1.getColumn().setText(Messages.LibraryPage_Version);
+		col1.getColumn().setWidth(100);
+		col1.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final String elem) {
+					return elem;
+				}
+				return ""; //$NON-NLS-1$
 			}
 		});
 
-		viewer.setCheckStateProvider(new ICheckStateProvider() {
+		col2.getColumn().setText(Messages.LibraryPage_Name);
+		col2.getColumn().setWidth(150);
+		col2.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final LibraryRecord libdisplay) {
+					return libdisplay.name();
+				}
+				return ""; //$NON-NLS-1$
+			}
+		});
+	}
+
+	private static void createLibraryFirstColumn(final TreeViewerColumn col1, final TreeViewerColumn col2) {
+		col1.getColumn().setText(Messages.LibraryPage_Name);
+		col1.getColumn().setWidth(150);
+		col1.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof final String elem) {
+					return elem;
+				}
+				return ""; //$NON-NLS-1$
+			}
 
 			@Override
-			public boolean isGrayed(final Object element) {
-				return false;
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				if (element instanceof final String item) {
+					cell.setImage(null);
+					cell.setText(item);
+				}
 			}
+		});
 
+		col2.getColumn().setText(Messages.LibraryPage_Version);
+		col2.getColumn().setWidth(100);
+		col2.setLabelProvider(new ColumnLabelProvider() {
 			@Override
-			public boolean isChecked(final Object element) {
-				return ((LibDisplay) element).isSelected();
-			}
-		});
-
-		viewer.addCheckStateListener(event -> {
-			final LibDisplay lib = (LibDisplay) event.getElement();
-			selectLib(lib, event.getChecked());
-			viewer.update(libGroupings.get(lib.getSymbolicName()).toArray(), null);
-		});
-	}
-
-	@SuppressWarnings("static-method")
-	private TableLayout createTableLayout() {
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(180, 100, true));
-		layout.addColumnData(new ColumnWeightData(50, 50, true));
-		layout.addColumnData(new ColumnWeightData(150, 200, true));
-		layout.addColumnData(new ColumnWeightData(100, 100, true));
-		return layout;
-	}
-
-	private void createButtons(final Composite buttonComposite) {
-
-		final Button selectAllButton = new Button(buttonComposite, SWT.PUSH);
-		selectAllButton.setFont(buttonComposite.getFont());
-		selectAllButton.setText(Messages.LibraryPage_SelectAll);
-		setButtonLayoutData(selectAllButton);
-
-		final Button deselectButton = new Button(buttonComposite, SWT.PUSH);
-		deselectButton.setFont(buttonComposite.getFont());
-		deselectButton.setText(Messages.LibraryPage_DeselectAll);
-		setButtonLayoutData(deselectButton);
-
-		selectAllButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				selectAll();
-				tableViewer.refresh();
-			}
-		});
-
-		deselectButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				deselectAll();
-				tableViewer.refresh();
+			public String getText(final Object element) {
+				if (element instanceof final LibraryRecord libdisplay) {
+					return libdisplay.version().toString();
+				}
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}
-
-	private class LibDisplay {
-		private boolean selected;
-		private final boolean isStd;
-		private final LibraryRecord libraryRecord;
-
-		public LibDisplay(final boolean selected, final LibraryRecord libRecord, final boolean isStd) {
-			this.selected = selected;
-			this.libraryRecord = libRecord;
-			this.isStd = isStd;
-		}
-
-		public LibDisplay(final LibraryRecord libRecord, final boolean isStd) {
-			this(false, libRecord, isStd);
-		}
-
-		public void setSelected(final boolean selected) {
-			this.selected = selected;
-		}
-
-		public boolean isSelected() {
-			return selected;
-		}
-
-		public boolean isStandard() {
-			return isStd;
-		}
-
-		public String getName() {
-			return libraryRecord.name();
-		}
-
-		public String getSymbolicName() {
-			return libraryRecord.symbolicName();
-		}
-
-		public Version getVersion() {
-			return libraryRecord.version();
-		}
-
-		public String getVersionString() {
-			return libraryRecord.version().toString();
-		}
-
-		public String getComment() {
-			return libraryRecord.comment();
-		}
-
-		public URI getUri() {
-			return libraryRecord.uri();
-		}
-
-		public LibraryRecord getLibraryRecord() {
-			return libraryRecord;
-		}
-	}
-
-	public boolean isShowStandard() {
-		return showStandard;
-	}
-
-	public void setShowStandard(final boolean showStandard) {
-		this.showStandard = showStandard;
-		findLibs();
-		tableViewer.setInput(libraries);
-	}
-
-	public boolean isShowWorkspace() {
-		return showWorkspace;
-	}
-
-	public void setShowWorkspace(final boolean showWorkspace) {
-		this.showWorkspace = showWorkspace;
-		findLibs();
-		tableViewer.setInput(libraries);
-	}
-
 }

@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreRegionString;
@@ -196,7 +195,7 @@ public class STCoreResourceDescriptionStrategy extends DefaultResourceDescriptio
 	@Override
 	protected boolean isResolvedAndExternal(final EObject from, final EObject to) {
 		if (to instanceof final LibraryElement libraryElement && !to.eIsProxy()
-				&& (libraryElement.getTypeEntry() == null || libraryElement.getTypeEntry() instanceof ErrorTypeEntry)) {
+				&& (libraryElement.getTypeEntry() == null || libraryElement.getTypeEntry().hasError())) {
 			return false;
 		}
 		return super.isResolvedAndExternal(from, to);

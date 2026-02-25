@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextcore.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.fordiac.ide.structuredtextcore.ui
-Bundle-Vendor: Eclipse 4diac
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
 Bundle-Version: 3.0.100.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextcore.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
@@ -55,3 +55,4 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring,
  org.eclipse.fordiac.ide.structuredtextcore.ui.validation
 Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivator
+Bundle-Localization: bundle

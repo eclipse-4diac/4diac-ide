@@ -27,7 +27,7 @@ public class AdapterTypeSelectionTreeContentProvider extends TypeSelectionTreeCo
 
 	@Override
 	protected List<TypeNode> createTree(final TypeLibrary typeLibrary) {
-		if (typeLibrary.getAdapterTypes().isEmpty()) {
+		if (typeLibrary.getAdapterTypes().findAny().isEmpty()) {
 			return Collections.emptyList();
 		}
 

@@ -20,6 +20,18 @@
       <super
             type="org.eclipse.debug.core.lineBreakpointMarker">
       </super>
+      <super
+            type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+      </super>
+      <super
+            type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+      </super>
+      <super
+            type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction">
+      </super>
+      <super
+            type="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.stalgorithm">
+      </super>
       <persistent
             value="true">
       </persistent>

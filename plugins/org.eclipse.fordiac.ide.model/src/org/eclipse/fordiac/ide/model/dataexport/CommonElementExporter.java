@@ -62,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -553,7 +552,7 @@ public class CommonElementExporter {
 	}
 
 	protected <T extends TypeEntry> T addDependency(final T entry) {
-		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+		if (entry != null) {
 			dependencies.add(entry);
 		}
 		return entry;

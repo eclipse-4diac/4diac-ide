@@ -61,7 +61,9 @@ public final class EventManagerUtils {
 				if (network) {
 					for (final EventOccurrence eo : fbtransaction.getOutputEventOccurrences()) {
 						for (final Transaction t : eo.getCreatedTransactions()) {
-							t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+							if (t.getInputEventOccurrence().getFbRuntime() == null) {
+								t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+							}
 							eventManager.getTransactions().add(t);
 						}
 					}

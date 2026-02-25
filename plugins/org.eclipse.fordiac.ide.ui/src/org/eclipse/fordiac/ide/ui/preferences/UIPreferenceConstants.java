@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2011, 2015, 2017 Profactor GbmH, fortiss GmbH
- * 				 2019, 2020 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2026 Profactor GbmH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -38,6 +38,11 @@ public final class UIPreferenceConstants {
 	public static final String P_ANY_REAL_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyRealConnectionConnectorColor"; //$NON-NLS-1$
 	public static final String P_ANY_STRING_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AnyStringConnectionConnectorColor"; //$NON-NLS-1$
 	public static final String P_REMAINING_DATA_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor";//$NON-NLS-1$
+	private static final String P_INTERFACE_BAR_COLOR = "org.eclipse.fordiac.ide.ui.InterfaceBarBackgroundColor";//$NON-NLS-1$
+	private static final String P_PAGE_COMMENT_COLOR = "org.eclipse.fordiac.ide.ui.PageCommentBackgroundColor";//$NON-NLS-1$
+	private static final String P_STICKY_NOTE_BG_COLOR = "org.eclipse.fordiac.ide.ui.StickNoteCommentBackgroundColor"; //$NON-NLS-1$
+	private static final String P_STICKY_NOTE_FG_COLOR = "org.eclipse.fordiac.ide.ui.StickNoteCommentForegroundColor"; //$NON-NLS-1$
+	private static final String P_STICKY_NOTE_BORDER_COLOR = "org.eclipse.fordiac.ide.ui.StickNoteCommentBorderColor"; //$NON-NLS-1$
 
 	/** The Constant P_ADAPTER_CONNECTOR_COLOR. */
 	public static final String P_ADAPTER_CONNECTOR_COLOR = "org.eclipse.fordiac.ide.ui.AdapterConnectionConnectorColor";//$NON-NLS-1$
@@ -114,5 +119,25 @@ public final class UIPreferenceConstants {
 
 	public static Color getAdapterConnectorColor() {
 		return JFaceResources.getColorRegistry().get(P_ADAPTER_CONNECTOR_COLOR);
+	}
+
+	public static Color getInterfaceBarColor() {
+		return JFaceResources.getColorRegistry().get(P_INTERFACE_BAR_COLOR);
+	}
+
+	public static Color getPageCommentColor() {
+		return JFaceResources.getColorRegistry().get(P_PAGE_COMMENT_COLOR);
+	}
+
+	public static Color getStickyNoteBGColor() {
+		return JFaceResources.getColorRegistry().get(P_STICKY_NOTE_BG_COLOR);
+	}
+
+	public static Color getStickyNoteFGColor() {
+		return JFaceResources.getColorRegistry().get(P_STICKY_NOTE_FG_COLOR);
+	}
+
+	public static Color getStickyNoteBorderColor() {
+		return JFaceResources.getColorRegistry().get(P_STICKY_NOTE_BORDER_COLOR);
 	}
 }

@@ -192,14 +192,14 @@ public class OpenTypeHandler extends AbstractHandler {
 
 		private static void fillForProject(final AbstractContentProvider contentProvider, final ItemsFilter itemsFilter,
 				final IProgressMonitor progressMonitor, final IProject proj) {
-			for (final TypeEntry entry : TypeLibraryManager.INSTANCE.getTypeLibrary(proj).getAllTypes()) {
+			TypeLibraryManager.INSTANCE.getTypeLibrary(proj).getAllTypes().forEachOrdered(entry -> {
 				if (progressMonitor.isCanceled()) {
 					return;
 				}
 				if (!(entry instanceof SystemEntry) && itemsFilter.matchItem(entry)) {
 					contentProvider.add(entry, itemsFilter);
 				}
-			}
+			});
 		}
 
 		@Override

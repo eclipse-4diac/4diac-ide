@@ -15,12 +15,14 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public class ChangeSubAppBoundsCommand extends AbstractChangeContainerBoundsCommand {
 
-	public ChangeSubAppBoundsCommand(final SubApp group, final int dx, final int dy, final int dw, final int dh) {
-		super(group, dx, dy, dw, dh, group.getWidth(), group.getHeight());
+	public ChangeSubAppBoundsCommand(final SubApp group, final Position newPos, final double newWidth,
+			final double newHeight) {
+		super(group, newPos, newWidth, newHeight, group.getWidth(), group.getHeight());
 	}
 
 	@Override

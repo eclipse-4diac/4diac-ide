@@ -125,6 +125,8 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateInternalFB;
 	public static String DeleteFBTypeParticipant_Change_UpdateManipulator;
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
+	public static String RenameUpdateFBTypeInterfaceModelEdit_NotPartOfInterface;
+	public static String RenameUpdateFBTypeInterfaceModelEdit_TypelibraryNull;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
 
@@ -132,13 +134,10 @@ public final class Messages extends NLS {
 
 	public static String InitialValueChange_InitialValueChanged;
 
-	public static String MoveToPackageChangePreview_EnterPackageName;
 	public static String MoveTypeToPackage;
 	public static String MoveTypeToPackage_UpdateDataTypeInstance;
 	public static String MoveTypeToPackage_RenamePackageTo;
 	public static String MoveTypeToPackage_PackageNameIsTheSame;
-	public static String MoveTypeToPackage_PackageNameIsEmpty;
-	public static String MoveTypeToPackage_InvalidDestination;
 	public static String MoveTypeToPackage_UpdateInstances;
 	public static String MoveTypeToPackage_NameChanged;
 	public static String MoveTypeToPackage_UpdateTypeEntryFile;
@@ -176,7 +175,6 @@ public final class Messages extends NLS {
 	public static String RenameElementRefactoringProcessor_RenamePinInType;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
-	public static String RenameType_TypeExists;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_OPEN_TYPE_ERROR_TITLE;
 	public static String OpenTypeHandler_OPEN_TYPE_TITLE;
@@ -190,9 +188,7 @@ public final class Messages extends NLS {
 	public static String typeManagementPreferencePageDescription;
 
 	public static String Refactoring_StructUsers;
-	public static String Refactoring_RenameFromTo;
-	public static String Refactoring_AffectedStruct;
-	public static String Refactoring_AffectedInstancesOfFB;
+	public static String Refactoring_RenameChangeName;
 	public static String Refactoring_UpdateTypeEntryChange;
 
 	public static String RepairBrokenConnectionWizardPage_Description;

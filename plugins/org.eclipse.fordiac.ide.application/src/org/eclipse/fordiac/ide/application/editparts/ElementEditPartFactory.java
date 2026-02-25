@@ -20,13 +20,13 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -71,8 +71,8 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
 		}
-		if (modelElement instanceof ErrorMarkerDataType) {
-			return new ErrorMarkerDataTypeEditPart();
+		if (modelElement instanceof ErrorDataType) {
+			return new ErrorDataTypeEditPart();
 		}
 		if (modelElement instanceof InstanceName) {
 			return new InstanceNameEditPart();

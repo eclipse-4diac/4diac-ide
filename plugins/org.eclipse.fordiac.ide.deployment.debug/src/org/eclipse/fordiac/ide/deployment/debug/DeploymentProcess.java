@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,6 +28,7 @@ import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.debug.AbstractLaunchProcess;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.DownloadRunnable;
+import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -38,12 +40,18 @@ public class DeploymentProcess extends AbstractLaunchProcess {
 	private final Job job;
 	private boolean terminated;
 
-	public DeploymentProcess(final AutomationSystem system, final Set<INamedElement> selection, final ILaunch launch)
-			throws DeploymentException {
+	public DeploymentProcess(final AutomationSystem system, final Set<INamedElement> selection,
+			final List<DeploymentLaunchValue> launchValues, final ILaunch launch) throws DeploymentException {
 		super(MessageFormat.format(Messages.DeploymentProcess_Name, system.getName()), launch);
 
-		downloadRunnable = new DownloadRunnable(DeploymentCoordinator.createDeploymentdata(selection.toArray()), null,
-				streamsProxy, null);
+		final List<DeviceDeploymentData> deploymentData = DeploymentCoordinator
+				.createDeploymentdata(selection.toArray());
+
+		for (final DeploymentLaunchValue value : launchValues) {
+			value.applyTo(deploymentData);
+		}
+
+		downloadRunnable = new DownloadRunnable(deploymentData, null, streamsProxy, null);
 
 		job = Job.create(name, this::deploy);
 		job.addJobChangeListener(IJobChangeListener.onDone(this::terminated));

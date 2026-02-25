@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd" >
+<DeviceType Name="TEST_DEVICE" Comment="Minimal device type for mapping tests" >
+  <Identification Standard="61499-1"/>
+  <VersionInfo Organization="4diac tests" Version="1.0" Author="test" Date="2026-02-23"/>
+  <VarDeclaration Name="MGR_ID" Type="WSTRING" InitialValue="&#34;localhost:61499&#34;" Comment="Device manager socket ID" />
+</DeviceType>

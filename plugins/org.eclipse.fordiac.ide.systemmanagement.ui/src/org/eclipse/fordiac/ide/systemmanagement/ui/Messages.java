@@ -29,7 +29,16 @@ public final class Messages extends NLS {
 
 	public static String AutomationSystemEditor_ShowingSystem;
 
+	public static String InstanceCommentDecoration_Description;
+	public static String InstanceCommentDecoration_Label;
+
+	public static String InstanceTypeDecoration_Description;
+	public static String InstanceTypeDecoration_Label;
+
 	public static String OpenApplicationForEditing;
+
+	public static String LibraryFolderDecoration_Description;
+	public static String LibraryFolderDecoration_Label;
 
 	public static String MissingExportBuilderMarkerResolution_Description;
 	public static String MissingExportBuilderMarkerResolution_Label;

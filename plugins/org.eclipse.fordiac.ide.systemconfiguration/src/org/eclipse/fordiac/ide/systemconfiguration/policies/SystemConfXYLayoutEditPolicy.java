@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
@@ -54,10 +55,13 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				@Override
 				protected List createSelectionHandles() {
+					final RoundedRectangle rect = (RoundedRectangle) getHost().getFigure();
+
 					final List list = new ArrayList();
 					list.add(new ResizeHandle(getHost(), PositionConstants.EAST));
 					list.add(new ResizeHandle(getHost(), PositionConstants.WEST));
-					list.add(new ModifiedMoveHandle(getHost(), new Insets(0, 2, 0, 2), 20));
+					list.add(new ModifiedMoveHandle(getHost(), new Insets(0, 2, 0, 2),
+							rect.getCornerDimensions().height));
 					return list;
 				}
 			};

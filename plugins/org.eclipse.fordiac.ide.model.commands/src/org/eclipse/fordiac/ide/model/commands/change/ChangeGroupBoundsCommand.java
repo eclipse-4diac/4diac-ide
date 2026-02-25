@@ -16,11 +16,13 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
 public class ChangeGroupBoundsCommand extends AbstractChangeContainerBoundsCommand {
 
-	public ChangeGroupBoundsCommand(final Group group, final int dx, final int dy, final int dw, final int dh) {
-		super(group, dx, dy, dw, dh, group.getWidth(), group.getHeight());
+	public ChangeGroupBoundsCommand(final Group group, final Position newPos, final double newWidth,
+			final double newHeight) {
+		super(group, newPos, newWidth, newHeight, group.getWidth(), group.getHeight());
 	}
 
 	@Override

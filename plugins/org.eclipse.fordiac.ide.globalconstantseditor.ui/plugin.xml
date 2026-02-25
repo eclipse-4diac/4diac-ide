@@ -112,21 +112,21 @@
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			name="Constants">
+			name="%page.name.constants">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 		<page
 			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.coloring"
-			name="Syntax Coloring">
+			name="%page.name.syntaxColoring">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 		<page
 			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.templates"
-			name="Templates">
+			name="%page.name.templates">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 	</extension>
@@ -136,7 +136,7 @@
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
-			name="Constants">
+			name="%page.name.constants">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -148,27 +148,27 @@
 		point="org.eclipse.ui.keywords">
 		<keyword
 			id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"
-			label="GlobalConstants"/>
+			label="%keyword.label.globalConstants"/>
 	</extension>
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Trigger expensive validation"
+			description="%command.description.triggerExpensiveValidation"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.validate"
-			name="Validate">
+			name="%command.name.validate">
 		</command>
 		<!-- copy qualified name -->
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 		<command
 			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
 			categoryId="org.eclipse.ui.category.edit"
-			description="Copy the qualified name for the selected element"
-			name="Copy Qualified Name">
+			description="%command.description.copyQualifiedName"
+			name="%command.name.copyQualifiedName">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -177,7 +177,7 @@
 			<command
 				commandId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.validate"
 				style="push"
-				tooltip="Trigger expensive validation">
+				tooltip="%command.tooltip.triggerExpensiveValidation">
 				<visibleWhen checkEnabled="false">
 					<reference
 						definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened">
@@ -188,7 +188,7 @@
 		<!-- copy qualified name -->
 		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened" />
 				</visibleWhen>
@@ -196,7 +196,7 @@
 		</menuContribution>
 		<menuContribution locationURI="menu:edit?after=copy">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened" />
 				</visibleWhen>
@@ -204,7 +204,7 @@
 		</menuContribution>
 		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
 			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
-				style="push" tooltip="Copy Qualified Name">
+				style="push" tooltip="%command.tooltip.copyQualifiedName">
 				<visibleWhen checkEnabled="false">
 					<and>
 						<reference definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.XtextEditor.opened" />
@@ -242,7 +242,7 @@
 			base-type="org.eclipse.core.runtime.text"
 			file-extensions="globalconsts"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.contenttype"
-			name="GlobalConstants File"
+			name="%content-type.name"
 			priority="normal">
 		</content-type>
 	</extension>
@@ -264,34 +264,68 @@
 			uriExtension="gcf">
 		</resourceServiceProvider>
 	</extension>
+ <extension
+       id="globalconstants"
+       name="%marker.name.globalconstants"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<!-- marker definitions for org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants -->
 	<extension
 			id="globalconstants.check.fast"
-			name="GlobalConstants Problem"
+			name="%marker.name.globalconstants.problem"
 			point="org.eclipse.core.resources.markers">
+  <super
+        type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+  </super>
 		<super type="org.eclipse.xtext.ui.check.fast"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="globalconstants.check.normal"
-			name="GlobalConstants Problem"
+			name="%marker.name.globalconstants.problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.normal"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="globalconstants.check.expensive"
-			name="GlobalConstants Problem"
+			name="%marker.name.globalconstants.problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+ <extension
+       id="globalconstants.task"
+       name="%marker.name.globalconstants.task"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.globalconstantseditor.ui.globalconstants">
+    </super>
+    <super
+          type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.task">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.validator.preferencePage"
-			name="Errors/Warnings">
+			name="%page.name.validation">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 		</page>
 	</extension>
@@ -300,7 +334,7 @@
 			category="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
 			id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.validator.propertyPage"
-			name="Errors/Warnings">
+			name="%page.name.validation">
 			<keywordReference id="org.eclipse.fordiac.ide.globalconstantseditor.ui.keyword_GlobalConstants"/>
 			<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject"/>
@@ -350,9 +384,9 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
-			description="Open the quick outline."
+			description="%command.description.openQuickOutline"
 			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
-			name="Quick Outline">
+			name="%command.name.openQuickOutline">
 		</command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
@@ -360,7 +394,7 @@
 			locationURI="popup:#TextEditorContext?after=group.open">
 			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
 				style="push"
-				tooltip="Open Quick Outline">
+				tooltip="%command.tooltip.openQuickOutline">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.Editor.opened"/>
 				</visibleWhen>
@@ -421,10 +455,10 @@
 			locationURI="popup:#TextEditorContext?after=xtext.ui.SourceMenu">
 			<menu
 				id="org.eclipse.fordiac.ide.globalconstantseditor.ui.RefactoringMenu"
-				label="Refactor">
+				label="%menu.label.refactor">
 				<command
 					commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
-					label="Rename ..."
+					label="%command.label.rename"
 					style="push">
 					<visibleWhen
 						checkEnabled="false">
@@ -435,7 +469,7 @@
 				</command>
 				<command
 					commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.MoveElement"
-					label="Move ..."
+					label="%command.label.move"
 					style="push">
 					<visibleWhen
 						checkEnabled="false">
@@ -459,7 +493,7 @@
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.compare.contentMergeViewers"
 			class="org.eclipse.fordiac.ide.globalconstantseditor.ui.GlobalConstantsExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-			extensions="globalconsts" label="GlobalConstants Compare">
+			extensions="globalconsts" label="%contentMergeViewer.label">
 		</viewer>
 		<contentTypeBinding
 			contentTypeId="org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.contenttype"
@@ -499,13 +533,13 @@
        <propertyTab
              category="GlobalConstants"
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
-             label="TypeInfo">
+             label="%propertyTab.label.typeInfo">
        </propertyTab>
        <propertyTab
              afterTab="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsTypeInfoTab"
              category="GlobalConstants"
              id="org.eclipse.fordiac.ide.globalconstantseditor.ui.propertyGlobalConstantsAttributeTab"
-             label="Attributes">
+             label="%propertyTab.label.attributes">
        </propertyTab>
     </propertyTabs>
  </extension>
@@ -542,7 +576,7 @@
     <renameParticipant
           class="org.eclipse.fordiac.ide.globalconstantseditor.ui.refactoring.GlobalConstantsRenameTypeRefactoringParticipant"
           id="org.eclipse.fordiac.ide.globalconstantseditor.ui.renameGlobalConstantsParticipant"
-          name="Rename Global Constants">
+          name="%renameParticipant.name">
        <enablement>
           <adapt
                 type="org.eclipse.xtext.ui.refactoring.ui.IRenameElementContext">

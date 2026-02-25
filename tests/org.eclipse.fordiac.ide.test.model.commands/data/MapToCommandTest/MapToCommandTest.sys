@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="MapToCommandTest">
+	<VersionInfo Version="1.0" Author="4diac test" Date="2026-02-23">
+	</VersionInfo>
+	<Application Name="App">
+		<SubAppNetwork>
+			<FB Name="SRC" Type="fb_maptest" x="700" y="-200">
+			</FB>
+			<FB Name="MID" Type="fb_maptest" x="4200" y="600">
+			</FB>
+			<FB Name="DST" Type="fb_maptest" x="2000" y="2200">
+			</FB>
+			<EventConnections>
+				<Connection Source="SRC.EO" Destination="MID.EI" dx1="1406.67"/>
+				<Connection Source="MID.EO" Destination="DST.EI" dx1="80" dx2="80" dy="800"/>
+			</EventConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="Device1" Type="TEST_DEVICE" x="0" y="0">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+        <Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="Res1" Type="TEST_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Mapping From="App.SRC" To="Device1.Res1"/>
+	<Mapping From="App.DST" To="Device1.Res1"/>
+</System>

@@ -27,7 +27,7 @@ public class DeviceTypeSelectionTreeContentProvider extends TypeSelectionTreeCon
 
 	@Override
 	protected List<TypeNode> createTree(final TypeLibrary typeLibrary) {
-		if (typeLibrary.getDeviceTypes().isEmpty()) {
+		if (typeLibrary.getDeviceTypes().findAny().isEmpty()) {
 			return Collections.emptyList();
 		}
 

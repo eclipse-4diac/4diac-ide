@@ -39,6 +39,14 @@ public class ChangeValueCommand extends AbstractChangeInterfaceElementCommand {
 		return getInterfaceElement() != null && getInterfaceElement().getType() != null;
 	}
 
+	public String getOldValue() {
+		return oldValue;
+	}
+
+	public String getNewValue() {
+		return newValue;
+	}
+
 	@Override
 	protected void doExecute() {
 		final VarDeclaration variable = getInterfaceElement();

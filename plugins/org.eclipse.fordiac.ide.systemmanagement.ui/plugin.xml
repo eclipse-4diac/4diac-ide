@@ -469,21 +469,21 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceTypeDecorator"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceTypeDecorator"
-            label="Instance type decoration"
+            label="%InstanceTypeDecoration_Label"
             lightweight="true"
             state="false">
             <enablement>
                 <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
             </enablement>
             <description>
-               Show type name beside typed fbnetwork elements.
+              	%InstanceTypeDecoration_Description
             </description>
       </decorator>
       <decorator
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceCommentDecorator"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceCommentDecorator"
-            label="Instance comment decoration"
+            label="%InstanceCommentDecoration_Label"
             lightweight="true"
             state="false">
             <enablement>
@@ -493,7 +493,20 @@
                	</or>
             </enablement>
             <description>
-               Show instance comment beside typed fbnetwork elements.
+               %InstanceCommentDecoration_Description
+            </description>
+      </decorator>
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.LibraryFolderDecorator"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.LibraryFolderDecorator"
+            label="%LibraryFolderDecoration_Label"
+            lightweight="true"
+            state="true">
+            <enablement>
+            	   <objectClass name="org.eclipse.core.resources.IFolder" />
+            </enablement>
+            <description>
+               	%LibraryFolderDecoration_Description
             </description>
       </decorator>
    </extension>

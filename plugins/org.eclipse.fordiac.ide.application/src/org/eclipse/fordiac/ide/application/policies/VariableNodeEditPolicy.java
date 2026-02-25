@@ -71,7 +71,7 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			// configureable F_MOVE pin use normal
 			// data connection creation
 			if (!AbstractConnectionCreateCommand.isSimpleStructPin(pin)
-					&& !(pin.eContainer().eContainer() instanceof ConfigurableMoveFB)) {
+					&& !(pin.getBlockFBNetworkElement() instanceof ConfigurableMoveFB)) {
 				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(
 						connCreateCmd.getParent());
 				structCmd.setSource(connCreateCmd.getSource());

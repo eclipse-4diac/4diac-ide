@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -42,7 +41,7 @@ public final class BlockInstanceFactory {
 	}
 
 	public static FB createFBInstanceForTypeEntry(final FBTypeEntry entry) {
-		if (entry instanceof ErrorTypeEntry) {
+		if (entry == null || entry.hasError()) {
 			return LibraryElementFactory.eINSTANCE.createFB();
 		}
 		if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {

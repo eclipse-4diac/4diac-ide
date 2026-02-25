@@ -18,9 +18,6 @@ import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -75,12 +72,12 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createDevGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Devices");
 
-		for (final DeviceTypeEntry entry : typelib.getDeviceTypes()) {
+		typelib.getDeviceTypes().forEachOrdered(entry -> {
 			final PaletteEntry typeEntry = createCreationEntry(entry, FordiacImage.ICON_DEVICE.getImageDescriptor());
 			if (typeEntry != null) {
 				paletteContainer.add(typeEntry);
 			}
-		}
+		});
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);
@@ -92,13 +89,13 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createRESGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Resources");
 
-		for (final ResourceTypeEntry entry : typelib.getResourceTypes()) {
+		typelib.getResourceTypes().forEachOrdered(entry -> {
 			final PaletteEntry paletteEntry = createCreationEntry(entry,
 					FordiacImage.ICON_RESOURCE.getImageDescriptor());
 			if (paletteEntry != null) {
 				paletteContainer.add(paletteEntry);
 			}
-		}
+		});
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);
@@ -110,13 +107,13 @@ public final class SystemConfPaletteFactory {
 	private static PaletteDrawer createSEGGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Segments");
 
-		for (final SegmentTypeEntry entry : typelib.getSegmentTypes()) {
+		typelib.getSegmentTypes().forEachOrdered(entry -> {
 			final PaletteEntry paletteEntry = createCreationEntry(entry,
 					FordiacImage.ICON_SEGMENT.getImageDescriptor());
 			if (paletteEntry != null) {
 				paletteContainer.add(paletteEntry);
 			}
-		}
+		});
 
 		if (!paletteContainer.getChildren().isEmpty()) {
 			palette.add(paletteContainer);

@@ -19,25 +19,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.OrderedLayout;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.figures.CommentContainer;
 import org.eclipse.fordiac.ide.application.policies.AbstractCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.gef.DragTracker;
@@ -243,24 +239,7 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	}
 
 	private void createCommentContainer(final IFigure mainFigure) {
-		commentContainer = new Figure();
-		final Border border = new SingleLineBorder() {
-
-			private final Insets insets = new Insets(5); // spacing
-
-			@Override
-			public Insets getInsets(final IFigure figure) {
-				return insets;
-			}
-
-		};
-		commentContainer.setBorder(border);
-		final ToolbarLayout layout = new ToolbarLayout();
-		layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
-		layout.setStretchMinorAxis(false);
-		commentContainer.setOpaque(true);
-
-		commentContainer.setLayoutManager(layout);
+		commentContainer = new CommentContainer();
 		mainFigure.add(commentContainer, BorderLayout.TOP);
 	}
 

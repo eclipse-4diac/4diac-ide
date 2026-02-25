@@ -27,7 +27,7 @@ public class ResourceTypeSelectionTreeContentProvider extends TypeSelectionTreeC
 
 	@Override
 	protected List<TypeNode> createTree(final TypeLibrary typeLibrary) {
-		if (typeLibrary.getResourceTypes().isEmpty()) {
+		if (typeLibrary.getResourceTypes().findAny().isEmpty()) {
 			return Collections.emptyList();
 		}
 

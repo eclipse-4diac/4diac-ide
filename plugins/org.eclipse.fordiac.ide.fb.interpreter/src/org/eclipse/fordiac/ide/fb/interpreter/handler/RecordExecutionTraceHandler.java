@@ -35,13 +35,17 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.ui.SelectAdapterEventDialog;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -90,39 +94,67 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		final ResourceSet reset = new ResourceSetImpl();
 
 		final EObject rootContainer = EcoreUtil.getRootContainer(network);
-		final IProject project = switch (rootContainer) {
-		case final Application app -> app.getAutomationSystem().getTypeLibrary().getProject();
-		case final AutomationSystem sys -> sys.getTypeLibrary().getProject();
-		case final FBType type -> type.getTypeLibrary().getProject();
-		default -> null;
-		};
+		final TypeLibrary typelib = ((LibraryElement) rootContainer).getTypeLibrary();
 
-		final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
-		if (!folder.exists()) {
+		if (typelib != null) {
+			final IProject project = typelib.getProject();
+			typelib.getAllTypes().forEach(type -> {
+				addResourceForFile(type, type.getFile(), reset);
+			});
+			addResourceForEventTypeLib(reset);
+			addResourceForDataTypeLib(typelib.getDataTypeLibrary(), reset);
+
+			final IFolder folder = project.getFolder("network_traces"); //$NON-NLS-1$
+			if (!folder.exists()) {
+				try {
+					folder.create(false, false, null);
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
+			}
+
+			final String systemName = switch (rootContainer) {
+			case final AutomationSystem system -> system.getName();
+			case final FBType type -> type.getName();
+			default -> ""; //$NON-NLS-1$
+			};
+
+			final IFile file = folder.getFile(systemName + "." + triggerEvent.getQualifiedName() + ".opsem"); //$NON-NLS-1$//$NON-NLS-2$
+			final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+			final Resource res = reset.createResource(uri);
+			res.getContents().add(manager);
+
 			try {
-				folder.create(false, false, null);
-			} catch (final CoreException e) {
+				res.save(Collections.emptyMap());
+				openEditorForGeneratedFile(event, file);
+			} catch (final IOException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
+		return Status.OK_STATUS;
+	}
 
-		final String systemName = switch (rootContainer) {
-		case final AutomationSystem system -> system.getName();
-		case final FBType type -> type.getName();
-		default -> ""; //$NON-NLS-1$
-		};
-		final IFile file = folder.getFile(systemName + "." + triggerEvent.getQualifiedName() + ".opsem"); //$NON-NLS-1$//$NON-NLS-2$
+	private static void addResourceForEventTypeLib(final ResourceSet reset) {
+		final var eventtypes = EventTypeLibrary.getInstance().getEventTypes();
+		eventtypes.forEach(eventtype -> {
+			final URI uri = URI.createPlatformResourceURI("EventType" + eventtype.toString(), true); //$NON-NLS-1$
+			final Resource res = reset.createResource(uri);
+			res.getContents().add(eventtype);
+		});
+	}
+
+	private static void addResourceForDataTypeLib(final DataTypeLibrary dataTypeLibrary, final ResourceSet reset) {
+		dataTypeLibrary.getDataTypes().forEach(datatype -> {
+			final URI uri = URI.createPlatformResourceURI("DataType" + datatype.toString(), true); //$NON-NLS-1$
+			final Resource res = reset.createResource(uri);
+			res.getContents().add(datatype);
+		});
+	}
+
+	private static void addResourceForFile(final TypeEntry type, final IFile file, final ResourceSet reset) {
 		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		final Resource res = reset.createResource(uri);
-		res.getContents().add(manager);
-		try {
-			res.save(Collections.emptyMap());
-			openEditorForGeneratedFile(event, file);
-		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-
-		return Status.OK_STATUS;
+		res.getContents().add(type.getType());
 	}
 
 	private static IInterfaceElement handleAdapterSelection(final AdapterDeclaration adapter,

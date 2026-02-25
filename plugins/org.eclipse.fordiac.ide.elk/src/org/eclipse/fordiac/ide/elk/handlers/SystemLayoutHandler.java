@@ -93,9 +93,8 @@ public class SystemLayoutHandler extends AbstractHandler {
 				files.add(file);
 			} else if (obj instanceof final IProject project) {
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-				Stream.of(typeLibrary.getSystems().stream(), typeLibrary.getCompositeFBTypes(),
-						typeLibrary.getSubAppTypes().stream()).flatMap(s -> s)
-						.forEach(typeEntry -> files.add(typeEntry.getFile()));
+				Stream.of(typeLibrary.getSystems(), typeLibrary.getCompositeFBTypes(), typeLibrary.getSubAppTypes())
+						.flatMap(s -> s).forEach(typeEntry -> files.add(typeEntry.getFile()));
 			}
 		}
 
@@ -125,7 +124,7 @@ public class SystemLayoutHandler extends AbstractHandler {
 				}
 			} else if (obj instanceof final IProject project) {
 				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-				typeLibrary.getSystems().stream().map(SystemEntry::getType)
+				typeLibrary.getSystems().map(SystemEntry::getType)
 						.forEach(sys -> collectElements(elements, sys.getApplication()));
 				typeLibrary.getCompositeFBTypes().forEach(typeEntry -> elements.add(typeEntry.getFile()));
 				typeLibrary.getSubAppTypes().forEach(typeEntry -> elements.add(typeEntry.getFile()));

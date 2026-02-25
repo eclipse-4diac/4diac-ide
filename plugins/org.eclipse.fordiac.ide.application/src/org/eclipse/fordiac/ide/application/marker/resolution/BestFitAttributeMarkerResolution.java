@@ -59,7 +59,7 @@ public class BestFitAttributeMarkerResolution extends AbstractCommandMarkerResol
 		}
 		final String name = attrName;
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(marker.getResource().getProject());
-		return typeLibrary.getAttributeTypes().stream().filter(type -> type.getTypeName().equals(name))
+		return typeLibrary.getAttributeTypes().filter(type -> type.getTypeName().equals(name))
 				.map(typeEntry -> new BestFitAttributeMarkerResolution(marker, typeEntry));
 	}
 

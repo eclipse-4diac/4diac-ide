@@ -31,7 +31,7 @@ public class TypeLibraryAllContainersState implements IAllContainersState {
 	@Override
 	public boolean isEmpty(final String containerHandle) {
 		final TypeLibrary typeLibrary = getTypeLibrary(containerHandle);
-		return typeLibrary == null || typeLibrary.getAllTypes().isEmpty();
+		return typeLibrary == null || typeLibrary.getAllTypes().findAny().isEmpty();
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class TypeLibraryAllContainersState implements IAllContainersState {
 		if (typeLibrary == null) {
 			return Collections.emptySet();
 		}
-		return typeLibrary.getAllTypes().stream().map(TypeEntry::getURI).collect(Collectors.toSet());
+		return typeLibrary.getAllTypes().map(TypeEntry::getURI).collect(Collectors.toSet());
 	}
 
 	@Override

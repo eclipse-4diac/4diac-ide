@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.attributetypeeditor.widgets;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.gef.nat.DirectlyDerivedTypeTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -30,8 +30,8 @@ import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -124,14 +124,13 @@ public class DirectlyDerivedTypeComposite extends Composite implements ISelectio
 		return new TypeSelectionButton(((AttributeDeclaration) directlyDerivedType.eContainer())::getTypeLibrary,
 				new ITypeSelectionContentProvider() {
 					@Override
-					public Collection<LibraryElement> getTypes(final Object input) {
-						return Collections
-								.unmodifiableCollection(ElementaryTypes.getAllElementaryType().stream().toList());
+					public Stream<LibraryElement> getTypes(final Object input) {
+						return ElementaryTypes.getAllElementaryType().stream().map(Function.identity());
 					}
 
 					@Override
-					public Collection<TypeEntry> getTypeEntries(final Object input) {
-						return Collections.emptyList();
+					public Stream<TypeEntry> getTypeEntries(final Object input) {
+						return Stream.empty();
 					}
 				}, new TypeSelectionTreeContentProvider() {
 					@Override

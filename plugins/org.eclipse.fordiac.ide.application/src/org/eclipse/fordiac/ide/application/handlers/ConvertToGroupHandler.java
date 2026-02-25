@@ -67,7 +67,8 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 	private static SubApp getSelectedSubApp(final Object selection) {
 		if (selection instanceof final IStructuredSelection structSel && !structSel.isEmpty()
 				&& structSel.size() == 1) {
-			return getSubApp(structSel.getFirstElement());
+			final SubApp subApp = getSubApp(structSel.getFirstElement());
+			return (subApp != null && subApp.isMapped()) ? (SubApp) subApp.getMapping().getFrom() : subApp;
 		}
 		return null;
 	}
