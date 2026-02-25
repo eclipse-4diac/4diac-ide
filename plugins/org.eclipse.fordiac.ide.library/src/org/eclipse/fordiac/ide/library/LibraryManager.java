@@ -943,16 +943,13 @@ public enum LibraryManager {
 		final IProject[] projects = project.getReferencedProjects();
 
 		for (final IProject refProject : projects) {
-			if (refProject.isAccessible()) {
-				final Manifest manifest = ManifestHelper.getContainerManifest(refProject);
-				if (manifest != null && manifest.getProduct() != null) {
-					final String sym = manifest.getProduct().getSymbolicName() != null
-							? manifest.getProduct().getSymbolicName()
-							: refProject.getName();
-					referenced.computeIfAbsent(sym, name -> new ArrayList<>())
-							.add(new Version(manifest.getProduct().getVersionInfo().getVersion()));
-				}
+			if (!refProject.isAccessible()) {
+				continue;
 			}
+			final Manifest manifest = ManifestHelper.getContainerManifest(refProject);
+			final String symbolicName = ManifestHelper.getSymbolicName(manifest, refProject.getName());
+			final Version version = ManifestHelper.getVersion(manifest, Version.emptyVersion);
+			referenced.computeIfAbsent(symbolicName, name -> new ArrayList<>()).add(version);
 		}
 
 	}
