@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -50,24 +52,23 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 		final IProject project = getProject();
 		final Manifest manifest = ManifestHelper.getContainerManifest(project);
 
-		if (manifest != null) {
-			if (kind == FULL_BUILD) {
-				fullBuild(project, manifest, progress.split(1));
-			} else {
-				boolean projectManifestChanged = false;
-				changedLibs.clear();
-				final var delta = getDelta(project);
-				final var md = delta.findMember(new Path(LibraryManager.MANIFEST));
-				if (md != null && (md.getKind() & (IResourceDelta.ADDED | IResourceDelta.CHANGED)) != 0) {
-					projectManifestChanged = true;
-				}
+		if (manifest == null) {
+			return new IProject[0];
+		}
+
+		if (kind == FULL_BUILD) {
+			fullBuild(project, manifest, progress.split(1));
+		} else {
+			final var delta = getDelta(project);
+			changedLibs.clear();
+			if (delta != null) {
 				delta.accept(visitor, IContainer.INCLUDE_HIDDEN);
-				if (projectManifestChanged || !changedLibs.isEmpty()) {
+				if (projectManifestChanged(delta) || referencedManifestChanged() || !changedLibs.isEmpty()) {
 					fullBuild(project, manifest, progress.split(1)); // no caching yet
 				}
 			}
 		}
-		return new IProject[0];
+		return project.getReferencedProjects();
 	}
 
 	@Override
@@ -132,6 +133,17 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 		}
 		return true;
 	};
+
+	private boolean referencedManifestChanged() throws CoreException {
+		return Stream.of(getProject().getReferencedProjects()).map(this::getDelta).filter(Objects::nonNull)
+				.anyMatch(LibraryBuilder::projectManifestChanged);
+	}
+
+	private static boolean projectManifestChanged(final IResourceDelta delta) {
+		final var md = delta.findMember(new Path(LibraryManager.MANIFEST));
+		return md != null && (md.getKind() & (IResourceDelta.ADDED | IResourceDelta.CHANGED)) != 0;
+
+	}
 
 	private static boolean isLinkedLibraryFolder(final IContainer container) {
 		return container instanceof IFolder && container.getParent() instanceof IProject
