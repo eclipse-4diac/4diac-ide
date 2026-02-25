@@ -19,12 +19,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -65,12 +68,15 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 			return;
 		}
 
-		final IInterfaceElement inputInsertedFB = insertedFB.getInterface().getEventInputs().getFirst();
-		final IInterfaceElement outputInsertedFB = insertedFB.getInterface().getEventOutputs().getFirst();
+		final IInterfaceElement eventOutputDestination = eventOutput.getOutputConnections().getFirst().getDestination();
+
+		final IInterfaceElement inputInsertedFB = getMatchingEventPin(insertedFB.getInterface().getEventInputs(),
+				eventOutput.getType());
+		final IInterfaceElement outputInsertedFB = getMatchingEventPin(insertedFB.getInterface().getEventOutputs(),
+				eventOutputDestination.getType());
 
 		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), eventOutput, inputInsertedFB));
-		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB,
-				eventOutput.getOutputConnections().getFirst().getDestination()));
+		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB, eventOutputDestination));
 		commands.add(new DeleteConnectionCommand(eventOutput.getOutputConnections().getFirst()));
 
 		if (predecessor != null) {
@@ -97,6 +103,10 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 		return commands.getCommands().stream().filter(ScopedCommand.class::isInstance)
 				.map(obj -> ((ScopedCommand) obj).getAffectedObjects()).flatMap(Set::stream)
 				.collect(Collectors.toUnmodifiableSet());
+	}
+
+	private static IInterfaceElement getMatchingEventPin(final EList<Event> pins, final DataType type) {
+		return pins.stream().filter(event -> event.getType().equals(type)).findFirst().orElse(pins.getFirst());
 	}
 
 	private static boolean hasOutputConnections(final IInterfaceElement output) {
