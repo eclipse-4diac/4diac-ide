@@ -21,8 +21,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEdi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SharedCursors;
@@ -106,13 +108,20 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 
 		public void performCreation() {
 			final ECState destState = (ECState) getFactory().getNewObject();
-			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, getECC());
+
+			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(point.x, point.y);
+
+			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, pos, getECC());
+
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
+
 			createTransitionCommand.setDestinationLocation(point);
+
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);
+
 			setCurrentCommand(compCom);
 			performCreation(1);
 		}
