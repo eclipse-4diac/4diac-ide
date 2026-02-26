@@ -74,7 +74,10 @@ public class ECCXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (request.getNewObjectType().equals(ECState.class) && getHost().getModel() instanceof final ECC ecc) {
 			final Point point = request.getLocation().getCopy();
 			getHostFigure().translateToRelative(point);
-			return new CreateECStateCommand((ECState) request.getNewObject(), point, ecc);
+
+			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(point.x, point.y);
+
+			return new CreateECStateCommand((ECState) request.getNewObject(), pos, ecc);
 		}
 		return null;
 	}
