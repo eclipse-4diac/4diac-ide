@@ -39,13 +39,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 
 	@Override
 	protected InterfaceList createInterfaceList() {
-		InterfaceList interfaceList = typeEntry.getInterface();
-		if (interfaceList == null) {
-			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			interfaceList = interfaceList.instanceCopy();
-		}
-		return interfaceList;
+		return typeEntry.getInterface().instanceCopy();
 	}
 
 	public TypedSubApp getSubApp() {

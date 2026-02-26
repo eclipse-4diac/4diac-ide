@@ -114,17 +114,20 @@ class FBNetworkImporter extends CommonElementImporter {
 		case LibraryElementTags.FB_ELEMENT -> parseFB();
 		case LibraryElementTags.GROUP_ELEMENT -> parseGroup();
 		case LibraryElementTags.COMMENT_ELEMENT -> parseComment();
-		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
-				LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
-		case LibraryElementTags.DATA_CONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getDataConnection(), fbNetwork.getDataConnections(),
-				LibraryElementTags.DATA_CONNECTIONS_ELEMENT);
-		case LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT -> parseConnectionList(LibraryElementPackage.eINSTANCE.getAdapterConnection(),
-				fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT);
+		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT ->
+			parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
+					LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
+		case LibraryElementTags.DATA_CONNECTIONS_ELEMENT ->
+			parseConnectionList(LibraryElementPackage.eINSTANCE.getDataConnection(), fbNetwork.getDataConnections(),
+					LibraryElementTags.DATA_CONNECTIONS_ELEMENT);
+		case LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT ->
+			parseConnectionList(LibraryElementPackage.eINSTANCE.getAdapterConnection(),
+					fbNetwork.getAdapterConnections(), LibraryElementTags.ADAPTERCONNECTIONS_ELEMENT);
 		default -> {
 			return false;
 		}
 		}
-		;
+
 		return true;
 	}
 
@@ -214,13 +217,7 @@ class FBNetworkImporter extends CommonElementImporter {
 					getTypeLibrary().createErrorTypeEntry(typeName, LibraryElementPackage.eINSTANCE.getFBType()));
 		}
 		final FB fb = BlockInstanceFactory.createFBInstanceForTypeEntry(entry);
-		InterfaceList fbInterface = entry.getInterface();
-		if (fbInterface == null) {
-			fbInterface = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			fbInterface = fbInterface.instanceCopy();
-		}
-		fb.setInterface(fbInterface);
+		fb.setInterface(entry.getInterface().instanceCopy());
 		fb.setTypeEntry(entry);
 		return fb;
 	}
