@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.data.ErrorDataType;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ErrorDataTypeItemProvider extends DataTypeItemProvider {
+public class ErrorDataTypeItemProvider extends AnyDerivedTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

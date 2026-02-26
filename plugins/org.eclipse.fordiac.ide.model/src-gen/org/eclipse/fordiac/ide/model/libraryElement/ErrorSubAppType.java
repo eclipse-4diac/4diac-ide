@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface ErrorSubAppType extends SubAppType, ErrorLibraryElement {
+public interface ErrorSubAppType extends SubAppType, ErrorFBType {
 } // ErrorSubAppType
