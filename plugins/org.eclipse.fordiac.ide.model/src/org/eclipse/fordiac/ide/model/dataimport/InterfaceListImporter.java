@@ -85,16 +85,21 @@ public class InterfaceListImporter extends TypeImporter {
 				parseEventList(interfaceList.getEventOutputs(), outputEventListName, false);
 			} else {
 				switch (name) {
-				case LibraryElementTags.INPUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars(), true);
-				case LibraryElementTags.OUTPUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars(), false);
-				case LibraryElementTags.SOCKETS_ELEMENT -> parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
-				case LibraryElementTags.PLUGS_ELEMENT -> parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
-				case LibraryElementTags.INOUT_VARS_ELEMENT -> parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars(), true);
+				case LibraryElementTags.INPUT_VARS_ELEMENT ->
+					parseVariableList(LibraryElementTags.INPUT_VARS_ELEMENT, interfaceList.getInputVars(), true);
+				case LibraryElementTags.OUTPUT_VARS_ELEMENT ->
+					parseVariableList(LibraryElementTags.OUTPUT_VARS_ELEMENT, interfaceList.getOutputVars(), false);
+				case LibraryElementTags.SOCKETS_ELEMENT ->
+					parseAdapterList(interfaceList.getSockets(), LibraryElementTags.SOCKETS_ELEMENT, true);
+				case LibraryElementTags.PLUGS_ELEMENT ->
+					parseAdapterList(interfaceList.getPlugs(), LibraryElementTags.PLUGS_ELEMENT, false);
+				case LibraryElementTags.INOUT_VARS_ELEMENT ->
+					parseVariableList(LibraryElementTags.INOUT_VARS_ELEMENT, interfaceList.getInOutVars(), true);
 				default -> {
 					return false;
 				}
 				}
-				;
+
 			}
 			return true;
 		});
@@ -190,14 +195,7 @@ public class InterfaceListImporter extends TypeImporter {
 		createAdapterFB(a);
 		getXandY(a.getAdapterFB());
 
-		processChildren(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT, name -> {
-			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
-				parseGenericAttributeNode(a);
-				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				return true;
-			}
-			return false;
-		});
+		parseFBChildren(a.getAdapterFB(), LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 
 		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
