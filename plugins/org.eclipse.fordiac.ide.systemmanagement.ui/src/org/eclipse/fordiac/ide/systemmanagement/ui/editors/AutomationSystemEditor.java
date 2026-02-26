@@ -130,6 +130,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void clearEditorContent() {
+		getModelToEditorNumMapping().clear();
 		for (int i = getPageCount() - 1; i >= 0; i--) {
 			removePage(i);
 		}
