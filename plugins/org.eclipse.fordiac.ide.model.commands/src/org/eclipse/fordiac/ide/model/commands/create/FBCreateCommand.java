@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
@@ -81,13 +80,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	protected InterfaceList createInterfaceList() {
-		InterfaceList interfaceList = typeEntry.getInterface();
-		if (interfaceList == null) {
-			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			interfaceList = interfaceList.instanceCopy();
-		}
-		return interfaceList;
+		return typeEntry.getInterface().instanceCopy();
 	}
 
 }

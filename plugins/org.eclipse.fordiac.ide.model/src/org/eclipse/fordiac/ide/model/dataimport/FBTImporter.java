@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -135,7 +134,7 @@ public class FBTImporter extends BlockTypeImporter {
 				return false;
 			}
 			}
-			;
+
 			return true;
 		};
 	}
@@ -308,7 +307,8 @@ public class FBTImporter extends BlockTypeImporter {
 			if (XMLStreamConstants.START_ELEMENT == event) {
 
 				switch (getReader().getLocalName()) {
-				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT -> throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!"); //$NON-NLS-1$
+				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT ->
+					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!"); //$NON-NLS-1$
 				case LibraryElementTags.ST_ELEMENT -> {
 					retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 					parseST((STAlgorithm) retVal);
@@ -319,7 +319,6 @@ public class FBTImporter extends BlockTypeImporter {
 				}
 				default -> throw unknownXMLChildException();
 				}
-				;
 
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(LibraryElementTags.ALGORITHM_ELEMENT)) {
@@ -538,7 +537,7 @@ public class FBTImporter extends BlockTypeImporter {
 				return false;
 			}
 			}
-			;
+
 			return true;
 		});
 		type.setECC(ecc);
@@ -768,9 +767,7 @@ public class FBTImporter extends BlockTypeImporter {
 			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		} else {
 			fb.setTypeEntry(entry);
-			final InterfaceList typeInterface = entry.getInterface();
-			fb.setInterface((typeInterface != null) ? typeInterface.instanceCopy()
-					: LibraryElementFactory.eINSTANCE.createInterfaceList());
+			fb.setInterface(entry.getInterface().instanceCopy());
 		}
 		type.getInternalFbs().add(fb);
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
