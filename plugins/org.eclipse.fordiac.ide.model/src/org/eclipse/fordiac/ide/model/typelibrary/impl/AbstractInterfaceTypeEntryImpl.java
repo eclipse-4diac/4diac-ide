@@ -120,7 +120,7 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 			FBType type = null;
 			final long modificationStamp;
 			final IFile fileCached = getFile();
-			if (fileCached != null) {
+			if (fileCached != null && fileCached.exists()) {
 				// read modification stamp at the beginning to ensure the loaded interface is at
 				// least as recent as the read modification stamp
 				modificationStamp = fileCached.getModificationStamp();
