@@ -28,20 +28,12 @@ abstract class AbstractCheckedTypeEntryImpl<T extends LibraryElement> extends Ab
 
 	@Override
 	public T getType() {
-		final LibraryElement type = super.getType();
-		if (typeClass.isInstance(type)) {
-			return typeClass.cast(type);
-		}
-		return null;
+		return typeClass.cast(super.getType());
 	}
 
 	@Override
 	public T copyType() {
-		final LibraryElement type = super.copyType();
-		if (typeClass.isInstance(type)) {
-			return typeClass.cast(type);
-		}
-		return null;
+		return typeClass.cast(super.copyType());
 	}
 
 	@Override
