@@ -13,3 +13,4 @@
 **/.META-INF_MANIFEST.MF
 **/.tycho-consumer-pom.xml
 **/pom.tycho
+features/.project
