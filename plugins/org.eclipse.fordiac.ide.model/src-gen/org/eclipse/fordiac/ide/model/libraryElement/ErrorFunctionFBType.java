@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface ErrorFunctionFBType extends FunctionFBType, ErrorLibraryElement {
+public interface ErrorFunctionFBType extends FunctionFBType, ErrorFBType {
 } // ErrorFunctionFBType

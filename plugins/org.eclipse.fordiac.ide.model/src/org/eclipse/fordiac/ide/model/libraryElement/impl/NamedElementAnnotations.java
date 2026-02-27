@@ -193,7 +193,7 @@ public final class NamedElementAnnotations {
 		// - if the map does contain the name -> put the null element into the map
 		// (so we do not add a diagnostic on it twice but still retain the key in the
 		// map for more duplicates)
-		final INamedElement duplicate = putConditional(namedContents, element.getQualifiedName(), element,
+		final INamedElement duplicate = putConditional(namedContents, element.getQualifiedName().toLowerCase(), element,
 				NullNamedElement.INSTANCE);
 		if (duplicate != null) { // we have a collision
 			// add diagnostics

@@ -31,6 +31,8 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -115,24 +117,32 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 			}
 			// _we_ need to (re-)load the interface
 
-			// get and check file
+			FBType type = null;
+			final long modificationStamp;
 			final IFile fileCached = getFile();
-			if (fileCached == null) {
-				return null; // no file, no type
+			if (fileCached != null && fileCached.exists()) {
+				// read modification stamp at the beginning to ensure the loaded interface is at
+				// least as recent as the read modification stamp
+				modificationStamp = fileCached.getModificationStamp();
+
+				// load the type
+				type = loadInterface();
+			} else {
+				// set modification stamp to NULL_STAMP to ensure the interface is reloaded as
+				// soon
+				// as a file becomes available
+				modificationStamp = IResource.NULL_STAMP;
 			}
 
-			// read modification stamp at the beginning to ensure the loaded interface is at
-			// least as recent as the read modification stamp
-			final long modificationStamp = fileCached.getModificationStamp();
-
-			final FBType newInterfaceType = loadInterface();
-			if (newInterfaceType == null) {
-				return null;
+			// create error type if it could not be loaded (no file or error)
+			if (type == null) {
+				type = createErrorLibraryElement();
+				PackageNameHelper.setFullTypeName(type, getFullTypeName());
 			}
 
-			interfaceList = newInterfaceType.getInterfaceList();
+			interfaceList = type.getInterfaceList();
 
-			notifications = basicSetInterface(newInterfaceType, notifications);
+			notifications = basicSetInterface(type, notifications);
 
 			// update the last modification stamp _after_ setting the interface to ensure
 			// other readers see the new stamp only together with the new type
@@ -175,6 +185,9 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 
 	@Override
 	protected abstract BlockTypeImporter getImporter();
+
+	@Override
+	protected abstract ErrorFBType createErrorLibraryElement();
 
 	@Override
 	public void notifyChanged(final Notification notification) {

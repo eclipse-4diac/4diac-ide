@@ -5058,7 +5058,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
 		errorAdapterTypeEClass.getESuperTypes().add(this.getAdapterType());
-		errorAdapterTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorAdapterTypeEClass.getESuperTypes().add(this.getErrorFBType());
 		errorAttributeDeclarationEClass.getESuperTypes().add(this.getAttributeDeclaration());
 		errorAttributeDeclarationEClass.getESuperTypes().add(this.getErrorLibraryElement());
 		errorAutomationSystemEClass.getESuperTypes().add(this.getAutomationSystem());
@@ -5068,7 +5068,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		errorFBTypeEClass.getESuperTypes().add(this.getFBType());
 		errorFBTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
 		errorFunctionFBTypeEClass.getESuperTypes().add(this.getFunctionFBType());
-		errorFunctionFBTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorFunctionFBTypeEClass.getESuperTypes().add(this.getErrorFBType());
 		errorGlobalConstantsEClass.getESuperTypes().add(this.getGlobalConstants());
 		errorGlobalConstantsEClass.getESuperTypes().add(this.getErrorLibraryElement());
 		errorLibraryElementEClass.getESuperTypes().add(this.getLibraryElement());
@@ -5079,7 +5079,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		errorSegmentTypeEClass.getESuperTypes().add(this.getSegmentType());
 		errorSegmentTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
 		errorSubAppTypeEClass.getESuperTypes().add(this.getSubAppType());
-		errorSubAppTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorSubAppTypeEClass.getESuperTypes().add(this.getErrorFBType());
 		eventEClass.getESuperTypes().add(this.getIInterfaceElement());
 		eventEClass.getESuperTypes().add(this.getICallable());
 		eventConnectionEClass.getESuperTypes().add(this.getConnection());

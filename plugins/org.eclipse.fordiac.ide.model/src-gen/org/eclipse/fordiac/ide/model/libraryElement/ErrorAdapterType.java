@@ -27,5 +27,5 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface ErrorAdapterType extends AdapterType, ErrorLibraryElement {
+public interface ErrorAdapterType extends AdapterType, ErrorFBType {
 } // ErrorAdapterType

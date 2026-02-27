@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
@@ -101,7 +103,9 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 
 	private void addAdapterDeclaration(final AdapterDeclaration adapterDecl) throws XMLStreamException {
 		final boolean hasAttributes = !adapterDecl.getAttributes().isEmpty();
-		if (hasAttributes) {
+		final boolean hasAdapterParams = hasAdapterParameters(adapterDecl);
+
+		if (hasAttributes || hasAdapterParams) {
 			addStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		} else {
 			addEmptyStartElement(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
@@ -114,7 +118,51 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 
 		if (hasAttributes) {
 			addAttributes(adapterDecl.getAttributes());
+		}
+		if (hasAdapterParams) {
+			addAdapterParameters(adapterDecl);
+		}
+
+		if (hasAttributes || hasAdapterParams) {
 			addEndElement();
+		}
+	}
+
+	private boolean hasAdapterParameters(final AdapterDeclaration adapterDecl) {
+		if (adapterDecl.getAdapterFB() == null || adapterDecl.getAdapterFB().getInterface() == null) {
+			return false;
+		}
+		final InterfaceList il = adapterDecl.getAdapterFB().getInterface();
+
+		Stream<? extends IInterfaceElement> stream = il.getInputVars().stream();
+		stream = Stream.concat(stream, il.getInOutVars().stream());
+		stream = Stream.concat(stream, il.getOutputVars().stream());
+
+		return stream.anyMatch(this::willExportAsParameter);
+	}
+
+	private boolean willExportAsParameter(final IInterfaceElement ie) {
+		if (ie.getComment() != null && !ie.getComment().isBlank()) {
+			return true;
+		}
+		if (!ie.getAttributes().isEmpty()) {
+			return true;
+		}
+		if (ie instanceof final VarDeclaration varDecl) {
+			return varDecl.hasValue();
+		}
+		return false;
+	}
+
+	private void addAdapterParameters(final AdapterDeclaration adapterDecl) throws XMLStreamException {
+		final InterfaceList il = adapterDecl.getAdapterFB().getInterface();
+
+		Stream<? extends IInterfaceElement> stream = il.getInputVars().stream();
+		stream = Stream.concat(stream, il.getInOutVars().stream());
+		stream = Stream.concat(stream, il.getOutputVars().stream());
+
+		for (final IInterfaceElement ie : stream.toList()) {
+			addParam(ie);
 		}
 	}
 
