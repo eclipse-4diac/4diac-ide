@@ -19,7 +19,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateECStateCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.ECCEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.StateCreationFactory;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
@@ -70,7 +72,10 @@ public class NewStateAction extends WorkbenchPartAction {
 		realPos.scale(1.0 / zoomManager.getZoom());
 
 		final ECState model = (ECState) stateFactory.getNewObject();
-		execute(new CreateECStateCommand(model, realPos, editor.getModel()));
+
+		final Position posModel = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(realPos.x, realPos.y);
+
+		execute(new CreateECStateCommand(model, posModel, editor.getModel()));
 
 		editor.outlineSelectionChanged(model);
 	}
