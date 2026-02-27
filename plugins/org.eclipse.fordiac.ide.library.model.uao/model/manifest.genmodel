@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.fordiac.ide.library.model.uao/src"
+    modelPluginID="org.eclipse.fordiac.ide.library.model.uao" modelName="Manifest"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.xsd.ecore.importer"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/importer/org.eclipse.xsd.ecore.importer">
+    <details key="sortAttributes" value="false"/>
+  </genAnnotations>
+  <foreignModel>file:/C:/Users/AK123700/Documents/uao-whitpaper/Neuer%20Ordner/manifest.xsd</foreignModel>
+  <genPackages prefix="Mgmt" basePackage="org.tempuri.library" resource="XML" disposableProviderFactory="true"
+      ecorePackage="mgmt.ecore#/">
+    <genClasses ecoreClass="mgmt.ecore#//DependenciesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DependenciesType/dependency"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//DependencyType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DependencyType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DependencyType/version"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DocumentRoot/comment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/dependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/dependency"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/library"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/license"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/manifest"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DocumentRoot/path"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/readMe"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//DocumentRoot/sources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//DocumentRoot/vendor"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//LibraryType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//LibraryType/readMe"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//LibraryType/sources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LibraryType/vendor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LibraryType/comment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//LibraryType/license"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LibraryType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LibraryType/displayName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LibraryType/version"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//LicenseType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LicenseType/identifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//LicenseType/path"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//ManifestType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//ManifestType/library"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mgmt.ecore#//ManifestType/dependencies"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//ReadMeType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//ReadMeType/path"/>
+    </genClasses>
+    <genClasses ecoreClass="mgmt.ecore#//SourcesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mgmt.ecore#//SourcesType/path"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
