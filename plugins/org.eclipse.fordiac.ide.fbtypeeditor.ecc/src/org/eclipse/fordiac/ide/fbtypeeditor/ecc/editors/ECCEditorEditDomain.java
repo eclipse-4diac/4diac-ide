@@ -21,12 +21,13 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEdi
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ConnCreateDirectEditDragTrackerProxy;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SharedCursors;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.requests.LocationRequest;
 import org.eclipse.gef.tools.CreationTool;
@@ -104,17 +105,31 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 			handleMove();
 		}
 
-		public void performCreation() {
+		public void performCreation(final org.eclipse.gef.EditPartViewer viewer) {
+			if (viewer == null || point == null || sourceState == null) {
+				return;
+			}
+			if (!(viewer.getRootEditPart() instanceof final org.eclipse.gef.editparts.ScalableFreeformRootEditPart root)) {
+				return;
+			}
+
 			final ECState destState = (ECState) getFactory().getNewObject();
-			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, point, getECC());
+			final Point translated = point.getCopy();
+			root.getContentPane().translateToRelative(translated);
+
+			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(translated.x,
+					translated.y);
+
+			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, pos, getECC());
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
 			createTransitionCommand.setDestinationLocation(point);
-			final CompoundCommand compCom = new CompoundCommand();
+
+			final org.eclipse.gef.commands.CompoundCommand compCom = new org.eclipse.gef.commands.CompoundCommand();
 			compCom.add(createStateCommand);
 			compCom.add(createTransitionCommand);
-			setCurrentCommand(compCom);
-			performCreation(1);
+
+			viewer.getEditDomain().getCommandStack().execute(compCom);
 		}
 
 		private ECC getECC() {
@@ -178,9 +193,7 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 					.getTargetEditPart() instanceof FreeformGraphicalRootEditPart) {
 				transitionStateCreationTool
 						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
-				setActiveTool(transitionStateCreationTool);
-				transitionStateCreationTool.performCreation();
-				setActiveTool(getDefaultTool());
+				transitionStateCreationTool.performCreation(viewer); // viewer parameter pass kiya
 				createTransitionAndState = false;
 			}
 			transition = false;
