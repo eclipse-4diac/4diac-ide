@@ -117,11 +117,16 @@ public class XMIExportFilter extends ExportFilter {
 		final Resource xmiResource = xmiResourceSet.createResource(xmiUri);
 		xmiResource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
-		if (!forceOverwrite && xmiResourceSet.getURIConverter().exists(xmiUri, Collections.emptyMap())
-				&& !MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
+		if (!forceOverwrite && xmiResourceSet.getURIConverter().exists(xmiUri, Collections.emptyMap())) {
+			final boolean overwrite = Display.getDefault().syncCall(() -> {
+				final boolean res = MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
 						Messages.XMIExportFilter_OverwriteDialogTitle,
-						MessageFormat.format(Messages.XMIExportFilter_OverwriteDialogMessage, xmiUri.toFileString()))) {
-			return;
+						MessageFormat.format(Messages.XMIExportFilter_OverwriteDialogMessage, xmiUri.toFileString()));
+				return Boolean.valueOf(res);
+			}).booleanValue();
+			if (!overwrite) {
+				return;
+			}
 		}
 
 		try {
