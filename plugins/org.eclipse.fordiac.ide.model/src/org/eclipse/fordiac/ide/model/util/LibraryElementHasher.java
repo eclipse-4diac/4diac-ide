@@ -30,7 +30,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.emf.HashMetaData;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 
 public final class LibraryElementHasher {
@@ -115,6 +117,12 @@ public final class LibraryElementHasher {
 			if (eObject == null) {
 				return null;
 			}
+
+			if (eObject instanceof final Attribute attr
+					&& !InternalAttributeDeclarations.isHashRelevantAttribute(attr.getAttributeDeclaration())) {
+				return null;
+			}
+
 			if (!HashMetaData.isIgnored(eObject.eClass())) {
 				return super.copy(eObject);
 			}
