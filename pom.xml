@@ -19,7 +19,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>5.0.2</tycho.version>
+		<tycho.version>5.0.2</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
 		<tycho-repo.url>https://download.eclipse.org/releases/2026-03</tycho-repo.url>
 		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
@@ -27,10 +27,10 @@
 		<sonar.java.source>21</sonar.java.source>
 		<sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
 		<sonar.organization>eclipse</sonar.organization>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.1</org.eclipse.justj.jre.repository>
-        <xtend-version>2.41.0</xtend-version>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.2</org.eclipse.justj.jre.repository>
+        <xtend-version>2.42.0</xtend-version>
         <xtend-java-version>21</xtend-java-version>
-        <eclipse.cbi.version>1.5.2</eclipse.cbi.version>
+        <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <maven-resources-plugin-version>3.4.0</maven-resources-plugin-version>
 	</properties>
@@ -249,16 +249,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.opentest4j</groupId>
-			<artifactId>opentest4j</artifactId>
-			<version>1.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.14.1</version>
-		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>
 			<artifactId>org.eclipse.xtend.lib</artifactId>
