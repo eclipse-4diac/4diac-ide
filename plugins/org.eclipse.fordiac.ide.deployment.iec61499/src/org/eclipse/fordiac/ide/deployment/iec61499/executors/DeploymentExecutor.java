@@ -166,6 +166,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String encodeXMLChars(final String value) {
 		String retVal = value;
+		// replace '&' characters first
+		retVal = retVal.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		// replace remaining characters
 		retVal = retVal.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replace("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
