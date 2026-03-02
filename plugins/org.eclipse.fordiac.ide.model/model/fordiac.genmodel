@@ -670,7 +670,7 @@
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/instanceCopy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, false, false);"/>
-      <genOperations ecoreOperation="lib.ecore#//InterfaceList/fullCopy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, true, true);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/fullCopy" body="return org.eclipse.emf.ecore.util.EcoreUtil.copy(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllInputs" body="return InterfaceListAnnotations.getAllInputs(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getAllOutputs" body="return InterfaceListAnnotations.getAllOutputs(this);"/>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getInput" body="return InterfaceListAnnotations.getInput(this, path);">
