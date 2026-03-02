@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionComm
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.StructDataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -71,7 +70,7 @@ public class VariableNodeEditPolicy extends InterfaceElementEditPolicy {
 			// configureable F_MOVE pin use normal
 			// data connection creation
 			if (!AbstractConnectionCreateCommand.isSimpleStructPin(pin)
-					&& !(pin.getBlockFBNetworkElement() instanceof ConfigurableMoveFB)) {
+					&& !AbstractConnectionCreateCommand.isStructManipulatorDefPin(pin)) {
 				final DataConnectionCreateCommand structCmd = new DataConnectionCreateCommand(
 						connCreateCmd.getParent());
 				structCmd.setSource(connCreateCmd.getSource());
