@@ -150,10 +150,8 @@ public final class FBNetworkHelper {
 		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 		dstNetwork.getNetworkElements().add(copy);
 		copy.setTypeEntry(srcFb.getTypeEntry());
-		copy.setName(srcFb.getName()); // name should be last so that checks
-		// are working correctly
-		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true, false);
-		copy.setInterface(interfaceList);
+		copy.setName(srcFb.getName()); // name should be last so that checks are working correctly
+		copy.setInterface(srcFb.getInterface().fullCopy());
 		copy.setPosition(EcoreUtil.copy(srcFb.getPosition()));
 	}
 
