@@ -14,6 +14,8 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.ui.editor;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.cleanup.STCoreSaveActionsEditor;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreEditorPreferences;
@@ -63,5 +65,10 @@ public class GlobalConstantsEditor extends XtextTypeEditorPage implements STCore
 
 	public void setSaveActionsDisabled(final boolean saveActionsDisabled) {
 		this.saveActionsDisabled = saveActionsDisabled;
+	}
+
+	@Override
+	protected boolean isLanguageTargetType(final EClass targetType) {
+		return targetType != null && targetType.getEPackage() == GlobalConstantsPackage.eINSTANCE;
 	}
 }
