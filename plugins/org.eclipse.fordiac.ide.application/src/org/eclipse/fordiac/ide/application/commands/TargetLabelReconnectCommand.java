@@ -13,8 +13,13 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.fordiac.ide.application.policies.DeleteTargetInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -26,6 +31,7 @@ import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class TargetLabelReconnectCommand extends Command {
 
@@ -33,7 +39,7 @@ public class TargetLabelReconnectCommand extends Command {
 	private final IInterfaceElement oldSource;
 	private final IInterfaceElement destination;
 
-	private AggressiveDeleteConnectionCommand deleteCommand;
+	private Command deleteCommand;
 	private CreateSubAppCrossingConnectionsCommand createCommand;
 
 	public TargetLabelReconnectCommand(final IInterfaceElement oldSource, final IInterfaceElement newSource,
@@ -104,11 +110,11 @@ public class TargetLabelReconnectCommand extends Command {
 	@Override
 	public void execute() {
 		if (destination instanceof VarDeclaration) {
-			deleteCommand = new AggressiveDeleteConnectionCommand(destination.getInputConnections().getFirst());
+			deleteCommand = DeleteTargetInterfaceElementPolicy.createOutputSideDeleteCommand(destination);
 			deleteCommand.execute();
 		}
 		if (destination instanceof Event) {
-			deleteCommand = new AggressiveDeleteConnectionCommand(getEventConnection());
+			deleteCommand = getEventConnection();
 			deleteCommand.execute();
 		}
 		createCommand = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
@@ -128,20 +134,78 @@ public class TargetLabelReconnectCommand extends Command {
 		deleteCommand.undo();
 	}
 
-	private Connection getEventConnection() {
-		if (destination.getInputConnections().size() == 1) {
-			return destination.getInputConnections().getFirst();
-		}
-
-		final var conns = destination.getInputConnections().stream().filter(this::traceConnection).toList();
-		return conns.getFirst();
+	private Command getEventConnection() {
+		final List<Connection> path = findPathToOldSource(destination);
+		return deleteConnections(path, oldSource, destination);
 	}
 
-	private boolean traceConnection(final Connection connection) {
-		if (connection.getSource() == oldSource) {
-			return true;
+	private static CompoundCommand deleteConnections(final List<Connection> path, final IInterfaceElement source,
+			final IInterfaceElement destination) {
+		final List<Connection> remainingPath = new ArrayList<>(path);
+		final CompoundCommand forwardCmd = new CompoundCommand();
+
+		for (final Connection conn : path) {
+			remainingPath.remove(conn);
+			forwardCmd.add(new DeleteConnectionCommand(conn));
+			if (conn.getSource() != source) {
+				forwardCmd.add(new DeleteInterfaceCommand(conn.getSource()));
+			}
+
+			if (conn.getDestination().getInputConnections().size() > 1) {
+				// delete until merge of connections
+				break;
+			}
+
+			if (conn.getDestination().getOutputConnections().size() > 1) {
+				// fan-out, switch to the deletion from destination
+				return deleteConnectionsBackwards(path, remainingPath, destination, conn.getDestination());
+			}
 		}
-		return connection.getSource().getInputConnections().stream().anyMatch(this::traceConnection);
+
+		return forwardCmd;
+	}
+
+	private static CompoundCommand deleteConnectionsBackwards(final List<Connection> fullPath,
+			final List<Connection> remainingPath, final IInterfaceElement originalDest,
+			final IInterfaceElement forwardFanOutNode) {
+		final CompoundCommand backwardCmd = new CompoundCommand();
+
+		for (final Connection revConn : fullPath.reversed()) {
+			remainingPath.remove(revConn);
+			backwardCmd.add(new DeleteConnectionCommand(revConn));
+			if (revConn.getDestination() != originalDest) {
+				backwardCmd.add(new DeleteInterfaceCommand(revConn.getDestination()));
+			}
+
+			if (revConn.getSource().getOutputConnections().size() > 1) {
+				break;
+			}
+
+			if (revConn.getSource().getInputConnections().size() > 1) {
+				// fan-out, recursively handle middle section
+				return deleteConnections(remainingPath, forwardFanOutNode, revConn.getSource());
+			}
+		}
+
+		return backwardCmd;
+	}
+
+	private List<Connection> findPathToOldSource(final IInterfaceElement target) {
+		for (final Connection conn : target.getInputConnections()) {
+			if (conn.getSource() == oldSource) {
+				final List<Connection> path = new ArrayList<>();
+				path.add(conn);
+				return path;
+			}
+
+			final List<Connection> path = findPathToOldSource(conn.getSource());
+			if (!path.isEmpty()) {
+				path.add(conn);
+				return path;
+			}
+		}
+
+		return new ArrayList<>();
 	}
 
 	public void setSource(final IInterfaceElement source) {
