@@ -37,12 +37,14 @@ public final class MappingTargetCreator {
 			if (srcElement.getTypeEntry() != null) {
 				created.setTypeEntry(srcElement.getTypeEntry());
 			}
-			// use the src interface to get all parameters
-			created.setInterface(srcElement.getInterface().fullCopy());
-			created.setPosition(EcoreUtil.copy(srcElement.getPosition()));
+			// configure the data type before setting the interface otherwise setDataType
+			// may overwrite any configuration parameters
 			if (srcElement instanceof final ConfigurableFB srcConfFB) {
 				((ConfigurableFB) created).setDataType(srcConfFB.getDataType());
 			}
+			// use the src interface to get all parameters
+			created.setInterface(srcElement.getInterface().fullCopy());
+			created.setPosition(EcoreUtil.copy(srcElement.getPosition()));
 			created.setName(extractTargetFBName(targetFBName));
 			res.getFBNetwork().getNetworkElements().add(created);
 		}

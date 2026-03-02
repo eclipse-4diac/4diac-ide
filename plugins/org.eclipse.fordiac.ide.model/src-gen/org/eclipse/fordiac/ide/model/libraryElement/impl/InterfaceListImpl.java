@@ -360,7 +360,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 */
 	@Override
 	public InterfaceList fullCopy() {
-		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, true, true);
+		return org.eclipse.emf.ecore.util.EcoreUtil.copy(this);
 	}
 
 	/**
