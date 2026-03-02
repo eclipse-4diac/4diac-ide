@@ -51,6 +51,14 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
 
+	public DataType getOldDataType() {
+		return oldDataType;
+	}
+
+	public DataType getDataType() {
+		return dataType;
+	}
+
 	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
