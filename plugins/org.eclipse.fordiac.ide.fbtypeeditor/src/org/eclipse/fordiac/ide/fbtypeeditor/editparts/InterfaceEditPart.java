@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 Johannes Kepler University
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.AncestorListener;
 import org.eclipse.draw2d.Border;
@@ -51,6 +52,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
@@ -139,6 +142,15 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 				refresh();
 				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
 					refreshTypeRoot();
+					refreshWiths();
+				}
+			}
+
+			private void refreshWiths() {
+				final EditPartViewer viewer = getViewer();
+				if (viewer != null) {
+					viewer.getEditPartRegistry().entrySet().stream().map(Entry::getValue)
+							.filter(ConnectionEditPart.class::isInstance).forEach(EditPart::refresh);
 				}
 			}
 		};
@@ -157,11 +169,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		if (getCastedModel() instanceof Event && null != sourceConnections) {
-			for (final ConnectionEditPart con : sourceConnections) {
-				final WithEditPart with = (WithEditPart) con;
-				with.updateWithPos();
-			}
+		if (getCastedModel() instanceof Event) {
+			getSourceConnections().forEach(ConnectionEditPart::refresh);
 		}
 		if ((getCastedModel() instanceof VarDeclaration) && (getFigure() instanceof InterfaceFigure)) {
 			((InterfaceFigure) getFigure()).updateConnectorColor();
@@ -268,15 +277,14 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	}
 
 	public static int calculateWithPos(final With with, final boolean isInput) {
-		final Event event = (Event) with.eContainer();
-		final InterfaceList interfaceList = (InterfaceList) event.eContainer();
-		if (null != interfaceList) {
-			return getnumEventwith(isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs(), event);
+		if (with.eContainer() instanceof final Event event && event.getInterfaceList() != null) {
+			final InterfaceList interfaceList = event.getInterfaceList();
+			return getNumEventWith(isInput ? interfaceList.getEventInputs() : interfaceList.getEventOutputs(), event);
 		}
 		return 0;
 	}
 
-	protected static int getnumEventwith(final EList<Event> eList, final Event event) {
+	protected static int getNumEventWith(final EList<Event> eList, final Event event) {
 		int nrOfEventWITH = 0;
 		for (final Event ele : eList) {
 			if (!ele.getWith().isEmpty()) {
