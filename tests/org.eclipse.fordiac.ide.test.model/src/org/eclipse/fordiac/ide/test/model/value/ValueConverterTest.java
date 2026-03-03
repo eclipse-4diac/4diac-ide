@@ -192,7 +192,7 @@ class ValueConverterTest {
 		);
 	}
 
-	@ParameterizedTest
+	@ParameterizedTest(name = "[{index}] input=''{2}'', expected=''{1}''")
 	@MethodSource
 	void toValueTest(final ValueConverter<?> converter, final Object expected, final String string) {
 		if (expected instanceof final Class<?> expectedClass && Throwable.class.isAssignableFrom(expectedClass)) {
@@ -215,6 +215,7 @@ class ValueConverterTest {
 			assertEquals(expected, converter.toValue(new Scanner(string)));
 		}
 	}
+
 
 	static Stream<Arguments> toStringTest() {
 		return Stream.of(//
@@ -287,7 +288,7 @@ class ValueConverterTest {
 		);
 	}
 
-	@ParameterizedTest
+	@ParameterizedTest(name = "[{index}] input=''{2}'', expected=''{1}''")
 	@MethodSource
 	@SuppressWarnings("unchecked")
 	<T> void toStringTest(final ValueConverter<? super T> converter, final String expected, final T value) {
