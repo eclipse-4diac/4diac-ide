@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.ui.FordiacStringUtils;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 
@@ -23,7 +24,7 @@ public class StyledSystemLabelProvider extends SystemLabelProvider implements IS
 		if (object instanceof final INamedElement el) {
 			final String comment = el.getComment();
 			if (!comment.isEmpty()) {
-				text.append(" [" + comment + "]", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$ //$NON-NLS-2$
+				text.append(" [" + FordiacStringUtils.getShortComment(comment) + "]", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		return text;
