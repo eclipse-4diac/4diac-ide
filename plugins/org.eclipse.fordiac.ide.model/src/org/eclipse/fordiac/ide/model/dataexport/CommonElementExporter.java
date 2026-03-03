@@ -291,9 +291,7 @@ public class CommonElementExporter {
 		if (HelperTypes.CDATA != type) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		}
-		if ((null != comment) && (!comment.isBlank())) {
-			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
-		}
+		addCommentAttribute(comment);
 		if (HelperTypes.CDATA == type) {
 			writeCDataSection(value);
 			addInlineEndElement();
