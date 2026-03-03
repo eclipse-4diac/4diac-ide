@@ -1009,7 +1009,7 @@ public abstract class CommonElementImporter {
 	 * @param value the string to unescape
 	 * @return the unescaped string
 	 */
-	protected static String fullyUnEscapeValue(final String value) {
+	public static String fullyUnEscapeValue(final String value) {
 		String escapedValue = value.replace("&amp;", "&"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&lt;", "<"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&gt;", ">"); //$NON-NLS-1$ //$NON-NLS-2$
