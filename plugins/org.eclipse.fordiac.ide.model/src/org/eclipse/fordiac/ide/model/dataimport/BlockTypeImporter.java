@@ -122,10 +122,7 @@ public abstract class BlockTypeImporter extends TypeImporter {
 		final ServiceInterface leftInter = LibraryElementFactory.eINSTANCE.createServiceInterface();
 		leftInter.setName(leftInterface);
 		type.getService().setLeftInterface(leftInter);
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			type.getService().setComment(comment);
-		}
+		readCommentAttribute(type);
 
 		processChildren(LibraryElementTags.SERVICE_ELEMENT, name -> {
 			if (LibraryElementTags.SERVICE_SEQUENCE_ELEMENT.equals(name)) {
@@ -197,14 +194,11 @@ public abstract class BlockTypeImporter extends TypeImporter {
 
 		processChildren(LibraryElementTags.SERVICE_TRANSACTION_ELEMENT, name -> {
 			switch (name) {
-			case LibraryElementTags.INPUT_PRIMITIVE_ELEMENT:
-				parseInputPrimitive(serviceTransaction, type);
-				break;
-			case LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT:
-				parseOutputPrimitive(serviceTransaction, type);
-				break;
-			default:
+			case LibraryElementTags.INPUT_PRIMITIVE_ELEMENT -> parseInputPrimitive(serviceTransaction, type);
+			case LibraryElementTags.OUTPUT_PRIMITIVE_ELEMENT -> parseOutputPrimitive(serviceTransaction, type);
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		});

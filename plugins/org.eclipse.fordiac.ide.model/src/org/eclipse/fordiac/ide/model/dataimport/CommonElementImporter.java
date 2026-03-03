@@ -485,10 +485,7 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 		variable.setValue(val);
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			variable.setComment(comment);
-		}
+		readCommentAttribute(variable);
 
 		processChildren(LibraryElementTags.PARAMETER_ELEMENT, tagName -> {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
@@ -711,10 +708,7 @@ public abstract class CommonElementImporter {
 			varDecl.setValue(val);
 		}
 
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		if (null != comment) {
-			ie.setComment(comment);
-		}
+		readCommentAttribute(ie);
 
 		processChildren(LibraryElementTags.PARAMETER_ELEMENT, tagName -> {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(tagName)) {
