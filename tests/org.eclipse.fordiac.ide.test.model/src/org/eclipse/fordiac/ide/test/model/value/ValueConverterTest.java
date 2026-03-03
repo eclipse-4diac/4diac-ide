@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.value.StructValueConverter;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 import org.eclipse.fordiac.ide.model.value.ValueConverter;
 import org.eclipse.fordiac.ide.model.value.WStringValueConverter;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -191,6 +192,7 @@ class ValueConverterTest {
 		);
 	}
 
+	@ParameterizedTest
 	@MethodSource
 	void toValueTest(final ValueConverter<?> converter, final Object expected, final String string) {
 		if (expected instanceof final Class<?> expectedClass && Throwable.class.isAssignableFrom(expectedClass)) {
@@ -285,6 +287,7 @@ class ValueConverterTest {
 		);
 	}
 
+	@ParameterizedTest
 	@MethodSource
 	@SuppressWarnings("unchecked")
 	<T> void toStringTest(final ValueConverter<? super T> converter, final String expected, final T value) {
