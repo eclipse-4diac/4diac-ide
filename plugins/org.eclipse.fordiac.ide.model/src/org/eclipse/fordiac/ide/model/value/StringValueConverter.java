@@ -127,6 +127,11 @@ public final class StringValueConverter implements ValueConverter<String> {
 		return result.toString();
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+
 	private static void escape(final int value, final StringBuilder result) {
 		switch (value) {
 		case '$' -> result.append("$$"); //$NON-NLS-1$
