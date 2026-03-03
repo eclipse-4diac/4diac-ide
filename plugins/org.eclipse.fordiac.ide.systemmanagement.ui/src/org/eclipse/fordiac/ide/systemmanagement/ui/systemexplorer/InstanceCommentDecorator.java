@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.ui.FordiacStringUtils;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -54,17 +55,7 @@ public class InstanceCommentDecorator implements ILightweightLabelDecorator {
 		}
 
 		if (null != comment && !comment.isBlank()) {
-			decoration.addSuffix(" [" + checkComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+			decoration.addSuffix(" [" + FordiacStringUtils.getShortComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
-
-	private static String checkComment(final String comment) {
-		final int i = comment.indexOf(System.getProperty("line.separator")); //$NON-NLS-1$
-		if (i != -1) {
-			// we have a multi-line comment only return first line
-			return comment.substring(0, i) + "..."; //$NON-NLS-1$
-		}
-		return comment;
-	}
-
 }
