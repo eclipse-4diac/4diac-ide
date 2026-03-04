@@ -14,8 +14,9 @@ package org.eclipse.fordiac.ide.model.ui.nat;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
-import org.eclipse.fordiac.ide.model.typelibrary.FunctionFBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 
@@ -23,7 +24,14 @@ public class FBTypeSelectionTreeContentProvider extends TypeSelectionTreeContent
 
 	public static final FBTypeSelectionTreeContentProvider INSTANCE = new FBTypeSelectionTreeContentProvider();
 
+	private final Predicate<FBTypeEntry> filter;
+
 	protected FBTypeSelectionTreeContentProvider() {
+		this(unused -> true);
+	}
+
+	public FBTypeSelectionTreeContentProvider(final Predicate<FBTypeEntry> filter) {
+		this.filter = filter;
 	}
 
 	@Override
@@ -33,7 +41,7 @@ public class FBTypeSelectionTreeContentProvider extends TypeSelectionTreeContent
 		}
 
 		final TypeNode fbTypes = new TypeNode(Messages.DataTypeDropdown_FB_Types);
-		addPathSubtree(fbTypes, typeLibrary.getFbTypes().filter(entry -> !(entry instanceof FunctionFBTypeEntry)));
+		addPathSubtree(fbTypes, typeLibrary.getFbTypes().filter(filter));
 		fbTypes.sortChildren();
 
 		return fbTypes.getChildren();
