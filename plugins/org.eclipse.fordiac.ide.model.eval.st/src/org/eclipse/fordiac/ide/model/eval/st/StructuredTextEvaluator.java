@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.Subrange;
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorArrayIndexOutOfBoundsException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
@@ -621,7 +622,11 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			for (final STExpression index : expr.getIndex()) {
 				indices.add(Integer.valueOf(ValueOperations.asInteger(evaluateExpression(index))));
 			}
-			yield arrayValue.get(indices).getValue();
+			try {
+				yield arrayValue.get(indices).getValue();
+			} catch (final ArrayIndexOutOfBoundsException e) {
+				throw new EvaluatorArrayIndexOutOfBoundsException(indices, arrayValue.getType(), this);
+			}
 		}
 		case final AnyStringValue stringValue ->
 			stringValue.charAt(ValueOperations.asInteger(evaluateExpression(expr.getIndex().getFirst())));
@@ -721,7 +726,11 @@ public abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			for (final STExpression index : expr.getIndex()) {
 				indices.add(Integer.valueOf(ValueOperations.asInteger(evaluateExpression(index))));
 			}
-			yield arrayValue.get(indices);
+			try {
+				yield arrayValue.get(indices);
+			} catch (final ArrayIndexOutOfBoundsException e) {
+				throw new EvaluatorArrayIndexOutOfBoundsException(indices, arrayValue.getType(), this);
+			}
 		}
 		case final StringValue unused -> new StringCharacterVariable((Variable<StringValue>) receiver,
 				ValueOperations.asInteger(evaluateExpression(expr.getIndex().getFirst())));
