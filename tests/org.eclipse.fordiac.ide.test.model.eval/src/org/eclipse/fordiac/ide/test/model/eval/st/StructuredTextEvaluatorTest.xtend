@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.eval.EvaluatorArrayIndexOutOfBoundsException
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.ScopedExpressionEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
@@ -896,7 +897,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testArrayIndexOutOfBounds() {
-		ArrayIndexOutOfBoundsException.assertThrows [
+		EvaluatorArrayIndexOutOfBoundsException.assertThrows [
 			'''
 				VAR_TEMP
 					test: ARRAY [ 0 .. 1 ] OF INT := [ 17, 4 ];
