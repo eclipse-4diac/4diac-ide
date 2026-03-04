@@ -124,6 +124,10 @@
       <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//BaseFBType/validateInternalFBs" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.validateInternalFBs(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//BaseFBType/validateInternalFBs/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//BaseFBType/validateInternalFBs/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
