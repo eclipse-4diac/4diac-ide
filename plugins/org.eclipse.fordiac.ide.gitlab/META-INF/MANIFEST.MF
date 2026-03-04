@@ -4,7 +4,10 @@ Bundle-Name: Gitlab
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gitlab;singleton:=true
 Bundle-Version: 3.1.100.qualifier
 Import-Package: org.eclipse.ui.preferences
-Require-Bundle: org.eclipse.ui.ide,
+Require-Bundle: 
+ org.eclipse.equinox.security,
+ org.eclipse.equinox.security.ui,
+ org.eclipse.ui.ide,
  org.eclipse.core.resources,
  org.eclipse.jface,
  org.eclipse.core.runtime,
