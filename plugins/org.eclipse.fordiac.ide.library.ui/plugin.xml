@@ -65,6 +65,13 @@
             Import an existing file into the workspace.
          </description>
       </wizard>
+  <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      name="Library Import">
+    <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
+  </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
