@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025  Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026  Primetals Technologies Austria GmbH
  *                           Monika Wenger
  *
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,8 @@
  * Contributors:
  *   Patrick Aigner
  *     - initial API and implementation and/or initial documentation
+ *   Alexander Fedorov (ArSysOp)
+ *     - [#2219] New 4diac IDE Project wizard cannot start without system libraries
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
@@ -249,8 +251,8 @@ public class LibrarySelectionPage extends WizardPage {
 		if (isLibrary) {
 			treeViewer.setInput(libraries.stream().map(LibraryRecord::name).distinct().sorted().toList());
 			treeViewer.setCheckedElements(tempSelection);
-			if (range != null && Collections.max(libraries, Comparator.comparing(LibraryRecord::version)).version()
-					.equals(range.getLeft())) {
+			if (range != null && !libraries.isEmpty() && Collections
+					.max(libraries, Comparator.comparing(LibraryRecord::version)).version().equals(range.getLeft())) {
 				Stream.of(treeViewer.getTree().getItems())
 						.filter(r -> Stream.of(r.getItems()).anyMatch(d -> d.getText().equals(version)))
 						.forEach(r -> treeViewer.setChecked(r, true));
