@@ -28,6 +28,66 @@ public final class Messages extends NLS {
 	public static String GitLab_Token_Title;
 	public static String GitLab_Url_Title;
 	public static String GitLab_Packages_And_Projects;
+
+	public static String GitLabEndpointDialog_add;
+
+	public static String GitLabEndpointDialog_configure;
+
+	public static String GitLabEndpointDialog_edit;
+
+	public static String GitLabEndpointDialog_name;
+
+	public static String GitLabEndpointDialog_name_exists;
+
+	public static String GitLabEndpointDialog_name_not_empty;
+
+	public static String GitLabEndpointDialog_token;
+
+	public static String GitLabEndpointDialog_token_note_empty;
+
+	public static String GitLabEndpointDialog_url;
+
+	public static String GitLabEndpointDialog_url_not_empty;
+	public static String GitLabEndpointsPreferencePage_16;
+
+	public static String GitLabEndpointsPreferencePage_20;
+
+	public static String GitLabEndpointsPreferencePage_add;
+
+	public static String GitLabEndpointsPreferencePage_all_endpoints;
+
+	public static String GitLabEndpointsPreferencePage_configure;
+
+	public static String GitLabEndpointsPreferencePage_connection_failed;
+
+	public static String GitLabEndpointsPreferencePage_connnection_sucessful;
+
+	public static String GitLabEndpointsPreferencePage_edit;
+
+	public static String GitLabEndpointsPreferencePage_enpoints;
+
+	public static String GitLabEndpointsPreferencePage_name;
+
+	public static String GitLabEndpointsPreferencePage_name_exists;
+
+	public static String GitLabEndpointsPreferencePage_name_not_empty;
+
+	public static String GitLabEndpointsPreferencePage_new_name;
+
+	public static String GitLabEndpointsPreferencePage_remove;
+
+	public static String GitLabEndpointsPreferencePage_remove_ep;
+
+	public static String GitLabEndpointsPreferencePage_remove_gl_ep;
+
+	public static String GitLabEndpointsPreferencePage_rename;
+
+	public static String GitLabEndpointsPreferencePage_rename_Ep;
+
+	public static String GitLabEndpointsPreferencePage_test_con;
+
+	public static String GitLabEndpointsPreferencePage_url;
+
 	public static String Library_Not_Found;
 	public static String No_Config;
 	public static String Private_Token;
