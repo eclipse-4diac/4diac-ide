@@ -18,8 +18,10 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -194,6 +196,16 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	@Override
 	public Algorithm getAlgorithmNamed(final String name) {
 		return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateInternalFBs(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.validateInternalFBs(this, diagnostics, context);
 	}
 
 	/**
