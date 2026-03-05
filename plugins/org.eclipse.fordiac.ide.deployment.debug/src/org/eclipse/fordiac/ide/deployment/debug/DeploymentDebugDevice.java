@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
+import org.eclipse.fordiac.ide.deployment.debug.watch.ISubContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch.Source;
@@ -257,6 +258,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				if (watchpoint.isPinnedChanged(delta)) {
 					updatePinned(watchpoint);
 				}
+				if (watchpoint.isWatchSubElementsChanged(delta)) {
+					updateWatchSubElements(watchpoint);
+				}
 			}
 		}
 	}
@@ -268,6 +272,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
 						name -> IWatch.watchFor(name, element.get(), this));
 				watch.setSource(Source.LAUNCH);
+				if (watch instanceof final ISubContainerWatch subContainerWatch) {
+					subContainerWatch.setWatchSubElements(watchpoint.watchSubElements());
+				}
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
@@ -287,6 +294,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 						name -> IWatch.watchFor(name, element.get(), this));
 				watch.setSource(Source.BREAKPOINT);
 				watch.setPinned(watchpoint.isPinned());
+				if (watch instanceof final ISubContainerWatch subContainerWatch) {
+					subContainerWatch.setWatchSubElements(watchpoint.isWatchSubElements());
+				}
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
@@ -335,6 +345,20 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		if (watch != null) {
 			watch.setPinned(watchpoint.isPinned());
 			getPrimaryDebugTarget().updateWatches(true);
+		}
+	}
+
+	protected void updateWatchSubElements(final DeploymentWatchpoint watchpoint) {
+		final IWatch watch = watches.get(watchpoint.getLocation());
+		if (watch instanceof final ISubContainerWatch subContainerWatch) {
+			try {
+				subContainerWatch.removeWatch();
+				subContainerWatch.setWatchSubElements(watchpoint.isWatchSubElements());
+				subContainerWatch.addWatch();
+				getPrimaryDebugTarget().updateWatches(true);
+			} catch (final DebugException e) {
+				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+			}
 		}
 	}
 

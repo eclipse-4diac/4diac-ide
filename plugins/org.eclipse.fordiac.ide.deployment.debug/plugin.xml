@@ -60,6 +60,9 @@
 		<attribute
 			name="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.pinned">
 		</attribute>
+		<attribute
+			name="org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.subElements">
+		</attribute>
 	</extension>
 	<extension
 		point="org.eclipse.debug.core.breakpoints">

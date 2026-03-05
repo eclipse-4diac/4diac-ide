@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -48,6 +49,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 	public static final String FORCE_VALUE = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceValue"; //$NON-NLS-1$
 	public static final String FORCE_ENABLED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceEnabled"; //$NON-NLS-1$
 	public static final String PINNED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.pinned"; //$NON-NLS-1$
+	public static final String SUBELEMENTS = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.subElements"; //$NON-NLS-1$
 
 	public DeploymentWatchpoint() {
 	}
@@ -190,6 +192,38 @@ public class DeploymentWatchpoint extends Breakpoint {
 
 	public boolean isPinnedChanged(final IMarkerDelta delta) {
 		return delta.getKind() == IResourceDelta.CHANGED && (isPinned() != delta.getAttribute(PINNED, false));
+	}
+
+	public boolean isWatchSubElements() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			return m.getAttribute(SUBELEMENTS, false);
+		}
+		return false;
+	}
+
+	public void setWatchSubElements(final boolean subElements) throws CoreException {
+		setAttribute(SUBELEMENTS, subElements);
+	}
+
+	public boolean isWatchSubElementsSupported() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			final EClass targetType = FordiacErrorMarker.getTargetType(m);
+			return targetType != null
+					&& (LibraryElementPackage.Literals.SUB_APP.isSuperTypeOf(targetType)
+							|| LibraryElementPackage.Literals.CFB_INSTANCE.isSuperTypeOf(targetType))
+					|| (LibraryElementPackage.Literals.FB.isSuperTypeOf(targetType)
+							&& getTarget().filter(FB.class::isInstance).map(FB.class::cast).map(FB::getTypeEntry)
+									.map(TypeEntry::getTypeEClass)
+									.filter(LibraryElementPackage.Literals.BASE_FB_TYPE::isSuperTypeOf).isPresent());
+		}
+		return false;
+	}
+
+	public boolean isWatchSubElementsChanged(final IMarkerDelta delta) {
+		return delta.getKind() == IResourceDelta.CHANGED
+				&& (isWatchSubElements() != delta.getAttribute(SUBELEMENTS, false));
 	}
 
 	@Override
