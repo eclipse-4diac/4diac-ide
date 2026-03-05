@@ -18,6 +18,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportAttributeValue/attribute"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportAttributeValue/expression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute xmiexport.ecore#//XMIExportAttributeValue/value"/>
+      <genOperations ecoreOperation="xmiexport.ecore#//XMIExportAttributeValue/getExpectedType"
+          body="return attribute.getType();"/>
     </genClasses>
     <genClasses ecoreClass="xmiexport.ecore#//XMIExportInitialValues">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValues/initialValues"/>
@@ -26,6 +28,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValue/variable"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportInitialValue/expression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute xmiexport.ecore#//XMIExportInitialValue/value"/>
+      <genOperations ecoreOperation="xmiexport.ecore#//XMIExportInitialValue/getExpectedType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType(variable);"/>
     </genClasses>
     <genClasses ecoreClass="xmiexport.ecore#//XMIExportTypeDeclarations">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference xmiexport.ecore#//XMIExportTypeDeclarations/typeDeclarations"/>

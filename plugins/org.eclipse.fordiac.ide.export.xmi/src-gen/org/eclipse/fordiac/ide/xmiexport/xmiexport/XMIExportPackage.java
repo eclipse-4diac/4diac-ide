@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -113,7 +114,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_ATTRIBUTE_VALUE__ATTRIBUTE = 0;
+	int XMI_EXPORT_ATTRIBUTE_VALUE__ATTRIBUTE = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -122,7 +123,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_ATTRIBUTE_VALUE__EXPRESSION = 1;
+	int XMI_EXPORT_ATTRIBUTE_VALUE__EXPRESSION = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -131,7 +132,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_ATTRIBUTE_VALUE__VALUE = 2;
+	int XMI_EXPORT_ATTRIBUTE_VALUE__VALUE = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Attribute Value</em>' class.
@@ -140,7 +141,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_ATTRIBUTE_VALUE_FEATURE_COUNT = 3;
+	int XMI_EXPORT_ATTRIBUTE_VALUE_FEATURE_COUNT = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.impl.XMIExportInitialValuesImpl <em>Initial Values</em>}' class.
@@ -187,7 +188,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_INITIAL_VALUE__VARIABLE = 0;
+	int XMI_EXPORT_INITIAL_VALUE__VARIABLE = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -196,7 +197,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_INITIAL_VALUE__EXPRESSION = 1;
+	int XMI_EXPORT_INITIAL_VALUE__EXPRESSION = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -205,7 +206,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_INITIAL_VALUE__VALUE = 2;
+	int XMI_EXPORT_INITIAL_VALUE__VALUE = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Initial Value</em>' class.
@@ -214,7 +215,7 @@ public interface XMIExportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int XMI_EXPORT_INITIAL_VALUE_FEATURE_COUNT = 3;
+	int XMI_EXPORT_INITIAL_VALUE_FEATURE_COUNT = STCorePackage.ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT + 3;
 
 
 	/**

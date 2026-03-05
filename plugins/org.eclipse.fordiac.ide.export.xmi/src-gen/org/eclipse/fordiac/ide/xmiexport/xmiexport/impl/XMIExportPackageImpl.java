@@ -481,14 +481,16 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		STCorePackage theSTCorePackage = (STCorePackage)EPackage.Registry.INSTANCE.getEPackage(STCorePackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		xmiExportAttributeValueEClass.getESuperTypes().add(theSTCorePackage.getSTExpectedTypeProvider());
+		xmiExportInitialValueEClass.getESuperTypes().add(theSTCorePackage.getSTExpectedTypeProvider());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(xmiExportAttributeValuesEClass, XMIExportAttributeValues.class, "XMIExportAttributeValues", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -499,6 +501,8 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		initEReference(getXMIExportAttributeValue_Expression(), theSTCorePackage.getSTInitializerExpression(), null, "expression", null, 0, 1, XMIExportAttributeValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getXMIExportAttributeValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, XMIExportAttributeValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(xmiExportAttributeValueEClass, theLibraryElementPackage.getLibraryElement(), "getExpectedType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(xmiExportInitialValuesEClass, XMIExportInitialValues.class, "XMIExportInitialValues", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getXMIExportInitialValues_InitialValues(), this.getXMIExportInitialValue(), null, "initialValues", null, 0, -1, XMIExportInitialValues.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -506,6 +510,8 @@ public class XMIExportPackageImpl extends EPackageImpl implements XMIExportPacka
 		initEReference(getXMIExportInitialValue_Variable(), theLibraryElementPackage.getINamedElement(), null, "variable", null, 0, 1, XMIExportInitialValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getXMIExportInitialValue_Expression(), theSTCorePackage.getSTInitializerExpression(), null, "expression", null, 0, 1, XMIExportInitialValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getXMIExportInitialValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, XMIExportInitialValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(xmiExportInitialValueEClass, theLibraryElementPackage.getLibraryElement(), "getExpectedType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(xmiExportTypeDeclarationsEClass, XMIExportTypeDeclarations.class, "XMIExportTypeDeclarations", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getXMIExportTypeDeclarations_TypeDeclarations(), this.getXMIExportTypeDeclaration(), null, "typeDeclarations", null, 0, -1, XMIExportTypeDeclarations.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
