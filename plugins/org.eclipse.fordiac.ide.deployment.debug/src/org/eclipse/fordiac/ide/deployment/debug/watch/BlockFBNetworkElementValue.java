@@ -13,9 +13,14 @@
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.SequencedCollection;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.debug.core.DebugException;
@@ -42,7 +47,8 @@ public class BlockFBNetworkElementValue extends DeploymentDebugElement implement
 	private final BlockFBNetworkElement element;
 	private final Resource resource;
 	private final String resourceRelativeName;
-	private final List<IWatch> watches;
+	private final SortedSet<IWatch> watches = new TreeSet<>(Comparator.comparing(IWatch::getName));
+	private boolean watchSubElements;
 
 	public BlockFBNetworkElementValue(final BlockFBNetworkElement element, final DeploymentDebugDevice target) {
 		this(element, element.getResource(),
@@ -55,12 +61,7 @@ public class BlockFBNetworkElementValue extends DeploymentDebugElement implement
 		this.element = element;
 		this.resource = resource;
 		this.resourceRelativeName = resourceRelativeName;
-		watches = getSubElements().map(this::createSubWatch).toList();
-	}
-
-	private Stream<INamedElement> getSubElements() throws UnsupportedOperationException {
-		return Stream.concat(getInterfaceSubElements(), getAdditionalSubElements())
-				.sorted(Comparator.comparing(INamedElement::getName));
+		getInterfaceSubElements().map(this::createSubWatch).forEachOrdered(watches::add);
 	}
 
 	private Stream<INamedElement> getInterfaceSubElements() throws UnsupportedOperationException {
@@ -98,8 +99,25 @@ public class BlockFBNetworkElementValue extends DeploymentDebugElement implement
 		return element;
 	}
 
-	public List<IWatch> getWatches() {
-		return watches;
+	public SequencedCollection<IWatch> getWatches() {
+		return Collections.unmodifiableSequencedCollection(watches);
+	}
+
+	public boolean isWatchSubElements() {
+		return watchSubElements;
+	}
+
+	public void setWatchSubElements(final boolean watchSubElements) {
+		if (watchSubElements == this.watchSubElements) {
+			return;
+		}
+		this.watchSubElements = watchSubElements;
+		if (watchSubElements) {
+			watches.addAll(getAdditionalSubElements().map(this::createSubWatch).toList());
+		} else {
+			final Set<INamedElement> remove = getAdditionalSubElements().collect(Collectors.toSet());
+			watches.removeIf(watch -> remove.contains(watch.getWatchedElement()));
+		}
 	}
 
 	@Override

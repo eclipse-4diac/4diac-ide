@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.List;
+import java.util.SequencedCollection;
 
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentDebugDevice;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -41,7 +41,7 @@ public class AdapterDeclarationWatch extends AbstractContainerWatch implements I
 	}
 
 	@Override
-	public List<IWatch> getSubWatches() {
+	public SequencedCollection<IWatch> getSubWatches() {
 		return value.getWatches();
 	}
 
