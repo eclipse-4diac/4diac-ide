@@ -222,7 +222,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getTypeEntry().getFile().getParent()) {
+		// child text editors may use a TextEditor which is having a root scheduling
+		// rule
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+				getTypeEntry().getFile().getWorkspace().getRoot()) {
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
