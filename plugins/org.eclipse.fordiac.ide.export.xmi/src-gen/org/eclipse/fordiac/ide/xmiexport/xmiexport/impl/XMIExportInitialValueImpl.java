@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
 import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
@@ -211,6 +212,16 @@ public class XMIExportInitialValueImpl extends MinimalEObjectImpl.Container impl
 		value = newValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, XMIExportPackage.XMI_EXPORT_INITIAL_VALUE__VALUE, oldValue, value));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LibraryElement getExpectedType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType(variable);
 	}
 
 	/**
