@@ -77,8 +77,7 @@ class LibraryImportTest {
 	@BeforeAll
 	static void setupBeforeClass() throws Exception {
 		final IProject proj = SystemManager.INSTANCE.createNew4diacProject(PROJECT,
-				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), Collections.emptyMap(),
-				new NullProgressMonitor());
+				ResourcesPlugin.getWorkspace().getRoot().getLocation().append(PROJECT), new NullProgressMonitor());
 		proj.refreshLocal(IResource.DEPTH_INFINITE, null);
 
 		// extract test libraries
