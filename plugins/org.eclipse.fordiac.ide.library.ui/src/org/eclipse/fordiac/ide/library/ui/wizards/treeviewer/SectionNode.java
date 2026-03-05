@@ -10,22 +10,24 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library.ui.sources;
+package org.eclipse.fordiac.ide.library.ui.wizards.treeviewer;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
-
 public final class SectionNode {
 	final String labelText;
-	final List<LibGroupNode> libGroupNodeChildren;
+	private final List<LibGroupNode> libGroupNodeChildren;
 
-	SectionNode(final String label, final List<LibGroupNode> payload) {
+	public SectionNode(final String label, final List<LibGroupNode> payload) {
 		this.labelText = label;
 		this.libGroupNodeChildren = payload;
 	}
 
 	public String getLabelText() {
 		return labelText;
+	}
+
+	public List<LibGroupNode> getLibGroupNodeChildren() {
+		return libGroupNodeChildren;
 	}
 }

@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.SectionNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 public final class LibrarySourceBuilder {
