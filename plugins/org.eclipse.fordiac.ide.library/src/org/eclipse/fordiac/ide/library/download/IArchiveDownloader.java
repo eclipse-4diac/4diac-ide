@@ -90,4 +90,8 @@ public interface IArchiveDownloader {
 	 * @param active active state
 	 */
 	void setActive(boolean active);
+
+	boolean hasMultipleEndpoints();
+
+	List<IArchiveDownloader> convertEndpointsToDownloader();
 }
