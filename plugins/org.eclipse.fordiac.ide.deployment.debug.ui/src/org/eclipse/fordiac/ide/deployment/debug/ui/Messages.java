@@ -65,6 +65,8 @@ public class Messages extends NLS {
 	public static String DeploymentDebugPreferencePage_MonitoringValueWriteThrough;
 	public static String DeploymentWatchpointDetailPane_Description;
 	public static String DeploymentWatchpointDetailPane_Name;
+	public static String DeploymentWatchpointEditor_Pinned;
+	public static String DeploymentWatchpointEditor_SubElements;
 	public static String DeploymentWatchpointForceEditor_ForceLabel;
 	public static String ForceHandler_ForceDialogInput;
 	public static String ForceHandler_ForceDialogTitle;
@@ -95,6 +97,8 @@ public class Messages extends NLS {
 	public static String RuntimeLaunchConfigurationTab_TraceLabel;
 	public static String TogglePinnedHandler_PinWatch;
 	public static String TogglePinnedHandler_UnpinWatch;
+	public static String ToggleWatchSubElementsHandler_RemoveSubElementWatches;
+	public static String ToggleWatchSubElementsHandler_WatchSubElements;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

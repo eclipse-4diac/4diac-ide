@@ -49,7 +49,8 @@ public class DeploymentWatchpointDetailPane implements IDetailPane3 {
 		editor = new DeploymentWatchpointEditor();
 		editor.addPropertyListener((source, propId) -> {
 			if (propId == DeploymentWatchpointEditor.PROP_FORCE_ENABLED
-					|| propId == DeploymentWatchpointEditor.PROP_PINNED) {
+					|| propId == DeploymentWatchpointEditor.PROP_PINNED
+					|| propId == DeploymentWatchpointEditor.PROP_SUB_ELEMENTS) {
 				editor.doSave(); // autosave only for condition enabled changes
 			}
 			firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
