@@ -49,6 +49,7 @@ import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
@@ -126,7 +127,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// position for state creation
 		final IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
-		((NewStateAction) action).setZoomManager(getZoomManger());
 	}
 
 	@Override
@@ -285,6 +285,9 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		}
 		if (adapter == ECC.class) {
 			return adapter.cast(getModel());
+		}
+		if (adapter == EditPartViewer.class) {
+			return adapter.cast(getGraphicalViewer());
 		}
 		return super.getAdapter(adapter);
 	}
