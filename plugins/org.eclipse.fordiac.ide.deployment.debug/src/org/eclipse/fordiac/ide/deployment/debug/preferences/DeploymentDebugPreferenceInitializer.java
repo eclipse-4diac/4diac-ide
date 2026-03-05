@@ -21,5 +21,9 @@ public class DeploymentDebugPreferenceInitializer extends AbstractPreferenceInit
 	public void initializeDefaultPreferences() {
 		DefaultScope.INSTANCE.getNode(DeploymentDebugPreferences.QUALIFIER)
 				.putBoolean(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH, false);
+		DefaultScope.INSTANCE.getNode(DeploymentDebugPreferences.QUALIFIER)
+				.putBoolean(DeploymentDebugPreferences.WATCH_INTERNAL_VARIABLES_DEFAULT, false);
+		DefaultScope.INSTANCE.getNode(DeploymentDebugPreferences.QUALIFIER)
+				.putBoolean(DeploymentDebugPreferences.WATCH_INTERNAL_NETWORKS_DEFAULT, false);
 	}
 }
