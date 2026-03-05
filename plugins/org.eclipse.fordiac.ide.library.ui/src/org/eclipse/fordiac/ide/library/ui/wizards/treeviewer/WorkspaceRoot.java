@@ -10,22 +10,29 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.library.ui.sources;
+package org.eclipse.fordiac.ide.library.ui.wizards.treeviewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public final class WorkspaceRoot {
-	final List<LibGroupNode> extractedLibs = new ArrayList<>();
-	final List<LibGroupNode> standardLibs = new ArrayList<>();
+	private final List<LibGroupNode> extractedLibs = new ArrayList<>();
+	private final List<LibGroupNode> standardLibs = new ArrayList<>();
 
-	final SectionNode standardSection = new SectionNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, standardLibs);
-	final SectionNode extractedSection = new SectionNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, extractedLibs);
+	final SectionNode standardSection = new SectionNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, getStandardLibs());
+	final SectionNode extractedSection = new SectionNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, getExtractedLibs());
 
 	public Object[] getChildren() {
 		return new Object[] { standardSection, extractedSection };
+	}
+
+	public List<LibGroupNode> getExtractedLibs() {
+		return extractedLibs;
+	}
+
+	public List<LibGroupNode> getStandardLibs() {
+		return standardLibs;
 	}
 }

@@ -27,6 +27,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.SectionNode;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.WorkspaceRoot;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -60,15 +62,15 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 		final WorkspaceRoot root = new WorkspaceRoot();
 
 		LibraryManager.INSTANCE.getExtractedLibraries().forEach((symbolicName, recs) -> {
-			root.extractedLibs.add(new LibGroupNode(recs));
+			root.getExtractedLibs().add(new LibGroupNode(recs));
 		});
-		root.extractedLibs.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		root.getExtractedLibs().sort(Comparator.comparing(LibGroupNode::getSymbolicName));
 
 		LibraryManager.INSTANCE.getStandardLibraries().forEach((symbolicName, recs) -> {
-			root.standardLibs.add(new LibGroupNode(recs));
+			root.getStandardLibs().add(new LibGroupNode(recs));
 		});
 
-		root.standardLibs.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		root.getStandardLibs().sort(Comparator.comparing(LibGroupNode::getSymbolicName));
 
 		final ITreeContentProvider cp = new WorkspaceLibrariesContentProvider();
 		final ILabelProvider lp = new ColumnLabelProvider() {
@@ -78,7 +80,7 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 					return ""; //$NON-NLS-1$
 				}
 				if (element instanceof final SectionNode s) {
-					return s.labelText;
+					return s.getLabelText();
 				}
 				if (element instanceof final LibGroupNode g) {
 					return g.getLabelText();
@@ -146,7 +148,7 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 		@Override
 		public Object[] getChildren(final Object parentElement) {
 			if ((parentElement instanceof final SectionNode s)
-					&& (s.libGroupNodeChildren instanceof final List<?> list)) {
+					&& (s.getLibGroupNodeChildren() instanceof final List<?> list)) {
 				return list.toArray();
 			}
 			if (parentElement instanceof final LibGroupNode g) {
