@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.SharedCursors;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
@@ -106,17 +107,21 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 			handleMove();
 		}
 
-		public void performCreation() {
+		public void performCreation(final EditPartViewer viewer) {
 			final ECState destState = (ECState) getFactory().getNewObject();
+			final Point relativePoint = point.getCopy();
 
-			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(point.x, point.y);
+			final Object eccEditPart = viewer.getEditPartRegistry().get(getECC());
+			if (eccEditPart instanceof final GraphicalEditPart gep) {
+				gep.getFigure().translateToRelative(relativePoint);
+			}
 
+			final Position pos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(relativePoint.x,
+					relativePoint.y);
 			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, pos, getECC());
-
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
-
-			createTransitionCommand.setDestinationLocation(point);
+			createTransitionCommand.setDestinationLocation(relativePoint);
 
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
@@ -188,7 +193,7 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 				transitionStateCreationTool
 						.setLocationActivation(((ECCPanningSelectionTool) getDefaultTool()).getLastLocation());
 				setActiveTool(transitionStateCreationTool);
-				transitionStateCreationTool.performCreation();
+				transitionStateCreationTool.performCreation(viewer);
 				setActiveTool(getDefaultTool());
 				createTransitionAndState = false;
 			}
