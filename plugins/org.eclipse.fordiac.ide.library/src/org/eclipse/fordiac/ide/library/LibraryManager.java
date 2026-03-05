@@ -510,10 +510,15 @@ public enum LibraryManager {
 			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
-				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$
+				+ " preferring " + preferred + " Project: " + project != null ? project.getName() : ""); //$NON-NLS-1$
 
-		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
+		List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
+
+		if (downloaders.size() == 1 && downloaders.get(0).hasMultipleEndpoints()) {
+			downloaders = downloaders.get(0).convertEndpointsToDownloader();
+		}
+
 		DownloadResult<Path> dlResult;
 		final StringBuilder errors = new StringBuilder();
 		final VersionRange range = (versionRange == null || versionRange.isEmpty()) ? ALL_RANGE : versionRange;
@@ -536,6 +541,7 @@ public enum LibraryManager {
 					errors.append(" | "); //$NON-NLS-1$
 					errors.append(downloader.getName());
 					errors.append(": "); //$NON-NLS-1$
+					errors.append(symbolicName + " ");
 					errors.append(dlResult.message());
 				}
 			} catch (final IOException e) {
@@ -715,6 +721,7 @@ public enum LibraryManager {
 	private void buildDependencies(final IProject project, final LibraryManagerData data, final Queue<String> queue,
 			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(Messages.LibraryManager_BuildingDependencyGraph);
+
 		while (!queue.isEmpty()) {
 			progress.setWorkRemaining(Math.max(queue.size(), 10));
 			final String symbolicName = queue.poll();
@@ -764,6 +771,10 @@ public enum LibraryManager {
 					queue.add(symb);
 				}
 			});
+
+			if (rnode.getError() != null) {
+				break;
+			}
 		}
 	}
 
@@ -908,7 +919,7 @@ public enum LibraryManager {
 		}
 		progress.worked(5);
 
-		final DownloadResult<java.net.URI> dlResult = libraryDownload(symbolicName, range, prefVersion, null, false,
+		final DownloadResult<java.net.URI> dlResult = libraryDownload(symbolicName, range, prefVersion, project, false,
 				false, progress.split(95));
 
 		if (dlResult.status() == DownloadResult.Status.OK) {
@@ -916,6 +927,8 @@ public enum LibraryManager {
 			if (rec != null) {
 				return new ResolveNode(rec);
 			}
+		} else {
+			FordiacLogHelper.logWarning(dlResult.message());
 		}
 
 		if (usePref) {
