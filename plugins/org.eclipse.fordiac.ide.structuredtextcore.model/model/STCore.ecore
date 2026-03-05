@@ -661,6 +661,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="initializerExpression"
         eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STExpectedTypeProvider" abstract="true"
+      interface="true">
+    <eOperations name="getExpectedType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="STJavaMethod" instanceClassName="java.lang.reflect.Method"
       serializable="false"/>
 </ecore:EPackage>

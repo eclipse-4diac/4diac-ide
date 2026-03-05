@@ -2283,6 +2283,25 @@ public interface STCorePackage extends EPackage {
 	int ST_INITIALIZER_EXPRESSION_SOURCE_FEATURE_COUNT = ST_SOURCE_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider <em>ST Expected Type Provider</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExpectedTypeProvider()
+	 * @generated
+	 */
+	int ST_EXPECTED_TYPE_PROVIDER = 58;
+
+	/**
+	 * The number of structural features of the '<em>ST Expected Type Provider</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_EXPECTED_TYPE_PROVIDER_FEATURE_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2290,7 +2309,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int ST_BINARY_OPERATOR = 58;
+	int ST_BINARY_OPERATOR = 59;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
@@ -2300,7 +2319,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int ST_UNARY_OPERATOR = 59;
+	int ST_UNARY_OPERATOR = 60;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -2310,7 +2329,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 60;
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 61;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature <em>ST Builtin Feature</em>}' enum.
@@ -2320,7 +2339,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBuiltinFeature()
 	 * @generated
 	 */
-	int ST_BUILTIN_FEATURE = 61;
+	int ST_BUILTIN_FEATURE = 62;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.
@@ -2330,7 +2349,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAccessSpecifier()
 	 * @generated
 	 */
-	int ST_ACCESS_SPECIFIER = 62;
+	int ST_ACCESS_SPECIFIER = 63;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition <em>ST Comment Position</em>}' enum.
@@ -2340,7 +2359,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCommentPosition()
 	 * @generated
 	 */
-	int ST_COMMENT_POSITION = 63;
+	int ST_COMMENT_POSITION = 64;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -2350,7 +2369,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 64;
+	int ST_DATE = 65;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -2360,7 +2379,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 65;
+	int ST_TIME = 66;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -2370,7 +2389,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 66;
+	int ST_TIME_OF_DAY = 67;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -2380,7 +2399,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 67;
+	int ST_DATE_AND_TIME = 68;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -2390,7 +2409,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 68;
+	int ST_STRING = 69;
 
 	/**
 	 * The meta object id for the '<em>ST Java Method</em>' data type.
@@ -2400,7 +2419,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTJavaMethod()
 	 * @generated
 	 */
-	int ST_JAVA_METHOD = 69;
+	int ST_JAVA_METHOD = 70;
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
@@ -4105,6 +4124,16 @@ public interface STCorePackage extends EPackage {
 	EReference getSTInitializerExpressionSource_InitializerExpression();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider <em>ST Expected Type Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Expected Type Provider</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider
+	 * @generated
+	 */
+	EClass getSTExpectedTypeProvider();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5647,6 +5676,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_INITIALIZER_EXPRESSION_SOURCE__INITIALIZER_EXPRESSION = eINSTANCE.getSTInitializerExpressionSource_InitializerExpression();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider <em>ST Expected Type Provider</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTExpectedTypeProvider()
+		 * @generated
+		 */
+		EClass ST_EXPECTED_TYPE_PROVIDER = eINSTANCE.getSTExpectedTypeProvider();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.

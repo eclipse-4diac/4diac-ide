@@ -319,6 +319,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTInitializerExpressionSourceAdapter();
 			}
 			@Override
+			public Adapter caseSTExpectedTypeProvider(STExpectedTypeProvider object) {
+				return createSTExpectedTypeProviderAdapter();
+			}
+			@Override
 			public Adapter caseImport(Import object) {
 				return createImportAdapter();
 			}
@@ -1163,6 +1167,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTInitializerExpressionSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider <em>ST Expected Type Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider
+	 * @generated
+	 */
+	public Adapter createSTExpectedTypeProviderAdapter() {
 		return null;
 	}
 
