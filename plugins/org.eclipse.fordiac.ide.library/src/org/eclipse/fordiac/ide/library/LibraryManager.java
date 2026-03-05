@@ -510,7 +510,7 @@ public enum LibraryManager {
 			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(MessageFormat.format(Messages.LibraryManager_LibraryDownload, symbolicName));
 		FordiacLogHelper.logInfo("Attempting to download library " + symbolicName + " with version " + versionRange //$NON-NLS-1$ //$NON-NLS-2$
-				+ " preferring " + preferred); //$NON-NLS-1$
+				+ " preferring " + preferred + " Project: " + project.getName()); //$NON-NLS-1$
 
 		final List<IArchiveDownloader> downloaders = TypeLibraryManager.listExtensions(DOWNLOADER_EXTENSION,
 				IArchiveDownloader.class);
