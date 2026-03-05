@@ -28,6 +28,10 @@ public class DeploymentDebugPreferencePage extends FordiacPropertyPreferencePage
 	public void createFieldEditors() {
 		addField(new BooleanFieldEditor(DeploymentDebugPreferences.MONITORING_VALUE_WRITE_THROUGH,
 				Messages.DeploymentDebugPreferencePage_MonitoringValueWriteThrough, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(DeploymentDebugPreferences.WATCH_INTERNAL_VARIABLES_DEFAULT,
+				Messages.DeploymentDebugPreferencePage_WatchInternalVariablesDefault, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(DeploymentDebugPreferences.WATCH_INTERNAL_NETWORKS_DEFAULT,
+				Messages.DeploymentDebugPreferencePage_WatchInternalNetworksDefault, getFieldEditorParent()));
 	}
 
 	@Override

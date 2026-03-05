@@ -63,6 +63,8 @@ public class Messages extends NLS {
 	public static String DeploymentDebugModelPresentation_WatchpointText;
 	public static String DeploymentDebugPreferencePage_Description;
 	public static String DeploymentDebugPreferencePage_MonitoringValueWriteThrough;
+	public static String DeploymentDebugPreferencePage_WatchInternalNetworksDefault;
+	public static String DeploymentDebugPreferencePage_WatchInternalVariablesDefault;
 	public static String DeploymentWatchpointDetailPane_Description;
 	public static String DeploymentWatchpointDetailPane_Name;
 	public static String DeploymentWatchpointEditor_Pinned;
