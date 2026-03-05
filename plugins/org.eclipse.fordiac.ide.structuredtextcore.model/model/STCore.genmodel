@@ -393,5 +393,8 @@
     <genClasses ecoreClass="STCore.ecore#//STInitializerExpressionSource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STInitializerExpressionSource/initializerExpression"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="STCore.ecore#//STExpectedTypeProvider">
+      <genOperations ecoreOperation="STCore.ecore#//STExpectedTypeProvider/getExpectedType"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

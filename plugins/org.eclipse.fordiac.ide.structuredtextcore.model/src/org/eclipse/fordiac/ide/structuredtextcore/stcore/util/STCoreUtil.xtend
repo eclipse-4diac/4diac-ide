@@ -116,6 +116,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider
 
 final class STCoreUtil {
 	static final LoadingCache<Pair<DataType, String>, DataType> TYPE_DECLARATION_CACHE = CacheBuilder.newBuilder.
@@ -383,6 +384,8 @@ final class STCoreUtil {
 				variable.featureType
 			STCallArgument:
 				computeExpectedType
+			STExpectedTypeProvider:
+				expectedType
 			STExpressionSource:
 				(eResource as STResource).expectedType
 		}
@@ -401,6 +404,8 @@ final class STCoreUtil {
 			STArrayInitializerExpression:
 				expectedType
 			STStructInitializerExpression:
+				expectedType
+			STExpectedTypeProvider:
 				expectedType
 			STInitializerExpressionSource:
 				(eResource as STResource).expectedType
@@ -516,7 +521,7 @@ final class STCoreUtil {
 				val type = switch (type: feature.type) {
 					AnyStringType case feature.maxLength instanceof STNumericLiteral:
 						type.newStringType(feature.maxLength.asConstantInt)
-					DataType:
+					default:
 						type
 				}
 				if (feature.array)
@@ -531,6 +536,8 @@ final class STCoreUtil {
 			}
 			AdapterDeclaration:
 				feature.adapterFB?.type
+			DirectlyDerivedType:
+				feature.baseType
 			ITypedElement:
 				feature.type
 			default:

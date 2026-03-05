@@ -67,6 +67,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STEnumLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpectedTypeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
@@ -518,6 +519,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stInitializerExpressionSourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stExpectedTypeProviderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2274,6 +2282,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTExpectedTypeProvider() {
+		return stExpectedTypeProviderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getSTBinaryOperator() {
 		return stBinaryOperatorEEnum;
 	}
@@ -2634,6 +2652,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		stInitializerExpressionSourceEClass = createEClass(ST_INITIALIZER_EXPRESSION_SOURCE);
 		createEReference(stInitializerExpressionSourceEClass, ST_INITIALIZER_EXPRESSION_SOURCE__INITIALIZER_EXPRESSION);
+
+		stExpectedTypeProviderEClass = createEClass(ST_EXPECTED_TYPE_PROVIDER);
 
 		// Create enums
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
@@ -3113,6 +3133,10 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stInitializerExpressionSourceEClass, STInitializerExpressionSource.class, "STInitializerExpressionSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTInitializerExpressionSource_InitializerExpression(), this.getSTInitializerExpression(), null, "initializerExpression", null, 0, 1, STInitializerExpressionSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stExpectedTypeProviderEClass, STExpectedTypeProvider.class, "STExpectedTypeProvider", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(stExpectedTypeProviderEClass, theLibraryElementPackage.getLibraryElement(), "getExpectedType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(stBinaryOperatorEEnum, STBinaryOperator.class, "STBinaryOperator"); //$NON-NLS-1$
