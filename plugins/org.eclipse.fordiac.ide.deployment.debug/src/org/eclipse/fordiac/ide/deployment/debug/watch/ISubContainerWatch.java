@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024 Martin Erich Jobst
+ * Copyright (c) 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,14 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.SequencedCollection;
-
-public interface IContainerWatch extends IWatch {
+public interface ISubContainerWatch extends IContainerWatch {
 
 	/**
-	 * Get the sub-watches
-	 *
-	 * @return The sub-watches
+	 * Get whether to watch sub-elements of this watch
 	 */
-	SequencedCollection<IWatch> getSubWatches();
+	boolean isWatchSubElements();
+
+	/**
+	 * Set whether to watch sub-elements of this watch
+	 *
+	 * @param watchSubElements The value
+	 */
+	void setWatchSubElements(boolean watchSubElements);
 }
