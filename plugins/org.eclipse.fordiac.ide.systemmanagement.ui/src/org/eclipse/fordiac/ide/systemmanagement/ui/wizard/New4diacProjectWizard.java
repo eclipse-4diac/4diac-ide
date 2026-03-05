@@ -22,7 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.library.ui.wizards.LibrarySelectionPage;
+import org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizardPage;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
@@ -41,7 +41,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 
 	/** The pages. */
 	private New4diacProjectPage page;
-	private LibrarySelectionPage libPage;
+	private UnifiedLibraryImportWizardPage libPage;
 
 	/**
 	 * Instantiates a new new system wizard.
@@ -61,11 +61,9 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new LibrarySelectionPage(Messages.New4diacProjectWizard_LibPageName, true, true, true);
+		libPage = new UnifiedLibraryImportWizardPage(null);
 		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
 		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
-
-		page.setLibraryPage(libPage);
 
 		addPage(page);
 		addPage(libPage);
@@ -83,9 +81,11 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 				@Override
 				protected void execute(final IProgressMonitor monitor) {
 					createProject(monitor != null ? monitor : new NullProgressMonitor());
+					//
 				}
 			};
 			getContainer().run(false, true, op);
+
 		} catch (final InvocationTargetException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			return false;
@@ -93,6 +93,9 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			Thread.currentThread().interrupt(); // mark interruption
 			return false;
 		}
+
+		libPage.performImport(getContainer());
+
 		// everything worked fine
 		return true;
 	}
@@ -106,7 +109,8 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		try {
 
 			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), libPage.getChosenLibraries(), monitor);
+					page.getLocationPath(), monitor);
+			libPage.setTargetProject(newProject);
 			final SystemCreator systemCreator = new SystemCreator(newProject, page.getInitialSystemName(),
 					page.getInitialApplicationName());
 			systemCreator.createSystem(monitor);

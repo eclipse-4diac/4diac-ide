@@ -1,16 +1,23 @@
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.library.LibraryRecord;
+import org.eclipse.fordiac.ide.library.model.library.Required;
+import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.sources.ILibrarySource;
 import org.eclipse.fordiac.ide.library.ui.sources.LibrarySourceBuilder;
@@ -51,7 +58,7 @@ import org.eclipse.ui.services.IDisposable;
 
 public class UnifiedLibraryImportWizardPage extends WizardPage {
 
-	private final IProject targetProject;
+	private IProject targetProject;
 	private final List<ILibrarySource> sources;
 
 	private ComboViewer sourceCombo;
@@ -380,7 +387,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 		final ILibrarySource sourceSnapshot = activeSource;
 
-		final Job job = new Job(Messages.UnifiedLibraryImportWizardPage_loading_from + sourceSnapshot.comboLabelText()) {
+		final Job job = new Job(
+				Messages.UnifiedLibraryImportWizardPage_loading_from + sourceSnapshot.comboLabelText()) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				try {
@@ -609,6 +617,21 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		final String pageId = org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants.GITLAB_ENDPOINTS_PREF_PAGE_ID;
 		org.eclipse.ui.dialogs.PreferencesUtil
 				.createPreferenceDialogOn(getShell(), pageId, new String[] { pageId }, null).open();
+	}
+
+	public void setTargetProject(final IProject project) {
+		this.targetProject = project;
+	}
+
+	public Map<Required, URI> getChosenLibraries() {
+		final Map<Required, URI> libs = new HashMap<>();
+
+		filteredTree.getCheckedViewer().getCheckedElements();
+
+		Stream.of(filteredTree.getCheckedViewer().getCheckedElements()).filter(LibraryRecord.class::isInstance)
+				.map(LibraryRecord.class::cast).forEach(lib -> libs
+						.put(ManifestHelper.createRequired(lib.symbolicName(), lib.version().toString()), lib.uri()));
+		return libs;
 	}
 
 }

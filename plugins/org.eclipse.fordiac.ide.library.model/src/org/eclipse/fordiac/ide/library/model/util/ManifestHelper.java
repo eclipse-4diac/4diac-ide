@@ -407,7 +407,7 @@ public final class ManifestHelper {
 		try {
 			resource.load(null);
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not load manifest", e); //$NON-NLS-1$
+			FordiacLogHelper.logWarning("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;
 		}
 		return (Manifest) resource.getContents().get(0);
