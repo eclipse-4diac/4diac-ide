@@ -22,11 +22,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.net.URI;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ICommand;
@@ -41,7 +38,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
@@ -85,14 +81,11 @@ public enum SystemManager {
 
 	@SuppressWarnings("static-method")
 	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final Map<Required, URI> includedLibraries, final IProgressMonitor monitor) throws CoreException {
+			final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
 		final IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
-
-		final Map<String, URI> includes = new HashMap<>();
-		includedLibraries.forEach((key, value) -> includes.put(key.getSymbolicName(), value));
 
 		if (!Platform.getLocation().equals(location)) {
 			description.setLocation(location);
@@ -116,7 +109,7 @@ public enum SystemManager {
 		project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME).create(IResource.VIRTUAL | IResource.FORCE, true,
 				monitor);
 
-		ManifestHelper.createProjectManifest(project, includedLibraries.keySet());
+		ManifestHelper.getOrCreateProjectManifest(project);
 
 		project.refreshLocal(IResource.DEPTH_ONE, monitor);
 		return project;
