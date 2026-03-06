@@ -126,7 +126,6 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 		// position for state creation
 		final IAction action = getActionRegistry().getAction(NewStateAction.CREATE_STATE);
 		((NewStateAction) action).setViewerControl((FigureCanvas) viewer.getControl());
-		((NewStateAction) action).setZoomManager(getZoomManger());
 	}
 
 	@Override
