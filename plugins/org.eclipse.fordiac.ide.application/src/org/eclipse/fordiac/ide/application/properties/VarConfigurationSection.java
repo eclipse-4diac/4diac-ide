@@ -26,7 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueGenericEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueTypedElementAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
@@ -120,7 +122,14 @@ public class VarConfigurationSection extends AbstractSection {
 						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
+		inputTable.addConfiguration(new InitialValueGenericEditorConfiguration<>(inputDataProvider,
+				new InitialValueTypedElementAccessor<VarDeclaration>() {
+					@Override
+					public LibraryElement getContext(final VarDeclaration element) {
+						return selectionRoot instanceof final LibraryElement libraryElement ? libraryElement : null;
+					}
+				}));
+
 		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
 		inputTable.configure();
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);

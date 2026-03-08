@@ -653,7 +653,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (cachedFile != null && cachedFile.exists()) {
 			try (Scanner scanner = new Scanner(cachedFile.getContents())) {
 				if (scanner.findWithinHorizon(TYPE_COMMENT_PATTERN, 0) != null) {
-					return scanner.match().group(1);
+					return CommonElementImporter.fullyUnEscapeValue(scanner.match().group(1));
 				}
 			} catch (final Exception e) {
 				FordiacLogHelper.logWarning(e.getMessage(), e);
