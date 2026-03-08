@@ -40,6 +40,16 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 /**
  * @brief Deployment executor for internal devices running on the interpreter
+ *
+ *        The executor searches for an active ReplayDebuggingDevice associated
+ *        with the device which is used to pass the commands.
+ *
+ *        Many of the commands are not implemented since the nature of the
+ *        commands do not apply. For example, creating a resource, since the
+ *        actual resource object is used by the interpreter.
+ *
+ *        The main supported commands are reading watches, triggering events and
+ *        forcing values.
  */
 public class InterpreterDeploymentExecutor implements IDeviceManagementInteractor {
 
@@ -119,125 +129,6 @@ public class InterpreterDeploymentExecutor implements IDeviceManagementInteracto
 	}
 
 	@Override
-	public void createResource(final Resource resource) {
-		// nothing to do here
-	}
-
-	@Override
-	public void writeResourceParameter(final Resource resource, final String parameter, final String value) {
-		// nothing to do here
-	}
-
-	@Override
-	public void writeDeviceParameter(final Device device, final String parameter, final String value) {
-		// nothing to do here
-
-	}
-
-	@Override
-	public void createFBInstance(final FBDeploymentData fb, final Resource res) throws DeploymentException {
-		// nothing to do here. All needed instances were already created and initialized
-		// when the resource was created.
-	}
-
-	@Override
-	public void writeFBParameter(final Resource resource, final String name, final String value) {
-		// nothing to do here. All needed instances were already created and initialized
-		// when the resource was created.
-	}
-
-	@Override
-	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fb,
-			final VarDeclaration varDecl) {
-		// nothing to do here. All needed instances were already created and initialized
-		// when the resource was created.
-
-	}
-
-	@Override
-	public void createConnection(final Resource res, final ConnectionDeploymentData connectionData) {
-		// nothing to do here. All needed instances were already created and initialized
-		// when the resource was created.
-
-	}
-
-	@Override
-	public void startFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
-		// nothing to do here. There's no implementation of the FB's states in the
-		// interpreter.
-	}
-
-	@Override
-	public void startResource(final Resource res) throws DeploymentException {
-		// TODO: Think about providing a resource simulator
-	}
-
-	@Override
-	public void resetResource(final String resName) throws DeploymentException {
-		// TODO: Think about providing a resource simulator
-	}
-
-	@Override
-	public void killResource(final String resName) throws DeploymentException {
-		// TODO: Think about providing a resource simulator
-	}
-
-	@Override
-	public void stopResource(final Resource res) throws DeploymentException {
-		// TODO: Think about providing a resource simulator
-	}
-
-	@Override
-	public void deleteResource(final String resName) {
-		// TODO: Think about providing a resource simulator
-	}
-
-	@Override
-	public void startDevice(final Device dev) throws DeploymentException {
-		// nothing to do here.
-	}
-
-	@Override
-	public void deleteFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
-		// not supported
-	}
-
-	@Override
-	public void deleteConnection(final Resource res, final ConnectionDeploymentData con) throws DeploymentException {
-		// not supported
-	}
-
-	@Override
-	public void killDevice(final Device dev) throws DeploymentException {
-		// nothing to do here
-	}
-
-	@Override
-	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
-		// this is used by the deployment interface, which we don't care about for the
-		// interpreter
-		return List.of();
-	}
-
-	@Override
-	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Response readWatches() throws DeploymentException {
 		return EcoreUtil.copy(interpreterDevice.getDeviceResponse().getResponse());
 	}
@@ -261,25 +152,138 @@ public class InterpreterDeploymentExecutor implements IDeviceManagementInteracto
 
 	@Override
 	public void forceValue(final Resource resource, final String name, final String value) throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		interpreterDevice.forceValue(resource, name, value);
 	}
 
 	@Override
 	public void clearForce(final Resource resource, final String name) throws DeploymentException {
-		// TODO Auto-generated method stub
+		interpreterDevice.clearForce(resource, name);
+	}
 
+	@Override
+	public List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> queryResources() throws DeploymentException {
+		// this is used by the deployment interface, which we don't care about for the
+		// interpreter
+		return List.of();
+	}
+
+	@Override
+	public void createResource(final Resource resource) {
+		// nothing to do here
+	}
+
+	@Override
+	public void writeResourceParameter(final Resource resource, final String parameter, final String value) {
+		// nothing to do here
+	}
+
+	@Override
+	public void writeDeviceParameter(final Device device, final String parameter, final String value) {
+		// nothing to do here
+	}
+
+	@Override
+	public void createFBInstance(final FBDeploymentData fb, final Resource res) throws DeploymentException {
+		// nothing to do here. All needed instances were already created and initialized
+		// when the resource was created.
+	}
+
+	@Override
+	public void writeFBParameter(final Resource resource, final String name, final String value) {
+		// nothing to do here. All needed instances were already created and initialized
+		// when the resource was created.
+	}
+
+	@Override
+	public void writeFBParameter(final Resource resource, final String value, final FBDeploymentData fb,
+			final VarDeclaration varDecl) {
+		// nothing to do here. All needed instances were already created and initialized
+		// when the resource was created.
+	}
+
+	@Override
+	public void createConnection(final Resource res, final ConnectionDeploymentData connectionData) {
+		// nothing to do here. All needed instances were already created and initialized
+		// when the resource was created.
+	}
+
+	@Override
+	public void startFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
+		// nothing to do here. There's no implementation of the FB's states in the
+		// interpreter.
+	}
+
+	@Override
+	public void startDevice(final Device dev) throws DeploymentException {
+		// nothing to do here.
+	}
+
+	@Override
+	public void deleteFB(final Resource res, final FBDeploymentData fb) throws DeploymentException {
+		// not supported
+	}
+
+	@Override
+	public void deleteConnection(final Resource res, final ConnectionDeploymentData con) throws DeploymentException {
+		// not supported
+	}
+
+	@Override
+	public void killDevice(final Device dev) throws DeploymentException {
+		// nothing to do here
+	}
+
+	@Override
+	public void startResource(final Resource res) throws DeploymentException {
+		// nothing to do here
+	}
+
+	@Override
+	public void resetResource(final String resName) throws DeploymentException {
+		// nothing to do here
+	}
+
+	@Override
+	public void killResource(final String resName) throws DeploymentException {
+		// nothing to do here
+	}
+
+	@Override
+	public void stopResource(final Resource res) throws DeploymentException {
+		// nothing to do here
+	}
+
+	@Override
+	public void deleteResource(final String resName) {
+		// nothing to do here
+	}
+
+	@Override
+	public Response queryFBType(final FBTypeEntry entry) throws DeploymentException {
+		// nothing to do here
+		return null;
+	}
+
+	@Override
+	public Response queryDataType(final DataTypeEntry entry) throws DeploymentException {
+		// nothing to do here
+		return null;
+	}
+
+	@Override
+	public Response queryGlobalConstType(final GlobalConstantsEntry entry) throws DeploymentException {
+		// nothing to do here
+		return null;
 	}
 
 	@Override
 	public void readTraces(final Device device, final String path) throws DeploymentException {
-		// TODO Auto-generated method stub
-
+		// nothing to do here
 	}
 
 	@Override
 	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
-		// TODO Auto-generated method stub
+		// nothing to do here
 		return Optional.empty();
 	}
 
