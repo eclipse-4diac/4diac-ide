@@ -57,7 +57,7 @@
 			<unit id="org.eclipse.tracecompass.lttng2.ust.feature.group" version="11.0.0.202506130813"/>
 		</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.1.0.qualifier">
+			<feature id="org.eclipse.fordiac.ide.milo" label="Milo Dependencies" provider-name="Eclipse 4diac" version="3.2.0.qualifier">
 				<description url="http://www.example.com/description">
       [Enter Feature Description here.]
    </description>
