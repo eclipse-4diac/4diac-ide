@@ -97,7 +97,10 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 			}
 			final VarDeclaration typeVarDec = getEquivalentDataPinFromType(runtime, varDec);
 			if (!VariableUtils.isEmptyValue(value)) {
-				typeVarDec.setValue(EcoreUtil.copy(value));
+				if (typeVarDec.getValue() == null) {
+					typeVarDec.setValue(LibraryElementFactory.eINSTANCE.createValue());
+				}
+				typeVarDec.getValue().setValue(value.getValue());
 			}
 		});
 	}
@@ -145,8 +148,13 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 
 		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo, runtime);
 
-		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(
-				outputConnection -> map.put(outputConnection, EcoreUtil.copy(getOutputValue(variable, runtime)))));
+		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(outputConnection -> {
+			var value = map.get(outputConnection);
+			if (value == null) {
+				value = map.put(outputConnection, LibraryElementFactory.eINSTANCE.createValue());
+			}
+			value.setValue(getOutputValue(variable, runtime).getValue());
+		}));
 	}
 
 	private static Value getOutputValue(final VarDeclaration variable, final FBNetworkRuntime runtime) {
