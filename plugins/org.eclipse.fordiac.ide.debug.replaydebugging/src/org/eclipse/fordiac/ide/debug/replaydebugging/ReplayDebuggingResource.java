@@ -19,11 +19,12 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
+import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IResourceReplayer;
 import org.eclipse.fordiac.ide.debug.replaydebugging.response.ResourceResponse;
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IResourceSimulator;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 
 /**
@@ -50,15 +51,15 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 
 	private final UpdateListener updateListener;
 
-	private final IResourceSimulator simulator;
+	private final IResourceReplayer replayer;
 
 	private ResourceResponse resourceResponse;
 
 	public ReplayDebuggingResource(final ReplayNavigator.Identifier reaplayNavigatorIdentifier,
-			final IResourceSimulator simulator, final UpdateListener updateListener) {
+			final IResourceReplayer replayer, final UpdateListener updateListener) {
 		this.replayNavigatorIdentifier = reaplayNavigatorIdentifier;
 		this.updateListener = updateListener;
-		this.simulator = simulator;
+		this.replayer = replayer;
 	}
 
 	public ResourceResponse getResourceResponse() {
@@ -66,8 +67,21 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	}
 
 	public void triggerEvent(final String name) {
-		simulator.injectEvent(name);
+		updateSimulatorWithReplayNavigator();
+		replayer.injectEvent(name);
 		runAllEvents();
+	}
+
+	public void forceValue(final String watchPoint, final String value) {
+		replayer.forceValue(watchPoint, value);
+	}
+
+	public void clearForce(final String watchPoint) {
+		replayer.clearForce(watchPoint);
+	}
+
+	private void updateSimulatorWithReplayNavigator() {
+		replayer.setCurrentState(replayNavigator.getCurrentState());
 	}
 
 	public EventChange getCurrentEventChange() {
@@ -84,7 +98,7 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	}
 
 	private void createReplayNavigator() {
-		final ReplayNavigator.DatapointsState initialState = simulator.getCurrentState();
+		final DatapointsState initialState = replayer.getCurrentState();
 
 		resourceResponse = new ResourceResponse(replayNavigatorIdentifier.resourceName(), initialState);
 		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState);
@@ -109,12 +123,12 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	 */
 	private void runAllEvents() {
 		// simulate all events and gather all data
-		HashMap<String, String> previousState = new HashMap<>(simulator.getCurrentState());
+		HashMap<String, String> previousState = new HashMap<>(replayer.getCurrentState());
 
-		for (Optional<String> lastEvent = simulator.replayNextEvent(); lastEvent
-				.isPresent(); lastEvent = simulator.replayNextEvent()) {
+		for (Optional<String> lastEvent = replayer.replayNextEvent(); lastEvent
+				.isPresent(); lastEvent = replayer.replayNextEvent()) {
 
-			final var currentState = simulator.getCurrentState();
+			final var currentState = replayer.getCurrentState();
 
 			// Process the value
 			final List<DataPointChange> dataPointChanges = new ArrayList<>();
@@ -125,14 +139,14 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 					dataPointChanges.add(new DataPointChange(datapoint, previousState.get(datapoint), currentValue));
 				}
 			}
-			replayNavigator.addEventChange(lastEvent.get(), dataPointChanges);
+			replayNavigator.addEventChange(dataPointChanges);
 			previousState = new HashMap<>(currentState);
 		}
 	}
 
 	// callback from the replay navigator when the state changes
 	@Override
-	public void update(final ReplayNavigator replayNavigator, final ReplayNavigator.DatapointsState changedValues) {
+	public void stateUpdated(final ReplayNavigator replayNavigator, final DatapointsState changedValues) {
 		resourceResponse.updateResponse(changedValues);
 		updateListener.onUpdate(this);
 	}
