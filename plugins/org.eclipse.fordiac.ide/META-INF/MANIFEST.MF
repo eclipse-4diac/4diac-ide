@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.ui,
  com.google.gson
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-Name: %Bundle-Name
 Bundle-Activator: org.eclipse.fordiac.ide.Activator
 Bundle-ManifestVersion: 2

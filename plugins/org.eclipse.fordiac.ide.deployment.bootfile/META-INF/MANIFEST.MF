@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Deployment Boot File
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.bootfile;singleton:=true
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.1.100.qualifier
 Export-Package: org.eclipse.fordiac.ide.deployment.bootfile,
  org.eclipse.fordiac.ide.deployment.bootfile.wizard
 Bundle-Vendor: Eclipse 4diac

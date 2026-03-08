@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ST Global Constants Model
 Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.model;singleton:=true
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.1.100.qualifier
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.globalConstants,
  org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl,
  org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util

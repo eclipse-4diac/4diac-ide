@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.contractspec.ui.tests
 Bundle-ManifestVersion: 2
 Bundle-Name: org.eclipse.fordiac.ide.contractspec.ui.tests
 Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.1.100.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.contractspec.ui.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.contractspec.ui,
