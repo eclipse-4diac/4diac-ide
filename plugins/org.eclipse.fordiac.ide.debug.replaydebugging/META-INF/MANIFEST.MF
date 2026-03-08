@@ -9,7 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.debug.replaydebugging,
  org.eclipse.fordiac.ide.debug.replaydebugging.core,
  org.eclipse.fordiac.ide.debug.replaydebugging.response,
- org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter
+ org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter
 Require-Bundle: org.eclipse.debug.core,
  org.eclipse.equinox.common,
  org.eclipse.fordiac.ide.deployment.debug,

@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Jose Cabral
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Jose Cabral - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+
 package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte;
 
 import java.util.HashSet;
@@ -17,8 +30,6 @@ public class Utils {
 
 	private Utils() {
 	}
-
-//	private static final Set<String> SIFB_IN_FORTE_NOT_IN_IDE = Set.of("E_CYCLE");
 
 	/**
 	 * Collects all ports from the device and its resources, applications, and

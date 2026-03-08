@@ -11,14 +11,14 @@
  *   Jose Cabral - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.debug.replaydebugging.simulator.forte;
+package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.forte;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IResourceSimulator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IDeviceReplayer;
+import org.eclipse.fordiac.ide.debug.replaydebugging.replayer.IResourceReplayer;
 import org.eclipse.fordiac.ide.deployment.debug.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
@@ -26,13 +26,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class DeviceSimulator implements IDeviceSimulator {
+public class DeviceReplayer implements IDeviceReplayer {
 
 	private final Device device;
 	private final String path;
 	private final IDeviceManagementExecutorService executorService;
 
-	public DeviceSimulator(final IDeviceManagementExecutorService executorService, final Device device,
+	public DeviceReplayer(final IDeviceManagementExecutorService executorService, final Device device,
 			final String path) {
 		this.device = device;
 		this.path = path;
@@ -40,14 +40,14 @@ public class DeviceSimulator implements IDeviceSimulator {
 	}
 
 	@Override
-	public Map<Resource, IResourceSimulator> start() {
-		final HashMap<Resource, IResourceSimulator> result = new HashMap<>();
+	public Map<Resource, IResourceReplayer> start() {
+		final HashMap<Resource, IResourceReplayer> result = new HashMap<>();
 		try {
 			executorService.connect();
 			executorService.readTraces(device, path);
 
 			for (final Resource resource : device.getResource()) {
-				result.put(resource, new ResourceSimulator(executorService, resource));
+				result.put(resource, new ResourceReplayer(executorService, resource));
 			}
 		} catch (final DeploymentException e) {
 			e.printStackTrace();

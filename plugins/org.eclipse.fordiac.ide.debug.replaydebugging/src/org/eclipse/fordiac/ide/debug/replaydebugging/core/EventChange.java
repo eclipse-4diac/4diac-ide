@@ -24,5 +24,5 @@ import java.util.List;
  *        triggered event (qualified name), and a collection of values that have
  *        changed as a result of the event.
  */
-public final record EventChange(int eventNumber, String triggeredEvent, List<DataPointChange> newValues) {
+public final record EventChange(int eventNumber, List<DataPointChange> newValues) {
 }

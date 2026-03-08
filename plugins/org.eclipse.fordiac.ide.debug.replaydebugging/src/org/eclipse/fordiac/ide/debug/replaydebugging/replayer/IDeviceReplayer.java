@@ -12,16 +12,32 @@
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.debug.replaydebugging.simulator;
+package org.eclipse.fordiac.ide.debug.replaydebugging.replayer;
 
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 
-public interface IDeviceSimulator {
+/**
+ * @brief Interface for replaying the execution of a device
+ *
+ *        It provides methods for starting and stopping the replay
+ */
+public interface IDeviceReplayer {
 
-	Map<Resource, IResourceSimulator> start();
+	/**
+	 * Starts the replay of the device. It returns a map with the resource replayers
+	 * for each resource of the device
+	 *
+	 * @return a map with the resource replayers for each resource of the device
+	 */
+	Map<Resource, IResourceReplayer> start();
 
+	/**
+	 * Stops the replay of the device.
+	 *
+	 * @return true if the replay was stopped successfully, false otherwise
+	 */
 	boolean stop();
 
 }

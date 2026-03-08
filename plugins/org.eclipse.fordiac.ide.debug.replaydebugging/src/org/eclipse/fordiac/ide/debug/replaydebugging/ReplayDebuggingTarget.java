@@ -53,6 +53,11 @@ public class ReplayDebuggingTarget extends DeploymentDebugTarget {
 
 	@Override
 	protected void doConnect(final Device device) throws DebugException {
+		final var path = deviceNameToPath.get(device.getName());
+		if (path == null) {
+			// trying to connect to a device that has no been selected
+			return;
+		}
 		final ReplayDebuggingDevice replayDebuggingDevice = new ReplayDebuggingDevice(device, this,
 				deviceNameToPath.get(device.getName()), remote);
 
