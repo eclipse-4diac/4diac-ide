@@ -11,7 +11,7 @@
  *   Jose Cabral - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.debug.replaydebugging.simulator.interpreter;
+package org.eclipse.fordiac.ide.debug.replaydebugging.replayer.interpreter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,5 +53,9 @@ public class EventCounter {
 
 	public int getEventCount(final Event event) {
 		return eventMonitoringValues.get(event).intValue();
+	}
+
+	public void setEventCount(final Event event, final int value) {
+		eventMonitoringValues.put(event, Integer.valueOf(value));
 	}
 }

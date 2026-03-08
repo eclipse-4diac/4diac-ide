@@ -29,6 +29,14 @@ import org.eclipse.tracecompass.ctf.core.event.types.StringDefinition;
 import org.eclipse.tracecompass.ctf.core.trace.CTFTrace;
 import org.eclipse.tracecompass.ctf.core.trace.CTFTraceReader;
 
+/**
+ * @brief Reads trace files and extracts sendOutputEvent events.
+ *
+ *        This class is responsible for reading CTF trace files from a specified
+ *        path, extracting events of type "sendOutputEvent", and organizing them
+ *        in a map where the keys are resource names and the values are lists of
+ *        SendOutputEvent objects associated with each resource.
+ */
 public class TracesReader {
 
 	private final File path;

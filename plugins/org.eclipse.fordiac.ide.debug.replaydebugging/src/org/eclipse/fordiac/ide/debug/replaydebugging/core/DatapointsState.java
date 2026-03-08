@@ -8,21 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Jose Cabral
- *     - initial API and implementation and/or initial documentation
+ *   Jose Cabral - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.debug.replaydebugging.simulator;
+package org.eclipse.fordiac.ide.debug.replaydebugging.core;
 
-import java.util.Optional;
+import java.util.HashMap;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+public class DatapointsState extends HashMap<String, String> {
 
-public interface IResourceSimulator {
-
-	Optional<String> replayNextEvent();
-
-	ReplayNavigator.DatapointsState getCurrentState();
-
-	void injectEvent(final String name);
 }
