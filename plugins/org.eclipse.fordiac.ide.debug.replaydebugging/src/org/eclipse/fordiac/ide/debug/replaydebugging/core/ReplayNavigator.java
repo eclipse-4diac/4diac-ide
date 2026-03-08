@@ -13,9 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.replaydebugging.core;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @brief Core part of the replay debugging mechanism. Ii allows navigation over
@@ -23,7 +27,7 @@ import java.util.List;
  *        datapoints.
  *
  *        This class provides functionality to move forward, backward, or jump
- *        to a specific event number (position) in a sequence of events. When
+ *        to a specific event number (position) between timelines. When
  *        navigating to a different event number, the update callback contains
  *        the final state of the datapoints that have changed between the
  *        previous position and the new position. The information is stored as
@@ -32,10 +36,7 @@ import java.util.List;
  *        The state is stored as a map of datapoint names to their values,
  *        allowing easy access to the current state of each datapoint.
  */
-public class ReplayNavigator {
-
-	public static class DatapointsState extends HashMap<String, String> {
-	}
+public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewSpawnedTimelineListener {
 
 	// identifier for the replay navigator, which includes the automation system,
 	// device, and resource names
@@ -48,7 +49,7 @@ public class ReplayNavigator {
 	 * state of the datapoints.
 	 */
 	public interface StateListener {
-		void update(ReplayNavigator replayNavigator, ReplayNavigator.DatapointsState changedValues);
+		void stateUpdated(ReplayNavigator replayNavigator, DatapointsState changedValues);
 	}
 
 	/**
@@ -59,45 +60,59 @@ public class ReplayNavigator {
 		void update(ReplayNavigator replayNavigator);
 	}
 
-	// all the datapoints with their current values
-	private DatapointsState currentState = new DatapointsState();
+	/**
+	 * Current overall position of the navigator, which includes the timeline and
+	 * the event number in that timeline.
+	 */
+	public record EventPosition(Timeline timeline, int eventNumber) {
+	}
 
-	// sequence of events that changed the were triggered
-	private final List<EventChange> eventChanges = new ArrayList<>();
+	// all the datapoints with their current values
+	private final DatapointsState currentState;
+
+	private final Timeline rootTimeline = new Timeline();
 
 	// current event number (position) in the sequence of events
-	private int currentEventNumber;
+	private EventPosition currentEventPosition = new EventPosition(rootTimeline, 0);
 
 	private final Identifier identifier;
 
-	// this field is intended to indicate at which events the datapoints were
-	// changed. Currently it is not used in the GUI
-	private final HashMap<String, List<Integer>> datapointsChangedAt = new HashMap<>();
+	private int maxEventNumber = 1;
 
-	private final List<StateListener> stateListeners = new ArrayList<>();
+	private final List<StateListener> stateListeners = new CopyOnWriteArrayList<>();
 
 	private final List<NavigatorConfigListener> navigatorConfigListeners = new ArrayList<>();
 
 	public ReplayNavigator(final Identifier identifier, final DatapointsState initialState) {
 		this.identifier = identifier;
 		this.currentState = initialState;
-		currentEventNumber = 0;
+		rootTimeline.addEventChange(initialState.entrySet().stream()
+				.map(entry -> new DataPointChange(entry.getKey(), entry.getValue(), entry.getValue())).toList());
+		rootTimeline.addNewEventListener(this);
+		rootTimeline.addNewSpawnedTimelineListener(this);
 	}
 
-	public void addEventChange(final String triggeredEvent, final List<DataPointChange> newValues) {
-		final var eventNumber = eventChanges.size() + 1;
-		eventChanges.add(new EventChange(eventNumber, triggeredEvent, newValues));
+	/**
+	 * @brief Adds a new event change to the navigator at the current position. If
+	 *        the current position is not at the end of the timeline, a new spawned
+	 *        timeline is created to add the event.
+	 *
+	 * @param newValues values of the datapoints that changed in the new event
+	 */
+	public void addEventChange(final List<DataPointChange> newValues) {
+		var timelineToAdd = currentEventPosition.timeline();
 
-		// store at which event numbers the events were triggered
-		for (final DataPointChange datapoint : newValues) {
-			List<Integer> indices = datapointsChangedAt.get(datapoint.datapoint());
-			if (indices == null) {
-				indices = new ArrayList<>();
-				datapointsChangedAt.put(datapoint.datapoint(), indices);
-			}
-			indices.add(Integer.valueOf(eventNumber));
+		if (currentEventPosition.timeline().getMaxEventNumber() != currentEventPosition.eventNumber()) {
+			// we are not at the end
+			timelineToAdd = new Timeline();
+			currentEventPosition.timeline().addSpawnedTimeline(timelineToAdd, currentEventPosition.eventNumber);
 		}
-		notifyNavigatorChange();
+		timelineToAdd.addEventChange(newValues);
+		moveToEvent(new EventPosition(timelineToAdd, timelineToAdd.getMaxEventNumber()));
+	}
+
+	public Timeline getRootTimeline() {
+		return rootTimeline;
 	}
 
 	/**
@@ -124,31 +139,31 @@ public class ReplayNavigator {
 
 	/**
 	 * @brief Returns the current event change based on the current event number.
-	 * @return The current EventChange or null for event 0 or if the current event
-	 *         number is out of bounds.
+	 *
+	 * @return The current EventChange or null if the current event number is out of
+	 *         bounds.
 	 */
 	public EventChange getCurrentEventChange() {
-		if (currentEventNumber <= 0 || currentEventNumber > eventChanges.size()) { // for event 0 we handle as no change
-																					// happened
-			return null;
-		}
-		return eventChanges.get(currentEventNumber - 1); // minus one since event 1 is at index 0
+		return currentEventPosition.timeline().getEventChange(currentEventPosition.eventNumber());
 	}
 
 	/**
-	 * @brief Returns the total number of events available for navigation.
+	 * @brief Returns the total number of events available for navigation, including
+	 *        all spawned timelines.
+	 *
 	 * @return The number of events.
 	 */
 	public int getAmountOfEvents() {
-		return eventChanges.size();
+		return maxEventNumber;
 	}
 
 	/**
-	 * @brief Gets the current event number (position) in the navigation sequence.
-	 * @return The current event number.
+	 * @brief Gets the current event position (timline and event number in it)
+	 *
+	 * @return The current event position.
 	 */
-	public int getCurrentEventNumber() {
-		return currentEventNumber;
+	public EventPosition getCurrentEventPosition() {
+		return currentEventPosition;
 	}
 
 	/**
@@ -164,82 +179,160 @@ public class ReplayNavigator {
 	}
 
 	/**
-	 * @brief Returns a list of event positions that have affected the specified
-	 *        datapoint.
-	 * @param datapoint The name of the datapoint to query.
-	 * @return A vector of event positions that have changed the datapoint.
-	 */
-	public List<Integer> getEventsThatTouch(final String datapoint) {
-		final List<Integer> touchedEvents = datapointsChangedAt.get(datapoint);
-		return (touchedEvents != null) ? touchedEvents : new ArrayList<>();
-	}
-
-	/**
 	 * @brief Moves the navigator one event forward
 	 */
 	public void moveOneEventForward() {
-		moveToEvent(currentEventNumber + 1);
-	}
-
-	/**
-	 * @brief Moves the navigator one event backward
-	 */
-	public void moveOneEventBackwards() {
-		moveToEvent(currentEventNumber - 1);
-	}
-
-	/**
-	 * @brief Moves the navigator to the specified event number.
-	 *
-	 *        The logic for moving to a specific event number is as follows: - Get
-	 *        the changes from each event and accumulate them - Update the current
-	 *        state with the accumulated changes
-	 *
-	 *        For forward and backward movements, special care is taken on which
-	 *        value to take and which is the first and last event to consider.
-	 *
-	 * @param eventNumber The event number to move to.
-	 */
-	public void moveToEvent(final int eventNumber) {
-		if (eventNumber < 0 || eventNumber > getAmountOfEvents()) {
+		// there's no deeper timeline or the next event lays still on the current
+		// timeline
+		if (currentEventPosition.timeline().getMaxEventNumber() == currentEventPosition.eventNumber()) {
 			return;
 		}
-		final DatapointsState changedValues = getChangesFromTo(currentEventNumber, eventNumber);
-		currentEventNumber = eventNumber;
+		moveToEvent(new EventPosition(currentEventPosition.timeline(), currentEventPosition.eventNumber() + 1));
+	}
+
+	/**
+	 * @brief Moves the navigator one event backward. If the current event number is
+	 *        0, it moves to the parent timeline (if any) to the event number where
+	 *        the current timeline was spawned.
+	 */
+	public void moveOneEventBackwards() {
+		if (currentEventPosition.eventNumber() == 0) {
+			final Timeline parentTimeline = currentEventPosition.timeline().getParentTimeline();
+			if (parentTimeline == null) {
+				return;
+			}
+			moveToEvent(new EventPosition(parentTimeline,
+					parentTimeline.getSpawnedTimelineEventNumber(currentEventPosition.timeline())));
+			return;
+		}
+		moveToEvent(new EventPosition(currentEventPosition.timeline(), currentEventPosition.eventNumber() - 1));
+	}
+
+	/**
+	 * @brief Moves the navigator to the specified event position.
+	 *
+	 *        The logic for moving to a specific event number is as follows: get the
+	 *        changes from each event and accumulate them and then update the
+	 *        current state with the accumulated changes
+	 *
+	 * @param eventNumber The event position to move to.
+	 */
+	public void moveToEvent(final EventPosition position) {
+		final DatapointsState changedValues = getChangesFromTo(currentEventPosition, position);
+		currentEventPosition = position;
 		updateCache(changedValues);
 	}
 
-	private DatapointsState getChangesFromTo(final int initialEventNumber, final int finalEventNumber) {
-		if (initialEventNumber < finalEventNumber) {
-			return getChangesFromToForward(initialEventNumber, finalEventNumber);
-		}
-		return getChangesFromToBackwards(initialEventNumber, finalEventNumber);
+	/**
+	 * Goes from the initial to final position across timelines accumulating the
+	 * changes of each event.
+	 *
+	 * @param initialPosition starting position of the navigation
+	 * @param finalPosition   ending position of the navigation
+	 * @return the accumulated changes between the initial and final position
+	 */
+	private static DatapointsState getChangesFromTo(final EventPosition initialPosition,
+			final EventPosition finalPosition) {
+		final var pathBetweenTimeliens = pathBetween(initialPosition.timeline(), finalPosition.timeline());
 
-	}
+		final var changedValues = new DatapointsState();
+		var currentInitialEventNumber = initialPosition.eventNumber();
 
-	private DatapointsState getChangesFromToForward(final int initialEventNumber, final int finalEventNumber) {
-		final DatapointsState changedValues = new DatapointsState();
-		for (int i = initialEventNumber + 1; i <= finalEventNumber; i++) { // we start accumulating changes from the
-																			// next event change
-			final EventChange eventChange = eventChanges.get(i - 1); // minus one since event 1 is at index 0
-			for (final DataPointChange dataPointChange : eventChange.newValues()) {
-				final String newValue = dataPointChange.newValue();
-				changedValues.put(dataPointChange.datapoint(), newValue);
+		while (!pathBetweenTimeliens.isEmpty()) {
+			final Timeline currentTimeline = pathBetweenTimeliens.pop();
+			final Timeline nextTimeline = pathBetweenTimeliens.peek();
+			if (nextTimeline == null) {
+				// both positions are on the same timeline, so we can directly get the changes
+				// between them
+				changedValues.putAll(
+						currentTimeline.getChangesFromTo(currentInitialEventNumber, finalPosition.eventNumber()));
+			} else if (currentTimeline.getSpawnedTimelines().contains(nextTimeline)) {
+				// we are going down in the timeline tree, so we need to get the changes from
+				// the current event to the spawn event of the next timeline
+				final var spawnEventNumber = currentTimeline.getSpawnedTimelineEventNumber(nextTimeline);
+				changedValues.putAll(currentTimeline.getChangesFromTo(currentInitialEventNumber, spawnEventNumber));
+				changedValues.putAll(nextTimeline.getInitialStateAtEnteringTimeline());
+				currentInitialEventNumber = 0; // after the first timeline, we always want to start from event 0
+			} else {
+				// we are going up in the timeline tree, so we need to get the changes from the
+				// current event the initial event of the current timeline, which is the spawn
+				// event of the current timeline in the
+				// next timeline
+				changedValues.putAll(currentTimeline.getChangesFromTo(currentInitialEventNumber, 0));
+				changedValues.putAll(currentTimeline.getInitialStateAtLeavingTimeline());
+				final var spawnEventNumber = nextTimeline.getSpawnedTimelineEventNumber(currentTimeline);
+				currentInitialEventNumber = spawnEventNumber; // after going up, we want to start from the spawn event
+																// of the next timeline
 			}
 		}
 		return changedValues;
 	}
 
-	private DatapointsState getChangesFromToBackwards(final int initialEventNumber, final int finalEventNumber) {
-		final DatapointsState changedValues = new DatapointsState();
-		for (int i = initialEventNumber; i >= finalEventNumber + 1; i--) {
-			final EventChange eventChange = eventChanges.get(i - 1);
-			for (final DataPointChange dataPointChange : eventChange.newValues()) {
-				final String newValue = dataPointChange.oldValue();
-				changedValues.put(dataPointChange.datapoint(), newValue);
-			}
+	/**
+	 * Finds the lowest common ancestor of two timelines, which is the timeline that
+	 * is the closest common parent of both timelines. This is used to find the path
+	 * between two timelines when navigating
+	 *
+	 * @param initialTimeline the first timeline
+	 * @param finalTimeline   the second timeline
+	 * @return the lowest common ancestor timeline, or null if there is no common
+	 *         ancestor
+	 */
+	private static Timeline lowestCommonAncestor(Timeline initialTimeline, Timeline finalTimeline) {
+		final Set<Timeline> ancestors = new HashSet<>();
+
+		while (initialTimeline != null) {
+			ancestors.add(initialTimeline);
+			initialTimeline = initialTimeline.getParentTimeline();
 		}
-		return changedValues;
+
+		while (finalTimeline != null) {
+			if (ancestors.contains(finalTimeline)) {
+				return finalTimeline;
+			}
+			finalTimeline = finalTimeline.getParentTimeline();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Finds the path between two timelines, which is the sequence of timelines that
+	 * connects the initial timeline to the final timeline through their common
+	 * ancestor. The logic goes backwards from the initial timeline to the common
+	 * ancestor and then forwards from the common ancestor to the final timeline.
+	 *
+	 * @param initialTimeline the starting timeline
+	 * @param finalTimeline   the target timeline
+	 * @return
+	 */
+	private static Deque<Timeline> pathBetween(final Timeline initialTimeline, final Timeline finalTimeline) {
+		final Timeline lca = lowestCommonAncestor(initialTimeline, finalTimeline);
+		if (lca == null) {
+			return new ArrayDeque<>();
+		}
+
+		final Deque<Timeline> path = new ArrayDeque<>();
+
+		// Walk from initialTimeline up to LCA
+		Timeline curr = initialTimeline;
+		while (curr != lca) {
+			path.add(curr);
+			curr = curr.getParentTimeline();
+		}
+		path.add(lca);
+
+		// Walk from b up to LCA (store separately)
+		final Deque<Timeline> tail = new ArrayDeque<>();
+		curr = finalTimeline;
+		while (curr != lca) {
+			tail.add(curr);
+			curr = curr.getParentTimeline();
+		}
+
+		// Append LCA -> B part
+		path.addAll(tail.reversed());
+		return path;
 	}
 
 	private void updateCache(final DatapointsState changedValues) {
@@ -249,14 +342,18 @@ public class ReplayNavigator {
 
 	private void notifyStateChange(final DatapointsState changedValues) {
 		for (final StateListener listener : stateListeners) {
-			listener.update(this, changedValues);
+			listener.stateUpdated(this, changedValues);
 		}
 	}
 
-	private void notifyNavigatorChange() {
-		for (final NavigatorConfigListener listener : navigatorConfigListeners) {
-			listener.update(this);
-		}
+	@Override
+	public void timelineSpawned(final Timeline timeline) {
+		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
+	}
+
+	@Override
+	public void eventAdded(final Timeline timeline) {
+		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
 	}
 
 }
