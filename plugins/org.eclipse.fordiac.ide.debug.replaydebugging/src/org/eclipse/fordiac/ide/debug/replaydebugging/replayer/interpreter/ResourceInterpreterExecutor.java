@@ -77,7 +77,7 @@ public class ResourceInterpreterExecutor {
 				state.eventTriggered(outputEvent);
 			}
 			if (lastInjectedEvent != null) {
-				state.eventTriggered(lastInjectedEvent);
+				state.eventTriggered((Event) networkRuntimeInspector.getRuntimeInterfaceElement(lastInjectedEvent));
 				lastInjectedEvent = null;
 			}
 		}
@@ -113,7 +113,7 @@ public class ResourceInterpreterExecutor {
 		// set outputs
 		final var fbDataOutput = fb.getInterface().getOutputVars();
 		final var dataOutputValues = new HashMap<String, String>();
-		for (int i = 0; i < fbDataOutput.size(); i++) {
+		for (int i = 0; i < outputValues.size(); i++) {
 			dataOutputValues.put(fbDataOutput.get(i).getName(), outputValues.get(i));
 		}
 
