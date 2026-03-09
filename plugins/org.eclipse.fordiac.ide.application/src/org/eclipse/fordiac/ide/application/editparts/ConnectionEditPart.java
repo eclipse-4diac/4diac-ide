@@ -26,6 +26,9 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -508,7 +511,30 @@ public class ConnectionEditPart extends AbstractConnectionEditPart implements An
 		if (getFigure().getTargetDecoration() != null) {
 			GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure().getTargetDecoration(), getModel(), event);
 		}
+
+		updateTargetPinAnnotations(getSource(), TargetPinManager.getTargetPins(getModel()), event);
+		updateTargetPinAnnotations(getTarget(), TargetPinManager.getSourcePins(getModel()), event);
+
 		refreshTooltip();
+	}
+
+	private void updateTargetPinAnnotations(final EditPart interfaceEditPart,
+			final Stream<IInterfaceElement> targetLabelReferences, final GraphicalAnnotationModelEvent event) {
+		if (interfaceEditPart.getChildren() != null) {
+			final Map<IInterfaceElement, TargetInterfaceElementEditPart> refInterfaceMap = interfaceEditPart
+					.getChildren().stream().filter(TargetInterfaceElementEditPart.class::isInstance)
+					.map(TargetInterfaceElementEditPart.class::cast)
+					.collect(Collectors.toMap(targetIE -> targetIE.getModel().getRefElement(), targetIE -> targetIE));
+
+			if (!refInterfaceMap.isEmpty()) {
+				targetLabelReferences.forEach(refElement -> {
+					final TargetInterfaceElementEditPart ep = refInterfaceMap.get(refElement);
+					if (ep != null) {
+						GraphicalAnnotationStyles.updateAnnotationFeedback(ep.getFigure(), getModel(), event);
+					}
+				});
+			}
+		}
 	}
 
 	private void refreshTooltip() {
