@@ -114,6 +114,12 @@ public class Messages extends NLS {
 	public static String UnifiedLibraryImportWizardPage_source;
 
 	public static String UnifiedLibraryImportWizardPage_work_with;
+	public static String LibraryPlanningPage_SymbolicName;
+	public static String LibraryPlanningPage_ActiveVersion;
+	public static String LibraryPlanningPage_Action;
+
+	public static String ManageLibraryWizard_Label;
+	public static String ManageLibraryWizard_Description;
 
 	static {
 		// initialize resource bundle

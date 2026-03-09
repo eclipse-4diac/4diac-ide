@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -1017,4 +1018,40 @@ public enum LibraryManager {
 		final Path fordiacInstallPath = installLocationFile.toPath();
 		return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
 	}
+
+	private static Stream<Version> getAvailableVersions(final Map<String, List<LibraryRecord>> lib,
+			final String symbolicName) {
+		return lib.getOrDefault(symbolicName, Collections.emptyList()).stream().map(LibraryRecord::version);
+	}
+
+	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
+		return Stream.concat(getAvailableVersions(getExtractedLibraries(), symbolicName),
+				getAvailableVersions(getStandardLibraries(), symbolicName));
+	}
+
+	public static List<LibraryRecord> getLinkedLibraries(final IFolder root) {
+		final List<LibraryRecord> libs = new ArrayList<>();
+		try {
+			root.accept(resource -> {
+				if (resource.equals(root)) {
+					return true;
+				}
+				if (resource instanceof final IFolder libFolder) {
+					if (!libFolder.exists() || !libFolder.isLinked()) {
+						return false;
+					}
+					final Manifest man = ManifestHelper.getContainerManifest(libFolder);
+					if (man != null) {
+						libs.add(new LibraryRecord(libFolder.getName(), null,
+								man.getProduct().getVersionInfo().getVersion(), null, null, null));
+					}
+				}
+				return false;
+			});
+		} catch (final CoreException e) {
+			e.printStackTrace();
+		}
+		return libs;
+	}
+
 }
