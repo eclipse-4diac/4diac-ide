@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Replay Debugging Core
 Bundle-SymbolicName: org.eclipse.fordiac.ide.debug.replaydebugging;singleton:=true
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.replaydebugging
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
