@@ -89,7 +89,7 @@ public class TargetPinManager {
 				.flatMap(TargetPinManager::getTargetPins).filter(Objects::nonNull).toList();
 	}
 
-	private static Stream<IInterfaceElement> getTargetPins(final Connection con) {
+	public static Stream<IInterfaceElement> getTargetPins(final Connection con) {
 		final IInterfaceElement destination = con.getDestination();
 		if (destination != null
 				&& followConnections(destination.getBlockFBNetworkElement(), destination.getOutputConnections())) {
@@ -103,7 +103,7 @@ public class TargetPinManager {
 				.flatMap(TargetPinManager::getSourcePins).filter(Objects::nonNull).toList();
 	}
 
-	private static Stream<IInterfaceElement> getSourcePins(final Connection con) {
+	public static Stream<IInterfaceElement> getSourcePins(final Connection con) {
 		final IInterfaceElement source = con.getSource();
 		if (source != null && followConnections(source.getBlockFBNetworkElement(), source.getInputConnections())) {
 			return source.getInputConnections().stream().flatMap(TargetPinManager::getSourcePins);
