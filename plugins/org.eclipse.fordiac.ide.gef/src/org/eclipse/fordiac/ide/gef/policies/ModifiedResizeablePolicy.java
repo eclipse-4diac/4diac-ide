@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
@@ -87,8 +88,12 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	protected IFigure createSelectionFeedbackFigure() {
-		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(),
+		final RoundedRectangle figure = ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(),
 				GefPreferenceConstants.CORNER_DIM);
+		figure.setFill(false);
+		figure.setOutline(true);
+		figure.setLineWidth(2 * ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
+		return figure;
 	}
 
 	@Override
