@@ -45,7 +45,8 @@ public final class Messages extends NLS {
 	public static String ConnectionAnnotations_SourceElementMissing;
 	public static String ConnectionAnnotations_SourceEndpointMissing;
 	public static String ConnectionAnnotations_TypeMismatch;
-
+	public static String ConnectionAnnotations_TypeMismatchIn2If;
+	public static String ConnectionAnnotations_TypeMismatchIf2In;
 	public static String ConnectionAnnotations_TypeMismatchInOut;
 
 	public static String ConnectionAnnotations_TypeMismatchInOutIntermediate;
