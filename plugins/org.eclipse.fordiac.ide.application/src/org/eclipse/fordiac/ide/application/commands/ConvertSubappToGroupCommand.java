@@ -97,8 +97,7 @@ public class ConvertSubappToGroupCommand extends Command implements ScopedComman
 
 	@Override
 	public void redo() {
-		convertToGroupCmd.redo();
-		ElementSelector.selectViewObjects(Arrays.asList(createGroupCmd.getElement()));
+		execute();
 	}
 
 	public Group getCreatedElement() {

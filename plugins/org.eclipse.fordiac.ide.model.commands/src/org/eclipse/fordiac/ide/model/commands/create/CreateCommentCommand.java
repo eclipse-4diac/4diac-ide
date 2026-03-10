@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -20,23 +20,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class CreateCommentCommand extends AbstractCreateFBNetworkElementCommand {
 
-	private final Rectangle posSizeRef;
-
-	public CreateCommentCommand(final FBNetwork fbNetwork, final Rectangle posSizeRef) {
+	public CreateCommentCommand(final FBNetwork fbNetwork, final Point posSizeRef) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createComment(), posSizeRef.x, posSizeRef.y);
-		this.posSizeRef = posSizeRef;
 	}
 
 	@Override
 	public boolean canExecute() {
 		return getFBNetwork() != null;
-	}
-
-	@Override
-	public void execute() {
-		super.execute();
-		getElement().setWidth(posSizeRef.width);
-		getElement().setHeight(posSizeRef.height);
 	}
 
 	@Override
@@ -54,5 +44,4 @@ public class CreateCommentCommand extends AbstractCreateFBNetworkElementCommand 
 	protected void checkName() {
 		// comments don't have a name so no check needed
 	}
-
 }

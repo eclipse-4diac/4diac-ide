@@ -47,7 +47,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double WIDTH_EDEFAULT = 200.0;
+	protected static final double WIDTH_EDEFAULT = 1000.0;
 
 	/**
 	 * The cached value of the '{@link #getWidth() <em>Width</em>}' attribute.
@@ -67,7 +67,7 @@ public class CommentImpl extends FBNetworkElementImpl implements Comment {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double HEIGHT_EDEFAULT = 100.0;
+	protected static final double HEIGHT_EDEFAULT = 500.0;
 
 	/**
 	 * The cached value of the '{@link #getHeight() <em>Height</em>}' attribute.
