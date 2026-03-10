@@ -75,8 +75,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			final FBNetworkElement newElement = ((AbstractCreateFBNetworkElementCommand) cmd).getElement();
 			if (group != null) {
 				cmd = cmd.chain(new AddElementsToGroup(group, List.of(newElement), new Point())); // point with 0,0 to
-				// keep
-				// the position
+				// keep the position
 			}
 			if (!isEditorRootNetwork(event, network)) {
 				// if we are in a container expand it accordingly
