@@ -144,7 +144,7 @@ public class BuildPathPropertyPage extends PropertyPage {
 
 	protected void performAddPattern(final List<Pattern> patterns, final String message) {
 		final InputDialog dialog = new InputDialog(getShell(), message, Messages.BuildPathPropertyPage_EnterNewPattern,
-				"", // $NON-NLS-2$
+				"", //$NON-NLS-1$
 				this::validatePatternValue);
 		if (dialog.open() == Window.OK) {
 			final Pattern pattern = BuildpathFactory.eINSTANCE.createPattern();

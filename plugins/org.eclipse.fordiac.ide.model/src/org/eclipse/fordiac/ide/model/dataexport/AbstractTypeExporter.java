@@ -158,9 +158,6 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		}
 
 		if (hasAttributes) {
-			if (varDecl.isInOutVar() && !varDecl.getInOutVarOpposite().isVisible()) {
-				addAttributeElement(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT, null, "false", null); //$NON-NLS-1$
-			}
 			addAttributes(varDecl.getAttributes());
 			addEndElement();
 		}

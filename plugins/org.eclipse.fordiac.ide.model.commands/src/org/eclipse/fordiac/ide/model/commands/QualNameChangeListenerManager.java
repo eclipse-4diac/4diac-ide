@@ -39,7 +39,7 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 		initializeListeners();
 	}
 
-	private static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.model.commands.QualNameChangeListener";
+	private static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.model.commands.QualNameChangeListener"; //$NON-NLS-1$
 	private final List<QualNameChangeListener> listeners = new ArrayList<>();
 
 	private void initializeListeners() {
@@ -47,7 +47,7 @@ public enum QualNameChangeListenerManager implements CommandStackEventListener {
 				.getConfigurationElementsFor(EXTENSION_POINT_ID);
 		for (final IConfigurationElement element : config) {
 			try {
-				final Object obj = element.createExecutableExtension("class");
+				final Object obj = element.createExecutableExtension("class"); //$NON-NLS-1$
 				if (obj instanceof final QualNameChangeListener l) {
 					listeners.add(l);
 				}

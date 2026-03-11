@@ -4,7 +4,6 @@
    <extension-point id="ConnectionRouterProvider" name="ConnectionRouterProvider" schema="schema/ConnectionRouterProvider.exsd"/>
    <extension-point id="ChildrenProvider" name="ChildrenProvider" schema="schema/ChildrenProvider.exsd"/>
    <extension-point id="graphicalAnnotationStyle" name="Graphical Annotation Style" schema="schema/graphicalAnnotationStyle.exsd"/>
-   <extension-point id="graphicalAnnotationProvider" name="Graphical Annotation Provider" schema="schema/graphicalAnnotationProvider.exsd"/>
     <extension point="org.eclipse.ui.themes">
         <themeElementCategory
             id="org.eclipse.fordiac.ide.themeCategory"
@@ -286,5 +285,30 @@
           layer="30"
           styler="org.eclipse.fordiac.ide.gef.annotation.ProblemAnnotationStyler">
     </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor"
+          layer="5"
+          styler="org.eclipse.fordiac.ide.gef.annotation.UtilityMarkerAnnotationStyler">
+    </style>
+    <style
+          annotationType="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource"
+          layer="5"
+          styler="org.eclipse.fordiac.ide.gef.annotation.UtilityMarkerAnnotationStyler">
+    </style>
  </extension>
+ <extension
+          point="org.eclipse.ui.themes">
+    <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"
+             label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
+             value="99, 179, 31">
+    </colorDefinition>
+    <colorDefinition
+           categoryId="org.eclipse.fordiac.ide.themeCategory"
+           id="org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"
+           label="%FordiacPreferencePage_LABEL_ConnectionSourceMarkerColor"
+           value="99, 179, 31">
+     </colorDefinition>      
+  </extension>
 </plugin>

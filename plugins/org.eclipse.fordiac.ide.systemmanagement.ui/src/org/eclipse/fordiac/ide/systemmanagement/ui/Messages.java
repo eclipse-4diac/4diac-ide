@@ -29,7 +29,16 @@ public final class Messages extends NLS {
 
 	public static String AutomationSystemEditor_ShowingSystem;
 
+	public static String InstanceCommentDecoration_Description;
+	public static String InstanceCommentDecoration_Label;
+
+	public static String InstanceTypeDecoration_Description;
+	public static String InstanceTypeDecoration_Label;
+
 	public static String OpenApplicationForEditing;
+
+	public static String LibraryFolderDecoration_Description;
+	public static String LibraryFolderDecoration_Label;
 
 	public static String MissingExportBuilderMarkerResolution_Description;
 	public static String MissingExportBuilderMarkerResolution_Label;
@@ -79,9 +88,20 @@ public final class Messages extends NLS {
 	public static String WrongBuilderOrderMarkerResolution_Description;
 	public static String WrongBuilderOrderMarkerResolution_Label;
 
-	public static String BulkEditorDirty;
-	public static String Continue;
-	public static String Cancel;
+	public static String SystemExplorer_CopyPackageNameAction;
+
+	public static String SystemExplorerPasteAction_CopyProject;
+
+	public static String SystemExplorerPasteAction_newProjectName;
+
+	public static String SystemExplorerPasteAction_nonEmptyProject;
+
+	public static String SystemExplorerPasteAction_projectExists;
+
+	public static String SystemExplorerPasteAction_copy;
+
+	public static String CopyActionErrorRetryTitle;
+	public static String CopyActionErrorRetryMessage;
 
 	static {
 		// initialize resource bundle

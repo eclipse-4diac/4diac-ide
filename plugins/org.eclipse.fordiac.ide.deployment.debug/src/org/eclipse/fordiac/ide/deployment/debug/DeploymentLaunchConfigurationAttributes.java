@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Martin Erich Jobst
+ * Copyright (c) 2022, 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.deployment.debug;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -51,6 +54,7 @@ public final class DeploymentLaunchConfigurationAttributes {
 	public static final int POLLING_INTERVAL_DEFAULT = 300;
 	public static final String ALLOW_TERMINATE = "org.eclipse.fordiac.ide.deployment.debug.allowTerminate"; //$NON-NLS-1$
 	public static final String ALLOW_TERMINATE_DEFAULT = AllowTerminate.DEBUG_ONLY.name();
+	public static final String VALUES = "org.eclipse.fordiac.ide.deployment.debug.values"; //$NON-NLS-1$
 
 	public static final String WATCH_TARGET_NAME = "org.eclipse.fordiac.ide.deployment.debug.watch.targetName"; //$NON-NLS-1$
 	public static final String WATCH_TARGET_TYPE = "org.eclipse.fordiac.ide.deployment.debug.watch.targetType"; //$NON-NLS-1$
@@ -76,7 +80,7 @@ public final class DeploymentLaunchConfigurationAttributes {
 	public static AutomationSystem getSystem(final ILaunchConfiguration configuration) throws CoreException {
 		final SystemEntry systemEntry = getSystemEntry(configuration);
 		if (systemEntry != null) {
-			return systemEntry.getSystem();
+			return systemEntry.getType();
 		}
 		return null;
 	}
@@ -144,6 +148,29 @@ public final class DeploymentLaunchConfigurationAttributes {
 				.map(EcoreUtil::getURI).map(URI::toString).toList());
 		configuration.setAttribute(WATCH_FORCE_VALUE,
 				watches.stream().map(DeploymentLaunchWatchpoint::forceValue).toList());
+	}
+
+	public static List<DeploymentLaunchValue> getValues(final ILaunchConfiguration configuration) throws CoreException {
+		final AutomationSystem system = getSystem(configuration);
+		if (system == null) {
+			return List.of();
+		}
+		final var valuesAttribute = configuration.getAttribute(VALUES, Collections.emptyMap());
+		return valuesAttribute.entrySet().stream().map(entry -> getValue(entry.getKey(), entry.getValue(), system))
+				.sorted(Comparator.comparing(DeploymentLaunchValue::getName)).toList();
+	}
+
+	private static DeploymentLaunchValue getValue(final String name, final String value,
+			final AutomationSystem system) {
+		final Optional<VarDeclaration> varDeclaration = system.findByQualifiedName(name)
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).findFirst();
+		return new DeploymentLaunchValue(name, varDeclaration, value);
+	}
+
+	public static void setValues(final ILaunchConfigurationWorkingCopy configuration,
+			final Collection<DeploymentLaunchValue> values) {
+		configuration.setAttribute(VALUES, values.stream()
+				.collect(Collectors.toMap(DeploymentLaunchValue::getName, DeploymentLaunchValue::getValue)));
 	}
 
 	private DeploymentLaunchConfigurationAttributes() {

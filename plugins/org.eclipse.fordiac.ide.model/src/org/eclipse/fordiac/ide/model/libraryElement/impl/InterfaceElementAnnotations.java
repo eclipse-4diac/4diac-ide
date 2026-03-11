@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import static org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper.getArraySize;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -39,6 +41,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public final class InterfaceElementAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = InterfaceElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
+
+	public static List<String> getBlockRelativePath(final IInterfaceElement element) {
+		final List<String> path = (element.eContainer() instanceof final IInterfaceElement parent)
+				? parent.getBlockRelativePath()
+				: new ArrayList<>();
+		path.add(element.getName());
+		return path;
+	}
 
 	public static String getFullTypeName(final IInterfaceElement element) {
 		return ImportHelper.deresolveImport(element.getType(), element);
@@ -70,6 +80,7 @@ public final class InterfaceElementAnnotations {
 		return switch (element.eContainer()) {
 		case final BlockFBNetworkElement blockFbNetworkElement -> blockFbNetworkElement;
 		case final InterfaceList interfaceList -> interfaceList.getBlockFBNetworkElement();
+		case final IInterfaceElement varDecl -> varDecl.getBlockFBNetworkElement();
 		case null, default -> null;
 		};
 	}
@@ -78,12 +89,17 @@ public final class InterfaceElementAnnotations {
 		return switch (element.eContainer()) {
 		case final FBType fbType -> fbType;
 		case final InterfaceList interfaceList -> interfaceList.getFBType();
+		case final IInterfaceElement varDecl -> varDecl.getFBType();
 		case null, default -> null;
 		};
 	}
 
 	public static InterfaceList getInterfaceList(final IInterfaceElement element) {
-		return element.eContainer() instanceof final InterfaceList interfaceList ? interfaceList : null;
+		return switch (element.eContainer()) {
+		case final InterfaceList interfaceList -> interfaceList;
+		case final IInterfaceElement parent -> parent.getInterfaceList();
+		case null, default -> null;
+		};
 	}
 
 	public static boolean validateName(final IInterfaceElement element, final DiagnosticChain diagnostics,
@@ -150,15 +166,7 @@ public final class InterfaceElementAnnotations {
 			return null;
 		}
 
-		final IInterfaceElement typeIE = typeInterface.getInterfaceElement(element.getName());
-
-		if (typeIE instanceof final VarDeclaration varDecl && varDecl.isInOutVar() && !element.isIsInput()) {
-			// if the type pin is a varinout and the searched element is an output we need
-			// to get the output opposite
-			return varDecl.getInOutVarOpposite();
-		}
-
-		return typeIE;
+		return typeInterface.getInterfaceElement(element);
 	}
 
 	private InterfaceElementAnnotations() {

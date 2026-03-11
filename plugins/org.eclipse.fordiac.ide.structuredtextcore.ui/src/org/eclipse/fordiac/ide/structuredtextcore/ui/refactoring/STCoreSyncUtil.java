@@ -14,7 +14,12 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.Messages;
 import org.eclipse.xtext.ui.refactoring.ui.SyncUtil;
 
 @SuppressWarnings("restriction")
@@ -28,12 +33,19 @@ public class STCoreSyncUtil extends SyncUtil {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void waitForBuild(final IProgressMonitor monitor) {
 		super.waitForBuild(monitor);
-		// also need to wait for auto build jobs to finish or the avoidBuild flag from
-		// the auto build job will not be cleared properly, resulting in a missed build
-		// after the refactoring completes
-		super.waitForAutoBuild(monitor);
+		// also need to schedule an explicit build job to avoid a missed build after the
+		// refactoring completes
+		scheduleAfterBuildJob();
+	}
+
+	protected static void scheduleAfterBuildJob() {
+		final Job afterBuildJob = Job.create(Messages.STCoreSyncUtil_Building,
+				(ICoreRunnable) monitor -> ResourcesPlugin.getWorkspace()
+						.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor));
+		afterBuildJob.setRule(ResourcesPlugin.getWorkspace().getRoot());
+		afterBuildJob.setPriority(Job.BUILD);
+		afterBuildJob.schedule();
 	}
 }

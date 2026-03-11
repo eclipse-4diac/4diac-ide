@@ -29,17 +29,17 @@ import org.eclipse.fordiac.ide.model.commands.insert.InsertFBCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.FBTreeNodeLabelProvider;
+import org.eclipse.fordiac.ide.model.ui.nat.FBTypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.FBTypeSelectionContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
-import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -154,18 +154,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	@Override
 	protected Object getInputType(final Object input) {
 		return BaseFBFilter.getFBTypeFromSelectedElement(input);
-	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
-	protected void setInputInit() {
-		final BaseFBType currentType = getType();
-		provider.setInput(currentType != null ? currentType.getInternalFbs() : Collections.emptyList());
-		table.refresh();
 	}
 
 	@Override

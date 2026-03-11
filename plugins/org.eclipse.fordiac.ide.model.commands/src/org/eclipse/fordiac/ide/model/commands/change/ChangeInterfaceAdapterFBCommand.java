@@ -64,7 +64,7 @@ class ChangeInterfaceAdapterFBCommand extends Command {
 		adapterFB.setTypeEntry(adpType.getTypeEntry());
 		final InterfaceList typeInterface = (adapterFB.isPlug() ? adpType.getPlugType().getInterfaceList()
 				: adpType.getInterfaceList());
-		adapterFB.setInterface(typeInterface.copy());
+		adapterFB.setInterface(typeInterface.instanceCopy());
 		adapterFB.setName(adpDecl.getName());
 		return adapterFB;
 	}

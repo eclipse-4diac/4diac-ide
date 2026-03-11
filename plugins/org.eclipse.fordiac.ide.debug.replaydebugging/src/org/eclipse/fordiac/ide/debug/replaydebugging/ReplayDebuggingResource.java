@@ -17,15 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
-import org.eclipse.fordiac.ide.deployment.devResponse.Data;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DataPointChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
+import org.eclipse.fordiac.ide.debug.replaydebugging.simulator.IDeviceSimulator;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
-import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -51,14 +51,11 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 
 	private final ReplayNavigator.Identifier replayNavigatorIdentifier;
 
-	private final IDeviceManagementExecutorService deviceManagementExecutorService;
-
 	private final Resource resource;
 
-	// port names beloging to the resource
-	private final Set<String> portNames;
-
 	private final UpdateListener updateListener;
+
+	private final IDeviceSimulator simulator;
 
 	// response data for the resources being replayed
 	org.eclipse.fordiac.ide.deployment.devResponse.Resource resourceResponse = DevResponseFactory.eINSTANCE
@@ -68,15 +65,12 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	// in the response
 	private final Map<String, org.eclipse.fordiac.ide.deployment.devResponse.Data> dataValues = new HashMap<>();
 
-	public ReplayDebuggingResource(final Resource resource, final Set<String> portNames,
-			final ReplayNavigator.Identifier reaplayNavigatorIdentifier,
-			final IDeviceManagementExecutorService deviceManagementExecutorService,
-			final UpdateListener updateListener) {
+	public ReplayDebuggingResource(final Resource resource, final ReplayNavigator.Identifier reaplayNavigatorIdentifier,
+			final IDeviceSimulator simulator, final UpdateListener updateListener) {
 		this.replayNavigatorIdentifier = reaplayNavigatorIdentifier;
-		this.deviceManagementExecutorService = deviceManagementExecutorService;
 		this.resource = resource;
-		this.portNames = portNames;
 		this.updateListener = updateListener;
+		this.simulator = simulator;
 	}
 
 	public org.eclipse.fordiac.ide.deployment.devResponse.Resource getResourceResponse() {
@@ -87,7 +81,7 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		return replayNavigator.getCurrentEventChange();
 	}
 
-	public void load() throws DeploymentException {
+	public void load() {
 		createReplayNavigator();
 	}
 
@@ -96,17 +90,8 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		ReplayNavigatorManager.getDefault().unregisterNavigator(replayNavigator);
 	}
 
-	private void createReplayNavigator() throws DeploymentException {
-		for (final String portName : portNames) {
-			deviceManagementExecutorService.addWatch(resource, portName);
-		}
-
-		// Read initial state
-		DeploymentDebugWatchData watchData;
-		watchData = new DeploymentDebugWatchData(deviceManagementExecutorService.readWatches());
-
-		final ReplayNavigator.DatapointsState initialState = new ReplayNavigator.DatapointsState();
-		initialState.putAll(getWatchData(watchData, resource, portNames));
+	private void createReplayNavigator() {
+		final ReplayNavigator.DatapointsState initialState = simulator.getCurrentState(resource);
 
 		createResourceResponse(initialState);
 
@@ -114,28 +99,6 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 		replayNavigator = new ReplayNavigator(replayNavigatorIdentifier, initialState, eventChanges);
 		replayNavigator.addStateChangeListener(this);
 		ReplayNavigatorManager.getDefault().registerNavigator(replayNavigator);
-	}
-
-	/**
-	 * @brief It reads the data from a watchData response from the device
-	 *        (DeploymentDebugWatchData), gets the values of all datapoints in
-	 *        portNames and stores it in a map for the replay navigator.
-	 *
-	 * @return a map with the port names as keys and their values as values.
-	 */
-	private HashMap<String, String> getWatchData(final DeploymentDebugWatchData data, final Resource resource,
-			final Set<String> portNames) {
-		final HashMap<String, String> result = new HashMap<>();
-		for (final String portName : portNames) {
-			final Data portData = data.getLastData(resource, portName);
-			if (portData == null) {
-				// if there is no data for this port, we just skip it
-				// this means that the forte device could not add the watch
-				continue;
-			}
-			result.put(portName, portData.getValue());
-		}
-		return result;
 	}
 
 	/**
@@ -209,23 +172,21 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 	 *
 	 * @throws DeploymentException If an error occurs during the replay of events.
 	 */
-	private List<EventChange> iterateOverAllEvents(final ReplayNavigator.DatapointsState initialState)
-			throws DeploymentException {
+	private List<EventChange> iterateOverAllEvents(final ReplayNavigator.DatapointsState initialState) {
 		// simulate all events and gather all data
 		int eventCounter = 0;
 		final List<EventChange> eventChanges = new ArrayList<>();
 		Map<String, String> previousState = new HashMap<>(initialState);
 
-		for (Optional<String> lastEvent = deviceManagementExecutorService.replayNextEvent(resource); lastEvent
-				.isPresent(); lastEvent = deviceManagementExecutorService.replayNextEvent(resource)) {
-			final DeploymentDebugWatchData watchData = new DeploymentDebugWatchData(
-					deviceManagementExecutorService.readWatches());
-			final Map<String, String> currentState = getWatchData(watchData, resource,
-					initialState.keySet().stream().collect(Collectors.toSet()));
+		for (Optional<String> lastEvent = simulator.replayNextEvent(resource); lastEvent
+				.isPresent(); lastEvent = simulator.replayNextEvent(resource)) {
+
+			final Map<String, String> currentState = simulator.getCurrentState(resource);
 
 			// Process the value
 			final List<DataPointChange> dataPointChanges = new ArrayList<>();
 			for (final Map.Entry<String, String> entry : currentState.entrySet()) {
+//				System.out.println(entry.getKey() + " : " + entry.getValue());
 				final String key = entry.getKey();
 				final String currentStateValue = entry.getValue();
 				if (!previousState.get(key).equals(currentStateValue)) {
@@ -236,10 +197,12 @@ public class ReplayDebuggingResource implements ReplayNavigator.StateListener {
 			eventChanges.add(new EventChange(eventCounter, lastEvent.get(), dataPointChanges));
 			previousState = new HashMap<>(currentState);
 
-			FordiacLogHelper.logInfo("\nEvent triggered " + lastEvent.get() + " with the following data changes:");
+			String toLog = "\nEvent triggered " + lastEvent.get() + " with the following data changes:";
 			for (final DataPointChange change : dataPointChanges) {
-				FordiacLogHelper.logInfo("  " + change.datapoint() + ": " + change.newValue());
+				toLog += "  " + change.datapoint() + ": " + change.newValue();
 			}
+
+			FordiacLogHelper.logInfo(toLog);
 
 		}
 		return eventChanges;

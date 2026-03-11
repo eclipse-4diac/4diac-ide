@@ -23,9 +23,9 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 
 public final class AttributeAnnotations {
 	private static final String NAMED_ELEMENTS_KEY = AttributeAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
@@ -40,8 +40,7 @@ public final class AttributeAnnotations {
 
 	public static boolean validateAttributeDeclaration(final Attribute attribute, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (null != attribute.getAttributeDeclaration()
-				&& attribute.getAttributeDeclaration().getTypeEntry() instanceof ErrorTypeEntry) {
+		if (attribute.getAttributeDeclaration() instanceof ErrorAttributeDeclaration) {
 			if (diagnostics != null) {
 				diagnostics.add(createAttributeValidationDiagnostic(MessageFormat.format(
 						Messages.AttributeAnnotations_MissingAttributeDeclaration, attribute.getName()), attribute));

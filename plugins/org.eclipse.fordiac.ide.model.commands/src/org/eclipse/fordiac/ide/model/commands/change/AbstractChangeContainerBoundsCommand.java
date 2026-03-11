@@ -18,18 +18,20 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
-import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public abstract class AbstractChangeContainerBoundsCommand extends Command
 		implements ConnectionLayoutTagger, ScopedCommand {
 
-	private final int dx;
-	private final int dy;
+	private final Position newPos;
 	private final double oldWidth;
 	private final double oldHeight;
 	private final double newWidth;
@@ -37,29 +39,24 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 	private final PositionableElement target;
 	private CompoundCommand updatePositions;
 
-	protected AbstractChangeContainerBoundsCommand(final PositionableElement target, final int dx, final int dy,
-			final int dw, final int dh, final double oldWidth, final double oldHeight) {
-		this.target = Objects.requireNonNull(target);
-		this.dx = dx;
-		this.dy = dy;
-		this.oldWidth = oldWidth;
-		this.oldHeight = oldHeight;
-		newWidth = calcNewSize(dx, dw, oldWidth);
-		newHeight = calcNewSize(dy, dh, oldHeight);
+	public static AbstractChangeContainerBoundsCommand getCommandFor(final FBNetworkElement container,
+			final Position newPos, final double newWidth, final double newHeight) {
+		return switch (container) {
+		case final Group group -> new ChangeGroupBoundsCommand(group, newPos, newWidth, newHeight);
+		case final SubApp subApp -> new ChangeSubAppBoundsCommand(subApp, newPos, newWidth, newHeight);
+		case final Comment comment -> new ChangeCommentBoundsCommand(comment, newPos, newWidth, newHeight);
+		default -> null;
+		};
 	}
 
-	private static double calcNewSize(final int deltaPos, int deltaSize, final double oldSize) {
-		if (deltaSize == 0) {
-			return oldSize;
-		}
-		if (deltaPos == 0) {
-			// snap to grid gives us always one pixel to much in size
-			deltaSize--;
-		}
-		// use screen coordinates for the new size calculation to reduce rounding
-		// artefact issues
-		return CoordinateConverter.INSTANCE
-				.screenToIEC61499(CoordinateConverter.INSTANCE.iec61499ToScreen(oldSize) + deltaSize);
+	protected AbstractChangeContainerBoundsCommand(final PositionableElement target, final Position newPos,
+			final double newWidth, final double newHeight, final double oldWidth, final double oldHeight) {
+		this.target = Objects.requireNonNull(target);
+		this.newPos = newPos;
+		this.newWidth = newWidth;
+		this.newHeight = newHeight;
+		this.oldWidth = oldWidth;
+		this.oldHeight = oldHeight;
 	}
 
 	@Override
@@ -92,9 +89,14 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command
 	}
 
 	private CompoundCommand createSetPosCommand() {
+
+		final Position oldPos = target.getPosition();
+		final double dx = newPos.getX() - oldPos.getX();
+		final double dy = newPos.getY() - oldPos.getY();
+
 		if (dx != 0 || dy != 0) {
 			final CompoundCommand cmd = new CompoundCommand();
-			cmd.add(new SetPositionCommand(target, dx, dy));
+			cmd.add(new SetPositionCommand(target, newPos));
 			// Ensure that the children stay at their position when the group grows or
 			// shrinks on the left/top side. If the child is in a group we must only
 			// consider it if the group the child is contained in itself is changed.

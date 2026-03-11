@@ -243,6 +243,15 @@ public interface LibraryElementFactory extends EFactory {
 	ConnectionRoutingData createConnectionRoutingData();
 
 	/**
+	 * Returns a new object of class '<em>Container Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Container Var Declaration</em>'.
+	 * @generated
+	 */
+	ContainerVarDeclaration createContainerVarDeclaration();
+
+	/**
 	 * Returns a new object of class '<em>Data Connection</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -315,13 +324,76 @@ public interface LibraryElementFactory extends EFactory {
 	ECTransition createECTransition();
 
 	/**
-	 * Returns a new object of class '<em>Error Marker Data Type</em>'.
+	 * Returns a new object of class '<em>Error Adapter Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker Data Type</em>'.
+	 * @return a new object of class '<em>Error Adapter Type</em>'.
 	 * @generated
 	 */
-	ErrorMarkerDataType createErrorMarkerDataType();
+	ErrorAdapterType createErrorAdapterType();
+
+	/**
+	 * Returns a new object of class '<em>Error Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Attribute Declaration</em>'.
+	 * @generated
+	 */
+	ErrorAttributeDeclaration createErrorAttributeDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>Error Automation System</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Automation System</em>'.
+	 * @generated
+	 */
+	ErrorAutomationSystem createErrorAutomationSystem();
+
+	/**
+	 * Returns a new object of class '<em>Error Device Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Device Type</em>'.
+	 * @generated
+	 */
+	ErrorDeviceType createErrorDeviceType();
+
+	/**
+	 * Returns a new object of class '<em>Error FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error FB Type</em>'.
+	 * @generated
+	 */
+	ErrorFBType createErrorFBType();
+
+	/**
+	 * Returns a new object of class '<em>Error Function FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Function FB Type</em>'.
+	 * @generated
+	 */
+	ErrorFunctionFBType createErrorFunctionFBType();
+
+	/**
+	 * Returns a new object of class '<em>Error Global Constants</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Global Constants</em>'.
+	 * @generated
+	 */
+	ErrorGlobalConstants createErrorGlobalConstants();
+
+	/**
+	 * Returns a new object of class '<em>Error Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Library Element</em>'.
+	 * @generated
+	 */
+	ErrorLibraryElement createErrorLibraryElement();
 
 	/**
 	 * Returns a new object of class '<em>Error Marker FBN Element</em>'.
@@ -340,6 +412,33 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	ErrorMarkerInterface createErrorMarkerInterface();
+
+	/**
+	 * Returns a new object of class '<em>Error Resource Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Resource Type</em>'.
+	 * @generated
+	 */
+	ErrorResourceType createErrorResourceType();
+
+	/**
+	 * Returns a new object of class '<em>Error Segment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Segment Type</em>'.
+	 * @generated
+	 */
+	ErrorSegmentType createErrorSegmentType();
+
+	/**
+	 * Returns a new object of class '<em>Error Sub App Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Sub App Type</em>'.
+	 * @generated
+	 */
+	ErrorSubAppType createErrorSubAppType();
 
 	/**
 	 * Returns a new object of class '<em>Event</em>'.

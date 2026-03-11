@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University Linz
+ * Copyright (c) 2020, 2025 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -35,8 +36,9 @@ public final class InterfaceListCopier {
 	/**
 	 * Create a new copy of the source interface list
 	 *
-	 * @param src        source interface list
-	 * @param copyValues flag indicating if initial values should be copied or not
+	 * @param src          source interface list
+	 * @param copyValues   flag indicating if initial values should be copied or not
+	 * @param copyComments flag indicating if comments should be copied or not
 	 * @return
 	 */
 	public static InterfaceList copy(final InterfaceList src, final boolean copyValues, final boolean copyComments) {
@@ -82,10 +84,6 @@ public final class InterfaceListCopier {
 
 	}
 
-	public static InterfaceList copy(final InterfaceList src) {
-		return copy(src, false, false);
-	}
-
 	public static void copyVarList(final Collection<VarDeclaration> destVars, final Collection<VarDeclaration> srcVars,
 			final boolean copyComments) {
 		srcVars.forEach(variable -> destVars.add(copyVar(variable, false, copyComments)));
@@ -98,7 +96,7 @@ public final class InterfaceListCopier {
 
 	public static VarDeclaration copyVar(final VarDeclaration variable, final boolean copyValues,
 			final boolean copyComments) {
-		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		final VarDeclaration copy = createVarDecl(variable, copyValues, copyComments);
 		setArraySize(copy, getArraySize(variable));
 
 		copyInterfaceElement(variable, copy, copyComments);
@@ -110,6 +108,17 @@ public final class InterfaceListCopier {
 		copy.setValue(varInitialization); // ensure that all vars have a value, reduces null checks
 
 		return copy;
+	}
+
+	private static VarDeclaration createVarDecl(final VarDeclaration variable, final boolean copyValues,
+			final boolean copyComments) {
+		if (variable instanceof final ContainerVarDeclaration contVarDecl) {
+			final ContainerVarDeclaration copyContVar = LibraryElementFactory.eINSTANCE.createContainerVarDeclaration();
+			contVarDecl.getCachedMembers()
+					.forEach(contVar -> copyContVar.getCachedMembers().add(copyVar(contVar, copyValues, copyComments)));
+			return copyContVar;
+		}
+		return LibraryElementFactory.eINSTANCE.createVarDeclaration();
 	}
 
 	private static void copyInterfaceElement(final IInterfaceElement src, final IInterfaceElement dst,

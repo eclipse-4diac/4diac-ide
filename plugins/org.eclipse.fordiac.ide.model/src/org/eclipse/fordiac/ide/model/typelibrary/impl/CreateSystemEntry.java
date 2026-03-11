@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.ITypeEntryCreator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -22,6 +24,11 @@ public class CreateSystemEntry implements ITypeEntryCreator {
 	@Override
 	public boolean canHandle(final IFile file) {
 		return (TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+	}
+
+	@Override
+	public boolean canHandle(final EClass eClass) {
+		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM.isSuperTypeOf(eClass);
 	}
 
 	@Override

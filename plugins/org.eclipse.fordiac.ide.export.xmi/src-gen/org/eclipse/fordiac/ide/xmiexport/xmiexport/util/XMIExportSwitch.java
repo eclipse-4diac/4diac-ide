@@ -115,6 +115,18 @@ public class XMIExportSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case XMIExportPackage.XMI_EXPORT_LITERAL_TYPES: {
+				XMIExportLiteralTypes xmiExportLiteralTypes = (XMIExportLiteralTypes)theEObject;
+				T result = caseXMIExportLiteralTypes(xmiExportLiteralTypes);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case XMIExportPackage.XMI_EXPORT_LITERAL_TYPE: {
+				XMIExportLiteralType xmiExportLiteralType = (XMIExportLiteralType)theEObject;
+				T result = caseXMIExportLiteralType(xmiExportLiteralType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -206,6 +218,36 @@ public class XMIExportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseXMIExportTypeDeclaration(XMIExportTypeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Literal Types</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Literal Types</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportLiteralTypes(XMIExportLiteralTypes object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Literal Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Literal Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseXMIExportLiteralType(XMIExportLiteralType object) {
 		return null;
 	}
 

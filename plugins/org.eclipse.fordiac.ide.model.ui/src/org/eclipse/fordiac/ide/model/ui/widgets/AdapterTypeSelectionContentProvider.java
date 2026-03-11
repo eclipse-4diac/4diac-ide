@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -27,15 +27,15 @@ public class AdapterTypeSelectionContentProvider implements ITypeSelectionConten
 	}
 
 	@Override
-	public Collection<LibraryElement> getTypes(final Object input) {
-		return Collections.emptyList();
+	public Stream<LibraryElement> getTypes(final Object input) {
+		return Stream.empty();
 	}
 
 	@Override
-	public Collection<TypeEntry> getTypeEntries(final Object input) {
+	public Stream<TypeEntry> getTypeEntries(final Object input) {
 		if (input instanceof final TypeLibrary typeLibrary) {
-			return Collections.unmodifiableCollection(typeLibrary.getAdapterTypesSorted());
+			return typeLibrary.getAdapterTypesSorted().map(Function.identity());
 		}
-		return Collections.emptyList();
+		return Stream.empty();
 	}
 }

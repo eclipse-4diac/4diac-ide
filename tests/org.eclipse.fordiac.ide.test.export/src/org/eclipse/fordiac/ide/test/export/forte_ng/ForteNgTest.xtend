@@ -45,7 +45,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def simpleAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
+		functionBlock.getInterfaceList().getOutputVars().add(createVarDeclaration(VARIABLE_NAME, BOOL))
 		functionBlock.callables.add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := 1;''')) // $NON-NLS-1$
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
 
@@ -82,7 +82,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def timeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME")) // $NON-NLS-1$
+		functionBlock.getInterfaceList().getOutputVars().add(createVarDeclaration(VARIABLE_NAME, "TIME")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TIME#1m;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -97,7 +97,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def dateAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE")) // $NON-NLS-1$
+		functionBlock.getInterfaceList().getOutputVars().add(createVarDeclaration(VARIABLE_NAME, "DATE")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := D#1996-08-12;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -112,7 +112,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def todAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD")) // $NON-NLS-1$
+		functionBlock.getInterfaceList().getOutputVars().add(createVarDeclaration(VARIABLE_NAME, "TOD")) // $NON-NLS-1$
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := TOD#06:06:59;'''))
 
 		var generatedCode = generateAlgorithm(functionBlock, ALGORITHM_NAME, errors)
@@ -127,7 +127,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def datetimeAssignmentAlgorithm() {
-		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, "DT")) // $NON-NLS-1$
+		functionBlock.getInterfaceList().getOutputVars().add(createVarDeclaration(VARIABLE_NAME, "DT")) // $NON-NLS-1$
 		functionBlock.getCallables().add(
 			createSTAlgorithm(ALGORITHM_NAME, '''«VARIABLE_NAME» := DT#1989-06-15-13:56:14.77;'''))
 
@@ -249,11 +249,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						#pragma once
 						
 						#include "forte/basicfb.h"
-						#include "forte/iec61131_functions.h"
-						#include "forte/datatypes/forte_array_common.h"
-						#include "forte/datatypes/forte_array.h"
-						#include "forte/datatypes/forte_array_fixed.h"
-						#include "forte/datatypes/forte_array_variable.h"
 						
 						namespace forte {
 						  class «EXPORTED_FUNCTIONBLOCK_NAME» final : public CBasicFB {
@@ -305,11 +300,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 					
 					#include "forte/«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_fbt.h"
 					
-					#include "forte/iec61131_functions.h"
-					#include "forte/datatypes/forte_array_common.h"
-					#include "forte/datatypes/forte_array.h"
-					#include "forte/datatypes/forte_array_fixed.h"
-					#include "forte/datatypes/forte_array_variable.h"
 					
 					using namespace std::literals;
 					using namespace forte::literals;

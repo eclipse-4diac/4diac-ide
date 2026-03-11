@@ -13,11 +13,16 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.model.data.DataFactory;
+import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataexport.AttributeTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.AttributeTypeImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -32,6 +37,16 @@ public class AttributeTypeEntryImpl extends AbstractCheckedTypeEntryImpl<Attribu
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new AttributeTypeImporter(getFile());
+	}
+
+	@Override
+	protected ErrorAttributeDeclaration createErrorLibraryElement() {
+		final ErrorAttributeDeclaration type = LibraryElementFactory.eINSTANCE.createErrorAttributeDeclaration();
+		final DirectlyDerivedType dataType = DataFactory.eINSTANCE.createDirectlyDerivedType();
+		dataType.setName(getTypeName());
+		dataType.setBaseType(ElementaryTypes.STRING);
+		type.setType(dataType);
+		return type;
 	}
 
 	@Override

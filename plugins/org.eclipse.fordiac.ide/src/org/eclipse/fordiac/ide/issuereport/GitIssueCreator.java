@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025, 2026 Johannes Kepler University Linz
+ * Copyright (c) 2025 Johannes Kepler University Linz, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Felix Schmid - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst - add preference qualifier and issue URL parameter
  *******************************************************************************/
 package org.eclipse.fordiac.ide.issuereport;
 
@@ -36,8 +37,6 @@ import com.google.gson.Gson;
 
 public class GitIssueCreator {
 
-	private static final String FORDIAC_IDE_ISSUE_URL = "https://github.com/eclipse-4diac/4diac-ide/issues/new?title=%s&body=%s"; //$NON-NLS-1$
-
 	private static record IssueInfo(String title, String body, String[] labels) {
 	}
 
@@ -51,14 +50,15 @@ public class GitIssueCreator {
 	private static final String[] LABELS = new String[] { "bug", "autoreport" };
 	private static final String SESSION_ID = UUID.randomUUID().toString();
 	private static final String CODE_DELIMITER = "```"; //$NON-NLS-1$
-	private static final int MAX_MANUAL_ISSUE_BODY_SIZE = 4000;
+	private static final String TRUNCATE_INIDCATER = "[truncated]"; //$NON-NLS-1$
+	private static final int MAX_MANUAL_ISSUE_URL_SIZE = 8000;
 
-	public static Optional<String> createIssue(final IStatus status) {
+	public static Optional<String> createIssue(final IStatus status, final String preferenceQualifier) {
 		final IssueInfo info = new IssueInfo(status.getMessage(), buildBody(status), LABELS);
-		return switch (PreferenceConstants.getReportDestination()) {
-		case GITLAB -> createGitLabIssue(info);
-		case GITHUB -> createGitHubIssue(info);
-		case GITHUB_MANUAL -> createGitHubIssueManual(info);
+		return switch (PreferenceConstants.getReportDestination(preferenceQualifier)) {
+		case GITLAB -> createGitLabIssue(info, preferenceQualifier);
+		case GITHUB -> createGitHubIssue(info, preferenceQualifier);
+		case GITHUB_MANUAL -> createGitHubIssueManual(info, preferenceQualifier);
 		};
 	}
 
@@ -102,31 +102,26 @@ public class GitIssueCreator {
 		return writer.toString();
 	}
 
-	private static Optional<String> createGitHubIssueManual(final IssueInfo info) {
-		String body = info.body();
-		if (body.length() > MAX_MANUAL_ISSUE_BODY_SIZE) {
-			body = body.substring(0, MAX_MANUAL_ISSUE_BODY_SIZE) + CODE_DELIMITER;
-		}
-
-		try {
-			final String reportingURI = FORDIAC_IDE_ISSUE_URL.formatted(
-					URLEncoder.encode(info.title(), StandardCharsets.UTF_8), // title
-					URLEncoder.encode(body, StandardCharsets.UTF_8)); // body
-			openLinkInBrowser(reportingURI);
-		} catch (final Exception e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
-		}
+	private static Optional<String> createGitHubIssueManual(final IssueInfo info, final String preferenceQualifier) {
+		final String reportingURLFormatString = PreferenceConstants.getReportGitHubManualURL(preferenceQualifier);
+		final String reportingURI = reportingURLFormatString.formatted(
+				URLEncoder.encode(info.title(), StandardCharsets.UTF_8),
+				URLEncoder.encode(String.join(",", info.labels()), StandardCharsets.UTF_8), //$NON-NLS-1$
+				URLEncoder.encode(info.body(), StandardCharsets.UTF_8));
+		openLinkInBrowser(truncateStacktraceURL(reportingURI, MAX_MANUAL_ISSUE_URL_SIZE));
 		return Optional.empty(); // no issue created yet...
 	}
 
-	private static Optional<String> createGitLabIssue(final IssueInfo info) {
+	private static Optional<String> createGitLabIssue(final IssueInfo info, final String preferenceQualifier) {
 		if (info.body().length() > 1048575) { // ~max GitLab description length
 			return Optional.empty();
 		}
 
-		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabURL());
-		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitLabProjectPath());
-		final String accessToken = PreferenceConstants.getReportGitLabToken();
+		final String baseURI = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitLabURL(preferenceQualifier));
+		final String projectPath = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitLabProjectPath(preferenceQualifier));
+		final String accessToken = PreferenceConstants.getReportGitLabToken(preferenceQualifier);
 		final String labels = String.join(",", info.labels()); //$NON-NLS-1$
 
 		final String uri = "%s/api/v4/projects/%s/issues?title=%s&description=%s&labels=%s"; //$NON-NLS-1$
@@ -148,10 +143,12 @@ public class GitIssueCreator {
 	}
 
 	@SuppressWarnings("nls")
-	private static Optional<String> createGitHubIssue(final IssueInfo info) {
-		final String baseURI = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubURL());
-		final String projectPath = removeLeadingTrailingSlashes(PreferenceConstants.getReportGitHubProjectPath());
-		final String token = PreferenceConstants.getReportGitHubToken();
+	private static Optional<String> createGitHubIssue(final IssueInfo info, final String preferenceQualifier) {
+		final String baseURI = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitHubURL(preferenceQualifier));
+		final String projectPath = removeLeadingTrailingSlashes(
+				PreferenceConstants.getReportGitHubProjectPath(preferenceQualifier));
+		final String token = PreferenceConstants.getReportGitHubToken(preferenceQualifier);
 
 		final Gson gson = new Gson();
 		final String jsonBody = gson.toJson(info);
@@ -188,4 +185,18 @@ public class GitIssueCreator {
 	private static String removeLeadingTrailingSlashes(final String s) {
 		return s.replaceAll("^/+|/+$", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	private static String truncateStacktraceURL(final String url, final int maxLength) {
+		if (url.length() <= maxLength) {
+			return url;
+		}
+		final String lineBreak = URLEncoder.encode(System.lineSeparator(), StandardCharsets.UTF_8);
+		final String epilogue = URLEncoder.encode(
+				System.lineSeparator() + TRUNCATE_INIDCATER + System.lineSeparator() + CODE_DELIMITER,
+				StandardCharsets.UTF_8);
+		// find the last line break that is inside the length limit
+		final int idx = url.lastIndexOf(lineBreak, maxLength - lineBreak.length() - epilogue.length());
+		return url.substring(0, idx).concat(epilogue);
+	}
 }
+

@@ -60,7 +60,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -151,10 +150,8 @@ public final class FBNetworkHelper {
 		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 		dstNetwork.getNetworkElements().add(copy);
 		copy.setTypeEntry(srcFb.getTypeEntry());
-		copy.setName(srcFb.getName()); // name should be last so that checks
-		// are working correctly
-		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true, false);
-		copy.setInterface(interfaceList);
+		copy.setName(srcFb.getName()); // name should be last so that checks are working correctly
+		copy.setInterface(srcFb.getInterface().fullCopy());
 		copy.setPosition(EcoreUtil.copy(srcFb.getPosition()));
 	}
 
@@ -193,13 +190,13 @@ public final class FBNetworkHelper {
 			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
 		final IInterfaceElement interfaceElement;
 		if (ie.getBlockFBNetworkElement() == null || srcNetwork != ie.getBlockFBNetworkElement().getFbNetwork()) {
-			interfaceElement = destInterface.getInterfaceElement(ie.getName());
+			interfaceElement = destInterface.getInterfaceElement(ie);
 		} else {
 			final FBNetworkElement element = dstNetwork.getElementNamed(ie.getBlockFBNetworkElement().getName());
 			if (!(element instanceof final BlockFBNetworkElement blockFbnel)) {
 				return null;
 			}
-			interfaceElement = blockFbnel.getInterfaceElement(ie.getName());
+			interfaceElement = blockFbnel.getInterface().getInterfaceElement(ie);
 		}
 		if (interfaceElement instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 				&& varDeclaration.isIsInput() != ie.isIsInput()) {
@@ -319,7 +316,7 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
-		if (!(type.getTypeEntry() instanceof ErrorTypeEntry)) {
+		if (type.getTypeEntry() != null && !type.getTypeEntry().hasError()) {
 			if (type instanceof final BaseFBType baseFBType) { // basic and simple fb type
 				return baseFBType.getInternalFbs();
 			}

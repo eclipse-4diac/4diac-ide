@@ -23,30 +23,44 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
 
-public class ForteTypeNameCreator {
+public class ForteTypeNameCreator implements TypeNameCreator {
 
-	public static String getForteTypeName(final TypeEntry entry) {
+	public static final TypeNameCreator TYPE_NAME_CREATOR = new ForteTypeNameCreator();
+
+	@Override
+	public String getTypeName(final TypeEntry entry) {
 		return convertFullTypeNameToFORTE(entry.getFullTypeName());
 	}
 
-	public static String getForteTypeName(final FBNetworkElement fb) {
+	@Override
+	public String getTypeName(final FBNetworkElement fb) {
 		if (fb != null && fb.getTypeEntry() != null) {
 			if (fb instanceof final ConfigurableFB confFB) {
 				return getConfigureFBType(confFB);
 			}
-			return getTypeName(fb);
+			return getForteTypeName(fb);
 		}
 		return ""; //$NON-NLS-1$
 	}
 
-	private static String getTypeName(final FBNetworkElement fb) {
+	@Override
+	public String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+		final String hash = entry.getTypeHash();
+		if (hash.isEmpty()) {
+			return getTypeName(entry);
+		}
+		return getTypeName(entry) + '#' + hash;
+	}
+
+	private static String getForteTypeName(final FBNetworkElement fb) {
 		return convertFullTypeNameToFORTE(fb.getFullTypeName());
 	}
 
 	private static String getConfigureFBType(final ConfigurableFB confFB) {
 		final DataType dt = confFB.getDataType();
-		String typeName = getTypeName(confFB);
+		String typeName = getForteTypeName(confFB);
 		if (dt != null) {
 			// The _1 is needed for 4diac FORTE to separate type name from configuration
 			// part
@@ -72,7 +86,4 @@ public class ForteTypeNameCreator {
 		return fullTypeName;
 	}
 
-	private ForteTypeNameCreator() {
-		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
-	}
 }

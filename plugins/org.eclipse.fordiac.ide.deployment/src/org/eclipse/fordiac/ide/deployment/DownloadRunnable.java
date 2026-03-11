@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.deployment;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -31,7 +32,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.deployment.data.ConnectionDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
-import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -270,10 +270,8 @@ public class DownloadRunnable implements IRunnableWithProgress, IDeploymentListe
 
 	private void deployParameters(final ResourceDeploymentData resDepData, final IDeviceManagementInteractor executor)
 			throws DeploymentException {
-		for (final ParameterDeploymentData param : resDepData.getParams()) {
-			executor.writeFBParameter(resDepData.getRes(), param.value(),
-					new FBDeploymentData(param.prefix(), param.variable().getBlockFBNetworkElement()),
-					param.variable());
+		for (final Map.Entry<String, String> param : resDepData.getParams().entrySet()) {
+			executor.writeFBParameter(resDepData.getRes(), param.getKey(), param.getValue());
 			curMonitor.worked(1);
 		}
 	}

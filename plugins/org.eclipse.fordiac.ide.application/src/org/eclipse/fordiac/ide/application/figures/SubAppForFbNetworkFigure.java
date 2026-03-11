@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2026 Profactor GmbH, fortiss GmbH,
  *                           Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
@@ -23,12 +23,12 @@ package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ScrollBar;
 import org.eclipse.draw2d.ScrollPane;
@@ -39,19 +39,19 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
+import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.utilities.ExpandedInterfacePositionMap;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
-import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstants;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -59,6 +59,8 @@ import org.eclipse.ui.PlatformUI;
 
 /** The Class SubAppForFbNetworkFigure. */
 public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
+
+	private static final Insets EXPANDED_SHADOW_INSETS = new Insets(2, 0, 0, 0);
 
 	private InstanceCommentFigure commentFigure;
 	private RoundedRectangle expandedMainFigure;
@@ -191,7 +193,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure.setCornerDimensions(
 				new Dimension(GefPreferenceConstants.CORNER_DIM, GefPreferenceConstants.CORNER_DIM));
-		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
+		final RectangleDropShadowBorder border = new RectangleDropShadowBorder(GefPreferenceConstants.CORNER_DIM);
+		border.setInsets(EXPANDED_SHADOW_INSETS);
+		expandedMainFigure.setBorder(border);
 		expandedMainFigure.setLayoutManager(createExpandedMainFigureLayout());
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
@@ -223,7 +227,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		};
 		interfaceBar.setMinimumSize(new Dimension(minExpandedInterfaceBarWidth, -1));
 		interfaceBar.setOutline(false);
-		interfaceBar.setBackgroundColor(EditorWithInterfaceEditPart.INTERFACE_BAR_BG_COLOR);
+		interfaceBar.setBackgroundColor(UIPreferenceConstants.getInterfaceBarColor());
 
 		interfaceBar.setLayoutManager(new ExpandedSubappInterfaceLayout(interfacePositions, isInput));
 
@@ -231,6 +235,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		final var lws = new LightweightSystem(shell);
 
 		final ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setOpaque(false);
 		scrollPane.setLayoutManager(new ExpandedInterfaceScrollPaneLayout(isInput));
 		scrollPane.setVerticalScrollBarVisibility(ScrollPane.AUTOMATIC);
 		scrollPane.setHorizontalScrollBarVisibility(ScrollPane.NEVER);
@@ -239,7 +244,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		lws.setContents(scrollPane);
 
 		parent.add(scrollPane, new GridData(SWT.BEGINNING, SWT.FILL, false, true));
-
 		return interfaceBar;
 	}
 
@@ -250,13 +254,21 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void addComment() {
-		final Figure commentContainer = new Figure();
+		final Figure commentContainer = new CommentContainer() {
+			@Override
+			protected void paintFigure(final Graphics graphics) {
+				final Rectangle bounds = getBounds();
+				graphics.fillRoundRectangle(bounds, GefPreferenceConstants.CORNER_DIM,
+						GefPreferenceConstants.CORNER_DIM);
+				graphics.fillRectangle(bounds.x, bounds.y + bounds.height - GefPreferenceConstants.CORNER_DIM - 1,
+						bounds.width, GefPreferenceConstants.CORNER_DIM + 1);
+				paintBottomLine(graphics);
+			}
+		};
 		commentContainer.setLayoutManager(new ToolbarLayout());
 		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
 
 		commentFigure = new InstanceCommentFigure();
-		final AdvancedLineBorder commentLineSeperator = new AdvancedLineBorder(PositionConstants.SOUTH);
-		commentFigure.setBorder(commentLineSeperator);
 		commentFigure.setCursor(Cursors.SIZEALL);
 		commentContainer.add(commentFigure);
 		refreshComment();
@@ -268,7 +280,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			// we have a rounding error
 			top += lineHeight - (top + bottom);
 		}
-		commentContainer.setBorder(new MarginBorder(top, 5, bottom, 5));
+		commentContainer.setBorder(new MarginBorder(top, 5, bottom + 1, 5)); // +1 to compensate for removed line border
 	}
 
 	private static GridData createCommentLayoutData() {

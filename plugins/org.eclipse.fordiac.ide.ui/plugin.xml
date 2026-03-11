@@ -148,7 +148,7 @@
              categoryId="org.eclipse.fordiac.ide.themeCategory"
              id="org.eclipse.fordiac.ide.ui.BoolConnectionConnectorColor"
              label="%FordiacPreferencePage_LABEL_BoolConnectorColor"
-             value="159, 164, 138">
+             value="163, 176, 143">
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
@@ -178,7 +178,7 @@
              categoryId="org.eclipse.fordiac.ide.themeCategory"
              id="org.eclipse.fordiac.ide.ui.DataConnectionConnectorColor"
              label="%FordiacPreferencePage_LABEL_DataConnectorColor"
-             value="0, 0, 255">
+             value="51, 102, 255">
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
@@ -188,11 +188,62 @@
        </colorDefinition>
        <colorDefinition
              categoryId="org.eclipse.fordiac.ide.themeCategory"
-             id="org.eclipse.fordiac.ide.ui.PredecessorMarkerColor"
-             label="%FordiacPreferencePage_LABEL_PredecessorMarkerColor"
-             value="99, 179, 31">
+             id="org.eclipse.fordiac.ide.ui.InterfaceBarBackgroundColor"
+             label="Interface Bar Background Color"
+             value="235, 245, 255"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
        </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.PageCommentBackgroundColor"
+             label="Page Comment Background Color"
+             value="248, 248, 252"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.StickNoteCommentBackgroundColor"
+             label="Sticky Note Comment Background Color"
+             value="255, 248, 210"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.StickNoteCommentForegroundColor"
+             label="Sticky Note Comment Foreground Color"
+             value="55, 50, 35"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.StickNoteCommentBorderColor"
+             label="Sticky Note Comment Border Color"
+             value="238, 215, 120"
+             isEditable="false"> 
+             <!-- the label does not need to be translatable --> 
+       </colorDefinition>
+       <colorDefinition
+             categoryId="org.eclipse.fordiac.ide.themeCategory"
+             id="org.eclipse.fordiac.ide.ui.NatTableDefaultBackground"
+             label="Nattable defaualt background color"
+             value="COLOR_LIST_BACKGROUND"
+             isEditable="false">
+             <!-- the label does not need to be translatable --> 
+		</colorDefinition>
     </extension>
+	<extension
+		point="org.eclipse.e4.ui.css.swt.theme">
+		<stylesheet
+			uri="css/dark_fordiac_connections.css">
+			<themeid
+				refid="org.eclipse.e4.ui.css.theme.e4_dark">
+			</themeid>
+		</stylesheet>
+	</extension>
  <extension
        point="org.eclipse.ui.preferenceTransfer">
     <transfer

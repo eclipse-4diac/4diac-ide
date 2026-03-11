@@ -258,18 +258,14 @@ public class PasteCommand extends Command implements ScopedCommand {
 				copiedElement.setTypeEntry(dstTypeLib.createErrorTypeEntry(element.getFullTypeName(),
 						element.getTypeEntry().getTypeEClass()));
 				if (element instanceof final BlockFBNetworkElement bfbElement) {
-					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().copy());
+					((BlockFBNetworkElement) copiedElement).setInterface(bfbElement.getInterface().fullCopy());
 				}
 			}
 		} else if (copiedElement instanceof final BlockFBNetworkElement copiedBlockElement) {
 			// clear the connection references
-			for (final IInterfaceElement ie : copiedBlockElement.getInterface().getAllInterfaceElements()) {
-				if (ie.isIsInput()) {
-					ie.getInputConnections().clear();
-				} else {
-					ie.getOutputConnections().clear();
-				}
-			}
+			copiedBlockElement.getInterface().getAllInterfaceElements() //
+					.map(ie -> ie.isIsInput() ? ie.getInputConnections() : ie.getOutputConnections())
+					.forEach(EList::clear);
 		}
 		return copiedElement;
 	}
@@ -339,7 +335,7 @@ public class PasteCommand extends Command implements ScopedCommand {
 			final BlockFBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
-			return copiedElement.getInterfaceElement(orig.getName());
+			return copiedElement.getInterface().getInterfaceElement(orig);
 		}
 		if (dstFBNetwork.equals(copyPasteData.srcNetwork())
 				|| (dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {

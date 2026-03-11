@@ -353,36 +353,38 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
+		switch (childEditPart) {
+		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP -> {
 			final IFigure contentFigure = unfoldedSubappContentEP.getFigure();
 			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
-		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+		}
+		case final InterfaceEditPart interfaceEditPart when getModel().isUnfolded() -> {
 			if (interfaceEditPart.isInput()) {
 				getFigure().getExpandedInputFigure().add(interfaceEditPart.getFigure());
 			} else {
 				getFigure().getExpandedOutputFigure().add(interfaceEditPart.getFigure());
 			}
-		} else {
-			super.addChildVisual(childEditPart, index);
+		}
+		default -> super.addChildVisual(childEditPart, index);
 		}
 	}
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof final UnfoldedSubappContentEditPart unfoldedSubappContentEP) {
-			if (getFigure().getExpandedContentArea() != null) {
-				getFigure().getExpandedContentArea().remove(unfoldedSubappContentEP.getFigure());
-			}
-		} else if (childEditPart instanceof final InterfaceEditPart interfaceEditPart && getModel().isUnfolded()) {
+		switch (childEditPart) {
+		case final UnfoldedSubappContentEditPart unfoldedSubappContentEP when getFigure()
+				.getExpandedContentArea() != null ->
+			getFigure().getExpandedContentArea().remove(unfoldedSubappContentEP.getFigure());
+		case final InterfaceEditPart interfaceEditPart when getModel().isUnfolded() -> {
 			if (interfaceEditPart.isInput()) {
 				getFigure().getExpandedInputFigure().remove(interfaceEditPart.getFigure());
 			} else {
 				getFigure().getExpandedOutputFigure().remove(interfaceEditPart.getFigure());
 			}
-		} else {
-			super.removeChildVisual(childEditPart);
+		}
+		default -> super.removeChildVisual(childEditPart);
 		}
 	}
 

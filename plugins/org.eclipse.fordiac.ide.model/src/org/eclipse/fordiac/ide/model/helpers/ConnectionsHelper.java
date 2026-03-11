@@ -23,8 +23,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 public final class ConnectionsHelper {
 
 	public static EList<Connection> getConnections(final IInterfaceElement oppositeIE) {
-		final IInterfaceElement fbOppostiteIE = oppositeIE.getBlockFBNetworkElement().getOpposite()
-				.getInterfaceElement(oppositeIE.getName());
+		final IInterfaceElement fbOppostiteIE = oppositeIE.getBlockFBNetworkElement().getOpposite().getInterface()
+				.getInterfaceElement(oppositeIE);
 
 		if (null != fbOppostiteIE) {
 			return (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
@@ -35,8 +35,8 @@ public final class ConnectionsHelper {
 
 	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie,
 			final Connection connection) {
-		final IInterfaceElement fbOppostiteIE = ie.getBlockFBNetworkElement().getOpposite()
-				.getInterfaceElement(ie.getName());
+		final IInterfaceElement fbOppostiteIE = ie.getBlockFBNetworkElement().getOpposite().getInterface()
+				.getInterfaceElement(ie);
 
 		if (null != fbOppostiteIE) {
 			final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
@@ -45,7 +45,7 @@ public final class ConnectionsHelper {
 			if ((null != connectionOpposite) && connectionOpposite.getBlockFBNetworkElement().isMapped()) {
 				final BlockFBNetworkElement mappedOppositeElement = connectionOpposite.getBlockFBNetworkElement()
 						.getOpposite();
-				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
+				return mappedOppositeElement.getInterface().getInterfaceElement(connectionOpposite);
 			}
 
 		}
@@ -63,8 +63,8 @@ public final class ConnectionsHelper {
 				final BlockFBNetworkElement opDestination = dest.getBlockFBNetworkElement().getOpposite();
 				if (null != opSource && null != opDestination
 						&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
-					final IInterfaceElement opSourceIE = opSource.getInterfaceElement(source.getName());
-					final IInterfaceElement opDestIE = opDestination.getInterfaceElement(dest.getName());
+					final IInterfaceElement opSourceIE = opSource.getInterface().getInterfaceElement(source);
+					final IInterfaceElement opDestIE = opDestination.getInterface().getInterfaceElement(dest);
 					if (opSourceIE != null && opDestIE != null) {
 						// if we didn't find source or destination at the opposite site we should search
 						// the connection

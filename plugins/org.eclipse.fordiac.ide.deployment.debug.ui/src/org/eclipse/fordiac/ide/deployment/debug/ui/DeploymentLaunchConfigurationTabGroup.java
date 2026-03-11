@@ -24,10 +24,11 @@ public class DeploymentLaunchConfigurationTabGroup extends AbstractLaunchConfigu
 	@Override
 	public void createTabs(final ILaunchConfigurationDialog dialog, final String mode) {
 		if (ILaunchManager.DEBUG_MODE.equals(mode) || DeploymentLaunchConfigurationDelegate.MONITOR_MODE.equals(mode)) {
-			setTabs(new DeploymentLaunchConfigurationTab(), new DeploymentLaunchWatchesTab(), new CommonTab(),
-					new PrototypeTab());
+			setTabs(new DeploymentLaunchConfigurationTab(), new DeploymentLaunchInitialValuesTab(),
+					new DeploymentLaunchWatchesTab(), new CommonTab(), new PrototypeTab());
 		} else {
-			setTabs(new DeploymentLaunchConfigurationTab(), new CommonTab(), new PrototypeTab());
+			setTabs(new DeploymentLaunchConfigurationTab(), new DeploymentLaunchInitialValuesTab(), new CommonTab(),
+					new PrototypeTab());
 		}
 	}
 }

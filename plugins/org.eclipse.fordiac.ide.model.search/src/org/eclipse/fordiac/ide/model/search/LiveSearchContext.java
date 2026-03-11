@@ -33,6 +33,6 @@ public class LiveSearchContext extends AbstractLiveSearchContext {
 
 	@Override
 	public Stream<URI> getTypes() {
-		return getTypelib().getAllTypes().stream().map(TypeEntry::getURI).filter(Objects::nonNull);
+		return getTypelib().getAllTypes().map(TypeEntry::getURI).filter(Objects::nonNull);
 	}
 }

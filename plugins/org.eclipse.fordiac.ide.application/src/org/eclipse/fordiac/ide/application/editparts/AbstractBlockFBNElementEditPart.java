@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.application.policies.DeleteFBNElementEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNElementSelectionPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractViewEditPart;
@@ -49,8 +48,10 @@ import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -61,6 +62,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPart;
@@ -214,17 +216,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			fontChangeListener = new DiagramFontChangeListener(getFigure());
 		}
 		return fontChangeListener;
-	}
-
-	public boolean isOnlyThisOrNothingSelected() {
-		final List<? extends EditPart> selection = getViewer().getSelectedEditParts();
-		if (selection.size() > 1) {
-			return false;
-		}
-		if (selection.size() == 1) {
-			return selection.get(0) == this;
-		}
-		return true;
 	}
 
 	protected void refreshToolTip() {
@@ -392,7 +383,6 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 			return getInterfaceInputElementIndex(interfaceEditPart, interfaceList);
 		}
 		return getInterfaceOutputElementIndex(interfaceEditPart, interfaceList);
-
 	}
 
 	private static int getInterfaceInputElementIndex(final InterfaceEditPart interfaceEditPart,
@@ -409,7 +399,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				return interfaceList.getInOutVars().stream().filter(VarDeclaration::isVisible).toList()
 						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleInputVars().indexOf(varDecl);
+			return expandAllVisibleMemberAccessIEs(interfaceList.getInputVars()).indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -432,7 +422,7 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 				return interfaceList.getOutMappedInOutVars().stream().filter(VarDeclaration::isVisible).toList()
 						.indexOf(varDecl);
 			}
-			return interfaceList.getVisibleOutputVars().indexOf(varDecl);
+			return expandAllVisibleMemberAccessIEs(interfaceList.getOutputVars()).indexOf(varDecl);
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -476,38 +466,24 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
-
-		addBasicElements(elements);
-		removeInvisibleInOutVars(elements);
-		removeInvisibleInputOutputVars(elements);
+		elements.add(getInstanceName());
+		elements.addAll(getModel().getInterface().getAllInterfaceElements().filter(IInterfaceElement::isVisible).toList());
 		addPinIndicators(elements);
-
 		return elements;
 	}
 
-	private void addBasicElements(final List<Object> elements) {
-		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface().getAllInterfaceElements());
-	}
-
-	private void removeInvisibleInOutVars(final List<Object> elements) {
-		final List<VarDeclaration> inoutInRemovalList = getModel().getInterface().getInOutVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-		final List<VarDeclaration> inoutOutRemovalList = getModel().getInterface().getOutMappedInOutVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-
-		elements.removeAll(inoutInRemovalList);
-		elements.removeAll(inoutOutRemovalList);
-	}
-
-	private void removeInvisibleInputOutputVars(final List<Object> elements) {
-		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
-				.filter(it -> !it.isVisible()).toList();
-
-		elements.removeAll(inputRemovalList);
-		elements.removeAll(outputRemovalList);
+	private static List<IInterfaceElement> expandAllVisibleMemberAccessIEs(
+			final List<? extends IInterfaceElement> elements) {
+		final List<IInterfaceElement> result = new ArrayList<>(elements.size());
+		for (final IInterfaceElement ie : elements) {
+			if (ie.isVisible()) {
+				result.add(ie);
+			}
+			if (ie instanceof final ContainerVarDeclaration structVarDecl) {
+				result.addAll(expandAllVisibleMemberAccessIEs(structVarDecl.getCachedMembers()));
+			}
+		}
+		return result;
 	}
 
 	private void addPinIndicators(final List<Object> elements) {

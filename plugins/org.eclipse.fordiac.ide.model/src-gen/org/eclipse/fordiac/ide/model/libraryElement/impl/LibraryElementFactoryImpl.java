@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -57,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -65,9 +65,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -129,7 +139,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-
+import org.eclipse.fordiac.ide.model.libraryElement.*;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -201,6 +211,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
 			case LibraryElementPackage.CONFIGURABLE_MOVE_FB: return createConfigurableMoveFB();
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA: return createConnectionRoutingData();
+			case LibraryElementPackage.CONTAINER_VAR_DECLARATION: return createContainerVarDeclaration();
 			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
 			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
 			case LibraryElementPackage.DEVICE: return createDevice();
@@ -209,9 +220,19 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.ECC: return createECC();
 			case LibraryElementPackage.EC_STATE: return createECState();
 			case LibraryElementPackage.EC_TRANSITION: return createECTransition();
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: return createErrorMarkerDataType();
+			case LibraryElementPackage.ERROR_ADAPTER_TYPE: return createErrorAdapterType();
+			case LibraryElementPackage.ERROR_ATTRIBUTE_DECLARATION: return createErrorAttributeDeclaration();
+			case LibraryElementPackage.ERROR_AUTOMATION_SYSTEM: return createErrorAutomationSystem();
+			case LibraryElementPackage.ERROR_DEVICE_TYPE: return createErrorDeviceType();
+			case LibraryElementPackage.ERROR_FB_TYPE: return createErrorFBType();
+			case LibraryElementPackage.ERROR_FUNCTION_FB_TYPE: return createErrorFunctionFBType();
+			case LibraryElementPackage.ERROR_GLOBAL_CONSTANTS: return createErrorGlobalConstants();
+			case LibraryElementPackage.ERROR_LIBRARY_ELEMENT: return createErrorLibraryElement();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: return createErrorMarkerFBNElement();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE: return createErrorMarkerInterface();
+			case LibraryElementPackage.ERROR_RESOURCE_TYPE: return createErrorResourceType();
+			case LibraryElementPackage.ERROR_SEGMENT_TYPE: return createErrorSegmentType();
+			case LibraryElementPackage.ERROR_SUB_APP_TYPE: return createErrorSubAppType();
 			case LibraryElementPackage.EVENT: return createEvent();
 			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
 			case LibraryElementPackage.FB: return createFB();
@@ -264,10 +285,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.TYPED_SUB_APP: return createTypedSubApp();
 			case LibraryElementPackage.UNTYPED_SUB_APP: return createUntypedSubApp();
 			case LibraryElementPackage.VALUE: return createValue();
+			case LibraryElementPackage.VAR_CONFIG_INSTANCE: return createVarConfigInstance();
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
-			case LibraryElementPackage.VAR_CONFIG_INSTANCE: return createVarConfigInstance();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -303,6 +324,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createInterfaceTypeEntryFromString(eDataType, initialValue);
 			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
 				return createBlockFBNWElementStreamFromString(eDataType, initialValue);
+			case LibraryElementPackage.STRING_ARRAY:
+				return createStringArrayFromString(eDataType, initialValue);
+			case LibraryElementPackage.STRING_LIST:
+				return createStringListFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -338,6 +363,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertInterfaceTypeEntryToString(eDataType, instanceValue);
 			case LibraryElementPackage.BLOCK_FBNW_ELEMENT_STREAM:
 				return convertBlockFBNWElementStreamToString(eDataType, instanceValue);
+			case LibraryElementPackage.STRING_ARRAY:
+				return convertStringArrayToString(eDataType, instanceValue);
+			case LibraryElementPackage.STRING_LIST:
+				return convertStringListToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -602,6 +631,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public ContainerVarDeclaration createContainerVarDeclaration() {
+		ContainerVarDeclarationImpl containerVarDeclaration = new ContainerVarDeclarationImpl();
+		return containerVarDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataConnection createDataConnection() {
 		DataConnectionImpl dataConnection = new DataConnectionImpl();
 		return dataConnection;
@@ -690,9 +730,86 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public ErrorMarkerDataType createErrorMarkerDataType() {
-		ErrorMarkerDataTypeImpl errorMarkerDataType = new ErrorMarkerDataTypeImpl();
-		return errorMarkerDataType;
+	public ErrorAdapterType createErrorAdapterType() {
+		ErrorAdapterTypeImpl errorAdapterType = new ErrorAdapterTypeImpl();
+		return errorAdapterType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorAttributeDeclaration createErrorAttributeDeclaration() {
+		ErrorAttributeDeclarationImpl errorAttributeDeclaration = new ErrorAttributeDeclarationImpl();
+		return errorAttributeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorAutomationSystem createErrorAutomationSystem() {
+		ErrorAutomationSystemImpl errorAutomationSystem = new ErrorAutomationSystemImpl();
+		return errorAutomationSystem;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorDeviceType createErrorDeviceType() {
+		ErrorDeviceTypeImpl errorDeviceType = new ErrorDeviceTypeImpl();
+		return errorDeviceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorFBType createErrorFBType() {
+		ErrorFBTypeImpl errorFBType = new ErrorFBTypeImpl();
+		return errorFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorFunctionFBType createErrorFunctionFBType() {
+		ErrorFunctionFBTypeImpl errorFunctionFBType = new ErrorFunctionFBTypeImpl();
+		return errorFunctionFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorGlobalConstants createErrorGlobalConstants() {
+		ErrorGlobalConstantsImpl errorGlobalConstants = new ErrorGlobalConstantsImpl();
+		return errorGlobalConstants;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorLibraryElement createErrorLibraryElement() {
+		ErrorLibraryElementImpl errorLibraryElement = new ErrorLibraryElementImpl();
+		return errorLibraryElement;
 	}
 
 	/**
@@ -715,6 +832,39 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ErrorMarkerInterface createErrorMarkerInterface() {
 		ErrorMarkerInterfaceImpl errorMarkerInterface = new ErrorMarkerInterfaceImpl();
 		return errorMarkerInterface;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorResourceType createErrorResourceType() {
+		ErrorResourceTypeImpl errorResourceType = new ErrorResourceTypeImpl();
+		return errorResourceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorSegmentType createErrorSegmentType() {
+		ErrorSegmentTypeImpl errorSegmentType = new ErrorSegmentTypeImpl();
+		return errorSegmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorSubAppType createErrorSubAppType() {
+		ErrorSubAppTypeImpl errorSubAppType = new ErrorSubAppTypeImpl();
+		return errorSubAppType;
 	}
 
 	/**
@@ -1534,6 +1684,43 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertBlockFBNWElementStreamToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String[] createStringArrayFromString(EDataType eDataType, String initialValue) {
+		return (String[])super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertStringArrayToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public List<String> createStringListFromString(EDataType eDataType, String initialValue) {
+		return (List<String>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertStringListToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class ConnectionAnnotations {
@@ -387,7 +386,7 @@ public class ConnectionAnnotations {
 	}
 
 	private static void setNegated(final Connection connection, final String negated) {
-		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, "");
+		connection.setAttribute(InternalAttributeDeclarations.NEGATED, negated, ""); //$NON-NLS-1$
 	}
 
 	public static boolean isNegated(final Connection connection) {
@@ -411,6 +410,6 @@ public class ConnectionAnnotations {
 
 	private static boolean isIncomplete(final BlockFBNetworkElement element) {
 		return element instanceof ErrorMarkerFBNElement
-				|| (element != null && element.getTypeEntry() instanceof ErrorTypeEntry);
+				|| (element != null && element.getTypeEntry() != null && element.getTypeEntry().hasError());
 	}
 }

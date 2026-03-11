@@ -453,8 +453,8 @@ public class FBEndpointFinder {
 
 		// trace find right interface from the interface stack
 		for (final IInterfaceElement structMem : ((StructManipulator) fb).getMemberVars().stream()
-				.filter(mem -> fb.getInterfaceElement(mem.getName()) != null).toList()) {
-			final IInterfaceElement realInt = fb.getInterfaceElement(structMem.getName());
+				.filter(mem -> fb.getInterface().getInterfaceElement(List.of(mem.getName())) != null).toList()) {
+			final IInterfaceElement realInt = fb.getInterface().getInterfaceElement(List.of(structMem.getName()));
 
 			Deque<String> subStack;
 			/*

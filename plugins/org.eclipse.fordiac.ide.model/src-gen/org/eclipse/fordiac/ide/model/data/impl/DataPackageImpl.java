@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedValue;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.IntType;
 import org.eclipse.fordiac.ide.model.data.InternalDataType;
@@ -141,6 +142,13 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	private EClass enumeratedValueEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorDataTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -700,6 +708,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	@Override
 	public EReference getEnumeratedValue_Type() {
 		return (EReference)enumeratedValueEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorDataType() {
+		return errorDataTypeEClass;
 	}
 
 	/**
@@ -1320,6 +1338,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		enumeratedValueEClass = createEClass(ENUMERATED_VALUE);
 		createEReference(enumeratedValueEClass, ENUMERATED_VALUE__TYPE);
 
+		errorDataTypeEClass = createEClass(ERROR_DATA_TYPE);
+
 		structuredTypeEClass = createEClass(STRUCTURED_TYPE);
 		createEReference(structuredTypeEClass, STRUCTURED_TYPE__MEMBER_VARIABLES);
 
@@ -1468,6 +1488,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		directlyDerivedTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		enumeratedTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		enumeratedValueEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+		errorDataTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
+		errorDataTypeEClass.getESuperTypes().add(theLibraryElementPackage.getErrorLibraryElement());
 		structuredTypeEClass.getESuperTypes().add(this.getAnyDerivedType());
 		subrangeTypeEClass.getESuperTypes().add(this.getDerivedType());
 		valueTypeEClass.getESuperTypes().add(this.getDataType());
@@ -1557,11 +1579,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		initEClass(enumeratedValueEClass, EnumeratedValue.class, "EnumeratedValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getEnumeratedValue_Type(), this.getEnumeratedType(), this.getEnumeratedType_EnumeratedValues(), "type", null, 0, 1, EnumeratedValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(errorDataTypeEClass, ErrorDataType.class, "ErrorDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
 		initEClass(structuredTypeEClass, StructuredType.class, "StructuredType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getStructuredType_MemberVariables(), theLibraryElementPackage.getVarDeclaration(), null, "memberVariables", null, 0, -1, StructuredType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(structuredTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(structuredTypeEClass, theLibraryElementPackage.getVarDeclaration(), "getMemberVar", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subrangeEClass, Subrange.class, "Subrange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSubrange_LowerLimit(), theXMLTypePackage.getInt(), "lowerLimit", null, 1, 1, Subrange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

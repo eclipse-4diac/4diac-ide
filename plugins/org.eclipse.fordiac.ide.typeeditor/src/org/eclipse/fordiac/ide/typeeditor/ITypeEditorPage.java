@@ -15,12 +15,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -57,35 +54,7 @@ public interface ITypeEditorPage extends ISelectionListener, IReusableEditor, IG
 	void reloadType();
 
 	default LibraryElement getType() {
-		if (getEditorInput() instanceof final TypeEditorInput typeEI) {
-			return typeEI.getContent();
-		}
-		return null;
-	}
-
-	default TypeEntry getTypeEntry() {
-		if (getEditorInput() instanceof final TypeEditorInput typeEI) {
-			return typeEI.getTypeEntry();
-		}
-		return null;
-	}
-
-	default IFile getFile() {
-		if (getEditorInput() instanceof final IFileEditorInput fileEI) {
-			return fileEI.getFile();
-		}
-		return null;
-	}
-
-	default void checkEditorInput(final IEditorInput input) {
-		if (!(input instanceof final TypeEditorInput typeEI)) {
-			throw new IllegalArgumentException("Type Editor Pages only accept TypeEditorInputs as valid inputs!"); //$NON-NLS-1$
-		}
-		final TypeEditorInput currentEditorInput = (TypeEditorInput) getEditorInput();
-		if (currentEditorInput != null && currentEditorInput.getContent() != typeEI.getContent()) {
-			throw new IllegalArgumentException(
-					"Editor input with new content given to type editor. This is currently not supported!"); //$NON-NLS-1$
-		}
+		return LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
 	}
 
 	default void revealEditor() {

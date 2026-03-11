@@ -19,14 +19,12 @@ package org.eclipse.fordiac.ide.gef;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.zoom.MouseLocationZoomScrollPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationModelEventDispatcher;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalViewerAnnotationModelEventDispatcher;
 import org.eclipse.fordiac.ide.gef.dnd.ParameterDropTargetListener;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -38,10 +36,10 @@ import org.eclipse.fordiac.ide.gef.preferences.GefPreferenceConstantsCache;
 import org.eclipse.fordiac.ide.gef.print.PrintPreviewAction;
 import org.eclipse.fordiac.ide.gef.ruler.FordiacRulerComposite;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
-import org.eclipse.fordiac.ide.model.ui.editors.IContentEditorInput;
-import org.eclipse.fordiac.ide.model.ui.editors.UntypedEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.editors.I4diacModelEditor;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.ContextMenuProvider;
@@ -81,7 +79,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -209,15 +206,11 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	}
 
 	private GefPreferenceConstantsCache getPreferenceConstantsCache() {
-		IProject project = null;
-		final IEditorInput input = getEditorInput();
-		if (input instanceof final IContentEditorInput contentInput) {
-			project = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(contentInput.getContent()).getProject();
-		} else if (input instanceof final IFileEditorInput fileInput) {
-			project = fileInput.getFile().getProject();
+		final LibraryElement libraryElement = LibraryElementProvider.INSTANCE.getLibraryElement(getEditorInput());
+		if (libraryElement != null && libraryElement.getTypeLibrary() != null) {
+			return new GefPreferenceConstantsCache(libraryElement.getTypeLibrary().getProject());
 		}
-
-		return new GefPreferenceConstantsCache(project);
+		return new GefPreferenceConstantsCache(null);
 	}
 
 	@Override
@@ -357,12 +350,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		}
 	}
 
-	protected void updateEditorTitle(final String newTitle) {
-		((UntypedEditorInput) getEditorInput()).setName(newTitle); // update the editor input so that the tooltip and
-		// header bars are correct as well
-		setPartName(newTitle);
-	}
-
 	/**
 	 * Sets the model.
 	 *
@@ -370,15 +357,6 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	 */
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final IContentEditorInput contentEI)) {
-			throw new IllegalArgumentException("Diagram editors only accept IContentEditorInput as valid inputs!"); //$NON-NLS-1$
-		}
-
-		final IContentEditorInput currentEditorInput = (IContentEditorInput) getEditorInput();
-		if (currentEditorInput != null && currentEditorInput.getContent() != contentEI.getContent()) {
-			throw new IllegalArgumentException(
-					"Editor input with new content given to diagram editor. This is currently not supported!"); //$NON-NLS-1$
-		}
 		if (getEditorInput() == null) {
 			setupEditDomain();
 		}
@@ -418,6 +396,11 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return LibraryElementProvider.INSTANCE.canSaveLibraryElement(getEditorInput());
 	}
 
 	/**

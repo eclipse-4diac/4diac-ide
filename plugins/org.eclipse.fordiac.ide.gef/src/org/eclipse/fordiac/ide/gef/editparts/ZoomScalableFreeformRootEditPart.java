@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GbmH, fortiss GmbH, Johannes Kepler University
+ * Copyright (c) 2008 Profactor GbmH, fortiss GmbH, Johannes Kepler University
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,8 +34,8 @@ import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
-import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
@@ -170,7 +170,6 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
 
 	public ZoomScalableFreeformRootEditPart(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {
-		super(false);
 		configureZoomManger();
 		setupZoomActions(site, actionRegistry);
 	}
@@ -272,8 +271,15 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			final AbstractFreeformFigure drawingAreaContainer) {
 		drawingAreaContainer.setOpaque(true);
 		drawingAreaContainer.setBackgroundColor(getDrawingAreaBGColor());
-		drawingAreaContainer.setBorder(new SingleLineBorder());
+		drawingAreaContainer.setBorder(createDrawingContainerShadowBorder());
 		drawingAreaContainer.setContents(drawingArea);
+	}
+
+	private static RectangleDropShadowBorder createDrawingContainerShadowBorder() {
+		final RectangleDropShadowBorder border = new RectangleDropShadowBorder();
+		border.setHaloSize(8);
+		border.setDropShadowSize(12);
+		return border;
 	}
 
 	private static Color getDrawingAreaBGColor() {

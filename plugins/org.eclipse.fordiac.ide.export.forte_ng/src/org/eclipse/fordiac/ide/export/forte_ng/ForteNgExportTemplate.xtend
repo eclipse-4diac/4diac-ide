@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_ng
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.ExportTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportOptions
-import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.osgi.framework.FrameworkUtil
 
@@ -30,21 +29,9 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 	}
 
 	def protected generateDependencyIncludes(Iterable<? extends INamedElement> dependencies) '''
-		«dependencies.filter(DataType).generateTypeIncludes»
-		«FOR include : dependencies.reject(DataType).map[generateDefiningInclude].toSet.sort»
+		«FOR include : dependencies.flatMap[generateDefiningIncludes].toSet.sort»
 			«include.generateDependencyInclude»
 		«ENDFOR»
-	'''
-
-	def protected generateTypeIncludes(Iterable<DataType> types) '''
-		«FOR include : types.map[generateDefiningInclude].toSet.sort»
-			«include.generateDependencyInclude»
-		«ENDFOR»
-		«generateDependencyInclude("forte/iec61131_functions.h")»
-		«generateDependencyInclude("forte/datatypes/forte_array_common.h")»
-		«generateDependencyInclude("forte/datatypes/forte_array.h")»
-		«generateDependencyInclude("forte/datatypes/forte_array_fixed.h")»
-		«generateDependencyInclude("forte/datatypes/forte_array_variable.h")»
 	'''
 
 	def protected generateDependencyInclude(String path) {

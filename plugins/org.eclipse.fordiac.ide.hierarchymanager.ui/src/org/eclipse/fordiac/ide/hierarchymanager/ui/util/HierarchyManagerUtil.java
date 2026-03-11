@@ -28,11 +28,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class HierarchyManagerUtil {
 	private HierarchyManagerUtil() {
@@ -51,13 +54,18 @@ public class HierarchyManagerUtil {
 		return null;
 	}
 
-	public static EObject getTypeEditable(final String containerFileName, final IProject project) {
+	public static LibraryElement getTypeEditable(final String containerFileName, final IProject project) {
 		if (project != null) {
 			final IFile file = project.getFile(containerFileName);
 			if (file.exists()) {
+				final LibraryElement libraryElement = LibraryElementProvider.INSTANCE
+						.getLibraryElement(new FileEditorInput(file));
+				if (libraryElement != null) {
+					return libraryElement;
+				}
 				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 				if (typeEntry != null) {
-					return typeEntry.getTypeEditable();
+					return typeEntry.getType();
 				}
 			}
 		}

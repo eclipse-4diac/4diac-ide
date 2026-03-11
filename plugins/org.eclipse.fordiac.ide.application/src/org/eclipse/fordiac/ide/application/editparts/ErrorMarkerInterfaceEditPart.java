@@ -13,13 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
@@ -55,21 +52,4 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 	public ErrorMarkerInterface getModel() {
 		return (ErrorMarkerInterface) super.getModel();
 	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		if (key == ErrorMarkerInterfaceEditPart.class) {
-			return key.cast(this);
-		}
-		if (key == ErrorMarkerDataTypeImpl.class) {
-			final Adapter a = getContentAdapter();
-			if (a.getTarget() instanceof final ErrorMarkerInterfaceImpl em
-					&& em.getType() instanceof final ErrorMarkerDataTypeImpl emdt) {
-				return key.cast(emdt);
-			}
-		}
-
-		return super.getAdapter(key);
-	}
-
 }

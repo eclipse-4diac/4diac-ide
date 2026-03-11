@@ -51,6 +51,19 @@ public final class NamedElementAnnotations {
 		return element.getName();
 	}
 
+	/**
+	 * @apiNote Do not call directly, use {@link INamedElement#getRelativeName()}
+	 *          instead.
+	 * @implNote Must be accessible from derived models.
+	 */
+	public static String getRelativeName(final INamedElement element, final INamedElement to) {
+		final INamedElement namedContainer = getNamedContainer(element);
+		if (namedContainer != null && namedContainer.eContainer() != null && namedContainer != to) {
+			return namedContainer.getRelativeName(to) + QUALIFIED_NAME_DELIMITER + element.getName();
+		}
+		return element.getName();
+	}
+
 	static INamedElement getNamedContainer(EObject object) {
 		while (object != null) {
 			object = object.eContainer();
@@ -180,7 +193,7 @@ public final class NamedElementAnnotations {
 		// - if the map does contain the name -> put the null element into the map
 		// (so we do not add a diagnostic on it twice but still retain the key in the
 		// map for more duplicates)
-		final INamedElement duplicate = putConditional(namedContents, element.getQualifiedName(), element,
+		final INamedElement duplicate = putConditional(namedContents, element.getQualifiedName().toLowerCase(), element,
 				NullNamedElement.INSTANCE);
 		if (duplicate != null) { // we have a collision
 			// add diagnostics
@@ -246,6 +259,11 @@ public final class NamedElementAnnotations {
 
 		@Override
 		public String getQualifiedName() {
+			return null;
+		}
+
+		@Override
+		public String getRelativeName(final INamedElement to) {
 			return null;
 		}
 

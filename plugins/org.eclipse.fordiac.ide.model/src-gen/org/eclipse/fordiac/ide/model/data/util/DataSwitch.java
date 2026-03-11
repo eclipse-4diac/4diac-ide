@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.fordiac.ide.model.data.*;
 
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
@@ -144,6 +145,19 @@ public class DataSwitch<T> extends Switch<T> {
 				EnumeratedValue enumeratedValue = (EnumeratedValue)theEObject;
 				T result = caseEnumeratedValue(enumeratedValue);
 				if (result == null) result = caseINamedElement(enumeratedValue);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DataPackage.ERROR_DATA_TYPE: {
+				ErrorDataType errorDataType = (ErrorDataType)theEObject;
+				T result = caseErrorDataType(errorDataType);
+				if (result == null) result = caseAnyDerivedType(errorDataType);
+				if (result == null) result = caseErrorLibraryElement(errorDataType);
+				if (result == null) result = caseAnyType(errorDataType);
+				if (result == null) result = caseDataType(errorDataType);
+				if (result == null) result = caseLibraryElement(errorDataType);
+				if (result == null) result = caseINamedElement(errorDataType);
+				if (result == null) result = caseConfigurableObject(errorDataType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -903,6 +917,21 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEnumeratedValue(EnumeratedValue object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Data Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorDataType(ErrorDataType object) {
 		return null;
 	}
 
@@ -1698,6 +1727,21 @@ public class DataSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLibraryElement(LibraryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Library Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorLibraryElement(ErrorLibraryElement object) {
 		return null;
 	}
 

@@ -7,7 +7,8 @@ Export-Package: org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.ui.imageprovider,
  org.eclipse.fordiac.ide.ui.preferences,
  org.eclipse.fordiac.ide.ui.providers,
- org.eclipse.fordiac.ide.ui.widget
+ org.eclipse.fordiac.ide.ui.widget,
+ org.eclipse.fordiac.ide.ui.widget.nattable
 Require-Bundle: org.eclipse.gef,
  org.eclipse.core.runtime,
  org.eclipse.jface,
@@ -29,7 +30,7 @@ Require-Bundle: org.eclipse.gef,
 Import-Package: org.osgi.service.event 
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-Name: Common UI Controls
 Bundle-Activator: org.eclipse.fordiac.ide.ui.UIPlugin
 Bundle-ManifestVersion: 2

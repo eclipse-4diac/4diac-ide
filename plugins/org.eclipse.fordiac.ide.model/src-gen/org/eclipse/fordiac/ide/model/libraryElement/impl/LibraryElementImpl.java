@@ -538,8 +538,28 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
+	public String getRelativeName(final INamedElement to) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateName(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.validateName(this, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validatePackage(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementAnnotations.validatePackage(this, diagnostics);
 	}
 
 	/**

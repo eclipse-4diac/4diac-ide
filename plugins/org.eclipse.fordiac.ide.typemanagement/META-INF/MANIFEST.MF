@@ -23,7 +23,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-Name: %FBTypeManagement.bundleName
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement;singleton:=true
@@ -34,6 +34,7 @@ Export-Package: org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.typemanagement.navigator,
  org.eclipse.fordiac.ide.typemanagement.preferences,
  org.eclipse.fordiac.ide.typemanagement.refactoring,
+ org.eclipse.fordiac.ide.typemanagement.refactoring.copy,
  org.eclipse.fordiac.ide.typemanagement.refactoring.edit,
  org.eclipse.fordiac.ide.typemanagement.refactoring.rename,
  org.eclipse.fordiac.ide.typemanagement.util,

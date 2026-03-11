@@ -27,9 +27,12 @@ public class BorderedRoundedRectangle extends RoundedRectangle {
 		graphics.fillRoundRectangle(getClientArea(), cornerDims.width, cornerDims.height);
 	}
 
-	/** Duplicated from {@link #org.eclipse.draw2d.RoundedRectangle;}
+	/**
+	 * Duplicated from {@link #org.eclipse.draw2d.RoundedRectangle;}
 	 *
-	 * The change is that for bordered shapes we need to take the client area instead of the figure bounds. **/
+	 * The change is that for bordered shapes we need to take the client area
+	 * instead of the figure bounds.
+	 **/
 	@Override
 	protected void outlineShape(final Graphics graphics) {
 		final float lineInset = Math.max(1.0f, getLineWidthFloat()) / 2.0f;
@@ -49,9 +52,10 @@ public class BorderedRoundedRectangle extends RoundedRectangle {
 
 	@Override
 	public void paintFigure(final Graphics graphics) {
-		// paint figure of shape does not check for background borders, needed for drop shadow
-		if (getBorder() instanceof AbstractBackground) {
-			((AbstractBackground) getBorder()).paintBackground(this, graphics, NO_INSETS);
+		// paint figure of shape does not check for background borders, needed for drop
+		// shadow
+		if (getBorder() instanceof final AbstractBackground background) {
+			background.paintBackground(this, graphics, NO_INSETS);
 		}
 		super.paintFigure(graphics);
 	}

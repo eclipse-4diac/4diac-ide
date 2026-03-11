@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023, 2026 Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
+ *   Martin Erich Jobst      - add validations
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
@@ -19,8 +21,11 @@ import java.util.Map;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
@@ -36,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 public class VarDeclarationAnnotations {
 
@@ -56,10 +62,14 @@ public class VarDeclarationAnnotations {
 
 	public static boolean validateNoValueForGenericTypeVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (GenericTypes.isAnyType(varDeclaration.getType()) && hasValue(varDeclaration)
+		if (GenericTypes.isAnyType(varDeclaration.getType()) && varDeclaration.hasValue()
 				&& varDeclaration.getBlockFBNetworkElement() == null) {
 			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+				diagnostics.add(new BasicDiagnostic(
+						ValidationPreferences.getDiagnosticSeverity(
+								ValidationPreferences.NO_VALUE_FOR_GENERIC_TYPE_VARIABLE, Diagnostic.OK,
+								varDeclaration),
+						LibraryElementValidator.DIAGNOSTIC_SOURCE,
 						LibraryElementValidator.VAR_DECLARATION__VALIDATE_NO_VALUE_FOR_GENERIC_TYPE_VARIABLE,
 						Messages.VarDeclarationAnnotations_ShouldNotSpecifyValueForGenericVariableInType,
 						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
@@ -88,7 +98,7 @@ public class VarDeclarationAnnotations {
 
 	public static boolean validateNoValueForVariableLengthArrayVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.isArray() && hasValue(varDeclaration)
+		if (varDeclaration.isArray() && varDeclaration.hasValue()
 				&& TypeDeclarationParser.isVariableArrayBounds(varDeclaration.getArraySize().getValue())) {
 			if (diagnostics != null) {
 				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
@@ -104,23 +114,32 @@ public class VarDeclarationAnnotations {
 	public static boolean validateValueForGenericInstanceVariable(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		if (varDeclaration.isIsInput() && varDeclaration.getInputConnections().isEmpty()
-				&& GenericTypes.isAnyType(varDeclaration.getType()) && !hasValue(varDeclaration)
-				&& varDeclaration.getBlockFBNetworkElement() != null && varDeclaration.getBlockFBNetworkElement()
-						.eContainingFeature() != LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS) {
-			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.WARNING, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE,
-						Messages.VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance,
-						FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+				&& GenericTypes.isAnyType(varDeclaration.getType()) && !varDeclaration.hasValue()) {
+			final BlockFBNetworkElement blockFBNetworkElement = varDeclaration.getBlockFBNetworkElement();
+			final VarDeclaration typeVarDeclaration = varDeclaration.findInTypeInterface();
+			if (blockFBNetworkElement != null
+					&& blockFBNetworkElement
+							.eContainingFeature() != LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS
+					&& (typeVarDeclaration == null || !typeVarDeclaration.hasValue())) {
+				if (diagnostics != null) {
+					diagnostics.add(new BasicDiagnostic(
+							ValidationPreferences.getDiagnosticSeverity(
+									ValidationPreferences.VALUE_FOR_GENERIC_INSTANCE_VARIABLE, Diagnostic.WARNING,
+									varDeclaration),
+							LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.VAR_DECLARATION__VALIDATE_VALUE_FOR_GENERIC_INSTANCE_VARIABLE,
+							Messages.VarDeclarationAnnotations_ShouldSpecifyValueForGenericVariableInInstance,
+							FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+				}
+				return false;
 			}
-			return false;
 		}
 		return true;
 	}
 
 	public static boolean validateValueOverriddenBySubAppInput(final VarDeclaration varDeclaration,
 			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
-		if (varDeclaration.isIsInput() && hasValue(varDeclaration) && !varDeclaration.getInputConnections().isEmpty()
+		if (varDeclaration.isIsInput() && varDeclaration.hasValue() && !varDeclaration.getInputConnections().isEmpty()
 				&& varDeclaration.getInputConnections().getFirst().getSourceElement() instanceof SubApp
 				&& varDeclaration.getInputConnections().getFirst().getSource().isIsInput()) {
 			if (diagnostics != null) {
@@ -226,11 +245,6 @@ public class VarDeclarationAnnotations {
 		return inOutVar;
 	}
 
-	static boolean hasValue(final VarDeclaration varDeclaration) {
-		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
-				&& !varDeclaration.getValue().getValue().isEmpty();
-	}
-
 	static boolean isSubappTypeInterface(final VarDeclaration varDeclaration) {
 		return varDeclaration.eContainer() instanceof final InterfaceList interfaceList
 				&& interfaceList.eContainer() instanceof SubAppType;
@@ -283,6 +297,50 @@ public class VarDeclarationAnnotations {
 		}
 
 		return typeIE;
+	}
+
+	static void setVisible(final VarDeclaration varDecl, final boolean visible) {
+		if (varDecl.eContainer() instanceof VarDeclaration) {
+			// member access pins treat the visible attribute in opposite to HiddenElements
+			if (visible) {
+				HiddenElementAnnotations.setVisible(varDecl, Boolean.toString(visible));
+			} else {
+				// if we are not visible the attribute can be removed
+				varDecl.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
+			}
+			return;
+		}
+
+		if (varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			// varDecl is the mapped VarInOut-Output
+			final VarDeclaration varInOutOriginal = varDecl.getInOutVarOpposite();
+			if (visible) {
+				varInOutOriginal.deleteAttribute(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
+			} else {
+				varInOutOriginal.setAttribute(InternalAttributeDeclarations.INOUT_VISIBLE_OUT,
+						Boolean.toString(visible), ""); //$NON-NLS-1$
+			}
+			return;
+		}
+
+		HiddenElementAnnotations.setVisible(varDecl, visible);
+	}
+
+	public static boolean isVisible(final VarDeclaration varDecl) {
+		if (varDecl.eContainer() instanceof VarDeclaration) {
+			// member access pins treat the visible attribute in opposite to HiddenElements
+			final String visibleAttribute = varDecl.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
+			return "true".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
+		}
+
+		if (varDecl.isInOutVar() && !varDecl.isIsInput()) {
+			// varDecl is the mapped VarInOut-Output
+			final String visibleAttribute = varDecl.getInOutVarOpposite()
+					.getAttributeValue(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
+			return !"false".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
+		}
+
+		return HiddenElementAnnotations.isVisible(varDecl);
 	}
 
 	private VarDeclarationAnnotations() {

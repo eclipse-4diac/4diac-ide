@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.model.datatype.helper;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -62,6 +63,8 @@ public final class InternalAttributeDeclarations {
 
 	private static final List<AttributeDeclaration> allAttributes = List.of(VAR_CONFIG, VISIBLE, INOUT_VISIBLE_OUT,
 			UNFOLDED, RETAIN, TARGET, NEGATED, INHERIT);
+
+	private static final Set<AttributeDeclaration> HASH_RELEVANT_ATRTRIBUTES = Set.of(RETAIN, NEGATED);
 
 	private static AttributeDeclaration createAttributeDeclaration(final String name, final DataType type) {
 		final AttributeDeclaration declaration = LibraryElementFactory.eINSTANCE.createAttributeDeclaration();
@@ -125,6 +128,13 @@ public final class InternalAttributeDeclarations {
 
 	public static boolean isInternalAttribute(final Attribute attribute) {
 		return getInternalAttributeByName(attribute.getName()) != null;
+	}
+
+	public static boolean isHashRelevantAttribute(final AttributeDeclaration declaration) {
+		if (declaration == null) {
+			return false;
+		}
+		return HASH_RELEVANT_ATRTRIBUTES.contains(declaration);
 	}
 
 	private InternalAttributeDeclarations() {

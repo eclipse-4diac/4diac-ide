@@ -126,7 +126,9 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		rect.addPoint(0, SCALED_WITH_DISTANCE * withPos);
 	}
 
-	public void updateWithPos() {
+	@Override
+	public void refresh() {
+		super.refresh();
 		if (null != getCastedModel().eContainer()) {
 			// if the container is null our model got already removed from it. We don't need
 			// to perform updates.

@@ -59,15 +59,6 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 		fbType = (FBType) value;
 	}
 
-	/**
-	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public void setTypeEditable(final LibraryElement value) {
-		// currently not needed in mock
-	}
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typelib;
@@ -86,16 +77,6 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	@Override
 	public InterfaceList getInterface() {
 		return fbType.getInterfaceList();
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public FBType getTypeEditable() {
-		// currently not needed in mock
-		return null;
 	}
 
 	@Override
@@ -147,5 +128,10 @@ public class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEntry {
 	@Override
 	public String getFileExtension() {
 		return TypeLibraryTags.FB_TYPE_FILE_ENDING;
+	}
+
+	@Override
+	public boolean hasError() {
+		return false;
 	}
 }

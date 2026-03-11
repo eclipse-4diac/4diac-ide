@@ -176,6 +176,11 @@ public class AdapterTypeItemProvider extends DataTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.ADAPTER_TYPE__PLUG_TYPE,
 				 LibraryElementFactory.eINSTANCE.createAdapterType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.ADAPTER_TYPE__PLUG_TYPE,
+				 LibraryElementFactory.eINSTANCE.createErrorAdapterType()));
 	}
 
 	/**

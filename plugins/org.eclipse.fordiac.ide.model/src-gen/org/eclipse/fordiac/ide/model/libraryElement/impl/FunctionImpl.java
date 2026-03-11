@@ -269,6 +269,16 @@ public abstract class FunctionImpl extends EObjectImpl implements Function {
 	 * @generated
 	 */
 	@Override
+	public String getRelativeName(final INamedElement to) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case LibraryElementPackage.FUNCTION__NAME:

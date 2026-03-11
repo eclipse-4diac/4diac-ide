@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.model.StructTreeLabelProvider;
-import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
@@ -43,7 +43,7 @@ public class MultiplexerSection extends StructManipulatorSection {
 
 	private static Command createHideCommand(final Object selected, final boolean checked) {
 		if (selected instanceof final VarDeclaration variable) {
-			return new HidePinCommand(variable, checked);
+			return new ChangePinVisibilityCommand(variable, checked);
 		}
 		return null;
 	}

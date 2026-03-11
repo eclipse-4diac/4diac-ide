@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2025 Profactor GmbH, fortiss GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, fortiss GmbH,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,12 +17,12 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.application.commands.MoveAndReconnectCommand;
@@ -36,27 +36,28 @@ import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
@@ -88,7 +89,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp
 				|| child.getModel() instanceof Comment) && RequestUtil.isResizeRequest(request)) {
-			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request, (Rectangle) constraint);
+			return createChangeSizeCommand((GraphicalEditPart) child, (Rectangle) constraint, request);
 		}
 		if ((child.getModel() instanceof final PositionableElement pe) && (RequestUtil.isMoveRequest(request))) {
 			return createMoveCommand(pe, (Rectangle) constraint);
@@ -96,29 +97,31 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request,
-			final Rectangle constraint) {
-		final Dimension sizeDelta = getScaledSizeDelta(request);
-		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
+	private static Command createChangeSizeCommand(final GraphicalEditPart child, final Rectangle constraint,
+			final ChangeBoundsRequest request) {
+		final FBNetworkElement fbnEl = (FBNetworkElement) child.getModel();
+		final Rectangle origBounds = child.getFigure().getBounds();
+
+		if (constraint.width == origBounds.width && constraint.height == origBounds.height) {
 			// we hit the min size and we are just moving, return a set position command
-			return createMoveCommand(container, constraint);
+			return createMoveCommand(fbnEl, constraint);
 		}
-		final Point moveDelta = getScaledMoveDelta(request);
-		return createChangeBoundsCommand(container, sizeDelta, moveDelta);
+		// if we resize the snap to grid gives as a pixel to much
+		if (request.getMoveDelta().x == 0 && request.getSizeDelta().width != 0) {
+			constraint.width -= 1;
+		}
+		if (request.getMoveDelta().y == 0 && request.getSizeDelta().height != 0) {
+			constraint.height -= 1;
+		}
+		return createChangeBoundsCommand(fbnEl, constraint);
 	}
 
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
-			final Dimension sizeDelta, final Point moveDelta) {
-		if (container instanceof final Group group) {
-			return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		if (container instanceof final SubApp subApp) {
-			return new ChangeSubAppBoundsCommand(subApp, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		if (container instanceof final Comment comment) {
-			return new ChangeCommentBoundsCommand(comment, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
-		}
-		return null;
+			final Rectangle constraint) {
+		final Position newPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(constraint.x, constraint.y);
+		final double newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(constraint.width);
+		final double newHeight = CoordinateConverter.INSTANCE.screenToIEC61499(constraint.height);
+		return AbstractChangeContainerBoundsCommand.getCommandFor(container, newPos, newWidth, newHeight);
 	}
 
 	@Override
@@ -168,21 +171,46 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (!fbEls.isEmpty()) {
 			return new MoveAndReconnectCommand(fbEls, destination, (FBNetwork) getHost().getModel());
 		}
-		return createRemoveFromGroup(editParts, request);
-	}
-
-	private Command createRemoveFromGroup(final List<? extends EditPart> editParts, final ChangeBoundsRequest request) {
 		final GroupContentEditPart groupContent = getGroupContentEditPart(editParts);
 		if (groupContent != null) {
-			final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(editParts);
-			if (!fbEls.isEmpty()) {
-				final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
-				final Point moveDelta = getScaledMoveDelta(request);
-				topLeft.translate(moveDelta.x, moveDelta.y);
-				return new RemoveElementsFromGroup(fbEls, topLeft);
-			}
+			return createRemoveFromGroup(groupContent, request);
+		}
+		return createSplitEditorMoveCommand(request);
+	}
+
+	private Command createRemoveFromGroup(final GroupContentEditPart groupContent, final ChangeBoundsRequest request) {
+		final List<FBNetworkElement> fbEls = collectFromGroupDraggedFBs(request.getEditParts());
+		if (!fbEls.isEmpty()) {
+			final Point topLeft = groupContent.getFigure().getBounds().getTopLeft();
+			final Point moveDelta = getScaledMoveDelta(request);
+			topLeft.translate(moveDelta.x, moveDelta.y);
+			return new RemoveElementsFromGroup(fbEls, topLeft);
 		}
 		return null;
+	}
+
+	private Command createSplitEditorMoveCommand(final ChangeBoundsRequest request) {
+		final List<FBNetworkElement> movedElements = request.getEditParts().stream().filter(
+				ep -> ep.getModel() instanceof final FBNetworkElement fbnel && fbnel.eContainer() == getFBNetwork())
+				.map(ep -> (FBNetworkElement) ep.getModel()).toList();
+
+		if (movedElements.isEmpty()) {
+			return null;
+		}
+
+		final Position topLeftCornerOfFBNetwork = FBNetworkHelper.getTopLeftCornerOfFBNetwork(movedElements);
+		final Point targetPos = getTranslatedAndZoomedPoint(request);
+		final Position iec61499TargetPos = CoordinateConverter.INSTANCE.createPosFromScreenCoordinates(targetPos.x,
+				targetPos.y);
+
+		final CompoundCommand cmd = new CompoundCommand();
+		movedElements.forEach(fbnEl -> {
+			final Position newPos = LibraryElementFactory.eINSTANCE.createPosition();
+			newPos.setX(iec61499TargetPos.getX() + fbnEl.getPosition().getX() - topLeftCornerOfFBNetwork.getX());
+			newPos.setY(iec61499TargetPos.getY() + fbnEl.getPosition().getY() - topLeftCornerOfFBNetwork.getY());
+			cmd.add(new FBNetworkElementSetPositionCommand(fbnEl, newPos));
+		});
+		return cmd;
 	}
 
 	protected Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
@@ -212,20 +240,35 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command getCloneCommand(final ChangeBoundsRequest request) {
 		final CopyPasteData copyPasteData = new CopyPasteData(getFBNetwork());
-		request.getEditParts().stream().map(n -> (EObject) (n.getModel())).forEach(m -> {
-			if (m instanceof final FBNetworkElement el) {
-				copyPasteData.elements().add(el);
-			}
-			if (m instanceof final Connection conn) {
-				copyPasteData.conns().add(new ConnectionReference(conn));
-			}
-		});
-		final Point scaledPoint = getDestinationPoint(request);
-		return new PasteCommand(copyPasteData, getFBNetwork(), scaledPoint.x, scaledPoint.y);
-	}
 
-	private Point getDestinationPoint(final ChangeBoundsRequest request) {
-		return getScaledMoveDelta(request);
+		Rectangle originalBounds = null;
+
+		for (final EditPart ep : request.getEditParts()) {
+			switch (ep.getModel()) {
+			case final FBNetworkElement el -> {
+				copyPasteData.elements().add(el);
+				final IFigure fig = ((GraphicalEditPart) ep).getFigure();
+				final Rectangle bounds = new PrecisionRectangle(fig.getBounds());
+				fig.translateToAbsolute(bounds);
+
+				if (originalBounds == null) {
+					originalBounds = bounds;
+				} else {
+					originalBounds.union(bounds);
+				}
+			}
+			case final Connection conn -> copyPasteData.conns().add(new ConnectionReference(conn));
+			default -> {
+				// do nothing
+			}
+			}
+		}
+
+		final Rectangle targetBounds = request.getTransformedRectangle(originalBounds);
+		translateFromAbsoluteToLayoutRelative(targetBounds);
+
+		return new PasteCommand(copyPasteData, getFBNetwork(),
+				new org.eclipse.swt.graphics.Point(targetBounds.x, targetBounds.y));
 	}
 
 	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {
@@ -248,12 +291,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return new SetPositionCommand(model, newPos);
 	}
 
-	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {
-		return request.getSizeDelta().getScaled(1.0 / getZoomManager().getZoom());
-	}
-
 	protected Point getScaledMoveDelta(final ChangeBoundsRequest request) {
-		return request.getMoveDelta().getScaled(1.0 / getZoomManager().getZoom());
+		final Point moveDelta = request.getMoveDelta().getCopy();
+		getHost().getFigure().translateToRelative(moveDelta);
+		return moveDelta;
 	}
 
 }

@@ -74,8 +74,8 @@ public class ChangeNameCommand extends Command implements ConnectionLayoutTagger
 		}
 		if (element instanceof final IInterfaceElement interfaceElement
 				&& interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp && subApp.isMapped()) {
-			result.getAdditionalCommands().add(
-					new ChangeNameCommand(subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), name));
+			result.getAdditionalCommands().add(new ChangeNameCommand(
+					subApp.getOpposite().getInterface().getInterfaceElement(interfaceElement), name));
 		}
 		if (element instanceof final AdapterDeclaration adapterDeclaration) {
 			handleAdapterDeclarationRename(name, result, adapterDeclaration);

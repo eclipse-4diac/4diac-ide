@@ -75,17 +75,17 @@ public class RunAllFBGenerator extends AbstractBasicFBGenerator {
 			eccGen.getLastState().setName(NameRepository.createUniqueName(eccGen.getLastState(), "S1")); //$NON-NLS-1$
 			if (i == 0) {
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_RUNALL));
+						(Event) destinationFB.getInterfaceList().getInterfaceElement(List.of(EVENT_RUNALL)));
 			} else {
 				eccGen.createTransitionFromTo(eccGen.getNTimesLast(1), eccGen.getLastState(),
-						(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_LASTCOMPLETE));
+						(Event) destinationFB.getInterfaceList().getInterfaceElement(List.of(EVENT_LASTCOMPLETE)));
 			}
 			final ECAction act = TestEccGenerator.createAction();
 			act.setOutput(destinationFB.getInterfaceList().getEventOutputs().get(i));
 			act.setECState(eccGen.getLastState());
 		}
 		eccGen.createTransitionFromTo(eccGen.getLastState(), eccGen.getEcc().getStart(),
-				(Event) destinationFB.getInterfaceList().getInterfaceElement(EVENT_LASTCOMPLETE));
+				(Event) destinationFB.getInterfaceList().getInterfaceElement(List.of(EVENT_LASTCOMPLETE)));
 	}
 
 	@Override

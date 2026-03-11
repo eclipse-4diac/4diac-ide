@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -121,7 +122,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 		compEl.setTypeEntry(compType);
 		addPosition(compEl, x + (double) 200, y + (double) 150);
 
-		compEl.setInterface(compEl.getType().getInterfaceList().copy());
+		compEl.setInterface(compEl.getType().getInterfaceList().instanceCopy());
 
 		net.getNetworkElements().add(compEl);
 		final String name = NameRepository.createUniqueName(compEl, "TESTAPPFB1");//$NON-NLS-1$
@@ -168,15 +169,17 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	private void createConnToRunAllFB() {
 
 		// connection from the composite to the runallFB
+		final InterfaceList runAllInterface = runAllFB.getInterface();
 		getEventConns().add(createEventConn(compositeFB.getInterfaceList().getEvent(EVENT_RUNALL),
-				(Event) runAllFB.getInterfaceElement(EVENT_RUNALL)));
+				(Event) runAllInterface.getInterfaceElement(List.of(EVENT_RUNALL))));
 
 		// connect muxFB outputs to the runallFB, so the runallFB knows, when to start
 		// the next test case
-		getEventConns().add(createEventConn((Event) muxFB.getInterfaceElement(EVENT_SUCCESS),
-				(Event) runAllFB.getInterfaceElement(EVENT_LASTCOMPLETE)));
-		getEventConns().add(createEventConn((Event) muxFB.getInterfaceElement(EVENT_ERROR),
-				(Event) runAllFB.getInterfaceElement(EVENT_LASTCOMPLETE)));
+		final InterfaceList muxInterface = muxFB.getInterface();
+		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_SUCCESS)),
+				(Event) runAllInterface.getInterfaceElement(List.of(EVENT_LASTCOMPLETE))));
+		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_ERROR)),
+				(Event) runAllInterface.getInterfaceElement(List.of(EVENT_LASTCOMPLETE))));
 	}
 
 	private void createConnToMuxFB(final int index) {
@@ -200,15 +203,17 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 	// create connections to the outputs of the composite
 	private void createConnToComposite() {
 		// Event Connections
-		getEventConns().add(createEventConn((Event) muxFB.getInterfaceElement(EVENT_ERROR),
-				(Event) compositeFB.getInterfaceList().getInterfaceElement(EVENT_ERROR)));
-		getEventConns().add(createEventConn((Event) muxFB.getInterfaceElement(EVENT_SUCCESS),
-				(Event) compositeFB.getInterfaceList().getInterfaceElement(EVENT_SUCCESS)));
+		final InterfaceList muxInterface = muxFB.getInterface();
+		final InterfaceList cfbInterface = compositeFB.getInterfaceList();
+		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_ERROR)),
+				(Event) cfbInterface.getInterfaceElement(List.of(EVENT_ERROR))));
+		getEventConns().add(createEventConn((Event) muxInterface.getInterfaceElement(List.of(EVENT_SUCCESS)),
+				(Event) cfbInterface.getInterfaceElement(List.of(EVENT_SUCCESS))));
 
 		// Data Connection
 		getDataConns()
-				.add(createDataConn((VarDeclaration) muxFB.getInterface().getInterfaceElement(VARDECL_TESTCASENAME),
-						compositeFB.getInterfaceList().getVariable(VARDECL_TESTCASENAME)));
+				.add(createDataConn((VarDeclaration) muxInterface.getInterfaceElement(List.of(VARDECL_TESTCASENAME)),
+						cfbInterface.getVariable(VARDECL_TESTCASENAME)));
 
 	}
 
@@ -242,7 +247,7 @@ public class CompositeTestFBGenerator extends AbstractCompositeFBGenerator {
 
 	private void connectMatchFBEventInputs(final FB sourceFb, final FB destFb) {
 		for (final Event sourceEv : sourceFb.getInterface().getEventOutputs()) {
-			final IInterfaceElement el = destFb.getInterfaceElement(sourceEv.getName());
+			final IInterfaceElement el = destFb.getInterface().getInterfaceElement(sourceEv);
 			if (el instanceof final Event destEv && destEv.isIsInput()) {
 				getEventConns().add(createEventConn(sourceEv, destEv));
 			}

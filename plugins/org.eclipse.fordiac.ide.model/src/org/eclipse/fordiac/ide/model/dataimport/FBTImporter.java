@@ -52,7 +52,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -108,42 +107,34 @@ public class FBTImporter extends BlockTypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.INTERFACE_LIST_ELEMENT:
-				getElement().setInterfaceList(
-						getInterfaceListImporter().parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
-				break;
-			case LibraryElementTags.BASIC_F_B_ELEMENT:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.INTERFACE_LIST_ELEMENT -> getElement().setInterfaceList(
+					getInterfaceListImporter().parseInterfaceList(LibraryElementTags.INTERFACE_LIST_ELEMENT));
+			case LibraryElementTags.BASIC_F_B_ELEMENT -> {
 				setElement(convertToBasicType(getElement()));
 				parseBasicFB((BasicFBType) getElement());
-				break;
-			case LibraryElementTags.SIMPLE_F_B_ELEMENT:
+			}
+			case LibraryElementTags.SIMPLE_F_B_ELEMENT -> {
 				setElement(convertToSimpleType(getElement()));
 				parseSimpleFB((SimpleFBType) getElement());
-				break;
-			case LibraryElementTags.FBNETWORK_ELEMENT:
+			}
+			case LibraryElementTags.FBNETWORK_ELEMENT -> {
 				// parse the composite FBs as last
 				setElement(convertToCompositeType(getElement()));
 				parseFBNetwork((CompositeFBType) getElement());
-				break;
-			case LibraryElementTags.SERVICE_ELEMENT:
-				parseService(getElement());
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			}
+			case LibraryElementTags.SERVICE_ELEMENT -> parseService(getElement());
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
 			}
+			}
+
 			return true;
 		};
 	}
@@ -316,18 +307,17 @@ public class FBTImporter extends BlockTypeImporter {
 			if (XMLStreamConstants.START_ELEMENT == event) {
 
 				switch (getReader().getLocalName()) {
-				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT:
+				case LibraryElementTags.FBD_ELEMENT, LibraryElementTags.LD_ELEMENT ->
 					throw new TypeImportException("Algorithm: Unsupported Algorithmtype (only ST and Other possible)!"); //$NON-NLS-1$
-				case LibraryElementTags.ST_ELEMENT:
+				case LibraryElementTags.ST_ELEMENT -> {
 					retVal = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 					parseST((STAlgorithm) retVal);
-					break;
-				case LibraryElementTags.OTHER_ELEMENT:
+				}
+				case LibraryElementTags.OTHER_ELEMENT -> {
 					retVal = LibraryElementFactory.eINSTANCE.createOtherAlgorithm();
 					parseOtherAlg((OtherAlgorithm) retVal);
-					break;
-				default:
-					throw unknownXMLChildException();
+				}
+				default -> throw unknownXMLChildException();
 				}
 
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
@@ -541,16 +531,13 @@ public class FBTImporter extends BlockTypeImporter {
 
 		processChildren(LibraryElementTags.ECC_ELEMENT, name -> {
 			switch (name) {
-			case LibraryElementTags.ECSTATE_ELEMENT:
-				parseECState(ecc); // IEC 61499 ->
-				// "START" state is the first in the list
-				break;
-			case LibraryElementTags.ECTRANSITION_ELEMENT:
-				parseECTransition(ecc);
-				break;
-			default:
+			case LibraryElementTags.ECSTATE_ELEMENT -> parseECState(ecc); // IEC 61499 ->
+			case LibraryElementTags.ECTRANSITION_ELEMENT -> parseECTransition(ecc);
+			default -> {
 				return false;
 			}
+			}
+
 			return true;
 		});
 		type.setECC(ecc);
@@ -780,9 +767,7 @@ public class FBTImporter extends BlockTypeImporter {
 			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		} else {
 			fb.setTypeEntry(entry);
-			final InterfaceList typeInterface = entry.getInterface();
-			fb.setInterface((typeInterface != null) ? typeInterface.copy()
-					: LibraryElementFactory.eINSTANCE.createInterfaceList());
+			fb.setInterface(entry.getInterface().instanceCopy());
 		}
 		type.getInternalFbs().add(fb);
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);

@@ -177,7 +177,7 @@ public final class FBShapeHelper {
 		final Predicate<IInterfaceElement> inputFilter = isInput ? IInterfaceElement::isIsInput
 				: Predicate.not(IInterfaceElement::isIsInput);
 
-		final double largestInterface = element.getInterface().getAllInterfaceElements().stream()
+		final double largestInterface = element.getInterface().getAllInterfaceElements()
 				.filter(Predicate.not(Event.class::isInstance)).filter(IInterfaceElement::isVisible).filter(inputFilter)
 				.mapToDouble(ie -> {
 					final int labelSize = Math.clamp(ie.getName().length(), minPinLabelSize, maxPinLabelSize);
@@ -206,7 +206,7 @@ public final class FBShapeHelper {
 		final Predicate<IInterfaceElement> inputFilter = isInput ? IInterfaceElement::isIsInput
 				: Predicate.not(IInterfaceElement::isIsInput);
 
-		if (element.getInterface().getAllInterfaceElements().stream().filter(inputFilter)
+		if (element.getInterface().getAllInterfaceElements().filter(inputFilter)
 				.anyMatch(Predicate.not(IInterfaceElement::isVisible)) || (!isInput && checkHiddenDemuxPin(element))) {
 			return WIDTH_ADJUST_HIDDEN;
 		}
@@ -214,8 +214,8 @@ public final class FBShapeHelper {
 	}
 
 	protected static double getHiddenHeightAdjust(final BlockFBNetworkElement element) {
-		if (element.getInterface().getAllInterfaceElements().stream()
-				.anyMatch(Predicate.not(IInterfaceElement::isVisible)) || checkHiddenDemuxPin(element)) {
+		if (element.getInterface().getAllInterfaceElements().anyMatch(Predicate.not(IInterfaceElement::isVisible))
+				|| checkHiddenDemuxPin(element)) {
 			return HEIGHT_ADJUST_HIDDEN;
 		}
 		return 0.0;

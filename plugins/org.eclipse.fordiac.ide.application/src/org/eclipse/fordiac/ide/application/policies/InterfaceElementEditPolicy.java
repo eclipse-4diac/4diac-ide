@@ -54,18 +54,21 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
-		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
-		command.setDestination(getHost().getModel());
+		if (!(request.getStartCommand() instanceof final AbstractConnectionCreateCommand connCreateCmd)) {
+			return null;
+		}
 
-		final FBNetwork newParent = checkConnectionParent(command.getSource(), command.getDestination(),
-				command.getParent());
+		connCreateCmd.setDestination(getHost().getModel());
+
+		final FBNetwork newParent = checkConnectionParent(connCreateCmd.getSource(), connCreateCmd.getDestination(),
+				connCreateCmd.getParent());
 		if (newParent != null) {
-			command.setParent(newParent);
-			return command;
+			connCreateCmd.setParent(newParent);
+			return connCreateCmd;
 		}
 		// if we are here it is not a direct connection try border crossing command
-		return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(command.getSource(),
-				command.getDestination());
+		return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(connCreateCmd.getSource(),
+				connCreateCmd.getDestination());
 	}
 
 	@Override

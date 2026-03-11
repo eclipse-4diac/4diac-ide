@@ -18,8 +18,6 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.text.MessageFormat;
-
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -31,8 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.ConfigurableFBManagement;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorDataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
@@ -111,17 +107,15 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 		if (newStructTypeEntry != null) {
 			if (getNewElement() instanceof StructManipulator) {
 				getNewMux().setDataType(getDataTypeFromTypeEntry());
-			} else if (getNewElement() instanceof ConfigurableFB) {
-				getNewMoveFB().setDataType(getDataTypeFromTypeEntry());
+			} else if (getNewElement() instanceof final ConfigurableFB confFB) {
+				confFB.setDataType(getDataTypeFromTypeEntry());
 			}
 
 		}
 		if (isDemuxConfiguration()) {
 			getNewMux().loadConfiguration(LibraryElementTags.DEMUX_VISIBLE_CHILDREN, newVisibleChildren);
-		} else if (getNewElement() instanceof ConfigurableFB) {
-			getNewMoveFB().updateConfiguration();
-		} else {
-			getNewMux().updateConfiguration();
+		} else if (getNewElement() instanceof final ConfigurableFB confFB) {
+			confFB.updateConfiguration();
 		}
 	}
 
@@ -130,10 +124,6 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 			return demux.isIsConfigured() || newVisibleChildren != null;
 		}
 		return false;
-	}
-
-	public ConfigurableFB getNewMoveFB() {
-		return (ConfigurableFB) newElement;
 	}
 
 	public StructManipulator getNewMux() {
@@ -149,20 +139,12 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 			return IecTypes.GenericTypes.ANY_STRUCT;
 		}
 
-		LibraryElement type = newStructTypeEntry.getType();
+		final LibraryElement type;
 		if (reloadDatatype) {
-			final DataTypeLibrary datatypeLib = entry.getTypeLibrary().getDataTypeLibrary();
-			final TypeEntry reloadedTypeEntry = datatypeLib.getDerivedTypeEntry(newStructTypeEntry.getFullTypeName());
-			if (newStructTypeEntry instanceof ErrorDataTypeEntry) {
-				if (reloadedTypeEntry != null && reloadedTypeEntry != newStructTypeEntry) {
-					// type exists now
-					type = reloadedTypeEntry.getType();
-				}
-			} else if (reloadedTypeEntry == null) {
-				// type was deleted, create error marker
-				type = datatypeLib.createErrorMarkerType(newStructTypeEntry.getFullTypeName(), MessageFormat
-						.format("Typeentry for StructManipulator `{0}` not available!", getOldMux().getName())); //$NON-NLS-1$
-			}
+			type = newStructTypeEntry.getTypeLibrary().getDataTypeLibrary()
+					.getType(newStructTypeEntry.getFullTypeName());
+		} else {
+			type = newStructTypeEntry.getType();
 		}
 		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
 	}

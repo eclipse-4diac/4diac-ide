@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020, 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH, Johannes
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, fortiss GmbH, Johannes
  *                          Kepler University Linz, Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.draw2d.Border;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
@@ -45,9 +44,9 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.fordiac.ide.application.figures.CommentContainer;
 import org.eclipse.fordiac.ide.application.policies.AbstractCreateInstanceDirectEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkCreateInstanceDirectEditPolicy;
-import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -61,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -70,12 +70,8 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Color;
 
 public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditPart {
-	public static final Color INTERFACE_BAR_BG_COLOR = new Color(235, 245, 255);
-	public static final Color INTERFACE_BAR_BORDER_COLOR = new Color(190, 199, 225);
-
 	private static final int TOP_BOTTOM_MARGIN = 1;
 	private static final int LEFT_RIGHT_MARGIN = 5;
 	private static final Insets RIGHT_LIST_BORDER_INSET = new Insets(TOP_BOTTOM_MARGIN, 0, TOP_BOTTOM_MARGIN,
@@ -314,8 +310,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 		rootContainer.setLayoutManager(rootContLayout);
 		rootContainer.setOpaque(true);
 		rootContainer.setOutline(false);
-		rootContainer.setBackgroundColor(INTERFACE_BAR_BG_COLOR);
-		rootContainer.setBorder(new SingleLineBorder(INTERFACE_BAR_BORDER_COLOR));
+		rootContainer.setBackgroundColor(UIPreferenceConstants.getInterfaceBarColor());
 		parent.add(rootContainer, layoutConstraint);
 		return rootContainer;
 	}
@@ -346,22 +341,7 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	}
 
 	private void createCommentContainer(final IFigure mainFigure) {
-		commentContainer = new Figure();
-		final Border border = new SingleLineBorder() {
-			private final Insets insets = new Insets(5); // spacing
-
-			@Override
-			public Insets getInsets(final IFigure figure) {
-				return insets;
-			}
-		};
-		commentContainer.setBorder(border);
-		final ToolbarLayout layout = new ToolbarLayout();
-		layout.setMinorAlignment(OrderedLayout.ALIGN_CENTER);
-		layout.setStretchMinorAxis(false);
-		commentContainer.setOpaque(true);
-
-		commentContainer.setLayoutManager(layout);
+		commentContainer = new CommentContainer();
 		mainFigure.add(commentContainer, BorderLayout.TOP);
 	}
 

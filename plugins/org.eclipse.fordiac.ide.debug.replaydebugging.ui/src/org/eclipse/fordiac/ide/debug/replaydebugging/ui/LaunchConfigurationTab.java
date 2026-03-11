@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Jose Cabral
+ * Copyright (c) 2025, 2026 Jose Cabral
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,6 +27,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.fordiac.ide.debug.replaydebugging.LaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -72,17 +73,23 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  */
 public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
-	public static final String ATTR_TRACE_PATH = "org.eclipse.fordiac.ide.debug.replaydebugging.ATTR_TRACE_PATH"; //$NON-NLS-1$
+	private static final String TRACE_PATH_SECTION_TEXT = "Trace Path"; //$NON-NLS-1$
+	private static final String SELECT_PATH_DIALOG_TEXT = "Select trace directory"; //$NON-NLS-1$
+	private static final String BROWSE_BUTTON_TEXT = "Browse Trace Path"; //$NON-NLS-1$
 
-	private static final String ATTR_TRACE_PATH_DEFAULT = ""; //$NON-NLS-1$
+	private static final String SIMULATOR_SECTION_TEXT = "Simulator Options"; //$NON-NLS-1$
+	private static final String REMOTE_TEXT = "Remote"; //$NON-NLS-1$
 
-	private static final String SELECT_PATH_DIALOG_TEXT = "Select trace directory";
-	private static final String BROWSE_BUTTON_TEXT = "Browse Trace Path";
+	private static final String COMPONENTS_SELECTION_SECTION_TEXT = "Select Components"; //$NON-NLS-1$
+	private static final String SYSTEM_SELECTION_BUTTON_TEXT = "Browse System"; //$NON-NLS-1$
 
-	private static final String GROUP_TEXT = "Select Components";
-	private static final String SYSTEM_SELECTION_BUTTON_TEXT = "Browse System";
+	private static final String LAUNCH_CONFIGURATION_TAB_NAME = "Replay Debugging"; //$NON-NLS-1$
 
 	private Text systemText;
+	private static final String SYSTEM_TEXT_DEFAULT = ""; //$NON-NLS-1$
+
+	private Button remoteCheckbox;
+
 	private CheckboxTreeViewer selectionTree;
 
 	private Composite component;
@@ -94,12 +101,36 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		component = new Composite(parent, SWT.FILL);
 		component.setLayout(new GridLayout(1, false));
 
+		createSimulatorSection();
 		createPathSelectionComponent();
 		createSelectionComponent();
 	}
 
+	private void createSimulatorSection() {
+		final Group group = new Group(component, SWT.BORDER);
+		group.setLayout(new GridLayout(1, false));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
+		group.setText(SIMULATOR_SECTION_TEXT);
+
+		// Checkbox to indicate if the replay should use the remote simulator (forte)
+		remoteCheckbox = new Button(group, SWT.CHECK);
+		remoteCheckbox.setText(REMOTE_TEXT);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(remoteCheckbox);
+		remoteCheckbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				updateLaunchConfigurationDialog();
+			}
+		});
+	}
+
 	private void createPathSelectionComponent() {
-		final Composite pathSelectionComposite = new Composite(component, SWT.FILL);
+		final Group group = new Group(component, SWT.BORDER);
+		group.setLayout(new GridLayout(1, false));
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
+		group.setText(TRACE_PATH_SECTION_TEXT);
+
+		final Composite pathSelectionComposite = new Composite(group, SWT.FILL);
 		pathSelectionComposite.setLayout(new GridLayout(3, false));
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(pathSelectionComposite);
 
@@ -126,7 +157,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 		final Group group = new Group(component, SWT.BORDER);
 		group.setLayout(new GridLayout(1, false));
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(group);
-		group.setText(GROUP_TEXT);
+		group.setText(COMPONENTS_SELECTION_SECTION_TEXT);
 
 		final Composite sytemSelectionComposite = new Composite(group, SWT.NONE);
 		sytemSelectionComposite.setLayout(new GridLayout(2, false));
@@ -152,38 +183,46 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ATTR_TRACE_PATH, ATTR_TRACE_PATH_DEFAULT);
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH,
+				LaunchConfigurationDelegate.ATTR_TRACE_PATH_DEFAULT);
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM);
 		configuration.removeAttribute(DeploymentLaunchConfigurationAttributes.SELECTION);
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_REMOTE,
+				LaunchConfigurationDelegate.ATTR_REMOTE_DEFAULT);
 	}
 
 	@Override
 	public void initializeFrom(final ILaunchConfiguration configuration) {
 		try {
-			tracerPathText.setText(configuration.getAttribute(ATTR_TRACE_PATH, ATTR_TRACE_PATH_DEFAULT));
-			systemText.setText(configuration.getAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM, "")); //$NON-NLS-1$
+			tracerPathText.setText(configuration.getAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH,
+					LaunchConfigurationDelegate.ATTR_TRACE_PATH_DEFAULT));
+			systemText.setText(
+					configuration.getAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM, SYSTEM_TEXT_DEFAULT));
+			remoteCheckbox.setSelection(configuration.getAttribute(LaunchConfigurationDelegate.ATTR_REMOTE,
+					LaunchConfigurationDelegate.ATTR_REMOTE_DEFAULT));
 			final AutomationSystem system = DeploymentLaunchConfigurationAttributes.getSystem(configuration);
 			selectionTree.setInput(system);
 			selectionTree.setCheckedElements(
 					DeploymentLaunchConfigurationAttributes.getSelection(configuration, system).toArray());
 		} catch (final CoreException e) {
-			systemText.setText("");
+			systemText.setText(SYSTEM_TEXT_DEFAULT);
 		}
 	}
 
 	@Override
 	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ATTR_TRACE_PATH, tracerPathText.getText());
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_TRACE_PATH, tracerPathText.getText());
 		configuration.setAttribute(DeploymentLaunchConfigurationAttributes.SYSTEM, systemText.getText());
 		configuration.setAttribute(DeploymentLaunchConfigurationAttributes.SELECTION,
 				Stream.of(selectionTree.getCheckedElements()).filter(INamedElement.class::isInstance)
 						.map(INamedElement.class::cast).map(INamedElement::getQualifiedName)
 						.collect(Collectors.toSet()));
+		configuration.setAttribute(LaunchConfigurationDelegate.ATTR_REMOTE, remoteCheckbox.getSelection());
 	}
 
 	@Override
 	public String getName() {
-		return "Replay Debugging";
+		return LAUNCH_CONFIGURATION_TAB_NAME;
 	}
 
 	@Override
@@ -302,7 +341,7 @@ public class LaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	public AutomationSystem getSystem() {
 		if (getSystemResource() instanceof final IFile systemFile && TypeLibraryManager.INSTANCE
 				.getTypeEntryForFile(systemFile) instanceof final SystemEntry systemEntry) {
-			return systemEntry.getSystem();
+			return systemEntry.getType();
 		}
 		return null;
 	}

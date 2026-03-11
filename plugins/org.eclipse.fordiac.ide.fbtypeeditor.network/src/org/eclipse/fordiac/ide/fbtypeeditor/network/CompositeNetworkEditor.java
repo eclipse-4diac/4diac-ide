@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.network;
 import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -36,8 +37,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -74,11 +76,6 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected CompositeNetworkEditPartFactory getEditPartFactory() {
 		return new CompositeNetworkEditPartFactory(this);
-	}
-
-	@Override
-	public TypeEditorInput getEditorInput() {
-		return (TypeEditorInput) super.getEditorInput();
 	}
 
 	@Override
@@ -131,23 +128,21 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
-		final boolean firstTime = getEditorInput() == null;
-		super.setInput(input);
-		if (firstTime && (getEditorInput().getContent() instanceof final CompositeFBType cfbTye)) {
-			setModel(cfbTye.getFBNetwork());
-			getModel().eAdapters().add(adapter);
-			configurePalette(getEditorInput());
+		final CompositeFBType compositeFBType = LibraryElementProvider.INSTANCE.getElement(input,
+				CompositeFBType.class);
+		if (compositeFBType == null) {
+			throw new IllegalArgumentException(
+					"CompositeFBType editors only accept composite FB types as valid inputs!"); //$NON-NLS-1$
 		}
+		setModel(compositeFBType.getFBNetwork());
+		getModel().eAdapters().add(adapter);
+		typeLib = compositeFBType.getTypeEntry().getTypeLibrary();
+		super.setInput(input);
 	}
 
 	@Override
 	protected void setEditorPartName(final IEditorInput input) {
 		setPartName(FordiacMessages.FBNetwork);
-	}
-
-	protected void configurePalette(final TypeEditorInput typeEditorInput) {
-		typeLib = typeEditorInput.getTypeEntry().getTypeLibrary();
 	}
 
 	@Override
@@ -157,8 +152,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getTypeEntry().getFile().getProject(), getEditDomain(),
-				getPaletteNavigatorID());
+		return new FBTypePaletteViewerProvider(getProject(), getEditDomain(), getPaletteNavigatorID());
 	}
 
 	@Override
@@ -174,8 +168,15 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				getTypeEntry().getFile().getProject());
+		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(), getProject());
+	}
+
+	private IProject getProject() {
+		final LibraryElement libraryElement = getType();
+		if (libraryElement != null && libraryElement.getTypeLibrary() != null) {
+			return libraryElement.getTypeLibrary().getProject();
+		}
+		return null;
 	}
 
 	@Override

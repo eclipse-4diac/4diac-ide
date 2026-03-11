@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getIdentification()
- * @model
+ * @model annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
  * @generated
  */
 public interface Identification extends EObject {

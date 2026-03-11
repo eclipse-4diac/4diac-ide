@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
@@ -504,6 +505,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public List<String> getBlockRelativePath() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean validateType(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.TypedElementAnnotations.validateType(this, diagnostics, context);
 	}
@@ -606,6 +617,16 @@ public class EventImpl extends EObjectImpl implements Event {
 	@Override
 	public Stream<INamedElement> findByQualifiedName(final String name) {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.findByQualifiedName(this, name);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getRelativeName(final INamedElement to) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);
 	}
 
 	/**

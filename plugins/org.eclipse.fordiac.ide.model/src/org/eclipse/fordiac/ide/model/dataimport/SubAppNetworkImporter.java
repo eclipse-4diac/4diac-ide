@@ -20,7 +20,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -86,14 +85,6 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 		}
-		for (final VarDeclaration inOutVar : subApp.getInterface().getInOutVars()) {
-			if (inOutVar.getAttributes().stream().map(Attribute::getName).anyMatch(
-					LibraryElementTags.ELEMENT_INOUTVISIBLEOUT::equals) && inOutVar.getInOutVarOpposite().isVisible()) {
-				inOutVar.getInOutVarOpposite().setVisible(false);
-				inOutVar.deleteAttribute(LibraryElementTags.ELEMENT_INOUTVISIBLEOUT);
-			}
-		}
-
 	}
 
 	public TypedSubApp createTypedSubapp(final String typeName) {
@@ -104,13 +95,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		}
 		final TypedSubApp subApp = LibraryElementFactory.eINSTANCE.createTypedSubApp();
 		subApp.setTypeEntry(subEntry);
-		InterfaceList interfaceList = subEntry.getInterface();
-		if (interfaceList == null) {
-			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			interfaceList = interfaceList.copy();
-		}
-		subApp.setInterface(interfaceList);
+		subApp.setInterface(subEntry.getInterface().instanceCopy());
 		return subApp;
 	}
 

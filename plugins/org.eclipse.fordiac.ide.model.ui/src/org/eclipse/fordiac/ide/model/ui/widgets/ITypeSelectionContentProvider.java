@@ -17,7 +17,7 @@
 
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -31,12 +31,12 @@ public interface ITypeSelectionContentProvider {
 	 *
 	 * @return a list of types to display in the viewer
 	 */
-	Collection<LibraryElement> getTypes(Object input);
+	Stream<LibraryElement> getTypes(Object input);
 
 	/**
 	 * Get the type entries for the type selection
 	 *
 	 * @return a list of types to display in the viewer
 	 */
-	Collection<TypeEntry> getTypeEntries(Object input);
+	Stream<TypeEntry> getTypeEntries(Object input);
 }

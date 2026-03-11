@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.resourceediting.editparts.ResourceDiagramEditPartFactory;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.gef.EditPartFactory;
@@ -35,20 +36,6 @@ import org.eclipse.ui.IEditorInput;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ResourceDiagramEditor extends FBNetworkEditor {
-
-	private final Adapter resourceAdapter = new AdapterImpl() {
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-			final Object feature = notification.getFeature();
-			if ((LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature))
-					&& (getResource().equals(notification.getNotifier()))) {
-				updateEditorTitle(ResourceEditorInput.getResourceEditorName(getResource()));
-			}
-			super.notifyChanged(notification);
-		}
-
-	};
 
 	private final Adapter colorChangeListener = new AdapterImpl() {
 		@Override
@@ -68,7 +55,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	}
 
 	private Resource getResource() {
-		return (Resource) getModel().eContainer();
+		return getModel() != null ? (Resource) getModel().eContainer() : null;
 	}
 
 	@Override
@@ -84,26 +71,32 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		if (!(input instanceof final ResourceEditorInput resInput)) {
-			throw new IllegalArgumentException("Resource editors only accept ResourceEditorInput as valid inputs!"); //$NON-NLS-1$
+		final Resource resource = LibraryElementProvider.INSTANCE.getElement(input, Resource.class);
+		if (resource == null) {
+			throw new IllegalArgumentException("Resource editors only accept resources as valid inputs!"); //$NON-NLS-1$
 		}
-		if (getEditorInput() == null) {
-			final Resource res = resInput.getContent();
-			setModel(res.getFBNetwork());
-			getResource().eAdapters().add(resourceAdapter);
-			getResource().getDevice().eAdapters().add(colorChangeListener);
-		}
+		removeColorChangeListener();
+		setModel(resource.getFBNetwork());
+		addColorChangeListener();
 		super.setInput(input);
 	}
 
 	@Override
 	public void dispose() {
+		removeColorChangeListener();
+		super.dispose();
+	}
+
+	protected void addColorChangeListener() {
 		if (null != getResource()) {
-			getResource().eAdapters().remove(resourceAdapter);
+			getResource().getDevice().eAdapters().add(colorChangeListener);
+		}
+	}
+
+	protected void removeColorChangeListener() {
+		if (null != getResource()) {
 			getResource().getDevice().eAdapters().remove(colorChangeListener);
 		}
-
-		super.dispose();
 	}
 
 	private void updateGridColor() {

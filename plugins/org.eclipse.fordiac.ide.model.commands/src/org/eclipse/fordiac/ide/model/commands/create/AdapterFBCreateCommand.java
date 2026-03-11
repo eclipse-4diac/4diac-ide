@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2024 TU Wien ACIN, Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2012, 2025 TU Wien ACIN, Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -71,7 +71,7 @@ class AdapterFBCreateCommand extends FBCreateCommand {
 		final InterfaceList src = (adapterDecl != null && !adapterDecl.isIsInput())
 				? type.getPlugType().getInterfaceList()
 				: type.getInterfaceList();
-		return src.copy();
+		return src.instanceCopy();
 	}
 
 }

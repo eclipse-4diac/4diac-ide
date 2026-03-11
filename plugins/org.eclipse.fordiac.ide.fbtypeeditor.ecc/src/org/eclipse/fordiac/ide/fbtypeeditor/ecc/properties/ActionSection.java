@@ -190,14 +190,4 @@ public class ActionSection extends AbstractSection {
 		algorithmCombo
 				.select((null == alg) ? algorithmCombo.getItemCount() - 1 : algorithmCombo.indexOf(alg.getName()));
 	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to be done here
-	}
 }

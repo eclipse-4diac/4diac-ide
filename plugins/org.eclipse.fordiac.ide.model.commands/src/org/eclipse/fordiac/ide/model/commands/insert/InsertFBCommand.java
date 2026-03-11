@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Germany GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -47,7 +47,7 @@ public class InsertFBCommand extends Command implements ScopedCommand {
 			internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		}
 		internalFB.setTypeEntry(fb.getTypeEntry());
-		internalFB.setInterface(fb.getInterface().copy());
+		internalFB.setInterface(fb.getInterface().instanceCopy());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
 		internalFB.setName(NameRepository.createUniqueName(internalFB, fb.getName()));

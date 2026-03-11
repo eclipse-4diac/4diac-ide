@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022-2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,7 +31,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -109,8 +109,12 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private List<ISearchContext> getSearchContexts() {
-		if (modelQuerySpec.scope() == SearchScope.PROJECT && modelQuerySpec.project() != null) {
-			return Arrays.asList(new LiveSearchContext(modelQuerySpec.project()));
+		if (modelQuerySpec.scope() == SearchScope.FILE && modelQuerySpec.source() instanceof final IFile file) {
+			return Arrays.asList(new FileSearchContext(file));
+		}
+		if (modelQuerySpec.scope() == SearchScope.PROJECT
+				&& modelQuerySpec.source() instanceof final IProject project) {
+			return Arrays.asList(new LiveSearchContext(project));
 		}
 		// workspace scope
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -189,7 +193,7 @@ public class ModelSearchQuery implements ISearchQuery {
 			}
 			if (fbnetworkElement instanceof final BlockFBNetworkElement bfbne && bfbne.getInterface() != null) {
 				if (modelQuerySpec.checkPinName()) {
-					final List<IInterfaceElement> matchingPins = bfbne.getInterface().getAllInterfaceElements().stream()
+					final List<IInterfaceElement> matchingPins = bfbne.getInterface().getAllInterfaceElements()
 							.filter(pin -> pin.getName() != null && compareStrings(pin.getName())).toList();
 					if (!matchingPins.isEmpty()) {
 						if (!path.isEmpty()) {
@@ -290,7 +294,7 @@ public class ModelSearchQuery implements ISearchQuery {
 	private void searchTypeInterface(final InterfaceList interfaceList, final IProgressMonitor monitor) {
 		// @formatter:off
 		Stream.of(
-	            interfaceList.getInputs(),
+	            interfaceList.getAllInputs(),
 	            interfaceList.getOutputVars().stream(),
 	            interfaceList.getEventOutputs().stream(),
 	            interfaceList.getPlugs().stream()
@@ -317,7 +321,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 		// @formatter:off
 		final Stream<IInterfaceElement> searchableElements = Stream.of(
-	            interfaceList.getInputs(),
+	            interfaceList.getAllInputs(),
 	            interfaceList.getOutputVars().stream(),
 	            interfaceList.getEventOutputs().stream(),
 	            interfaceList.getPlugs().stream()
@@ -409,10 +413,9 @@ public class ModelSearchQuery implements ISearchQuery {
 					? new CompositeMatcher(List.of(new STMatcher(this::compareStrings), globalConstMatcher))
 					: new STMatcher(this::compareStrings);
 
-			final URI target = EcoreUtil.getURI(modelElement);
 			searchSupport.search(matcher).filter(TextMatch.class::isInstance).map(TextMatch.class::cast)
-					.map(match -> new TextMatch(target, match.getLine() + 1, match.getOffset(), match.getLength(),
-							match.getType()))
+					.map(match -> new SearchResultTextMatch(modelElement, match.getLine() + 1, match.getOffset(),
+							match.getLength(), match.getType()))
 					.forEach(match -> searchResult.addFordiacMatch(match));
 			isIncompleteResult |= searchSupport.isIncompleteResult();
 		}

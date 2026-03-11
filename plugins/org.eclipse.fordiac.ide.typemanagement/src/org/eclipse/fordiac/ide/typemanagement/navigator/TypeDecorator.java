@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.FordiacStringUtils;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -57,7 +58,7 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 		if (element instanceof final IFile file) {
 			final String comment = getComment(file);
 			if (comment != null) {
-				decoration.addSuffix(" [" + comment + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				decoration.addSuffix(" [" + FordiacStringUtils.getShortComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}

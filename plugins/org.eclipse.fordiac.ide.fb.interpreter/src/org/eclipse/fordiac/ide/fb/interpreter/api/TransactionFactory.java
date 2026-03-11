@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.InterfacePinUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -92,7 +93,7 @@ public final class TransactionFactory {
 		}
 		final String inputEvent = st.getInputPrimitive().getEvent();
 		if (inputEvent != null) {
-			final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
+			final Event eventPin = InterfacePinUtils.findEventInInterface(fb, inputEvent);
 			if (eventPin == null) {
 				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 			}
@@ -103,7 +104,7 @@ public final class TransactionFactory {
 			for (final List<String> parameter : paramList) {
 				if (parameter.size() == 2) {
 					final IInterfaceElement el = EcoreUtil
-							.copy(fb.getInterfaceList().getInterfaceElement(parameter.get(0).strip()));
+							.copy(fb.getInterfaceList().getInterfaceElement(List.of(parameter.get(0).strip())));
 
 					VariableUtils.setVariable((VarDeclaration) el, parameter.get(1));
 					transaction.getInputVariables().add((VarDeclaration) el);

@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -49,7 +51,8 @@ public class ExampleFbNetworkTest extends AbstractInterpreterTest {
 
 		final FBNetwork fbnetwork = ((FBNetworkRuntime) t0.getInputEventOccurrence().getResultFBRuntime())
 				.getFbnetwork();
-		final VarDeclaration varQ = (VarDeclaration) fbnetwork.getFBNamed(EXECUTED_FB_1).getInterfaceElement("Q"); //$NON-NLS-1$
+		final VarDeclaration varQ = (VarDeclaration) fbnetwork.getFBNamed(EXECUTED_FB_1).getInterface()
+				.getInterfaceElement(List.of("Q")); //$NON-NLS-1$
 		assertEquals("TRUE", varQ.getValue().getValue()); //$NON-NLS-1$
 
 		// transaction 1: connected block

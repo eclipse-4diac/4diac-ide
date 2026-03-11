@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.fordiac</groupId>
 	<artifactId>parent</artifactId>
-	<version>3.0.2-SNAPSHOT</version>
+	<version>3.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Eclipse 4diac IDE Parent Project</name>
 	<modules>
@@ -19,18 +19,20 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>5.0.1</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2025-12</tycho-repo.url>
+		<tycho.version>5.0.2</tycho.version>  <!-- when updating this version also update .mvn/extensions.xml -->
+		<tycho-repo.url>https://download.eclipse.org/releases/2026-03</tycho-repo.url>
+		<sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>21</sonar.java.source>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/21/updates/release/latest</org.eclipse.justj.jre.repository>
-        <xtend-version>2.41.0</xtend-version>
+		<sonar.java.binaries>${project.build.outputDirectory}</sonar.java.binaries>
+		<sonar.organization>eclipse</sonar.organization>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/25/updates/release/25.0.2</org.eclipse.justj.jre.repository>
+        <xtend-version>2.42.0</xtend-version>
         <xtend-java-version>21</xtend-java-version>
-        <eclipse.platform.version>4.38</eclipse.platform.version>
-        <equinox.executable.version>3.8.3100</equinox.executable.version>
-        <eclipse.cbi.version>1.5.2</eclipse.cbi.version>
+        <eclipse.cbi.version>1.5.4</eclipse.cbi.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+        <maven-resources-plugin-version>3.4.0</maven-resources-plugin-version>
 	</properties>
 
 	<repositories>
@@ -131,30 +133,12 @@
 						<artifact>
 							<groupId>org.eclipse.fordiac</groupId>
 							<artifactId>org.eclipse.fordiac.ide.product</artifactId>
-							<version>3.0.2-SNAPSHOT</version>
+							<version>3.1.0-SNAPSHOT</version>
 						</artifact>
 					</target>
 					
 					<resolveWithExecutionEnvironmentConstraints>false</resolveWithExecutionEnvironmentConstraints>
-					
-					<dependency-resolution>	
-						<extraRequirements>
-							<requirement>
-								<type>eclipse-feature</type>
-								<id>org.eclipse.equinox.executable</id>
-								<versionRange>${equinox.executable.version}</versionRange>
-							</requirement>
-							<requirement>
-								<type>eclipse-feature</type>
-								<id>org.eclipse.platform</id>
-								<versionRange>${eclipse.platform.version}</versionRange>
-							</requirement>
-						</extraRequirements>
-						<profileProperties>
-							<org.eclipse.justj.buildtime>true</org.eclipse.justj.buildtime>
-						</profileProperties>
-					</dependency-resolution>
- 
+
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -235,7 +219,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>${maven-resources-plugin-version}</version>
 				<executions>
 					<execution>
 						<id>copy-resources-splash</id>
@@ -256,20 +240,15 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>${sonar-maven-plugin.version}</version>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.opentest4j</groupId>
-			<artifactId>opentest4j</artifactId>
-			<version>1.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.14.1</version>
-		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>
 			<artifactId>org.eclipse.xtend.lib</artifactId>

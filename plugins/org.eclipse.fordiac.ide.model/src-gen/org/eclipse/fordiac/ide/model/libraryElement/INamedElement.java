@@ -118,4 +118,12 @@ public interface INamedElement extends EObject {
 	 */
 	boolean validateName(DiagnosticChain diagnostics, Map<Object, Object> context);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	String getRelativeName(INamedElement to);
+
 } // INamedElement

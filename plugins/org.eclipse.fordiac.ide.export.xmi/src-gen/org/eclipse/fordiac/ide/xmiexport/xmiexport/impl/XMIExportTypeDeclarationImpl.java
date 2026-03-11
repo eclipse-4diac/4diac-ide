@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
@@ -75,7 +75,7 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 	 * @generated
 	 * @ordered
 	 */
-	protected INamedElement resultType;
+	protected LibraryElement resultType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,7 +187,7 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 	 * @generated
 	 */
 	@Override
-	public INamedElement getResultType() {
+	public LibraryElement getResultType() {
 		return resultType;
 	}
 
@@ -196,8 +196,8 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetResultType(INamedElement newResultType, NotificationChain msgs) {
-		INamedElement oldResultType = resultType;
+	public NotificationChain basicSetResultType(LibraryElement newResultType, NotificationChain msgs) {
+		LibraryElement oldResultType = resultType;
 		resultType = newResultType;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE, oldResultType, newResultType);
@@ -212,7 +212,7 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 	 * @generated
 	 */
 	@Override
-	public void setResultType(INamedElement newResultType) {
+	public void setResultType(LibraryElement newResultType) {
 		if (newResultType != resultType) {
 			NotificationChain msgs = null;
 			if (resultType != null)
@@ -278,7 +278,7 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 				setTypeDeclaration((STTypeDeclaration)newValue);
 				return;
 			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE:
-				setResultType((INamedElement)newValue);
+				setResultType((LibraryElement)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -301,7 +301,7 @@ public class XMIExportTypeDeclarationImpl extends MinimalEObjectImpl.Container i
 				setTypeDeclaration((STTypeDeclaration)null);
 				return;
 			case XMIExportPackage.XMI_EXPORT_TYPE_DECLARATION__RESULT_TYPE:
-				setResultType((INamedElement)null);
+				setResultType((LibraryElement)null);
 				return;
 			default:
 				super.eUnset(featureID);

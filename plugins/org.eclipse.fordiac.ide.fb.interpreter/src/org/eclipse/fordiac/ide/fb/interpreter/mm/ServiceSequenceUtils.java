@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -135,16 +134,16 @@ public final class ServiceSequenceUtils {
 	}
 
 	public static List<Event> getEvents(final FBType type, final List<String> eventNames) {
-		return eventNames.stream().map(name -> findEvent(type, name)).map(Event.class::cast).filter(Objects::nonNull)
-				.toList();
+		return eventNames.stream().map(name -> findEventInType(type, name)).map(Event.class::cast)
+				.filter(Objects::nonNull).toList();
 	}
 
-	private static Event findEvent(final FBType fbType, final String eventName) {
-		final IInterfaceElement event = fbType.getInterfaceList().getInterfaceElement(eventName);
-		if (!(event instanceof final Event ev) || !event.isIsInput()) {
+	public static Event findEventInType(final FBType fbType, final String eventName) {
+		final Event foundEvent = InterfacePinUtils.findEventInInterface(fbType, eventName);
+		if (foundEvent == null || !InterfacePinUtils.isInput(foundEvent)) {
 			throw new IllegalArgumentException("input primitive: event " + eventName + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 		}
-		return ev;
+		return foundEvent;
 	}
 
 	private ServiceSequenceUtils() {

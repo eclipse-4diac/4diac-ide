@@ -45,6 +45,8 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 		final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) selection.getFirstElement();
 		final IInterfaceElement originPin = interfaceEditPart.getModel();
 
+		editor.getSite().getPage().getNavigationHistory().markLocation(editor);
+
 		// Jump-mode, jump over Struct
 		if (!stepMode && originPin instanceof final MemberVarDeclaration memberVarDecl && memberVarDecl.isIsInput()) {
 			selectOpposites(event, viewer, originPin, jumpOverStruct(memberVarDecl, true), editor);
@@ -119,7 +121,7 @@ public class FollowRightConnectionHandler extends FollowConnectionHandler {
 			// we are at a type interface border in the type editor
 			return false;
 		}
-		final InterfaceList il = (InterfaceList) pin.getModel().eContainer();
+		final InterfaceList il = pin.getModel().getInterfaceList();
 		return !(il.getEventOutputs().isEmpty() && il.getOutputVars().isEmpty() && il.getPlugs().isEmpty()
 				&& il.getInOutVars().isEmpty());
 	}

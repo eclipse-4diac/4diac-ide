@@ -28,9 +28,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.typeeditor.TypeEditorInput;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -42,19 +40,18 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.part.EditorPart;
 
 public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 
 	private static final String CREATE_PLUG = Messages.InterfaceContextMenuProvider_CreatePlug;
 	private static final String CREATE_SOCKET = Messages.InterfaceContextMenuProvider_CreateSocket;
 
-	private final DataTypeLibrary dataTypeLib;
+	private final TypeLibrary typeLib;
 
 	public InterfaceContextMenuProvider(final EditPartViewer viewer, final ZoomManager zoomManager,
-			final ActionRegistry registry, final DataTypeLibrary dataTypeLib) {
+			final ActionRegistry registry, final TypeLibrary typeLib) {
 		super(viewer, zoomManager, registry);
-		this.dataTypeLib = dataTypeLib;
+		this.typeLib = typeLib;
 	}
 
 	@Override
@@ -70,11 +67,11 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		action = getRegistry().getAction(ActionFactory.DELETE.getId());
 		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
-		buildInterfaceEditEntries(menu, getRegistry(), dataTypeLib);
+		buildInterfaceEditEntries(menu, getRegistry(), typeLib);
 	}
 
 	public static void buildInterfaceEditEntries(final IMenuManager menu, final ActionRegistry registry,
-			final DataTypeLibrary dataTypeLib) {
+			final TypeLibrary typeLib) {
 		IAction action;
 
 		action = registry.getAction(CreateInputEventAction.ID);
@@ -89,7 +86,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		MenuManager submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataInput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (final DataType dataType : dataTypeLib.getDataTypesSorted()) {
+		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted().toList()) {
 			action = registry.getAction(CreateInputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateInputVariableAction(part, fbType, dataType);
@@ -101,7 +98,7 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 		submenu = new MenuManager(Messages.InterfaceContextMenuProvider_CreateDataOutput);
 		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, submenu);
 
-		for (final DataType dataType : dataTypeLib.getDataTypesSorted()) {
+		for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted().toList()) {
 			action = registry.getAction(CreateOutputVariableAction.getID(dataType.getName()));
 			if (null == action) {
 				action = new CreateOutputVariableAction(part, fbType, dataType);
@@ -110,44 +107,39 @@ public class InterfaceContextMenuProvider extends FordiacContextMenuProvider {
 			submenu.add(action);
 		}
 		if (!(fbType instanceof AdapterType)) {
-			buildAdapterMenuEntries(menu, registry, part, fbType);
+			buildAdapterMenuEntries(menu, registry, part, fbType, typeLib);
 		}
 	}
 
 	private static void buildAdapterMenuEntries(final IMenuManager menu, final ActionRegistry registry,
-			final IWorkbenchPart part, final FBType fbType) {
+			final IWorkbenchPart part, final FBType fbType, final TypeLibrary typeLib) {
 
-		if (((EditorPart) part).getEditorInput() instanceof final TypeEditorInput untypedInput) {
-			final TypeLibrary typeLib = untypedInput.getTypeEntry().getTypeLibrary();
-			if (null != typeLib) {
-				final MenuManager socketEntry = new MenuManager(CREATE_SOCKET);
-				menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, socketEntry);
+		final MenuManager socketEntry = new MenuManager(CREATE_SOCKET);
+		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, socketEntry);
 
-				final MenuManager plugEntry = new MenuManager(CREATE_PLUG);
-				menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, plugEntry);
+		final MenuManager plugEntry = new MenuManager(CREATE_PLUG);
+		menu.appendToGroup(IWorkbenchActionConstants.GROUP_ADD, plugEntry);
 
-				Action action = (Action) registry.getAction(CreateNewPlugAction.ID);
-				if (null != action) {
-					((CreateFromNewAdapterAction) action).setTypeEntry(untypedInput.getTypeEntry());
-				}
-				plugEntry.add(action);
-
-				action = (Action) registry.getAction(CreateNewSocketAction.ID);
-				if (null != action) {
-					((CreateFromNewAdapterAction) action).setTypeEntry(untypedInput.getTypeEntry());
-				}
-				socketEntry.add(action);
-
-				fillMenuForPalletteGroup(socketEntry, plugEntry, registry, part, fbType, typeLib);
-			}
+		Action action = (Action) registry.getAction(CreateNewPlugAction.ID);
+		if (null != action) {
+			((CreateFromNewAdapterAction) action).setTypeEntry(fbType.getTypeEntry());
 		}
+		plugEntry.add(action);
+
+		action = (Action) registry.getAction(CreateNewSocketAction.ID);
+		if (null != action) {
+			((CreateFromNewAdapterAction) action).setTypeEntry(fbType.getTypeEntry());
+		}
+		socketEntry.add(action);
+
+		fillMenuForPalletteGroup(socketEntry, plugEntry, registry, part, fbType, typeLib);
 	}
 
 	private static void fillMenuForPalletteGroup(final MenuManager socketEntry, final MenuManager plugEntry,
 			final ActionRegistry registry, final IWorkbenchPart part, final FBType fbType, final TypeLibrary typeLib) {
 		IAction action;
 
-		for (final AdapterTypeEntry entry : typeLib.getAdapterTypesSorted()) {
+		for (final AdapterTypeEntry entry : typeLib.getAdapterTypesSorted().toList()) {
 			// add socket entry
 			action = registry.getAction(CreateSocketAction.getID(entry));
 			if (null == action) {

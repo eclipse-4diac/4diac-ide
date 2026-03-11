@@ -43,13 +43,13 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefFigureCanvas;
 import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
+import org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
@@ -210,7 +210,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		// click next to the FB
 		Point point = new Point(145, 245);
 		assertFalse(fbBounds.contains(point.x, point.y));
-		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		assertThrows(TimeoutException.class, editor::waitForSelectedFBEditPart);
 		List<SWTBotGefEditPart> selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertFalse(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
@@ -218,7 +218,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		// click next to the FB
 		point = new Point(265, 350);
 		assertFalse(fbBounds.contains(point.x, point.y));
-		assertThrows(TimeoutException.class, () -> editor.waitForSelectedFBEditPart());
+		assertThrows(TimeoutException.class, editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertFalse(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
@@ -227,7 +227,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		point = new Point(150, 250);
 		editor.click(point.x, point.y);
 		assertTrue(fbBounds.contains(point.x, point.y));
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
@@ -236,7 +236,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		point = new Point(170, 300);
 		editor.click(point.x, point.y);
 		assertTrue(fbBounds.contains(point.x, point.y));
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));
@@ -245,7 +245,7 @@ public class Basic1FBNetworkEditingTests extends Abstract4diacUITests {
 		point = new Point(200, 340);
 		editor.click(point.x, point.y);
 		assertTrue(fbBounds.contains(point.x, point.y));
-		assertDoesNotThrow(() -> editor.waitForSelectedFBEditPart());
+		assertDoesNotThrow(editor::waitForSelectedFBEditPart);
 		selectedEditParts = editor.selectedEditParts();
 		assertFalse(selectedEditParts.isEmpty());
 		assertTrue(fbBot.isFbSelected(selectedEditParts, UITestNamesHelper.E_SWITCH_FB));

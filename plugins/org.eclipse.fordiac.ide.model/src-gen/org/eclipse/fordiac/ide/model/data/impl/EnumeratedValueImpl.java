@@ -231,6 +231,16 @@ public class EnumeratedValueImpl extends EObjectImpl implements EnumeratedValue 
 	 * @generated
 	 */
 	@Override
+	public String getRelativeName(final INamedElement to) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DataPackage.ENUMERATED_VALUE__TYPE:

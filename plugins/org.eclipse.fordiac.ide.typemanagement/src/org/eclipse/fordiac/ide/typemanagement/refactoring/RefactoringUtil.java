@@ -14,6 +14,9 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -21,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.ui.PlatformUI;
 
 public final class RefactoringUtil {
@@ -39,6 +43,33 @@ public final class RefactoringUtil {
 		} catch (final OperationCanceledException | CoreException e) {
 			throw new InvocationTargetException(e);
 		}
+	}
+
+	public static boolean containsTypeEntryFile(final IResource resource) {
+		try {
+			if (containsTypeEntry(resource)) {
+				return true;
+			}
+		} catch (final CoreException e) {
+			return false;
+		}
+		return false;
+	}
+
+	private static boolean containsTypeEntry(final IResource resource) throws CoreException {
+		if (resource instanceof final IFile file) {
+			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
+				return true;
+			}
+		} else if (resource instanceof final IContainer container) {
+			for (final IResource member : container.members()) {
+				if (containsTypeEntry(member)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
 	}
 
 	private RefactoringUtil() {

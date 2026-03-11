@@ -16,7 +16,7 @@
 package org.eclipse.fordiac.ide.xmiexport.xmiexport;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTypeDeclaration;
@@ -89,12 +89,12 @@ public interface XMIExportTypeDeclaration extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Result Type</em>' containment reference.
-	 * @see #setResultType(INamedElement)
+	 * @see #setResultType(LibraryElement)
 	 * @see org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage#getXMIExportTypeDeclaration_ResultType()
 	 * @model containment="true"
 	 * @generated
 	 */
-	INamedElement getResultType();
+	LibraryElement getResultType();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportTypeDeclaration#getResultType <em>Result Type</em>}' containment reference.
@@ -104,6 +104,6 @@ public interface XMIExportTypeDeclaration extends EObject {
 	 * @see #getResultType()
 	 * @generated
 	 */
-	void setResultType(INamedElement value);
+	void setResultType(LibraryElement value);
 
 } // XMIExportTypeDeclaration

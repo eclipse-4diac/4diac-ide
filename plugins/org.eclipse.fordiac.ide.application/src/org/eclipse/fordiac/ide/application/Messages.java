@@ -59,6 +59,10 @@ public final class Messages extends NLS {
 
 	public static String ConfigurableMoveFBSection_DataType;
 
+	public static String ConfigurableMoveFBSection_Inputs;
+
+	public static String ConfigurableMoveFBSection_Outputs;
+
 	public static String CopyEditPartsAction_Text;
 
 	public static String CreateConnectionSection_CreateConnection;
@@ -97,11 +101,9 @@ public final class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
-	public static String FBMarker_ActivePredecessor;
+	public static String FBMarker_MarkAs;
 
-	public static String FBMarker_MarkAsPredecessor;
-
-	public static String FBMarker_RemovePredecessorMarker;
+	public static String FBMarker_RemoveMarker;
 
 	public static String FunctionBlock;
 
@@ -301,6 +303,15 @@ public final class Messages extends NLS {
 	public static String AttributeInherit_CopyAttribute;
 
 	public static String AttributeInherit_InheritAttribute;
+
+	public static String ChangeTypeNameToFile_QuickfixLabel;
+	public static String ChangeTypeNameToFile_QuickfixDesc;
+	public static String ChangeFileNameToType_QuickfixLabel;
+	public static String ChangeFileNameToType_QuickfixDesc;
+	public static String ChangePackageName_QuickfixLabel;
+	public static String ChangeName_NoFileError;
+	public static String ChangeName_NoTypeEntryError;
+	public static String ChangeName_NoTypeError;
 
 	static {
 		// initialize resource bundle

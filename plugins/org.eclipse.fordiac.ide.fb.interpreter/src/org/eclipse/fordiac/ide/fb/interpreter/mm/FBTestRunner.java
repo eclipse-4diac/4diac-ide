@@ -43,10 +43,14 @@ public final class FBTestRunner {
 		}
 		final FBRuntimeAbstract rt = RuntimeFactory.createFrom(fb);
 		RuntimeFactory.setStartState(rt, startStateName);
-		final List<FBTransaction> transaction = TransactionFactory.createFrom(fb, seq, rt);
-		final EventManager eventManager = EventManagerFactory.createFrom(transaction);
-		EventManagerUtils.process(eventManager);
-		return checkResults(seq, eventManager);
+		try {
+			final List<FBTransaction> transaction = TransactionFactory.createFrom(fb, seq, rt);
+			final EventManager eventManager = EventManagerFactory.createFrom(transaction);
+			EventManagerUtils.process(eventManager);
+			return checkResults(seq, eventManager);
+		} catch (final Exception e) {
+			return Optional.of(e.getMessage());
+		}
 	}
 
 	public static Optional<String> checkResults(final ServiceSequence seq, final EventManager eventManager) {
@@ -72,8 +76,8 @@ public final class FBTestRunner {
 	private static Optional<String> checkTransaction(final FBTransaction result,
 			final ServiceTransaction expectedResult) {
 		// input event was correctly generated
-		if (!result.getInputEventOccurrence().getEvent().getName()
-				.equals(expectedResult.getInputPrimitive().getEvent())) {
+		if (!InterfacePinUtils.compareEventNames(result.getInputEventOccurrence().getEvent(),
+				expectedResult.getInputPrimitive().getEvent())) {
 			return Optional.of(
 					"Input event " + expectedResult.getInputPrimitive().getEvent() + " was not generated correctly"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -101,9 +105,9 @@ public final class FBTestRunner {
 	private static Optional<String> checkOutputPrimitive(final FBTransaction result, final int j,
 			final OutputPrimitive p) {
 		// generated output event is correct
-		final String nameGeneratedEvent = result.getOutputEventOccurrences().get(j).getEvent().getName();
-		if (!p.getEvent().equals(nameGeneratedEvent)) {
-			return Optional.of("Generated output event " + nameGeneratedEvent + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
+		final var generatedEvent = result.getOutputEventOccurrences().get(j).getEvent();
+		if (!InterfacePinUtils.compareEventNames(generatedEvent, p.getEvent())) {
+			return Optional.of("Generated output event " + InterfacePinUtils.getFullName(generatedEvent) + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		// the associated data is correct
 		final Optional<String> errorMsg = processParameters(p.getParameters(), result);

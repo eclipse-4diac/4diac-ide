@@ -62,11 +62,11 @@ import org.eclipse.fordiac.ide.model.ui.widgets.TypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.bindings.keys.KeyStroke;
@@ -224,7 +224,7 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 		}
 		if (copy instanceof final IInterfaceElement interfaceElement
 				&& getTypeElement(interfaceElement.getBlockFBNetworkElement()) instanceof final FBType fbType) {
-			return fbType.getInterfaceList().getInterfaceElement(interfaceElement.getName());
+			return fbType.getInterfaceList().getInterfaceElement(interfaceElement);
 		}
 
 		return null;
@@ -273,15 +273,8 @@ public class AttributeSection extends AbstractSection implements I4diacNatTableU
 	}
 
 	@Override
-	protected void setInputCode() {
-		// nothing to do here
-	}
-
-	@Override
 	protected void setInputInit() {
-		provider.setInput(getFilteredAttributeList());
 		buttons.setEnabled(isTypeEditable());
-		table.refresh();
 	}
 
 	@Override

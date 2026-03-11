@@ -44,11 +44,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.widget.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
-import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.action.IAction;
@@ -125,11 +125,25 @@ public class InstancePropertySection extends AbstractSection {
 
 	@Override
 	protected void performRefresh() {
-		if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			outputTable.refresh();
+		if (getType() != null) {
+			if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
+				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
+				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			}
+
+			final List<VarDeclaration> allInputs = new ArrayList<>();
+			final InterfaceList fbInterface = getType().getInterface();
+			allInputs.addAll(fbInterface.getInputVars());
+			allInputs.addAll(fbInterface.getInOutVars());
+			inputDataProvider.setInput(allInputs);
+
+			final List<VarDeclaration> allOutputs = new ArrayList<>();
+			allOutputs.addAll(fbInterface.getOutputVars());
+			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
+			outputDataProvider.setInput(allOutputs);
+
 			inputTable.refresh();
+			outputTable.refresh();
 		}
 	}
 
@@ -285,29 +299,6 @@ public class InstancePropertySection extends AbstractSection {
 			return fbNetworkElement;
 		}
 		return null;
-	}
-
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
-	}
-
-	@Override
-	protected void setInputInit() {
-		if (getType() != null) {
-			final List<VarDeclaration> allInputs = new ArrayList<>();
-			final InterfaceList fbInterface = getType().getInterface();
-			allInputs.addAll(fbInterface.getInputVars());
-			allInputs.addAll(fbInterface.getInOutVars());
-			inputDataProvider.setInput(allInputs);
-
-			final List<VarDeclaration> allOutputs = new ArrayList<>();
-			allOutputs.addAll(fbInterface.getOutputVars());
-			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
-			outputDataProvider.setInput(allOutputs);
-		}
-		inputTable.refresh();
-		outputTable.refresh();
 	}
 
 	protected final Adapter interfaceAdapter = new EContentAdapter() {

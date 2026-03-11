@@ -269,7 +269,7 @@ public class MoveAndReconnectCommand extends Command implements QualNameAffected
 					if (ie.isIsInput()) {
 						ie.getInputConnections().stream()
 								// filter connections between selected fbElements (handled in OutputConnections)
-								.filter(conn -> !fbElements.contains(conn.getSource().eContainer().eContainer()))
+								.filter(conn -> !fbElements.contains(conn.getSource().getBlockFBNetworkElement()))
 								// add reconnection command to same Interface
 								.forEach(conn -> cmd.add(new BorderCrossingReconnectCommand(conn.getDestination(),
 										conn.getDestination(), conn, false)));

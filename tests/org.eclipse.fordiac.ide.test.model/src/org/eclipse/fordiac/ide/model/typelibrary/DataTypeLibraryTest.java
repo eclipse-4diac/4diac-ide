@@ -18,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -72,10 +72,10 @@ class DataTypeLibraryTest {
 
 	@Test
 	void testInvalidMaxLength() {
-		assertInstanceOf(ErrorMarkerDataType.class, dataTypeLibrary.getType("STRING[-1]")); //$NON-NLS-1$
-		assertInstanceOf(ErrorMarkerDataType.class, dataTypeLibrary.getType("STRING[ABC]")); //$NON-NLS-1$
-		assertInstanceOf(ErrorMarkerDataType.class, dataTypeLibrary.getType("WSTRING[ABC]")); //$NON-NLS-1$
-		assertInstanceOf(ErrorMarkerDataType.class, dataTypeLibrary.getType("NO_STRING[17]")); //$NON-NLS-1$
-		assertInstanceOf(ErrorMarkerDataType.class, dataTypeLibrary.getType("DINT[17]")); //$NON-NLS-1$
+		assertInstanceOf(ErrorDataType.class, dataTypeLibrary.getType("STRING[-1]")); //$NON-NLS-1$
+		assertInstanceOf(ErrorDataType.class, dataTypeLibrary.getType("STRING[ABC]")); //$NON-NLS-1$
+		assertInstanceOf(ErrorDataType.class, dataTypeLibrary.getType("WSTRING[ABC]")); //$NON-NLS-1$
+		assertInstanceOf(ErrorDataType.class, dataTypeLibrary.getType("NO_STRING[17]")); //$NON-NLS-1$
+		assertInstanceOf(ErrorDataType.class, dataTypeLibrary.getType("DINT[17]")); //$NON-NLS-1$
 	}
 }

@@ -3,7 +3,8 @@
 
 <!--
 ********************************************************************************
- * Copyright (c) 2020 Primetals Austria GmbH
+ * Copyright (c) 2020, 2026 Primetals Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,10 +15,13 @@
  * Contributors:
  * Michael Jäger
  *    - initial API and implementation and/or initial documentation
+ * Martin Erich Jobst
+ *    - add graphical annotation provider
  ********************************************************************************
 -->
 
 <plugin>
+   <extension-point id="graphicalAnnotationProvider" name="Graphical Annotation Provider" schema="schema/graphicalAnnotationProvider.exsd"/>
    <extension-point id="openListener" name="openListener" schema="schema/openListener.exsd"/>
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
@@ -38,6 +42,16 @@
             markerType="org.eclipse.fordiac.ide.model.problem"
             name="org.eclipse.fordiac.ide.model.ui.annotation.info"
             super="org.eclipse.ui.workbench.texteditor.info">
+      </type>
+      <type
+            markerSeverity="0"
+            markerType="org.eclipse.fordiac.ide.model.ui.predecessor"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.predecessor">
+      </type>
+      <type
+            markerSeverity="0"
+            markerType="org.eclipse.fordiac.ide.model.ui.connectionSource"
+            name="org.eclipse.fordiac.ide.model.ui.annotation.util.connectionSource">
       </type>
    </extension>
    <extension
@@ -90,5 +104,34 @@
             </adapt>
          </enabledWhen>
       </page>
+   </extension>
+  <extension
+       id="predecessor"
+       name="Event Predecessor Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.marker">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+  </extension>
+  <extension
+       id="connectionSource"
+       name="Connection Source Marker"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.core.resources.marker">
+    </super>
+    <persistent
+          value="false">
+    </persistent>
+  </extension>
+   <extension
+         point="org.eclipse.ui.elementFactories">
+      <factory
+            class="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory"
+            id="org.eclipse.fordiac.ide.model.ui.editors.SubEditorInputFactory">
+      </factory>
    </extension>
 </plugin>

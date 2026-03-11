@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.test.ui.helpers.UITestNamesHelper;
 import org.eclipse.fordiac.ide.test.ui.swtbot.SWTBot4diacNatTable;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory;
+import org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -42,6 +42,10 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 		case LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE ->
 			Stream.concat(Stream.of(new CreateMissingFBMarkerResolution(marker), new ChangeFBMarkerResolution(marker)),
 					BestFitFBMarkerResolution.createResolutions(marker)).toArray(IMarkerResolution[]::new);
+		case LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_NAME -> new IMarkerResolution[] {
+				new ChangeTypeNameMarkerResolution(marker), new ChangeFileNameMarkerResolution(marker) };
+		case LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE ->
+			new IMarkerResolution[] { new ChangePackageNameMarkerResolution(marker) };
 		default -> new IMarkerResolution[0];
 		};
 	}
@@ -53,6 +57,8 @@ public class FordiacMarkerResolutionGenerator implements IMarkerResolutionGenera
 				&& (LibraryElementValidator.ITYPED_ELEMENT__VALIDATE_TYPE == code
 						|| LibraryElementValidator.TYPED_CONFIGUREABLE_OBJECT__VALIDATE_TYPE == code
 						|| LibraryElementValidator.CONFIGURABLE_FB__VALIDATE_DATA_TYPE == code
-						|| LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION == code);
+						|| LibraryElementValidator.ATTRIBUTE__VALIDATE_ATTRIBUTE_DECLARATION == code
+						|| LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_NAME == code
+						|| LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE == code);
 	}
 }

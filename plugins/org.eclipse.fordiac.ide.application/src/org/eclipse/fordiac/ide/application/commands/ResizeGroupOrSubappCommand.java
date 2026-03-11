@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
@@ -44,7 +45,6 @@ import org.eclipse.gef.commands.Command;
 public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger, QualNameAffectedCommand {
 
 	final GraphicalEditPart graphicalEditPart;
-	List<FBNetworkElement> fbnetworkElements;
 
 	private Command cmdToExecuteBefore;
 
@@ -72,10 +72,9 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		if (isUnlockedGroup() || isExpandedAndUnlockedSubapp()) {
 			GraphicalEditPart parent = getTargetContainerEP();
 			while (parent != null) {
-				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
+				addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent));
 				addChangeContainerBoundCommand(checkAndCreateResizeInterfaceContentCommand(parent));
 				parent = findNestedGraphicalEditPart(parent);
-				this.fbnetworkElements = null;
 			}
 		}
 	}
@@ -113,7 +112,6 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 				changeBoundscmd.redo();
 			}
 		}
-
 	}
 
 	@Override
@@ -150,22 +148,21 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		return null;
 	}
 
-	private AbstractChangeContainerBoundsCommand checkAndCreateResizeCommand(final GraphicalEditPart containerEP,
-			List<FBNetworkElement> children) {
+	private AbstractChangeContainerBoundsCommand checkAndCreateResizeCommand(final GraphicalEditPart containerEP) {
 		getViewer().flush();
 
-		if ((children == null)
-				&& (containerEP instanceof final AbstractContainerContentEditPart abstractContainerContentEditPart)) {
-			children = abstractContainerContentEditPart.getModel().getNetworkElements();
-		}
-		if (children != null) {
+		if (containerEP instanceof final AbstractContainerContentEditPart abstractContainerContentEditPart) {
+			final List<FBNetworkElement> children = abstractContainerContentEditPart.getModel().getNetworkElements();
+
 			final Rectangle fbBounds = getFBBounds(children);
 			final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
 			if (fbBounds != null && !containerBounds.contains(fbBounds)) {
 				fbBounds.union(containerBounds);
 				final FBNetworkElement container = getContainer(containerEP);
 				if (container != null) {
-					return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
+					return createChangeBoundsCommand(container,
+							((GraphicalEditPart) containerEP.getParent()).getFigure().getBounds(), containerBounds,
+							fbBounds);
 				}
 			}
 		}
@@ -186,10 +183,20 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 					+ subappFigure.getInsets().right;
 			if (fullContainerBounds.width < newFig1.width) {
 				final FBNetworkElement container = getSubappContainer(fullContentGraphicalEditPart);
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, fullContainerBounds, newFig1);
+				return createChangeBoundsCommand(container, subappFigure.getBounds(), fullContainerBounds, newFig1);
 			}
 		}
 		return null;
+	}
+
+	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
+			final Rectangle curBounds, final Rectangle contentContainerBounds, final Rectangle contentBounds) {
+		final Rectangle newBounds = curBounds.getCopy();
+		newBounds.x += contentBounds.x - contentContainerBounds.x;
+		newBounds.y += contentBounds.y - contentContainerBounds.y;
+		newBounds.width += contentBounds.width - contentContainerBounds.width;
+		newBounds.height += contentBounds.height - contentContainerBounds.height;
+		return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, newBounds);
 	}
 
 	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {

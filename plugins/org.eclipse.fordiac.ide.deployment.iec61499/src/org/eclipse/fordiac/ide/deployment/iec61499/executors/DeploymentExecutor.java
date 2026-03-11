@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.deployment.iec61499.ResponseMapping;
 import org.eclipse.fordiac.ide.deployment.iec61499.handlers.EthernetDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.interactors.AbstractDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.interactors.ForteTypeNameCreator;
+import org.eclipse.fordiac.ide.deployment.interactors.TypeNameCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -50,6 +51,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.GlobalConstantsEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.util.LibraryElementHashException;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.xml.sax.InputSource;
 
 public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
@@ -92,7 +94,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	private final Set<String> genFBs = new HashSet<>();
 	private int id = 0;
 
-	String getNextId() {
+	protected String getNextId() {
 		return Integer.toString(id++);
 	}
 
@@ -122,7 +124,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public void createResource(final Resource resource) throws DeploymentException {
 		final String request = MessageFormat.format(CREATE_RESOURCE_INSTANCE, getNextId(), resource.getName(),
-				ForteTypeNameCreator.getForteTypeName(resource.getTypeEntry()));
+				getTypeNameCreator().getTypeName(resource.getTypeEntry()));
 		try {
 			sendREQ("", request); //$NON-NLS-1$
 		} catch (final EOFException e) {
@@ -164,6 +166,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	private static String encodeXMLChars(final String value) {
 		String retVal = value;
+		// replace '&' characters first
+		retVal = retVal.replace("&", "&amp;"); //$NON-NLS-1$ //$NON-NLS-2$
+		// replace remaining characters
 		retVal = retVal.replace("\"", "&quot;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replace("'", "&apos;"); //$NON-NLS-1$ //$NON-NLS-2$
 		retVal = retVal.replace("<", "&lt;"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -190,7 +195,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 			final VarDeclaration varDecl) throws DeploymentException {
 		final String encodedValue = encodeXMLChars(value);
 		final String request = generateWriteParamRequest(fbData.getPrefix() + fbData.getFb().getName(),
-				varDecl.getName(), encodedValue);
+				varDecl.getRelativeName(fbData.getFb()), encodedValue);
 		try {
 			sendREQ(resource.getName(), request);
 		} catch (final IOException e) {
@@ -212,8 +217,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		final FBNetworkElement sourceFB = source.getBlockFBNetworkElement();
 		final FBNetworkElement destFB = destination.getBlockFBNetworkElement();
 		final String request = MessageFormat.format(CREATE_CONNECTION, getNextId(),
-				connData.sourcePrefix() + sourceFB.getName() + "." + source.getName() + connData.sourceSuffix(), //$NON-NLS-1$
-				connData.destinationPrefix() + destFB.getName() + "." + destination.getName()); //$NON-NLS-1$
+				connData.sourcePrefix() + sourceFB.getName() + "." + source.getRelativeName(sourceFB) //$NON-NLS-1$
+						+ connData.sourceSuffix(),
+				connData.destinationPrefix() + destFB.getName() + "." + destination.getRelativeName(destFB)); //$NON-NLS-1$
 
 		try {
 			sendREQ(resource.getName(), request);
@@ -327,7 +333,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void createFBInstance(final FBDeploymentData fbData, final Resource res) throws DeploymentException {
-		final String fbType = ForteTypeNameCreator.getForteTypeName(fbData.getFb());
+		final String fbType = getTypeNameCreator().getTypeName(fbData.getFb());
 		final String fullFbInstanceName = fbData.getPrefix() + fbData.getFb().getName();
 		if (fbType.isEmpty()) {
 			throw new DeploymentException((MessageFormat
@@ -413,23 +419,28 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 		}
 	}
 
-	private static String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
+	private String getTypeNameWithHash(final TypeEntry entry) throws LibraryElementHashException {
 		final String hash = entry.getTypeHash();
 		if (hash.isEmpty()) {
-			return ForteTypeNameCreator.getForteTypeName(entry);
+			return getTypeNameCreator().getTypeName(entry);
 		}
-		return ForteTypeNameCreator.getForteTypeName(entry) + '#' + hash;
+		return getTypeNameCreator().getTypeName(entry) + '#' + hash;
 	}
 
 	protected Response parseResponse(final String result) throws IOException {
 		if (null != result) {
-			final InputSource source = new InputSource(new StringReader(result));
-			final XMLResource xmlResource = new XMLResourceImpl();
-			xmlResource.load(source, respMapping.getLoadOptions());
-			for (final EObject object : xmlResource.getContents()) {
-				if (object instanceof final Response response) {
-					return response;
+			try {
+				final InputSource source = new InputSource(new StringReader(result));
+				final XMLResource xmlResource = new XMLResourceImpl();
+				xmlResource.load(source, respMapping.getLoadOptions());
+				for (final EObject object : xmlResource.getContents()) {
+					if (object instanceof final Response response) {
+						return response;
+					}
 				}
+			} catch (final IOException e) {
+				FordiacLogHelper.logWarning(MessageFormat.format("{0}\n{1}", e.getMessage(), result), e); //$NON-NLS-1$
+				throw e;
 			}
 		}
 		return EMPTY_RESPONSE;
@@ -512,5 +523,10 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	@Override
 	public Optional<String> replayNextEvent(final Resource resource) throws DeploymentException {
 		throw new UnsupportedOperationException(Messages.DeploymentExecutor_ReplayNextEventNotSupported);
+	}
+
+	@SuppressWarnings("static-method") // allow subclasses to override
+	protected TypeNameCreator getTypeNameCreator() {
+		return ForteTypeNameCreator.TYPE_NAME_CREATOR;
 	}
 }

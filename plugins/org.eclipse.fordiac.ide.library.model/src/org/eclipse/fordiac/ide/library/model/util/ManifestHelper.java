@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -40,6 +41,7 @@ import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.library.VersionInfo;
 import org.eclipse.fordiac.ide.library.model.library.util.LibraryResourceFactoryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.osgi.framework.Version;
 
 public final class ManifestHelper {
 	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
@@ -164,6 +166,71 @@ public final class ManifestHelper {
 			return null;
 		}
 		return getManifest(URI.createURI(manifest.toUri().toString()));
+	}
+
+	public static Manifest getReferencedManifest(final IProject project, final String symbolicName) {
+		try {
+			final IProject[] projects = project.getReferencedProjects();
+			for (final IProject refProject : projects) {
+				if (!refProject.isAccessible()) {
+					continue;
+				}
+				final Manifest manifest = getContainerManifest(refProject);
+				if (Objects.equals(symbolicName, getSymbolicName(manifest, refProject.getName()))) {
+					return manifest;
+				}
+			}
+		} catch (final CoreException e) {
+			// do nothing
+		}
+		return null;
+	}
+
+	/**
+	 * Get the symbolic name from a project
+	 *
+	 * @param project The project
+	 * @return The symbolic name, project name, or {@code null}
+	 */
+	public static String getSymbolicName(final IProject project) {
+		if (project == null) {
+			return null;
+		}
+		final Manifest manifest = getContainerManifest(project);
+		return getSymbolicName(manifest, project.getName());
+	}
+
+	/**
+	 * Get the symbolic name from a manifest
+	 *
+	 * @param manifest     The manifest (may be null)
+	 * @param defaultValue The default value
+	 * @return The symbolic name or default value if no symbolic name is available
+	 */
+	public static String getSymbolicName(final Manifest manifest, final String defaultValue) {
+		if (manifest == null || manifest.getProduct() == null || manifest.getProduct().getSymbolicName() == null) {
+			return defaultValue;
+		}
+		return manifest.getProduct().getSymbolicName();
+	}
+
+	/**
+	 * Get the product version from a manifest
+	 *
+	 * @param manifest     The manifest (may be null)
+	 * @param defaultValue The default value
+	 * @return The version or default value if no valid version is available
+	 */
+	public static Version getVersion(final Manifest manifest, final Version defaultValue) {
+		if (manifest == null || manifest.getProduct() == null || manifest.getProduct().getVersionInfo() == null
+				|| manifest.getProduct().getVersionInfo().getVersion() == null) {
+			return defaultValue;
+		}
+		try {
+			return new Version(manifest.getProduct().getVersionInfo().getVersion());
+		} catch (final IllegalArgumentException e) {
+			return defaultValue;
+		}
 	}
 
 	/**

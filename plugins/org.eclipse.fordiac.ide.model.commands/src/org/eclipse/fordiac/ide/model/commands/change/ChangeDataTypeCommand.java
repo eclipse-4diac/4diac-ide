@@ -19,12 +19,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -35,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
@@ -44,6 +50,14 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 	private final DataType dataType;
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
+
+	public DataType getOldDataType() {
+		return oldDataType;
+	}
+
+	public DataType getDataType() {
+		return dataType;
+	}
 
 	private ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
@@ -75,7 +89,7 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 		if (interfaceElement != null && interfaceElement.getBlockFBNetworkElement() instanceof final SubApp subApp
 				&& subApp.isMapped()) {
 			result.getAdditionalCommands().add(new ChangeDataTypeCommand(
-					subApp.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType));
+					subApp.getOpposite().getInterface().getInterfaceElement(interfaceElement), dataType));
 		}
 		if (interfaceElement instanceof final AdapterDeclaration adapterDeclaration) {
 			if (interfaceElement.getFBType() instanceof final CompositeFBType compositeFBType
@@ -106,6 +120,35 @@ public final class ChangeDataTypeCommand extends AbstractChangeInterfaceElementC
 			return result;
 		}
 		return forTypeName(interfaceElement, typeDeclaration);
+	}
+
+	@Override
+	public boolean canExecute() {
+		if (getInterfaceElement() instanceof VarDeclaration
+				&& getInterfaceElement().eContainer() instanceof final StructuredType parentStruct
+				&& dataType instanceof final StructuredType structType) {
+			final Set<String> structs = new HashSet<>();
+			structs.add(PackageNameHelper.getFullTypeName(parentStruct));
+			final boolean hasRecursion = hasRecursionCheck(structs, structType);
+			if (hasRecursion) {
+				ErrorMessenger.popUpErrorMessage(Messages.ChangeDataTypeCommand_RecursiveStructError);
+			}
+			return !hasRecursion;
+		}
+		return true;
+	}
+
+	private boolean hasRecursionCheck(final Set<String> structs, final StructuredType structuredType) {
+		if (!structs.add(PackageNameHelper.getFullTypeName(structuredType))) {
+			return true;
+		}
+		for (final VarDeclaration member : structuredType.getMemberVariables()) {
+			if (member.getType() instanceof final StructuredType memberStruct
+					&& hasRecursionCheck(structs, memberStruct)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

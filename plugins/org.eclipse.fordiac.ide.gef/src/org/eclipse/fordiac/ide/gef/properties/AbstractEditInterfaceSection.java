@@ -37,11 +37,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderToolbarWidget;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.IChangeableRowDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.ISelectionProviderSection;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.SelectionProviderProxy;
+import org.eclipse.fordiac.ide.ui.widget.nattable.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -145,16 +145,6 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		if (outputButtons != null) {
 			outputButtons.dispose();
 		}
-	}
-
-	@Override
-	protected void setInputCode() {
-		// nothing to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to be done here
 	}
 
 	@Override

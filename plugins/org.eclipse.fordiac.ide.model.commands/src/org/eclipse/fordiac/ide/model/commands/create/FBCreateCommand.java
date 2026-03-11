@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
@@ -81,13 +80,7 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 
 	@Override
 	protected InterfaceList createInterfaceList() {
-		InterfaceList interfaceList = typeEntry.getInterface();
-		if (interfaceList == null) {
-			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			interfaceList = interfaceList.copy();
-		}
-		return interfaceList;
+		return typeEntry.getInterface().instanceCopy();
 	}
 
 }

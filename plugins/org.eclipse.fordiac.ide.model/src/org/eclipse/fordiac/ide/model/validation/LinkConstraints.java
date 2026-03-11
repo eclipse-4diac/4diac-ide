@@ -30,8 +30,10 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -107,6 +109,10 @@ public final class LinkConstraints {
 			return false;
 		}
 
+		if (!checkMemberAccessConnection(target)) {
+			return false;
+		}
+
 		if (!typeCheck(source, target)) {
 			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
 					(null != source.getFullTypeName()) ? source.getFullTypeName() : FordiacMessages.NA,
@@ -130,6 +136,12 @@ public final class LinkConstraints {
 			// data in or outputs which are not connect by withs are not allowed to be
 			// connected
 			if (null != varDecl.eContainer()) {
+				if (varDecl.eContainer() instanceof final VarDeclaration parent) {
+					// member access pins are not in any with, connections should only be allowed if
+					// the root parent has a with
+					return isWithConstraintOK(getRootIE(parent));
+				}
+
 				final var obj = varDecl.eContainer().eContainer();
 				if ((obj instanceof CompositeFBType) || (obj instanceof SubApp)
 						|| (obj instanceof ErrorMarkerFBNElement)) {
@@ -145,6 +157,13 @@ public final class LinkConstraints {
 			return false;
 		}
 		return true;
+	}
+
+	private static IInterfaceElement getRootIE(IInterfaceElement varDecl) {
+		while (varDecl.eContainer() instanceof final VarDeclaration parent) {
+			varDecl = parent;
+		}
+		return varDecl;
 	}
 
 	public static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
@@ -213,6 +232,38 @@ public final class LinkConstraints {
 		return true;
 	}
 
+	private static boolean checkMemberAccessConnection(final IInterfaceElement target) {
+		if (target instanceof final ContainerVarDeclaration contVarDecl && isAnyChildInputConnected(contVarDecl)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_ChildHasInputConnection, target.getName()));
+			return false;
+		}
+		if (target.eContainer() instanceof final VarDeclaration parent && isAnyParentInputConnected(parent)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_ParentHasInputConnection, target.getName()));
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean isAnyChildInputConnected(final ContainerVarDeclaration contVarDecl) {
+		for (final VarDeclaration mem : contVarDecl.getCachedMembers()) {
+			if (!mem.getInputConnections().isEmpty()) {
+				return true;
+			}
+			if (mem instanceof final ContainerVarDeclaration memContVarDecl
+					&& isAnyChildInputConnected(memContVarDecl)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isAnyParentInputConnected(final IInterfaceElement ie) {
+		return (!ie.getInputConnections().isEmpty()
+				|| (ie.eContainer() instanceof final VarDeclaration parent && isAnyParentInputConnected(parent)));
+	}
+
 	public static boolean isSwapNeeded(final IInterfaceElement source, final FBNetwork parent) {
 		if (((source.eContainer() != null) && (source.eContainer().eContainer() instanceof CompositeFBType))
 				|| ((source.getBlockFBNetworkElement() != null)
@@ -225,8 +276,8 @@ public final class LinkConstraints {
 	}
 
 	private static FBNetwork getContainingFBNetwork(final IInterfaceElement target) {
-		if ((null != target.eContainer() && target.eContainer().eContainer() != null)
-				&& (target.eContainer().eContainer().eContainer() instanceof final FBNetwork fbNetwork)) {
+		if (target.getBlockFBNetworkElement() != null
+				&& target.getBlockFBNetworkElement().eContainer() instanceof final FBNetwork fbNetwork) {
 			return fbNetwork;
 		}
 		return null;
@@ -246,27 +297,27 @@ public final class LinkConstraints {
 	}
 
 	public static boolean isValidConnSource(final IInterfaceElement source, final FBNetwork parent) {
-		final EObject sourceCont = source.eContainer().eContainer();
+		final BlockFBNetworkElement sourceFBNElement = source.getBlockFBNetworkElement();
 		if (!source.isIsInput()) {
-			// an output can only be a connection source if its container is part of the
-			// parent
-			return sourceCont != null && parent == sourceCont.eContainer();
+			// an output can only be a connection source if its BlockFBNetworkElement is
+			// part of the parent
+			return sourceFBNElement != null && parent == sourceFBNElement.eContainer();
 		}
 		// an input can only be a connection source if its a type input or the parent is
 		// the inside of the subapp
-		return isTypeContainer(sourceCont) || isInsideSubapp(sourceCont, parent);
+		return isTypeContainer(source.getFBType()) || isInsideSubapp(sourceFBNElement, parent);
 	}
 
 	public static boolean isValidConnDestination(final IInterfaceElement dst, final FBNetwork parent) {
-		final EObject dstCont = dst.eContainer().eContainer();
+		final BlockFBNetworkElement dstFBNElement = dst.getBlockFBNetworkElement();
 		if (dst.isIsInput()) {
-			// an input can only be a connection source if its container is part of the
-			// parent
-			return dstCont != null && parent == dstCont.eContainer();
+			// an input can only be a connection source if its BlockFBNetworkElement is part
+			// of the parent
+			return dstFBNElement != null && parent == dstFBNElement.eContainer();
 		}
 		// an output can only be a connection source if its a type input or the parent
 		// is the inside of the subapp
-		return isTypeContainer(dstCont) || isInsideSubapp(dstCont, parent);
+		return isTypeContainer(dst.getFBType()) || isInsideSubapp(dstFBNElement, parent);
 	}
 
 	private static boolean isTypeContainer(final EObject cont) {

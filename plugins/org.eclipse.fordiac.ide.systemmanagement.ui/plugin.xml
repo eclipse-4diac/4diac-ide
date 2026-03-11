@@ -178,6 +178,9 @@
                viewerId="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer">
             <includes>
                <actionExtension
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.copy">
+               </actionExtension>
+               <actionExtension
                      pattern="org.eclipse.ui.navigator.resources.*">
                </actionExtension>
                <actionExtension
@@ -365,6 +368,12 @@
          <enablement></enablement>
       </commonWizard> 
       <actionProvider
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.SystemExplorerEditActionProvider"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.copy"
+            overrides="org.eclipse.ui.navigator.resources.actions.EditActions">
+            <enablement></enablement>
+      </actionProvider>
+      <actionProvider
             class="org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementActionProvider"
             id="org.eclipse.fordiac.ide.systemmanagement.OpenActionProvider">
             <enablement>
@@ -460,21 +469,21 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceTypeDecorator"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceTypeDecorator"
-            label="Instance type decoration"
+            label="%InstanceTypeDecoration_Label"
             lightweight="true"
             state="false">
             <enablement>
                 <objectClass name="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement" />
             </enablement>
             <description>
-               Show type name beside typed fbnetwork elements.
+              	%InstanceTypeDecoration_Description
             </description>
       </decorator>
       <decorator
             class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.InstanceCommentDecorator"
             icon="fordiacimage://ICON_FB_TYPE"
             id="org.eclipse.fordiac.ide.systemmanagement.ui.InstanceCommentDecorator"
-            label="Instance comment decoration"
+            label="%InstanceCommentDecoration_Label"
             lightweight="true"
             state="false">
             <enablement>
@@ -484,7 +493,20 @@
                	</or>
             </enablement>
             <description>
-               Show instance comment beside typed fbnetwork elements.
+               %InstanceCommentDecoration_Description
+            </description>
+      </decorator>
+      <decorator
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.LibraryFolderDecorator"
+            id="org.eclipse.fordiac.ide.systemmanagement.ui.LibraryFolderDecorator"
+            label="%LibraryFolderDecoration_Label"
+            lightweight="true"
+            state="true">
+            <enablement>
+            	   <objectClass name="org.eclipse.core.resources.IFolder" />
+            </enablement>
+            <description>
+               	%LibraryFolderDecoration_Description
             </description>
       </decorator>
    </extension>

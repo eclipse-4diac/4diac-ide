@@ -219,7 +219,7 @@ public class DynamicContractChecker {
 					ruleData.markers().add(eo);
 				}
 			} else if (!fulfill) {
-				reactionAgeMissedError(eo, true);
+				reactionAgeMissedError(eo, Code.REACTION_MISSED);
 				ruleData.markers().add(eo);
 			}
 			return;
@@ -270,7 +270,7 @@ public class DynamicContractChecker {
 			}
 		} else if (!fulfill) {
 			final EventOccurrence mm = missedMarker(eo.eventName(), interval.getUpperBound());
-			reactionAgeMissedError(mm, false);
+			reactionAgeMissedError(mm, Code.AGE_MISSED);
 			insertSorted(ruleData.markers(), mm);
 		}
 	}
@@ -279,7 +279,7 @@ public class DynamicContractChecker {
 		final ContractRule rule = ruleData.rule();
 		if (eo.type() == EventOccurrence.Type.MISSED_MARKER) {
 			if (eo.state() == EventOccurrence.State.ISSUE) {
-				eventMissedError(eo, Code.CAUSAL_REACTION_MISSED);
+				reactionAgeMissedError(eo, Code.CAUSAL_REACTION_MISSED);
 				ruleData.markers().add(eo);
 			}
 			return;
@@ -340,7 +340,7 @@ public class DynamicContractChecker {
 			if (age == null) {
 				final String missedEventName = createKey(rule, rule.getInputs().getFirst());
 				final EventOccurrence mm = missedMarker(missedEventName, checkI.getUpperBound());
-				eventMissedError(mm, Code.CAUSAL_AGE_MISSED);
+				reactionAgeMissedError(mm, Code.CAUSAL_AGE_MISSED);
 				insertSorted(ruleData.markers(), mm);
 				return;
 			}
@@ -349,7 +349,7 @@ public class DynamicContractChecker {
 				// also raise a missed issue when too late (for consistency with other rules)
 				if (age.timestampNs() >= checkI.getUpperBound()) {
 					final EventOccurrence mm = missedMarker(age.eventName(), checkI.getUpperBound());
-					eventMissedError(mm, Code.CAUSAL_AGE_MISSED);
+					reactionAgeMissedError(mm, Code.CAUSAL_AGE_MISSED);
 					insertSorted(ruleData.markers(), mm);
 				}
 
@@ -374,9 +374,14 @@ public class DynamicContractChecker {
 				code);
 	}
 
-	private void reactionAgeMissedError(final EventOccurrence eo, final boolean isReaction) {
-		final ContractRule.Type type = isReaction ? ContractRule.Type.REACTION : ContractRule.Type.AGE;
-		final Code code = isReaction ? Code.REACTION_MISSED : Code.AGE_MISSED;
+	private void reactionAgeMissedError(final EventOccurrence eo, final Code code) {
+		final ContractRule.Type type = switch (code) {
+		case Code.REACTION_MISSED -> ContractRule.Type.REACTION;
+		case Code.AGE_MISSED -> ContractRule.Type.AGE;
+		case Code.CAUSAL_REACTION_MISSED -> ContractRule.Type.CAUSAL_REACTION;
+		case Code.CAUSAL_AGE_MISSED -> ContractRule.Type.CAUSAL_AGE;
+		default -> throw new IllegalArgumentException("Unexpected value: " + code); //$NON-NLS-1$
+		};
 		system.error(Messages.ContractReactionAgeMissedError.formatted(type, eo.eventName(),
 				Utils.nsToString(eo.timestampNs())), code);
 	}

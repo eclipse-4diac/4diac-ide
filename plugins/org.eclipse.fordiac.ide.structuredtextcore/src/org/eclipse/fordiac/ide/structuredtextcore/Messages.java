@@ -71,6 +71,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed;
 	public static String STCoreValidator_NonComparableTypes;
 	public static String STCoreValidator_NonConstantExpressionInVariableDeclaration;
+	public static String STCoreValidator_NoSideEffects;
 	public static String STCoreValidator_MaxLengthTypeInvalid;
 	public static String STCoreValidator_TooManyIndicesGiven;
 	public static String STCoreValidator_ArrayIndexOutOfBounds;

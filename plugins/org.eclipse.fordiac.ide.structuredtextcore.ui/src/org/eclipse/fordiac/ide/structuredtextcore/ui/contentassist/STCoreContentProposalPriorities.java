@@ -20,9 +20,9 @@ public class STCoreContentProposalPriorities extends ContentProposalPriorities {
 	@Override
 	protected void adjustPriority(final ICompletionProposal proposal, final String prefix, final int priority) {
 		final var additionalData = proposal != null ? proposal.getAdditionalProposalInfo() : null;
-		if (additionalData != null && !additionalData.contains("STStandardFunction")
-				&& !additionalData.contains("STFunction")
-				&& !additionalData.contains("org.eclipse.fordiac.ide.model.data")) {
+		if (additionalData != null && !additionalData.contains("STStandardFunction") //$NON-NLS-1$
+				&& !additionalData.contains("STFunction") //$NON-NLS-1$
+				&& !additionalData.contains("org.eclipse.fordiac.ide.model.data")) { //$NON-NLS-1$
 			super.adjustPriority(proposal, prefix, 2000);
 		}
 		super.adjustPriority(proposal, prefix, priority);

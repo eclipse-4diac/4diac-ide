@@ -30,8 +30,6 @@ import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
-import org.eclipse.fordiac.ide.application.dnd.CustomDragSourceListener;
-import org.eclipse.fordiac.ide.application.dnd.CustomDragTargetListener;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.figures.FBNetworkConnectionLayerClippingStrategy;
@@ -47,6 +45,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.LayerConstants;
@@ -124,6 +123,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 	}
 
 	@Override
+	protected DefaultEditDomain createEditDomain() {
+		return new FBNetworkEditDomain(this);
+	}
+
+	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
 				ModelHelper.getProjectFromContextChecked(getModel()));
@@ -138,8 +142,6 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette {
 		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
 				.getAction(Open4DIACElementAction.ID);
 		getGraphicalViewer().addSelectionChangedListener(openAction);
-		getGraphicalViewer().addDragSourceListener(new CustomDragSourceListener(getGraphicalViewer()));
-		getGraphicalViewer().addDropTargetListener(new CustomDragTargetListener(getGraphicalViewer()));
 
 		final ScalableFreeformRootEditPart rootEP = (ScalableFreeformRootEditPart) getGraphicalViewer()
 				.getRootEditPart();

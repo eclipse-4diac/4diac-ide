@@ -17,8 +17,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -62,13 +60,7 @@ public class ZoomFitPageHandler extends AbstractHandler {
 	private static void zoomSelection(final ISelection currentSelection, final ZoomManager zoomManager) {
 		final Rectangle zoomBounds = getZoomBoundsFromSelection(currentSelection);
 		if (zoomBounds != null) {
-			final double newZoom = getZoomFactor(zoomBounds, zoomManager);
-			Display.getDefault().syncExec(() -> {
-				zoomManager.setZoom(newZoom);
-				// for correctly setting the position we need to get bounds after zooming again
-				final Point newPos = getScrollLocation(currentSelection, zoomManager);
-				zoomManager.setViewLocation(newPos);
-			});
+			Display.getDefault().syncExec(() -> zoomManager.zoomTo(zoomBounds));
 		}
 	}
 
@@ -89,26 +81,6 @@ public class ZoomFitPageHandler extends AbstractHandler {
 			return zoomBounds;
 		}
 		return null;
-	}
-
-	private static double getZoomFactor(final Rectangle zoomBounds, final ZoomManager zoomManager) {
-		final Dimension available = zoomManager.getViewport().getClientArea().getSize();
-		final double scaleX = Math.min(available.width * zoomManager.getZoom() / zoomBounds.width,
-				zoomManager.getMaxZoom());
-		final double scaleY = Math.min(available.height * zoomManager.getZoom() / zoomBounds.height,
-				zoomManager.getMaxZoom());
-		return Math.min(scaleX, scaleY);
-
-	}
-
-	private static Point getScrollLocation(final ISelection currentSelection, final ZoomManager zoomManager) {
-		final Rectangle zoomBounds = getZoomBoundsFromSelection(currentSelection);
-		if (zoomBounds != null) {
-			final Dimension size = zoomManager.getViewport().getClientArea().getSize();
-			return zoomBounds.getCenter().translate(-size.width / 2, -size.height / 2)
-					.translate(zoomManager.getViewport().getViewLocation());
-		}
-		return zoomManager.getViewport().getViewLocation();
 	}
 
 }

@@ -75,8 +75,8 @@ public class ContractspecResourceProvider implements IEditedResourceProvider {
 	}
 
 	private static void addFBInterface(final Resource res, final BlockFBNetworkElement fbElem) {
-		fbElem.getInterface().getInputs().forEach(ie -> createPort(res, ie.getName(), true));
-		fbElem.getInterface().getOutputs().forEach(oe -> createPort(res, oe.getName(), false));
+		fbElem.getInterface().getAllInputs().forEach(ie -> createPort(res, ie.getName(), true));
+		fbElem.getInterface().getAllOutputs().forEach(oe -> createPort(res, oe.getName(), false));
 	}
 
 	private static void addFBInterface(final Resource res, final List<String> inputs, final List<String> outputs) {

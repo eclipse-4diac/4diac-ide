@@ -61,7 +61,9 @@ public final class EventManagerUtils {
 				if (network) {
 					for (final EventOccurrence eo : fbtransaction.getOutputEventOccurrences()) {
 						for (final Transaction t : eo.getCreatedTransactions()) {
-							t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+							if (t.getInputEventOccurrence().getFbRuntime() == null) {
+								t.getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
+							}
 							eventManager.getTransactions().add(t);
 						}
 					}
@@ -104,7 +106,7 @@ public final class EventManagerUtils {
 
 	private static void setInputVariable(final VarDeclaration inputVar, final FBType type) {
 		if (null != inputVar) {
-			final var pin = type.getInterfaceList().getInterfaceElement(inputVar.getName());
+			final var pin = type.getInterfaceList().getInterfaceElement(List.of(inputVar.getName()));
 			if ((pin instanceof final VarDeclaration datapin) && pin.isIsInput()) {
 				final Value sampledValue = LibraryElementFactory.eINSTANCE.createValue();
 				datapin.setValue(sampledValue);

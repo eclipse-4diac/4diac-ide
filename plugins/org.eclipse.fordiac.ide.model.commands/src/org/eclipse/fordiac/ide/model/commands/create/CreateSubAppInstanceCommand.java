@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016, 2017 fortiss GmbH
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -39,13 +39,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 
 	@Override
 	protected InterfaceList createInterfaceList() {
-		InterfaceList interfaceList = typeEntry.getInterface();
-		if (interfaceList == null) {
-			interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
-		} else {
-			interfaceList = interfaceList.copy();
-		}
-		return interfaceList;
+		return typeEntry.getInterface().instanceCopy();
 	}
 
 	public TypedSubApp getSubApp() {

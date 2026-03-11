@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: 4diac IDE UI tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.ui
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
@@ -10,11 +10,11 @@ Import-Package: org.eclipse.core.runtime,
  org.eclipse.draw2d.geometry,
  org.eclipse.ui.internal.views.properties.tabbed.view,
  org.eclipse.ui.views.properties.tabbed,
- org.junit.jupiter.api;version="[5.1.0,6.0.0)",
- org.junit.jupiter.api.extension;version="[5.1.0,6.0.0)",
- org.junit.jupiter.api.function;version="[5.1.0,6.0.0)",
- org.junit.jupiter.params;version="[5.1.0,6.0.0)",
- org.junit.jupiter.params.provider;version="[5.1.0,6.0.0)",
+ org.junit.jupiter.api;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.api.extension;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.api.function;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params.provider;version="[6.0.0,7.0.0)",
  org.opentest4j,
  org.slf4j
 Require-Bundle: org.eclipse.ui,
@@ -30,8 +30,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.fbtypeeditor.network,
  org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.systemmanagement.ui;bundle-version="3.0.0",
- org.eclipse.fordiac.ide.typemanagement;bundle-version="3.0.0",
+ org.eclipse.fordiac.ide.systemmanagement.ui,
+ org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.swt,
  org.hamcrest.core,
  org.eclipse.draw2d,

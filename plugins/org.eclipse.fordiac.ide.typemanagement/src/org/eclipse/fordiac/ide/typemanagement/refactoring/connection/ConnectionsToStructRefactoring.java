@@ -48,6 +48,8 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.CommandCompositeChange;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -72,7 +74,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	private final TypeLibrary lib;
 
-	private CompositeChange compChange;
+	private List<ModelEdit<?>> modelEdits;
 
 	/**
 	 * Creates a Instance
@@ -88,8 +90,9 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		this.destinationURI = EcoreUtil.getURI(Objects.requireNonNull(destinationType));
 		this.replaceableConMap = Objects.requireNonNull(replacableConMap);
 
-		vars = sourceType.getInterfaceList().getOutputs().filter(port -> replacableConMap.containsKey(port.getName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).toList();
+		vars = sourceType.getInterfaceList().getAllOutputs()
+				.filter(port -> replacableConMap.containsKey(port.getName())).filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast).toList();
 
 		lib = sourceType.getTypeLibrary();
 	}
@@ -198,7 +201,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
 		}
 		if (conflictResolution
-				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) {
+				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) { //$NON-NLS-1$ //$NON-NLS-2$
 			status.merge(RefactoringStatus
 					.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_MissingStructManipulator));
 		}
@@ -249,8 +252,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_InvalidName, target)));
 		}
 		if ((TypeLibraryManager.INSTANCE.getTypeEntryForURI(fbURI) instanceof final InterfaceTypeEntry ifTypeEntry)
-				&& (ifTypeEntry.getInterface().getAllInterfaceElements().stream()
-						.anyMatch(port -> port.getName().equals(name)) && !nameCol.contains(name))) {
+				&& (ifTypeEntry.getInterface().getAllInterfaceElements().anyMatch(port -> port.getName().equals(name))
+						&& !nameCol.contains(name))) {
 			status.merge(RefactoringStatus.createFatalErrorStatus(
 					MessageFormat.format(Messages.ConnectionsToStructRefactoring_NameExists, target)));
 		}
@@ -259,16 +262,18 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		compChange = new CommandCompositeChange(Messages.ConnectionsToStructRefactoring_ChangeName);
+		final CompositeChange compChange = new CommandCompositeChange(
+				Messages.ConnectionsToStructRefactoring_ChangeName);
+		modelEdits = new ArrayList<>();
 		pm.beginTask(Messages.ConnectionsToStructRefactoring_ProgressText, 1);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
 		}
 
-		compChange.add(new ReplaceVarsWithStructChange(sourceURI, replaceableConMap.keySet(), structURI, sourceVarName,
-				false, 0));
-		compChange.add(new ReplaceVarsWithStructChange(destinationURI, replaceableConMap.values(), structURI,
+		modelEdits.add(new ReplaceVarsWithStructModelEdit(sourceURI, replaceableConMap.keySet(), structURI,
+				sourceVarName, false, 0));
+		modelEdits.add(new ReplaceVarsWithStructModelEdit(destinationURI, replaceableConMap.values(), structURI,
 				destinationVarName, true, 0));
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType
@@ -279,6 +284,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			connect(sourceType, destinationType);
 		}
 		pm.done();
+		compChange.add(ModelEditChange.fromModelEdits(Messages.ConnectionsToStructRefactoring_ChangeName, modelEdits));
 		return compChange;
 	}
 
@@ -288,8 +294,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		if (!sourceURI.toString().equals(destinationURI.toString())) {
 			createUpdateChanges(destinationType, updateMap);
 		}
-		updateMap.entrySet().forEach(
-				entry -> compChange.add(new SystemUpdateFBChange(EcoreUtil.getURI(entry.getKey()), entry.getValue())));
+		updateMap.entrySet().forEach(entry -> modelEdits
+				.add(new SystemUpdateFBModelEdit(EcoreUtil.getURI(entry.getKey()), entry.getValue())));
 	}
 
 	private static void createUpdateChanges(final FBType sourceType, final Map<AutomationSystem, List<URI>> updateMap) {
@@ -308,7 +314,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		destinationSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
 
 			// Collect all correct connections
-			final List<Connection> cons = instance.getInterface().getInputs()
+			final List<Connection> cons = instance.getInterface().getAllInputs()
 					.map(IInterfaceElement::getInputConnections).flatMap(EList::stream)
 					.filter(con -> replaceableConMap.containsKey(con.getSource().getName())
 							&& replaceableConMap.get(con.getSource().getName()).equals(con.getDestination().getName())
@@ -324,7 +330,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		});
 
 		connectMap.entrySet()
-				.forEach(entry -> compChange.add(new SystemConnectStructChange(EcoreUtil.getURI(entry.getKey()),
+				.forEach(entry -> modelEdits.add(new SystemConnectStructModelEdit(EcoreUtil.getURI(entry.getKey()),
 						entry.getValue(), replaceableConMap, sourceVarName, destinationVarName)));
 
 		if (conflictResolution) {
@@ -339,24 +345,25 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 		final Map<AutomationSystem, List<URI>> repairDestinationMap = new HashMap<>();
 		destinationSearch.stream().map(BlockFBNetworkElement.class::cast)
 				.filter(instance -> !correctConnectionMap.containsKey(instance)).forEach(instance -> {
-					if (instance.getInterface().getInputs()
+					if (instance.getInterface().getAllInputs()
 							.filter(input -> replaceableConMap.containsValue(input.getName()))
 							.map(IInterfaceElement::getInputConnections).flatMap(EList::stream).findAny().isPresent()) {
 						addToMap(repairDestinationMap, instance);
 					}
 				});
 		sourceSearch.stream().map(BlockFBNetworkElement.class::cast).forEach(instance -> {
-			if (instance.getInterface().getOutputs().filter(output -> replaceableConMap.containsKey(output.getName()))
+			if (instance.getInterface().getAllOutputs()
+					.filter(output -> replaceableConMap.containsKey(output.getName()))
 					.map(IInterfaceElement::getOutputConnections).flatMap(EList::stream)
 					.anyMatch(con -> !correctConnectionMap.containsKey(con.getDestinationElement()))) {
 				addToMap(repairSourceMap, instance);
 			}
 		});
 		repairSourceMap.entrySet().forEach(
-				entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+				entry -> modelEdits.add(new SystemRepairBrokenConnectionModelEdit(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), true)));
 		repairDestinationMap.entrySet().forEach(
-				entry -> compChange.add(new SystemRepairBrokenConnectionChange(EcoreUtil.getURI(entry.getKey()),
+				entry -> modelEdits.add(new SystemRepairBrokenConnectionModelEdit(EcoreUtil.getURI(entry.getKey()),
 						structURI, replaceableConMap, entry.getValue(), false)));
 	}
 

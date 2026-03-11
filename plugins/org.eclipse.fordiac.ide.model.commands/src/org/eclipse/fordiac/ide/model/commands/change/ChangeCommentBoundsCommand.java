@@ -17,11 +17,13 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
 public class ChangeCommentBoundsCommand extends AbstractChangeContainerBoundsCommand {
 
-	public ChangeCommentBoundsCommand(final Comment comment, final int dx, final int dy, final int dw, final int dh) {
-		super(comment, dx, dy, dw, dh, comment.getWidth(), comment.getHeight());
+	public ChangeCommentBoundsCommand(final Comment comment, final Position newPos, final double newWidth,
+			final double newHeight) {
+		super(comment, newPos, newWidth, newHeight, comment.getWidth(), comment.getHeight());
 	}
 
 	@Override

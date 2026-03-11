@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -120,36 +122,21 @@ public class SystemImporter extends CommonElementImporter {
 		final SystemConfiguration sysConf = getElement().getSystemConfiguration();
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.APPLICATION_ELEMENT:
-				parseApplication(getElement());
-				break;
-			case LibraryElementTags.DEVICE_ELEMENT:
-				sysConf.getDevices().add(parseDevice());
-				break;
-			case LibraryElementTags.MAPPING_ELEMENT:
-				parseMapping();
-				break;
-			case LibraryElementTags.SEGMENT_ELEMENT:
-				sysConf.getSegments().add(parseSegment());
-				break;
-			case LibraryElementTags.LINK_ELEMENT:
-				parseLink(sysConf);
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.APPLICATION_ELEMENT -> parseApplication(getElement());
+			case LibraryElementTags.DEVICE_ELEMENT -> sysConf.getDevices().add(parseDevice());
+			case LibraryElementTags.MAPPING_ELEMENT -> parseMapping();
+			case LibraryElementTags.SEGMENT_ELEMENT -> sysConf.getSegments().add(parseSegment());
+			case LibraryElementTags.LINK_ELEMENT -> parseLink(sysConf);
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};
@@ -278,15 +265,17 @@ public class SystemImporter extends CommonElementImporter {
 			final FBNetworkElement fromElement) {
 		final var devResSeperator = toValue.indexOf('.');
 		if (devResSeperator == -1) {
-			getErrors().add(
-					new TypeImportDiagnostic("Wrong to mapping string", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_WrongString,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
 		final Device dev = getElement().getDeviceNamed(toValue.substring(0, devResSeperator));
 		if (dev == null) {
-			getErrors().add(
-					new TypeImportDiagnostic("Device missing in mapping", fromValue + "->" + toValue, getLineNumber()));//$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingDevice,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
+					getLineNumber()));
 			return null;
 		}
 
@@ -296,7 +285,8 @@ public class SystemImporter extends CommonElementImporter {
 
 		final Resource res = dev.getResourceNamed(resName);
 		if (res == null) {
-			getErrors().add(new TypeImportDiagnostic("Resource missing in mapping", fromValue + "->" + toValue, //$NON-NLS-1$
+			getErrors().add(new TypeImportDiagnostic(Messages.SystemImporter_Mapping_MissingResource,
+					MessageFormat.format(Messages.SystemImporter_Mapping_LocationFormat, fromValue, toValue),
 					getLineNumber()));
 			return null;
 		}
@@ -350,7 +340,7 @@ public class SystemImporter extends CommonElementImporter {
 						comm.setName(copyCommunication.getName());
 						comm.setPosition(EcoreUtil.copy(copyCommunication.getPosition()));
 						comm.setTypeEntry(copyCommunication.getTypeEntry());
-						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
+						comm.setInterface(copyCommunication.getType().getInterfaceList().instanceCopy());
 						channel.getMappedElements().add(comm);
 						return comm;
 					}
@@ -469,17 +459,18 @@ public class SystemImporter extends CommonElementImporter {
 
 		processChildren(LibraryElementTags.APPLICATION_ELEMENT, name -> {
 			switch (name) {
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(application);
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			case LibraryElementTags.SUBAPPNETWORK_ELEMENT:
+			}
+			case LibraryElementTags.SUBAPPNETWORK_ELEMENT -> {
 				final SubAppNetworkImporter supAppImporter = new SubAppNetworkImporter(this);
 				application.setFBNetwork(supAppImporter.getFbNetwork());
 				supAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		});
@@ -499,7 +490,7 @@ public class SystemImporter extends CommonElementImporter {
 		for (final BlockFBNetworkElement fbnEl : mappedFBs) {
 			final BlockFBNetworkElement srcResFb = fbnEl.getOpposite();
 			final Resource res = fbnEl.getResource();
-			fbnEl.getInterface().getOutputs().flatMap(ie -> ie.getOutputConnections().stream()) //
+			fbnEl.getInterface().getAllOutputs().flatMap(ie -> ie.getOutputConnections().stream()) //
 					.filter(con -> con.getDestinationElement().getResource() == res) //
 					.forEach(con -> res.getFBNetwork().addConnection(createResourceCon(srcResFb, con)));
 		}
@@ -517,8 +508,8 @@ public class SystemImporter extends CommonElementImporter {
 	private static Connection createResourceCon(final BlockFBNetworkElement srcResFB, final Connection con) {
 		final BlockFBNetworkElement dstResFB = con.getDestinationElement().getOpposite();
 		final Connection resCon = EcoreUtil.copy(con);
-		resCon.setSource(srcResFB.getOutput(con.getSource().getName()));
-		resCon.setDestination(dstResFB.getInput(con.getDestination().getName()));
+		resCon.setSource(srcResFB.getInterface().getInterfaceElement(con.getSource()));
+		resCon.setDestination(dstResFB.getInterface().getInterfaceElement(con.getDestination()));
 		return resCon;
 	}
 

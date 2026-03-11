@@ -24,7 +24,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.fbrtlauncher.preferences.FbrtPreferenceConstants;
 import org.eclipse.fordiac.ide.runtime.RuntimeLaunchTab;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.widget.FileChooserControl;
+import org.eclipse.fordiac.ide.ui.widget.DirectoryChooserControl;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -35,22 +35,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class FBRTLaunchTab extends RuntimeLaunchTab {
 
 	private static final String DEFAULT_FBRT_PORT = "61500"; //$NON-NLS-1$
-	private static final String ATTR_FBRT_LOCATION = "org.eclipse.fordiac.ide.fbrtlauncher.location"; //$NON-NLS-1$
 	private static final String ATTR_FBRT_DEV_TYPE = "org.eclipse.fordiac.ide.fbrtlauncher.deviceType"; //$NON-NLS-1$
-	private static final String ATTR_FBRT_LIB = "org.eclipse.fordiac.ide.fbrtlauncher.lib"; //$NON-NLS-1$
 	private static final String ATTR_FBRT_PORT = "org.eclipse.fordiac.ide.fbrtlauncher.port"; //$NON-NLS-1$
 
 	private static final String[] FBRT_DEV_TYPES = { "RMT_FRAME", "RMT_DEV" }; //$NON-NLS-1$ //$NON-NLS-2$
 	private static final String DEFAULT_FBRT_DEV_TYPE = FBRT_DEV_TYPES[0];
 
-	private FileChooserControl fbrtChooser;
-	private Text library;
+	private DirectoryChooserControl workingDirChooser;
 	private Combo devType;
 
 	@Override
@@ -62,10 +58,9 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.BEGINNING).grab(true, false).applyTo(comp);
 		setControl(comp);
 
-		fbrtChooser = new FileChooserControl(comp, SWT.NONE, Messages.FBRTPreferencePage_FBRTLocation, true);
-		fbrtChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
+		workingDirChooser = new DirectoryChooserControl(comp, SWT.NONE, Messages.FBRTPreferencePage_FBRTLocation, true);
+		workingDirChooser.addChooserValueChangedListener(newVal -> scheduleUpdateJob());
 
-		createLibrary(comp);
 		createDevType(comp);
 		createPortSelection(comp);
 
@@ -74,26 +69,25 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 	@Override
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
-
 		configuration.setAttribute(ATTR_LOCATION, getJavaRte());
+
 		final IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE,
 				FbrtPreferenceConstants.FBRTLAUNCHER_PREFERENCES_ID);
 
 		final String fbrtPath = store.getString(FbrtPreferenceConstants.P_PATH);
-		configuration.setAttribute(ATTR_FBRT_LOCATION, (fbrtPath != null && !fbrtPath.isBlank()) ? fbrtPath : ""); //$NON-NLS-1$
+		if (fbrtPath != null && !fbrtPath.isBlank()) {
+			configuration.setAttribute(ATTR_WORKING_DIRECTORY, fbrtPath);
+		}
 
-		configuration.setAttribute(ATTR_FBRT_LIB, store.getString(FbrtPreferenceConstants.P_LIB));
 		configuration.setAttribute(ATTR_FBRT_DEV_TYPE, DEFAULT_FBRT_DEV_TYPE);
 		configuration.setAttribute(ATTR_FBRT_PORT, DEFAULT_FBRT_PORT);
-
 		updateLaunchArguments(configuration);
 	}
 
 	@Override
 	public void initializeFrom(final ILaunchConfiguration configuration) {
 		try {
-			fbrtChooser.setValue(configuration.getAttribute(ATTR_FBRT_LOCATION, "")); //$NON-NLS-1$
-			library.setText(configuration.getAttribute(ATTR_FBRT_LIB, "")); //$NON-NLS-1$
+			workingDirChooser.setValue(configuration.getAttribute(ATTR_WORKING_DIRECTORY, "")); //$NON-NLS-1$
 			devType.select(
 					getSelectedDevTypeIndex(configuration.getAttribute(ATTR_FBRT_DEV_TYPE, DEFAULT_FBRT_DEV_TYPE)));
 			setPortValue(configuration.getAttribute(ATTR_FBRT_PORT, DEFAULT_FBRT_PORT));
@@ -104,8 +98,10 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 
 	@Override
 	public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ATTR_FBRT_LOCATION, fbrtChooser.getValue());
-		configuration.setAttribute(ATTR_FBRT_LIB, library.getText());
+		final String workingDir = workingDirChooser.getValue();
+		if (!workingDir.isBlank()) {
+			configuration.setAttribute(ATTR_WORKING_DIRECTORY, workingDir);
+		}
 		configuration.setAttribute(ATTR_FBRT_DEV_TYPE, FBRT_DEV_TYPES[devType.getSelectionIndex()]);
 		configuration.setAttribute(ATTR_FBRT_PORT, getPortValue());
 		updateLaunchArguments(configuration);
@@ -122,19 +118,11 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 			return false;
 		}
 
-		if (fbrtChooser.getValue().isBlank()) {
-			setErrorMessage(Messages.FBRTLaunchTab_NoFBRTJarSet);
+		if (workingDirChooser.getValue().isBlank()) {
+			setErrorMessage(Messages.FBRTLaunchTab_NoFBRTDirectorySet);
 			return false;
 		}
 		return true;
-	}
-
-	private void createLibrary(final Composite parent) {
-		final Label label = new Label(parent, SWT.NONE);
-		label.setText(Messages.FBRTPreferencePage_FBRTLibrary);
-		library = new Text(parent, SWT.BORDER);
-		GridDataFactory.fillDefaults().align(GridData.FILL, GridData.CENTER).applyTo(library);
-		library.addModifyListener(ev -> scheduleUpdateJob());
 	}
 
 	private void createDevType(final Composite parent) {
@@ -169,28 +157,13 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 			// update java executable attribute, e.g., using it on a new machine.
 			configuration.setAttribute(ATTR_LOCATION, getJavaRte());
 
-			final File runtimeFile = getRuntimeFile(configuration);
 			final String portNum = configuration.getAttribute(ATTR_FBRT_PORT, DEFAULT_FBRT_PORT);
 			final String devType = configuration.getAttribute(ATTR_FBRT_DEV_TYPE, DEFAULT_FBRT_DEV_TYPE);
 
-			String fbrtPath = "fb.rt."; //$NON-NLS-1$
-			if (FBRT_DEV_TYPES[0].equalsIgnoreCase(devType)) {
-				fbrtPath += "hmi."; //$NON-NLS-1$
-			}
-
-			final String arguments = "-noverify -classpath ./lib" //$NON-NLS-1$
-					+ File.pathSeparatorChar + "./" //$NON-NLS-1$
-					+ runtimeFile.getName() + File.pathSeparatorChar + " " //$NON-NLS-1$
-					+ fbrtPath + devType + " -n " //$NON-NLS-1$
-					+ devType + " -s " //$NON-NLS-1$
-					+ portNum + " -p " //$NON-NLS-1$
-					+ configuration.getAttribute(ATTR_FBRT_LIB, ""); //$NON-NLS-1$
+			final String arguments = "-jar device.jar FBRT_WINDOW " //$NON-NLS-1$
+					+ devType + " MGR_ID \"localhost:" + portNum + "\""; //$NON-NLS-1$//$NON-NLS-2$
 
 			configuration.setAttribute(ATTR_TOOL_ARGUMENTS, arguments);
-			final File parentFile = runtimeFile.getParentFile();
-			if (parentFile != null) {
-				configuration.setAttribute(ATTR_WORKING_DIRECTORY, parentFile.getPath());
-			}
 
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
@@ -204,10 +177,6 @@ public class FBRTLaunchTab extends RuntimeLaunchTab {
 			}
 		}
 		return 0;
-	}
-
-	private static File getRuntimeFile(final ILaunchConfigurationWorkingCopy configuration) throws CoreException {
-		return new File(configuration.getAttribute(ATTR_FBRT_LOCATION, "")); //$NON-NLS-1$
 	}
 
 }

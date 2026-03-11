@@ -23,16 +23,15 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangePinVisibilityCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeRetainAttributeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
-import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.RetainHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.CommentHelper;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -42,7 +41,8 @@ import org.eclipse.fordiac.ide.ui.preferences.PreferenceStoreProvider;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.gef.commands.Command;
 
-public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDeclaration, VarDeclarationTableColumn> {
+public class VarDeclarationColumnAccessor
+		extends AbstractCommandColumnAccessor<VarDeclaration, VarDeclarationTableColumn> {
 
 	public VarDeclarationColumnAccessor(final CommandExecutor commandExecutor) {
 		this(commandExecutor, VarDeclarationTableColumn.DEFAULT_COLUMNS);
@@ -62,19 +62,13 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case COMMENT -> CommentHelper.getInstanceComment(rowObject);
 		case INITIAL_VALUE -> getInitialValue(rowObject);
 		case VAR_CONFIG -> Boolean.valueOf(rowObject.isVarConfig());
-		case VISIBLE -> Boolean.valueOf(rowObject.isVisible());
+		case VISIBLE, VISIBLEIN -> Boolean.valueOf(rowObject.isVisible());
 		case RETAIN -> getAttributeValueAsString(rowObject);
-		case VISIBLEIN, VISIBLEOUT -> Boolean.valueOf(handleInOutCheck(rowObject, column));
+		case VISIBLEOUT -> Boolean.valueOf(rowObject.getInOutVarOpposite().isVisible());
 		case FILE_PATH -> EcoreUtil.getURI(rowObject).toPlatformString(true);
 		case LOCATION -> FordiacMarkerHelper.getLocation(rowObject);
 		default -> throw new IllegalArgumentException("Unexpected value: " + column); //$NON-NLS-1$
 		};
-	}
-
-	private static boolean handleInOutCheck(final VarDeclaration rowObject, final VarDeclarationTableColumn column) {
-		final IInterfaceElement interfaceElement = getCorrectVarInOutPin(rowObject, column);
-		return interfaceElement.isVisible();
-
 	}
 
 	private static String getAttributeValueAsString(final VarDeclaration rowObject) {
@@ -95,8 +89,10 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		case INITIAL_VALUE -> new ChangeValueCommand(rowObject, Objects.toString(newValue, NULL_DEFAULT));
 		case VAR_CONFIG -> new ChangeVarConfigurationCommand(rowObject,
 				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLE -> new HidePinCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-		case VISIBLEIN, VISIBLEOUT -> handleInOut(rowObject, column, newValue);
+		case VISIBLE, VISIBLEIN ->
+			new ChangePinVisibilityCommand(rowObject, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
+		case VISIBLEOUT -> new ChangePinVisibilityCommand(rowObject.getInOutVarOpposite(),
+				Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
 		case RETAIN -> new ChangeRetainAttributeCommand(rowObject,
 				RetainHelper.deriveTag(rowObject.getAttributeValue(LibraryElementTags.RETAIN_ATTRIBUTE)),
 				RetainHelper.deriveTag(Objects.toString(newValue, NULL_DEFAULT)));
@@ -104,21 +100,7 @@ public class VarDeclarationColumnAccessor extends AbstractColumnAccessor<VarDecl
 		};
 	}
 
-	private static Command handleInOut(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
-			final Object newValue) {
-		final VarDeclaration varDeclaration = getCorrectVarInOutPin(rowObject, column);
-		return new HidePinCommand(varDeclaration, Boolean.parseBoolean(Objects.toString(newValue, NULL_DEFAULT)));
-	}
-
-	private static VarDeclaration getCorrectVarInOutPin(final VarDeclaration rowObject,
-			final VarDeclarationTableColumn column) {
-		if (column.equals(VarDeclarationTableColumn.VISIBLEIN)) {
-			return rowObject;
-		}
-		return rowObject.getInOutVarOpposite();
-	}
-
-	protected static String getInitialValue(final VarDeclaration rowObject) {
+	public static String getInitialValue(final VarDeclaration rowObject) {
 		final String value = InitialValueHelper.getInitialOrDefaultValue(rowObject);
 
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(rowObject);

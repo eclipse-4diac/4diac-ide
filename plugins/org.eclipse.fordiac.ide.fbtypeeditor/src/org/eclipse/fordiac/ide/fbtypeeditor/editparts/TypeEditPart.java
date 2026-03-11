@@ -25,7 +25,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
 import org.eclipse.fordiac.ide.gef.annotation.FordiacAnnotationUtil;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
@@ -44,10 +43,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerDataTypeImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -229,13 +228,11 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 		if (editManager instanceof final ComboDirectEditManager comboEditManager) {
 			final List<String> dataTypeNames;
 			if (getCastedModel() instanceof Event) {
-				dataTypeNames = EventTypeLibrary.getInstance().getEventTypes().stream().map(EventType::getName)
-						.toList();
+				dataTypeNames = EventTypeLibrary.getInstance().getEventTypes().map(EventType::getName).toList();
 			} else if (getCastedModel() instanceof AdapterDeclaration) {
-				dataTypeNames = typeLib.getAdapterTypesSorted().stream().map(TypeEntry::getTypeName).toList();
+				dataTypeNames = typeLib.getAdapterTypesSorted().map(TypeEntry::getTypeName).toList();
 			} else {
-				dataTypeNames = typeLib.getDataTypeLibrary().getDataTypesSorted().stream().map(DataType::getName)
-						.toList();
+				dataTypeNames = typeLib.getDataTypeLibrary().getDataTypesSorted().map(DataType::getName).toList();
 			}
 			comboEditManager.updateComboData(dataTypeNames);
 			comboEditManager.setSelectedItem(dataTypeNames.indexOf(getTypeName()));
@@ -256,14 +253,5 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart implements An
 	@Override
 	public boolean isConnectable() {
 		return false;
-	}
-
-	@Override
-	public <T> T getAdapter(final Class<T> key) {
-		if (key == ErrorMarkerDataTypeImpl.class) {
-			final DataType marker = getCastedModel().getType();
-			return marker instanceof ErrorMarkerDataTypeImpl ? key.cast(marker) : null;
-		}
-		return super.getAdapter(key);
 	}
 }

@@ -26,7 +26,6 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 import com.google.inject.Inject
 import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyStringType
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -1669,8 +1668,8 @@ class STFunctionValidatorTest {
 			END_VAR
 			in1 := 2;
 			END_FUNCTION
-		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
-			"Inputs shall not be be assigned. This will be elevated to an error in the future")
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignment, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+			"Inputs may not be be assigned")
 	}
 
 	@Test
@@ -1821,6 +1820,18 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertWarning(STCorePackage.eINSTANCE.STFeatureExpression,
 			STCoreValidator.TRUNCATING_LITERAL_CONVERSION, "Truncating conversion of literal to CHAR")
+	}
+
+	@Test
+	def void testNoSideEffects() {
+		'''
+			FUNCTION test
+			VAR_TEMP
+				INT_VAR: INT;
+			END_VAR
+			INT_VAR = 17;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.NO_SIDE_EFFECTS)
 	}
 
 	@Test

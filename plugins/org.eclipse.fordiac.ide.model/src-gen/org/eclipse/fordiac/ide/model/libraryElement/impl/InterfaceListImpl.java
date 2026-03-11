@@ -302,7 +302,7 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public EList<IInterfaceElement> getAllInterfaceElements() {
+	public Stream<IInterfaceElement> getAllInterfaceElements() {
 		return InterfaceListAnnotations.getAllInterfaceElements(this);
 	}
 
@@ -325,12 +325,13 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final String name) {
-		return InterfaceListAnnotations.getInterfaceElement(this, name);
+	public IInterfaceElement getInterfaceElement(final List<String> path) {
+		return InterfaceListAnnotations.getInterfaceElement(this, path);
 	}
 
 	/**
@@ -343,30 +344,13 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public InterfaceList copy() {
-		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public List<VarDeclaration> getVisibleInputVars() {
-		return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public List<VarDeclaration> getVisibleOutputVars() {
-		return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
+	public InterfaceList instanceCopy() {
+		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this, false, false);
 	}
 
 	/**
@@ -375,8 +359,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public Stream<IInterfaceElement> getInputs() {
-		return InterfaceListAnnotations.getInputs(this);
+	public InterfaceList fullCopy() {
+		return org.eclipse.emf.ecore.util.EcoreUtil.copy(this);
 	}
 
 	/**
@@ -385,8 +369,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public Stream<IInterfaceElement> getOutputs() {
-		return InterfaceListAnnotations.getOutputs(this);
+	public Stream<IInterfaceElement> getAllInputs() {
+		return InterfaceListAnnotations.getAllInputs(this);
 	}
 
 	/**
@@ -395,8 +379,8 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInput(final String name) {
-		return InterfaceListAnnotations.getInputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	public Stream<IInterfaceElement> getAllOutputs() {
+		return InterfaceListAnnotations.getAllOutputs(this);
 	}
 
 	/**
@@ -405,8 +389,38 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getOutput(final String name) {
-		return InterfaceListAnnotations.getOutputs(this).filter(ie -> ie.getName().equals(name)).findAny().orElse(null);
+	public IInterfaceElement getInput(final List<String> path) {
+		return InterfaceListAnnotations.getInput(this, path);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getOutput(final List<String> path) {
+		return InterfaceListAnnotations.getOutput(this, path);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getInterfaceElement(final IInterfaceElement refElement) {
+		return InterfaceListAnnotations.getInterfaceElement(this, refElement);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IInterfaceElement getInterfaceElement(final List<String> path, final boolean demandCreate) {
+		return InterfaceListAnnotations.getInterfaceElement(this, path, demandCreate);
 	}
 
 	/**

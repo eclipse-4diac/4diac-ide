@@ -62,7 +62,7 @@ public class OnlineCreateConnectionHandler extends AbstractDeploymentCommand {
 		}
 		final BlockFBNetworkElement oppositeSource = conn.getSourceElement().getOpposite();
 		if (null != oppositeSource) {
-			final List<Connection> conns = oppositeSource.getInterfaceElement(conn.getSource().getName())
+			final List<Connection> conns = oppositeSource.getInterface().getInterfaceElement(conn.getSource())
 					.getOutputConnections();
 			for (final Connection connection : conns) {
 				if (connection.getDestination().getName().equals(conn.getDestination().getName())) {

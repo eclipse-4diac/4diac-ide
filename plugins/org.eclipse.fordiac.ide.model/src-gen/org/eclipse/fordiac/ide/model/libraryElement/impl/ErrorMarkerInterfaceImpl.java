@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.eclipse.emf.common.notify.Notification;
@@ -282,6 +283,16 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
+	public String getRelativeName(final INamedElement to) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getRelativeName(this, to);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES);
@@ -420,6 +431,16 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	@Override
 	public IInterfaceElement findInTypeInterface() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.findInTypeInterface(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<String> getBlockRelativePath() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.InterfaceElementAnnotations.getBlockRelativePath(this);
 	}
 
 	/**

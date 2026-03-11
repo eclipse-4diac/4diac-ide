@@ -14,12 +14,10 @@
 package org.eclipse.fordiac.ide.test.resourcedeployment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -29,7 +27,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.deployment.data.ParameterDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
@@ -69,12 +66,6 @@ class ResourceDeploymentTest {
 	}
 
 	@TestFactory
-	Stream<DynamicTest> dynamicUniqueParamTest() {
-		return generateDynamicTests("Test unique Destinations in: ", //$NON-NLS-1$
-				(nw, dep) -> assertFalse(hasDuplicateEntry(dep.getParams())));
-	}
-
-	@TestFactory
 	Stream<DynamicTest> dynamicNumberOfParametersTest() {
 		return generateDynamicTests("Test Number of Params in: ", //$NON-NLS-1$
 				(nw, dep) -> assertEquals(nw.expectedNumParameters(), dep.getParams().size(),
@@ -92,20 +83,6 @@ class ResourceDeploymentTest {
 			final BiConsumer<TestNetwork, ResourceDeploymentData> assertion) {
 		return networks.stream().map(netw -> dynamicTest(testNamePrefix + netw.name(),
 				() -> assertion.accept(netw, generateDeploymentData(netw.name()))));
-	}
-
-	private static boolean hasDuplicateEntry(final List<ParameterDeploymentData> parameters) {
-		final HashSet<String> set = new HashSet<>();
-		for (final ParameterDeploymentData param : parameters) {
-			if (!set.add(getParameterDestination(param))) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static String getParameterDestination(final ParameterDeploymentData param) {
-		return param.prefix() + param.variable().getQualifiedName();
 	}
 
 	private static EList<Resource> loadResources() throws CoreException, IOException {

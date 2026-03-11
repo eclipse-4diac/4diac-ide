@@ -20,7 +20,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.fordiac.ide.ui.widget.NatTableColumnEditableRule;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
 import org.eclipse.gef.EditPart;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 

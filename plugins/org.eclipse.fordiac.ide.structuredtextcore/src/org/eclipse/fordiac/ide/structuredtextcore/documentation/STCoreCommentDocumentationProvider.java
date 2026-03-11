@@ -29,7 +29,7 @@ public class STCoreCommentDocumentationProvider extends MultiLineCommentDocument
 		final List<INode> primaryDocumentationNodes = getSingleLineDocumentationForSTVarDeclarationNodes(o);
 
 		if (!primaryDocumentationNodes.isEmpty()) {
-			return primaryDocumentationNodes.get(0).getText().replace("//", "");
+			return primaryDocumentationNodes.get(0).getText().replace("//", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		final List<INode> secondaryDocumentationNodes = getDocumentationNodes(o);
@@ -46,7 +46,7 @@ public class STCoreCommentDocumentationProvider extends MultiLineCommentDocument
 				final var iter = node.getNextSibling().getAsTreeIterable();
 				for (final INode iNode : iter) {
 					if (iNode.getGrammarElement() instanceof final TerminalRule terminalrule
-							&& "SL_Comment".equalsIgnoreCase(terminalrule.getName())) {
+							&& "SL_Comment".equalsIgnoreCase(terminalrule.getName())) { //$NON-NLS-1$
 						return Collections.<INode>singletonList(iNode);
 					}
 				}

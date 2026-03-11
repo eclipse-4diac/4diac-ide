@@ -46,6 +46,6 @@ public class UntypeSubAppCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	@Override
 	protected void setInterface() {
-		newElement.setInterface(oldElement.getTypeInterface().copy());
+		newElement.setInterface(oldElement.getTypeInterface().fullCopy());
 	}
 }

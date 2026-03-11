@@ -60,15 +60,6 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 		dataType = (AnyDerivedType) value;
 	}
 
-	/**
-	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public void setTypeEditable(final LibraryElement value) {
-		// currently not needed in mock
-	}
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typelib;
@@ -82,16 +73,6 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	@Override
 	public AnyDerivedType getType() {
 		return dataType;
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public AnyDerivedType getTypeEditable() {
-		// currently not needed in mock
-		return null;
 	}
 
 	@Override
@@ -143,5 +124,10 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 	@Override
 	public String getFileExtension() {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING;
+	}
+
+	@Override
+	public boolean hasError() {
+		return false;
 	}
 }

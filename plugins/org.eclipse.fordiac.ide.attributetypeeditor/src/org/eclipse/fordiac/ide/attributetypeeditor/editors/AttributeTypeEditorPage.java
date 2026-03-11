@@ -32,12 +32,12 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.attributetypeeditor.Messages;
 import org.eclipse.fordiac.ide.attributetypeeditor.widgets.DirectlyDerivedTypeComposite;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructEditingComposite;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAttributeDeclarationTypeCommand;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.typeeditor.AbstractTypeEditorPage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.SWT;
@@ -108,8 +108,6 @@ public class AttributeTypeEditorPage extends AbstractTypeEditorPage {
 
 	@Override
 	public void setInput(final IEditorInput input) {
-		checkEditorInput(input);
-
 		if (getSite() instanceof final MultiPageEditorSite mpes) {
 			annotationModel = mpes.getMultiPageEditor().getAdapter(GraphicalAnnotationModel.class);
 		}

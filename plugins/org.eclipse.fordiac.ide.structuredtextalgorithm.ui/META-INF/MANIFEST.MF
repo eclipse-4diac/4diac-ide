@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
-Bundle-Vendor: Eclipse 4diac
-Bundle-Version: 3.0.0.qualifier
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Version: 3.1.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
@@ -40,3 +40,4 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 Bundle-Activator: org.eclipse.fordiac.ide.structuredtextalgorithm.ui.internal.StructuredtextalgorithmActivator
+Bundle-Localization: bundle

@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2025 fortiss GmbH, Profactor GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2015 fortiss GmbH, Profactor GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr
  *     - clean-up and extracting functionality
+ *   Alois Zoitl - fixed layout, reduced code duplication
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -84,25 +85,23 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createFBInfoGroup(parent);
-		createInputInfoGroup(parent);
+		createInfoGroup(getLeftComposite());
+		createInputInfoGroup(getRightComposite());
 	}
 
-	protected void createFBInfoGroup(final Composite parent) {
-		final Composite composite = getWidgetFactory().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
-		getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
-		nameText = createGroupText(composite, true);
+	protected void createInfoGroup(final Composite container) {
+		container.setLayout(new GridLayout(2, false));
+		getWidgetFactory().createCLabel(container, FordiacMessages.InstanceName + ":"); //$NON-NLS-1$
+		nameText = createGroupText(container, true);
 		nameText.addModifyListener(event -> {
 			removeContentAdapter();
 			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
-		final CLabel commentLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
+		final CLabel commentLabel = getWidgetFactory().createCLabel(container, FordiacMessages.InstanceComment + ":"); //$NON-NLS-1$
 		commentLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-		commentText = createGroupText(composite, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		commentText = createGroupText(container, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		final GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
 		gridData.heightHint = 3 * commentText.getLineHeight();
 		commentText.setLayoutData(gridData);
@@ -114,8 +113,8 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 
 	}
 
-	private void createInputInfoGroup(final Composite parent) {
-		final Group inputGroup = getWidgetFactory().createGroup(parent, FordiacMessages.Inputs);
+	private void createInputInfoGroup(final Composite container) {
+		final Group inputGroup = getWidgetFactory().createGroup(container, FordiacMessages.Inputs);
 		inputGroup.setLayout(new GridLayout(1, false));
 		inputGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
@@ -259,15 +258,5 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 			}
 			return element.toString();
 		}
-	}
-
-	@Override
-	protected void setInputInit() {
-		// currently nothing to do here
-	}
-
-	@Override
-	protected void setInputCode() {
-		// currently nothing to do here
 	}
 }

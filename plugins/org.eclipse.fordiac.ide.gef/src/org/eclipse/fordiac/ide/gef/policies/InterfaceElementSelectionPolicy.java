@@ -12,14 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.ui.UtilityMarkerHelper;
 import org.eclipse.fordiac.ide.ui.preferences.ConnectionPreferenceValues;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
@@ -32,7 +31,7 @@ public class InterfaceElementSelectionPolicy extends SelectionEditPolicy {
 	/**
 	 * @param interfaceEditPart
 	 */
-	public InterfaceElementSelectionPolicy(InterfaceEditPart interfaceEditPart) {
+	public InterfaceElementSelectionPolicy(final InterfaceEditPart interfaceEditPart) {
 		this.interfaceEditPart = interfaceEditPart;
 	}
 
@@ -47,21 +46,19 @@ public class InterfaceElementSelectionPolicy extends SelectionEditPolicy {
 	}
 
 	@Override
-	public void eraseTargetFeedback(Request request) {
+	public void eraseTargetFeedback(final Request request) {
 		getHostFigure().setCursor(null);
 	}
 
 	@Override
-	public EditPart getTargetEditPart(Request request) {
+	public EditPart getTargetEditPart(final Request request) {
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ? getHost() : null;
 	}
 
 	@Override
-	public void showTargetFeedback(Request request) {
-		if (request instanceof SelectionRequest) {
-			Point pos = ((SelectionRequest) request).getLocation();
-			getHostFigure().translateToRelative(pos);
-			getHostFigure().setCursor(Display.getDefault().getSystemCursor(SWT.CURSOR_CROSS));
-		}
+	public void showTargetFeedback(final Request request) {
+		final int cursorId = UtilityMarkerHelper.getMarkedElement(UtilityMarkerHelper.CONNECTION_SRC_MARKER_ID,
+				interfaceEditPart.getModel()) != null ? SWT.CURSOR_HAND : SWT.CURSOR_CROSS;
+		getHostFigure().setCursor(Display.getDefault().getSystemCursor(cursorId));
 	}
 }

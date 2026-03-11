@@ -28,8 +28,10 @@ import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.BlockTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -44,6 +46,13 @@ public class AdapterTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<Adapter
 	@Override
 	protected BlockTypeImporter getImporter() {
 		return new ADPImporter(getFile());
+	}
+
+	@Override
+	protected ErrorAdapterType createErrorLibraryElement() {
+		final ErrorAdapterType type = LibraryElementFactory.eINSTANCE.createErrorAdapterType();
+		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		return type;
 	}
 
 	@Override

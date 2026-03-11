@@ -89,12 +89,13 @@ public class FlattenSubApplication extends AbstractHandler {
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
-		return switch (currentElement) {
-		case final SubApp subApp -> subApp;
+		final SubApp subApp = switch (currentElement) {
+		case final SubApp sub -> sub;
 		case final SubAppForFBNetworkEditPart subAppEP -> subAppEP.getModel();
 		case final UISubAppNetworkEditPart uiSubAppNWEP -> (SubApp) uiSubAppNWEP.getModel().eContainer();
 		default -> null;
 		};
+		return (subApp != null && subApp.isMapped()) ? (SubApp) subApp.getMapping().getFrom() : subApp;
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {

@@ -46,117 +46,7 @@ import org.eclipse.fordiac.ide.model.buildpath.impl.BuildpathPackageImpl;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
-
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.ArraySize;
-import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.Color;
-import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Comment;
-import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
-import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableMoveFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
-import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Function;
-import org.eclipse.fordiac.ide.model.libraryElement.FunctionBody;
-import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Identification;
-import org.eclipse.fordiac.ide.model.libraryElement.Import;
-import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.Language;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.Link;
-import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
-import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
-import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Method;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.OriginalSource;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
-import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeName;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunction;
-import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody;
-import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.Segment;
-import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleECAction;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleECState;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
-import org.eclipse.fordiac.ide.model.libraryElement.TextFunction;
-import org.eclipse.fordiac.ide.model.libraryElement.TextFunctionBody;
-import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
-import org.eclipse.fordiac.ide.model.libraryElement.With;
-
+import org.eclipse.fordiac.ide.model.libraryElement.*;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
@@ -371,6 +261,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass containerVarDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass dataConnectionEClass = null;
 
 	/**
@@ -427,7 +324,56 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass errorMarkerDataTypeEClass = null;
+	private EClass errorAdapterTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorAttributeDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorAutomationSystemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorDeviceTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorFBTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorFunctionFBTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorGlobalConstantsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorLibraryElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -442,6 +388,27 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass errorMarkerInterfaceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorResourceTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorSegmentTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorSubAppTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1009,6 +976,20 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EDataType blockFBNWElementStreamEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stringArrayEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType stringListEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1899,6 +1880,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getContainerVarDeclaration() {
+		return containerVarDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getContainerVarDeclaration_CachedMembers() {
+		return (EReference)containerVarDeclarationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDataConnection() {
 		return dataConnectionEClass;
 	}
@@ -2259,8 +2260,78 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getErrorMarkerDataType() {
-		return errorMarkerDataTypeEClass;
+	public EClass getErrorAdapterType() {
+		return errorAdapterTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorAttributeDeclaration() {
+		return errorAttributeDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorAutomationSystem() {
+		return errorAutomationSystemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorDeviceType() {
+		return errorDeviceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorFBType() {
+		return errorFBTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorFunctionFBType() {
+		return errorFunctionFBTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorGlobalConstants() {
+		return errorGlobalConstantsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorLibraryElement() {
+		return errorLibraryElementEClass;
 	}
 
 	/**
@@ -2301,6 +2372,36 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getErrorMarkerInterface_Value() {
 		return (EReference)errorMarkerInterfaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorResourceType() {
+		return errorResourceTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorSegmentType() {
+		return errorSegmentTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getErrorSubAppType() {
+		return errorSubAppTypeEClass;
 	}
 
 	/**
@@ -4379,6 +4480,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EDataType getStringArray() {
+		return stringArrayEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EDataType getStringList() {
+		return stringListEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
 		return (LibraryElementFactory)getEFactoryInstance();
 	}
@@ -4510,6 +4631,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__DY);
 		createEAttribute(connectionRoutingDataEClass, CONNECTION_ROUTING_DATA__NEEDS_VALIDATION);
 
+		containerVarDeclarationEClass = createEClass(CONTAINER_VAR_DECLARATION);
+		createEReference(containerVarDeclarationEClass, CONTAINER_VAR_DECLARATION__CACHED_MEMBERS);
+
 		dataConnectionEClass = createEClass(DATA_CONNECTION);
 		createEReference(dataConnectionEClass, DATA_CONNECTION__FB_NETWORK);
 
@@ -4554,13 +4678,33 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(ecTransitionEClass, EC_TRANSITION__CONDITION_EVENT);
 		createEReference(ecTransitionEClass, EC_TRANSITION__ECC);
 
-		errorMarkerDataTypeEClass = createEClass(ERROR_MARKER_DATA_TYPE);
+		errorAdapterTypeEClass = createEClass(ERROR_ADAPTER_TYPE);
+
+		errorAttributeDeclarationEClass = createEClass(ERROR_ATTRIBUTE_DECLARATION);
+
+		errorAutomationSystemEClass = createEClass(ERROR_AUTOMATION_SYSTEM);
+
+		errorDeviceTypeEClass = createEClass(ERROR_DEVICE_TYPE);
+
+		errorFBTypeEClass = createEClass(ERROR_FB_TYPE);
+
+		errorFunctionFBTypeEClass = createEClass(ERROR_FUNCTION_FB_TYPE);
+
+		errorGlobalConstantsEClass = createEClass(ERROR_GLOBAL_CONSTANTS);
+
+		errorLibraryElementEClass = createEClass(ERROR_LIBRARY_ELEMENT);
 
 		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
 		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
 
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__VALUE);
+
+		errorResourceTypeEClass = createEClass(ERROR_RESOURCE_TYPE);
+
+		errorSegmentTypeEClass = createEClass(ERROR_SEGMENT_TYPE);
+
+		errorSubAppTypeEClass = createEClass(ERROR_SUB_APP_TYPE);
 
 		eventEClass = createEClass(EVENT);
 		createEReference(eventEClass, EVENT__WITH);
@@ -4762,12 +4906,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		stMethodEClass = createEClass(ST_METHOD);
 
+		structManipulatorEClass = createEClass(STRUCT_MANIPULATOR);
+
 		subAppEClass = createEClass(SUB_APP);
 		createEAttribute(subAppEClass, SUB_APP__WIDTH);
 		createEAttribute(subAppEClass, SUB_APP__HEIGHT);
 		createEAttribute(subAppEClass, SUB_APP__LOCKED);
-
-		structManipulatorEClass = createEClass(STRUCT_MANIPULATOR);
 
 		subAppTypeEClass = createEClass(SUB_APP_TYPE);
 
@@ -4811,6 +4955,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		valueEClass = createEClass(VALUE);
 		createEAttribute(valueEClass, VALUE__VALUE);
 
+		varConfigInstanceEClass = createEClass(VAR_CONFIG_INSTANCE);
+
 		varDeclarationEClass = createEClass(VAR_DECLARATION);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__ARRAY_SIZE);
 		createEReference(varDeclarationEClass, VAR_DECLARATION__WITHS);
@@ -4826,8 +4972,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		withEClass = createEClass(WITH);
 		createEReference(withEClass, WITH__VARIABLES);
 
-		varConfigInstanceEClass = createEClass(VAR_CONFIG_INSTANCE);
-
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -4842,6 +4986,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		varDeclListEDataType = createEDataType(VAR_DECL_LIST);
 		interfaceTypeEntryEDataType = createEDataType(INTERFACE_TYPE_ENTRY);
 		blockFBNWElementStreamEDataType = createEDataType(BLOCK_FBNW_ELEMENT_STREAM);
+		stringArrayEDataType = createEDataType(STRING_ARRAY);
+		stringListEDataType = createEDataType(STRING_LIST);
 	}
 
 	/**
@@ -4900,6 +5046,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		configurableMoveFBEClass.getESuperTypes().add(this.getConfigurableFB());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
 		connectionEClass.getESuperTypes().add(this.getHiddenElement());
+		containerVarDeclarationEClass.getESuperTypes().add(this.getVarDeclaration());
 		dataConnectionEClass.getESuperTypes().add(this.getConnection());
 		demultiplexerEClass.getESuperTypes().add(this.getStructManipulator());
 		deviceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
@@ -4910,9 +5057,29 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		ecStateEClass.getESuperTypes().add(this.getINamedElement());
 		ecStateEClass.getESuperTypes().add(this.getPositionableElement());
 		ecTransitionEClass.getESuperTypes().add(this.getPositionableElement());
-		errorMarkerDataTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
+		errorAdapterTypeEClass.getESuperTypes().add(this.getAdapterType());
+		errorAdapterTypeEClass.getESuperTypes().add(this.getErrorFBType());
+		errorAttributeDeclarationEClass.getESuperTypes().add(this.getAttributeDeclaration());
+		errorAttributeDeclarationEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorAutomationSystemEClass.getESuperTypes().add(this.getAutomationSystem());
+		errorAutomationSystemEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorDeviceTypeEClass.getESuperTypes().add(this.getDeviceType());
+		errorDeviceTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorFBTypeEClass.getESuperTypes().add(this.getFBType());
+		errorFBTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorFunctionFBTypeEClass.getESuperTypes().add(this.getFunctionFBType());
+		errorFunctionFBTypeEClass.getESuperTypes().add(this.getErrorFBType());
+		errorGlobalConstantsEClass.getESuperTypes().add(this.getGlobalConstants());
+		errorGlobalConstantsEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorLibraryElementEClass.getESuperTypes().add(this.getLibraryElement());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getBlockFBNetworkElement());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
+		errorResourceTypeEClass.getESuperTypes().add(this.getResourceType());
+		errorResourceTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorSegmentTypeEClass.getESuperTypes().add(this.getSegmentType());
+		errorSegmentTypeEClass.getESuperTypes().add(this.getErrorLibraryElement());
+		errorSubAppTypeEClass.getESuperTypes().add(this.getSubAppType());
+		errorSubAppTypeEClass.getESuperTypes().add(this.getErrorFBType());
 		eventEClass.getESuperTypes().add(this.getIInterfaceElement());
 		eventEClass.getESuperTypes().add(this.getICallable());
 		eventConnectionEClass.getESuperTypes().add(this.getConnection());
@@ -4965,8 +5132,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		stFunctionEClass.getESuperTypes().add(this.getTextFunction());
 		stFunctionBodyEClass.getESuperTypes().add(this.getTextFunctionBody());
 		stMethodEClass.getESuperTypes().add(this.getTextMethod());
-		subAppEClass.getESuperTypes().add(this.getBlockFBNetworkElement());
 		structManipulatorEClass.getESuperTypes().add(this.getConfigurableFB());
+		subAppEClass.getESuperTypes().add(this.getBlockFBNetworkElement());
 		subAppTypeEClass.getESuperTypes().add(this.getCompositeFBType());
 		textAlgorithmEClass.getESuperTypes().add(this.getAlgorithm());
 		textFunctionEClass.getESuperTypes().add(this.getFunction());
@@ -4976,8 +5143,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		typedSubAppEClass.getESuperTypes().add(this.getSubApp());
 		untypedSubAppEClass.getESuperTypes().add(this.getSubApp());
-		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
 		varConfigInstanceEClass.getESuperTypes().add(this.getVarDeclaration());
+		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterConnectionEClass, AdapterConnection.class, "AdapterConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -5093,16 +5260,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(blockFBNetworkElementEClass, BlockFBNetworkElement.class, "BlockFBNetworkElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getBlockFBNetworkElement_Interface(), this.getInterfaceList(), this.getInterfaceList_BlockFBNetworkElement(), "interface", null, 0, 1, BlockFBNetworkElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(blockFBNetworkElementEClass, this.getIInterfaceElement(), "getInterfaceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		addEOperation(blockFBNetworkElementEClass, this.getInterfaceList(), "getTypeInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(blockFBNetworkElementEClass, this.getIInterfaceElement(), "getInput", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(blockFBNetworkElementEClass, this.getIInterfaceElement(), "getOutput", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(blockFBNetworkElementEClass, null, "checkConnections", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -5135,8 +5293,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getColorizableElement_Color(), this.getColor(), null, "color", null, 1, 1, ColorizableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(commentEClass, Comment.class, "Comment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getComment_Width(), theXMLTypePackage.getDouble(), "width", "200", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEAttribute(getComment_Height(), theXMLTypePackage.getDouble(), "height", "100", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getComment_Width(), theXMLTypePackage.getDouble(), "width", "1000", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getComment_Height(), theXMLTypePackage.getDouble(), "height", "500", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(communicationChannelEClass, CommunicationChannel.class, "CommunicationChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -5367,6 +5525,40 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(connectionRoutingDataEClass, ecorePackage.getEBoolean(), "is5SegementData", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(containerVarDeclarationEClass, ContainerVarDeclaration.class, "ContainerVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getContainerVarDeclaration_CachedMembers(), this.getVarDeclaration(), null, "cachedMembers", null, 0, -1, ContainerVarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(containerVarDeclarationEClass, this.getVarDeclaration(), "getCachedMember", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(containerVarDeclarationEClass, this.getVarDeclaration(), "getCachedMember", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getStringList(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "demandCreate", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(containerVarDeclarationEClass, null, "getAllCachedMembers", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getETreeIterator());
+		g2 = createEGenericType(this.getVarDeclaration());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
+		op = addEOperation(containerVarDeclarationEClass, ecorePackage.getEBoolean(), "validateMemberInputConnections", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(containerVarDeclarationEClass, ecorePackage.getEBoolean(), "validateMemberInitialValues", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(dataConnectionEClass, DataConnection.class, "DataConnection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getDataConnection_FBNetwork(), this.getFBNetwork(), this.getFBNetwork_DataConnections(), "fBNetwork", null, 0, 1, DataConnection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -5432,7 +5624,21 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(ecTransitionEClass, ecorePackage.getEInt(), "getPriority", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(errorMarkerDataTypeEClass, ErrorMarkerDataType.class, "ErrorMarkerDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEClass(errorAdapterTypeEClass, ErrorAdapterType.class, "ErrorAdapterType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorAttributeDeclarationEClass, ErrorAttributeDeclaration.class, "ErrorAttributeDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorAutomationSystemEClass, ErrorAutomationSystem.class, "ErrorAutomationSystem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorDeviceTypeEClass, ErrorDeviceType.class, "ErrorDeviceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorFBTypeEClass, ErrorFBType.class, "ErrorFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorFunctionFBTypeEClass, ErrorFunctionFBType.class, "ErrorFunctionFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorGlobalConstantsEClass, ErrorGlobalConstants.class, "ErrorGlobalConstants", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorLibraryElementEClass, ErrorLibraryElement.class, "ErrorLibraryElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5461,6 +5667,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(errorResourceTypeEClass, ErrorResourceType.class, "ErrorResourceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorSegmentTypeEClass, ErrorSegmentType.class, "ErrorSegmentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(errorSubAppTypeEClass, ErrorSubAppType.class, "ErrorSubAppType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getEvent_With(), this.getWith(), null, "with", null, 0, -1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -5582,6 +5794,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(fbNetworkElementEClass, ecorePackage.getEBoolean(), "validateType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		addEOperation(fbNetworkElementEClass, ecorePackage.getEString(), "getQualifiedName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(fbNetworkElementEClass, theXMLTypePackage.getDouble(), "getWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -5682,6 +5903,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(iInterfaceElementEClass, this.getIInterfaceElement(), "findInTypeInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(iInterfaceElementEClass, this.getStringList(), "getBlockRelativePath", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(importEClass, Import.class, "Import", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getImport_ImportedNamespace(), theXMLTypePackage.getString(), "importedNamespace", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -5706,6 +5929,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(iNamedElementEClass, ecorePackage.getEString(), "getRelativeName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getINamedElement(), "to", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(inputPrimitiveEClass, InputPrimitive.class, "InputPrimitive", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(interfaceListEClass, InterfaceList.class, "InterfaceList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -5721,11 +5947,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getInterfaceList_FBType(), this.getFBType(), this.getFBType_InterfaceList(), "FBType", null, 0, 1, InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getInterfaceList_BlockFBNetworkElement(), this.getBlockFBNetworkElement(), this.getBlockFBNetworkElement_Interface(), "BlockFBNetworkElement", null, 0, 1, InterfaceList.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(interfaceListEClass, null, "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		g1 = createEGenericType(ecorePackage.getEEList());
-		g2 = createEGenericType(this.getIInterfaceElement());
-		g1.getETypeArguments().add(g2);
-		initEOperation(op, g1);
+		addEOperation(interfaceListEClass, this.getInterfaceElementStream(), "getAllInterfaceElements", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, this.getEvent(), "getEvent", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
@@ -5734,26 +5956,31 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, this.getIInterfaceElement(), "getInterfaceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getStringList(), "path", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, this.getAdapterDeclaration(), "getAdapter", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(interfaceListEClass, this.getInterfaceList(), "copy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(interfaceListEClass, this.getInterfaceList(), "instanceCopy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleInputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(interfaceListEClass, this.getInterfaceList(), "fullCopy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleOutputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(interfaceListEClass, this.getInterfaceElementStream(), "getAllInputs", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		addEOperation(interfaceListEClass, this.getInterfaceElementStream(), "getInputs", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(interfaceListEClass, this.getInterfaceElementStream(), "getOutputs", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(interfaceListEClass, this.getInterfaceElementStream(), "getAllOutputs", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, this.getIInterfaceElement(), "getInput", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getStringList(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(interfaceListEClass, this.getIInterfaceElement(), "getOutput", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getStringList(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(interfaceListEClass, this.getIInterfaceElement(), "getInterfaceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getIInterfaceElement(), "refElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(interfaceListEClass, this.getIInterfaceElement(), "getInterfaceElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getStringList(), "path", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "demandCreate", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iTypedElementEClass, ITypedElement.class, "ITypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -5789,6 +6016,15 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(libraryElementEClass, ecorePackage.getEString(), "getDocumentation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(libraryElementEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(libraryElementEClass, ecorePackage.getEBoolean(), "validatePackage", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -5957,6 +6193,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(stMethodEClass, STMethod.class, "STMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
+		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(structManipulatorEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(structManipulatorEClass, this.getVarDeclaration(), "getMemberVars", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(subAppEClass, SubApp.class, "SubApp", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSubApp_Width(), theXMLTypePackage.getDouble(), "width", "3000", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getSubApp_Height(), theXMLTypePackage.getDouble(), "height", "1700", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
@@ -5975,12 +6217,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(subAppEClass, theXMLTypePackage.getDouble(), "getVisibleWidth", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(subAppEClass, theXMLTypePackage.getDouble(), "getVisibleHeight", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(structManipulatorEClass, StructManipulator.class, "StructManipulator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-
-		addEOperation(structManipulatorEClass, null, "updateConfiguration", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(structManipulatorEClass, this.getVarDeclaration(), "getMemberVars", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(subAppTypeEClass, SubAppType.class, "SubAppType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -6067,10 +6303,21 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(valueEClass, this.getIInterfaceElement(), "getParentIE", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		initEClass(varConfigInstanceEClass, VarConfigInstance.class, "VarConfigInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		op = addEOperation(varConfigInstanceEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(varDeclarationEClass, VarDeclaration.class, "VarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getVarDeclaration_ArraySize(), this.getArraySize(), this.getArraySize_VarDeclaration(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getVarDeclaration_ArraySize(), this.getArraySize(), this.getArraySize_VarDeclaration(), "arraySize", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getVarDeclaration_Withs(), this.getWith(), this.getWith_Variables(), "withs", null, 0, -1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getVarDeclaration_Value(), this.getValue(), null, "value", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getVarDeclaration_Value(), this.getValue(), null, "value", null, 0, 1, VarDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(varDeclarationEClass, theXMLTypePackage.getBoolean(), "isVarConfig", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -6177,6 +6424,23 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(varDeclarationEClass, this.getVarDeclaration(), "findInTypeInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		op = addEOperation(varDeclarationEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(varDeclarationEClass, theXMLTypePackage.getBoolean(), "isVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(varDeclarationEClass, ecorePackage.getEBoolean(), "hasValue", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(varDeclarationEClass, ecorePackage.getEString(), "getValueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(varDeclarationEClass, null, "setValueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "valueString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(varDeclarationEClass, ecorePackage.getEString(), "getArraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(varDeclarationEClass, null, "setArraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, ecorePackage.getEString(), "arraySizeString", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(versionInfoEClass, VersionInfo.class, "VersionInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getVersionInfo_Author(), theXMLTypePackage.getString(), "author", "", 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getVersionInfo_Date(), theXMLTypePackage.getString(), "date", "YYYY-MM-DD", 1, 1, VersionInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
@@ -6186,17 +6450,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(withEClass, With.class, "With", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getWith_Variables(), this.getVarDeclaration(), this.getVarDeclaration_Withs(), "variables", null, 1, 1, With.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(varConfigInstanceEClass, VarConfigInstance.class, "VarConfigInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-
-		op = addEOperation(varConfigInstanceEClass, ecorePackage.getEBoolean(), "validateName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, ecorePackage.getEDiagnosticChain(), "diagnostics", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		g1 = createEGenericType(ecorePackage.getEMap());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		addEParameter(op, g1, "context", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$
@@ -6216,6 +6469,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEDataType(varDeclListEDataType, List.class, "VarDeclList", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.List<org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"); //$NON-NLS-1$ //$NON-NLS-2$
 		initEDataType(interfaceTypeEntryEDataType, InterfaceTypeEntry.class, "InterfaceTypeEntry", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(blockFBNWElementStreamEDataType, Stream.class, "BlockFBNWElementStream", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.stream.Stream<org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement>"); //$NON-NLS-1$ //$NON-NLS-2$
+		initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(stringListEDataType, List.class, "StringList", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.List<java.lang.String>"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Create resource
 		createResource(eNS_URI);
@@ -6937,6 +7192,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (containerVarDeclarationEClass.getEOperations().get(3),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (containerVarDeclarationEClass.getEOperations().get(4),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (errorMarkerInterfaceEClass.getEOperations().get(0),
 		   source,
 		   new String[] {
@@ -6956,6 +7223,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   });
 		addAnnotation
 		  (fbNetworkElementEClass.getEOperations().get(9),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (fbNetworkElementEClass.getEOperations().get(10),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -6991,7 +7264,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (libraryElementEClass.getEOperations().get(4),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (typedConfigureableObjectEClass.getEOperations().get(4),
+		   source,
+		   new String[] {
+			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (varConfigInstanceEClass.getEOperations().get(0),
 		   source,
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -7056,12 +7341,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   new String[] {
 			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
-		addAnnotation
-		  (varConfigInstanceEClass.getEOperations().get(0),
-		   source,
-		   new String[] {
-			   "invariant", "true" //$NON-NLS-1$ //$NON-NLS-2$
-		   });
 	}
 
 	/**
@@ -7073,7 +7352,19 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	protected void createHashMetaDataAnnotations() {
 		String source = "http:///org/eclipse/fordiac/ide/model/HashMetaData"; //$NON-NLS-1$
 		addAnnotation
+		  (getConnection_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (connectionRoutingDataEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getECTransition_Comment(),
 		   source,
 		   new String[] {
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -7083,6 +7374,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (identificationEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
 		  (getINamedElement_Comment(),
@@ -7097,7 +7394,31 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 		addAnnotation
+		  (getSegment_Width(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
 		  (getService_Comment(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Width(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Height(),
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getSubApp_Locked(),
 		   source,
 		   new String[] {
 			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
@@ -7125,6 +7446,12 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		   source,
 		   new String[] {
 			   "transformer", "org.eclipse.fordiac.ide.model.util.StringTransformer" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (versionInfoEClass,
+		   source,
+		   new String[] {
+			   "ignored", "true" //$NON-NLS-1$ //$NON-NLS-2$
 		   });
 	}
 

@@ -323,10 +323,11 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 		return null;
 	}
 
-	private static void configureTreeLayout(final TreeViewer viewer) {
+	public static void configureTreeLayout(final TreeViewer viewer) {
 		final TreeViewerColumn variableName = new TreeViewerColumn(viewer, SWT.LEFT);
 		final TreeViewerColumn variableType = new TreeViewerColumn(viewer, SWT.LEFT);
 		final TreeViewerColumn comment = new TreeViewerColumn(viewer, SWT.LEFT);
+
 		viewer.getTree().setHeaderVisible(true);
 		variableName.getColumn().setResizable(true);
 		variableType.getColumn().setResizable(true);
@@ -341,6 +342,7 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 
 	@Override
 	protected void performRefresh() {
+		typeSelectionWidget.refresh();
 		if ((null != getType().getFbNetwork()) && !blockRefresh) {
 			refreshStructTypeTable();
 		}
@@ -396,16 +398,6 @@ public abstract class StructManipulatorSection extends AbstractSection implement
 				}
 			}
 		}
-	}
-
-	@Override
-	protected void setInputCode() {
-		// Currently nothing needs to be done here
-	}
-
-	@Override
-	protected void setInputInit() {
-		// Currently nothing needs to be done here
 	}
 
 	protected CheckboxTreeViewer getViewer() {

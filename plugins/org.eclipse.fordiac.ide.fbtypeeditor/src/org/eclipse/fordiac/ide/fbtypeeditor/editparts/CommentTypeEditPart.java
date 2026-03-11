@@ -30,10 +30,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
-import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModelEvent;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
@@ -141,7 +141,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart implements Annotable
 	private Point calculatePos() {
 		if (null != referencedInterface) {
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
-			final InterfaceList interfaceList = ((InterfaceList) getInterfaceElement().eContainer());
+			final InterfaceList interfaceList = getInterfaceElement().getInterfaceList();
 			int dx = 0;
 			if (getInterfaceElement().isIsInput()) {
 				final int countInputEvWITH = getNrEvWITH(interfaceList.getEventInputs());

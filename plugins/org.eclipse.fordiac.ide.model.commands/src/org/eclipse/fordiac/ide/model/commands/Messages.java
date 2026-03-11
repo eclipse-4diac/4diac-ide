@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.model.commands;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.model.commands.messages"; //$NON-NLS-1$
 	public static String UpdateFBTypeCommand_type_mismatch;
@@ -27,6 +27,7 @@ public final class Messages extends NLS {
 	public static String ChangeFbTypeCommand_TypeNotFound;
 	public static String ChangeValueCommand_LABEL_ChangeValue;
 	public static String ChangeValueCommand_ConstantValuesNoAllowedOnAny;
+	public static String ChangeDataTypeCommand_RecursiveStructError;
 	public static String CreateSubAppInstanceCommand_CreateSubapplicationInstance;
 	public static String DeleteConnectionCommand_DeleteConnection;
 	public static String DeleteFBNetworkElement;

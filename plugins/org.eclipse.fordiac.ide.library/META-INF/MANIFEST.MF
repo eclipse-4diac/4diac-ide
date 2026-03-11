@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Library
 Bundle-SymbolicName: org.eclipse.fordiac.ide.library;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Automatic-Module-Name: org.eclipse.fordiac.ide.library
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
@@ -23,4 +23,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.services,
  org.osgi.service.event
-Export-Package: org.eclipse.fordiac.ide.library
+Export-Package: org.eclipse.fordiac.ide.library, 
+ org.eclipse.fordiac.ide.library.download

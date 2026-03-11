@@ -59,15 +59,6 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 		attributeDeclaration = (AttributeDeclaration) value;
 	}
 
-	/**
-	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public void setTypeEditable(final LibraryElement value) {
-		// currently not needed in mock
-	}
-
 	@Override
 	public TypeLibrary getTypeLibrary() {
 		return typelib;
@@ -81,16 +72,6 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	@Override
 	public AttributeDeclaration getType() {
 		return attributeDeclaration;
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public AttributeDeclaration getTypeEditable() {
-		// currently not needed in mock
-		return null;
 	}
 
 	@Override
@@ -142,5 +123,10 @@ public class AttributeTypeEntryMock extends BasicNotifierImpl implements Attribu
 	@Override
 	public String getFileExtension() {
 		return TypeLibraryTags.ATTRIBUTE_TYPE_FILE_ENDING;
+	}
+
+	@Override
+	public boolean hasError() {
+		return false;
 	}
 }

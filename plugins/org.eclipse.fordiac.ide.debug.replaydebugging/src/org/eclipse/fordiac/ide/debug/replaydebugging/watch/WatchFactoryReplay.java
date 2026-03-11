@@ -80,7 +80,7 @@ public class WatchFactoryReplay {
 			new AdapterDeclarationWatch(name, adapterDeclaration, debugTarget);
 		case final BlockFBNetworkElement networkElement ->
 			new FBNetworkElementWatchReplay(name, networkElement, debugTarget);
-		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName());
+		default -> throw new UnsupportedOperationException("Unsupported element: " + element.eClass().getName()); //$NON-NLS-1$
 		};
 	}
 

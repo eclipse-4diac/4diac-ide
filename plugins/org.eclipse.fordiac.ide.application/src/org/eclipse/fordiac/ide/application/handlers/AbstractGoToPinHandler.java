@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2025 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -22,7 +21,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -78,34 +76,21 @@ public abstract class AbstractGoToPinHandler extends AbstractHandler {
 	}
 
 	private static IInterfaceElement getSelectedInterfaceElement(final ISelection selection) {
-		if ((selection instanceof final IStructuredSelection structSel && !selection.isEmpty())
-				&& ((structSel.size() == 1) && (structSel.getFirstElement() instanceof final EditPart ep))) {
-			// only if only one element is selected
-			if (ep.getModel() instanceof final IInterfaceElement ie) {
-				return ie;
-			}
+		// only if only one element is selected
+		if ((selection instanceof final IStructuredSelection structSel && structSel.size() == 1
+				&& structSel.getFirstElement() instanceof final EditPart ep)
+				&& (ep.getModel() instanceof final IInterfaceElement ie)) {
+			return ie;
 		}
 		return null;
 	}
 
 	protected static List<IInterfaceElement> getAllInputs(final IInterfaceElement ie) {
-		final List<IInterfaceElement> inputList = new ArrayList<>();
-		final InterfaceList interfaceList = (InterfaceList) ie.eContainer();
-		inputList.addAll(interfaceList.getEventInputs().stream().filter(IInterfaceElement::isVisible).toList());
-		inputList.addAll(interfaceList.getInputVars().stream().filter(IInterfaceElement::isVisible).toList());
-		inputList.addAll(interfaceList.getInOutVars().stream().filter(IInterfaceElement::isVisible).toList());
-		inputList.addAll(interfaceList.getSockets().stream().filter(IInterfaceElement::isVisible).toList());
-		return inputList;
+		return ie.getInterfaceList().getAllInputs().filter(IInterfaceElement::isVisible).toList();
 	}
 
 	protected static List<IInterfaceElement> getAllOutputs(final IInterfaceElement ie) {
-		final List<IInterfaceElement> outputList = new ArrayList<>();
-		final InterfaceList interfaceList = (InterfaceList) ie.eContainer();
-		outputList.addAll(interfaceList.getEventOutputs().stream().filter(IInterfaceElement::isVisible).toList());
-		outputList.addAll(interfaceList.getOutputVars().stream().filter(IInterfaceElement::isVisible).toList());
-		outputList.addAll(interfaceList.getOutMappedInOutVars().stream().filter(IInterfaceElement::isVisible).toList());
-		outputList.addAll(interfaceList.getPlugs().stream().filter(IInterfaceElement::isVisible).toList());
-		return outputList;
+		return ie.getInterfaceList().getAllOutputs().filter(IInterfaceElement::isVisible).toList();
 	}
 
 	private IInterfaceElement getFollowingPin(final IInterfaceElement ie, final List<IInterfaceElement> interfaceList) {

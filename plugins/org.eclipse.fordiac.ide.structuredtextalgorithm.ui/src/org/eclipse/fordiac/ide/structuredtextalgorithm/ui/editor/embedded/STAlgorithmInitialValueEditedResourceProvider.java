@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023 Martin Erich Jobst
+ * Copyright (c) 2023, 2026 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,19 +21,23 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.ParserRule;
 
 public class STAlgorithmInitialValueEditedResourceProvider extends STAlgorithmEditedResourceProvider {
-	private final ITypedElement element;
+	private final LibraryElement expectedType;
 
 	public STAlgorithmInitialValueEditedResourceProvider(final ITypedElement element) {
-		super(EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement ? libraryElement
-				: null);
-		this.element = element;
+		this(EcoreUtil.getRootContainer(element) instanceof final LibraryElement libraryElement ? libraryElement : null,
+				STCoreUtil.getFeatureType(element));
+	}
+
+	public STAlgorithmInitialValueEditedResourceProvider(final LibraryElement libraryElement,
+			final LibraryElement expectedType) {
+		super(libraryElement);
+		this.expectedType = expectedType;
 	}
 
 	@Override
 	public STAlgorithmResource createResource() {
 		final STAlgorithmResource resource = super.createResource();
-		final LibraryElement featureType = STCoreUtil.getFeatureType(element);
-		resource.getDefaultLoadOptions().put(STResource.OPTION_EXPECTED_TYPE, featureType);
+		resource.getDefaultLoadOptions().put(STResource.OPTION_EXPECTED_TYPE, expectedType);
 		return resource;
 	}
 

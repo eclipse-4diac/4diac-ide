@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2024 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -115,15 +115,15 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		heightText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
 		heightText.addModifyListener(e -> {
 			if (getType() != null) {
-				final int heightDiff;
+				final double newHeight;
 				try {
-					heightDiff = Integer.parseInt(heightText.getText())
-							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getHeight());
+					newHeight = CoordinateConverter.INSTANCE.screenToIEC61499(Integer.parseInt(heightText.getText()));
 				} catch (final Exception exc) {
 					return;
 				}
 				removeContentAdapter();
-				executeCommand(new ChangeGroupBoundsCommand(getType(), 0, 0, 0, heightDiff));
+				executeCommand(new ChangeGroupBoundsCommand(getType(), getType().getPosition(), getType().getWidth(),
+						newHeight));
 				addContentAdapter();
 			}
 		});
@@ -136,15 +136,15 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		widthText.addVerifyListener(GroupPropertySection::ensureTextContainsOnlyDigits);
 		widthText.addModifyListener(e -> {
 			if (getType() != null) {
-				final int widthDiff;
+				final double newWidth;
 				try {
-					widthDiff = Integer.parseInt(widthText.getText())
-							- CoordinateConverter.INSTANCE.iec61499ToScreen(getType().getWidth());
+					newWidth = CoordinateConverter.INSTANCE.screenToIEC61499(Integer.parseInt(widthText.getText()));
 				} catch (final Exception exc) {
 					return;
 				}
 				removeContentAdapter();
-				executeCommand(new ChangeGroupBoundsCommand(getType(), 0, 0, widthDiff, 0));
+				executeCommand(new ChangeGroupBoundsCommand(getType(), getType().getPosition(), newWidth,
+						getType().getHeight()));
 				addContentAdapter();
 			}
 		});
@@ -203,15 +203,4 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 		}
 		return null;
 	}
-
-	@Override
-	protected void setInputCode() {
-		// Nothing for now
-	}
-
-	@Override
-	protected void setInputInit() {
-		// nothing to do for now
-	}
-
 }

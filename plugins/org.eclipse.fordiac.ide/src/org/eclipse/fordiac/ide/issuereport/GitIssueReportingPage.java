@@ -19,8 +19,8 @@ import org.eclipse.fordiac.ide.Messages;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants.ReportDestination;
 import org.eclipse.fordiac.ide.issuereport.PreferenceConstants.ReportMode;
 import org.eclipse.jface.layout.LayoutConstants;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -34,7 +34,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-public class GitIssueReportingPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class GitIssueReportingPage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	// UI elements
 	private Button noReportButton;
@@ -56,7 +56,6 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 	private ReportDestination reportDestination;
 
 	public GitIssueReportingPage() {
-		super(GRID);
 		setPreferenceStore(
 				new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.P_BUG_REPORT_PREFERENCE_ID));
 	}
@@ -231,10 +230,5 @@ public class GitIssueReportingPage extends FieldEditorPreferencePage implements 
 		gitHubURLText.setEnabled(isGitHub);
 		gitHubProjectPathText.setEnabled(isGitHub);
 		gitHubTokenText.setEnabled(isGitHub);
-	}
-
-	@Override
-	protected void createFieldEditors() {
-		// No field editors used, only custom controls
 	}
 }

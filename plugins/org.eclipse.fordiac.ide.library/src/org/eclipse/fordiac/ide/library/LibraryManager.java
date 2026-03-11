@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.nio.file.DirectoryStream.Filter;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,9 +27,6 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.DosFileAttributeView;
-import java.nio.file.attribute.PosixFileAttributeView;
-import java.nio.file.attribute.PosixFilePermission;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -65,6 +60,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.fordiac.ide.library.download.DownloadResult;
+import org.eclipse.fordiac.ide.library.download.IArchiveDownloader;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -89,7 +86,6 @@ public enum LibraryManager {
 	public static final String EXTRACTED_LIB_DIRECTORY = ".lib"; //$NON-NLS-1$
 	public static final String MANIFEST = "MANIFEST.MF"; //$NON-NLS-1$
 	public static final String DOWNLOADER_EXTENSION = "org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension"; //$NON-NLS-1$
-	public static final String MARKER_ATTRIBUTE = "LIB"; //$NON-NLS-1$
 
 	private final java.net.URI workspaceLibraryURI = java.net.URI.create("WORKSPACE_LOC/" + EXTRACTED_LIB_DIRECTORY); //$NON-NLS-1$
 
@@ -99,6 +95,9 @@ public enum LibraryManager {
 
 	private final java.net.URI standardLibraryUri = java.net.URI.create("ECLIPSE_HOME/" + TypeLibraryTags.TYPE_LIBRARY); //$NON-NLS-1$
 	private final Path standardLibraryPath = getStandardLibPath();
+
+	public static final Set<String> LIBRARY_FOLDERS = Set.of(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME,
+			TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
 
 	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
 	public static final Set<String> TYPE_ENDINGS = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
@@ -120,6 +119,15 @@ public enum LibraryManager {
 
 	public static final Object FAMILY_FORDIAC_LIBRARY = new Object();
 
+	private record LibraryManagerData(Map<String, DependencyNode> dependencyNodes,
+			Map<String, ResolveNode> resolveNodes, Map<String, Version> preferred, Map<String, IFolder> linked,
+			Map<String, List<Version>> referenced) {
+		public static LibraryManagerData init() {
+			return new LibraryManagerData(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(),
+					new HashMap<>());
+		}
+	}
+
 	LibraryManager() {
 		initLibraryMap(stdlibraries, standardLibraryPath, standardLibraryUri);
 		if (!Files.exists(libraryPath)) {
@@ -138,7 +146,7 @@ public enum LibraryManager {
 			FordiacLogHelper.logError("Cannot register watch watch service!", e); //$NON-NLS-1$
 		}
 
-		setStandardLibsReadOnly();
+		LibraryPermission.setLibReadOnly(standardLibraryPath);
 	}
 
 	/**
@@ -176,12 +184,11 @@ public enum LibraryManager {
 	}
 
 	/**
-	 * Initialise map with all libraries contained in the folder specified
+	 * Initialize map with all libraries contained in the folder specified
 	 *
-	 * @param map      map to initialise
-	 * @param path     path to folder
-	 * @param standard if libraries are standard
-	 * @param baseURI  URI to use as base
+	 * @param map     map to initialize
+	 * @param path    path to folder
+	 * @param baseURI URI to use as base
 	 */
 	private static void initLibraryMap(final Map<String, List<LibraryRecord>> map, final Path path,
 			final java.net.URI baseURI) {
@@ -198,10 +205,9 @@ public enum LibraryManager {
 	/**
 	 * Add {@link LibraryRecord} to the given map based on the {@link Path}
 	 *
-	 * @param map      target map
-	 * @param path     path of the library folder
-	 * @param baseUri  URI to use as base
-	 * @param standard if record belongs to standard library
+	 * @param map     target map
+	 * @param path    path of the library folder
+	 * @param baseUri URI to use as base
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static void addLibrary(final Map<String, List<LibraryRecord>> map, final Path path,
@@ -295,7 +301,7 @@ public enum LibraryManager {
 							fileOutputStream.write(buffer, 0, len);
 						}
 					}
-					setPathReadOnly(newFile);
+					LibraryPermission.setPathReadOnly(newFile);
 				}
 				entry = zipInputStream.getNextEntry();
 			}
@@ -321,14 +327,14 @@ public enum LibraryManager {
 			Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-					setPathEditable(file);
+					LibraryPermission.setPathEditable(file);
 					Files.delete(file);
 					return FileVisitResult.CONTINUE;
 				}
 
 				@Override
 				public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-					setPathEditable(dir);
+					LibraryPermission.setPathEditable(dir);
 					Files.delete(dir);
 					return FileVisitResult.CONTINUE;
 				}
@@ -347,118 +353,14 @@ public enum LibraryManager {
 	 * @throws IOException if an I/O error occurs
 	 */
 	private static Path newPath(final Path destinationDir, final ZipEntry zipEntry) throws IOException {
-		final Path destPath = destinationDir.resolve(zipEntry.getName());
+		final Path normalizedDestinationDir = destinationDir.toAbsolutePath().normalize();
+		final String entryName = zipEntry.getName().replace('\\', '/');
+		final Path destPath = normalizedDestinationDir.resolve(entryName).normalize();
 
-		if (!destPath.startsWith(destinationDir)) {
+		if (!destPath.startsWith(normalizedDestinationDir)) {
 			throw new IOException("Entry is outside of the target dir: " + zipEntry.getName()); //$NON-NLS-1$
 		}
 		return destPath;
-	}
-
-	/**
-	 * Sets a specific path read only
-	 *
-	 * @param path Path to set read only
-	 */
-	private static void setPathReadOnly(final Path path) {
-		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
-		if (dosView != null) {
-			try {
-				dosView.setReadOnly(true);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
-		if (posixView != null) {
-			try {
-				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
-				permissions.remove(PosixFilePermission.OWNER_WRITE);
-				permissions.remove(PosixFilePermission.GROUP_WRITE);
-				permissions.remove(PosixFilePermission.OTHERS_WRITE);
-				posixView.setPermissions(permissions);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-	}
-
-	/**
-	 * Sets a specific path editable
-	 *
-	 * @param path Path to set editable
-	 */
-	private static void setPathEditable(final Path path) {
-		final DosFileAttributeView dosView = Files.getFileAttributeView(path, DosFileAttributeView.class);
-		if (dosView != null) {
-			try {
-				dosView.setReadOnly(false);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-		final PosixFileAttributeView posixView = Files.getFileAttributeView(path, PosixFileAttributeView.class);
-		if (posixView != null) {
-			try {
-				final Set<PosixFilePermission> permissions = posixView.readAttributes().permissions();
-				permissions.add(PosixFilePermission.OWNER_WRITE);
-				permissions.add(PosixFilePermission.GROUP_WRITE);
-				permissions.add(PosixFilePermission.OTHERS_WRITE);
-				posixView.setPermissions(permissions);
-			} catch (final IOException e) {
-				// empty
-			}
-		}
-	}
-
-	private void setStandardLibsReadOnly() {
-		final WorkspaceJob job = new WorkspaceJob(Messages.LibraryManager_SetStandardLibrariesReadOnly) {
-
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-
-				try {
-					Files.walkFileTree(standardLibraryPath, new FileVisitor<Path>() {
-
-						@Override
-						public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-								throws IOException {
-							setPathReadOnly(file);
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult visitFileFailed(final Path file, final IOException exc)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-
-						@Override
-						public FileVisitResult postVisitDirectory(final Path dir, final IOException exc)
-								throws IOException {
-							return FileVisitResult.CONTINUE;
-						}
-					});
-				} catch (final IOException e) {
-					// empty
-				}
-				return Status.OK_STATUS;
-			}
-
-			@Override
-			public boolean belongsTo(final Object family) {
-				return family == FAMILY_FORDIAC_LIBRARY;
-			}
-		};
-		job.setRule(null);
-		job.setPriority(Job.DECORATE);
-		job.schedule();
 	}
 
 	/**
@@ -685,10 +587,8 @@ public enum LibraryManager {
 	 */
 	public void resolveDependencies(final IProject project, final Manifest projectManifest,
 			final IProgressMonitor monitor) throws OperationCanceledException, CoreException {
-		final Map<String, DependencyNode> deps = new HashMap<>();
-		final Map<String, ResolveNode> res = new HashMap<>();
-		final Map<String, Version> preferred = new HashMap<>();
-		final Map<String, IFolder> linked = new HashMap<>();
+
+		final LibraryManagerData libManagerData = LibraryManagerData.init();
 
 		final Queue<String> queue = new LinkedList<>(); // symbolicNames
 
@@ -705,32 +605,40 @@ public enum LibraryManager {
 			return;
 		}
 
-		findPreferred(project, preferred, linked, progress.split(5));
+		collectReferencedDependencies(project, libManagerData.referenced());
+
+		findPreferred(project, libManagerData, progress.split(5));
 
 		projectManifest.getDependencies().getRequired().forEach(req -> {
-			deps.put(req.getSymbolicName(), new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
-					VersionComparator.parseVersionRange(req.getVersion())));
+			libManagerData.dependencyNodes().put(req.getSymbolicName(),
+					new DependencyNode(req.getSymbolicName(), "Project", //$NON-NLS-1$
+							VersionComparator.parseVersionRange(req.getVersion())));
 			queue.add(req.getSymbolicName());
 		});
 
-		buildDependencies(deps, res, preferred, queue, progress.split(70));
+		buildDependencies(project, libManagerData, queue, progress.split(70));
 
 		final List<ErrorMarkerBuilder> markerList = new LinkedList<>();
 
 		// import valid nodes
-		importDependencyNodes(project, deps, res, preferred, linked, projectManifest, markerList, progress.split(15));
+		importDependencyNodes(project, libManagerData, projectManifest, markerList, progress.split(15));
 
 		// remove still linked libraries
-		cleanupLinks(linked, progress.split(2));
+		cleanupLinks(libManagerData.linked(), progress.split(2));
+
+		// check if imported library links are broken
+		checkLinkedLibraries(project, progress.split(1));
 
 		if (PreferenceProvider.getBoolean(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID,
 				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
 			// force load explicitly defined dependencies
 			final List<Required> explicitDeps = projectManifest.getDependencies().getRequired().stream()
-					.filter(r -> !r.getVersion().contains("-") && !deps.get(r.getSymbolicName()).isValid()).toList(); //$NON-NLS-1$
+					.filter(r -> !r.getVersion().contains("-") //$NON-NLS-1$
+							&& !libManagerData.dependencyNodes().get(r.getSymbolicName()).isValid())
+					.toList();
 			progress.setWorkRemaining(explicitDeps.size());
 			for (final Required req : explicitDeps) {
-				linked.remove(req.getSymbolicName());
+				libManagerData.linked().remove(req.getSymbolicName());
 				final Version version = Version.parseVersion(req.getVersion());
 				LibraryRecord lib = getLibraryRecord(stdlibraries, req.getSymbolicName(), version);
 				// check if library is already downloaded
@@ -769,25 +677,59 @@ public enum LibraryManager {
 		}
 	}
 
-	private void buildDependencies(final Map<String, DependencyNode> deps, final Map<String, ResolveNode> res,
-			final Map<String, Version> preferred, final Queue<String> queue, final SubMonitor progress)
-			throws OperationCanceledException {
+	/**
+	 * Checks if a given link inside the library folders is broken.
+	 *
+	 * <p>
+	 * This method checks if the existing links are broken, creates error markers
+	 * and will eventually abort the build.
+	 *
+	 * @param project selected project
+	 */
+	private static void checkLinkedLibraries(final IProject project, final SubMonitor progress) {
+		progress.setTaskName(Messages.LibraryManager_CheckLinks);
+		progress.setWorkRemaining(10);
+
+		LIBRARY_FOLDERS.stream().map(project::getFolder).forEach(folder -> {
+			try {
+				folder.accept(resource -> {
+					if (resource.equals(folder)) {
+						return true;
+					}
+					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
+						if (libFolder.getModificationStamp() == IResource.NULL_STAMP) {
+							FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
+									List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
+							throw new OperationCanceledException();
+						}
+						progress.worked(1);
+					}
+					return false;
+				});
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		});
+	}
+
+	private void buildDependencies(final IProject project, final LibraryManagerData data, final Queue<String> queue,
+			final SubMonitor progress) throws OperationCanceledException {
 		progress.setTaskName(Messages.LibraryManager_BuildingDependencyGraph);
 		while (!queue.isEmpty()) {
 			progress.setWorkRemaining(Math.max(queue.size(), 10));
 			final String symbolicName = queue.poll();
 
-			final var dnode = deps.get(symbolicName);
+			final var dnode = data.dependencyNodes().get(symbolicName);
 
 			if (!dnode.isChanged()) {
 				continue;
 			}
 
 			if (!dnode.isValid()) {
-				final var rnode = res.get(symbolicName);
+				final var rnode = data.resolveNodes().get(symbolicName);
 				if (rnode != null) {
 					rnode.getDependencies().keySet().forEach(symb -> {
-						final var dn = deps.get(symb);
+						final var dn = data.dependencyNodes().get(symb);
 						if (dn != null) {
 							dn.removeCause(symbolicName);
 							if (dn.isChanged()) {
@@ -800,23 +742,23 @@ public enum LibraryManager {
 			}
 
 			// resolve dependency
-			final var rnode = resolveDependency(symbolicName, dnode.getRange(), preferred.get(symbolicName),
-					progress.split(1));
+			final var rnode = resolveDependency(project, symbolicName, dnode.getRange(),
+					data.preferred().get(symbolicName), progress.split(1), data.referenced());
 
-			if (res.containsKey(symbolicName)) {
-				final var oldRNode = res.get(symbolicName);
+			if (data.resolveNodes().containsKey(symbolicName)) {
+				final var oldRNode = data.resolveNodes().get(symbolicName);
 				oldRNode.getDependencies().keySet().forEach(old -> {
 					if (!rnode.getDependencies().containsKey(old)) {
-						deps.get(old).removeCause(symbolicName);
+						data.dependencyNodes().get(old).removeCause(symbolicName);
 					}
 				});
 			}
 
-			res.put(symbolicName, rnode);
+			data.resolveNodes().put(symbolicName, rnode);
 
 			// updated dependencies
 			rnode.getDependencies().forEach((symb, val) -> {
-				final var dn = deps.computeIfAbsent(symb, s -> new DependencyNode(symb));
+				final var dn = data.dependencyNodes().computeIfAbsent(symb, s -> new DependencyNode(symb));
 				dn.putCause(symbolicName, val);
 				if (dn.isChanged()) {
 					queue.add(symb);
@@ -825,26 +767,24 @@ public enum LibraryManager {
 		}
 	}
 
-	private void importDependencyNodes(final IProject project, final Map<String, DependencyNode> deps,
-			final Map<String, ResolveNode> res, final Map<String, Version> preferred, final Map<String, IFolder> linked,
+	private void importDependencyNodes(final IProject project, final LibraryManagerData data,
 			final Manifest projectManifest, final List<ErrorMarkerBuilder> markerList, final SubMonitor progress) {
-		for (final var dnode : deps.values()) {
+		for (final var dnode : data.dependencyNodes().values()) {
 			if (dnode.isValid()) {
-				final var rnode = res.get(dnode.getSymbolicName());
+				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
 
 				if (rnode.isValid()) {
-					// no need to import the same version again
-					if (!linked.containsKey(rnode.getSymbolicName())
-							|| !preferred.get(rnode.getSymbolicName()).equals(rnode.getVersion())) {
+					if (rnode.requireImport(data.linked(), data.preferred())) {
 						importLibrary(project, rnode.getUri(), false, false);
-
 					}
-					linked.remove(rnode.getSymbolicName());
+					if (!rnode.isReferenced()) {
+						data.linked().remove(rnode.getSymbolicName());
+					}
 				} else {
-					markerList.add(createDependencyMarker(projectManifest, rnode, dnode));
+					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
 				}
 			} else if (dnode.isRangeEmpty()) {
-				markerList.add(createDependencyMarker(projectManifest, dnode));
+				markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, dnode));
 			}
 		}
 	}
@@ -866,8 +806,8 @@ public enum LibraryManager {
 	 * @param linked    set to fill with symbolic names of linked libraries
 	 * @param progress  SubMonitor for progress reporting
 	 */
-	private static void findPreferred(final IProject project, final Map<String, Version> preferred,
-			final Map<String, IFolder> linked, final SubMonitor progress) {
+	private static void findPreferred(final IProject project, final LibraryManagerData data,
+			final SubMonitor progress) {
 		final IFolder standardLibFolder = project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME);
 		final IFolder externalLibFolder = project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME);
 		if (!standardLibFolder.exists() || !externalLibFolder.exists()) {
@@ -885,17 +825,13 @@ public enum LibraryManager {
 				}
 				final Manifest libManifest = ManifestHelper.getContainerManifest(libFolder);
 				if (libManifest != null) {
-					linked.put(libFolder.getName(), libFolder);
-					preferred.put(libFolder.getName(),
+					data.linked().put(libFolder.getName(), libFolder);
+					data.preferred().put(libFolder.getName(),
 							new Version(libManifest.getProduct().getVersionInfo().getVersion()));
 				} else {
-					final IPath path = libFolder.getRawLocation();
-					final String segment = (path != null && path.segmentCount() >= 2)
-							? path.segment(path.segmentCount() - 2)
-							: ""; //$NON-NLS-1$
-					final int index = segment.lastIndexOf('-');
-					if (index > 0) {
-						preferred.put(libFolder.getName(), new Version(segment.substring(index + 1)));
+					final Version version = parseLibraryVersion(libFolder);
+					if (!version.equals(Version.emptyVersion)) {
+						data.preferred().put(libFolder.getName(), version);
 					}
 				}
 			}
@@ -910,6 +846,22 @@ public enum LibraryManager {
 	}
 
 	/**
+	 * Parses the Library Version of the folders raw location if possible
+	 *
+	 * @param the folder
+	 * @return
+	 */
+	static Version parseLibraryVersion(final IFolder libraryFolder) {
+		final IPath path = libraryFolder.getRawLocation();
+		final String segment = (path != null && path.segmentCount() >= 2) ? path.segment(path.segmentCount() - 2) : ""; //$NON-NLS-1$
+		final int index = segment.lastIndexOf('-');
+		if (index > 0) {
+			return new Version(segment.substring(index + 1));
+		}
+		return Version.emptyVersion;
+	}
+
+	/**
 	 * Resolves the given dependency. Will download libraries as needed.
 	 *
 	 * @param symbolicName name of the library
@@ -918,13 +870,17 @@ public enum LibraryManager {
 	 * @param progress     SubMonitor for progress report
 	 * @return
 	 */
-	private ResolveNode resolveDependency(final String symbolicName, final VersionRange range,
-			final Version prefVersion, final SubMonitor progress) {
+	private ResolveNode resolveDependency(final IProject project, final String symbolicName, final VersionRange range,
+			final Version prefVersion, final SubMonitor progress, final Map<String, List<Version>> referenced) {
 		final boolean usePref = prefVersion != null && range.includes(prefVersion);
 		LibraryRecord rec;
 
 		progress.setTaskName(Messages.LibraryManager_ResolvingDependency + symbolicName);
 		progress.setWorkRemaining(100);
+
+		if (isProvidedByReference(referenced, symbolicName, range)) {
+			return new ResolveNode(symbolicName, prefVersion, project);
+		}
 
 		if (stdlibraries.containsKey(symbolicName)) {
 			if (usePref) {
@@ -972,6 +928,32 @@ public enum LibraryManager {
 		return new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable + dlResult.message());
 	}
 
+	private static boolean isProvidedByReference(final Map<String, List<Version>> referenced, final String symbolicName,
+			final VersionRange versionRange) {
+		return referenced.getOrDefault(symbolicName, Collections.emptyList()).stream().anyMatch(versionRange::includes);
+
+	}
+
+	/**
+	 * Collect provided libraries from referenced projects
+	 *
+	 */
+	private static void collectReferencedDependencies(final IProject project,
+			final Map<String, List<Version>> referenced) throws CoreException {
+		final IProject[] projects = project.getReferencedProjects();
+
+		for (final IProject refProject : projects) {
+			if (!refProject.isAccessible()) {
+				continue;
+			}
+			final Manifest manifest = ManifestHelper.getContainerManifest(refProject);
+			final String symbolicName = ManifestHelper.getSymbolicName(manifest, refProject.getName());
+			final Version version = ManifestHelper.getVersion(manifest, Version.emptyVersion);
+			referenced.computeIfAbsent(symbolicName, name -> new ArrayList<>()).add(version);
+		}
+
+	}
+
 	/**
 	 * Search for existing library based on symbolic name and version
 	 *
@@ -1013,43 +995,6 @@ public enum LibraryManager {
 			final String symbolicName, final java.net.URI uri) {
 		return libs.getOrDefault(symbolicName, Collections.emptyList()).stream().filter(l -> l.uri().equals(uri))
 				.sorted((o1, o2) -> o2.version().compareTo(o1.version())).findFirst().orElse(null);
-	}
-
-	/**
-	 * Creates error marker based on dependency and resolved node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param rnode    resolved node
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final ResolveNode rnode,
-			final DependencyNode dnode) {
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
-						VersionComparator.formatVersionRange(dnode.getRange()),
-						String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, rnode.getSymbolicName()));
-	}
-
-	/**
-	 * Creates version range error marker based on dependency node
-	 *
-	 * @param manifest manifest to attach marker
-	 * @param dnode    dependency node
-	 * @return {@link ErrorMarkerBuilder} for error
-	 */
-	private static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final DependencyNode dnode) {
-		final String causedBy = dnode.getCauses().entrySet().stream()
-				.map(entry -> entry.getKey() + ": " + VersionComparator.formatVersionRange(entry.getValue())) //$NON-NLS-1$
-				.collect(Collectors.joining(", ")); //$NON-NLS-1$
-
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(
-						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
-				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
 	}
 
 	private static Path getStandardLibPath() {

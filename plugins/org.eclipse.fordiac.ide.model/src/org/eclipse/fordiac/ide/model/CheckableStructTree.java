@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -38,14 +40,14 @@ public class CheckableStructTree extends AbstractStructTree<CheckableStructTreeN
 		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
 			final CheckableStructTreeNode treeNode = parent.addChild(memberVariable);
 
-			final IInterfaceElement variablePin = struct.getInterfaceElement(treeNode.getPinName());
+			final IInterfaceElement variablePin = struct.getInterface()
+					.getInterfaceElement(List.of(treeNode.getPinName()));
 			if ((variablePin != null) && !(variablePin instanceof ErrorMarkerInterface)) {
 				treeNode.check(true);
 			}
 
 			if ((memberVariable.getType() instanceof final StructuredType structuredtype)
-					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT) 
-					&& !memberVariable.isArray()) {
+					&& (memberVariable.getType() != GenericTypes.ANY_STRUCT) && !memberVariable.isArray()) {
 				buildTree(struct, structuredtype, treeNode);
 			} else if (treeNode.isChecked()) {
 				CheckableStructTreeNode.greyParents(treeNode);

@@ -1,9 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
- * 		            Johannes Kepler University Linz
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2026 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH,
  *                          Martin Erich Jobst
- *
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,13 +13,12 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Matthias Plasch, Filip Andren,
  *   Waldemar Eisenmenger, Martin Melik Merkumians
- *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - Refactored class hierarchy of xml exporters
- *               - New Project Explorer layout
- *               - Added support for project renameing
- *   Martin Jobst
- *     - add Xtext nature and builder
- *     - migrate system handling to typelib
+ *                - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - Refactored class hierarchy of xml exporters
+ *                - New Project Explorer layout
+ *                - Added support for project renameing
+ *   Martin Jobst - add Xtext nature and builder
+ *                - migrate system handling to typelib
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -32,7 +30,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.ICommand;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -43,15 +40,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.library.model.library.Required;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
-import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.nature.FordiacNature;
@@ -131,47 +122,7 @@ public enum SystemManager {
 		return project;
 	}
 
-	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name,
-			final IProgressMonitor monitor) throws CoreException {
-		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
-		final AutomationSystem system = SystemImporter.createAutomationSystem();
-		system.setName(name);
-		typeLibrary.createTypeEntry(systemFile).save(system, monitor);
-		return system;
-	}
-
-	/**
-	 * Load system.
-	 *
-	 *
-	 * systemFile xml file for the system
-	 *
-	 * @return the system entry
-	 */
-	private static SystemEntry initSystem(final IFile systemFile) {
-		if (systemFile.exists()) {
-			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
-					.createTypeEntry(systemFile);
-		}
-		return null;
-	}
-
-	public synchronized AutomationSystem getSystem(final IFile systemFile) {
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
-		SystemEntry sysEntry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
-		if (sysEntry == null) {
-			sysEntry = initSystem(systemFile);
-		}
-		return sysEntry != null ? sysEntry.getSystem() : null;
-	}
-
-	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
-		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().stream().map(SystemEntry::getSystem)
-				.toList();
-	}
-
-	private static String[] getNatureIDs() {
+	public static String[] getNatureIDs() {
 		return new String[] { SystemManager.FORDIAC_PROJECT_NATURE_ID, XtextProjectHelper.NATURE_ID };
 	}
 

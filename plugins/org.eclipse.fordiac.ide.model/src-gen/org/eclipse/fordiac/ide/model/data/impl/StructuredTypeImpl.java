@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
- * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2008, 2025 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                                                       Martin Erich Jobst, Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -98,6 +98,16 @@ public class StructuredTypeImpl extends AnyDerivedTypeImpl implements Structured
 	@Override
 	public boolean isAssignableFrom(final DataType other) {
 		return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VarDeclaration getMemberVar(final String name) {
+		return getMemberVariables().stream().filter(mv -> mv.getName().equals(name)).findAny().orElse(null);
 	}
 
 	/**

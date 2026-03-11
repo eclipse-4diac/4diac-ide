@@ -16,9 +16,9 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.IReplayNavigatorRegistrationListener;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ReplayNavigatorManager;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.IReplayNavigatorRegistrationListener;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;

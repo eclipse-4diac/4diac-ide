@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -147,41 +146,11 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 	 * @generated
 	 */
 	@Override
-	public IInterfaceElement getInterfaceElement(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInterfaceElement(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public InterfaceList getTypeInterface() {
 		if(getTypeEntry() != null) {
 			return getTypeEntry().getInterface();
 		}
 		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IInterfaceElement getInput(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getInput(this, name);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IInterfaceElement getOutput(final String name) {
-		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.getOutput(this, name);
 	}
 
 	/**

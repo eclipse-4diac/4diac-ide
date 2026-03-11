@@ -210,8 +210,6 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			});
 		});
 
-		document.prepend(textRegionExtensions.regionFor(varDeclaration).keyword(";"), IHiddenRegionFormatter::noSpace); //$NON-NLS-1$
-
 		final ISemanticRegion typeRegion = textRegionExtensions.regionFor(varDeclaration)
 				.assignment(grammarAccess.getSTVarDeclarationAccess().getTypeAssignment_5());
 		if (typeRegion != null) {
@@ -229,7 +227,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		document.format(varDeclaration.getDefaultValue());
 		document.prepend(varDeclaration.getPragma(), IHiddenRegionFormatter::oneSpace);
 		document.format(varDeclaration.getPragma());
-		document.append(varDeclaration, IHiddenRegionFormatter::newLine);
+		formatSemicolon(varDeclaration, document);
 	}
 
 	protected void _format(final STPragma pragma, final IFormattableDocument document) {
@@ -258,8 +256,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		ifStatement.getStatements().forEach(document::format);
 		ifStatement.getElseifs().forEach(document::format);
 		document.format(ifStatement.getElse());
-		document.surround(textRegionExtensions.regionFor(ifStatement).keyword(";"), IHiddenRegionFormatter::noSpace); //$NON-NLS-1$
-		document.append(ifStatement, it -> it.setNewLines(1, 2, 2));
+		formatSemicolon(ifStatement, document);
 	}
 
 	protected void _format(final STElseIfPart elseIfStatement, final IFormattableDocument document) {
@@ -302,8 +299,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			});
 		});
 		forStatement.getStatements().forEach(document::format);
-		document.surround(textRegionExtensions.regionFor(forStatement).keyword(";"), IHiddenRegionFormatter::noSpace); //$NON-NLS-1$
-		document.append(forStatement, it -> it.setNewLines(1, 2, 2));
+		formatSemicolon(forStatement, document);
 	}
 
 	protected void _format(final STWhileStatement whileStatement, final IFormattableDocument document) {
@@ -314,8 +310,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		document.interior(doKeyword, endKeyword, IHiddenRegionFormatter::indent);
 		formatCondition(whileStatement.getCondition(), beginKeyword, doKeyword, document);
 		whileStatement.getStatements().forEach(document::format);
-		document.surround(textRegionExtensions.regionFor(whileStatement).keyword(";"), IHiddenRegionFormatter::noSpace); //$NON-NLS-1$
-		document.append(whileStatement, it -> it.setNewLines(1, 2, 2));
+		formatSemicolon(whileStatement, document);
 	}
 
 	protected void _format(final STRepeatStatement repeatStatement, final IFormattableDocument document) {
@@ -330,9 +325,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			format.noSpace();
 		});
 		repeatStatement.getStatements().forEach(document::format);
-		document.surround(textRegionExtensions.regionFor(repeatStatement).keyword(";"), //$NON-NLS-1$
-				IHiddenRegionFormatter::noSpace);
-		document.append(repeatStatement, it -> it.setNewLines(1, 2, 2));
+		formatSemicolon(repeatStatement, document);
 	}
 
 	protected void _format(final STCaseStatement caseStatement, final IFormattableDocument document) {
@@ -340,10 +333,9 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		final ISemanticRegion endKeyword = textRegionExtensions.regionFor(caseStatement).keyword("END_CASE"); //$NON-NLS-1$
 		document.append(beginKeyword, IHiddenRegionFormatter::newLine);
 		document.interior(beginKeyword, endKeyword, IHiddenRegionFormatter::indent);
-		document.surround(textRegionExtensions.regionFor(caseStatement).keyword(";"), IHiddenRegionFormatter::noSpace); //$NON-NLS-1$
 		caseStatement.getCases().forEach(document::format);
 		document.format(caseStatement.getElse());
-		document.append(caseStatement, it -> it.setNewLines(1, 2, 2));
+		formatSemicolon(caseStatement, document);
 	}
 
 	protected void _format(final STCaseCases stCase, final IFormattableDocument document) {
@@ -359,7 +351,6 @@ public class STCoreFormatter extends AbstractFormatter2 {
 
 	protected void _format(final STAssignment assignment, final IFormattableDocument document) {
 		final ISemanticRegion assignKeyword = textRegionExtensions.regionFor(assignment).keyword(":="); //$NON-NLS-1$
-		final ISemanticRegion semicolonKeyword = textRegionExtensions.regionFor(assignment).keyword(";"); //$NON-NLS-1$
 		document.format(assignment.getLeft());
 		document.surround(assignKeyword, IHiddenRegionFormatter::oneSpace);
 		document.append(assignKeyword, it -> {
@@ -367,14 +358,11 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			it.setOnAutowrap(new STCoreAutowrapFormatter(textRegionExtensions.nextHiddenRegion(assignment)));
 		});
 		document.format(assignment.getRight());
-		document.prepend(semicolonKeyword, IHiddenRegionFormatter::noSpace);
-		document.append(semicolonKeyword, it -> it.setNewLines(1, 1, 2));
+		formatSemicolon(assignment, document);
 	}
 
 	protected void _format(final STStatement statement, final IFormattableDocument document) {
-		final ISemanticRegion semicolonKeyword = textRegionExtensions.regionFor(statement).keyword(";"); //$NON-NLS-1$
-		document.surround(semicolonKeyword, IHiddenRegionFormatter::noSpace);
-		document.append(semicolonKeyword, it -> it.setNewLines(1, 1, 2));
+		formatSemicolon(statement, document);
 	}
 
 	protected static void _format(final STElementaryInitializerExpression initExpression,
@@ -459,6 +447,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		}
 		document.format(binaryExpression.getLeft());
 		document.format(binaryExpression.getRight());
+		formatSemicolon(binaryExpression, document);
 	}
 
 	protected void _format(final STUnaryExpression unaryExpression, final IFormattableDocument document) {
@@ -470,6 +459,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			document.append(opRange, IHiddenRegionFormatter::noSpace);
 		}
 		document.format(unaryExpression.getExpression());
+		formatSemicolon(unaryExpression, document);
 	}
 
 	protected void _format(final STMemberAccessExpression mExpression, final IFormattableDocument document) {
@@ -481,10 +471,10 @@ public class STCoreFormatter extends AbstractFormatter2 {
 		});
 		document.format(mExpression.getMember());
 		document.format(mExpression.getReceiver());
+		formatSemicolon(mExpression, document);
 	}
 
 	protected void _format(final STFeatureExpression featureExpression, final IFormattableDocument document) {
-		final ISemanticRegion semicolonKeyword = textRegionExtensions.regionFor(featureExpression).keyword(";"); //$NON-NLS-1$
 		document.surround(
 				textRegionExtensions.regionFor(featureExpression)
 						.keyword(grammarAccess.getSTFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()),
@@ -494,12 +484,10 @@ public class STCoreFormatter extends AbstractFormatter2 {
 						.keyword(grammarAccess.getSTFeatureExpressionAccess().getRightParenthesisKeyword_2_2()),
 				IHiddenRegionFormatter::noSpace);
 		formatList(featureExpression.getParameters(), document);
-		document.prepend(semicolonKeyword, IHiddenRegionFormatter::noSpace);
-		document.append(semicolonKeyword, it -> it.setNewLines(1, 1, 2));
+		formatSemicolon(featureExpression, document);
 	}
 
 	protected void _format(final STBuiltinFeatureExpression featureExpression, final IFormattableDocument document) {
-		final ISemanticRegion semicolonKeyword = textRegionExtensions.regionFor(featureExpression).keyword(";"); //$NON-NLS-1$
 		document.surround(
 				textRegionExtensions.regionFor(featureExpression).keyword(
 						grammarAccess.getSTBuiltinFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0()),
@@ -509,8 +497,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 						.keyword(grammarAccess.getSTBuiltinFeatureExpressionAccess().getRightParenthesisKeyword_2_2()),
 				IHiddenRegionFormatter::noSpace);
 		formatList(featureExpression.getParameters(), document);
-		document.prepend(semicolonKeyword, IHiddenRegionFormatter::noSpace);
-		document.append(semicolonKeyword, it -> it.setNewLines(1, 1, 2));
+		formatSemicolon(featureExpression, document);
 	}
 
 	protected void _format(final STMultibitPartialExpression mBPExpression, final IFormattableDocument document) {
@@ -527,6 +514,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 						grammarAccess.getSTMultibitPartialExpressionAccess().getRightParenthesisKeyword_2_1_2()),
 				IHiddenRegionFormatter::noSpace);
 		document.format(mBPExpression.getExpression());
+		formatSemicolon(mBPExpression, document);
 	}
 
 	protected static void _format(final STCallUnnamedArgument unnamedArgument, final IFormattableDocument document) {
@@ -569,6 +557,7 @@ public class STCoreFormatter extends AbstractFormatter2 {
 						.keyword(grammarAccess.getSTAccessExpressionAccess().getRightSquareBracketKeyword_1_1_4()),
 				IHiddenRegionFormatter::noSpace);
 		formatList(arrayAccessExpression.getIndex(), document);
+		formatSemicolon(arrayAccessExpression, document);
 	}
 
 	protected void formatBlock(final EObject blockElement, final List<? extends EObject> listElements,
@@ -648,6 +637,12 @@ public class STCoreFormatter extends AbstractFormatter2 {
 			final IFormattableDocument document) {
 		document.format(semanticElement);
 		document.prepend(end, IHiddenRegionFormatter::newLine);
+	}
+
+	protected void formatSemicolon(final EObject semanticElement, final IFormattableDocument document) {
+		final ISemanticRegion semicolonKeyword = textRegionExtensions.regionFor(semanticElement).keyword(";"); //$NON-NLS-1$
+		document.surround(semicolonKeyword, IHiddenRegionFormatter::noSpace);
+		document.append(semicolonKeyword, it -> it.setNewLines(1, 1, 2));
 	}
 
 	@Override

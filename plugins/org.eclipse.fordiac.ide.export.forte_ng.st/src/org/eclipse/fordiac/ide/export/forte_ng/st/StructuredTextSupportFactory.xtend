@@ -16,7 +16,6 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
-import org.eclipse.fordiac.ide.model.libraryElement.GlobalConstants
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STFunctionBody
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod

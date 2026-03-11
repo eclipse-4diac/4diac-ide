@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.search.types;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.ErrorDataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
@@ -23,7 +24,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.LiveSearchContext;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -43,7 +42,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 				new DataTypeInstanceSearchChildrenProvider());
 	}
 
-	public DataTypeInstanceSearch(final ErrorTypeEntry dtEntry, final TypeLibrary library) {
+	public DataTypeInstanceSearch(final DataTypeEntry dtEntry, final TypeLibrary library) {
 		super(new LiveSearchContext(library), createSearchFilter(dtEntry),
 				new DataTypeInstanceSearchChildrenProvider());
 	}
@@ -69,7 +68,7 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 		if (confFB.getDataType() == null || confFB.getDataType().getTypeEntry() == null) {
 			return false; // unconfigured FB, corresponds to ANY_STRUCT
 		}
-		if (confFB.getDataType() instanceof ErrorMarkerDataType || dtEntry.getType() instanceof ErrorMarkerDataType) {
+		if (confFB.getDataType() instanceof ErrorDataType || dtEntry.getType() instanceof ErrorDataType) {
 			return confFB.getDataType().getTypeEntry().getFullTypeName().equals(dtEntry.getFullTypeName());
 		}
 		return dtEntry == confFB.getDataType().getTypeEntry();

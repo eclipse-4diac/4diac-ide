@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2024 fortiss GmbH, Johannes Kepler University Linz
+ * Copyright (c) 2014, 2025 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
@@ -31,11 +35,13 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeServiceSequenceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
+import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -60,6 +66,8 @@ public class ServiceSection extends AbstractSection {
 	private Text rightNameInput;
 	private Text leftCommentInput;
 	private Text rightCommentInput;
+
+	private ComposedAdapterFactory adapterFactory;
 
 	@Override
 	protected FBType getType() {
@@ -259,11 +267,6 @@ public class ServiceSection extends AbstractSection {
 		sequencesViewer.setInput(null);
 	}
 
-	@Override
-	protected void setInputInit() {
-		// currently nothing to be done here
-	}
-
 	private static Composite createButtonContainer(final FormToolkit widgetFactory, final Composite parent) {
 		final Composite container = widgetFactory.createComposite(parent, SWT.NONE);
 		final GridData buttonCompLayoutData = new GridData(SWT.CENTER, SWT.TOP, false, true);
@@ -271,6 +274,18 @@ public class ServiceSection extends AbstractSection {
 		container.setLayoutData(buttonCompLayoutData);
 		container.setLayout(new GridLayout(1, true));
 		return container;
+	}
+
+	private ComposedAdapterFactory getAdapterFactory() {
+		if (null == adapterFactory) {
+			adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+			adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+			adapterFactory.addAdapterFactory(new LibraryElementItemProviderAdapterFactory());
+			adapterFactory.addAdapterFactory(new DataItemProviderAdapterFactory());
+			adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
+			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		}
+		return adapterFactory;
 	}
 
 }

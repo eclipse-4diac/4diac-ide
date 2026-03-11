@@ -202,7 +202,7 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	}
 
 	private void checkBlockElementConnecitons(final BlockFBNetworkElement bfbEl) {
-		for (final IInterfaceElement ie : bfbEl.getInterface().getAllInterfaceElements()) {
+		bfbEl.getInterface().getAllInterfaceElements().forEach(ie -> {
 			if (ie.isIsInput()) {
 				for (final Connection con : ie.getInputConnections()) {
 					checkConnection(con, con.getSource(), ie);
@@ -212,7 +212,7 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 					checkConnection(con, con.getDestination(), ie);
 				}
 			}
-		}
+		});
 	}
 
 	private void checkConnection(final Connection con, final IInterfaceElement opposite,
@@ -276,7 +276,7 @@ public class AddElementsToSubAppCommand extends Command implements ScopedCommand
 	private void handleModifyConnection(final Connection con, final IInterfaceElement ie) {
 		final IInterfaceElement source = con.getSource();
 		// find a pin with matching source in the subapp
-		final Optional<IInterfaceElement> reusablePin = targetSubApp.getInterface().getAllInterfaceElements().stream()
+		final Optional<IInterfaceElement> reusablePin = targetSubApp.getInterface().getAllInterfaceElements()
 				.filter(pin -> pin.getInputConnections().size() == 1)
 				.filter(pin -> pin.getInputConnections().get(0).getSource().equals(source)).findFirst();
 

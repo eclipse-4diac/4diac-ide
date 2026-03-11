@@ -195,6 +195,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createConnectionRoutingDataAdapter();
 			}
 			@Override
+			public Adapter caseContainerVarDeclaration(ContainerVarDeclaration object) {
+				return createContainerVarDeclarationAdapter();
+			}
+			@Override
 			public Adapter caseDataConnection(DataConnection object) {
 				return createDataConnectionAdapter();
 			}
@@ -227,8 +231,36 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createECTransitionAdapter();
 			}
 			@Override
-			public Adapter caseErrorMarkerDataType(ErrorMarkerDataType object) {
-				return createErrorMarkerDataTypeAdapter();
+			public Adapter caseErrorAdapterType(ErrorAdapterType object) {
+				return createErrorAdapterTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorAttributeDeclaration(ErrorAttributeDeclaration object) {
+				return createErrorAttributeDeclarationAdapter();
+			}
+			@Override
+			public Adapter caseErrorAutomationSystem(ErrorAutomationSystem object) {
+				return createErrorAutomationSystemAdapter();
+			}
+			@Override
+			public Adapter caseErrorDeviceType(ErrorDeviceType object) {
+				return createErrorDeviceTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorFBType(ErrorFBType object) {
+				return createErrorFBTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorFunctionFBType(ErrorFunctionFBType object) {
+				return createErrorFunctionFBTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorGlobalConstants(ErrorGlobalConstants object) {
+				return createErrorGlobalConstantsAdapter();
+			}
+			@Override
+			public Adapter caseErrorLibraryElement(ErrorLibraryElement object) {
+				return createErrorLibraryElementAdapter();
 			}
 			@Override
 			public Adapter caseErrorMarkerFBNElement(ErrorMarkerFBNElement object) {
@@ -237,6 +269,18 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseErrorMarkerInterface(ErrorMarkerInterface object) {
 				return createErrorMarkerInterfaceAdapter();
+			}
+			@Override
+			public Adapter caseErrorResourceType(ErrorResourceType object) {
+				return createErrorResourceTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorSegmentType(ErrorSegmentType object) {
+				return createErrorSegmentTypeAdapter();
+			}
+			@Override
+			public Adapter caseErrorSubAppType(ErrorSubAppType object) {
+				return createErrorSubAppTypeAdapter();
 			}
 			@Override
 			public Adapter caseEvent(Event object) {
@@ -455,12 +499,12 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createSTMethodAdapter();
 			}
 			@Override
-			public Adapter caseSubApp(SubApp object) {
-				return createSubAppAdapter();
-			}
-			@Override
 			public Adapter caseStructManipulator(StructManipulator object) {
 				return createStructManipulatorAdapter();
+			}
+			@Override
+			public Adapter caseSubApp(SubApp object) {
+				return createSubAppAdapter();
 			}
 			@Override
 			public Adapter caseSubAppType(SubAppType object) {
@@ -503,6 +547,10 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 				return createValueAdapter();
 			}
 			@Override
+			public Adapter caseVarConfigInstance(VarConfigInstance object) {
+				return createVarConfigInstanceAdapter();
+			}
+			@Override
 			public Adapter caseVarDeclaration(VarDeclaration object) {
 				return createVarDeclarationAdapter();
 			}
@@ -513,10 +561,6 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseWith(With object) {
 				return createWithAdapter();
-			}
-			@Override
-			public Adapter caseVarConfigInstance(VarConfigInstance object) {
-				return createVarConfigInstanceAdapter();
 			}
 			@Override
 			public Adapter caseDataType(DataType object) {
@@ -935,6 +979,20 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration <em>Container Var Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration
+	 * @generated
+	 */
+	public Adapter createContainerVarDeclarationAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.DataConnection <em>Data Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1047,16 +1105,114 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType <em>Error Marker Data Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType <em>Error Adapter Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorAdapterType
 	 * @generated
 	 */
-	public Adapter createErrorMarkerDataTypeAdapter() {
+	public Adapter createErrorAdapterTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration <em>Error Attribute Declaration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorAttributeDeclaration
+	 * @generated
+	 */
+	public Adapter createErrorAttributeDeclarationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem <em>Error Automation System</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorAutomationSystem
+	 * @generated
+	 */
+	public Adapter createErrorAutomationSystemAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType <em>Error Device Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorDeviceType
+	 * @generated
+	 */
+	public Adapter createErrorDeviceTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType <em>Error FB Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorFBType
+	 * @generated
+	 */
+	public Adapter createErrorFBTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType <em>Error Function FB Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorFunctionFBType
+	 * @generated
+	 */
+	public Adapter createErrorFunctionFBTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants <em>Error Global Constants</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorGlobalConstants
+	 * @generated
+	 */
+	public Adapter createErrorGlobalConstantsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement <em>Error Library Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement
+	 * @generated
+	 */
+	public Adapter createErrorLibraryElementAdapter() {
 		return null;
 	}
 
@@ -1085,6 +1241,48 @@ public class LibraryElementAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createErrorMarkerInterfaceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType <em>Error Resource Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorResourceType
+	 * @generated
+	 */
+	public Adapter createErrorResourceTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType <em>Error Segment Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorSegmentType
+	 * @generated
+	 */
+	public Adapter createErrorSegmentTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType <em>Error Sub App Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorSubAppType
+	 * @generated
+	 */
+	public Adapter createErrorSubAppTypeAdapter() {
 		return null;
 	}
 

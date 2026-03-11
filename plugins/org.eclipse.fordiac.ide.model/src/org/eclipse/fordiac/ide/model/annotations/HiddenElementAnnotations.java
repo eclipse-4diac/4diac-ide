@@ -27,7 +27,7 @@ public final class HiddenElementAnnotations {
 		}
 	}
 
-	private static void setVisible(final HiddenElement connection, final String visible) {
+	public static void setVisible(final HiddenElement connection, final String visible) {
 		connection.setAttribute(InternalAttributeDeclarations.VISIBLE, visible, ""); //$NON-NLS-1$
 	}
 
@@ -37,6 +37,6 @@ public final class HiddenElementAnnotations {
 	}
 
 	private HiddenElementAnnotations() {
-		throw new UnsupportedOperationException("Utility class should not be instantiated");
+		throw new UnsupportedOperationException("Utility class should not be instantiated"); //$NON-NLS-1$
 	}
 }

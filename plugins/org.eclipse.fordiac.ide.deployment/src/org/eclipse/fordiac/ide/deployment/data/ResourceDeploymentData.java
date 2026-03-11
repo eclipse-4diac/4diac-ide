@@ -18,8 +18,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.SequencedMap;
 import java.util.SequencedSet;
 
 import org.eclipse.fordiac.ide.deployment.Messages;
@@ -27,6 +30,7 @@ import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -56,7 +60,7 @@ public class ResourceDeploymentData {
 
 	private final List<ConnectionDeploymentData> connections = new ArrayList<>();
 
-	private final List<ParameterDeploymentData> params = new ArrayList<>();
+	private final SequencedMap<String, String> params = new LinkedHashMap<>();
 
 	private final SequencedSet<FBTypeEntry> fbTypes = new LinkedHashSet<>();
 
@@ -74,7 +78,7 @@ public class ResourceDeploymentData {
 		return connections;
 	}
 
-	public List<ParameterDeploymentData> getParams() {
+	public Map<String, String> getParams() {
 		return params;
 	}
 
@@ -94,8 +98,8 @@ public class ResourceDeploymentData {
 		connections.add(connection);
 	}
 
-	public void addParameter(final ParameterDeploymentData param) {
-		params.add(param);
+	public void addParameter(final String qualifiedName, final String value) {
+		params.put(qualifiedName, value);
 	}
 
 	public ResourceDeploymentData(final Resource res) throws DeploymentException {
@@ -132,20 +136,24 @@ public class ResourceDeploymentData {
 			dataTypes.add(entry);
 		}
 		for (final VarDeclaration inputVar : fb.getInterface().getInputVars()) {
-			addInputParam(subAppHierarchy, prefix, inputVar);
+			addInputParam(subAppHierarchy, prefix, inputVar, fb);
 		}
 		for (final VarDeclaration inoutVar : fb.getInterface().getInOutVars()) {
-			addInputParam(subAppHierarchy, prefix, inoutVar);
+			addInputParam(subAppHierarchy, prefix, inoutVar, fb);
 		}
-		fb.getInterface().getInputs().forEach(input -> addInputConnections(subAppHierarchy, prefix, input));
+		fb.getInterface().getAllInputs().forEach(input -> addInputConnections(subAppHierarchy, prefix, input));
 	}
 
 	private void addInputParam(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final VarDeclaration input) throws DeploymentException {
+			final VarDeclaration input, final FB fb) throws DeploymentException {
 		final String value = findInitialValue(subAppHierarchy, input);
 		if (value != null) {
-			params.add(
-					new ParameterDeploymentData(ensurePrefix(prefix, input.getBlockFBNetworkElement()), input, value));
+			params.put(ensurePrefix(prefix, fb) + fb.getName() + "." + input.getRelativeName(fb), value); //$NON-NLS-1$
+		}
+		if (input instanceof final ContainerVarDeclaration container) {
+			for (final VarDeclaration member : container.getCachedMembers()) {
+				addInputParam(subAppHierarchy, prefix, member, fb);
+			}
 		}
 	}
 
@@ -249,15 +257,14 @@ public class ResourceDeploymentData {
 		} else {
 			return element;
 		}
-		return element.isIsInput() ? interfaceList.getInput(element.getName())
-				: interfaceList.getOutput(element.getName());
+		return interfaceList.getInterfaceElement(element);
 	}
 
 	private static IInterfaceElement getSubAppExternalElement(final IInterfaceElement element, final SubApp subApp) {
 		if (subApp instanceof UntypedSubApp) {
 			return element;
 		}
-		return element.isIsInput() ? subApp.getInput(element.getName()) : subApp.getOutput(element.getName());
+		return subApp.getInterface().getInterfaceElement(element);
 	}
 
 	private static FBNetwork getFBNetworkForSubApp(final SubApp subApp) {

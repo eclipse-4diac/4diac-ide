@@ -49,17 +49,19 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.preferences.ModelPreferenceConstants;
-import org.eclipse.fordiac.ide.model.typelibrary.ErrorTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -289,9 +291,7 @@ public class CommonElementExporter {
 		if (HelperTypes.CDATA != type) {
 			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
 		}
-		if ((null != comment) && (!comment.isBlank())) {
-			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
-		}
+		addCommentAttribute(comment);
 		if (HelperTypes.CDATA == type) {
 			writeCDataSection(value);
 			addInlineEndElement();
@@ -459,8 +459,7 @@ public class CommonElementExporter {
 
 	protected void addParam(final IInterfaceElement ie) throws XMLStreamException {
 		final boolean hasAttributes = hasNonTrivialAttributes(ie);
-		final boolean hasInitalValue = (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
-				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+		final boolean hasInitalValue = hasInitialValue(ie);
 		final boolean hasComment = ie.getComment() != null && !ie.getComment().isBlank();
 
 		if (hasAttributes) {
@@ -468,10 +467,14 @@ public class CommonElementExporter {
 		} else if (hasInitalValue || hasComment || ie instanceof VarConfigInstance) {
 			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
 		} else {
+			if (ie instanceof final ContainerVarDeclaration structVar) {
+				addVisibleChildrenOfStructVar(structVar);
+			}
 			return;
 		}
 
-		addNameAttribute(ie.getName());
+		final BlockFBNetworkElement block = ie.getBlockFBNetworkElement();
+		addNameAttribute(block != null ? ie.getRelativeName(block) : ie.getName());
 		String value = ""; //$NON-NLS-1$
 		if (hasInitalValue) {
 			value = ((VarDeclaration) ie).getValue().getValue();
@@ -483,6 +486,26 @@ public class CommonElementExporter {
 			addAttributes(ie.getAttributes());
 			addEndElement();
 		}
+
+		if (ie instanceof final ContainerVarDeclaration structVar) {
+			addVisibleChildrenOfStructVar(structVar);
+		}
+	}
+
+	private static boolean hasInitialValue(final IInterfaceElement ie) {
+		return (ie instanceof final VarDeclaration varDecl) && (varDecl.getValue() != null
+				&& varDecl.getValue().getValue() != null && !varDecl.getValue().getValue().isBlank());
+	}
+
+	private void addVisibleChildrenOfStructVar(final ContainerVarDeclaration structVar) throws XMLStreamException {
+		for (final VarDeclaration varDecl : structVar.getCachedMembers()) {
+			if (varDecl.isVisible()) {
+				addParam(varDecl);
+			} else if (varDecl instanceof final ContainerVarDeclaration structMemVar) {
+				addVisibleChildrenOfStructVar(structMemVar);
+			}
+		}
+
 	}
 
 	private static boolean hasNonTrivialAttributes(final IInterfaceElement ie) {
@@ -494,8 +517,11 @@ public class CommonElementExporter {
 						|| (ie instanceof final VarDeclaration varDecl) && varDecl.isVarConfig());
 	}
 
-	protected void addXYAttributes(final PositionableElement fb) throws XMLStreamException {
-		addXYAttributes(fb.getPosition().getX(), fb.getPosition().getY());
+	protected void addXYAttributes(final PositionableElement posEl) throws XMLStreamException {
+		final Position position = posEl.getPosition();
+		final double xPos = (position != null) ? position.getX() : 0.0;
+		final double yPos = (position != null) ? position.getY() : 0.0;
+		addXYAttributes(xPos, yPos);
 	}
 
 	protected void addXYAttributes(final double x, final double y) throws XMLStreamException {
@@ -524,7 +550,7 @@ public class CommonElementExporter {
 	}
 
 	protected <T extends TypeEntry> T addDependency(final T entry) {
-		if (entry != null && !(entry instanceof ErrorTypeEntry)) {
+		if (entry != null) {
 			dependencies.add(entry);
 		}
 		return entry;
@@ -539,6 +565,6 @@ public class CommonElementExporter {
 
 	protected static String formatPosOrSizeVal(final double val) {
 		final String stringVal = Double.toString(Math.round(val * 100.0) / 100.0);
-		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal;
+		return (stringVal.endsWith(".0")) ? stringVal.substring(0, stringVal.length() - 2) : stringVal; //$NON-NLS-1$
 	}
 }

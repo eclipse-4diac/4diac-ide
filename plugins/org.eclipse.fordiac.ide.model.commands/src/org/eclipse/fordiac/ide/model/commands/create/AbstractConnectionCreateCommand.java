@@ -196,13 +196,13 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 			final BlockFBNetworkElement opDestination = destination.getBlockFBNetworkElement().getOpposite();
 
 			if (opSource != null && opDestination != null) {
-				IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
+				IInterfaceElement opSrcIE = opSource.getInterface().getInterfaceElement(source);
 				if (opSrcIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
 					opSrcIE = varDeclaration.getInOutVarOpposite();
 				}
 
-				IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
+				IInterfaceElement opDstIE = opDestination.getInterface().getInterfaceElement(destination);
 				if (opDstIE instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
 					opDstIE = varDeclaration.getInOutVarOpposite();
@@ -294,7 +294,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	 * @return true if it is a struct defining pin of a struct manipulator.
 	 */
 	public static boolean isStructManipulatorDefPin(final IInterfaceElement pin) {
-		if (!(pin instanceof VarDeclaration)) {
+		if (!(pin instanceof VarDeclaration) || pin.eContainer() instanceof VarDeclaration) {
 			return false;
 		}
 		final FBNetworkElement fbNE = pin.getBlockFBNetworkElement();
@@ -305,7 +305,11 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 
 	public static boolean shouldStructDataConnCreationBeUsed(final IInterfaceElement pin,
 			final IInterfaceElement other) {
-		return isStructManipulatorDefPin(pin) && other != null && other.getType() instanceof StructuredType;
+		return isStructManipulatorDefPin(pin) && other != null && isSimpleStructPin(other);
+	}
+
+	public static boolean isSimpleStructPin(final IInterfaceElement pin) {
+		return pin.getType() instanceof StructuredType && !((VarDeclaration) pin).isArray();
 	}
 
 	private static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {

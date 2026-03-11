@@ -2,8 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Search
 Bundle-SymbolicName: org.eclipse.fordiac.ide.model.search;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-Vendor: Eclipse 4diac
+Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.search
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.fordiac.ide.model.search.plugin.SearchPlugin

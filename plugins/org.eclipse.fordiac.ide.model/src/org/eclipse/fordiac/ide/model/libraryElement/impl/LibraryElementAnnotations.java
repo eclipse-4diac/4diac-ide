@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -22,11 +23,13 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 final class LibraryElementAnnotations {
 
@@ -60,6 +63,25 @@ final class LibraryElementAnnotations {
 			}
 		}
 		return NamedElementAnnotations.validateName(element, diagnostics, context) && isValid;
+	}
+
+	public static boolean validatePackage(final LibraryElement element, final DiagnosticChain diagnostics) {
+		if (element.eContainer() == null && element.getTypeEntry() != null) {
+			final TypeEntry entry = element.getTypeEntry();
+
+			if (!Objects.equals(entry.getPackageName(), PackageNameHelper.getPackageNameFromFile(entry.getFile()))) {
+				if (diagnostics != null) {
+					final int severity = ValidationPreferences.getDiagnosticSeverity(
+							ValidationPreferences.PACKAGENAME_MISMATCH_FOLDER, Diagnostic.OK, element.eResource());
+					diagnostics.add(new BasicDiagnostic(severity, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.LIBRARY_ELEMENT__VALIDATE_PACKAGE,
+							Messages.IdentifierVerifier_PackageNameMismatch, FordiacMarkerHelper.getDiagnosticData(
+									element, LibraryElementPackage.Literals.COMPILER_INFO__PACKAGE_NAME)));
+				}
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private LibraryElementAnnotations() {

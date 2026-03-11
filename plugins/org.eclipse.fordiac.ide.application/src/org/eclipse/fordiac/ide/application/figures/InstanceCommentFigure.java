@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2019 Johannes Kepler University Linz,
+ *                    Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,16 +15,20 @@
 package org.eclipse.fordiac.ide.application.figures;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
+import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
+import org.eclipse.jface.resource.JFaceResources;
 
 public class InstanceCommentFigure extends Figure implements IFontUpdateListener {
 
 	public static final String EMPTY_COMMENT = "[" + Messages.InstanceCommentEditPart_EMPTY_COMMENT + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final int EMPTY_COMMENT_ALPHA = 150;
 	private final TextFlow textFlow;
 
 	public InstanceCommentFigure() {
@@ -54,6 +58,15 @@ public class InstanceCommentFigure extends Figure implements IFontUpdateListener
 
 	public int getTextWidth() {
 		return textFlow.getSize().width();
+	}
+
+	@Override
+	protected void paintChildren(final Graphics graphics) {
+		if (EMPTY_COMMENT.equals(textFlow.getText())) {
+			graphics.setAlpha(EMPTY_COMMENT_ALPHA);
+			graphics.setFont(JFaceResources.getFontRegistry().getItalic(UIPreferenceConstants.DIAGRAM_FONT));
+		}
+		super.paintChildren(graphics);
 	}
 
 }

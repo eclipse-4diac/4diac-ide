@@ -101,7 +101,7 @@ class ForteNgExportFilter extends TemplateExportFilter {
 			AttributeDeclaration,
 			AutomationSystem: // SubAppType is derived from CompositeFBType and needs to be handled first
 			{
-				warnings.add(
+				infos.add(
 					MessageFormat.format(Messages.TemplateExportFilter_PREFIX_ERRORMESSAGE_WITH_TYPENAME,
 						source.typeEntry.file.fullPath.toString, Messages.TemplateExportFilter_FILE_IGNORED))
 				emptySet

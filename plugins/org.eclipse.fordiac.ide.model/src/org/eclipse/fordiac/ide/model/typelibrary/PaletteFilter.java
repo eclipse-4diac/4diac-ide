@@ -43,13 +43,13 @@ public class PaletteFilter {
 
 	private Stream<TypeEntry> getTypeStream() {
 		if (hostNetwork == null) {
-			return Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+			return Stream.concat(typeLib.getFbTypes(), typeLib.getSubAppTypes());
 		}
 
 		final EObject host = EcoreUtil.getRootContainer(hostNetwork.eContainer());
 		final Stream<TypeEntry> stream = host instanceof CompositeFBType && !(host instanceof SubAppType)
-				? typeLib.getFbTypes().stream().map(TypeEntry.class::cast)
-				: Stream.concat(typeLib.getFbTypes().stream(), typeLib.getSubAppTypes().stream());
+				? typeLib.getFbTypes().map(TypeEntry.class::cast)
+				: Stream.concat(typeLib.getFbTypes(), typeLib.getSubAppTypes());
 
 		if (host instanceof final LibraryElement le) {
 			final TypeEntry selfEntry = le.getTypeEntry();

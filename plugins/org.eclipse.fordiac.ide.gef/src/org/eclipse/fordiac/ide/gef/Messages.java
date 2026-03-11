@@ -96,13 +96,9 @@ public final class Messages extends NLS {
 	public static String PrintPreview_LABEL_Tile;
 	public static String SetProfileCommand_LABEL_SetProfile;
 
-	public static String ValidationJob_RefreshJobName;
-
-	public static String ValidationJob_ReloadJobName;
-
-	public static String ValidationJob_UpdateJobName;
-
-	public static String ValidationJob_ValidationJobName;
+	public static String UtilityMarker_ActiveMarker;
+	public static String UtilityMarker_Predecessor;
+	public static String UtilityMarker_ConnectionSource;
 
 	public static String VariableDialog_DefaultTitle;
 

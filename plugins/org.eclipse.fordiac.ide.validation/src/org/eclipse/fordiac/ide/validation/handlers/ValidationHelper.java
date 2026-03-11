@@ -45,10 +45,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.validation.Activator;
+import org.eclipse.fordiac.ide.validation.Messages;
 import org.eclipse.ocl.ecore.Constraint;
 import org.eclipse.ocl.expressions.Variable;
 
 public final class ValidationHelper {
+
+	public static void validate(final INamedElement namedElement) {
+		final Job job = new OCLJob(Messages.ValidationHelper_OCLJobName, namedElement);
+		job.setUser(true);
+		job.setPriority(Job.BUILD);
+		job.setRule(getFile(namedElement));
+		job.schedule();
+	}
 
 	private static class OCLJob extends Job {
 		private static final String ECC = "ECC"; //$NON-NLS-1$
@@ -88,8 +97,8 @@ public final class ValidationHelper {
 							.getContextVariable();
 					final String contextName = (context.getType().getName());
 					if (contextName.equals(objectName)) {
-						subMonitor.setTaskName(
-								MessageFormat.format("{0}: {1}", createHierarchicalName(object), constraint.getName()));
+						subMonitor.setTaskName(MessageFormat.format(Messages.ValidationHelper_SubtaskFormat,
+								createHierarchicalName(object), constraint.getName()));
 						if (!Activator.getDefault().getOclInstance().check(object, constraint)) {
 							final ConstraintHelper properties = new ConstraintHelper(constraint.getName());
 							addValidationMarker(iresource, properties.getMessage(), properties.getSeverity(),
@@ -107,7 +116,7 @@ public final class ValidationHelper {
 					iresource.deleteMarkers(IValidationMarker.TYPE, true, IResource.DEPTH_INFINITE);
 				}
 			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e); // $NON-NLS-1$
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 
@@ -130,13 +139,6 @@ public final class ValidationHelper {
 			FordiacMarkerHelper.createMarkers(iresource,
 					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
 							.setSeverity(severity).setLocation(location).setLineNumber(lineNumber).setTarget(context)));
-		}
-
-		private static IResource getFile(final INamedElement element) {
-			if (element instanceof final FBType fbtype) {
-				return fbtype.getTypeEntry().getFile();
-			}
-			return ModelHelper.getFileFromContext(element);
 		}
 
 		private static String createHierarchicalName(final EObject object) {
@@ -222,9 +224,11 @@ public final class ValidationHelper {
 
 	}
 
-	public static void validate(final INamedElement namedElement) {
-		final Job job = new OCLJob("OCL validation", namedElement);
-		job.schedule();
+	private static IResource getFile(final INamedElement element) {
+		if (element instanceof final FBType fbtype) {
+			return fbtype.getTypeEntry().getFile();
+		}
+		return ModelHelper.getFileFromContext(element);
 	}
 
 	private ValidationHelper() {

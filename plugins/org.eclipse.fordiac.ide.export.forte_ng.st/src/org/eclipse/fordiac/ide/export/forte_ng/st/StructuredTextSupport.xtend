@@ -50,9 +50,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType
-import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
@@ -62,6 +62,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
@@ -567,6 +568,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STStructInitializerExpression:
 				// need dependencies of default values generated in initializer
 				object.mappedStructInitElements.entrySet.filter[value === null].flatMap[key.defaultDependencies]
+			STCaseCases:
+				object.conditions.flatMap[caseConditionDependencies]
+			STForStatement:
+				#["forte_st_iterator".createDependencyPlaceholder]
+			STBinaryExpression:
+				object.binaryExpressionDependencies
+			STUnaryExpression:
+				object.unaryExpressionDependencies
 			STNumericLiteral:
 				#[object.resultType]
 			STStringLiteral:
@@ -579,13 +588,35 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[object.resultType]
 			STDateAndTimeLiteral:
 				#[object.resultType]
-			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
+			STFeatureExpression case object.call:
+				object.feature.featureDependencies + object.callArgumentDependencies
+			STFeatureExpression:
 				object.feature.featureDependencies
 			STFunction:
 				object.returnType !== null ? #[object.returnType] : emptySet
 			default:
 				emptySet
 		}
+	}
+
+	def protected Iterable<INamedElement> getCaseConditionDependencies(STExpression expr) {
+		switch (expr) {
+			STBinaryExpression case expr.op.range: #["AND", "GE", "LE"]
+			default: #["EQ"]
+		}.map[createStandardFunctionDependencyPlaceholder]
+	}
+
+	def protected Iterable<INamedElement> getBinaryExpressionDependencies(STBinaryExpression expr) {
+		switch (expr.op) {
+			case RANGE: emptySet // ranges in CASE statements are handled separately
+			case AMPERSAND: #["AND"]
+			case POWER: #["EXPT"]
+			default: #[expr.op.getName]
+		}.map[createStandardFunctionDependencyPlaceholder]
+	}
+
+	def protected Iterable<INamedElement> getUnaryExpressionDependencies(STUnaryExpression expr) {
+		#[expr.op.getName.createStandardFunctionDependencyPlaceholder]
 	}
 
 	def protected Iterable<INamedElement> getFeatureDependencies(INamedElement feature) {
@@ -597,21 +628,63 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[feature]
 			STVarDeclaration:
 				#[feature.featureType]
-			STFunction:
-				#[feature] + feature.parameterDependencies
+			STFunction,
 			FunctionFBType:
-				#[feature] + feature.parameterDependencies
-			ICallable:
-				feature.parameterDependencies
+				#[feature]
+			STStandardFunction:
+				#[feature.name.createStandardFunctionDependencyPlaceholder]
 			default:
 				emptySet
 		}
 	}
 
-	def protected Iterable<INamedElement> getParameterDependencies(ICallable feature) {
-		(feature.inputParameters + feature.outputParameters + feature.inOutParameters).flatMap [
-			defaultDependencies // need dependencies of default values possibly generated in call
-		].reject[isAnyType] // cannot have default values of generic types anyhow
+	def protected Iterable<INamedElement> getCallArgumentDependencies(STFeatureExpression expr) {
+		try {
+			(expr.mappedInputArguments.entrySet + expr.mappedInOutArguments.entrySet +
+				expr.mappedOutputArguments.entrySet).flatMap[key.getCallArgumentDependencies(value)]
+		} catch (IndexOutOfBoundsException e) {
+			emptySet
+		} catch (ClassCastException e) {
+			emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getCallArgumentDependencies(STBuiltinFeatureExpression expr) {
+		try {
+			(expr.mappedInputArguments.entrySet + expr.mappedInOutArguments.entrySet +
+				expr.mappedOutputArguments.entrySet).flatMap[key.getCallArgumentDependencies(value)]
+		} catch (IndexOutOfBoundsException e) {
+			emptyList
+		} catch (ClassCastException e) {
+			emptyList
+		}
+	}
+
+	def protected Iterable<INamedElement> getCallArgumentDependencies(ITypedElement parameter,
+		STCallArgument argument) {
+		switch (argument) {
+			case null:
+				// need dependencies of default values generated in call,
+				// except for generic types, since those have no default values
+				#["forte_st_util".createDependencyPlaceholder] + parameter.defaultDependencies.reject[isAnyType]
+			case (argument.argument instanceof STMemberAccessExpression) &&
+				(argument.argument as STMemberAccessExpression).member instanceof STMultibitPartialExpression:
+				#["forte_st_util".createDependencyPlaceholder]
+			default:
+				emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getParameterDependencies(STVarDeclaration parameter) {
+		switch (parameter.eContainer) {
+			STVarInputDeclarationBlock,
+			STVarInOutDeclarationBlock:
+				#[parameter.featureType]
+			STVarOutputDeclarationBlock:
+				#[parameter.featureType, "forte_st_util".createDependencyPlaceholder]
+			default:
+				emptySet
+		}
 	}
 
 	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {
@@ -624,6 +697,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			default:
 				emptySet
 		}
+	}
+
+	protected def LibraryElement createStandardFunctionDependencyPlaceholder(CharSequence name) {
+		createDependencyPlaceholder('''iec61131_functions/func_«name»''')
 	}
 
 	def protected generateLineDirective(EObject element) {

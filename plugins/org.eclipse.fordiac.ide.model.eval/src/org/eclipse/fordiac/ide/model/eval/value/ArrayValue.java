@@ -127,8 +127,17 @@ public final class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 			return false;
 		}
 		final ArrayValue other = (ArrayValue) obj;
-		return start == other.start && end == other.end && IntStream.rangeClosed(start, end)
-				.allMatch(index -> Objects.equals(get(index).getValue(), other.get(index).getValue()));
+		if (start != other.start || end != other.end) {
+			return false;
+		}
+		for (int i = start; i <= end; i++) {
+			final Variable<?> element = get(i);
+			final Variable<?> otherElement = other.get(i);
+			if (!element.getValue().equals(otherElement.getValue())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

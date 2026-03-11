@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.ui.widget;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.MessageDialogProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;

@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.resource;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -26,7 +24,6 @@ import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.ISelectable;
 import org.eclipse.xtext.resource.impl.AbstractCompoundSelectable;
 
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 public class TypeLibraryResourceDescriptions extends AbstractCompoundSelectable implements IResourceDescriptions {
@@ -36,10 +33,8 @@ public class TypeLibraryResourceDescriptions extends AbstractCompoundSelectable 
 
 	@Override
 	public Iterable<IResourceDescription> getAllResourceDescriptions() {
-		return Iterables.transform(
-				Iterables.concat(
-						Iterables.transform(TypeLibraryManager.INSTANCE.getTypeLibraries(), TypeLibrary::getAllTypes)),
-				this::getResourceDescription);
+		return () -> TypeLibraryManager.INSTANCE.getTypeLibraries().stream().flatMap(TypeLibrary::getAllTypes)
+				.map(this::getResourceDescription).iterator();
 	}
 
 	@Override
@@ -73,7 +68,7 @@ public class TypeLibraryResourceDescriptions extends AbstractCompoundSelectable 
 
 	@Override
 	public boolean isEmpty() {
-		return TypeLibraryManager.INSTANCE.getTypeLibraries().stream().map(TypeLibrary::getAllTypes)
-				.allMatch(Collection::isEmpty);
+		return TypeLibraryManager.INSTANCE.getTypeLibraries().stream().flatMap(TypeLibrary::getAllTypes).findAny()
+				.isEmpty();
 	}
 }

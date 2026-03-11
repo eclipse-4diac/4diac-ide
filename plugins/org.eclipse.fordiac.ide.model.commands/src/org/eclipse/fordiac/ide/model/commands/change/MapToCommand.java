@@ -165,17 +165,15 @@ public class MapToCommand extends Command implements ScopedCommand {
 	}
 
 	protected void checkConnections() {
-
-		final var validInterfaceElements = srcElement.getInterface().getAllInterfaceElements().stream()
-				.filter(element -> !(element instanceof ErrorMarkerInterface)).toList(); // Error marker do not get
-																							// mapped
-		for (final IInterfaceElement interfaceElement : validInterfaceElements) {
-			if (interfaceElement.isIsInput()) {
-				checkInputConnections(interfaceElement);
-			} else {
-				checkOutputConnections(interfaceElement);
-			}
-		}
+		srcElement.getInterface().getAllInterfaceElements()
+				.filter(element -> !(element instanceof ErrorMarkerInterface)) // Error marker do not get mapped
+				.forEach(interfaceElement -> {
+					if (interfaceElement.isIsInput()) {
+						checkInputConnections(interfaceElement);
+					} else {
+						checkOutputConnections(interfaceElement);
+					}
+				});
 	}
 
 	private void checkInputConnections(final IInterfaceElement interfaceElement) {
@@ -189,14 +187,14 @@ public class MapToCommand extends Command implements ScopedCommand {
 			if (resource.equals(res)) {
 				// we need to create a connection in the target resource
 				// connections to error markers will not get mapped
-				IInterfaceElement destination = targetElement.getInterfaceElement(interfaceElement.getName());
+				IInterfaceElement destination = targetElement.getInterface().getInterfaceElement(interfaceElement);
 				if (destination instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
 					destination = varDeclaration.getInOutVarOpposite();
 				}
 
 				final var sourceElement = connection.getSourceElement().getOpposite();
-				var source = sourceElement.getInterfaceElement(connection.getSource().getName());
+				var source = sourceElement.getInterface().getInterfaceElement(connection.getSource());
 				if (source instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
 					source = varDeclaration.getInOutVarOpposite();
@@ -219,14 +217,14 @@ public class MapToCommand extends Command implements ScopedCommand {
 				// we need to create a connection in the target resource
 				// connections to error markers will not get mapped
 				final var destinationElement = connection.getDestinationElement();
-				IInterfaceElement destination = destinationElement.getOpposite()
-						.getInterfaceElement(connection.getDestination().getName());
+				IInterfaceElement destination = destinationElement.getOpposite().getInterface()
+						.getInterfaceElement(connection.getDestination());
 				if (destination instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& !varDeclaration.isIsInput()) {
 					destination = varDeclaration.getInOutVarOpposite();
 				}
 
-				var source = targetElement.getInterfaceElement(interfaceElement.getName());
+				var source = targetElement.getInterface().getInterfaceElement(interfaceElement);
 				if (source instanceof final VarDeclaration varDeclaration && varDeclaration.isInOutVar()
 						&& varDeclaration.isIsInput()) {
 					source = varDeclaration.getInOutVarOpposite();

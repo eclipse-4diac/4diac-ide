@@ -47,8 +47,8 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -95,7 +95,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	private static final Pattern TYPE_PACKAGE_NAME_PATTERN = Pattern.compile("packageName=\\\"([\\w:]*)\\\""); //$NON-NLS-1$
 
 	private IFile file;
-	private String typeName;
 	private String fullTypeName;
 	private final AtomicReference<String> comment = new AtomicReference<>();
 
@@ -104,7 +103,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	private SoftReference<LibraryElement> typeRef;
 	private SoftReference<String> typeHashRef;
-	private SoftReference<LibraryElement> typeEditableRef;
 	private final AtomicReference<Set<TypeEntry>> dependencies = new AtomicReference<>(Collections.emptySet());
 	private boolean loading;
 
@@ -120,63 +118,130 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		if (typeLibrary != null) {
 			throw new IllegalStateException("Cannot change file while added to type library"); //$NON-NLS-1$
 		}
+		final NotificationChain notifications = basicSetFile(newFile, null);
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+	}
+
+	protected synchronized NotificationChain basicSetFile(final IFile newFile, NotificationChain notifications) {
 		final IFile oldFile = file;
+		if (Objects.equals(oldFile, newFile)) {
+			return notifications; // skip if files are equal
+		}
+
+		// set file
 		file = newFile;
+
+		// set URL in type resource
 		final LibraryElement type = basicGetType();
 		if (type != null) {
 			type.eResource().setURI(getURI());
 		}
-		final LibraryElement typeEditable = basicGetTypeEditable();
-		if (typeEditable != null) {
-			typeEditable.eResource().setURI(getURI());
-		}
+
 		if (eNotificationRequired()) {
-			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE,
-					TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, file));
+			notifications = chainNotification(notifications, new TypeEntryNotificationImpl(this, Notification.SET,
+					TypeEntry.TYPE_ENTRY_FILE_FEATURE, TypeEntry.TYPE_ENTRY_FILE_FEATURE_ID, oldFile, newFile));
 		}
+		return notifications;
 	}
 
 	@Override
 	public String getTypeName() {
-		if (typeName == null) {
-			loadTypeNameFromFile();
-		}
-		return typeName;
-	}
-
-	private void setTypeName(final String typeName) {
-		this.typeName = typeName;
+		return PackageNameHelper.extractPlainTypeName(getFullTypeName());
 	}
 
 	@Override
 	public String getFullTypeName() {
-		if (fullTypeName == null) {
-			loadTypeNameFromFile();
+		// check if type name is present
+		String result = fullTypeName;
+		if (result != null) {
+			return result; // simple, non-contended case
 		}
-		return fullTypeName;
+
+		// the hard way
+		NotificationChain notifications = null;
+		synchronized (this) {
+			// check again
+			result = fullTypeName;
+			if (result != null) {
+				return result; // concurrent update
+			}
+
+			// _we_ need to load the type name
+
+			// load the type name
+			result = loadTypeNameFromFile();
+
+			// set type name
+			notifications = basicSetFullTypeName(result, notifications);
+		}
+
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
+		}
+		return result;
 	}
 
-	private void setFullTypeName(final String fullTypeName) {
-		if (!Objects.equals(this.fullTypeName, fullTypeName)) {
-			if (typeLibrary != null && this.fullTypeName != null) {
-				typeLibrary.removeTypeEntryNameReference(this);
-			}
-			this.fullTypeName = fullTypeName;
-			if (typeLibrary != null && fullTypeName != null) {
-				typeLibrary.addTypeEntryNameReference(this);
-			}
+	protected synchronized NotificationChain basicSetFullTypeName(final String newFullTypeName,
+			NotificationChain notifications) {
+		Objects.requireNonNull(newFullTypeName, "New full type name must not be null"); //$NON-NLS-1$
+		final String oldFullTypeName = fullTypeName;
+		if (Objects.equals(oldFullTypeName, newFullTypeName)) {
+			return notifications; // skip if names are equal
 		}
+
+		// remove from type library (if name is set)
+		if (typeLibrary != null && fullTypeName != null) {
+			typeLibrary.removeTypeEntryNameReference(this);
+		}
+
+		// set type name
+		fullTypeName = newFullTypeName;
+
+		// add (back) to type library
+		if (typeLibrary != null) {
+			typeLibrary.addTypeEntryNameReference(this);
+		}
+
+		if (eNotificationRequired()) {
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE,
+							TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE_ID, oldFullTypeName, newFullTypeName));
+		}
+		return notifications;
 	}
 
 	@Override
 	public String getComment() {
+		// check if comment is present
 		String result = comment.get();
-		if (result == null) {
-			result = loadTypeCommentFromFile();
-			comment.compareAndSet(null, result); // only set if still null
-			// we do not care about a (slightly) stale result here
+		if (result != null) {
+			return result;
+		}
+
+		// load comment from file
+		NotificationChain notifications = null;
+		result = loadTypeCommentFromFile();
+		notifications = basicSetComment(result, notifications);
+
+		// dispatch notifications
+		if (notifications != null) {
+			notifications.dispatch();
 		}
 		return result;
+	}
+
+	protected NotificationChain basicSetComment(final String newComment, NotificationChain notifications) {
+		Objects.requireNonNull(newComment, "New comment must not be null"); //$NON-NLS-1$
+		final String oldComment = comment.getAndSet(newComment);
+		if (!Objects.equals(oldComment, newComment) && eNotificationRequired()) {
+			notifications = chainNotification(notifications,
+					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_COMMENT_FEATURE,
+							TypeEntry.TYPE_ENTRY_COMMENT_FEATURE_ID, oldComment, newComment));
+		}
+		return notifications;
 	}
 
 	@Override
@@ -196,23 +261,30 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 				return type; // concurrent update
 			}
 
-			// get and check file
-			final IFile fileCached = getFile();
-			if (fileCached == null) {
-				return null; // no file, no type
-			}
-
 			// _we_ need to (re-)load the type
 
-			// read modification stamp at the beginning to ensure the loaded type is at
-			// least as recent as the read modification stamp
-			final long modificationStamp = fileCached.getModificationStamp();
+			final long modificationStamp;
+			final IFile fileCached = getFile();
+			if (fileCached != null && fileCached.exists()) {
+				// read modification stamp at the beginning to ensure the loaded type is at
+				// least as recent as the read modification stamp
+				modificationStamp = fileCached.getModificationStamp();
 
-			// load and set the type
-			type = loadType();
-			if (type == null) {
-				return null;
+				// load the type
+				type = loadType();
+			} else {
+				// set modification stamp to NULL_STAMP to ensure the type is reloaded as soon
+				// as a file becomes available
+				modificationStamp = IResource.NULL_STAMP;
 			}
+
+			// create error type if it could not be loaded (no file or error)
+			if (type == null) {
+				type = createErrorLibraryElement();
+				PackageNameHelper.setFullTypeName(type, getFullTypeName());
+			}
+
+			// set type
 			notifications = basicSetType(type, notifications);
 
 			// update the last modification stamp _after_ setting the type to ensure other
@@ -251,18 +323,17 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	protected synchronized NotificationChain basicSetType(final LibraryElement newType,
 			NotificationChain notifications) {
 		final LibraryElement oldType = (typeRef != null) ? typeRef.get() : null;
-		typeHashRef = null; // our type is invalidated clear the hash
 		if (newType != null) {
 			Objects.requireNonNull(newType.getName(), "No name in new type"); //$NON-NLS-1$
 			encloseInResource(newType);
 			newType.setTypeEntry(this);
-			setTypeName(newType.getName());
-			setFullTypeName(PackageNameHelper.getFullTypeName(newType));
-			comment.set(newType.getComment());
+			notifications = basicSetFullTypeName(PackageNameHelper.getFullTypeName(newType), notifications);
+			notifications = basicSetComment(newType.getComment(), notifications);
 			typeRef = new SoftReference<>(newType);
 		} else {
 			typeRef = null;
 		}
+		typeHashRef = null; // our type is invalidated clear the hash
 		if (eNotificationRequired()) {
 			notifications = chainNotification(notifications, new TypeEntryNotificationImpl(this, Notification.SET,
 					TypeEntry.TYPE_ENTRY_TYPE_FEATURE, TypeEntry.TYPE_ENTRY_TYPE_FEATURE_ID, oldType, newType));
@@ -275,115 +346,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			new FordiacTypeResource(Objects.requireNonNullElseGet(getURI(),
 					() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))).getContents().add(newType); //$NON-NLS-1$
 		}
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#getTypeEditable()}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public LibraryElement getTypeEditable() {
-		// check if type is present and current
-		LibraryElement typeEditable = basicGetTypeEditable();
-		if (typeEditable != null && !isFileContentChangedEditable()) {
-			return typeEditable; // simple, non-contended case
-		}
-
-		// the hard way
-		NotificationChain notifications = null;
-		synchronized (this) {
-			// check again
-			typeEditable = basicGetTypeEditable();
-			if (typeEditable != null && !isFileContentChangedEditable()) {
-				return typeEditable; // concurrent update
-			}
-
-			// get and check file
-			final IFile fileCached = getFile();
-			if (fileCached == null) {
-				return null; // no file, no type
-			}
-
-			// _we_ need to get a fresh type editable
-
-			final long modificationStamp;
-
-			// try loaded type first
-			final LibraryElement type = basicGetType();
-			if (type != null && !isFileContentChanged()) {
-				// read modification stamp at the beginning to ensure the copied type is at
-				// least as recent as the modification stamp
-				modificationStamp = lastModificationTimestamp.get();
-
-				typeEditable = EcoreUtil.copy(type);
-			} else { // load a fresh copy ourselves
-				// read modification stamp at the beginning to ensure the loaded type is at
-				// least as recent as the read modification stamp
-				modificationStamp = fileCached.getModificationStamp();
-
-				typeEditable = loadType();
-				if (typeEditable == null) {
-					return null;
-				}
-			}
-
-			// set the type editable
-			notifications = basicSetTypeEditable(typeEditable, notifications);
-
-			// update the last modification stamp _after_ setting the type to ensure other
-			// readers see the new stamp only together with the new type
-			lastModificationTimestampEditable.set(modificationStamp);
-		}
-		// dispatch notifications
-		if (notifications != null) {
-			notifications.dispatch();
-		}
-		return typeEditable;
-	}
-
-	protected LibraryElement basicGetTypeEditable() {
-		final SoftReference<LibraryElement> typeEditableRefCached = typeEditableRef;
-		return typeEditableRefCached != null ? typeEditableRefCached.get() : null;
-	}
-
-	private boolean isFileContentChangedEditable() {
-		final IFile fileCached = getFile();
-		if (fileCached != null) {
-			final long modificationStamp = fileCached.getModificationStamp();
-			return modificationStamp != IResource.NULL_STAMP
-					&& modificationStamp != lastModificationTimestampEditable.get();
-		}
-		return false;
-	}
-
-	/**
-	 * @deprecated see {@link TypeEntry#setTypeEditable(LibraryElement)}
-	 */
-	@Override
-	@Deprecated(since = "3.0.0", forRemoval = true)
-	public void setTypeEditable(final LibraryElement newTypeEditable) {
-		final NotificationChain notifications = basicSetTypeEditable(newTypeEditable, null);
-		if (notifications != null) {
-			notifications.dispatch();
-		}
-	}
-
-	protected synchronized NotificationChain basicSetTypeEditable(final LibraryElement newTypeEditable,
-			NotificationChain notifications) {
-		final LibraryElement oldTypeEditable = (typeEditableRef != null) ? typeEditableRef.get() : null;
-		if (newTypeEditable != null) {
-			encloseInResource(newTypeEditable);
-			newTypeEditable.setTypeEntry(this);
-			typeEditableRef = new SoftReference<>(newTypeEditable);
-		} else {
-			typeEditableRef = null;
-		}
-		if (eNotificationRequired()) {
-			notifications = chainNotification(notifications,
-					new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
-							TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE_ID, oldTypeEditable, newTypeEditable));
-		}
-		return notifications;
 	}
 
 	private LibraryElement loadType() {
@@ -481,35 +443,14 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			NotificationChain notifications = null;
 			synchronized (this) {
-				if (!getTypeEClass().equals(LibraryElementPackage.Literals.AUTOMATION_SYSTEM)) {
-					// currently we only want to purge the models if it is not an automation system,
-					// as it is used as identification in system explorer and monitoring
-					// FIXME remove if when monitoring is fixed
+				if (basicGetType() != null) {
 					notifications = basicSetType(null, notifications);
-					notifications = basicSetTypeEditable(null, notifications);
 				}
-
-				// if there is an editor opened then this notification will be delegated to the
-				// corresponding editor.
-				// If not, then nothing will happen
-				notifications = delegateNotificationToEditor(notification, notifications);
 			}
-
 			if (notifications != null) {
 				notifications.dispatch();
 			}
 		}
-	}
-
-	private NotificationChain delegateNotificationToEditor(final Notification notification,
-			NotificationChain notifications) {
-		if (eNotificationRequired()) {
-			notifications = chainNotification(notifications,
-					new TypeEntryNotificationImpl(this, Notification.SET,
-							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE,
-							TypeEntry.TYPE_ENTRY_EDITOR_INSTANCE_UPDATE_FEATURE_ID, null, notification.getNotifier()));
-		}
-		return notifications;
 	}
 
 	@Override
@@ -533,6 +474,8 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	protected abstract CommonElementImporter getImporter();
+
+	protected abstract ErrorLibraryElement createErrorLibraryElement();
 
 	@Override
 	public TypeLibrary getTypeLibrary() {
@@ -593,6 +536,11 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	}
 
 	@Override
+	public boolean hasError() {
+		return file == null || !file.exists() || basicGetType() instanceof ErrorLibraryElement;
+	}
+
+	@Override
 	public String toString() {
 		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: "); //$NON-NLS-1$
@@ -628,12 +576,6 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 			// get updated modification stamp
 			final long modificationStamp = fileCached.getModificationStamp();
-
-			// set type editable (if different)
-			final LibraryElement currentTypeEditable = basicGetTypeEditable();
-			if (exporter.getType() != currentTypeEditable) {
-				notifications = basicSetTypeEditable(exporter.getType(), notifications);
-			}
 
 			// update the last modification stamp editable _after_ setting the type editable
 			// to ensure readers see the new stamp only together with the new type editable
@@ -684,36 +626,34 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 		}
 	}
 
-	private void loadTypeNameFromFile() {
-		if (getFile() != null) {
-			if (getFile().exists()) {
-				try (Scanner scanner = new Scanner(getFile().getContents())) {
+	private String loadTypeNameFromFile() {
+		final IFile cachedFile = getFile();
+		if (cachedFile != null) {
+			if (cachedFile.exists()) {
+				try (Scanner scanner = new Scanner(cachedFile.getContents())) {
 					if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
-						setTypeName(scanner.match().group(1));
+						final String foundTypeName = scanner.match().group(1);
 						if (scanner.findWithinHorizon(TYPE_PACKAGE_NAME_PATTERN, 0) != null) {
-							final String packageName = scanner.match().group(1);
-							setFullTypeName(packageName + "::" + typeName); //$NON-NLS-1$
-						} else {
-							setFullTypeName(typeName);
+							final String foundPackageName = scanner.match().group(1);
+							return foundPackageName + "::" + foundTypeName; //$NON-NLS-1$
 						}
-						return;
+						return foundTypeName;
 					}
 				} catch (final Exception e) {
 					FordiacLogHelper.logWarning(e.getMessage(), e);
 				}
 			}
-			setTypeName(TypeEntry.getTypeNameFromFile(getFile()));
-		} else {
-			setTypeName(""); //$NON-NLS-1$
+			return TypeEntry.getTypeNameFromFile(cachedFile);
 		}
-		setFullTypeName(typeName);
+		return ""; //$NON-NLS-1$
 	}
 
 	private String loadTypeCommentFromFile() {
-		if (getFile() != null && getFile().exists()) {
-			try (Scanner scanner = new Scanner(getFile().getContents())) {
+		final IFile cachedFile = getFile();
+		if (cachedFile != null && cachedFile.exists()) {
+			try (Scanner scanner = new Scanner(cachedFile.getContents())) {
 				if (scanner.findWithinHorizon(TYPE_COMMENT_PATTERN, 0) != null) {
-					return scanner.match().group(1);
+					return CommonElementImporter.fullyUnEscapeValue(scanner.match().group(1));
 				}
 			} catch (final Exception e) {
 				FordiacLogHelper.logWarning(e.getMessage(), e);

@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
@@ -114,11 +115,9 @@ class STFunctionSupport extends StructuredTextSupport {
 	override getDependencies(Map<?, ?> options) {
 		prepare()
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			(source.functions.map[returnType].filterNull + source.functions.flatMap [
-				varDeclarations.filter [
-					it instanceof STVarInputDeclarationBlock || it instanceof STVarOutputDeclarationBlock
-				]
-			].flatMap[varDeclarations].map[type as INamedElement]).toSet
+			(source.functions.map[returnType].filterNull + source.functions.flatMap[varDeclarations].flatMap [
+				varDeclarations
+			].flatMap[parameterDependencies]).toSet
 		else
 			source.containedDependencies
 	}

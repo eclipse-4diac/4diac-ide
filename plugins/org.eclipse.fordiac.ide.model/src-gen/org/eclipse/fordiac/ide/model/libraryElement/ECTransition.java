@@ -49,6 +49,7 @@ public interface ECTransition extends PositionableElement {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getECTransition_Comment()
 	 * @model default="" dataType="org.eclipse.emf.ecore.xml.type.String" derived="true"
 	 *        extendedMetaData="kind='attribute' name='Comment'"
+	 *        annotation="http:///org/eclipse/fordiac/ide/model/HashMetaData ignored='true'"
 	 * @generated
 	 */
 	String getComment();
