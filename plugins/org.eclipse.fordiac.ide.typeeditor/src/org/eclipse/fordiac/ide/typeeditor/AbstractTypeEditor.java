@@ -193,26 +193,26 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 				doSaveAs();
 				return;
 			}
-			int result = DEFAULT_BUTTON_INDEX;
-			try {
-				if (dependencyAffectingTypeChange()) {
-					result = createTypeUpdateDialog().open();
-				}
-			} catch (final Exception e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-
-			switch (result) {
-			case DEFAULT_BUTTON_INDEX:
-				doSaveInternal(monitor);
-				break;
-			case CANCEL_BUTTON_INDEX:
-				MessageDialog.openInformation(null, Messages.TypeEditor_WarningDialog_Headline,
-						Messages.TypeEditor_WarningDialog_NotSaved);
-				break;
-			default:
-				break;
-			}
+//			int result = DEFAULT_BUTTON_INDEX;
+//			try {
+//				if (dependencyAffectingTypeChange()) {
+//					result = createTypeUpdateDialog().open();
+//				}
+//			} catch (final Exception e) {
+//				FordiacLogHelper.logError(e.getMessage(), e);
+//			}
+//
+//			switch (result) {
+//			case DEFAULT_BUTTON_INDEX:
+			doSaveInternal(monitor);
+//				break;
+//			case CANCEL_BUTTON_INDEX:
+//				MessageDialog.openInformation(null, Messages.TypeEditor_WarningDialog_Headline,
+//						Messages.TypeEditor_WarningDialog_NotSaved);
+//				break;
+//			default:
+//				break;
+//			}
 		}
 	}
 
