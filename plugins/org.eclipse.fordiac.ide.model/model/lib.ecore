@@ -361,9 +361,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//FBNetworkElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
-        defaultValueLiteral="200"/>
+        defaultValueLiteral="1000"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double"
-        defaultValueLiteral="100"/>
+        defaultValueLiteral="500"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationChannel" eSuperTypes="#//FB"/>
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationConfiguration" abstract="true"

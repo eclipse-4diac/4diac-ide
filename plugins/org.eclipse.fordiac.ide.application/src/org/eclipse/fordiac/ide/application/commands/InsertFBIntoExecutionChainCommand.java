@@ -68,15 +68,14 @@ public class InsertFBIntoExecutionChainCommand extends Command implements Scoped
 			return;
 		}
 
-		final IInterfaceElement eventOutputDestination = eventOutput.getOutputConnections().getFirst().getDestination();
-
 		final IInterfaceElement inputInsertedFB = getMatchingEventPin(insertedFB.getInterface().getEventInputs(),
 				eventOutput.getType());
 		final IInterfaceElement outputInsertedFB = getMatchingEventPin(insertedFB.getInterface().getEventOutputs(),
-				eventOutputDestination.getType());
+				eventOutput.getType());
 
 		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), eventOutput, inputInsertedFB));
-		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB, eventOutputDestination));
+		commands.add(getCreateConnectionCommand(insertedFB.getFbNetwork(), outputInsertedFB,
+				eventOutput.getOutputConnections().getFirst().getDestination()));
 		commands.add(new DeleteConnectionCommand(eventOutput.getOutputConnections().getFirst()));
 
 		if (predecessor != null) {

@@ -28,7 +28,7 @@ public class NewCommentHandler extends AbstractContainerElementHandler {
 	@Override
 	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final List<?> selection,
 			final FBNetwork network, final Rectangle posSizeRef) {
-		return new CreateCommentCommand(network, posSizeRef);
+		return new CreateCommentCommand(network, posSizeRef.getTopLeft());
 	}
 
 	@Override

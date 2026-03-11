@@ -294,7 +294,7 @@ public abstract class AbstractConnectionCreateCommand extends Command implements
 	 * @return true if it is a struct defining pin of a struct manipulator.
 	 */
 	public static boolean isStructManipulatorDefPin(final IInterfaceElement pin) {
-		if (!(pin instanceof VarDeclaration)) {
+		if (!(pin instanceof VarDeclaration) || pin.eContainer() instanceof VarDeclaration) {
 			return false;
 		}
 		final FBNetworkElement fbNE = pin.getBlockFBNetworkElement();

@@ -318,10 +318,10 @@ public abstract class AbstractBreadCrumbEditor extends AbstractCloseAbleFormEdit
 	protected void selectElement(EObject element) {
 		if (element instanceof final Connection conn) {
 			// first select source or destination to move the viewport
-			if (conn.getSourceElement() != null) {
-				HandlerHelper.selectElement(conn.getSourceElement(), this);
-			} else if (conn.getDestinationElement() != null) {
-				HandlerHelper.selectElement(conn.getDestinationElement(), this);
+			if (conn.getSource() != null) {
+				HandlerHelper.selectElement(conn.getSource(), this);
+			} else if (conn.getDestination() != null) {
+				HandlerHelper.selectElement(conn.getDestination(), this);
 			}
 		}
 		// try to select element (or one of its parents)
