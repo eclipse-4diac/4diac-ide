@@ -38,6 +38,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator
 public final class NamedElementAnnotations {
 	static final String QUALIFIED_NAME_DELIMITER = "."; //$NON-NLS-1$
 
+	static final String DEFAULT_NAMED_ELEMENTS_KEY = NamedElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
+
 	/**
 	 * @apiNote Do not call directly, use {@link INamedElement#getQualifiedName()}
 	 *          instead.
@@ -165,6 +167,26 @@ public final class NamedElementAnnotations {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Validate duplicate names
+	 *
+	 * @param element     The element to validate
+	 * @param diagnostics The diagnostic chain
+	 * @param context     The diagnostic context
+	 * @return true on success, false if a duplicate was found
+	 *
+	 * @apiNote This is intended to be called only from an annotation for a specific
+	 *          subclass of {@link INamedElement}.
+	 * @implNote Do not add validations for a specific subclass to this generic
+	 *           implementation. If you need specific behavior for a subclass,
+	 *           override the invariant for the subclass in the model and create a
+	 *           separate annotation.
+	 */
+	public static boolean validateDuplicateName(final INamedElement element, final DiagnosticChain diagnostics,
+			final Map<Object, Object> context) {
+		return validateDuplicateName(element, diagnostics, context, DEFAULT_NAMED_ELEMENTS_KEY);
 	}
 
 	/**

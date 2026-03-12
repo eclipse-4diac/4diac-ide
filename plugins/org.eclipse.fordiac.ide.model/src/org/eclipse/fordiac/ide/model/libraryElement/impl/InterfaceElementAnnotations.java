@@ -101,7 +101,7 @@ public final class InterfaceElementAnnotations {
 			return false;
 		}
 		if (!isOutMappedInOutVar(element)
-				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY)) {
+				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context)) {
 			return false;
 		}
 		return true;
