@@ -120,6 +120,8 @@ public class VarDeclarationAnnotations {
 			if (blockFBNetworkElement != null
 					&& blockFBNetworkElement
 							.eContainingFeature() != LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS
+					&& (!blockFBNetworkElement.isMapped()
+							|| blockFBNetworkElement.getMapping().getFrom() == blockFBNetworkElement)
 					&& (typeVarDeclaration == null || !typeVarDeclaration.hasValue())) {
 				if (diagnostics != null) {
 					diagnostics.add(new BasicDiagnostic(
