@@ -15,21 +15,22 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public final class FBNetworkElementAnnotations {
-	private static final String NAMED_ELEMENTS_KEY = FBNetworkElementAnnotations.class.getName() + ".NAMED_ELEMENTS"; //$NON-NLS-1$
-
 	public static boolean validateName(final FBNetworkElement element, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (isErrorMarkerOrComment(element) || isMappedFromApplication(element)) {
-			return true; // do not check error markers, comments, or mapped elements in resource network
+		// do not check error markers, comments, mapped elements in resource network, or
+		// adapter FBs
+		if (isErrorMarkerOrComment(element) || isMappedFromApplication(element) || element instanceof AdapterFB) {
+			return true;
 		}
 		return NamedElementAnnotations.validateName(element, diagnostics, context)
-				&& NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY);
+				&& NamedElementAnnotations.validateDuplicateName(element, diagnostics, context);
 	}
 
 	public static boolean validateType(final FBNetworkElement element, final DiagnosticChain diagnostics,

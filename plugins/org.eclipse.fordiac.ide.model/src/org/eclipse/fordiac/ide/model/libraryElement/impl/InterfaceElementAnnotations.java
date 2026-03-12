@@ -111,7 +111,7 @@ public final class InterfaceElementAnnotations {
 			return false;
 		}
 		if (!isOutMappedInOutVar(element)
-				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context, NAMED_ELEMENTS_KEY)) {
+				&& !NamedElementAnnotations.validateDuplicateName(element, diagnostics, context)) {
 			return false;
 		}
 		if (!FordiacKeywords.DT.equals(element.getName()) // allow "DT" for IEC 61499 standard blocks
