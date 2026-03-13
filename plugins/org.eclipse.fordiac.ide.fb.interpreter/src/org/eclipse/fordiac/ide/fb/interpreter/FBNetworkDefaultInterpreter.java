@@ -51,13 +51,9 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 		// sampling input & writing output is special for composite types
 		if (runtime instanceof final CompositeFBTypeRuntime compTypeRT) {
 			if (compTypeRT.getNetworkRuntime().getOuterNetworkRuntime() == null) {
-				// TODO: won't this move the fBNetworkRuntime from a possible
-				// composite/network parent runtime of it? or do we need to create a copy of it?
 				compTypeRT.getNetworkRuntime().setOuterNetworkRuntime(fBNetworkRuntime);
 				// put the composite runtime into the inner network, so we will find our way
 				// back to the outer network
-				// TODO: At this point compTypeRT is inside fBNetworkRuntime.getTypeRuntimes(),
-				// won't this move the compTypeRT from it?
 				compTypeRT.getNetworkRuntime().getTypeRuntimes().put(eventOccurrence.getParentFB(), compTypeRT);
 			}
 			return DefaultRunFBType.runFBType(runtime, eventOccurrence);

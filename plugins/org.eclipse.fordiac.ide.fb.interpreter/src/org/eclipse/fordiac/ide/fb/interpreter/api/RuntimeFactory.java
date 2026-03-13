@@ -147,8 +147,6 @@ public final class RuntimeFactory {
 		}
 
 		runtime = RuntimeFactory.createFrom(uSubApp.getSubAppNetwork());
-		// TODO: won't this move the fBNetworkRuntime from a possible
-		// composite/network parent runtime of it? or do we need to create a copy of it?
 		runtime.setOuterNetworkRuntime(fBNetworkRuntime);
 		fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
 		return runtime;
