@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -73,8 +72,6 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		super.activate();
 		getModel().eAdapters().add(versionInfoAdapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
-		// position the FB at 0,0
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
 	}
 
 	@Override

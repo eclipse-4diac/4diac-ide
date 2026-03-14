@@ -125,6 +125,7 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 			getContentPane().setPreferredSize(null);
 		}
 		super.addChildVisual(childEditPart, index);
+		refreshTypeRootVisuals(childEditPart.getModel());
 	}
 
 	@Override
@@ -140,5 +141,21 @@ public class InterfaceContainerEditPart extends AbstractGraphicalEditPart {
 
 	public boolean isInterfaceEditable() {
 		return !(getModel().getFbType() instanceof FunctionFBType);
+	}
+
+	private void refreshTypeRootVisuals(final Object model) {
+		final FBTypeRootEditPart fbTypeRootEP = getFBTypeRootEP();
+		if (fbTypeRootEP != null) {
+			fbTypeRootEP.refreshPinPropertyVisuals(model);
+		}
+	}
+
+	private FBTypeRootEditPart getFBTypeRootEP() {
+		for (final Object part : getRoot().getChildren()) {
+			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
+				return fbtRootEP;
+			}
+		}
+		return null;
 	}
 }

@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 - 2017 fortiss GmbH
- * 				 2020        Johannes Kepler University Linz
+ * Copyright (c) 2014 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,13 +13,10 @@
  *   Virendra Ashiwal
  *     - extracted as common code from class EventInterfaceFilter, AdapterInterfaceFilter
  *       and DataInterfaceFilter
- *
- *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.CommentTypeField;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.TypeField;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.PinProperty;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -29,23 +25,19 @@ final class InterfaceFilterSelection {
 
 	static IInterfaceElement getSelectableInterfaceElementOfType(final Object object) {
 		Object ie = object;
-		if (ie instanceof EditPart) {
-			ie = ((EditPart) ie).getModel();
+		if (ie instanceof final EditPart ep) {
+			ie = ep.getModel();
 		}
 
-		if (ie instanceof TypeField) {
-			return ((TypeField) ie).getReferencedElement();
-		}
-		if (ie instanceof CommentTypeField) {
-			return ((CommentTypeField) ie).getReferencedElement();
+		if (ie instanceof final PinProperty pinProp) {
+			return pinProp.getPin();
 		}
 
 		return isInterfaceElementOfType(ie) ? (IInterfaceElement) ie : null;
 	}
 
 	private static boolean isInterfaceElementOfType(final Object ie) {
-		return (ie instanceof IInterfaceElement)
-				&& (((IInterfaceElement) ie).eContainer().eContainer() instanceof FBType);
+		return (ie instanceof final IInterfaceElement ifEl) && (ifEl.eContainer().eContainer() instanceof FBType);
 	}
 
 	private InterfaceFilterSelection() {
