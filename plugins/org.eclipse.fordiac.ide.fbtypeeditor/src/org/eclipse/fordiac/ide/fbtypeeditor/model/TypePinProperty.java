@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 Profactor GmbH, fortiss GmbH,
- *                          Primetals Technologies Austria GmbH
+ * Copyright (c) 2026 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,35 +8,26 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class TypeField implements IAdaptable {
-	private final IInterfaceElement referencedElement;
+public final class TypePinProperty extends PinProperty implements IAdaptable {
 
-	public IInterfaceElement getReferencedElement() {
-		return referencedElement;
-	}
-
-	public TypeField(final IInterfaceElement referencedElement) {
-		this.referencedElement = referencedElement;
-	}
-
-	public String getLabel() {
-		return getReferencedElement().getFullTypeName();
+	TypePinProperty(final IInterfaceElement pin) {
+		super(pin);
 	}
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == ConfigurableObject.class) {
-			return adapter.cast(referencedElement);
+			return adapter.cast(getPin());
 		}
 		return null;
 	}
+
 }

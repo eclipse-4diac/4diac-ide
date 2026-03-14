@@ -1,0 +1,28 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
+
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+
+public record PinProperties(TypePinProperty typeProp, CommentPinProperty commentProp, WithPinProperty withProp) {
+
+	public static PinProperties createFromPin(final IInterfaceElement pin) {
+		if (pin instanceof AdapterDeclaration) {
+			// adapters do not have a with connection
+			return new PinProperties(new TypePinProperty(pin), new CommentPinProperty(pin), null);
+		}
+
+		return new PinProperties(new TypePinProperty(pin), new CommentPinProperty(pin), new WithPinProperty(pin));
+	}
+}

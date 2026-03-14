@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 				 			Johannes Kepler University Linz
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -36,7 +36,6 @@ public class WithEditPart extends AbstractConnectionEditPart {
 
 	private static final int WITH_BOX_SIZE = 4;
 	private static final float WITH_SCALE = 1f;
-	private static final int SCALED_WITH_DISTANCE = (int) WithAnchor.WITH_DISTANCE;
 
 	public With getCastedModel() {
 		return (With) getModel();
@@ -76,24 +75,21 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		return connection;
 	}
 
-	private void updateConnection(final PolylineConnection connection) {
-
-		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(), isInput());
-
+	private static void updateConnection(final PolylineConnection connection) {
 		final PolygonDecoration rectDec = new PolygonDecoration();
-		rectDec.setTemplate(createPointList(withPos, false));
+		rectDec.setTemplate(createPointList());
 		rectDec.setScale(WITH_SCALE, WITH_SCALE);
 		rectDec.setFill(false);
 		connection.setTargetDecoration(rectDec);
 
 		final PolygonDecoration rectDec2 = new PolygonDecoration();
-		rectDec2.setTemplate(createPointList(withPos, true));
+		rectDec2.setTemplate(createPointList());
 		rectDec2.setScale(WITH_SCALE, WITH_SCALE);
 		rectDec2.setFill(false);
 		connection.setSourceDecoration(rectDec2);
 	}
 
-	private PointList createPointList(final int withPos, final boolean top) {
+	private static PointList createPointList() {
 		final PointList rect = new PointList(9);
 		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
 		rect.addPoint(-WITH_BOX_SIZE, WITH_BOX_SIZE);
@@ -101,29 +97,7 @@ public class WithEditPart extends AbstractConnectionEditPart {
 		rect.addPoint(WITH_BOX_SIZE, -WITH_BOX_SIZE);
 		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
 		rect.addPoint(0, -WITH_BOX_SIZE);
-		if (isInput()) {
-			if (top) {
-				addRightAlignedLine(withPos, rect);
-			} else {
-				addLeftAlignedLine(withPos, rect);
-			}
-		} else if (top) {
-			addLeftAlignedLine(withPos, rect);
-		} else {
-			addRightAlignedLine(withPos, rect);
-		}
-		rect.addPoint(0, -WITH_BOX_SIZE);
 		return rect;
-	}
-
-	private static void addLeftAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, -SCALED_WITH_DISTANCE * withPos);
-		rect.addPoint(0, (int) (SCALED_WITH_DISTANCE * 0.8));
-	}
-
-	private static void addRightAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, (int) (-SCALED_WITH_DISTANCE * 0.8));
-		rect.addPoint(0, SCALED_WITH_DISTANCE * withPos);
 	}
 
 	@Override
