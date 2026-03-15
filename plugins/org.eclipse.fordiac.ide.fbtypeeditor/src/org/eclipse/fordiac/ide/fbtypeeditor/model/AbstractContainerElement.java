@@ -11,7 +11,7 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
 
 import java.util.List;
 
@@ -29,5 +29,5 @@ public abstract class AbstractContainerElement {
 		return fbType;
 	}
 
-	abstract List<? extends IInterfaceElement> getChildren();
+	public abstract List<? extends IInterfaceElement> getChildren();
 }

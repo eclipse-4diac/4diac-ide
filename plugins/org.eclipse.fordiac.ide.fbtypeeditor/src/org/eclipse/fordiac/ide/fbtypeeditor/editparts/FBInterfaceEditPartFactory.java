@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.model.CommentPinProperty;
 import org.eclipse.fordiac.ide.fbtypeeditor.model.TypePinProperty;
 import org.eclipse.fordiac.ide.fbtypeeditor.model.WithPinProperty;

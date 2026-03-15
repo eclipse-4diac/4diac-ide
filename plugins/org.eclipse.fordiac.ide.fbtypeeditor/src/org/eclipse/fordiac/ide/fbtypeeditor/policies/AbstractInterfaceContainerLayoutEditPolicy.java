@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.policies;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractContainerElement;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
