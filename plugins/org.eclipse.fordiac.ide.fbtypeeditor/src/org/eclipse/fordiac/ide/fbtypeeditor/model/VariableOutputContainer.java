@@ -11,22 +11,21 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class VariableInputContainer extends AbstractContainerElement {
+public class VariableOutputContainer extends AbstractContainerElement {
 
-	public VariableInputContainer(final FBType fbtype) {
+	public VariableOutputContainer(final FBType fbtype) {
 		super(fbtype);
 	}
 
 	@Override
 	public List<? extends IInterfaceElement> getChildren() {
-		return new ArrayList<>(getFbType().getInterfaceList().getInputVars());
+		return getFbType().getInterfaceList().getOutputVars();
 	}
 }

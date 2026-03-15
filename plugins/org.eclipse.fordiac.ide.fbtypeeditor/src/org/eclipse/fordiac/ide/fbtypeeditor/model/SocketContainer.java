@@ -11,21 +11,22 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
 
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class EventInputContainer extends AbstractContainerElement {
+public class SocketContainer extends AbstractContainerElement {
 
-	public EventInputContainer(final FBType fbtype) {
+	public SocketContainer(final FBType fbtype) {
 		super(fbtype);
 	}
 
 	@Override
 	public List<? extends IInterfaceElement> getChildren() {
-		return getFbType().getInterfaceList().getEventInputs();
+		return getFbType().getInterfaceList().getSockets();
 	}
+
 }
