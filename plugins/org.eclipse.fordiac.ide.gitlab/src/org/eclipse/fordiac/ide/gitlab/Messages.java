@@ -39,6 +39,8 @@ public final class Messages extends NLS {
 
 	public static String GitLabEndpointDialog_name_exists;
 
+	public static String GitLabEndpointDialog_name_invalid_characters;
+
 	public static String GitLabEndpointDialog_name_not_empty;
 
 	public static String GitLabEndpointDialog_token;
@@ -48,9 +50,6 @@ public final class Messages extends NLS {
 	public static String GitLabEndpointDialog_url;
 
 	public static String GitLabEndpointDialog_url_not_empty;
-	public static String GitLabEndpointsPreferencePage_16;
-
-	public static String GitLabEndpointsPreferencePage_20;
 
 	public static String GitLabEndpointsPreferencePage_add;
 
@@ -87,6 +86,12 @@ public final class Messages extends NLS {
 	public static String GitLabEndpointsPreferencePage_test_con;
 
 	public static String GitLabEndpointsPreferencePage_url;
+
+	public static String GitLabEndpointsPreferencePage_connection_failed_title;
+
+	public static String GitLabEndpointsPreferencePage_name_invalid_characters;
+
+	public static String GitLabEndpointsPreferencePage_select_endpoint_to_test;
 
 	public static String Library_Not_Found;
 	public static String No_Config;

@@ -181,6 +181,9 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 					if (v.isBlank()) {
 						return Messages.GitLabEndpointsPreferencePage_name_not_empty;
 					}
+					if (!GitLabEndpoint.isValidName(v)) {
+						return Messages.GitLabEndpointsPreferencePage_name_invalid_characters;
+					}
 					if (usedNamesExcluding(selected).contains(v)) {
 						return Messages.GitLabEndpointsPreferencePage_name_exists;
 					}
@@ -215,7 +218,7 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 		final GitLabEndpoint selected = getSelected();
 		if (selected == null) {
 			MessageDialog.openInformation(getShell(), Messages.GitLabEndpointsPreferencePage_test_con,
-					Messages.GitLabEndpointsPreferencePage_16);
+					Messages.GitLabEndpointsPreferencePage_select_endpoint_to_test);
 			return;
 		}
 		testConnection(selected);
@@ -231,7 +234,7 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 			} else {
 				final String msg = res != null
 						? Objects.toString(res.message(), Messages.GitLabEndpointsPreferencePage_connection_failed)
-						: Messages.GitLabEndpointsPreferencePage_20;
+						: Messages.GitLabEndpointsPreferencePage_connection_failed_title;
 				MessageDialog.openError(getShell(), Messages.GitLabEndpointsPreferencePage_test_con, msg);
 			}
 		} catch (final Exception ex) {
@@ -271,16 +274,15 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 
 	@Override
 	public boolean performOk() {
-		return saveAndReturn(true);
+		return saveAndReturn();
 	}
 
 	@Override
 	protected void performApply() {
-		saveAndReturn(false);
+		saveAndReturn();
 	}
 
-	private boolean saveAndReturn(final boolean returnValueOnSuccess) {
-		// validate all
+	private boolean saveAndReturn() {
 		for (final GitLabEndpoint ep : endpoints) {
 			if (ep == null || !ep.isValid()) {
 				setErrorMessage(Messages.GitLabEndpointsPreferencePage_all_endpoints);
@@ -289,7 +291,8 @@ public class GitLabEndpointsPreferencePage extends PreferencePage implements IWo
 		}
 		setErrorMessage(null);
 		GitLabEndpointsStore.saveEndpoints(endpoints);
-		return returnValueOnSuccess;
+		return true;
+
 	}
 
 	@Override
