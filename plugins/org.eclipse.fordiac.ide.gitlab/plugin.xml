@@ -6,18 +6,18 @@
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
             class="org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsPreferencePage"
-            id="org.eclipse.fordiac.ide.gitlab.preferences.GitLabPackageDownloaderPage"
+            id="org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"
             name="GitLab Endpoints">
       </page>
    </extension>
-   <extension point="org.eclipse.ui.preferencePages">
+<!--   <extension point="org.eclipse.ui.preferencePages">
   <page
       id="org.eclipse.fordiac.ide.gitlab.preferences.gitlabEndpoints"
       name="GitLab Endpoints"
       class="org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsPreferencePage"
       category="org.eclipse.fordiac.ide">
   </page>
-</extension>
+</extension> -->
    
    <extension
          point="org.eclipse.fordiac.ide.library.ArchiveDownloaderExtension">

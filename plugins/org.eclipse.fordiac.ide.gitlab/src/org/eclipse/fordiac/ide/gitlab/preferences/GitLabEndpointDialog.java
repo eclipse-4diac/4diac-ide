@@ -99,6 +99,8 @@ final class GitLabEndpointDialog extends TitleAreaDialog {
 		String msg = null;
 		if (name.isBlank()) {
 			msg = Messages.GitLabEndpointDialog_name_not_empty;
+		} else if (!GitLabEndpoint.isValidName(name)) {
+			msg = Messages.GitLabEndpointDialog_name_invalid_characters;
 		} else if (reservedNames.contains(name)) {
 			msg = Messages.GitLabEndpointDialog_name_exists;
 		} else if (url.isBlank()) {
