@@ -26,14 +26,18 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.helpers.ArraySizeHelper;
+import org.eclipse.fordiac.ide.model.helpers.ImportHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
@@ -42,10 +46,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
@@ -278,61 +286,34 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		return existingSubAppPin(ie, oppositePin, isRightPath);
 	}
 
-	IInterfaceElement existingSubAppPin(final IInterfaceElement ie, final IInterfaceElement oppositePin,
+	private IInterfaceElement existingSubAppPin(final IInterfaceElement ie, final IInterfaceElement oppositePin,
 			final boolean isRightPath) {
-		final Optional<IInterfaceElement> subappPin;
-		if (isRightPath) {
-
-			if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement()
-					.getOuterFBNetworkElement() instanceof final BlockFBNetworkElement outerFB) {
-
-				if (ie instanceof Event) {
-					subappPin = outerFB.getInterface().getEventInputs().stream()
-							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-							.map(IInterfaceElement.class::cast);
-				} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-					subappPin = outerFB.getInterface().getInOutVars().stream()
-							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-							.map(IInterfaceElement.class::cast);
-				} else {
-					subappPin = outerFB.getInterface().getInputVars().stream()
-							.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-							.map(IInterfaceElement.class::cast);
-				}
-
-				if (subappPin.isPresent()) {
-					createConnection(ie.getBlockFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
-					return subappPin.get();
-				}
-			}
-
-		} else if (ie.getBlockFBNetworkElement() != null && ie.getBlockFBNetworkElement()
-				.getOuterFBNetworkElement() instanceof final BlockFBNetworkElement outerFB) {
-
-			if (ie instanceof Event) {
-				subappPin = outerFB.getInterface().getEventOutputs().stream()
-						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-						.map(IInterfaceElement.class::cast);
-			} else if (ie instanceof final VarDeclaration varDecl && varDecl.isInOutVar()) {
-				subappPin = outerFB.getInterface().getOutMappedInOutVars().stream()
-						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-						.map(IInterfaceElement.class::cast);
-			} else {
-				subappPin = outerFB.getInterface().getOutputVars().stream()
-						.filter(pin -> isSourceTypeMatching(ie, pin, oppositePin, isRightPath)).findFirst()
-						.map(IInterfaceElement.class::cast);
-			}
-
-			if (subappPin.isPresent()) {
-				createConnection(ie.getBlockFBNetworkElement().getFbNetwork(), subappPin.get(), ie);
-				return subappPin.get();
-			}
+		final BlockFBNetworkElement fb = ie.getBlockFBNetworkElement();
+		if (fb == null || !(fb.getOuterFBNetworkElement() instanceof final BlockFBNetworkElement outerFB)) {
+			return null;
 		}
-		return null;
+
+		final Stream<? extends IInterfaceElement> pinStream = switch (ie) {
+		case final Event e when isRightPath -> outerFB.getInterface().getEventInputs().stream();
+		case final Event e -> outerFB.getInterface().getEventOutputs().stream();
+
+		case final VarDeclaration v when isRightPath && v.isInOutVar() ->
+			outerFB.getInterface().getInOutVars().stream();
+		case final VarDeclaration v when v.isInOutVar() -> outerFB.getInterface().getOutMappedInOutVars().stream();
+
+		default -> isRightPath ? outerFB.getInterface().getInputVars().stream()
+				: outerFB.getInterface().getOutputVars().stream();
+		};
+
+		return pinStream.filter(pin -> isSourceTypeMatching(pin, oppositePin, isRightPath)).findFirst()
+				.map(matchedPin -> {
+					createConnection(fb.getFbNetwork(), matchedPin, ie);
+					return matchedPin;
+				}).orElse(null);
 	}
 
-	boolean isSourceTypeMatching(final IInterfaceElement ie, final IInterfaceElement subAppPin,
-			final IInterfaceElement oppositePin, final boolean isRightPath) {
+	boolean isSourceTypeMatching(final IInterfaceElement subAppPin, final IInterfaceElement oppositePin,
+			final boolean isRightPath) {
 		if (isRightPath) {
 			return !subAppPin.getInputConnections().stream()
 					.filter(p -> getConnectionSourceFBInterfaceElements(p, isRightPath).contains(oppositePin)).findAny()
@@ -343,8 +324,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 				.isEmpty();
 	}
 
-	List<IInterfaceElement> getConnectionSourceFBInterfaceElements(final Connection con, final boolean isRightPath) {
-
+	private List<IInterfaceElement> getConnectionSourceFBInterfaceElements(final Connection con,
+			final boolean isRightPath) {
 		final List<IInterfaceElement> list = new ArrayList<>();
 
 		if (isRightPath) {
@@ -368,7 +349,6 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 
 	private IInterfaceElement createInterfaceElement(final boolean isRightPath, final IInterfaceElement ie,
 			final SubApp subapp, final IInterfaceElement template) {
-
 		if (emptyPinAlreadyExists(subapp, ie, isRightPath)) {
 			return subapp.getInterface().getInterfaceElement(ie);
 		}
@@ -377,9 +357,31 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		final CreateSubAppInterfaceElementCommand pinCmd = new CreateSubAppInterfaceElementCommand(template.getType(),
 				source.getName(), subapp.getInterface(), isRightPath, isInOut, ArraySizeHelper.getArraySize(template),
 				-1);
-
 		pinCmd.execute();
 		commands.add(pinCmd);
+
+		final LibraryElement root = (LibraryElement) EcoreUtil.getRootContainer(template);
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(root);
+		final IInterfaceElement typePin = template.findInTypeInterface();
+
+		final var searchSupport = ISearchFactory.createSearchSupport(typePin, typePin.eClass().getInstanceClass());
+		if (searchSupport != null) {
+			for (final String namespace : searchSupport.getImportedNamespaces()) {
+				final var constEntry = typeLibrary.getGlobalConstantsEntry(namespace);
+				if (constEntry == null) {
+					continue;
+				}
+				final var resolvedEntry = ImportHelper.resolveImport(constEntry.getTypeName(), root,
+						typeLibrary::getGlobalConstantsEntry, name -> null);
+
+				if (resolvedEntry == null) {
+					final var importCommand = new AddNewImportCommand(root, namespace);
+					importCommand.execute();
+					commands.add(importCommand);
+				}
+			}
+		}
+
 		return pinCmd.getCreatedElement();
 	}
 
