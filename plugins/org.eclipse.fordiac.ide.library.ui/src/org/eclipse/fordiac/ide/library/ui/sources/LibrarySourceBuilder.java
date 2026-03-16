@@ -48,12 +48,12 @@ public final class LibrarySourceBuilder {
 		final Object value = LibraryTreeNode.unwrapNode(sel);
 		return switch (value) {
 		case null -> ""; //$NON-NLS-1$
-		case final LeafNode leaf -> Messages.LibrarySourceBuilder_0 + System.lineSeparator()
-				+ Messages.LibrarySourceBuilder_2 + leaf.getProject().name() + System.lineSeparator()
-				+ Messages.LibrarySourceBuilder_3 + leaf.getPackage().name() + System.lineSeparator()
-				+ Messages.LibrarySourceBuilder_4 + leaf.getVersion() + System.lineSeparator();
-		case final Project p -> Messages.LibrarySourceBuilder_5 + System.lineSeparator()
-				+ Messages.LibrarySourceBuilder_6 + p.name() + System.lineSeparator();
+		case final LeafNode leaf -> Messages.LibrarySourceBuilder_gitlab_package_version + System.lineSeparator()
+				+ Messages.LibrarySourceBuilder_project + leaf.getProject().name() + System.lineSeparator()
+				+ Messages.LibrarySourceBuilder_pkg + leaf.getPackage().name() + System.lineSeparator()
+				+ Messages.LibrarySourceBuilder_v + leaf.getVersion() + System.lineSeparator();
+		case final Project p -> Messages.LibrarySourceBuilder_gitlab_project + System.lineSeparator()
+				+ Messages.LibrarySourceBuilder_name + p.name() + System.lineSeparator();
 		case final Package p -> Messages.LibrarySourceBuilder_gitlab_package + System.lineSeparator()
 				+ Messages.LibrarySourceBuilder_name + p.name() + System.lineSeparator();
 		case final Path path -> Messages.LibrarySourceBuilder_file_system + System.lineSeparator()

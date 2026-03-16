@@ -39,17 +39,15 @@ public class Messages extends NLS {
 	public static String LibraryPage_Path;
 	public static String LibraryPage_Columns;
 
-	public static String LibrarySourceBuilder_0;
+	public static String LibrarySourceBuilder_gitlab_package_version;
 
-	public static String LibrarySourceBuilder_2;
+	public static String LibrarySourceBuilder_project;
 
-	public static String LibrarySourceBuilder_3;
+	public static String LibrarySourceBuilder_pkg;
 
-	public static String LibrarySourceBuilder_4;
+	public static String LibrarySourceBuilder_v;
 
-	public static String LibrarySourceBuilder_5;
-
-	public static String LibrarySourceBuilder_6;
+	public static String LibrarySourceBuilder_gitlab_project;
 
 	public static String LibrarySourceBuilder_comment;
 
