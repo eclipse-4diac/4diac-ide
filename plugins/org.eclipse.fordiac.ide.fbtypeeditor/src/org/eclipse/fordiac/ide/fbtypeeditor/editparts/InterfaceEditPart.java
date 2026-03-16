@@ -245,9 +245,9 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		final int pos = calculateWithPos((With) connection.getModel(), isInput());
 		if (isInput()) {
-			return new InputWithAnchor(getFigure(), pos, this);
+			return new InputWithAnchor(getFigure(), pos);
 		}
-		return new OutputWithAnchor(getFigure(), pos, this);
+		return new OutputWithAnchor(getFigure(), pos);
 	}
 
 	public static int calculateWithPos(final With with, final boolean isInput) {
