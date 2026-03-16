@@ -22,7 +22,7 @@ public class WithAnchor extends ChopboxAnchor {
 
 	public static final PrecisionRectangle LOC_HELPER = new PrecisionRectangle();
 
-	public static final double WITH_DISTANCE = 12.0;
+	public static final double WITH_DISTANCE = 13.0;
 
 	private final int pos;
 
