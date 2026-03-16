@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.osgi.framework.Version;
 
 public final class LatestOnlyFilter extends ViewerFilter {
+
 	private volatile boolean enabled;
 	private final java.util.IdentityHashMap<Object, Object> bestLeafByParent = new java.util.IdentityHashMap<>();
 	private final java.util.HashMap<String, Object> bestByPackageName = new java.util.HashMap<>();
@@ -46,7 +47,10 @@ public final class LatestOnlyFilter extends ViewerFilter {
 		if (children.length == 0) {
 			return;
 		}
-		if (parent instanceof org.eclipse.fordiac.ide.gitlab.Package && children[0] instanceof LeafNode) {
+
+		final Object parentValue = LibraryTreeNode.unwrapNode(parent);
+		final Object firstChildValue = LibraryTreeNode.unwrapNode(children[0]);
+		if (parentValue instanceof final org.eclipse.fordiac.ide.gitlab.Package pack && firstChildValue instanceof LeafNode) {
 			Object best = children[0];
 			for (final Object c : children) {
 				if (compareGitLabLeaf(c, best) > 0) {
@@ -54,11 +58,10 @@ public final class LatestOnlyFilter extends ViewerFilter {
 				}
 			}
 			bestLeafByParent.put(parent, best);
-			bestByPackageName.put(((org.eclipse.fordiac.ide.gitlab.Package) parent).name(), best);
+			bestByPackageName.put(pack.name(), best);
 			return;
 		}
-		if (parent instanceof org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode
-				&& children[0] instanceof org.eclipse.fordiac.ide.library.LibraryRecord) {
+		if (parentValue instanceof LibGroupNode && firstChildValue instanceof LibraryRecord) {
 			bestLeafByParent.put(parent, children[0]);
 			return;
 		}
@@ -76,10 +79,8 @@ public final class LatestOnlyFilter extends ViewerFilter {
 		if (parentElement != null) {
 			final Object best = bestLeafByParent.get(parentElement);
 			if (best != null) {
-				if (element instanceof org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode) {
-					return element == best;
-				}
-				if (element instanceof LibraryRecord) {
+				final Object value = LibraryTreeNode.unwrapNode(element);
+				if (value instanceof LeafNode || value instanceof LibraryRecord) {
 					return element == best;
 				}
 			}
@@ -88,8 +89,8 @@ public final class LatestOnlyFilter extends ViewerFilter {
 	}
 
 	private static int compareGitLabLeaf(final Object a, final Object b) {
-		final String va = a instanceof final LeafNode l ? l.getVersion() : null;
-		final String vb = b instanceof final LeafNode l ? l.getVersion() : null;
+		final String va = LibraryTreeNode.unwrapNode(a) instanceof final LeafNode l ? l.getVersion() : null;
+		final String vb = LibraryTreeNode.unwrapNode(b) instanceof final LeafNode l ? l.getVersion() : null;
 		return compareVersions(va, vb);
 	}
 
@@ -114,5 +115,4 @@ public final class LatestOnlyFilter extends ViewerFilter {
 	boolean hasBestForPackage(final String packageName) {
 		return bestByPackageName.containsKey(packageName);
 	}
-
 }

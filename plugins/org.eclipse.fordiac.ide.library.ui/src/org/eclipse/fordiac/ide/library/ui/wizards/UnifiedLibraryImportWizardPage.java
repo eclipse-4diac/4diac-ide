@@ -33,10 +33,9 @@ import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.sources.ILibrarySource;
 import org.eclipse.fordiac.ide.library.ui.sources.LibrarySourceBuilder;
-import org.eclipse.fordiac.ide.library.ui.sources.LibrarySourceBuilder.EmptyTreeContentProvider;
-import org.eclipse.fordiac.ide.library.ui.sources.LibrarySourceUIComponents;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.FilteredCheckedTree;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LatestOnlyFilter;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.NonValidGitlabPackageFilter;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,9 +43,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -66,7 +63,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.eclipse.ui.dialogs.PatternFilter;
-import org.eclipse.ui.services.IDisposable;
+import org.eclipse.ui.model.AdaptableList;
+import org.eclipse.ui.model.WorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 public class UnifiedLibraryImportWizardPage extends WizardPage {
 
@@ -82,13 +81,12 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 	private FilteredCheckedTree filteredTree;
 	private ContainerCheckedTreeViewer viewer;
+	private WorkbenchContentProvider contentProvider;
+	private WorkbenchLabelProvider labelProvider;
 
 	private Text detailsText;
 
 	private ILibrarySource activeSource;
-
-	private ITreeContentProvider currentContentProvider;
-	private ILabelProvider currentLabelProvider;
 
 	private Object[] lastExpandedElements = new Object[0];
 	private Object lastSelectedElement = null;
@@ -188,7 +186,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	private void createTopRow(final Composite parent) {
-
 		final Composite top = new Composite(parent, SWT.NONE);
 		top.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		top.setLayout(new GridLayout(4, false));
@@ -212,10 +209,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		manageButton = new Button(top, SWT.PUSH);
 		manageButton.setText(Messages.UnifiedLibraryImportWizardPage_manage);
 		manageButton.setToolTipText(Messages.UnifiedLibraryImportWizardPage_config);
-
 		manageButton.addListener(SWT.Selection, e -> {
 			openGitLabPreferences();
-			// After closing preferences, rebuild the sources list from preferences
 			rebuildSourcesKeepingSelection();
 		});
 
@@ -233,7 +228,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		configHost.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		configLayout = new StackLayout();
 		configHost.setLayout(configLayout);
-
 		rebuildConfigComposites();
 	}
 
@@ -242,7 +236,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			c.dispose();
 		}
 
-		// Create one config composite per source, then switch using StackLayout
 		for (final ILibrarySource s : sources) {
 			final Composite cfg = new Composite(configHost, SWT.NONE);
 			cfg.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -270,8 +263,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private void createMainArea(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 		final GridData sashGD = new GridData(SWT.FILL, SWT.FILL, true, true);
-		// give the wizard page a larger preferred size so the tree can show more
-		// rows/columns
 		sashGD.heightHint = 650;
 		sashGD.widthHint = 950;
 		sash.setLayoutData(sashGD);
@@ -281,19 +272,18 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 		filteredTree = new FilteredCheckedTree(treeArea, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL, new PatternFilter());
 		viewer = filteredTree.getCheckedViewer();
-		viewer.setContentProvider(new EmptyTreeContentProvider());
-		viewer.setLabelProvider(new LabelProvider());
-		viewer.setInput(new Object[0]);
-
+		contentProvider = new WorkbenchContentProvider();
+		labelProvider = new WorkbenchLabelProvider();
+		viewer.setContentProvider(contentProvider);
+		viewer.setLabelProvider(labelProvider);
+		viewer.setInput(new AdaptableList());
 		viewer.addFilter(latestOnlyFilter);
 		viewer.addFilter(gitlabPackageFilter);
+		updateGitlabContext(viewer.getInput());
 		applyViewerFilters();
 
-		final ICheckStateListener checkListener = event -> {
-			handleTreeCheckBoxes(event);
-		};
+		final ICheckStateListener checkListener = this::handleTreeCheckBoxes;
 		viewer.addCheckStateListener(checkListener);
-
 		viewer.addSelectionChangedListener(e -> updateDetails());
 
 		detailsText = new Text(sash, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
@@ -308,7 +298,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return;
 		}
 		if (event.getChecked() && activeSource.isSelectableLeaf(event.getElement())) {
-			final String key = activeSource.exclusiveVersinSelectionKey(event.getElement());
+			final String key = activeSource.exclusiveVersionSelectionKey(event.getElement());
 			if (key != null && !key.isBlank()) {
 				internalCheckUpdate = true;
 				try {
@@ -320,7 +310,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 						if (!activeSource.isSelectableLeaf(other)) {
 							continue;
 						}
-						final String otherKey = activeSource.exclusiveVersinSelectionKey(other);
+						final String otherKey = activeSource.exclusiveVersionSelectionKey(other);
 						if (key.equals(otherKey)) {
 							viewer.setChecked(other, false);
 						}
@@ -338,16 +328,12 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private void rebuildSourcesKeepingSelection() {
 		final String previousId = activeSource != null ? activeSource.id() : null;
 
-		// dispose old sources if needed
 		for (final ILibrarySource s : sources) {
 			s.dispose();
 		}
-
 		sources.clear();
 		sources.addAll(LibrarySourceBuilder.getAllSources());
-
 		sourceCombo.setInput(sources);
-
 		rebuildConfigComposites();
 
 		ILibrarySource toSelect = null;
@@ -375,48 +361,37 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return;
 		}
 
-		// snapshot expansion + selection BEFORE anything changes
 		try {
 			lastExpandedElements = viewer.getExpandedElements();
-			final Object sel = ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-			lastSelectedElement = sel;
+			lastSelectedElement = ((IStructuredSelection) viewer.getSelection()).getFirstElement();
 		} catch (final Exception ignore) {
 			// viewer might not be initialized yet
 		}
 
-		// Ensure a content provider is set before any setInput() call (JFace
-		// assertion).
-		if (viewer.getContentProvider() == null) {
-			viewer.setContentProvider(new EmptyTreeContentProvider());
-			viewer.setLabelProvider(new LabelProvider());
-		}
-
 		setErrorMessage(null);
 		setPageComplete(false);
-
 		detailsText.setText(Messages.UnifiedLibraryImportWizardPage_loading);
-		viewer.setInput(new Object[0]);
+		viewer.setInput(new AdaptableList());
 
 		final ILibrarySource sourceSnapshot = activeSource;
-
 		final Job job = new Job(
 				Messages.UnifiedLibraryImportWizardPage_loading_from + sourceSnapshot.comboLabelText()) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				try {
-					final LibrarySourceUIComponents model = sourceSnapshot.loadLibrarySource(monitor);
+					final Object model = sourceSnapshot.loadLibrarySource(monitor);
 					if (monitor.isCanceled()) {
 						return Status.CANCEL_STATUS;
 					}
 
 					Display.getDefault().asyncExec(() -> {
 						if (getControl() == null || getControl().isDisposed()) {
-							disposeCurrentProviders();
 							return;
 						}
 						try {
 							applyModelToViewer(model);
-							latestOnlyFilter.rebuildIndex(viewer, currentContentProvider, model.input());
+							updateGitlabContext(model);
+							latestOnlyFilter.rebuildIndex(viewer, contentProvider, model);
 							applyViewerFilters();
 							restoreTreeStateAfterRefresh();
 							detailsText.setText(Messages.UnifiedLibraryImportWizardPage_select_to_see_details);
@@ -427,7 +402,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 							setPageComplete(false);
 						}
 					});
-
 					return Status.OK_STATUS;
 				} catch (final Exception ex) {
 					Display.getDefault().asyncExec(() -> {
@@ -438,7 +412,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 						detailsText.setText(Messages.UnifiedLibraryImportWizardPage_feiled_load);
 						setPageComplete(false);
 					});
-					return new Status(IStatus.ERROR, "org.eclipse.fordiac.ide.library.ui", ex.getMessage(), ex);
+					return new Status(IStatus.ERROR, "org.eclipse.fordiac.ide.library.ui", ex.getMessage(), ex); //$NON-NLS-1$
 				}
 			}
 		};
@@ -452,24 +426,19 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return;
 		}
 
-		// 1) Restore expansion
 		if (lastExpandedElements != null && lastExpandedElements.length > 0) {
 			try {
 				viewer.setExpandedElements(lastExpandedElements);
 			} catch (final Exception ignore) {
-				// elements may not exist anymore after filtering "latest only"
+				// elements may not exist anymore after filtering
 			}
 		}
 		if (viewer.getExpandedElements().length == 0) {
-
 			viewer.expandToLevel(2);
-
 		} else {
-			// keep existing behavior: expand a bit for first load
 			viewer.expandToLevel(2);
 		}
 
-		// 2) Restore selection if still present
 		if (lastSelectedElement != null) {
 			try {
 				viewer.setSelection(new StructuredSelection(lastSelectedElement), true);
@@ -479,21 +448,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		}
 	}
 
-	private void applyModelToViewer(final LibrarySourceUIComponents model) {
-		disposeCurrentProviders();
-
-		currentContentProvider = model.contentProvider();
-		currentLabelProvider = model.labelProvider();
-
-		viewer.setContentProvider(currentContentProvider);
-		viewer.setLabelProvider(currentLabelProvider);
-		viewer.setInput(model.input());
-
-		updateGitLabContext(model);
-
+	private void applyModelToViewer(final Object model) {
+		viewer.setInput(model);
 		viewer.refresh();
 		viewer.expandAll();
-
 		uncheckAll();
 	}
 
@@ -509,23 +467,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		}
 	}
 
-	private void updateGitLabContext(final LibrarySourceUIComponents model) {
-
-		try {
-			final Object in = model != null ? model.input() : null;
-			final Object ctx = model != null ? model.context() : null;
-			if (in instanceof final java.util.Map<?, ?> inMap && ctx instanceof final java.util.Map<?, ?> ctxMap) {
-				@SuppressWarnings("unchecked")
-				final var pp = (java.util.Map<org.eclipse.fordiac.ide.gitlab.Project, java.util.List<org.eclipse.fordiac.ide.gitlab.Package>>) inMap;
-				@SuppressWarnings("unchecked")
-				final var leaves = (java.util.Map<String, java.util.List<org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode>>) ctxMap;
-				gitlabPackageFilter.setContext(pp, leaves, latestOnlyFilter);
-				return;
-			}
-		} catch (final Exception ignore) {
-			// ignore (non-GitLab input/context)
-		}
-		gitlabPackageFilter.setContext(null, null, latestOnlyFilter);
+	private void updateGitlabContext(final Object input) {
+		gitlabPackageFilter.setLatestOnlyFilter(latestOnlyFilter);
 	}
 
 	private void applyViewerFilters() {
@@ -562,30 +505,12 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 					// selection may have been filtered out
 				}
 			}
-
 			if (expandedBefore != null && expandedBefore.length > 0 && viewer.getExpandedElements().length == 0) {
 				viewer.expandToLevel(2);
-
 			}
-
 		} finally {
 			viewer.getTree().setRedraw(true);
 		}
-	}
-
-	private void disposeCurrentProviders() {
-		try {
-			if (currentLabelProvider != null) {
-				currentLabelProvider.dispose();
-			}
-		} finally {
-			currentLabelProvider = null;
-		}
-
-		if (currentContentProvider instanceof final IDisposable d) {
-			d.dispose();
-		}
-		currentContentProvider = null;
 	}
 
 	private boolean hasSelectableCheckedLeafs() {
@@ -618,9 +543,11 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 	@Override
 	public void dispose() {
-		disposeCurrentProviders();
 		for (final ILibrarySource s : sources) {
 			s.dispose();
+		}
+		if (labelProvider != null) {
+			labelProvider.dispose();
 		}
 		super.dispose();
 	}
@@ -637,13 +564,9 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 	public Map<Required, URI> getChosenLibraries() {
 		final Map<Required, URI> libs = new HashMap<>();
-
-		filteredTree.getCheckedViewer().getCheckedElements();
-
-		Stream.of(filteredTree.getCheckedViewer().getCheckedElements()).filter(LibraryRecord.class::isInstance)
-				.map(LibraryRecord.class::cast).forEach(lib -> libs
+		Stream.of(filteredTree.getCheckedViewer().getCheckedElements()).map(LibraryTreeNode::unwrapNode)
+				.filter(LibraryRecord.class::isInstance).map(LibraryRecord.class::cast).forEach(lib -> libs
 						.put(ManifestHelper.createRequired(lib.symbolicName(), lib.version().toString()), lib.uri()));
 		return libs;
 	}
-
 }

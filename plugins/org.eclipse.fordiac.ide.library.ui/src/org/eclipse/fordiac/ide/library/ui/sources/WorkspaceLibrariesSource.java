@@ -12,11 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.sources;
 
-import java.io.IOException;
 import java.net.URI;
-import java.nio.file.DirectoryStream.Filter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -27,15 +23,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.LibraryRecord;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibGroupNode;
-import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.SectionNode;
-import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.WorkspaceRoot;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.model.AdaptableList;
 
 public class WorkspaceLibrariesSource implements ILibrarySource {
 
@@ -58,49 +52,40 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 	}
 
 	@Override
-	public LibrarySourceUIComponents loadLibrarySource(final IProgressMonitor monitor) {
-		final WorkspaceRoot root = new WorkspaceRoot();
+	public Object loadLibrarySource(final IProgressMonitor monitor) {
+		final AdaptableList root = new AdaptableList();
 
-		LibraryManager.INSTANCE.getExtractedLibraries().forEach((symbolicName, recs) -> {
-			root.getExtractedLibs().add(new LibGroupNode(recs));
-		});
-		root.getExtractedLibs().sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		final List<LibGroupNode> standardGroups = new ArrayList<>();
+		LibraryManager.INSTANCE.getStandardLibraries()
+				.forEach((symbolicName, recs) -> standardGroups.add(new LibGroupNode(recs)));
+		standardGroups.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		root.add(createSectionNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, standardGroups));
 
-		LibraryManager.INSTANCE.getStandardLibraries().forEach((symbolicName, recs) -> {
-			root.getStandardLibs().add(new LibGroupNode(recs));
-		});
+		final List<LibGroupNode> extractedGroups = new ArrayList<>();
+		LibraryManager.INSTANCE.getExtractedLibraries()
+				.forEach((symbolicName, recs) -> extractedGroups.add(new LibGroupNode(recs)));
+		extractedGroups.sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		root.add(createSectionNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, extractedGroups));
 
-		root.getStandardLibs().sort(Comparator.comparing(LibGroupNode::getSymbolicName));
+		return root;
+	}
 
-		final ITreeContentProvider cp = new WorkspaceLibrariesContentProvider();
-		final ILabelProvider lp = new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if (element instanceof WorkspaceRoot) {
-					return ""; //$NON-NLS-1$
-				}
-				if (element instanceof final SectionNode s) {
-					return s.getLabelText();
-				}
-				if (element instanceof final LibGroupNode g) {
-					return g.getLabelText();
-				}
-				if (element instanceof final LibraryRecord r) {
-					return r.symbolicName() + " - " + r.version(); //$NON-NLS-1$
-				}
-				if (element instanceof final Path p) {
-					return p.getFileName() != null ? p.getFileName().toString() : p.toString();
-				}
-				return super.getText(element);
+	private static LibraryTreeNode createSectionNode(final String label, final List<LibGroupNode> groups) {
+		final LibraryTreeNode section = new LibraryTreeNode(label, label);
+		for (final LibGroupNode group : groups) {
+			final LibraryTreeNode groupNode = new LibraryTreeNode(group, group.getLabelText());
+			for (final LibraryRecord rec : group.getLibraryRecords()) {
+				groupNode.addChild(new LibraryTreeNode(rec, rec.symbolicName() + " - " + rec.version())); //$NON-NLS-1$
 			}
-		};
-
-		return new LibrarySourceUIComponents(cp, lp, root, null);
+			section.addChild(groupNode);
+		}
+		return section;
 	}
 
 	@Override
 	public boolean isSelectableLeaf(final Object element) {
-		return element instanceof LibraryRecord || element instanceof Path;
+		final Object value = LibraryTreeNode.unwrapNode(element);
+		return value instanceof LibraryRecord;
 	}
 
 	@Override
@@ -108,94 +93,28 @@ public class WorkspaceLibrariesSource implements ILibrarySource {
 			final IProgressMonitor monitor) throws Exception {
 
 		final List<URI> urisToImport = new ArrayList<>();
-		int importedFromFolder = 0;
 
 		for (final Object o : selectedLeafElements) {
 			if (monitor.isCanceled()) {
 				return;
 			}
 
-			if (o instanceof final LibraryRecord rec) {
-				// link/import existing extracted library
+			final Object value = LibraryTreeNode.unwrapNode(o);
+			if (value instanceof final LibraryRecord rec) {
 				urisToImport.add(rec.uri());
-				continue;
-			}
-
-			if ((o instanceof final Path p) && Files.isDirectory(p)) {
-				// treat as extracted library directory
-				LibraryManager.INSTANCE.importLibrary(targetProject, p.toUri(), true, true);
-				importedFromFolder++;
 			}
 		}
 
 		if (!urisToImport.isEmpty()) {
 			LibraryManager.INSTANCE.importLibraries(targetProject, urisToImport, true);
 		}
-		monitor.worked(urisToImport.size() + importedFromFolder);
-	}
-
-	private static final class WorkspaceLibrariesContentProvider implements ITreeContentProvider {
-		private static final Object[] EMPTY = new Object[0];
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof final WorkspaceRoot root) {
-				return root.getChildren();
-			}
-			return EMPTY;
-		}
-
-		@Override
-		public Object[] getChildren(final Object parentElement) {
-			if ((parentElement instanceof final SectionNode s)
-					&& (s.getLibGroupNodeChildren() instanceof final List<?> list)) {
-				return list.toArray();
-			}
-			if (parentElement instanceof final LibGroupNode g) {
-				return g.getLibraryRecords().toArray();
-			}
-			if (parentElement instanceof final Path p && Files.isDirectory(p)) {
-				return listPathChildren(p);
-			}
-			return EMPTY;
-		}
-
-		@Override
-		public Object getParent(final Object element) {
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(final Object element) {
-			if (element instanceof SectionNode) {
-				return true;
-			}
-			if (element instanceof LibGroupNode) {
-				return true;
-			}
-			if (element instanceof final Path p) {
-				return Files.isDirectory(p);
-			}
-			return false;
-		}
-
-		private static Object[] listPathChildren(final Path dir) {
-			final List<Path> children = new ArrayList<>();
-			try (var stream = Files.newDirectoryStream(dir, (Filter<? super Path>) Files::isDirectory)) {
-				stream.forEach(children::add);
-			} catch (final IOException e) {
-				// ignore
-			}
-			children.sort(
-					Comparator.comparing(p -> p.getFileName() != null ? p.getFileName().toString() : p.toString()));
-			return children.toArray(Path[]::new);
-		}
-
+		monitor.worked(urisToImport.size());
 	}
 
 	@Override
-	public String exclusiveVersinSelectionKey(final Object element) {
-		if (element instanceof final LibraryRecord rec) {
+	public String exclusiveVersionSelectionKey(final Object element) {
+		final Object value = LibraryTreeNode.unwrapNode(element);
+		if (value instanceof final LibraryRecord rec) {
 			return rec.symbolicName();
 		}
 		return null;

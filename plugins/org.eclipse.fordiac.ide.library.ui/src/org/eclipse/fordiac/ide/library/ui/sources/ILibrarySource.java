@@ -25,7 +25,7 @@ public interface ILibrarySource {
 
 	void createConfigUI(Composite parent);
 
-	LibrarySourceUIComponents loadLibrarySource(IProgressMonitor monitor) throws Exception;
+	Object loadLibrarySource(IProgressMonitor monitor) throws Exception;
 
 	boolean isSelectableLeaf(Object element);
 
@@ -35,7 +35,7 @@ public interface ILibrarySource {
 		// optional
 	}
 
-	default String exclusiveVersinSelectionKey(final Object element) {
+	default String exclusiveVersionSelectionKey(final Object element) {
 		return null;
 	}
 

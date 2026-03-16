@@ -81,7 +81,6 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 				@Override
 				protected void execute(final IProgressMonitor monitor) {
 					createProject(monitor != null ? monitor : new NullProgressMonitor());
-					//
 				}
 			};
 			getContainer().run(false, true, op);

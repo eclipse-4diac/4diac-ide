@@ -12,77 +12,64 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library.ui.wizards.treeviewer;
 
-import java.util.List;
-
 import org.eclipse.fordiac.ide.gitlab.Project;
-import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 public final class NonValidGitlabPackageFilter extends ViewerFilter {
+
 	private boolean enabled;
-
-	private java.util.Map<Project, List<org.eclipse.fordiac.ide.gitlab.Package>> projectsAndPackages;
-
-	private java.util.Map<String, List<LeafNode>> packagesAndLeaves;
-
 	private LatestOnlyFilter latestOnlyFilter;
 
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	public void setContext(
-			final java.util.Map<Project, List<org.eclipse.fordiac.ide.gitlab.Package>> projectsAndPackages,
-			final java.util.Map<String, List<LeafNode>> packagesAndLeaves, final LatestOnlyFilter latestOnlyFilter) {
-		this.projectsAndPackages = projectsAndPackages;
-		this.packagesAndLeaves = packagesAndLeaves;
+	public void setLatestOnlyFilter(final LatestOnlyFilter latestOnlyFilter) {
 		this.latestOnlyFilter = latestOnlyFilter;
 	}
 
 	@Override
-	public boolean select(final org.eclipse.jface.viewers.Viewer viewer, final Object parentElement,
-			final Object element) {
+	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 		if (!enabled) {
 			return true;
 		}
 
-		// Only apply to GitLab model nodes.
-		if (element instanceof final org.eclipse.fordiac.ide.gitlab.Package pack) {
-			return hasVisibleLeaves(pack);
+		final Object value = LibraryTreeNode.unwrapNode(element);
+
+		if (value instanceof final org.eclipse.fordiac.ide.gitlab.Package pack) {
+			return hasVisibleLeaves(element, pack);
 		}
 
-		if (element instanceof final org.eclipse.fordiac.ide.gitlab.Project project) {
-			return hasVisiblePackages(project);
+		if (value instanceof final Project project) {
+			return hasVisiblePackages(element, project);
 		}
 
 		return true;
 	}
 
-	private boolean hasVisibleLeaves(final org.eclipse.fordiac.ide.gitlab.Package pack) {
-		final var leavesMap = packagesAndLeaves;
-		if (leavesMap == null) {
+	private boolean hasVisibleLeaves(final Object element, final org.eclipse.fordiac.ide.gitlab.Package pack) {
+		if (!(element instanceof final LibraryTreeNode node)) {
 			return true;
+		}
+		if (node.getChildren().isEmpty()) {
+			return false;
 		}
 
 		if (latestOnlyFilter != null && latestOnlyFilter.isEnabled()) {
 			return latestOnlyFilter.hasBestForPackage(pack.name());
 		}
-
-		final var leaves = leavesMap.get(pack.name());
-		return leaves != null && !leaves.isEmpty();
+		return true;
 	}
 
-	private boolean hasVisiblePackages(final org.eclipse.fordiac.ide.gitlab.Project project) {
-		final var pp = projectsAndPackages;
-		if (pp == null) {
+	private boolean hasVisiblePackages(final Object element, final Project project) {
+		if (!(element instanceof final LibraryTreeNode node)) {
 			return true;
 		}
-		final var packs = pp.get(project);
-		if (packs == null || packs.isEmpty()) {
-			return false;
-		}
-		for (final var p : packs) {
-			if (p != null && hasVisibleLeaves(p)) {
+		for (final LibraryTreeNode child : node.getChildren()) {
+			final Object childValue = LibraryTreeNode.unwrapNode(child);
+			if (childValue instanceof final org.eclipse.fordiac.ide.gitlab.Package pack
+					&& hasVisibleLeaves(child, pack)) {
 				return true;
 			}
 		}
