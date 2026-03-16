@@ -18,7 +18,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 class PinPropColumnLayout extends AbstractPinPropColumnLayout {
 
-	private final boolean inputSide;
 	private final int padding;
 	private final int maxWidth;
 
@@ -27,7 +26,7 @@ class PinPropColumnLayout extends AbstractPinPropColumnLayout {
 	}
 
 	public PinPropColumnLayout(final boolean inputSide, final int padding, final int maxWidth) {
-		this.inputSide = inputSide;
+		super(inputSide);
 		this.padding = padding;
 		this.maxWidth = maxWidth;
 	}
@@ -41,7 +40,7 @@ class PinPropColumnLayout extends AbstractPinPropColumnLayout {
 			final int childWidthToUse = Math.min(maxWidth, childSize.width);
 
 			int x = r.x;
-			if (inputSide) {
+			if (isInputSide()) {
 				// Right-align for inputs (padding on right side towards FB)
 				x += r.width - childWidthToUse - padding;
 			} else {
