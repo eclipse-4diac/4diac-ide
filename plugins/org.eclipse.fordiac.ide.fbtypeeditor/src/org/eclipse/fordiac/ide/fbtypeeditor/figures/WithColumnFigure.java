@@ -16,11 +16,12 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.figures.AbstractShadowBorder;
 
 class WithColumnFigure extends Figure {
 
-	public WithColumnFigure(final int columnWidth) {
-		setLayoutManager(new WithColumnLayout(columnWidth));
+	public WithColumnFigure(final boolean inputSide, final int columnWidth) {
+		setLayoutManager(new WithColumnLayout(inputSide, columnWidth));
 	}
 
 	public void setColumnWidth(final int width) {
@@ -37,7 +38,8 @@ class WithColumnFigure extends Figure {
 	private static class WithColumnLayout extends AbstractPinPropColumnLayout {
 		private int columnWidth;
 
-		public WithColumnLayout(final int columnWidth) {
+		public WithColumnLayout(final boolean inputSide, final int columnWidth) {
+			super(inputSide);
 			this.columnWidth = columnWidth;
 		}
 
@@ -50,7 +52,9 @@ class WithColumnFigure extends Figure {
 			final Rectangle r = container.getClientArea();
 			for (final IFigure child : container.getChildren()) {
 				final int y = getChildYPos(child);
-				child.setBounds(new Rectangle(r.x, y, columnWidth, child.getPreferredSize().height));
+				final int x = r.x + ((isInputSide()) ? AbstractShadowBorder.SHADOW_INSETS.left
+						: -AbstractShadowBorder.SHADOW_INSETS.right);
+				child.setBounds(new Rectangle(x, y, columnWidth, child.getPreferredSize().height));
 			}
 		}
 

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.figures;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayout;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.StackLayout;
@@ -40,7 +41,16 @@ public class FBInterfaceRootFigure extends FreeformLayer {
 		setLayoutManager(new FreeformLayout());
 		setOpaque(false);
 
-		final Figure fig = new Figure();
+		final Figure fig = new Figure() {
+			@Override
+			protected void paintChildren(final Graphics graphics) {
+				// draw fbColumn first so that we can draw on top of the shadow
+				fbColumn.paint(graphics);
+				getChildren().stream().filter(child -> child != fbColumn && child.isVisible())
+						.forEach(child -> child.paint(graphics));
+			}
+		};
+
 		final ToolbarLayout layout = new ToolbarLayout(true);
 		fig.setLayoutManager(layout);
 		add(fig);
@@ -48,9 +58,9 @@ public class FBInterfaceRootFigure extends FreeformLayer {
 
 		inputCommentsColumn = createColumn(new PinPropColumnLayout(true, COMMENT_PADDING, MAX_COMMENT_SIZE));
 		inputTypesColumn = createColumn(new PinPropColumnLayout(true, WITH_PADDING));
-		inputWithColumn = new WithColumnFigure(inputWithColumnWidth);
+		inputWithColumn = new WithColumnFigure(true, inputWithColumnWidth);
 		fbColumn = createColumn(new StackLayout());
-		outputWithColumn = new WithColumnFigure(outputWithColumnWidth);
+		outputWithColumn = new WithColumnFigure(false, outputWithColumnWidth);
 		outputTypesColumn = createColumn(new PinPropColumnLayout(false, WITH_PADDING));
 		outputCommentsColumn = createColumn(new PinPropColumnLayout(false, COMMENT_PADDING, MAX_COMMENT_SIZE));
 

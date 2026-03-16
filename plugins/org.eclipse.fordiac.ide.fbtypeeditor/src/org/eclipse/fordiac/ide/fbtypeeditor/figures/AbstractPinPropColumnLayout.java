@@ -17,6 +17,16 @@ import org.eclipse.draw2d.IFigure;
 
 abstract class AbstractPinPropColumnLayout extends AbstractConstraintLayout {
 
+	private final boolean inputSide;
+
+	public AbstractPinPropColumnLayout(final boolean inputSide) {
+		this.inputSide = inputSide;
+	}
+
+	public boolean isInputSide() {
+		return inputSide;
+	}
+
 	protected int getChildYPos(final IFigure child) {
 		return (getConstraint(child) instanceof final Integer i) ? i.intValue() : 0;
 	}
