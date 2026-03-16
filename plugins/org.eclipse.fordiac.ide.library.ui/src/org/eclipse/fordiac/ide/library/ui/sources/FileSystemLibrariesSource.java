@@ -19,12 +19,7 @@ import java.util.Collection;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fordiac.ide.library.LibraryManager;
-import org.eclipse.fordiac.ide.library.ui.sources.LibrarySourceBuilder.EmptyTreeContentProvider;
-import org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,12 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.model.AdaptableList;
 
 public final class FileSystemLibrariesSource implements ILibrarySource {
 
-	private Path rootFolder; // chosen via UI
-
-	private Text rootText;
+	private Path rootFolder;
 
 	@Override
 	public String id() {
@@ -47,7 +41,7 @@ public final class FileSystemLibrariesSource implements ILibrarySource {
 
 	@Override
 	public String comboLabelText() {
-		return "FileSystem Libraries";
+		return "FileSystem Libraries"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -56,18 +50,17 @@ public final class FileSystemLibrariesSource implements ILibrarySource {
 		grid.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		grid.setLayout(new GridLayout(3, false));
 
-		new Label(grid, SWT.NONE).setText("Root folder:");
+		new Label(grid, SWT.NONE).setText("Root folder:"); //$NON-NLS-1$
 
-		rootText = new Text(grid, SWT.BORDER | SWT.SINGLE);
+		final Text rootText = new Text(grid, SWT.BORDER | SWT.SINGLE);
 		rootText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		rootText.setMessage("Choose a folder containing ZIPs or extracted libraries...");
+		rootText.setMessage("Choose a folder containing ZIPs or extracted libraries..."); //$NON-NLS-1$
 
 		final Button browse = new Button(grid, SWT.PUSH);
-		browse.setText("Browse…");
-
+		browse.setText("Browse…"); //$NON-NLS-1$
 		browse.addListener(SWT.Selection, ev -> {
 			final DirectoryDialog dlg = new DirectoryDialog(parent.getShell());
-			dlg.setText("Select library root folder");
+			dlg.setText("Select library root folder"); //$NON-NLS-1$
 			final String sel = dlg.open();
 			if (sel != null && !sel.isBlank()) {
 				rootText.setText(sel);
@@ -77,58 +70,54 @@ public final class FileSystemLibrariesSource implements ILibrarySource {
 	}
 
 	@Override
-	public LibrarySourceUIComponents loadLibrarySource(final IProgressMonitor monitor) {
+	public Object loadLibrarySource(final IProgressMonitor monitor) {
 		final Path root = rootFolder;
+		final AdaptableList list = new AdaptableList();
 		if (root == null || !Files.isDirectory(root)) {
-			return new LibrarySourceUIComponents(new EmptyTreeContentProvider(), new LabelProvider(), new Object[0],
-					null);
+			return list;
 		}
 
-		// show only top-level directories and archives (same logic as LibraryManager
-		// uses for its archive folder)
-		final Path[] content = LibraryManager.INSTANCE.listArchiveFolders(root);
+		for (final Path path : LibraryManager.INSTANCE.listArchiveFolders(root)) {
+			list.add(createPathNode(path));
+		}
+		return list;
+	}
 
-		final ITreeContentProvider cp = new ArchivedLibraryImportContentProvider();
-		final ILabelProvider lp = new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if (element instanceof final Path p) {
-					return p.getFileName() != null ? p.getFileName().toString() : p.toString();
-				}
-				return ""; //$NON-NLS-1$
+	private static LibraryTreeNode createPathNode(final Path path) {
+		final String label = path.getFileName() != null ? path.getFileName().toString() : path.toString();
+		final LibraryTreeNode node = new LibraryTreeNode(path, label);
+		if (Files.isDirectory(path)) {
+			for (final Path child : LibraryManager.INSTANCE.listArchiveFolders(path)) {
+				node.addChild(createPathNode(child));
 			}
-		};
-
-		return new LibrarySourceUIComponents(cp, lp, content, null);
+		}
+		return node;
 	}
 
 	@Override
 	public boolean isSelectableLeaf(final Object element) {
-		return element instanceof Path;
+		return LibraryTreeNode.unwrapNode(element) instanceof Path;
 	}
 
 	@Override
 	public void install(final IProject targetProject, final Collection<?> selectedLeafElements,
 			final IProgressMonitor monitor) throws Exception {
-
 		int done = 0;
 		for (final Object o : selectedLeafElements) {
 			if (monitor.isCanceled()) {
 				return;
 			}
-			if (!(o instanceof final Path p)) {
+
+			final Object value = LibraryTreeNode.unwrapNode(o);
+			if (!(value instanceof final Path p)) {
 				continue;
 			}
 
 			if (Files.isDirectory(p)) {
-				// Import extracted library directory (link)
 				LibraryManager.INSTANCE.importLibrary(targetProject, p.toUri(), true, true);
-				done++;
-				continue;
+			} else {
+				LibraryManager.INSTANCE.extractLibrary(p, targetProject, true, true);
 			}
-
-			// ZIP archive -> extract
-			LibraryManager.INSTANCE.extractLibrary(p, targetProject, true, true);
 			done++;
 		}
 		monitor.worked(done);
