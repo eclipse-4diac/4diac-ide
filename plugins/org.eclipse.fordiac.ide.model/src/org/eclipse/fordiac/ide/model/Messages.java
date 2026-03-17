@@ -116,7 +116,6 @@ public final class Messages extends NLS {
 	public static String ImportUtils_ERROR_ParameterNotSet;
 	public static String ImportUtils_ERROR_ParameterValueNotSet;
 	public static String InterfaceElementAnnotations_DuplicateName;
-	public static String InterfaceElementAnnotations_MemberNameCollidesWithDataType;
 	public static String LinkConstraints_ClassLinkconstraintsShouldNotBeCreated;
 	public static String LinkConstraints_ConnectingIncompatibleInterfaceTypes;
 	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
