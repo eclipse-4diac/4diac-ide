@@ -42,7 +42,7 @@ public interface MemberVarDeclaration extends VarDeclaration {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent Names</em>' attribute list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getMemberVarDeclaration_ParentNames()
-	 * @model
+	 * @model unique="false"
 	 * @generated
 	 */
 	EList<String> getParentNames();
