@@ -21,6 +21,7 @@ import static org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage.
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.DevResponseFactory;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.EndpointList;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBList;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBStatus;
 import org.eclipse.fordiac.ide.deployment.devResponse.FBType;
 import org.eclipse.fordiac.ide.deployment.devResponse.GlobalConstType;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
@@ -133,6 +135,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 * @generated
 	 */
 	private EClass typeResponseEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fbStatusEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -253,6 +262,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getResource_Status() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -286,6 +305,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	@Override
 	public EReference getFB_Ports() {
 		return (EReference)fbEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFB_Status() {
+		return (EAttribute)fbEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -536,6 +565,16 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getFBStatus() {
+		return fbStatusEEnum;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -572,11 +611,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		createEAttribute(resourceEClass, RESOURCE__NAME);
 		createEAttribute(resourceEClass, RESOURCE__TYPE);
 		createEReference(resourceEClass, RESOURCE__FBS);
+		createEAttribute(resourceEClass, RESOURCE__STATUS);
 
 		fbEClass = createEClass(FB);
 		createEAttribute(fbEClass, FB__NAME);
 		createEAttribute(fbEClass, FB__TYPE);
 		createEReference(fbEClass, FB__PORTS);
+		createEAttribute(fbEClass, FB__STATUS);
 
 		fbTypeEClass = createEClass(FB_TYPE);
 
@@ -614,6 +655,9 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 
 		typeResponseEClass = createEClass(TYPE_RESPONSE);
 		createEAttribute(typeResponseEClass, TYPE_RESPONSE__NAME);
+
+		// Create enums
+		fbStatusEEnum = createEEnum(FB_STATUS);
 	}
 
 	/**
@@ -659,11 +703,13 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEAttribute(getResource_Name(), ecorePackage.getEString(), "name", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getResource_Type(), ecorePackage.getEString(), "type", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getResource_Fbs(), this.getFB(), null, "fbs", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getResource_Status(), this.getFBStatus(), "status", "UNKNOWN", 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(fbEClass, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, "FB", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getFB_Name(), ecorePackage.getEString(), "name", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getFB_Type(), ecorePackage.getEString(), "type", null, 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getFB_Ports(), this.getPort(), null, "ports", null, 0, -1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getFB_Status(), this.getFBStatus(), "status", "UNKNOWN", 0, 1, org.eclipse.fordiac.ide.deployment.devResponse.FB.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(fbTypeEClass, FBType.class, "FBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -702,6 +748,14 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 		initEClass(typeResponseEClass, TypeResponse.class, "TypeResponse", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getTypeResponse_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeResponse.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		// Initialize enums and add enum literals
+		initEEnum(fbStatusEEnum, FBStatus.class, "FBStatus"); //$NON-NLS-1$
+		addEEnumLiteral(fbStatusEEnum, FBStatus.UNKNOWN);
+		addEEnumLiteral(fbStatusEEnum, FBStatus.IDLE);
+		addEEnumLiteral(fbStatusEEnum, FBStatus.RUNNING);
+		addEEnumLiteral(fbStatusEEnum, FBStatus.STOPPED);
+		addEEnumLiteral(fbStatusEEnum, FBStatus.KILLED);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -719,6 +773,27 @@ public class DevResponsePackageImpl extends EPackageImpl implements DevResponseP
 	 */
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+		addAnnotation
+		  (getFB_Name(),
+		   source,
+		   new String[] {
+			   "name", "Name", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getFB_Type(),
+		   source,
+		   new String[] {
+			   "name", "Type", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
+		addAnnotation
+		  (getFB_Status(),
+		   source,
+		   new String[] {
+			   "name", "Status", //$NON-NLS-1$ //$NON-NLS-2$
+			   "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+		   });
 		addAnnotation
 		  (getResponse_TypeResponse(),
 		   source,

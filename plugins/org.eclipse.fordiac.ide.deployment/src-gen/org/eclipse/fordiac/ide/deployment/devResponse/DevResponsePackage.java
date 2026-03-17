@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.deployment.devResponse;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -187,13 +188,22 @@ public interface DevResponsePackage extends EPackage {
 	int RESOURCE__FBS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Status</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__STATUS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = 3;
+	int RESOURCE_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
@@ -231,13 +241,22 @@ public interface DevResponsePackage extends EPackage {
 	int FB__PORTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Status</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FB__STATUS = 3;
+
+	/**
 	 * The number of structural features of the '<em>FB</em>' class. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int FB_FEATURE_COUNT = 3;
+	int FB_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl <em>FB Type</em>}' class.
@@ -564,6 +583,16 @@ public interface DevResponsePackage extends EPackage {
 	int CONNECTION_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBStatus <em>FB Status</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBStatus
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBStatus()
+	 * @generated
+	 */
+	int FB_STATUS = 14;
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.AdapterType <em>Adapter Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -623,6 +652,17 @@ public interface DevResponsePackage extends EPackage {
 	EReference getResource_Fbs();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.Resource#getStatus <em>Status</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Status</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.Resource#getStatus()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EAttribute getResource_Status();
+
+	/**
 	 * Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB <em>FB</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -662,6 +702,17 @@ public interface DevResponsePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFB_Ports();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.deployment.devResponse.FB#getStatus <em>Status</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Status</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FB#getStatus()
+	 * @see #getFB()
+	 * @generated
+	 */
+	EAttribute getFB_Status();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBType <em>FB Type</em>}'.
@@ -928,6 +979,16 @@ public interface DevResponsePackage extends EPackage {
 	EAttribute getTypeResponse_Name();
 
 	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBStatus <em>FB Status</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>FB Status</em>'.
+	 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBStatus
+	 * @generated
+	 */
+	EEnum getFBStatus();
+
+	/**
 	 * Returns the factory that creates the instances of the model. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -999,6 +1060,14 @@ public interface DevResponsePackage extends EPackage {
 		EReference RESOURCE__FBS = eINSTANCE.getResource_Fbs();
 
 		/**
+		 * The meta object literal for the '<em><b>Status</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE__STATUS = eINSTANCE.getResource_Status();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl <em>FB</em>}' class.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl
@@ -1027,6 +1096,14 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB__PORTS = eINSTANCE.getFB_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Status</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FB__STATUS = eINSTANCE.getFB_Status();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBTypeImpl <em>FB Type</em>}' class.
@@ -1241,6 +1318,16 @@ public interface DevResponsePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TYPE_RESPONSE__NAME = eINSTANCE.getTypeResponse_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.deployment.devResponse.FBStatus <em>FB Status</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.FBStatus
+		 * @see org.eclipse.fordiac.ide.deployment.devResponse.impl.DevResponsePackageImpl#getFBStatus()
+		 * @generated
+		 */
+		EEnum FB_STATUS = eINSTANCE.getFBStatus();
 
 	}
 
