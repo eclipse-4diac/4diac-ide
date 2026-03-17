@@ -375,6 +375,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 							.createResource();
 					res.setName(fb.getName());
 					res.setType(fb.getType());
+					res.setStatus(fb.getStatus());
 					return res;
 				}).toList();
 			}

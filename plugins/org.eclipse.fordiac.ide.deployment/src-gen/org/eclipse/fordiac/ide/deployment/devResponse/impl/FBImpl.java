@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBStatus;
 import org.eclipse.fordiac.ide.deployment.devResponse.Port;
 
 /**
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Port;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.FBImpl#getStatus <em>Status</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,6 +97,35 @@ public class FBImpl extends EObjectImpl implements FB {
 	 * @ordered
 	 */
 	protected EList<Port> ports;
+
+	/**
+	 * The default value of the '{@link #getStatus() <em>Status</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStatus()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FBStatus STATUS_EDEFAULT = FBStatus.UNKNOWN;
+
+	/**
+	 * The cached value of the '{@link #getStatus() <em>Status</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStatus()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBStatus status = STATUS_EDEFAULT;
+
+	/**
+	 * This is true if the Status attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean statusESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -170,6 +201,58 @@ public class FBImpl extends EObjectImpl implements FB {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBStatus getStatus() {
+		return status;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStatus(FBStatus newStatus) {
+		FBStatus oldStatus = status;
+		status = newStatus == null ? STATUS_EDEFAULT : newStatus;
+		boolean oldStatusESet = statusESet;
+		statusESet = true;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.FB__STATUS, oldStatus, status, !oldStatusESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetStatus() {
+		FBStatus oldStatus = status;
+		boolean oldStatusESet = statusESet;
+		status = STATUS_EDEFAULT;
+		statusESet = false;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.UNSET, DevResponsePackage.FB__STATUS, oldStatus, STATUS_EDEFAULT, oldStatusESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetStatus() {
+		return statusESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -196,6 +279,8 @@ public class FBImpl extends EObjectImpl implements FB {
 				return getType();
 			case DevResponsePackage.FB__PORTS:
 				return getPorts();
+			case DevResponsePackage.FB__STATUS:
+				return getStatus();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -219,6 +304,9 @@ public class FBImpl extends EObjectImpl implements FB {
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends Port>)newValue);
 				return;
+			case DevResponsePackage.FB__STATUS:
+				setStatus((FBStatus)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -241,6 +329,9 @@ public class FBImpl extends EObjectImpl implements FB {
 			case DevResponsePackage.FB__PORTS:
 				getPorts().clear();
 				return;
+			case DevResponsePackage.FB__STATUS:
+				unsetStatus();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -260,6 +351,8 @@ public class FBImpl extends EObjectImpl implements FB {
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case DevResponsePackage.FB__PORTS:
 				return ports != null && !ports.isEmpty();
+			case DevResponsePackage.FB__STATUS:
+				return isSetStatus();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -280,6 +373,12 @@ public class FBImpl extends EObjectImpl implements FB {
 		result.append(name);
 		result.append(", type: "); //$NON-NLS-1$
 		result.append(type);
+		result.append(", status: "); //$NON-NLS-1$
+		if (statusESet) {
+			result.append(status);
+		} else {
+			result.append("<unset>"); //$NON-NLS-1$
+		}
 		result.append(')');
 		return result.toString();
 	}

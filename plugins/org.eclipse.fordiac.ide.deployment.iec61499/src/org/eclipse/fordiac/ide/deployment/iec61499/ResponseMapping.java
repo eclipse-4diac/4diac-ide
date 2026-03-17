@@ -26,6 +26,7 @@ public class ResponseMapping {
 	public ResponseMapping() {
 		loadOptions = new HashMap<>();
 		loadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+		loadOptions.put(XMLResource.OPTION_LAX_FEATURE_PROCESSING, Boolean.TRUE);
 
 		final XMLMapImpl map = new XMLMapImpl();
 		map.setNoNamespacePackage(DevResponsePackage.eINSTANCE);
