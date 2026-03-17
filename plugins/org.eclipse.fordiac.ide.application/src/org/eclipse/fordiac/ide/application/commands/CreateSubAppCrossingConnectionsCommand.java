@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -360,29 +361,50 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		pinCmd.execute();
 		commands.add(pinCmd);
 
-		final LibraryElement root = (LibraryElement) EcoreUtil.getRootContainer(template);
+		addImportsFromTemplate(template);
+		return pinCmd.getCreatedElement();
+	}
+
+	private void addImportsFromTemplate(final IInterfaceElement template) {
+		if (!(EcoreUtil.getRootContainer(template) instanceof final LibraryElement root)) {
+			return;
+		}
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibraryFromContext(root);
-		final IInterfaceElement typePin = template.findInTypeInterface();
 
-		final var searchSupport = ISearchFactory.createSearchSupport(typePin, typePin.eClass().getInstanceClass());
-		if (searchSupport != null) {
-			for (final String namespace : searchSupport.getImportedNamespaces()) {
-				final var constEntry = typeLibrary.getGlobalConstantsEntry(namespace);
-				if (constEntry == null) {
-					continue;
-				}
-				final var resolvedEntry = ImportHelper.resolveImport(constEntry.getTypeName(), root,
-						typeLibrary::getGlobalConstantsEntry, name -> null);
+		if (template.getType() != null && template.getType().getTypeEntry() != null) {
+			final DataTypeLibrary dataTypeLib = typeLibrary.getDataTypeLibrary();
+			final var entry = template.getType().getTypeEntry();
 
-				if (resolvedEntry == null) {
-					final var importCommand = new AddNewImportCommand(root, namespace);
-					importCommand.execute();
-					commands.add(importCommand);
-				}
+			// check if import is required by trying to resolve the type
+			final var resolvedEntry = ImportHelper.resolveImport(entry.getTypeName(), root,
+					dataTypeLib::getTypeIfExists, name -> null);
+			if (resolvedEntry == null) {
+				final var importCommand = new AddNewImportCommand(root, entry.getFullTypeName());
+				importCommand.execute();
+				commands.add(importCommand);
 			}
 		}
 
-		return pinCmd.getCreatedElement();
+		final IInterfaceElement typePin = template.findInTypeInterface();
+		final var searchSupport = ISearchFactory.createSearchSupport(typePin, typePin.eClass().getInstanceClass());
+		if (searchSupport == null) {
+			return;
+		}
+
+		for (final String namespace : searchSupport.getImportedNamespaces()) {
+			final var constEntry = typeLibrary.getGlobalConstantsEntry(namespace);
+			if (constEntry == null) {
+				continue;
+			}
+			final var resolvedEntry = ImportHelper.resolveImport(constEntry.getTypeName(), root,
+					typeLibrary::getGlobalConstantsEntry, name -> null);
+
+			if (resolvedEntry == null) {
+				final var importCommand = new AddNewImportCommand(root, namespace);
+				importCommand.execute();
+				commands.add(importCommand);
+			}
+		}
 	}
 
 	private boolean emptyPinAlreadyExists(final SubApp subapp, final IInterfaceElement ie, final boolean isRightPath) {
