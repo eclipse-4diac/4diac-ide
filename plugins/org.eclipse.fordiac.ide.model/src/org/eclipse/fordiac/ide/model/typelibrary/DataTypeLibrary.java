@@ -138,13 +138,7 @@ public final class DataTypeLibrary {
 		if (null == name) {
 			return GenericTypes.ANY;
 		}
-		final String uppercaseName = name.toUpperCase();
-		DataType type = typeMap.get(uppercaseName);
-		if (type != null) {
-			return type;
-		}
-
-		type = getDerivedType(uppercaseName);
+		DataType type = getTypeIfExists(name);
 		if (type != null) {
 			return type;
 		}
@@ -163,7 +157,11 @@ public final class DataTypeLibrary {
 		if (dataType != null) {
 			return dataType;
 		}
-		return getDerivedType(uppercaseName);
+		final DataTypeEntry entry = derivedTypes.get(uppercaseName);
+		if (entry != null && !entry.hasError()) {
+			return entry.getType();
+		}
+		return null;
 	}
 
 	public List<StructuredType> getStructuredTypes() {
@@ -173,14 +171,6 @@ public final class DataTypeLibrary {
 
 	public List<StructuredType> getStructuredTypesSorted() {
 		return getStructuredTypes().stream().sorted(NamedElementComparator.INSTANCE).toList();
-	}
-
-	private DataType getDerivedType(final String uppercaseName) {
-		final DataTypeEntry entry = derivedTypes.get(uppercaseName);
-		if (null != entry) {
-			return entry.getType();
-		}
-		return null;
 	}
 
 	public DataTypeEntry getDerivedTypeEntry(final String name) {
@@ -228,7 +218,7 @@ public final class DataTypeLibrary {
 	}
 
 	public StructuredType getStructuredType(final String name) {
-		final DataType derivedType = getDerivedType(name.toUpperCase());
+		final DataType derivedType = getTypeIfExists(name);
 		if (derivedType instanceof final StructuredType structuredType) {
 			return structuredType;
 		}
