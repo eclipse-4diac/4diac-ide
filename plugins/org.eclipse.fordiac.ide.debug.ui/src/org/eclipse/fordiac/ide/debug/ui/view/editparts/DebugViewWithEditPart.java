@@ -98,8 +98,9 @@ public class DebugViewWithEditPart extends WithEditPart {
 				r.setBounds(getBox());
 				r.translate(0, -1);
 				r.resize(1, 1);
+				r.x = getFigure().getParent().getBounds().right();
 				getOwner().translateToAbsolute(r);
-				final int leftX = getFigure().getParent().getBounds().getRight().x - (int) getAbsoluteWithPos();
+				final int leftX = r.x - (int) getAbsoluteWithPos();
 				final int centerY = r.y + r.height / 2;
 				return new Point(leftX, centerY);
 			}
@@ -114,8 +115,9 @@ public class DebugViewWithEditPart extends WithEditPart {
 				r.setBounds(getBox());
 				r.translate(-1, -1);
 				r.resize(1, 1);
+				r.x = getFigure().getParent().getBounds().x;
 				getOwner().translateToAbsolute(r);
-				final int leftX = getFigure().getParent().getBounds().x + (int) getAbsoluteWithPos();
+				final int leftX = r.x + (int) getAbsoluteWithPos();
 				final int centerY = r.y + r.height / 2;
 				return new Point(leftX, centerY);
 			}
