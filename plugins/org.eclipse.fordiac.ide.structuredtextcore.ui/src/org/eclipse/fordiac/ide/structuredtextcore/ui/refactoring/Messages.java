@@ -27,10 +27,9 @@ public class Messages extends NLS {
 	public static String ExtractCallableRefactoring_NameNotUnique;
 	public static String ExtractCallableRefactoring_SourceNotFound;
 	public static String ExtractCallableRefactoring_ControlFlowError;
-	public static String ExtractCallableRefactoring_RegionNotFound;
 	public static String ExtractCallableRefactoring_ReturnTypeNotPresent;
 	public static String ExtractCallableRefactoring_ReturnVariableAccessMayChangeSemantics;
-	public static String ExtractCallableRefactoring_TextNotFound;
+	public static String ExtractCallableRefactoring_UnalignedSelection;
 	public static String ExtractCallableWizardPage_NameField;
 	public static String MoveElementHandler_RefactoringDialogTitle;
 	static {
