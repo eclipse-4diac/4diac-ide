@@ -2282,6 +2282,21 @@
         eType="#//SimpleFBType" eOpposite="#//SimpleFBType/simpleECStates"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFBType" eSuperTypes="#//BaseFBType">
+    <eOperations name="validateEventUsage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invariant" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeAnnotations.validateEventUsage(this, diagnostics, context);"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleECStates" lowerBound="1"
         upperBound="-1" eType="#//SimpleECState" containment="true" eOpposite="#//SimpleECState/simpleFBType">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
