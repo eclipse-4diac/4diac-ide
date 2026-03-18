@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2013 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -27,10 +27,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
-/**
- * The Class ECCRootEditPart.
- */
-public class ECCRootEditPart extends AbstractDiagramEditPart {
+public class ECCEditPart extends AbstractDiagramEditPart {
 
 	/** The adapter. */
 	private Adapter adapter;

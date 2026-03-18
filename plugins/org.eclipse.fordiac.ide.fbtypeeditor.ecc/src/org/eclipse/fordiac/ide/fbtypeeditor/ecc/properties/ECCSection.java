@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionAlgorithmEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECActionOutputEventEditPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECTransitionEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -38,7 +38,8 @@ public final class ECCSection {
 	public static List<String> getLanguages() {
 		final List<String> languages = new ArrayList<>();
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
+		final IExtensionPoint point = registry
+				.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
 		final IExtension[] extensions = point.getExtensions();
 		for (final IExtension extension : extensions) {
 			final IConfigurationElement[] elements = extension.getConfigurationElements();
@@ -58,28 +59,21 @@ public final class ECCSection {
 	}
 
 	public static Object getECCInputType(final Object input) {
-		if (input instanceof ECCRootEditPart) {
-			return ((ECCRootEditPart) input).getCastedECCModel().getBasicFBType();
-		}
-		if (input instanceof ECC) {
-			return ((ECC) input).getBasicFBType();
-		}
-		if (input instanceof ECActionAlgorithmEditPart) {
-			return ((ECActionAlgorithmEditPart) input).getAction().getECState().getECC().getBasicFBType();
-		}
-		if (input instanceof ECActionOutputEventEditPart) {
-			final ECAction action = ((ECActionOutputEventEditPart) input).getAction();
-			if ((null != action) && (null != action.getECState())) {
-				return action.getECState().getECC().getBasicFBType();
+		return switch (input) {
+		case final ECCEditPart eccEP -> eccEP.getCastedECCModel().getBasicFBType();
+		case final ECC ecc -> ecc.getBasicFBType();
+		case final ECActionAlgorithmEditPart algEP -> algEP.getBFB();
+		case final ECActionOutputEventEditPart eoEP -> {
+			final ECAction action = eoEP.getAction();
+			if (action != null && action.getECState() != null) {
+				yield action.getECState().getECC().getBasicFBType();
 			}
+			yield null;
 		}
-		if (input instanceof ECTransitionEditPart) {
-			return ((ECTransitionEditPart) input).getModel().getECC().getBasicFBType();
-		}
-		if (input instanceof ECStateEditPart) {
-			return ((ECStateEditPart) input).getModel().getECC().getBasicFBType();
-		}
-		return null;
+		case final ECTransitionEditPart transitionEP -> transitionEP.getModel().getECC().getBasicFBType();
+		case final ECStateEditPart stateEP -> stateEP.getModel().getECC().getBasicFBType();
+		default -> null;
+		};
 	}
 
 	private ECCSection() {

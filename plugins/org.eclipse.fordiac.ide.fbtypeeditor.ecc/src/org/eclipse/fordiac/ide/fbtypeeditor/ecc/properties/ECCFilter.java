@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECCEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.jface.viewers.IFilter;
 
@@ -21,7 +21,7 @@ public class ECCFilter implements IFilter {
 
 	@Override
 	public boolean select(Object toTest) {
-		return ((toTest instanceof ECCRootEditPart) || (toTest instanceof ECC));
+		return ((toTest instanceof ECCEditPart) || (toTest instanceof ECC));
 	}
 
 }
