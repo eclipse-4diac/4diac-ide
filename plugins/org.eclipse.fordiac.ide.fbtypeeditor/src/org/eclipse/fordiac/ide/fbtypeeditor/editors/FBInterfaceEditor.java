@@ -18,15 +18,12 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.FBInterfacePaletteFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
+import org.eclipse.fordiac.ide.fbtypeeditor.figures.InterfaceEditorRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
-import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
-import org.eclipse.fordiac.ide.gef.figures.MinSpaceFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -40,7 +37,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
-import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -183,28 +179,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new ZoomScalableFreeformRootEditPart(getSite(), getActionRegistry()) {
-			@Override
-			protected AbstractFreeformFigure createDrawingAreaContainer() {
-				return new MinSpaceFreeformFigure();
-			}
-
-			@Override
-			protected IFigure createFigure() {
-				final IFigure rootFigure = super.createFigure();
-				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
-				if (grid != null) {
-					// it does not make sense to have a grid in the interface layer so hide it
-					grid.setVisible(false);
-				}
-				return rootFigure;
-			}
-
-			@Override
-			protected void refreshGridLayer() {
-				// empty to be sure that grid will not be drawn
-			}
-		};
+		return new InterfaceEditorRootEditPart(getSite(), getActionRegistry());
 	}
 
 	@Override
