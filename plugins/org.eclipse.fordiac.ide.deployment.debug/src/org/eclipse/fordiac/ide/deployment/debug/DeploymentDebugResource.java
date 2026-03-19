@@ -15,11 +15,13 @@ package org.eclipse.fordiac.ide.deployment.debug;
 import java.text.MessageFormat;
 
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDisconnect;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBStatus;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementExecutorService;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -27,29 +29,53 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 public class DeploymentDebugResource extends DeploymentDebugElement implements IThread, IDisconnect {
 
 	private final Resource resource;
-	private final boolean allowTerminate;
 
-	public DeploymentDebugResource(final Resource resoure, final DeploymentDebugDevice target,
-			final boolean allowTerminate) {
+	private FBStatus status = FBStatus.UNKNOWN;
+
+	public DeploymentDebugResource(final Resource resoure, final DeploymentDebugDevice target) {
 		super(target);
 		this.resource = resoure;
-		this.allowTerminate = allowTerminate;
 		fireCreationEvent();
+	}
+
+	public FBStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(final FBStatus status) {
+		if (status == this.status) {
+			return;
+		}
+		this.status = status;
+		switch (status) {
+		case IDLE, STOPPED -> fireSuspendEvent(DebugEvent.UNSPECIFIED);
+		case RUNNING -> fireResumeEvent(DebugEvent.UNSPECIFIED);
+		case KILLED -> fireTerminateEvent();
+		default -> {
+			// do nothing
+		}
+		}
 	}
 
 	@Override
 	public boolean canResume() {
-		return getDebugTarget().isAllowTerminate() && getDebugTarget().isAlive();
+		return getDebugTarget().isAlive() && switch (status) {
+		case UNKNOWN, IDLE, STOPPED -> true;
+		default -> false;
+		};
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return getDebugTarget().isAllowTerminate() && getDebugTarget().isAlive();
+		return getDebugTarget().isAlive() && getDebugTarget().isAllowTerminate() && switch (status) {
+		case UNKNOWN, RUNNING -> true;
+		default -> false;
+		};
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return false;
+		return status == FBStatus.IDLE || status == FBStatus.STOPPED;
 	}
 
 	@Override
@@ -111,12 +137,12 @@ public class DeploymentDebugResource extends DeploymentDebugElement implements I
 
 	@Override
 	public boolean canTerminate() {
-		return getDebugTarget().isAlive() && allowTerminate;
+		return getDebugTarget().isAlive() && getDebugTarget().isAllowTerminate();
 	}
 
 	@Override
 	public boolean isTerminated() {
-		return false;
+		return status == FBStatus.KILLED;
 	}
 
 	@Override
