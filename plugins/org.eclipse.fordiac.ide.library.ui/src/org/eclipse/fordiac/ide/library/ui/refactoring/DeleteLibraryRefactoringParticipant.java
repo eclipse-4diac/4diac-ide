@@ -30,7 +30,7 @@ import org.eclipse.ltk.core.refactoring.participants.DeleteParticipant;
 
 public class DeleteLibraryRefactoringParticipant extends DeleteParticipant {
 	private IProject project;
-	private Manifest manifest;
+	private String symbolicName;
 	private boolean block;
 
 	@Override
@@ -44,9 +44,11 @@ public class DeleteLibraryRefactoringParticipant extends DeleteParticipant {
 						.isPrefixOf(resource.getFullPath())) {
 			block = true;
 			// block deletion of library contents (library itself can be deleted)
-			if (resource instanceof final IFolder folder && folder.getFullPath().segmentCount() == 3) {
-				manifest = ManifestHelper.getContainerManifest(folder);
-				block = manifest == null || !ManifestHelper.isLibrary(manifest); // don't block if it is a valid library
+			if (resource instanceof final IFolder folder && folder.getFullPath().segmentCount() == 3
+					&& folder.isLinked()) {
+				block = false;
+				symbolicName = getSymbolicName(folder);
+
 			}
 
 			return true;
@@ -72,9 +74,20 @@ public class DeleteLibraryRefactoringParticipant extends DeleteParticipant {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		if (block) {
+		if (block || symbolicName == null) {
 			return null;
 		}
-		return new DeleteLibraryDependencyChange(project, manifest.getProduct().getSymbolicName());
+
+		return new DeleteLibraryDependencyChange(project, symbolicName);
+	}
+
+	private static String getSymbolicName(final IFolder folder) {
+		final Manifest manifest = ManifestHelper.getContainerManifest(folder);
+		if (manifest != null && ManifestHelper.isLibrary(manifest) && manifest.getProduct() != null
+				&& manifest.getProduct().getSymbolicName() != null) {
+			return manifest.getProduct().getSymbolicName();
+		}
+		return folder.getName();
+
 	}
 }
