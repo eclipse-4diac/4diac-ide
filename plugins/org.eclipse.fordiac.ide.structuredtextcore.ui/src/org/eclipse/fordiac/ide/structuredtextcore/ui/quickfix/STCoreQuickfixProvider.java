@@ -560,7 +560,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	protected void createMissingVariable(final EObject element, final VarDeclarationKind kind) {
 		if (element instanceof final STFeatureExpression expression) {
-			final ICallable callable = EcoreUtil2.getContainerOfType(expression, ICallable.class);
+			final ICallable callable = findCallable(expression);
 			final String name = getFeatureText(expression);
 			final LibraryElement type = findNonGenericType(getExpectedFeatureType(expression));
 			if (callable != null && IdentifierVerifier.verifyIdentifier(name).isEmpty()
@@ -568,6 +568,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 				createMissingVariable(callable, name, dataType, kind);
 			}
 		}
+	}
+
+	private static ICallable findCallable(final EObject object) {
+		final ICallable callable = EcoreUtil2.getContainerOfType(object, ICallable.class);
+		if (callable != null) {
+			return callable;
+		}
+		return object.eResource().getContents().stream().filter(ICallable.class::isInstance).map(ICallable.class::cast)
+				.findFirst().orElse(null);
 	}
 
 	@SuppressWarnings("static-method") // subclasses may override
