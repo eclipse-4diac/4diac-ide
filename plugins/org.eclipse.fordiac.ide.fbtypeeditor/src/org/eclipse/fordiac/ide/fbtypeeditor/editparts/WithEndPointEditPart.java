@@ -17,11 +17,15 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.model.WithPinProperty;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 
@@ -29,11 +33,24 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 
 	private FigureFollower figFollower;
 
+	private final Adapter pinAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+
+			if (LibraryElementPackage.Literals.IINTERFACE_ELEMENT__TYPE == notification.getFeature()
+					&& !notification.isTouch()) {
+				updateLineColor(getFigure());
+			}
+		}
+	};
+
 	@Override
 	public void activate() {
 		super.activate();
 		figFollower = new FigureFollower(this, getModel().getPin());
-
+		if (getModel().getPin() != null) {
+			getModel().getPin().eAdapters().add(pinAdapter);
+		}
 	}
 
 	@Override
@@ -43,6 +60,10 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 			figFollower.unhookFromRefFigure();
 			figFollower = null;
 		}
+		if (getModel().getPin() != null) {
+			getModel().getPin().eAdapters().remove(pinAdapter);
+		}
+
 	}
 
 	@Override
