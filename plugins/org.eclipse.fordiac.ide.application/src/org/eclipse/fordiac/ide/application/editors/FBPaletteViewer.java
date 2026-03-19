@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.eclipse.ui.navigator.CommonViewerSorter;
+import org.eclipse.ui.navigator.CommonViewerComparator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.INavigatorFilterService;
 import org.eclipse.ui.navigator.NavigatorContentServiceFactory;
@@ -99,7 +99,7 @@ public class FBPaletteViewer extends PaletteViewer {
 			commonViewer.addFilter(visibleFilter);
 		}
 
-		commonViewer.setSorter(new CommonViewerSorter());
+		commonViewer.setComparator(new CommonViewerComparator());
 		commonViewer.addFilter(new TypeListPatternFilter());
 
 		commonViewer.getControl().addMouseListener(new MouseListener() {
