@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.model.WithPinProperty;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -68,6 +70,13 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 
 	@Override
 	protected IFigure createFigure() {
+		final IFigure fig = (getModel().getPin() instanceof AdapterDeclaration) ? createAdapterFigure()
+				: createDefaultFigure();
+		updateLineColor(fig);
+		return fig;
+	}
+
+	private static IFigure createDefaultFigure() {
 		final IFigure fig = new Figure() {
 			@Override
 			protected void paintFigure(final Graphics graphics) {
@@ -78,8 +87,25 @@ public class WithEndPointEditPart extends AbstractConnectableEditPart {
 				graphics.drawLine(bounds.x, y, bounds.x + bounds.width, y);
 			}
 		};
-		updateLineColor(fig);
 		fig.setPreferredSize(new Dimension(-1, 2));
+		return fig;
+	}
+
+	private static IFigure createAdapterFigure() {
+		final IFigure fig = new Figure() {
+			@Override
+			protected void paintFigure(final Graphics graphics) {
+				super.paintFigure(graphics);
+				final Rectangle bounds = getBounds();
+				final int y = bounds.y + bounds.height / 2;
+				graphics.setLineWidth(HideableConnection.NORMAL_DOUBLE_LINE_WIDTH);
+				graphics.drawLine(bounds.x, y, bounds.x + bounds.width, y);
+				graphics.setLineWidth(1);
+				graphics.setForegroundColor(FigureUtilities.lighter(getForegroundColor()));
+				graphics.drawLine(bounds.x, y, bounds.x + bounds.width, y);
+			}
+		};
+		fig.setPreferredSize(new Dimension(-1, HideableConnection.NORMAL_DOUBLE_LINE_WIDTH));
 		return fig;
 	}
 
