@@ -121,7 +121,6 @@ final class ECCEditorEditDomain extends DefaultEditDomain {
 			final CreateECStateCommand createStateCommand = new CreateECStateCommand(destState, pos, getECC());
 			final CreateTransitionCommand createTransitionCommand = new CreateTransitionCommand(sourceState, destState,
 					null);
-			createTransitionCommand.setDestinationLocation(relativePoint);
 
 			final CompoundCommand compCom = new CompoundCommand();
 			compCom.add(createStateCommand);
