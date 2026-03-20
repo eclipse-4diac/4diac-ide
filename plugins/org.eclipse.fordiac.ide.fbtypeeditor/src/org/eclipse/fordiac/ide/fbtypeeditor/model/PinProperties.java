@@ -12,17 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.model;
 
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
 public record PinProperties(TypePinProperty typeProp, CommentPinProperty commentProp, WithPinProperty withProp) {
 
 	public static PinProperties createFromPin(final IInterfaceElement pin) {
-		if (pin instanceof AdapterDeclaration) {
-			// adapters do not have a with connection
-			return new PinProperties(new TypePinProperty(pin), new CommentPinProperty(pin), null);
-		}
-
 		return new PinProperties(new TypePinProperty(pin), new CommentPinProperty(pin), new WithPinProperty(pin));
 	}
 }
