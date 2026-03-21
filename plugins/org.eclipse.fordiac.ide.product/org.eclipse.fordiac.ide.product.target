@@ -17,6 +17,10 @@
 <target name="4diac IDE Target">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/cbi/updates/license/"/>
+			<unit id="org.eclipse.license.feature.group" version="0.0.0"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/releases/0.11.0/"/>
 			<unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.0.0"/>
 			<unit id="org.eclipse.elk.feature.feature.group" version="0.0.0"/>
