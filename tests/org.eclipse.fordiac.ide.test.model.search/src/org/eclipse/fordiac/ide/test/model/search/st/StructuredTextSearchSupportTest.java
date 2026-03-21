@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.search.IModelMatcher;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.search.Match;
@@ -120,7 +120,8 @@ abstract class StructuredTextSearchSupportTest {
 		result.setBaseType(type);
 		result.setInitialValue(defaultValue);
 		typeLib.addTypeEntry(new DataTypeEntryMock(result, typeLib, null));
-		new FordiacTypeResource(URI.createFileURI(name + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)).getContents()
+		FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(name + TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)).getContents()
 				.add(result);
 		return result;
 	}
@@ -130,7 +131,8 @@ abstract class StructuredTextSearchSupportTest {
 		result.setName(name);
 		result.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		typeLib.addTypeEntry(new FBTypeEntryMock(result, typeLib, null));
-		new FordiacTypeResource(URI.createFileURI(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)).getContents()
+		FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)).getContents()
 				.add(result);
 		return result;
 	}
@@ -155,7 +157,8 @@ abstract class StructuredTextSearchSupportTest {
 		result.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		result.setBody(LibraryElementFactory.eINSTANCE.createSTFunctionBody());
 		typeLib.addTypeEntry(new FBTypeEntryMock(result, typeLib, null));
-		new FordiacTypeResource(URI.createFileURI(name + TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)).getContents()
+		FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(name + TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)).getContents()
 				.add(result);
 		return result;
 	}
@@ -172,7 +175,8 @@ abstract class StructuredTextSearchSupportTest {
 		result.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		result.setECC(LibraryElementFactory.eINSTANCE.createECC());
 		typeLib.addTypeEntry(new FBTypeEntryMock(result, typeLib, null));
-		new FordiacTypeResource(URI.createFileURI(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)).getContents()
+		FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(name + TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)).getContents()
 				.add(result);
 		return result;
 	}
