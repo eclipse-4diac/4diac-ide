@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -35,7 +34,6 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	private final TypeEntry newStructTypeEntry;
 	private final String newVisibleChildren;
-	private boolean reloadDatatype = true;
 
 	public ChangeStructCommand(final BlockFBNetworkElement fb, final DataType newStruct) {
 		super(fb);
@@ -50,17 +48,6 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 
 	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct) {
 		this(mux, newStruct, getOldVisibleChildren(mux));
-	}
-
-	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final String visibleChildren,
-			final boolean doNotReload) {
-		this(mux, newStruct, visibleChildren);
-		reloadDatatype = !doNotReload;
-	}
-
-	public ChangeStructCommand(final StructManipulator mux, final DataType newStruct, final boolean doNotReload) {
-		this(mux, newStruct, getOldVisibleChildren(mux));
-		reloadDatatype = !doNotReload;
 	}
 
 	public ChangeStructCommand(final Demultiplexer demux, final String newVisibleChildren) {
@@ -139,13 +126,6 @@ public class ChangeStructCommand extends AbstractUpdateBlockFBNElementCommand {
 			return IecTypes.GenericTypes.ANY_STRUCT;
 		}
 
-		final LibraryElement type;
-		if (reloadDatatype) {
-			type = newStructTypeEntry.getTypeLibrary().getDataTypeLibrary()
-					.getType(newStructTypeEntry.getFullTypeName());
-		} else {
-			type = newStructTypeEntry.getType();
-		}
-		return (type instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
+		return (newStructTypeEntry.getType() instanceof final DataType dt) ? dt : IecTypes.GenericTypes.ANY_STRUCT;
 	}
 }
