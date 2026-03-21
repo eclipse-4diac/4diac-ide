@@ -33,7 +33,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.emf.HashMetaData;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 
 public final class LibraryElementHasher {
 	/**
@@ -88,7 +89,8 @@ public final class LibraryElementHasher {
 		sb.append(algorithm);
 		sb.append(':');
 
-		final FordiacTypeResource typeRes = new FordiacTypeResource(URI.createFileURI(TOHASH_URI));
+		final LibraryElementResource typeRes = FordiacTypeResourceFactory.INSTANCE
+				.createResource(URI.createFileURI(TOHASH_URI));
 		typeRes.getContents().add(copyForHashing(eObject));
 
 		try (OutputStream nullOut = OutputStream.nullOutputStream();

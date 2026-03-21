@@ -99,7 +99,9 @@ public final class Messages extends NLS {
 	public static String FBTImporter_POSITION_EXCEPTION;
 	public static String FBTImporter_SERVICE_INTERFACE_LEFTINTERFACE_EXCEPTION;
 	public static String FBTImporter_SERVICE_INTERFACE_RIGHTINTERFACE_EXCEPTION;
+	public static String FordiacTypeResFactory_URINoTypeFile;
 	public static String FordiacTypeResource_LoadFromUnsupportedURI;
+	public static String FordiacTypeResource_NoContentToSave;
 	public static String FordiacTypeResource_NotInWorkspace;
 	public static String FordiacTypeResource_SaveToUnsupportedURI;
 	public static String FordiacTypeResource_TypeImportError;
