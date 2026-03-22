@@ -40,6 +40,7 @@ public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 	@Override
 	protected IFigure createDragSourceFeedbackFigure() {
 		boundsHelper.updateMargins(getHost().getModel());
+		getHostFigure().validate();
 		ghostFigure = new GhostImageFigure(getHostFigure(), 2 * ModifiedMoveHandle.SELECTION_FILL_ALPHA, null);
 		addFeedback(ghostFigure);
 		return super.createDragSourceFeedbackFigure();
