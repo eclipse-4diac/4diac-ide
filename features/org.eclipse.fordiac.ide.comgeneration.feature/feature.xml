@@ -15,28 +15,18 @@
 -->
 <feature
       id="org.eclipse.fordiac.ide.comgeneration.feature"
-      label="Communication FB generation"
+      label="%featureName"
       version="3.2.0.qualifier"
-      provider-name="Eclipse 4diac"
+      provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
 
    <description>
-      Prototype tool for automatic generation of FBs used for communication between devices and resources.
+      %description
    </description>
 
    <copyright>
-      Copyright (c) 2014 - 2017 Luka Lednicki, fortiss GmbH
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-SPDX-License-Identifier: EPL-2.0 
-
-Contributors:
-Luka Lednicki, Gerd Kainz, Alois Zoitl, Monika Wenger 
-- initial API and implementation and/or initial documentation
+      %copyright
    </copyright>
 
    <license url="%licenseURL">
