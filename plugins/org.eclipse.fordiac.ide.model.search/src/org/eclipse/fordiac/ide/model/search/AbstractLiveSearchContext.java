@@ -21,16 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 public abstract class AbstractLiveSearchContext implements ISearchContext {
@@ -63,54 +54,10 @@ public abstract class AbstractLiveSearchContext implements ISearchContext {
 	 * @return
 	 */
 	private static LibraryElement getLiveType(final TypeEntry typeEntry) {
+		final LibraryElement libElement = LibraryElementProvider.INSTANCE
+				.getLibraryElement(new FileEditorInput(typeEntry.getFile()));
 
-		final IEditorPart editor = getEditor(typeEntry);
-
-		if (editor == null) {
-			return typeEntry.getType();
-		}
-
-		final LibraryElement libElement = editor.getAdapter(LibraryElement.class);
-
-		if (libElement != null) {
-			return libElement;
-		}
-
-		// this should never happen
-		FordiacLogHelper
-				.logError("It was not possible to find a type for the typeEntry: " + typeEntry.getFullTypeName()); //$NON-NLS-1$
-		return null;
-
-	}
-
-	private static IEditorPart getEditor(final TypeEntry typeEntry) {
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-
-		return Display.getDefault().syncCall(() -> {
-			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-
-			if (activeWorkbenchWindow == null) {
-				final IWorkbenchWindow[] workbenchWindows = workbench.getWorkbenchWindows();
-				if (workbench.getWorkbenchWindows().length > 0 && workbenchWindows[0].getActivePage() != null) {
-					final IWorkbenchPage activePage = workbenchWindows[0].getActivePage();
-					for (final IEditorReference ref : activePage.getEditorReferences()) {
-						try {
-							final IEditorInput editorInput = ref.getEditorInput();
-							if (editorInput instanceof final FileEditorInput fileInput
-									&& fileInput.getFile().equals(typeEntry.getFile())) {
-								return ref.getEditor(true);
-							}
-						} catch (final PartInitException e) {
-							FordiacLogHelper.logWarning("Could not open Editor for type entry in search", e); //$NON-NLS-1$
-						}
-					}
-				}
-
-				return null;
-			}
-
-			return activeWorkbenchWindow.getActivePage().findEditor(new FileEditorInput(typeEntry.getFile()));
-		});
+		return (libElement != null) ? libElement : typeEntry.getType();
 	}
 
 }
