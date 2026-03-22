@@ -64,7 +64,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 				// react to TYPE_ENTRY_FULL_TYPE_NAME_FEATURE for renamed dependencies
 				if (TypeEntry.TYPE_ENTRY_FULL_TYPE_NAME_FEATURE.equals(notification.getFeature())) {
 					Display.getDefault()
-							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
+							.asyncExec(() -> updateDependency(dependency, notification.getNewStringValue()));
 				}
 			}
 		} else {
