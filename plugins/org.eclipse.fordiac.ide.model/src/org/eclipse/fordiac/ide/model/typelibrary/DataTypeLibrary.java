@@ -50,11 +50,13 @@ public final class DataTypeLibrary {
 	private static final Pattern STRING_MAX_LENGTH_PATTERN = Pattern.compile("(W?STRING)\\[(\\d+)\\]", //$NON-NLS-1$
 			Pattern.CASE_INSENSITIVE);
 
+	private final TypeLibrary typeLibrary;
 	private final Map<String, DataType> typeMap = new ConcurrentHashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new ConcurrentHashMap<>();
 
 	/** Instantiates a new data type library. */
-	public DataTypeLibrary() {
+	public DataTypeLibrary(final TypeLibrary typeLibrary) {
+		this.typeLibrary = typeLibrary;
 		initElementaryTypes();
 		initGenericTypes();
 	}
@@ -209,6 +211,7 @@ public final class DataTypeLibrary {
 			final DataType type = entry.getType();
 			PackageNameHelper.setFullTypeName(type, typeName);
 			entry.setType(type); // update type name in entry
+			entry.setTypeLibrary(typeLibrary);
 			return entry;
 		}).getType();
 	}

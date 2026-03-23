@@ -37,7 +37,7 @@ class STFunctionValidatorPartialAccessTest {
 
 	@BeforeAll
 	def static void setup() {
-		new DataTypeLibrary
+		new DataTypeLibrary(null)
 	}
 
 	@Test
