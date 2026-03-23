@@ -52,7 +52,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
 
-	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary(null);
 
 	// create a state description that fits our purpose
 	public static class State extends CommandTestBase.StateBase {
@@ -342,7 +342,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 			@Override
 			public boolean exists() {
-				return true;  // needed that tests complete correctly
+				return true; // needed that tests complete correctly
 			}
 
 			@Override
@@ -605,8 +605,9 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
-			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description,
+			final StateInitializer<?> initializer, final StateVerifier<?> initialVerifier,
+			final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
@@ -625,7 +626,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 				State::new, //
 				(StateVerifier<State>) FBNetworkTestBase::verifyDefaultInitialValues, //
 				executionDescriptions //
-				));
+		));
 
 		return commands;
 	}

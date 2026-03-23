@@ -30,7 +30,7 @@ public class InsertVariableCommandTest extends InsertVariableCommandTestBase {
 	private static VarDeclaration createTestVarDec(final String name) {
 		final VarDeclaration varDec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDec.setName(name);
-		varDec.setType(new DataTypeLibrary().getType(FordiacKeywords.BOOL));
+		varDec.setType(new DataTypeLibrary(null).getType(FordiacKeywords.BOOL));
 		return varDec;
 	}
 

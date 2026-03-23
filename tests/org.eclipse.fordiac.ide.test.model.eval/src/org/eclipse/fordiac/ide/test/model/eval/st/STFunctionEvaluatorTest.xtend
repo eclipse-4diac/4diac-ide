@@ -28,7 +28,7 @@ import static extension org.junit.jupiter.api.Assertions.*
 class STFunctionEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
-		new DataTypeLibrary
+		new DataTypeLibrary(null)
 		GlobalConstantsStandaloneSetup.doSetup
 		STFunctionStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register

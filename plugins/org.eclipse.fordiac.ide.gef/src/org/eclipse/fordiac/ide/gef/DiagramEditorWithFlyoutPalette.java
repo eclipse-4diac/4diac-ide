@@ -501,8 +501,11 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		super.selectionChanged(part, selection);
-		updateActions(getSelectionActions());
+		// If not the active editor, ignore selection changed.
+		if (getSite() != null && getSite().getPage() != null && this.equals(getSite().getPage().getActiveEditor())) {
+			super.selectionChanged(part, selection);
+			updateActions(getSelectionActions());
+		}
 	}
 
 	/**
