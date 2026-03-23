@@ -93,11 +93,7 @@
                     	<instanceof value="org.eclipse.core.resources.IProject" />
 					</or>
 				</parentExpression>
-			</commonSorter>    
-			<dragAssistant
-		    	class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDragAssistant"
-		    	viewerId="org.eclipse.fordiac.ide.hierarchymanager.view">
-		    </dragAssistant>
+			</commonSorter>
 			<dropAssistant
 		        	class="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant"
 		    		id="org.eclipse.fordiac.ide.hierarchymanager.ui.listeners.HierarchyManagerDropAssistant">
