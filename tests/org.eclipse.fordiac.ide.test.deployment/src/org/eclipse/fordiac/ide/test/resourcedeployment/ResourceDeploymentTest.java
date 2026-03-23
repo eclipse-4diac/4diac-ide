@@ -103,7 +103,7 @@ class ResourceDeploymentTest {
 
 	@SuppressWarnings("unused")
 	private static void setup() {
-		new DataTypeLibrary();
+		new DataTypeLibrary(null);
 		GlobalConstantsStandaloneSetup.doSetup();
 		STFunctionStandaloneSetup.doSetup();
 		STAlgorithmStandaloneSetup.doSetup();

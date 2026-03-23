@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class CreateMemberVariableCommandTestBase
 		extends CommandTestBase<CreateMemberVariableCommandTestBase.State> {
-	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary();
+	protected static DataTypeLibrary datatypeLib = new DataTypeLibrary(null);
 
 	// create a state description that holds the struct and the command
 	public static class State extends CommandTestBase.StateBase {
@@ -41,7 +41,7 @@ public abstract class CreateMemberVariableCommandTestBase
 			// TODO add user-defined datatypes to datatype library for testing
 		}
 
-		public State(State s) {
+		public State(final State s) {
 			struct = EcoreUtil.copy(s.struct);
 		}
 
@@ -51,22 +51,22 @@ public abstract class CreateMemberVariableCommandTestBase
 		}
 	}
 
-	protected static Collection<Arguments> describeCommand(String description, StateInitializer<?> initializer,
-			StateVerifier<?> initialVerifier, List<ExecutionDescription<?>> commands) {
+	protected static Collection<Arguments> describeCommand(final String description, final StateInitializer<?> initializer,
+			final StateVerifier<?> initialVerifier, final List<ExecutionDescription<?>> commands) {
 		return describeCommand(description, initializer, initialVerifier, commands, CommandTestBase::defaultUndoCommand,
 				CommandTestBase::defaultRedoCommand);
 	}
 
-	protected static void verifyDefaultInitialValues(State state, State oldState, TestFunction t) {
+	protected static void verifyDefaultInitialValues(final State state, final State oldState, final TestFunction t) {
 		t.test(state.getStructuredType());
 		t.test(state.getStructuredType().getMemberVariables().isEmpty());
 	}
 
 	// define here the list of test sequences
 	// multiple execution descriptions are possible -> define in test class
-	protected static Collection<Arguments> createCommands(List<ExecutionDescription<?>> autofilledExecutionDescriptions,
-			List<ExecutionDescription<?>> configuredExecutionDescriptions) {
-		Collection<Arguments> commands = new ArrayList<>();
+	protected static Collection<Arguments> createCommands(final List<ExecutionDescription<?>> autofilledExecutionDescriptions,
+			final List<ExecutionDescription<?>> configuredExecutionDescriptions) {
+		final Collection<Arguments> commands = new ArrayList<>();
 		// test series 1
 		commands.addAll(describeCommand("Autofilled Command", // //$NON-NLS-1$
 				State::new, //
