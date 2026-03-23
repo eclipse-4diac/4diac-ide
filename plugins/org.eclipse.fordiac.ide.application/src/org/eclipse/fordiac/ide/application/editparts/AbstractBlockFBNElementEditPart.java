@@ -260,12 +260,21 @@ public abstract class AbstractBlockFBNElementEditPart extends AbstractPositionab
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		switch (childEditPart) {
-		case final InterfaceEditPart interfaceEditPart ->
-			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		case final InterfaceEditPart interfaceEditPart -> addInterfaceElementFigure(child, interfaceEditPart);
 		case final HiddenPinIndicatorEditPart hiddenPinIndicatorEditPart ->
 			addPinIndicatorFigure(hiddenPinIndicatorEditPart, child);
 		case final MappingEditPart mapping -> addMappingFigure(child);
 		default -> getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		}
+	}
+
+	private void addInterfaceElementFigure(final IFigure child, final InterfaceEditPart interfaceEditPart) {
+		final int targetIndex = getInterfaceElementIndex(interfaceEditPart);
+		final IFigure targetFigure = getTargetFigure(interfaceEditPart);
+		if (targetIndex < targetFigure.getChildren().size()) {
+			targetFigure.add(child, targetIndex);
+		} else {
+			targetFigure.add(child);
 		}
 	}
 

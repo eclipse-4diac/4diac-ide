@@ -80,7 +80,7 @@ public final class TypeLibrary extends ConcurrentNotifierImpl {
 
 	private IProject project;
 	private Buildpath buildpath;
-	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
+	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary(this);
 	private final Map<String, AdapterTypeEntry> adapterTypes = new ConcurrentHashMap<>();
 	private final Map<String, AttributeTypeEntry> attributeTypes = new ConcurrentHashMap<>();
 	private final Map<String, DeviceTypeEntry> deviceTypes = new ConcurrentHashMap<>();
