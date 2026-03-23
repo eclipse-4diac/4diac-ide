@@ -23,10 +23,13 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -36,11 +39,11 @@ import org.eclipse.fordiac.ide.model.ui.annotation.FordiacMarkerGraphicalAnnotat
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
 import org.eclipse.fordiac.ide.model.ui.validation.ValidationJob;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.progress.UIJob;
 
 public class FileLibraryElementProvider
 		extends AbstractLibraryElementProvider<FileLibraryElementProvider.FileLibraryElementInfo> {
@@ -234,7 +237,12 @@ public class FileLibraryElementProvider
 			if (delta.getResource() instanceof final IFile file) {
 				final FileLibraryElementInfo info = getLibraryElementInfo(new FileEditorInput(file));
 				if (info != null && (IResourceDelta.CONTENT & delta.getFlags()) != 0) {
-					Display.getDefault().asyncExec(() -> handleLibraryElementContentChanged(info));
+					final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_RefreshJobName, file.getName()), monitor -> {
+						handleLibraryElementContentChanged(info);
+					});
+					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+					job.setPriority(Job.INTERACTIVE);
+					job.schedule();
 				}
 			}
 		}
@@ -245,10 +253,19 @@ public class FileLibraryElementProvider
 				if (info != null) {
 					if ((IResourceDelta.MOVED_TO & delta.getFlags()) != 0) {
 						final IFile newFile = file.getWorkspace().getRoot().getFile(delta.getMovedToPath());
-						Display.getDefault()
-								.asyncExec(() -> handleLibraryElementMoved(info, new FileEditorInput(newFile)));
+						final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_MoveJobName, file.getName()), monitor -> {
+							handleLibraryElementMoved(info, new FileEditorInput(newFile));
+						});
+						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+						job.setPriority(Job.INTERACTIVE);
+						job.schedule();
 					} else {
-						Display.getDefault().asyncExec(() -> handleLibraryElementDeleted(info));
+						final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_DeleteJobName, file.getName()), monitor -> {
+							handleLibraryElementDeleted(info);
+						});
+						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+						job.setPriority(Job.INTERACTIVE);
+						job.schedule();
 					}
 				}
 			}
