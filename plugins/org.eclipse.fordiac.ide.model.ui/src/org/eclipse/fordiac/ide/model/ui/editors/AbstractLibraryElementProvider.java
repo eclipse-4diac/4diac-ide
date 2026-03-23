@@ -303,6 +303,7 @@ public abstract class AbstractLibraryElementProvider<T extends AbstractLibraryEl
 		protected void dispose() {
 			libraryElement = null;
 			undoContext = new UndoContext();
+			updater.setLibraryElement(null);
 		}
 
 		protected boolean isDirty() {
