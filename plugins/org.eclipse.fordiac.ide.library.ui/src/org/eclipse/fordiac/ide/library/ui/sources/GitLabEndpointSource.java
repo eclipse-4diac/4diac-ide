@@ -17,9 +17,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -92,13 +95,16 @@ public final class GitLabEndpointSource implements ILibrarySource, IDisposable {
 	private static LibraryTreeNode createProjectNode(final Project project, final List<Package> packages,
 			final Map<String, List<LeafNode>> packagesAndLeaves) {
 		final LibraryTreeNode projectNode = new LibraryTreeNode(project, project.name());
-		packages.stream().sorted(Comparator.comparing(Package::name)).forEach(pack -> {
-			final LibraryTreeNode packageNode = new LibraryTreeNode(pack, pack.name());
-			packagesAndLeaves.getOrDefault(pack.name(), List.of()).stream()
-					.sorted(Comparator.comparing(LeafNode::getVersion))
-					.forEach(leaf -> packageNode.addChild(new LibraryTreeNode(leaf, leaf.getVersion())));
-			projectNode.addChild(packageNode);
-		});
+		packages.stream().sorted(Comparator.comparing(Package::name))
+				.collect(Collectors.toMap(Package::name, Function.identity(), (first, ignored) -> first,
+						LinkedHashMap::new))
+				.values().forEach(pack -> {
+					final LibraryTreeNode packageNode = new LibraryTreeNode(pack, pack.name());
+					packagesAndLeaves.getOrDefault(pack.name(), List.of()).stream()
+							.sorted(Comparator.comparing(LeafNode::getVersion))
+							.forEach(leaf -> packageNode.addChild(new LibraryTreeNode(leaf, leaf.getVersion())));
+					projectNode.addChild(packageNode);
+				});
 		return projectNode;
 	}
 
