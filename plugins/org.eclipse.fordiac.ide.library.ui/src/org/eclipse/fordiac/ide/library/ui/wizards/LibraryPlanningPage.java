@@ -21,7 +21,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
+import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryDescriptorNode.LibraryDescriptorLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
@@ -45,12 +48,14 @@ public class LibraryPlanningPage extends WizardPage {
 
 	private TreeViewer treeViewer;
 	private final IProject project;
-	private final Map<String, List<String>> versionLookup;
+	private final Map<String, List<String>> localVersionLookup;
+	private final Map<String, List<String>> remoteVersionLookup;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
 		super(pageName);
 		this.project = project;
-		this.versionLookup = new HashMap<>();
+		this.localVersionLookup = new HashMap<>();
+		this.remoteVersionLookup = new HashMap<>();
 	}
 
 	@Override
@@ -148,7 +153,6 @@ public class LibraryPlanningPage extends WizardPage {
 
 		final TreeViewerColumn actionColumn = createColumn(Messages.LibraryPlanningPage_Action,
 				new LibraryDescriptorNode.ActionLabelProvider());
-
 		layout.setColumnData(actionColumn.getColumn(), new ColumnWeightData(20));
 
 		actionColumn.setEditingSupport(new EditingSupport(treeViewer) {
@@ -191,7 +195,10 @@ public class LibraryPlanningPage extends WizardPage {
 			}
 
 			private List<String> getAvailableVersions(final LibraryDescriptorNode node) {
-				return versionLookup.getOrDefault(node.getName(), Collections.emptyList());
+				return Stream
+						.concat(localVersionLookup.getOrDefault(node.getName(), Collections.emptyList()).stream(),
+								remoteVersionLookup.getOrDefault(node.getName(), Collections.emptyList()).stream())
+						.distinct().toList();
 			}
 
 			private List<String> getAvailableActionStrings(final LibraryDescriptorNode node) {
@@ -212,17 +219,38 @@ public class LibraryPlanningPage extends WizardPage {
 	private void initVersionLookup() {
 		// Get available standard libs
 		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME))
-				.forEach(i -> versionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
+				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
 						.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(i.symbolicName()).map(Version::toString)
 								.toList()));
 
 		// Get available external libs
 		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME))
-				.forEach(i -> versionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
+				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
 						.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(i.symbolicName()).map(Version::toString)
 								.toList()));
 
-		// TODO download available versions
+		// Get available remote Versions
+		initRemoteVersionLookup();
+
+	}
+
+	private void initRemoteVersionLookup() {
+		final GitLabDownloader downloader = new GitLabDownloader();
+		downloader.convertEndpointsToDownloader().stream().forEach(d -> {
+			if (d.isActive()) {
+				final DownloadResult<Void> fetch = downloader.fetchProjectsAndPackages();
+				if (fetch.status() == DownloadResult.Status.OK) {
+					final Map<String, List<LeafNode>> packagesAndLeaves = downloader.getPackagesAndLeaves();
+
+					for (final String symbolicName : localVersionLookup.keySet()) {
+						packagesAndLeaves.getOrDefault(symbolicName, Collections.emptyList()).stream()
+								.map(LeafNode::getVersion).forEach(v -> remoteVersionLookup
+										.computeIfAbsent(symbolicName, s -> new ArrayList<>()).add(v));
+					}
+
+				}
+			}
+		});
 	}
 
 	private TreeViewerColumn createColumn(final String name, final CellLabelProvider labelProvider) {
