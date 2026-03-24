@@ -29,8 +29,10 @@ import org.eclipse.fordiac.ide.deployment.debug.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.debug.ui.breakpoint.DeploymentWatchpointUtil;
 import org.eclipse.fordiac.ide.deployment.debug.watch.ISubContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -88,7 +90,14 @@ public class ToggleWatchSubElementsHandler extends AbstractHandler implements IE
 	}
 
 	private static boolean isValidWatch(final ISubContainerWatch watch) {
-		return watch.getWatchedElement() instanceof SubApp || watch.getWatchedElement() instanceof CFBInstance;
+		return switch (watch.getWatchedElement()) {
+		case final SubApp subApp -> true;
+		case final CFBInstance cfb -> true;
+		case final BlockFBNetworkElement bfbne when bfbne.getTypeEntry() != null
+				&& LibraryElementPackage.Literals.BASE_FB_TYPE.isSuperTypeOf(bfbne.getTypeEntry().getTypeEClass()) ->
+			true;
+		default -> false;
+		};
 	}
 
 	@Override
