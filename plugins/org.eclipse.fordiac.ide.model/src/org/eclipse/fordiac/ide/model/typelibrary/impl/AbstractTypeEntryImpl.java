@@ -362,7 +362,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			retval.setTypeEntry(this);
 			return retval;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+			handleLoadException(e);
 			return null;
 		} finally {
 			loading = false;
@@ -640,7 +640,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 						return foundTypeName;
 					}
 				} catch (final Exception e) {
-					FordiacLogHelper.logWarning(e.getMessage(), e);
+					handleLoadException(e);
 				}
 			}
 			return TypeEntry.getTypeNameFromFile(cachedFile);
@@ -656,10 +656,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 					return CommonElementImporter.fullyUnEscapeValue(scanner.match().group(1));
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				handleLoadException(e);
 			}
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	protected void handleLoadException(final Exception e) {
+		// suppress logging of core exceptions (e.g., resource not found)
+		if (e instanceof CoreException || e.getCause() instanceof CoreException) {
+			return;
+		}
+		FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected static NotificationChain chainNotification(final NotificationChain notifications,

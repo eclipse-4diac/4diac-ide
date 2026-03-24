@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends AbstractCheckedTypeEntryImpl<T>
 		implements InterfaceTypeEntry {
@@ -178,7 +177,7 @@ public abstract class AbstractInterfaceTypeEntryImpl<T extends FBType> extends A
 			updateInterfaceDependencies(importer.getDependencies());
 			return interfaceType;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+			handleLoadException(e);
 			return null;
 		}
 	}
