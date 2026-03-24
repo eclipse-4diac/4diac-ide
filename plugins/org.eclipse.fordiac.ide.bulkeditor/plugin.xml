@@ -29,9 +29,12 @@
             label="Open in Bulk Editor">
             <visibleWhen>
 			  	<with variable="selection">
-			    	<iterate operator="and">
+			    	<iterate operator="and" ifEmpty="false">
 			      		<or>
-			        		<instanceof value="org.eclipse.core.resources.IProject"/>
+			        		<and>
+                                <instanceof value="org.eclipse.core.resources.IProject"/>
+                                <test property="org.eclipse.core.resources.open" value="true"/>
+                            </and>
 			        		<instanceof value="org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp"/>
 			      		</or>
 			    	</iterate>
