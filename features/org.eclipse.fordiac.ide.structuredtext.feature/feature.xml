@@ -15,29 +15,23 @@
 -->
 <feature
       id="org.eclipse.fordiac.ide.structuredtext.feature"
-      label="Structured Text Feature"
+      label="%featureName"
       version="3.2.0.qualifier"
-      provider-name="Eclipse 4diac"
+      provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
 
    <description>
-      This feature provides support for IEC 61131-3 Structured Text.
+      %description
    </description>
 
    <copyright>
-      Copyright (c) 2022 Martin Erich Jobst
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-SPDX-License-Identifier: EPL-2.0 
-
-Contributors:
-Martin Jobst
-- initial API and implementation and/or initial documentation
+      %copyright
    </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
 
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature" version="2.0" match="greaterOrEqual"/>
