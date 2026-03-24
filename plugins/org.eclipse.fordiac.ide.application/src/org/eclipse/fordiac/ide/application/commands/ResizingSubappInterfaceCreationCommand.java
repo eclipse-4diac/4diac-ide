@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.application.commands;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
-import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -126,9 +125,10 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 		final int expandedIOHeight = subAppEP.getFigure().getExpandedIOHeight();
 		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subAppEP.getContentEP());
 		if (containerBounds.height < expandedIOHeight) {
-			containerBounds.height = expandedIOHeight;
-			changeSubappHeightCmd = FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(subAppEP.getModel(),
-					containerBounds);
+			final Rectangle newContentBounds = containerBounds.getCopy();
+			newContentBounds.height = expandedIOHeight;
+			changeSubappHeightCmd = ResizeGroupOrSubappCommand.createChangeBoundsCommand(subAppEP.getModel(),
+					containerBounds, newContentBounds);
 			changeSubappHeightCmd.execute();
 		}
 	}

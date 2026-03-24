@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
@@ -32,11 +33,15 @@ import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.QualNameAffectedCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
@@ -154,15 +159,13 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		if (containerEP instanceof final AbstractContainerContentEditPart abstractContainerContentEditPart) {
 			final List<FBNetworkElement> children = abstractContainerContentEditPart.getModel().getNetworkElements();
 
-			final Rectangle fbBounds = getFBBounds(children);
-			final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
+			final Rectangle fbBounds = getAbsoluteFBBounds(containerEP, children);
+			final Rectangle containerBounds = getAbsoluteContainerBounds(containerEP);
 			if (fbBounds != null && !containerBounds.contains(fbBounds)) {
 				fbBounds.union(containerBounds);
 				final FBNetworkElement container = getContainer(containerEP);
 				if (container != null) {
-					return createChangeBoundsCommand(container,
-							((GraphicalEditPart) containerEP.getParent()).getFigure().getBounds(), containerBounds,
-							fbBounds);
+					return createChangeBoundsCommand(container, containerBounds, fbBounds);
 				}
 			}
 		}
@@ -183,20 +186,40 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 					+ subappFigure.getInsets().right;
 			if (fullContainerBounds.width < newFig1.width) {
 				final FBNetworkElement container = getSubappContainer(fullContentGraphicalEditPart);
-				return createChangeBoundsCommand(container, subappFigure.getBounds(), fullContainerBounds, newFig1);
+				return createChangeBoundsCommand(container, fullContainerBounds, newFig1);
 			}
 		}
 		return null;
 	}
 
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
-			final Rectangle curBounds, final Rectangle contentContainerBounds, final Rectangle contentBounds) {
-		final Rectangle newBounds = curBounds.getCopy();
-		newBounds.x += contentBounds.x - contentContainerBounds.x;
-		newBounds.y += contentBounds.y - contentContainerBounds.y;
-		newBounds.width += contentBounds.width - contentContainerBounds.width;
-		newBounds.height += contentBounds.height - contentContainerBounds.height;
-		return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, newBounds);
+			final Rectangle oldBounds, final Rectangle newBounds) {
+		final Rectangle currentBounds = getCurrentBounds(container);
+		if (currentBounds == null) {
+			return null;
+		}
+		currentBounds.x += newBounds.x - oldBounds.x;
+		currentBounds.y += newBounds.y - oldBounds.y;
+		currentBounds.width += newBounds.width - oldBounds.width;
+		currentBounds.height += newBounds.height - oldBounds.height;
+		return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, currentBounds);
+	}
+
+	private static Rectangle getCurrentBounds(final FBNetworkElement container) {
+		return switch (container) {
+		case final Group group ->
+			createBounds(group.getPosition().toScreenPoint(), group.getWidth(), group.getHeight());
+		case final SubApp subApp ->
+			createBounds(subApp.getPosition().toScreenPoint(), subApp.getWidth(), subApp.getHeight());
+		case final Comment comment ->
+			createBounds(comment.getPosition().toScreenPoint(), comment.getWidth(), comment.getHeight());
+		default -> null;
+		};
+	}
+
+	private static Rectangle createBounds(final Point position, final double width, final double height) {
+		return new Rectangle(position.x, position.y, CoordinateConverter.INSTANCE.iec61499ToScreen(width),
+				CoordinateConverter.INSTANCE.iec61499ToScreen(height));
 	}
 
 	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
@@ -241,6 +264,22 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			addValueBounds(fbBounds, fbe, editPartRegistry);
 		}
 		return fbBounds;
+	}
+
+	private Rectangle getAbsoluteFBBounds(final GraphicalEditPart containerEP, final List<FBNetworkElement> children) {
+		final Rectangle fbBounds = getFBBounds(children);
+		if (fbBounds != null) {
+			containerEP.getFigure().translateToAbsolute(fbBounds);
+		}
+		return fbBounds;
+	}
+
+	private static Rectangle getAbsoluteContainerBounds(final GraphicalEditPart containerEP) {
+		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
+		if (containerEP.getParent() instanceof final GraphicalEditPart parentEP) {
+			parentEP.getFigure().translateToAbsolute(containerBounds);
+		}
+		return containerBounds;
 	}
 
 	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
