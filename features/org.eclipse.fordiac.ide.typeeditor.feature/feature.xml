@@ -15,30 +15,23 @@
 -->
 <feature
       id="org.eclipse.fordiac.ide.typeeditor.feature"
-      label="Function Block Type Editor"
+      label="%featureName"
       version="3.2.0.qualifier"
-      provider-name="Eclipse 4diac"
+      provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
 
    <description>
-      This feature contains the function block type editing functionality of 4diac IDE.
+      %description
    </description>
 
    <copyright>
-      Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-SPDX-License-Identifier: EPL-2.0 
-
-Contributors:
-Gerhard Ebenhofer, Gerd Kainz, Alois Zoitl, Ingo Hegny, Waldemar
-Eisenmenger, Monika Wenger 
-- initial API and implementation and/or initial documentation
+      %copyright
    </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
 
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
