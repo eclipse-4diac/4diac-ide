@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Prankur Agarwal - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - Added moving of node with same parent
  *******************************************************************************/
 package org.eclipse.fordiac.ide.hierarchymanager.ui.operations;
 
@@ -17,6 +18,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.hierarchymanager.model.hierarchy.Level;
@@ -29,7 +31,8 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 	private EObject parent;
 	private final EObject newParent;
 	private int index;
-	private final int targetIndex;
+	private int targetIndex;
+	private boolean sameParent;
 
 	public MoveNodeOperation(final EObject newParent, final Node node, final int targetIndex) {
 		super("Move Node");
@@ -42,71 +45,64 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 	public IStatus execute(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
 		parent = node.eContainer();
 		index = getParentIndex();
-		removeFromParent();
-		addToNewParent();
-		saveHierarchy(parent, monitor);
-		return Status.OK_STATUS;
+		sameParent = parent == newParent;
+
+		if (sameParent && index < targetIndex) {
+			targetIndex--;
+		}
+		return performMove(monitor);
 	}
 
 	@Override
 	public IStatus redo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		removeFromParent();
-		addToNewParent();
+		return performMove(monitor);
+	}
+
+	private IStatus performMove(final IProgressMonitor monitor) {
+		if (sameParent) {
+			move(targetIndex, index);
+		} else {
+			moveToContainer(newParent, node, targetIndex);
+		}
 		saveHierarchy(parent, monitor);
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus undo(final IProgressMonitor monitor, final IAdaptable info) throws ExecutionException {
-		// for adding we can not use getParentContainer as the root node has levels and not nodes
-		removeFromNewParent();
-		if (parent instanceof final RootLevel root) {
-			root.getLevels().add(index, (Level) node);
-		}
-		if (parent instanceof final Level level) {
-			level.getChildren().add(index, node);
+		if (sameParent) {
+			move(index, targetIndex);
+		} else {
+			moveToContainer(parent, node, index);
 		}
 		saveHierarchy(parent, monitor);
 		return Status.OK_STATUS;
 	}
 
+	private void move(final int target, final int current) {
+		final EList<? extends Node> parentContainer = getParentContainer();
+		parentContainer.move(target, current);
+	}
+
+	private static void moveToContainer(final EObject container, final Node targetNode, final int targetIdx) {
+		if (container instanceof final Level level) {
+			if (targetIdx == -1) {
+				level.getChildren().add(targetNode);
+			} else {
+				level.getChildren().add(targetIdx, targetNode);
+			}
+		} else if (container instanceof final RootLevel rootLevel && targetNode instanceof final Level targetLevel) {
+			if (targetIdx == -1) {
+				rootLevel.getLevels().add(targetLevel);
+			} else {
+				rootLevel.getLevels().add(targetIdx, targetLevel);
+			}
+		}
+	}
+
 	private int getParentIndex() {
 		final EList<? extends Node> parentContainer = getParentContainer();
-		if (parentContainer != null) {
-			return parentContainer.indexOf(node);
-		}
-		return -1;
-	}
-
-	private void removeFromParent() {
-		final EList<? extends Node> parentContainer = getParentContainer();
-		if (parentContainer != null && index != -1) {
-			parentContainer.remove(index);
-		}
-	}
-
-	private void addToNewParent() {
-		if (newParent instanceof final Level level) {
-			if (targetIndex == -1) {
-				level.getChildren().add(node);
-			} else {
-				level.getChildren().add(targetIndex, node);
-			}
-		} else if (newParent instanceof final RootLevel rootLevel) {
-			if (targetIndex == -1) {
-				rootLevel.getLevels().get(index).getChildren().add(node);
-			} else {
-				rootLevel.getLevels().get(index).getChildren().add(targetIndex, node);
-			}
-		}
-	}
-
-	private void removeFromNewParent() {
-		if (newParent instanceof final Level level) {
-			level.getChildren().remove(node);
-		} else if (newParent instanceof final RootLevel rootLevel) {
-			rootLevel.getLevels().get(index).getChildren().remove(node);
-		}
+		return parentContainer.indexOf(node);
 	}
 
 	private EList<? extends Node> getParentContainer() {
@@ -116,7 +112,6 @@ public class MoveNodeOperation extends AbstractChangeHierarchyOperation {
 		if (parent instanceof final Level level) {
 			return level.getChildren();
 		}
-		return null;
+		return ECollections.emptyEList();
 	}
-
 }
