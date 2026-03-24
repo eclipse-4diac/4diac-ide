@@ -73,6 +73,9 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	}
 
 	public void updateDependency(final TypeEntry dependency, final String fullTypeName) {
+		if (libraryElement == null) {
+			return;
+		}
 		final TypeLibrary typeLibrary = libraryElement.getTypeLibrary();
 		if (typeLibrary == null) {
 			return;
