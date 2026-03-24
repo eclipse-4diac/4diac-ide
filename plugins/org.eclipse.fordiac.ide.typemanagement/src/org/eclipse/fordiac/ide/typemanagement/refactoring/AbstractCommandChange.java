@@ -89,6 +89,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final void initializeValidationData(final IProgressMonitor pm) {
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 		initializeEditor();
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
@@ -110,6 +113,9 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final RefactoringStatus isValid(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 		final RefactoringStatus status = new RefactoringStatus();
 		final LibraryElement libraryElement = acquireLibraryElement(false);
 		final T element = getElement(libraryElement);
@@ -136,20 +142,19 @@ public abstract class AbstractCommandChange<T extends EObject> extends Composite
 	 */
 	@Override
 	public final Change perform(final IProgressMonitor pm) throws CoreException {
-		if (performInUIThread() && Display.getCurrent() == null) {
-			final Change[] change = new Change[1];
-			final CoreException[] coreException = new CoreException[1];
-			Display.getDefault().syncExec(() -> {
-				try {
-					change[0] = doPerform(pm);
-				} catch (final CoreException e) {
-					coreException[0] = e;
-				}
-			});
-			if (coreException[0] != null) {
-				throw coreException[0];
+		if (pm.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+
+		if (performInUIThread()) {
+			if (Display.getCurrent() == null) {
+				return Display.getDefault().syncCall(() -> doPerform(pm));
 			}
-			return change[0];
+
+			// process outstanding UI/dependency updates if in UI thread
+			while (Display.getCurrent().readAndDispatch()) {
+				// read and dispatch events
+			}
 		}
 		return doPerform(pm);
 	}
