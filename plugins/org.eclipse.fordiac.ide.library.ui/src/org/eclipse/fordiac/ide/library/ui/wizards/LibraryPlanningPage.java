@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryDescriptorNode.LibraryDescriptorLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -231,11 +232,11 @@ public class LibraryPlanningPage extends WizardPage {
 
 		// Get available remote Versions
 		initRemoteVersionLookup();
-
 	}
 
 	private void initRemoteVersionLookup() {
 		final GitLabDownloader downloader = new GitLabDownloader();
+		final StringBuilder message = new StringBuilder();
 		downloader.convertEndpointsToDownloader().stream().forEach(d -> {
 			if (d.isActive()) {
 				final DownloadResult<Void> fetch = downloader.fetchProjectsAndPackages();
@@ -247,10 +248,14 @@ public class LibraryPlanningPage extends WizardPage {
 								.map(LeafNode::getVersion).forEach(v -> remoteVersionLookup
 										.computeIfAbsent(symbolicName, s -> new ArrayList<>()).add(v));
 					}
-
+				} else {
+					message.append(fetch.message());
 				}
 			}
 		});
+		if (!message.isEmpty()) {
+			setMessage(message.toString(), IMessageProvider.WARNING);
+		}
 	}
 
 	private TreeViewerColumn createColumn(final String name, final CellLabelProvider labelProvider) {
