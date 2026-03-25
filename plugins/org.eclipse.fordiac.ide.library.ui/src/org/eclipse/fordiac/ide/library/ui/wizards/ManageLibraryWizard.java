@@ -18,19 +18,22 @@ import org.eclipse.jface.wizard.Wizard;
 public class ManageLibraryWizard extends Wizard {
 
 	private final IProject project;
+	private final LibraryPlanningPage planningPage;
 
 	public ManageLibraryWizard(final IProject project) {
 		this.project = project;
+		this.planningPage = new LibraryPlanningPage("Plan Libraries", project);
 	}
 
 	@Override
 	public boolean performFinish() {
+		// TODO apply changes after validation
 		return false;
 	}
 
 	@Override
 	public void addPages() {
-		addPage(new LibraryPlanningPage("Plan Libraries", project));
+		addPage(planningPage);
 		super.addPages();
 	}
 
