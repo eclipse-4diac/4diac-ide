@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.library.ui.wizards;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.osgi.framework.Version;
 
 public class LibraryChangeAction {
@@ -32,11 +33,9 @@ public class LibraryChangeAction {
 
 	public static LibraryChangeAction createAction(final LibraryDescriptorNode node, final String targetVersion) {
 		final int result = new VersionComparator().compare(node.getActiveVersion(), targetVersion);
-
 		if (result == 0) {
 			return emptyAction;
 		}
-
 		return result < 0 ? new LibraryChangeAction(targetVersion, ActionType.UPDATE)
 				: new LibraryChangeAction(targetVersion, ActionType.DOWNGRADE);
 	}
@@ -63,18 +62,22 @@ public class LibraryChangeAction {
 	}
 
 	public static String getActionText(final LibraryChangeAction action) {
+		if (action == null) {
+			return ""; //$NON-NLS-1$
+		}
+
 		return switch (action.getType()) {
 		case REMOVE: {
-			yield "Remove Library"; //$NON-NLS-1$
+			yield Messages.LibraryChangeAction_Remove;
 		}
 		case UPDATE: {
-			yield MessageFormat.format("{0} (update)", action.getTargetVersion()); //$NON-NLS-1$
+			yield MessageFormat.format(Messages.LibraryChangeAction_Update, action.getTargetVersion());
 		}
 		case DOWNGRADE: {
-			yield MessageFormat.format("{0} (downgrade)", action.getTargetVersion()); //$NON-NLS-1$
+			yield MessageFormat.format(Messages.LibraryChangeAction_Downgrade, action.getTargetVersion());
 		}
 		case EMPTY: {
-			yield "select action ..";//$NON-NLS-1$
+			yield Messages.LibraryChangeAction_Empty + " ..";//$NON-NLS-1$
 		}
 		default:
 			yield ""; //$NON-NLS-1$

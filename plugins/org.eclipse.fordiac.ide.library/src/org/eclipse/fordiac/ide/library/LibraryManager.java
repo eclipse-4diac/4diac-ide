@@ -542,7 +542,8 @@ public enum LibraryManager {
 					errors.append(" | "); //$NON-NLS-1$
 					errors.append(downloader.getName());
 					errors.append(": "); //$NON-NLS-1$
-					errors.append(symbolicName + " ");
+					errors.append(symbolicName);
+					errors.append(" "); //$NON-NLS-1$
 					errors.append(dlResult.message());
 				}
 			} catch (final IOException e) {
@@ -682,6 +683,39 @@ public enum LibraryManager {
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
 			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
 		}
+	}
+
+	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
+		return Stream.concat(getAvailableVersions(getExtractedLibraries(), symbolicName),
+				getAvailableVersions(getStandardLibraries(), symbolicName));
+	}
+
+	public static List<LibraryRecord> getLinkedLibraries(final IFolder root) {
+		final List<LibraryRecord> libs = new ArrayList<>();
+		try {
+			root.accept(resource -> {
+				if (resource.equals(root)) {
+					return true;
+				}
+				if (resource instanceof final IFolder libFolder) {
+					if (!libFolder.exists() || !libFolder.isLinked()) {
+						return false;
+					}
+					final Manifest manifest = ManifestHelper.getContainerManifest(libFolder);
+					if (manifest != null && manifest.getProduct() != null) {
+						libs.add(new LibraryRecord(ManifestHelper.getSymbolicName(manifest, ""), //$NON-NLS-1$
+								manifest.getProduct().getName(),
+								ManifestHelper.getVersion(manifest, Version.emptyVersion),
+								manifest.getProduct().getComment(), libFolder.getLocation().toPath(),
+								libFolder.getLocationURI()));
+					}
+				}
+				return false;
+			});
+		} catch (final CoreException e) {
+			e.printStackTrace();
+		}
+		return libs;
 	}
 
 	/**
@@ -1022,36 +1056,6 @@ public enum LibraryManager {
 	private static Stream<Version> getAvailableVersions(final Map<String, List<LibraryRecord>> lib,
 			final String symbolicName) {
 		return lib.getOrDefault(symbolicName, Collections.emptyList()).stream().map(LibraryRecord::version);
-	}
-
-	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
-		return Stream.concat(getAvailableVersions(getExtractedLibraries(), symbolicName),
-				getAvailableVersions(getStandardLibraries(), symbolicName));
-	}
-
-	public static List<LibraryRecord> getLinkedLibraries(final IFolder root) {
-		final List<LibraryRecord> libs = new ArrayList<>();
-		try {
-			root.accept(resource -> {
-				if (resource.equals(root)) {
-					return true;
-				}
-				if (resource instanceof final IFolder libFolder) {
-					if (!libFolder.exists() || !libFolder.isLinked()) {
-						return false;
-					}
-					final Manifest man = ManifestHelper.getContainerManifest(libFolder);
-					if (man != null) {
-						libs.add(new LibraryRecord(libFolder.getName(), null,
-								man.getProduct().getVersionInfo().getVersion(), null, null, null));
-					}
-				}
-				return false;
-			});
-		} catch (final CoreException e) {
-			e.printStackTrace();
-		}
-		return libs;
 	}
 
 }

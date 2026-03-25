@@ -13,16 +13,14 @@
 package org.eclipse.fordiac.ide.library.ui.wizards;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.fordiac.ide.library.ui.Messages;
 import org.eclipse.jface.wizard.Wizard;
 
 public class ManageLibraryWizard extends Wizard {
-
-	private final IProject project;
 	private final LibraryPlanningPage planningPage;
 
 	public ManageLibraryWizard(final IProject project) {
-		this.project = project;
-		this.planningPage = new LibraryPlanningPage("Plan Libraries", project);
+		this.planningPage = new LibraryPlanningPage(Messages.LibraryPlanningPage_Titel, project);
 	}
 
 	@Override
