@@ -144,15 +144,15 @@ public class LibraryPlanningPage extends WizardPage {
 
 	private void configureColumns(final TreeColumnLayout layout) {
 		final TreeViewerColumn symbolicNameColumn = createColumn(Messages.LibraryPlanningPage_SymbolicName,
-				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getName));
+				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getName, false));
 		layout.setColumnData(symbolicNameColumn.getColumn(), new ColumnWeightData(40));
 
 		final TreeViewerColumn activeVersionColumn = createColumn(Messages.LibraryPlanningPage_ActiveVersion,
-				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getActiveVersion));
+				new LibraryDescriptorLabelProvider(LibraryDescriptorNode::getActiveVersion, false));
 		layout.setColumnData(activeVersionColumn.getColumn(), new ColumnWeightData(20));
 
 		final TreeViewerColumn actionColumn = createColumn(Messages.LibraryPlanningPage_Action,
-				new LibraryDescriptorNode.ActionLabelProvider());
+				new LibraryDescriptorLabelProvider(node -> LibraryChangeAction.getActionText(node.getAction()), true));
 		layout.setColumnData(actionColumn.getColumn(), new ColumnWeightData(20));
 
 		actionColumn.setEditingSupport(new EditingSupport(treeViewer) {
@@ -172,7 +172,7 @@ public class LibraryPlanningPage extends WizardPage {
 			@Override
 			protected Object getValue(final Object element) {
 				if (element instanceof final LibraryDescriptorNode rec) {
-					return Integer.valueOf(getAvailableActions(rec).indexOf(rec.getActionType()));
+					return Integer.valueOf(getAvailableActions(rec).indexOf(rec.getAction()));
 				}
 				return Integer.valueOf(0);
 			}
