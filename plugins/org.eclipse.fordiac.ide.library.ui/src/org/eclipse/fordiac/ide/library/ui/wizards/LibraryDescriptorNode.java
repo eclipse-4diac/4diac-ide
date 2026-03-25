@@ -19,12 +19,12 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryChangeAction.ActionType;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
 
 public class LibraryDescriptorNode {
@@ -69,7 +69,7 @@ public class LibraryDescriptorNode {
 		return Collections.emptyList();
 	}
 
-	public LibraryChangeAction getActionType() {
+	public LibraryChangeAction getAction() {
 		return action;
 	}
 
@@ -77,71 +77,60 @@ public class LibraryDescriptorNode {
 		this.action = action;
 	}
 
-	public static class ActionLabelProvider extends StyledCellLabelProvider {
+	public static class LibraryDescriptorLabelProvider extends StyledCellLabelProvider {
+
+		private static final StyledString.Styler UPGRADE_DOWNGRADE_STYLER = new StyledString.Styler() {
+			@Override
+			public void applyStyles(final TextStyle textStyle) {
+				textStyle.foreground = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
+				textStyle.background = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+			}
+		};
+
+		private static final StyledString.Styler REMOVE_STYLER = new StyledString.Styler() {
+			@Override
+			public void applyStyles(final TextStyle textStyle) {
+				textStyle.foreground = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+				textStyle.background = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			}
+		};
+
+		private final Function<LibraryDescriptorNode, String> textProvider;
+		private final boolean isModifiable;
+
+		public LibraryDescriptorLabelProvider(final Function<LibraryDescriptorNode, String> textProvider,
+				final boolean isModifiable) {
+			Objects.requireNonNull(textProvider);
+			this.textProvider = textProvider;
+			this.isModifiable = isModifiable;
+		}
+
 		@Override
 		public void update(final ViewerCell cell) {
 			if (cell.getElement() instanceof final LibraryDescriptorNode node) {
 				final StyledString styled = new StyledString();
-
 				if (node.getChildren().isEmpty()) {
-					if (node.getActionType().getType() == ActionType.EMPTY) {
-						styled.append(LibraryChangeAction.getActionText(node.getActionType()),
-								StyledString.QUALIFIER_STYLER);
-					} else {
-						styled.append(LibraryChangeAction.getActionText(node.getActionType()));
-					}
+					styled.append(textProvider.apply(node), getStyler(node));
 				}
 				cell.setText(styled.getString());
 				cell.setStyleRanges(styled.getStyleRanges());
-
 				super.update(cell);
 			}
 		}
-	}
 
-	public static class LibraryDescriptorLabelProvider extends ColumnLabelProvider {
-
-		private final Function<LibraryDescriptorNode, String> textProvider;
-
-		public LibraryDescriptorLabelProvider(final Function<LibraryDescriptorNode, String> textProvider) {
-			Objects.requireNonNull(textProvider);
-			this.textProvider = textProvider;
-		}
-
-		@Override
-		public String getText(final Object element) {
-			if (element instanceof final LibraryDescriptorNode desc) {
-				return textProvider.apply(desc);
+		protected Styler getStyler(final LibraryDescriptorNode node) {
+			final ActionType type = node.getAction().getType();
+			if (type == ActionType.EMPTY && isModifiable) {
+				return StyledString.QUALIFIER_STYLER;
 			}
-			return ""; //$NON-NLS-1$
-		}
 
-		@Override
-		public Color getBackground(final Object element) {
-			if (element instanceof final LibraryDescriptorNode desc) {
-				if (desc.getActionType().getType() == ActionType.REMOVE) {
-					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-				}
-				if (desc.getActionType().getType() == ActionType.EMPTY) {
-					return super.getBackground(element);
-				}
-			}
-			return Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+			return switch (type) {
+			case ActionType.REMOVE -> REMOVE_STYLER;
+			case ActionType.UPDATE -> UPGRADE_DOWNGRADE_STYLER;
+			case ActionType.DOWNGRADE -> UPGRADE_DOWNGRADE_STYLER;
+			default -> null;
+			};
 		}
-
-		@Override
-		public Color getForeground(final Object element) {
-			if (element instanceof final LibraryDescriptorNode desc) {
-				if (desc.getActionType().getType() == ActionType.REMOVE) {
-					return Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-				}
-				if (desc.getActionType().getType() == ActionType.EMPTY) {
-					return super.getForeground(element);
-				}
-			}
-			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
-		}
-
 	}
 
 }
