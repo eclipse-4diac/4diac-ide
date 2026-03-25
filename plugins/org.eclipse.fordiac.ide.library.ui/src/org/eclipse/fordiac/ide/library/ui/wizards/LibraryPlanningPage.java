@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryManager;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
 import org.eclipse.fordiac.ide.library.ui.Messages;
+import org.eclipse.fordiac.ide.library.ui.wizards.LibraryChangeAction.ActionType;
 import org.eclipse.fordiac.ide.library.ui.wizards.LibraryDescriptorNode.LibraryDescriptorLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -51,6 +52,7 @@ public class LibraryPlanningPage extends WizardPage {
 	private final IProject project;
 	private final Map<String, List<String>> localVersionLookup;
 	private final Map<String, List<String>> remoteVersionLookup;
+	private List<LibraryDescriptorNode> input;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
 		super(pageName);
@@ -117,18 +119,16 @@ public class LibraryPlanningPage extends WizardPage {
 			}
 		});
 
-		treeViewer.setInput(getViewerInput());
+		input = getViewerInput();
+		treeViewer.setInput(input);
 		treeViewer.getTree().setLinesVisible(true);
 		setControl(root);
 
 		setPageComplete(false);
 
 		treeViewer.expandAll();
-
-		treeViewer.getTree().getDisplay().asyncExec(() -> {
-			treeViewer.getTree().pack();
-			treeViewer.getTree().layout();
-		});
+		treeViewer.getTree().pack();
+		root.layout();
 
 	}
 
@@ -166,6 +166,7 @@ public class LibraryPlanningPage extends WizardPage {
 					if (i.intValue() >= 0 && i.intValue() < actions.size()) {
 						rec.setAction(actions.get(i.intValue()));
 						treeViewer.update(element, null);
+						checkPageComplete();
 					}
 				}
 			}
@@ -256,6 +257,12 @@ public class LibraryPlanningPage extends WizardPage {
 		if (!message.isEmpty()) {
 			setMessage(message.toString(), IMessageProvider.WARNING);
 		}
+	}
+
+	private void checkPageComplete() {
+		final boolean actionPresent = input.stream().flatMap(node -> node.getChildren().stream())
+				.anyMatch(node -> node.getAction().getType() != ActionType.EMPTY);
+		setPageComplete(actionPresent);
 	}
 
 	private TreeViewerColumn createColumn(final String name, final CellLabelProvider labelProvider) {
