@@ -126,24 +126,25 @@ public class LibraryPlanningPage extends WizardPage {
 		input = getViewerInput();
 		treeViewer.setInput(input);
 		treeViewer.getTree().setLinesVisible(true);
-		setControl(root);
+		treeViewer.expandAll();
 
+		setControl(root);
 		setPageComplete(false);
 
-		treeViewer.expandAll();
-		treeViewer.getTree().pack();
 		root.layout();
 
 	}
 
 	private List<LibraryDescriptorNode> getViewerInput() {
-		final LibraryDescriptorNode stdLib = new LibraryDescriptorNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, "");
+		final LibraryDescriptorNode stdLib = new LibraryDescriptorNode(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
 		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME)).stream().forEach(
 				lib -> stdLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
+		stdLib.setAction(null);
 
-		final LibraryDescriptorNode extLib = new LibraryDescriptorNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, "");
+		final LibraryDescriptorNode extLib = new LibraryDescriptorNode(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME, ""); //$NON-NLS-1$
 		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.EXTERNAL_LIB_FOLDER_NAME)).stream().forEach(
 				lib -> extLib.addChild(new LibraryDescriptorNode(lib.symbolicName(), lib.version().toString())));
+		extLib.setAction(null);
 		return List.of(extLib, stdLib);
 	}
 
@@ -212,10 +213,10 @@ public class LibraryPlanningPage extends WizardPage {
 			}
 
 			private List<LibraryChangeAction> getAvailableActions(final LibraryDescriptorNode node) {
-				return Stream
-						.concat(Stream.of(LibraryChangeAction.emptyAction(), LibraryChangeAction.removeAction()),
-								getAvailableVersions(node).stream().map(v -> LibraryChangeAction.createAction(node, v)))
-						.distinct().toList();
+				return Stream.concat(Stream.of(LibraryChangeAction.emptyAction(), LibraryChangeAction.removeAction()),
+						getAvailableVersions(node).stream().filter(v -> !v.equals(node.getActiveVersion()))
+								.map(v -> LibraryChangeAction.createAction(node, v)))
+						.toList();
 			}
 
 		});

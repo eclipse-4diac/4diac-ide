@@ -51,7 +51,7 @@ public class LibraryDescriptorNode {
 		return activeVersion;
 	}
 
-	public void setActiveVerion(final String activeVersion) {
+	public void setActiveVersion(final String activeVersion) {
 		this.activeVersion = activeVersion;
 	}
 
@@ -100,8 +100,7 @@ public class LibraryDescriptorNode {
 
 		public LibraryDescriptorLabelProvider(final Function<LibraryDescriptorNode, String> textProvider,
 				final boolean isModifiable) {
-			Objects.requireNonNull(textProvider);
-			this.textProvider = textProvider;
+			this.textProvider = Objects.requireNonNull(textProvider);
 			this.isModifiable = isModifiable;
 		}
 
@@ -111,6 +110,8 @@ public class LibraryDescriptorNode {
 				final StyledString styled = new StyledString();
 				if (node.getChildren().isEmpty()) {
 					styled.append(textProvider.apply(node), getStyler(node));
+				} else {
+					styled.append(textProvider.apply(node));
 				}
 				cell.setText(styled.getString());
 				cell.setStyleRanges(styled.getStyleRanges());
