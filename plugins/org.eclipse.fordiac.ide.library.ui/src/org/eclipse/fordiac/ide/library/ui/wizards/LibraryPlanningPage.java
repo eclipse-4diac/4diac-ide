@@ -61,6 +61,10 @@ public class LibraryPlanningPage extends WizardPage {
 		this.remoteVersionLookup = new HashMap<>();
 	}
 
+	public List<LibraryDescriptorNode> getModifiedNodes() {
+		return getLibraryNodes().filter(node -> node.getAction().getType() != ActionType.EMPTY).toList();
+	}
+
 	@Override
 	public void createControl(final Composite parent) {
 		final Composite root = new Composite(parent, SWT.NONE);
@@ -260,9 +264,11 @@ public class LibraryPlanningPage extends WizardPage {
 	}
 
 	private void checkPageComplete() {
-		final boolean actionPresent = input.stream().flatMap(node -> node.getChildren().stream())
-				.anyMatch(node -> node.getAction().getType() != ActionType.EMPTY);
-		setPageComplete(actionPresent);
+		setPageComplete(getLibraryNodes().anyMatch(node -> node.getAction().getType() != ActionType.EMPTY));
+	}
+
+	private Stream<LibraryDescriptorNode> getLibraryNodes() {
+		return input.stream().flatMap(node -> node.getChildren().stream());
 	}
 
 	private TreeViewerColumn createColumn(final String name, final CellLabelProvider labelProvider) {
