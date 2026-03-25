@@ -154,7 +154,6 @@ public class GitLabDownloader implements IArchiveDownloader {
 				getPackages(project);
 			}
 		} catch (final IOException e) {
-			FordiacLogHelper.logError("Problem with GitLab import", e); //$NON-NLS-1$
 			return new DownloadResult<>(DownloadResult.Status.ERROR,
 					MessageFormat.format(Messages.Download_Error, e.getMessage()));
 		}
