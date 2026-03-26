@@ -62,28 +62,21 @@ public class AttributeTypeImporter extends TypeImporter {
 	protected IChildHandler getBaseChildrenHandler() {
 		return name -> {
 			switch (name) {
-			case LibraryElementTags.IDENTIFICATION_ELEMENT:
-				parseIdentification(getElement());
-				break;
-			case LibraryElementTags.VERSION_INFO_ELEMENT:
-				parseVersionInfo(getElement());
-				break;
-			case LibraryElementTags.COMPILER_INFO_ELEMENT:
-				getElement().setCompilerInfo(parseCompilerInfo());
-				break;
-			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT:
-				parseStructuredType(getElement());
-				break;
-			case LibraryElementTags.DIRECTLY_DERIVED_TYPE:
+			case LibraryElementTags.IDENTIFICATION_ELEMENT -> parseIdentification(getElement());
+			case LibraryElementTags.VERSION_INFO_ELEMENT -> parseVersionInfo(getElement());
+			case LibraryElementTags.COMPILER_INFO_ELEMENT -> getElement().setCompilerInfo(parseCompilerInfo());
+			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT -> parseStructuredType(getElement());
+			case LibraryElementTags.DIRECTLY_DERIVED_TYPE -> {
 				parseDirectlyDerivedType(getElement());
 				proceedToEndElementNamed(LibraryElementTags.DIRECTLY_DERIVED_TYPE);
-				break;
-			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			}
+			case LibraryElementTags.ATTRIBUTE_ELEMENT -> {
 				parseGenericAttributeNode(getElement());
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-				break;
-			default:
+			}
+			default -> {
 				return false;
+			}
 			}
 			return true;
 		};
@@ -98,10 +91,11 @@ public class AttributeTypeImporter extends TypeImporter {
 		directlyDerivedType.setBaseType(baseType);
 
 		final String initalValue = getAttributeValue(LibraryElementTags.INITIALVALUE_ATTRIBUTE);
-		directlyDerivedType.setInitialValue(initalValue);
+		if (initalValue != null) {
+			directlyDerivedType.setInitialValue(initalValue);
+		}
 
-		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
-		directlyDerivedType.setComment(comment);
+		readCommentAttribute(directlyDerivedType);
 
 		attribute.setType(directlyDerivedType);
 	}
