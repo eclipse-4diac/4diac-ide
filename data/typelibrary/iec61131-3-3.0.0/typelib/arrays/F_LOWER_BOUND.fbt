@@ -20,7 +20,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="DIM" Type="ANY_INT" Comment="Selects array dimension to get the lower bound from"/>
+			<VarDeclaration Name="DIM" Type="ANY_INT" Comment="Selects array dimension to get the lower bound from, defaults to first dimension" InitialValue="DINT#1"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT" Type="ANY_INT" Comment="Lower bound of the selected array dimension"/>
