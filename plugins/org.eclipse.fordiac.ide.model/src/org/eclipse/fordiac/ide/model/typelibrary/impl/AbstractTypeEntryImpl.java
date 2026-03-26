@@ -372,8 +372,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 	@Override
 	public LibraryElement copyType() {
 		final LibraryElement copy = EcoreUtil.copy(getType());
-		encloseInResource(copy);
-		copy.setTypeEntry(this);
+		if (copy != null) {
+			encloseInResource(copy);
+			copy.setTypeEntry(this);
+		}
 		return copy;
 	}
 
