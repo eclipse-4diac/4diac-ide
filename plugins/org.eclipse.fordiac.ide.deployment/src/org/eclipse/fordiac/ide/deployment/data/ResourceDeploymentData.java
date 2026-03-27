@@ -17,17 +17,20 @@ import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.SequencedSet;
 
 import org.eclipse.fordiac.ide.deployment.Messages;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ContainerVarDeclaration;
@@ -42,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -67,6 +71,7 @@ public class ResourceDeploymentData {
 	private final SequencedSet<DataTypeEntry> dataTypes = new LinkedHashSet<>();
 
 	private final Deque<SubApp> subAppHierarchy = new ArrayDeque<>();
+	private final Map<String, VarConfigInstance> varConfigParams = new HashMap<>();
 	private final StringBuilder prefix = new StringBuilder();
 
 	public Resource getRes() {
@@ -163,17 +168,33 @@ public class ResourceDeploymentData {
 	private String findInitialValue(final VarDeclaration input) throws DeploymentException {
 		boolean negate = false;
 		VarDeclaration result = input;
+		int resultPrefixLength = prefix.length();
+		SubApp subApp;
 		final Iterator<SubApp> subAppIterator = subAppHierarchy.descendingIterator();
 		while (!result.getInputConnections().isEmpty()
 				&& result.getInputConnections().getFirst().getSource() instanceof final VarDeclaration source
 				&& source.isIsInput() // source is a (subapp) input
 				// get the external source of the subapp instance
 				&& subAppIterator.hasNext() && getSubAppExternalElement(source,
-						subAppIterator.next()) instanceof final VarDeclaration externalSource) {
+						subApp = subAppIterator.next()) instanceof final VarDeclaration externalSource) {
 			negate ^= result.getInputConnections().getFirst().isNegated();
 			result = externalSource;
+			resultPrefixLength -= subApp.getName().length() + 1;
 		}
+		if (!subAppIterator.hasNext()) {
+			resultPrefixLength = 0;
+		}
+		result = findVarConfigParam(result, prefix.substring(0, resultPrefixLength)).orElse(result);
 		return DeploymentHelper.getVariableValue(result, input, negate);
+	}
+
+	private Optional<VarDeclaration> findVarConfigParam(final VarDeclaration input, final String inputPrefix) {
+		final BlockFBNetworkElement fb = input.getBlockFBNetworkElement();
+		if (fb == null || inputPrefix.isEmpty()) {
+			return Optional.empty();
+		}
+		final String resultQualifiedName = inputPrefix + fb.getName() + "." + input.getName(); //$NON-NLS-1$
+		return Optional.ofNullable(varConfigParams.get(resultQualifiedName));
 	}
 
 	private void addInputConnections(final IInterfaceElement input) {
@@ -223,13 +244,24 @@ public class ResourceDeploymentData {
 		}
 		prefix.append(subApp.getName());
 		prefix.append('.');
+		if (subApp instanceof final TypedSubApp typedSubApp) {
+			for (final VarConfigInstance param : getVarConfigParams(typedSubApp)) {
+				varConfigParams.putIfAbsent(prefix + param.getName(), param);
+			}
+		}
 	}
 
 	private SubApp leaveSubApp() {
 		final SubApp subApp = subAppHierarchy.removeLast();
 		if (subAppHierarchy.isEmpty()) {
+			varConfigParams.clear();
 			prefix.setLength(0);
 		} else {
+			if (subApp instanceof final TypedSubApp typedSubApp) {
+				for (final VarConfigInstance param : getVarConfigParams(typedSubApp)) {
+					varConfigParams.remove(prefix + param.getName(), param);
+				}
+			}
 			final int newLength = prefix.length() - subApp.getName().length() - 1;
 			if (newLength >= 0) {
 				prefix.setLength(newLength);
@@ -281,11 +313,19 @@ public class ResourceDeploymentData {
 		return subApp.getSubAppNetwork();
 	}
 
-	public static String getMappedParentName(final FBNetworkElement fbnElement) {
+	private static String getMappedParentName(final FBNetworkElement fbnElement) {
 		if (fbnElement.isMapped()
 				&& fbnElement.getMapping().getFrom().eContainer().eContainer() instanceof final INamedElement namedEl) {
 			return namedEl.getQualifiedName() + "."; //$NON-NLS-1$
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	private static List<VarConfigInstance> getVarConfigParams(final TypedSubApp subApp) {
+		if (subApp.isMapped() && subApp.getMapping().getTo() == subApp
+				&& subApp.getOpposite() instanceof final TypedSubApp oppositeSubApp) {
+			return oppositeSubApp.getVarConfigParams();
+		}
+		return subApp.getVarConfigParams();
 	}
 }
