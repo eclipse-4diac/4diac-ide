@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloader;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.LibraryManager;
@@ -44,6 +48,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Version;
 
 public class LibraryPlanningPage extends WizardPage {
@@ -51,14 +56,14 @@ public class LibraryPlanningPage extends WizardPage {
 	private TreeViewer treeViewer;
 	private final IProject project;
 	private final Map<String, List<String>> localVersionLookup;
-	private final Map<String, List<String>> remoteVersionLookup;
+	private Map<String, List<String>> remoteVersionLookup;
 	private List<LibraryDescriptorNode> input;
 
 	protected LibraryPlanningPage(final String pageName, final IProject project) {
 		super(pageName);
 		this.project = project;
 		this.localVersionLookup = new HashMap<>();
-		this.remoteVersionLookup = new HashMap<>();
+		this.remoteVersionLookup = Map.of();
 	}
 
 	public List<LibraryDescriptorNode> getModifiedNodes() {
@@ -80,7 +85,7 @@ public class LibraryPlanningPage extends WizardPage {
 				SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		initVersionLookup();
+		initLocalVersionLookup();
 
 		configureColumns(columnLayout);
 
@@ -132,6 +137,8 @@ public class LibraryPlanningPage extends WizardPage {
 		setPageComplete(false);
 
 		root.layout();
+
+		startRemoteVersionLookupJob();
 
 	}
 
@@ -223,7 +230,7 @@ public class LibraryPlanningPage extends WizardPage {
 
 	}
 
-	private void initVersionLookup() {
+	private void initLocalVersionLookup() {
 		// Get available standard libs
 		LibraryManager.getLinkedLibraries(project.getFolder(TypeLibraryTags.STANDARD_LIB_FOLDER_NAME))
 				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
@@ -235,33 +242,6 @@ public class LibraryPlanningPage extends WizardPage {
 				.forEach(i -> localVersionLookup.computeIfAbsent(i.symbolicName(), s -> new ArrayList<>())
 						.addAll(LibraryManager.INSTANCE.getAllAvailableVersions(i.symbolicName()).map(Version::toString)
 								.toList()));
-
-		// Get available remote Versions
-		initRemoteVersionLookup();
-	}
-
-	private void initRemoteVersionLookup() {
-		final GitLabDownloader downloader = new GitLabDownloader();
-		final StringBuilder message = new StringBuilder();
-		downloader.convertEndpointsToDownloader().stream().forEach(d -> {
-			if (d.isActive()) {
-				final DownloadResult<Void> fetch = downloader.fetchProjectsAndPackages();
-				if (fetch.status() == DownloadResult.Status.OK) {
-					final Map<String, List<LeafNode>> packagesAndLeaves = downloader.getPackagesAndLeaves();
-
-					for (final String symbolicName : localVersionLookup.keySet()) {
-						packagesAndLeaves.getOrDefault(symbolicName, Collections.emptyList()).stream()
-								.map(LeafNode::getVersion).forEach(v -> remoteVersionLookup
-										.computeIfAbsent(symbolicName, s -> new ArrayList<>()).add(v));
-					}
-				} else {
-					message.append(fetch.message());
-				}
-			}
-		});
-		if (!message.isEmpty()) {
-			setMessage(message.toString(), IMessageProvider.WARNING);
-		}
 	}
 
 	private void checkPageComplete() {
@@ -277,6 +257,65 @@ public class LibraryPlanningPage extends WizardPage {
 		column.getColumn().setText(name);
 		column.setLabelProvider(labelProvider);
 		return column;
+	}
+
+	private void startRemoteVersionLookupJob() {
+		setMessage(Messages.LibraryPlanningPage_LoadRemoteVersions + " ...", IMessageProvider.INFORMATION); //$NON-NLS-1$
+		final Job job = new Job(Messages.LibraryPlanningPage_LoadRemoteVersions) {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				final Map<String, List<String>> fetchedVersions = new HashMap<>();
+				final StringBuilder warningMessage = new StringBuilder();
+
+				loadRemoteVersionLookup(fetchedVersions, warningMessage);
+
+				Display.getDefault().asyncExec(() -> {
+					if (treeViewer == null || treeViewer.getTree().isDisposed()) {
+						return;
+					}
+
+					remoteVersionLookup = fetchedVersions;
+
+					if (!warningMessage.isEmpty()) {
+						setMessage(warningMessage.toString(), IMessageProvider.WARNING);
+					} else {
+						setMessage(null);
+					}
+
+					treeViewer.refresh();
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+
+		job.setUser(false);
+		job.schedule();
+	}
+
+	private void loadRemoteVersionLookup(final Map<String, List<String>> target, final StringBuilder message) {
+		final GitLabDownloader downloader = new GitLabDownloader();
+
+		downloader.convertEndpointsToDownloader().forEach(d -> {
+			if (d.isActive()) {
+				final DownloadResult<Void> fetch = downloader.fetchProjectsAndPackages();
+
+				if (fetch.status() == DownloadResult.Status.OK) {
+					final Map<String, List<LeafNode>> packagesAndLeaves = downloader.getPackagesAndLeaves();
+
+					for (final String symbolicName : localVersionLookup.keySet()) {
+						packagesAndLeaves.getOrDefault(symbolicName, Collections.emptyList()).stream()
+								.map(LeafNode::getVersion).distinct()
+								.forEach(v -> target.computeIfAbsent(symbolicName, s -> new ArrayList<>()).add(v));
+					}
+				} else {
+					if (!message.isEmpty()) {
+						message.append(System.lineSeparator());
+					}
+					message.append(fetch.message());
+				}
+			}
+		});
 	}
 
 }

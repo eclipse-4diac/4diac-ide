@@ -122,6 +122,7 @@ public class Messages extends NLS {
 
 	public static String LibraryPlanningPage_ActiveVersion;
 	public static String LibraryPlanningPage_Action;
+	public static String LibraryPlanningPage_LoadRemoteVersions;
 	public static String LibraryPlanningPage_SymbolicName;
 	public static String LibraryPlanningPage_Titel;
 
