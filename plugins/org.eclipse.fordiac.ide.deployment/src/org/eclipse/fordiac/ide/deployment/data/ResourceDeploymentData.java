@@ -66,6 +66,9 @@ public class ResourceDeploymentData {
 
 	private final SequencedSet<DataTypeEntry> dataTypes = new LinkedHashSet<>();
 
+	private final Deque<SubApp> subAppHierarchy = new ArrayDeque<>();
+	private final StringBuilder prefix = new StringBuilder();
+
 	public Resource getRes() {
 		return res;
 	}
@@ -104,30 +107,31 @@ public class ResourceDeploymentData {
 
 	public ResourceDeploymentData(final Resource res) throws DeploymentException {
 		this.res = res;
-		addFBNetworkElements(new ArrayDeque<>(), res.getFBNetwork(), new StringBuilder());
+		addFBNetworkElements(res.getFBNetwork());
+		if (!subAppHierarchy.isEmpty() || !prefix.isEmpty()) {
+			throw new IllegalStateException("subAppHierarchy and prefix must both be empty"); //$NON-NLS-1$
+		}
 	}
 
-	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork,
-			final StringBuilder prefix) throws DeploymentException {
+	private void addFBNetworkElements(final FBNetwork fbNetwork) throws DeploymentException {
 		for (final FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if (fbnElement instanceof final FB fb) {
-				addFB(subAppHierarchy, prefix, fb);
+				addFB(fb);
 			} else if (fbnElement instanceof final SubApp subApp) {
-				enterSubApp(subAppHierarchy, prefix, subApp);
+				enterSubApp(subApp);
 				final FBNetwork subAppInternalNetwork = getFBNetworkForSubApp(subApp);
 				if (subAppInternalNetwork == null) {
 					throw new DeploymentException(
 							MessageFormat.format(Messages.ResourceDeploymentData_MissingSubAppNetwork, prefix));
 				}
-				addFBNetworkElements(subAppHierarchy, subAppInternalNetwork, prefix);
-				leaveSubApp(subAppHierarchy, prefix);
+				addFBNetworkElements(subAppInternalNetwork);
+				leaveSubApp();
 			}
 		}
 	}
 
-	private void addFB(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix, final FB fb)
-			throws DeploymentException {
-		fbs.add(new FBDeploymentData(ensurePrefix(prefix, fb), fb));
+	private void addFB(final FB fb) throws DeploymentException {
+		fbs.add(new FBDeploymentData(ensurePrefix(fb), fb));
 		if (fb.getTypeEntry() instanceof final FBTypeEntry entry) {
 			fbTypes.add(entry);
 		}
@@ -136,29 +140,27 @@ public class ResourceDeploymentData {
 			dataTypes.add(entry);
 		}
 		for (final VarDeclaration inputVar : fb.getInterface().getInputVars()) {
-			addInputParam(subAppHierarchy, prefix, inputVar, fb);
+			addInputParam(inputVar, fb);
 		}
 		for (final VarDeclaration inoutVar : fb.getInterface().getInOutVars()) {
-			addInputParam(subAppHierarchy, prefix, inoutVar, fb);
+			addInputParam(inoutVar, fb);
 		}
-		fb.getInterface().getAllInputs().forEach(input -> addInputConnections(subAppHierarchy, prefix, input));
+		fb.getInterface().getAllInputs().forEach(this::addInputConnections);
 	}
 
-	private void addInputParam(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final VarDeclaration input, final FB fb) throws DeploymentException {
-		final String value = findInitialValue(subAppHierarchy, input);
+	private void addInputParam(final VarDeclaration input, final FB fb) throws DeploymentException {
+		final String value = findInitialValue(input);
 		if (value != null) {
-			params.put(ensurePrefix(prefix, fb) + fb.getName() + "." + input.getRelativeName(fb), value); //$NON-NLS-1$
+			params.put(ensurePrefix(fb) + fb.getName() + "." + input.getRelativeName(fb), value); //$NON-NLS-1$
 		}
 		if (input instanceof final ContainerVarDeclaration container) {
 			for (final VarDeclaration member : container.getCachedMembers()) {
-				addInputParam(subAppHierarchy, prefix, member, fb);
+				addInputParam(member, fb);
 			}
 		}
 	}
 
-	private static String findInitialValue(final Deque<SubApp> subAppHierarchy, final VarDeclaration input)
-			throws DeploymentException {
+	private String findInitialValue(final VarDeclaration input) throws DeploymentException {
 		boolean negate = false;
 		VarDeclaration result = input;
 		final Iterator<SubApp> subAppIterator = subAppHierarchy.descendingIterator();
@@ -174,50 +176,47 @@ public class ResourceDeploymentData {
 		return DeploymentHelper.getVariableValue(result, input, negate);
 	}
 
-	private void addInputConnections(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final IInterfaceElement input) {
-		final String inputPrefix = ensurePrefix(prefix, input.getBlockFBNetworkElement());
-		for (final ConnectionDeploymentSource sourceData : findSourceEndPoints(subAppHierarchy, prefix,
-				new StringBuilder(), input, new ArrayList<>())) {
+	private void addInputConnections(final IInterfaceElement input) {
+		final String inputPrefix = ensurePrefix(input.getBlockFBNetworkElement());
+		for (final ConnectionDeploymentSource sourceData : findSourceEndPoints(input, new StringBuilder(),
+				new ArrayList<>())) {
 			connections.add(sourceData.toConnectionData(inputPrefix, input));
 		}
 	}
 
-	private List<ConnectionDeploymentSource> findSourceEndPoints(final Deque<SubApp> subAppHierarchy,
-			final StringBuilder prefix, final StringBuilder suffix, final IInterfaceElement destination,
-			final List<ConnectionDeploymentSource> result) {
+	private List<ConnectionDeploymentSource> findSourceEndPoints(final IInterfaceElement destination,
+			final StringBuilder suffix, final List<ConnectionDeploymentSource> result) {
 		for (final Connection con : destination.getInputConnections()) {
 			DeploymentHelper.addSourceSuffix(suffix, con);
-			findConnectionEndPoints(subAppHierarchy, prefix, suffix, con.getSource(), result);
+			findConnectionEndPoints(con.getSource(), suffix, result);
 			DeploymentHelper.removeSourceSuffix(suffix, con);
 		}
 		return result;
 	}
 
-	private void findConnectionEndPoints(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final StringBuilder suffix, final IInterfaceElement source, final List<ConnectionDeploymentSource> result) {
+	private void findConnectionEndPoints(final IInterfaceElement source, final StringBuilder suffix,
+			final List<ConnectionDeploymentSource> result) {
 		if (source.isIsInput()) { // source is a (subapp) input
-			final SubApp subApp = leaveSubApp(subAppHierarchy, prefix);
+			final SubApp subApp = leaveSubApp();
 			final IInterfaceElement externalElement = getSubAppExternalElement(source, subApp);
 			if (externalElement != null) {
-				findSourceEndPoints(subAppHierarchy, prefix, suffix, externalElement, result);
+				findSourceEndPoints(externalElement, suffix, result);
 			}
-			enterSubApp(subAppHierarchy, prefix, subApp);
+			enterSubApp(subApp);
 		} else if (source.getBlockFBNetworkElement() instanceof final SubApp subApp) { // source is a subapp output
-			enterSubApp(subAppHierarchy, prefix, subApp);
+			enterSubApp(subApp);
 			final IInterfaceElement internalElement = getSubAppInternalElement(source, subApp);
 			if (internalElement != null) {
-				findSourceEndPoints(subAppHierarchy, prefix, suffix, internalElement, result);
+				findSourceEndPoints(internalElement, suffix, result);
 			}
-			leaveSubApp(subAppHierarchy, prefix);
+			leaveSubApp();
 		} else { // source is a regular FB output
-			result.add(new ConnectionDeploymentSource(ensurePrefix(prefix, source.getBlockFBNetworkElement()),
+			result.add(new ConnectionDeploymentSource(ensurePrefix(source.getBlockFBNetworkElement()),
 					suffix.toString(), source));
 		}
 	}
 
-	private static void enterSubApp(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix,
-			final SubApp subApp) {
+	private void enterSubApp(final SubApp subApp) {
 		subAppHierarchy.addLast(subApp);
 		if (prefix.isEmpty()) { // if the prefix is empty we need to add mapping info
 			prefix.append(getMappedParentName(subApp));
@@ -226,7 +225,7 @@ public class ResourceDeploymentData {
 		prefix.append('.');
 	}
 
-	private static SubApp leaveSubApp(final Deque<SubApp> subAppHierarchy, final StringBuilder prefix) {
+	private SubApp leaveSubApp() {
 		final SubApp subApp = subAppHierarchy.removeLast();
 		if (subAppHierarchy.isEmpty()) {
 			prefix.setLength(0);
@@ -239,7 +238,7 @@ public class ResourceDeploymentData {
 		return subApp;
 	}
 
-	private static String ensurePrefix(final StringBuilder prefix, final FBNetworkElement element) {
+	private String ensurePrefix(final FBNetworkElement element) {
 		return prefix.isEmpty() ? getMappedParentName(element) : prefix.toString();
 	}
 
