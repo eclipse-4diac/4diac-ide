@@ -25,7 +25,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
@@ -237,9 +236,9 @@ public class FileLibraryElementProvider
 			if (delta.getResource() instanceof final IFile file) {
 				final FileLibraryElementInfo info = getLibraryElementInfo(new FileEditorInput(file));
 				if (info != null && (IResourceDelta.CONTENT & delta.getFlags()) != 0) {
-					final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_RefreshJobName, file.getName()), monitor -> {
-						handleLibraryElementContentChanged(info);
-					});
+					final UIJob job = UIJob.create(
+							MessageFormat.format(Messages.FileLibraryElementProvider_RefreshJobName, file.getName()),
+							(ICoreRunnable) monitor -> handleLibraryElementContentChanged(info));
 					job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 					job.setPriority(Job.INTERACTIVE);
 					job.schedule();
@@ -253,16 +252,17 @@ public class FileLibraryElementProvider
 				if (info != null) {
 					if ((IResourceDelta.MOVED_TO & delta.getFlags()) != 0) {
 						final IFile newFile = file.getWorkspace().getRoot().getFile(delta.getMovedToPath());
-						final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_MoveJobName, file.getName()), monitor -> {
-							handleLibraryElementMoved(info, new FileEditorInput(newFile));
-						});
+						final UIJob job = UIJob.create(
+								MessageFormat.format(Messages.FileLibraryElementProvider_MoveJobName, file.getName()),
+								(ICoreRunnable) monitor -> handleLibraryElementMoved(info,
+										new FileEditorInput(newFile)));
 						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 						job.setPriority(Job.INTERACTIVE);
 						job.schedule();
 					} else {
-						final UIJob job = UIJob.create(MessageFormat.format(Messages.FileLibraryElementProvider_DeleteJobName, file.getName()), monitor -> {
-							handleLibraryElementDeleted(info);
-						});
+						final UIJob job = UIJob.create(
+								MessageFormat.format(Messages.FileLibraryElementProvider_DeleteJobName, file.getName()),
+								(ICoreRunnable) monitor -> handleLibraryElementDeleted(info));
 						job.setRule(ResourcesPlugin.getWorkspace().getRoot());
 						job.setPriority(Job.INTERACTIVE);
 						job.schedule();
