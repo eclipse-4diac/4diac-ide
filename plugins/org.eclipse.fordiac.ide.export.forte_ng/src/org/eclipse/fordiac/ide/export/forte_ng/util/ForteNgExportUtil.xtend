@@ -210,6 +210,8 @@ final class ForteNgExportUtil {
 			AdapterType: '''«type.generateTypeNamespace»::FORTE_«type.generateTypeNamePlain»'''
 			ArrayType:
 				generateArrayTypeName(type.subranges, type.baseType)
+			// match ANY_DERIVED exclusively
+			DataType case type === GenericTypes.ANY_DERIVED: '''CIEC_ANY_DERIVED'''
 			// match generic types (must be before other data types)
 			DataType case GenericTypes.isAnyType(type): '''CIEC_«type.generateTypeNamePlain»_VARIANT'''
 			StringType: '''CIEC_«type.generateTypeNamePlain»«IF type.isSetMaxLength»_FIXED<«type.maxLength»>«ENDIF»'''
@@ -327,6 +329,8 @@ final class ForteNgExportUtil {
 					"forte_array_fixed"
 			AdapterType:
 				type.name + "_adp"
+			AnyDerivedType case type === GenericTypes.ANY_DERIVED:
+				"forte_any_derived"
 			AnyDerivedType:
 				type.name + "_dtp"
 			DataType case GenericTypes.isAnyType(type): '''forte_«type.generateTypeNamePlain.toLowerCase»_variant'''
