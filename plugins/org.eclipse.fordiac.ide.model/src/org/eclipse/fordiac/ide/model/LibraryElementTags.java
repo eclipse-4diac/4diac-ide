@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH
  *                          Martin Erich Jobst
+ *                          HR Agrartechnik GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,8 @@
  *  Martin Jobst
  *    - add function FB type
  *    - add global constants
+ *  Franz Höpfinger
+ *    - add E_MOVE constants for configurable support
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -184,6 +187,8 @@ public final class LibraryElementTags {
 	public static final String TYPENAME_FMOVE = "F_MOVE"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_FMOVE = "iec61131::selection"; //$NON-NLS-1$
 	public static final String F_MOVE_CONFIG = "DataType"; //$NON-NLS-1$
+	public static final String TYPENAME_EMOVE = "E_MOVE"; //$NON-NLS-1$
+	public static final String PACKAGE_NAME_EMOVE = "iec61499::events"; //$NON-NLS-1$
 	public static final String TYPENAME_MUX = "STRUCT_MUX"; //$NON-NLS-1$
 	public static final String TYPENAME_DEMUX = "STRUCT_DEMUX"; //$NON-NLS-1$
 	public static final String PACKAGE_NAME_MUXERS = "eclipse4diac::convert"; //$NON-NLS-1$

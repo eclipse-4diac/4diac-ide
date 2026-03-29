@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH, HR Agrartechnik GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Bianca Wiesmayr - initial implementation
+ *   Franz Höpfinger - added E_MOVE configurable support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
@@ -57,6 +58,10 @@ public final class BlockInstanceFactory {
 		}
 		if (LibraryElementTags.TYPENAME_FMOVE.equals(entry.getTypeName())
 				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_FMOVE)) {
+			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
+		}
+		if (LibraryElementTags.TYPENAME_EMOVE.equals(entry.getTypeName())
+				&& matchesPackageName(entry, LibraryElementTags.PACKAGE_NAME_EMOVE)) {
 			return LibraryElementFactory.eINSTANCE.createConfigurableMoveFB();
 		}
 		if (LibraryElementPackage.Literals.COMPOSITE_FB_TYPE.equals(entry.getTypeEClass())) {

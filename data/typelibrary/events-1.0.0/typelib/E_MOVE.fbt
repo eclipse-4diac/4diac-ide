@@ -6,6 +6,8 @@
 	</VersionInfo>
 	<VersionInfo Organization=" HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-10-31" Remarks="Copy F_MOVE to E_MOVE and adjust Comments">
 	</VersionInfo>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.2" Author="Franz Höpfinger" Date="2026-03-29" Remarks="Added configurable DataType for E_MOVE similar to F_MOVE">
+	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
@@ -24,5 +26,6 @@
 			<VarDeclaration Name="OUT" Type="ANY" Comment="input = output"/>
 		</OutputVars>
 	</InterfaceList>
+	<Attribute Name="GenericClassName" Value="'GEN_FORTE_E_MOVE'"/>
 	<Attribute Name="TypeHash" Value="''"/>
 </FBType>
