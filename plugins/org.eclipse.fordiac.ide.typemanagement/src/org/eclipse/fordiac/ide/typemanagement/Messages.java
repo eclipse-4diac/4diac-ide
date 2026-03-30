@@ -191,6 +191,12 @@ public final class Messages extends NLS {
 	public static String Refactoring_RenameChangeName;
 	public static String Refactoring_UpdateTypeEntryChange;
 
+	public static String RefactoringUtil_SaveAllButton;
+
+	public static String RefactoringUtil_SaveAllMessage;
+
+	public static String RefactoringUtil_SaveAllTitle;
+
 	public static String RepairBrokenConnectionWizardPage_Description;
 	public static String RepairBrokenConnectionWizardPage_Dots;
 	public static String RepairBrokenConnectionWizardPage_Name;
