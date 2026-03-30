@@ -514,11 +514,20 @@ public abstract class DiagramEditorWithFlyoutPalette extends GraphicalEditorWith
 		}
 
 		final MultiPageEditorPart multiPageEditor = multiPageEditorSite.getMultiPageEditor();
-		if (multiPageEditor.equals(page.getActiveEditor()) && multiPageEditor.getSelectedPage() == this) {
-			// only if the our parent is the current active editor and we are the selected
-			// page
+		if (multiPageEditor.equals(page.getActiveEditor()) && isSelectedEditorPage(multiPageEditor)) {
+			// only if the parent is the current active editor and we are the selected page
 			updateActions(getSelectionActions());
 		}
+	}
+
+	private boolean isSelectedEditorPage(final MultiPageEditorPart multiEditorPart) {
+		if (multiEditorPart.getSelectedPage() == this) {
+			return true;
+		}
+		if (multiEditorPart.getSelectedPage() instanceof final MultiPageEditorPart nestedPart) {
+			return isSelectedEditorPage(nestedPart);
+		}
+		return false;
 	}
 
 	/**
