@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.preferences.UIPreferenceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 /** The Class SubAppForFbNetworkFigure. */
@@ -148,7 +147,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
-			Display.getDefault().asyncExec(this::layoutExpandedInterface); // initial interface layout
 		} else if (expandedMainFigure != null) {
 			transformToCollapsedSubapp();
 		}
