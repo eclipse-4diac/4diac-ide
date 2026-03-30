@@ -401,6 +401,9 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		}
 
 		final IInterfaceElement typePin = template.findInTypeInterface();
+		if (typePin == null) {
+			return;
+		}
 		final var searchSupport = ISearchFactory.createSearchSupport(typePin, typePin.eClass().getInstanceClass());
 		if (searchSupport == null) {
 			return;
