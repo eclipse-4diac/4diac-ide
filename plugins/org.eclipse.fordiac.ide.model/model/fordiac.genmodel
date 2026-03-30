@@ -1030,6 +1030,11 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateDestinationTypeMismatch(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/findInTypeInterface"
           body="return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVisible" body="org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.setVisible(this, visible);">

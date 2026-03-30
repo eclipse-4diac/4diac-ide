@@ -16,7 +16,9 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -24,15 +26,18 @@ import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -41,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.fordiac.ide.model.validation.ValidationPreferences;
 
 public class VarDeclarationAnnotations {
@@ -56,6 +62,51 @@ public class VarDeclarationAnnotations {
 								LibraryElementPackage.Literals.IINTERFACE_ELEMENT__INPUT_CONNECTIONS)));
 			}
 			return false;
+		}
+		return true;
+	}
+
+	public static boolean validateDestinationTypeMismatch(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (!varDeclaration.isInOutVar() && GenericTypes.isAnyType(varDeclaration.getType())
+				&& varDeclaration.getOutputConnections().size() > 1) {
+			final List<IInterfaceElement> destinations = varDeclaration.getOutputConnections().stream()
+					.map(Connection::getDestination).toList();
+			if (!allTypesMatch(destinations)) {
+				if (diagnostics != null) {
+					final String destinationsString = destinations.stream()
+							.map(v -> MessageFormat.format(
+									Messages.VarDeclarationAnnotations_DestinationTypeMismatchDestination,
+									v.getQualifiedName(), v.getFullTypeName()))
+							.collect(Collectors
+									.joining(Messages.VarDeclarationAnnotations_DestinationTypeMismatchSeparator));
+					final String destinationTypesString = destinations.stream()
+							.map(v -> MessageFormat.format(
+									Messages.VarDeclarationAnnotations_DestinationTypeMismatchDestinationType,
+									v.getFullTypeName()))
+							.collect(Collectors
+									.joining(Messages.VarDeclarationAnnotations_DestinationTypeMismatchSeparator));
+					diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+							LibraryElementValidator.VAR_DECLARATION__VALIDATE_DESTINATION_TYPE_MISMATCH,
+							MessageFormat.format(Messages.VarDeclarationAnnotations_DestinationTypeMismatch,
+									varDeclaration.getFullTypeName(), destinationTypesString,
+									varDeclaration.getQualifiedName(), destinationsString),
+							FordiacMarkerHelper.getDiagnosticData(varDeclaration,
+									LibraryElementPackage.Literals.IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS)));
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean allTypesMatch(final List<IInterfaceElement> elements) {
+		final DataType firstType = LinkConstraints.getFullDataType(elements.getFirst());
+		for (int i = 1; i < elements.size(); i++) {
+			final DataType elementType = LinkConstraints.getFullDataType(elements.get(i));
+			if (!elementType.isAssignableFrom(firstType) || !firstType.isAssignableFrom(elementType)) {
+				return false;
+			}
 		}
 		return true;
 	}
