@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
@@ -335,6 +336,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 		final SubAppForFbNetworkFigure figure = getFigure();
 		figure.updateTypeLabel(getModel());
 		figure.updateExpandedFigure();
+		layoutExpandedInterface();
 	}
 
 	private void updateEditPolicies() {
@@ -460,7 +462,13 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 
 	public void layoutExpandedInterface() {
 		if (getModel().isUnfolded()) {
-			Display.getDefault().asyncExec(() -> getFigure().layoutExpandedInterface());
+			Display.getDefault().execute(() -> {
+				final EditPartViewer viewer = getViewer();
+				// if we have no viewer or the viewer's control is disposed we can not layout
+				if (viewer != null && viewer.getControl() != null && !viewer.getControl().isDisposed()) {
+					getFigure().layoutExpandedInterface();
+				}
+			});
 		}
 	}
 
