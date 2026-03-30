@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *                    Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,8 +11,10 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
- *    Hesam Rezaee
- *      - add Hovering features
+ *   Hesam Rezaee
+ *       - add Hovering features
+ *   Martin Erich Jobst
+ *       - rework and cleanup hover documentation
  */
 
 package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering
@@ -22,156 +25,136 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.ui.editor.hover.html.DefaultHoverDocumentationProvider
-import org.eclipse.fordiac.ide.model.libraryElement.Event
 
 class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider {
 	override getDocumentation(EObject object) {
 		'''«object.getSTElementAutoDocumentation»«super.getDocumentation(object)»'''
 	}
 
-	def dispatch getSTElementAutoDocumentation(STFunction object) '''
+	def dispatch CharSequence getSTElementAutoDocumentation(ICallable object) '''
 		«IF !object.inputParameters.isEmpty»
 			<p>INPUTS:
 			«FOR in : object.inputParameters»
-				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name»</b>«IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
+				<div style="text-indent:10px;"><b>«in.name» : «in.fullTypeName»«IF object.varargs && in == object.inputParameters.last» ...«ENDIF»</b>«IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
 			«ENDFOR»
 			</p>
 		«ENDIF»
 		«IF !object.outputParameters.isEmpty»
 			<p>OUTPUTS:
 			«FOR out : object.outputParameters»
-				<div style="text-indent:10px;"><b>«out.name» : «(out as STVarDeclaration).type.name»</b>«IF !out.documentation.nullOrEmpty» - «out.documentation»«ENDIF»</div>
+				<div style="text-indent:10px;"><b>«out.name» : «out.fullTypeName»</b>«IF !out.documentation.nullOrEmpty» - «out.documentation»«ENDIF»</div>
 			«ENDFOR»
 			</p>
 		«ENDIF»
 		«IF !object.inOutParameters.isEmpty»
 			<p>IN_OUTS:
 			«FOR inout : object.inOutParameters»
-				<div style="text-indent:10px;"><b>«inout.name» : «(inout as STVarDeclaration).type.name»</b>«IF !inout.documentation.nullOrEmpty» - «inout.documentation»«ENDIF»</div>
+				<div style="text-indent:10px;"><b>«inout.name» : «inout.fullTypeName»</b>«IF !inout.documentation.nullOrEmpty» - «inout.documentation»«ENDIF»</div>
 			«ENDFOR»
 			</p>
 		«ENDIF»
-	'''
-
-	def dispatch getSTElementAutoDocumentation(STMethod object) '''
-		«IF !object.inputParameters.isEmpty»
-			<p>INPUTS:
-			«FOR in : object.inputParameters»
-				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name»</b>«IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
-			«ENDFOR»
-			</p>
-		«ENDIF»
-		«IF !object.outputParameters.isEmpty»
-			<p>OUTPUTS:
-			«FOR out : object.outputParameters»
-				<div style="text-indent:10px;"><b>«out.name» : «(out as STVarDeclaration).type.name»</b>«IF !out.documentation.nullOrEmpty» - «out.documentation»«ENDIF»</div>
-			«ENDFOR»
-			</p>
-		«ENDIF»
-		«IF !object.inOutParameters.isEmpty»
-			<p>IN_OUTS:
-			«FOR inout : object.inOutParameters»
-				<div style="text-indent:10px;"><b>«inout.name» : «(inout as STVarDeclaration).type.name»</b>«IF !inout.documentation.nullOrEmpty» - «inout.documentation»«ENDIF»</div>
-			«ENDFOR»
-			</p>
-		«ENDIF»
-	'''
-
-	def dispatch getSTElementAutoDocumentation(STStandardFunction object) '''
-		«IF !object.inputParameters.isEmpty»
-			<p>INPUTS: 
-			«FOR in : object.inputParameters»
-				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name»«IF object.varargs && in == object.inputParameters.last» ...«ENDIF» «IF !in.comment.blank»  («in.comment») «ENDIF»</b> «IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
-			«ENDFOR»
-			</p>
-		«ENDIF»	
-		«IF !object.returnType.name.blank»
+		«IF object.returnType !== null»
 			<p>RETURN:
-				<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name» «IF !object.returnValueComment.blank»  («object.returnValueComment») «ENDIF»  </b></div>
+				<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name»</b></div>
 			</p>
 		«ENDIF»
 		«IF !object.comment.isEmpty»
 			<p>DESCRIPTION: 
 				<div style="text-indent:10px;"><b>«object.comment»</b></div>
 			</p>
-		«ENDIF»			
-		
+		«ENDIF»
 	'''
 
-	def dispatch getSTElementAutoDocumentation(FB object) '''
-		
-			
-			   <p>INPUTS:
-		«FOR in : object.inputParameters»
-			<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-		    </p>
-			<p>OUTPUTS:
-		«FOR out : object.outputParameters»
-			<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-		«IF !object.typeEntry.comment.isEmpty»		
-			<p>DESCRIPTION: 
-				<div style="text-indent:10px;"><b>«object.typeEntry.comment»</b></div>
+	def dispatch CharSequence getSTElementAutoDocumentation(STStandardFunction object) '''
+		«IF !object.inputParameters.isEmpty»
+			<p>INPUTS:
+			«FOR in : object.inputParameters»
+				<div style="text-indent:10px;"><b>«in.name» : «in.fullTypeName»«IF object.varargs && in == object.inputParameters.last» ...«ENDIF»</b>«IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
+			«ENDFOR»
 			</p>
 		«ENDIF»
-		
-	'''
-
-	def dispatch getSTElementAutoDocumentation(Event object) '''
-		
-			
-			   <p>INPUTS:
-		«FOR in : object.inputParameters»
-			<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-		    </p>
+		«IF !object.outputParameters.isEmpty»
 			<p>OUTPUTS:
-		«FOR out : object.outputParameters»
-			<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-		«IF !object.comment.isEmpty»		
-			<p>DESCRIPTION: 
+			«FOR out : object.outputParameters»
+				<div style="text-indent:10px;"><b>«out.name» : «out.fullTypeName»</b>«IF !out.documentation.nullOrEmpty» - «out.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»
+		«IF !object.inOutParameters.isEmpty»
+			<p>IN_OUTS:
+			«FOR inout : object.inOutParameters»
+				<div style="text-indent:10px;"><b>«inout.name» : «inout.fullTypeName»</b>«IF !inout.documentation.nullOrEmpty» - «inout.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»
+		«IF object.returnType !== null»
+			<p>RETURN:
+				<div style="text-indent:10px;"><b>«object.returnType.name»</b>«IF !object.returnValueComment.blank» - «object.returnValueComment»«ENDIF»</div>
+			</p>
+		«ENDIF»
+		«IF !object.comment.isEmpty»
+			<p>DESCRIPTION:
 				<div style="text-indent:10px;"><b>«object.comment»</b></div>
 			</p>
 		«ENDIF»
-		
 	'''
 
-	def dispatch getSTElementAutoDocumentation(FBType object) '''
-		
-			<p>INPUTS:
-		«FOR in : object.inputParameters»
-			<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-			</p>
-			<p>OUTPUTS:
-		«FOR out : object.outputParameters»
-			<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
-		«ENDFOR»
-			</p>	
+	def dispatch CharSequence getSTElementAutoDocumentation(FB object) {
+		object.type.STElementAutoDocumentation
+	}
+
+	def dispatch CharSequence getSTElementAutoDocumentation(FBType object) '''
+		«IF !object.interfaceList.eventInputs.isEmpty»
 			<p>INPUT EVENTS:
-		«FOR event : object.interfaceList.eventInputs»
-			<div style="text-indent:10px;"><b>«event.name»</b></div>
-		«ENDFOR»
+			«FOR event : object.interfaceList.eventInputs»
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
+			«ENDFOR»
 			</p>
+		«ENDIF»
+		«IF !object.interfaceList.eventOutputs.isEmpty»
 			<p>OUTPUT EVENTS:
-		«FOR event : object.interfaceList.eventOutputs»
-			<div style="text-indent:10px;"><b>«event.name»</b></div>
-		«ENDFOR»
-		«IF !object.typeEntry.comment.isEmpty»
-			<p>DESCRIPTION: 
-				<div style="text-indent:10px;"><b>«object.typeEntry.comment»</b></div>
+			«FOR event : object.interfaceList.eventOutputs»
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
+			«ENDFOR»
 			</p>
-		«ENDIF»	
-		
+		«ENDIF»
+		«IF !object.inputParameters.isEmpty»
+			<p>INPUTS:
+			«FOR in : object.inputParameters»
+				<div style="text-indent:10px;"><b>«in.name» : «in.fullTypeName»«IF object.varargs && in == object.inputParameters.last» ...«ENDIF»«IF !in.comment.blank»  («in.comment»)«ENDIF»</b>«IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»
+		«IF !object.outputParameters.isEmpty»
+			<p>OUTPUTS:
+			«FOR out : object.outputParameters»
+				<div style="text-indent:10px;"><b>«out.name» : «out.fullTypeName»</b>«IF !out.documentation.nullOrEmpty» - «out.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»
+		«IF !object.inOutParameters.isEmpty»
+			<p>IN_OUTS:
+			«FOR inout : object.inOutParameters»
+				<div style="text-indent:10px;"><b>«inout.name» : «inout.fullTypeName»</b>«IF !inout.documentation.nullOrEmpty» - «inout.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»
+		«IF object.returnType !== null»
+			<p>RETURN:
+				<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name»</b></div>
+			</p>
+		«ENDIF»
+		«IF !object.comment.isEmpty»
+			<p>DESCRIPTION:
+				<div style="text-indent:10px;"><b>«object.comment»</b></div>
+			</p>
+		«ENDIF»
 	'''
 
 	private def isVarInternalConst(VarDeclaration object) {
@@ -181,39 +164,45 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		}
 	}
 
-	def dispatch getSTElementAutoDocumentation(VarDeclaration object) '''
-		
-			<p>DESCRIPTION: 
+	def dispatch CharSequence getSTElementAutoDocumentation(VarDeclaration object) '''
+		«IF !object.comment.isEmpty»
+			<p>DESCRIPTION:
 				<div style="text-indent:10px;"><b>«object.comment»</b></div>
 			</p>
-			«IF object.isVarInternalConst»
-				<p>Expression: 
-					<div style="text-indent:10px;"><b>«object.value?.value»</b></div>
-				</p>
-			«ENDIF»
-			
+		«ENDIF»
+		«IF object.isVarInternalConst»
+			<p>Expression:
+				<div style="text-indent:10px;"><b>«object.value?.value»</b></div>
+			</p>
+		«ENDIF»
 	'''
 
-	def dispatch getSTElementAutoDocumentation(StructuredType object) '''
-		
-			<p>DESCRIPTION: 
+	def dispatch CharSequence getSTElementAutoDocumentation(StructuredType object) '''
+		«IF !object.comment.isEmpty»
+			<p>DESCRIPTION:
 				<div style="text-indent:10px;"><b>«object.comment»</b></div>
-			</p>	
-			
+			</p>
+		«ENDIF»
 	'''
 
-	def dispatch getSTElementAutoDocumentation(STVarDeclaration varDeclaration) {
-		if (varDeclaration.eContainer instanceof STVarGlobalDeclarationBlock) {
+	def dispatch CharSequence getSTElementAutoDocumentation(STVarDeclaration varDeclaration) {
+		if (varDeclaration.eContainer instanceof STVarGlobalDeclarationBlock)
 			getVarGlobalDescription(varDeclaration)
-		}
+		else
+			'''
+				«IF !varDeclaration.comment.isEmpty»
+					<p>DESCRIPTION:
+						<div style="text-indent:10px;"><b>«varDeclaration.comment»</b></div>
+					</p>
+				«ENDIF»
+			'''
 	}
 
 	private def getVarGlobalDescription(STVarDeclaration declaration) '''
+		<p>File location: <b>«declaration.eResource.URI.toPlatformString(true)»</b></p>
 		
-			<p>File location: <b>«declaration.eResource.URI.toPlatformString(true)»</b></p>
-			
-			<p>Expression: <b>«NodeModelUtils.getNode(declaration.defaultValue)?.text»</b></p>
+		<p>Expression: <b>«NodeModelUtils.getNode(declaration.defaultValue)?.text»</b></p>
 	'''
 
-	def dispatch getSTElementAutoDocumentation(EObject object) '''''' // No ST element or no auto-documentation needed ST element
+	def dispatch CharSequence getSTElementAutoDocumentation(EObject object) '''''' // No ST element or no auto-documentation needed ST element
 }
