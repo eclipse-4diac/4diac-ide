@@ -61,6 +61,7 @@ import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementActivationListener
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.model.ui.editors.SubEditorInput;
+import org.eclipse.fordiac.ide.model.ui.listeners.CommentDecoratorCommandStackListener;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
 import org.eclipse.fordiac.ide.resourceediting.editors.ResourceDiagramEditor;
 import org.eclipse.fordiac.ide.subapptypeeditor.viewer.SubappInstanceViewer;
@@ -105,6 +106,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	public AutomationSystemEditor() {
 		getCommandStack().addCommandStackEventListener(this);
 		getCommandStack().addCommandStackEventListener(new EditorTabCommandStackListener(this));
+		getCommandStack().addCommandStackEventListener(new CommentDecoratorCommandStackListener());
 		QualNameChangeListenerManager.addCommandStackEventListener(getCommandStack());
 	}
 
