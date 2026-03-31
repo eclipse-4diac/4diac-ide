@@ -90,7 +90,7 @@ public class PasteEditPartsAction extends SelectionAction {
 					cmd = createPasteCommandForSubApp(subAppEP);
 				}
 				if (cmd != null) {
-					return new ResizeGroupOrSubappCommand(editPart, cmd);
+					return cmd.chain(new ResizeGroupOrSubappCommand(editPart));
 				}
 			}
 			final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
