@@ -139,37 +139,40 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 
 		private WrapedResizeGroupOrSubappCommand(final GraphicalEditPart groupEP,
 				final CreateSubAppInterfaceElementCommand cmd) {
-			this.resizeCmd = new ResizeGroupOrSubappCommand(groupEP, cmd);
+			this.resizeCmd = new ResizeGroupOrSubappCommand(groupEP);
 			this.cmd = cmd;
 		}
 
 		@Override
 		public boolean canExecute() {
-			return resizeCmd.canExecute();
+			return cmd.canExecute() && resizeCmd.canExecute();
 		}
 
 		@Override
 		public boolean canUndo() {
-			return resizeCmd.canUndo();
+			return cmd.canUndo() && resizeCmd.canUndo();
 		}
 
 		@Override
 		public boolean canRedo() {
-			return resizeCmd.canRedo();
+			return cmd.canRedo() && resizeCmd.canRedo();
 		}
 
 		@Override
 		public void execute() {
+			cmd.execute();
 			resizeCmd.execute();
 		}
 
 		@Override
 		public void undo() {
 			resizeCmd.undo();
+			cmd.undo();
 		}
 
 		@Override
 		public void redo() {
+			cmd.redo();
 			resizeCmd.redo();
 		}
 
@@ -178,5 +181,4 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 			return cmd.getCreatedElement();
 		}
 	}
-
 }

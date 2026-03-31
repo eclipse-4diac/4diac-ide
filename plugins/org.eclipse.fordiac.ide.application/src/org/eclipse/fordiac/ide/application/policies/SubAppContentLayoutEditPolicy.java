@@ -51,8 +51,8 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 				translateToRelative(getHost(), destination);
 				final List<FBNetworkElement> elements = editParts.stream().map(EditPart::getModel)
 						.filter(FBNetworkElement.class::isInstance).map(FBNetworkElement.class::cast).toList();
-				return new ResizeGroupOrSubappCommand(getHost(),
-						new MoveAndReconnectCommand(elements, destination, getParentModel().getSubAppNetwork()));
+				return new MoveAndReconnectCommand(elements, destination, getParentModel().getSubAppNetwork())
+						.chain(new ResizeGroupOrSubappCommand(getHost()));
 			}
 
 		}

@@ -244,7 +244,7 @@ public class InstancePropertySection extends AbstractSection {
 					.getEditPartForModel(getType());
 			if (editPart instanceof final SubAppForFBNetworkEditPart subAppforFBNetworkEditPart
 					&& subAppforFBNetworkEditPart.getContentEP() != null) {
-				cmd = new ResizeGroupOrSubappCommand(subAppforFBNetworkEditPart.getContentEP(), cmd);
+				cmd = cmd.chain(new ResizeGroupOrSubappCommand(subAppforFBNetworkEditPart.getContentEP()));
 			}
 		}
 		return cmd;

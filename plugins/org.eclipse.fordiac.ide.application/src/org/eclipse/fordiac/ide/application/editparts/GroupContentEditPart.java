@@ -50,8 +50,8 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractContainerCreateInstanceDirectEditPolicy() {
 			@Override
 			public Command getElementCreateCommand(final TypeEntry type, final Point refPoint) {
-				return new ResizeGroupOrSubappCommand(this.getHost(),
-						new CreateFBElementInGroupCommand(type, getModel().getGroup(), refPoint.x, refPoint.y));
+				return new CreateFBElementInGroupCommand(type, getModel().getGroup(), refPoint.x, refPoint.y)
+						.chain(new ResizeGroupOrSubappCommand(this.getHost()));
 			}
 		});
 	}
