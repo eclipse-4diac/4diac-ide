@@ -132,7 +132,7 @@ public class FordiacQuickFixHandler extends AbstractHandler {
 
 	public static IMarker[] getMarkersFromEditorSelection(final IStructuredSelection selection) {
 		return selection.stream().filter(EditPart.class::isInstance).map(EditPart.class::cast)
-				.map(FordiacQuickFixHandler::getMarker).toArray(IMarker[]::new);
+				.map(FordiacQuickFixHandler::getMarker).filter(Objects::nonNull).toArray(IMarker[]::new);
 	}
 
 	public static boolean hasMarker(final EditPart editPart) {
