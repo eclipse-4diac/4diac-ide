@@ -64,7 +64,7 @@ public class FBWithNetworkDefaultInterpreter {
 	}
 
 	protected static IInterfaceElement getEquivalentNetworkPin(final FBNetworkRuntime runtime,
-			final FBNetworkElement parentFB, final VarDeclaration pin) {
+			final FBNetworkElement parentFB, final IInterfaceElement pin) {
 		final var equivalentFb = runtime.getFbnetwork().getFBNamed(parentFB.getName());
 		return InterfacePinUtils.findPinInInterface(equivalentFb, pin);
 	}

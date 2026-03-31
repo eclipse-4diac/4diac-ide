@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -38,13 +39,13 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		try {
-			RefactoringUtil.saveAllAndBuild();
 			final IStructuredSelection selection = HandlerUtil.getCurrentStructuredSelection(event);
 			if (selection.size() == 1) {
 				final Object firstElement = selection.getFirstElement();
 				final URI elementURI = getElementURI(firstElement);
 				final String elementName = getElementName(firstElement);
 				if (elementURI != null && !elementName.isEmpty()) {
+					RefactoringUtil.saveAllAndBuild();
 					final RenameRefactoring refactoring = new RenameRefactoring(
 							new RenameElementRefactoringProcessor(elementURI, elementName));
 					final RenameElementRefactoringWizard wizard = new RenameElementRefactoringWizard(refactoring);
@@ -52,6 +53,8 @@ public class RenameElementRefactoringHandler extends AbstractHandler {
 					openOperation.run(HandlerUtil.getActiveShell(event), refactoring.getName());
 				}
 			}
+		} catch (final OperationCanceledException e) {
+			// ignore
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} catch (final Exception e) {

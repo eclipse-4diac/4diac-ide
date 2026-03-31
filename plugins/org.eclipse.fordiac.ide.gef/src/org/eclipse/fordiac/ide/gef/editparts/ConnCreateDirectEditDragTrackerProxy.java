@@ -165,7 +165,7 @@ public class ConnCreateDirectEditDragTrackerProxy implements DragTracker {
 	}
 
 	@Override
-	public void setProperties(final Map properties) {
+	public void setProperties(final Map<?, ?> properties) {
 		connectionTool.setProperties(properties);
 		editPartTracker.setProperties(properties);
 	}

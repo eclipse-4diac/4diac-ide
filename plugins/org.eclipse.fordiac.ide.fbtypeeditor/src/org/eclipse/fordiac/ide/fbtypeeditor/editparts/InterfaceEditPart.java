@@ -36,6 +36,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.PinProperty;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.annotation.AnnotableGraphicalEditPart;
@@ -141,7 +142,6 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 				super.notifyChanged(notification);
 				refresh();
 				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
-					refreshTypeRoot();
 					refreshWiths();
 				}
 			}
@@ -160,10 +160,11 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	public void updateAnnotations(final GraphicalAnnotationModelEvent event) {
 		GraphicalAnnotationStyles.updateAnnotationFeedback(getFigure(), getModel(), event,
 				FordiacAnnotationUtil::showOnTarget, FordiacAnnotationUtil::showOnTargetName);
-		final CommentTypeEditPart commentTypeEditPart = findAssociatedCommentTypeEP();
-		if (commentTypeEditPart != null) {
-			commentTypeEditPart.updateAnnotations(event);
-		}
+
+		getViewer().getEditPartRegistry().values().stream()
+				.filter(ep -> ep.getModel() instanceof final PinProperty pinProp && pinProp.getPin().equals(getModel()))
+				.filter(AnnotableGraphicalEditPart.class::isInstance).map(AnnotableGraphicalEditPart.class::cast)
+				.forEach(ep -> ep.updateAnnotations(event));
 	}
 
 	@Override
@@ -183,35 +184,8 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	}
 
 	@Override
-	public void activate() {
-		super.activate();
-		checkAssociatedCommentType();
-		// tell the root edipart that we are here and that it should add the type
-		// comment children
-		refreshTypeRoot();
-	}
-
-	@Override
 	public boolean isConnectable() {
 		return true;
-	}
-
-	private void refreshTypeRoot() {
-		final FBTypeRootEditPart typeRootEP = getFBTypeRootEP();
-		if (typeRootEP != null) {
-			typeRootEP.refresh();
-			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
-					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
-		}
-	}
-
-	private FBTypeRootEditPart getFBTypeRootEP() {
-		for (final Object part : getRoot().getChildren()) {
-			if (part instanceof final FBTypeRootEditPart fbtRootEP) {
-				return fbtRootEP;
-			}
-		}
-		return null;
 	}
 
 	public void setInOutConnectionsWith(final int with) {
@@ -271,9 +245,9 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		final int pos = calculateWithPos((With) connection.getModel(), isInput());
 		if (isInput()) {
-			return new InputWithAnchor(getFigure(), pos, this);
+			return new InputWithAnchor(getFigure(), pos);
 		}
-		return new OutputWithAnchor(getFigure(), pos, this);
+		return new OutputWithAnchor(getFigure(), pos);
 	}
 
 	public static int calculateWithPos(final With with, final boolean isInput) {
@@ -322,18 +296,4 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart
 		return getCastedModel();
 	}
 
-	private void checkAssociatedCommentType() {
-		final CommentTypeEditPart ep = findAssociatedCommentTypeEP();
-		if (ep != null && ep.getReferencedInterface() == null) {
-			// the associated comment type editpart was created before us
-			ep.setupReferencedEP();
-		}
-	}
-
-	private CommentTypeEditPart findAssociatedCommentTypeEP() {
-		return (CommentTypeEditPart) getViewer().getEditPartRegistry().values().stream()
-				.filter(CommentTypeEditPart.class::isInstance)
-				.filter(c -> this.getModel().equals(((CommentTypeEditPart) c).getInterfaceElement())).findAny()
-				.orElse(null);
-	}
 }

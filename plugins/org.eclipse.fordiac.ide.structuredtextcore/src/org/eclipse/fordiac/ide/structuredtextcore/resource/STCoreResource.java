@@ -31,7 +31,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 import org.eclipse.fordiac.ide.model.resource.TypeImportDiagnostic;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -111,7 +112,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			if (uri.hasQuery() && resourceSet != null) {
 				typeResource = resourceSet.getResource(uri.trimQuery(), true);
 			} else {
-				typeResource = new FordiacTypeResource(uri);
+				typeResource = FordiacTypeResourceFactory.INSTANCE.createResource(uri);
 				typeResource.load(inputStream, Collections.emptyMap());
 			}
 			return typeResource;
@@ -194,7 +195,7 @@ public class STCoreResource extends LibraryElementXtextResource implements STRes
 			reconcile(libraryElement, options);
 			// chain save library element to outputStream
 			try {
-				final FordiacTypeResource typeResource = new FordiacTypeResource(uri);
+				final LibraryElementResource typeResource = FordiacTypeResourceFactory.INSTANCE.createResource(uri);
 				typeResource.getContents().add(libraryElement);
 				typeResource.save(outputStream, options);
 			} catch (final Exception e) {

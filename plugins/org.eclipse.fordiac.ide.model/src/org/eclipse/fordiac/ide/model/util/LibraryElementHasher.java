@@ -24,7 +24,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Base64;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -33,7 +32,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.emf.HashMetaData;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
+import org.eclipse.fordiac.ide.model.resource.LibraryElementResource;
 
 public final class LibraryElementHasher {
 	/**
@@ -49,29 +50,27 @@ public final class LibraryElementHasher {
 	 */
 	public static final String DEFAULT_HASH_ALGORITHM = "SHA3-512"; //$NON-NLS-1$
 
-	private static final String TOHASH_URI = "tohash.xml"; //$NON-NLS-1$
-
 	/**
 	 * Calculate hash with default parameters for the given object
 	 *
-	 * @param eObject The object to hash
+	 * @param element The object to hash
 	 * @return The hash string
 	 * @throws LibraryElementHashException if an error occurs
 	 */
-	public static String hash(final EObject eObject) throws LibraryElementHashException {
-		return hash(eObject, CURRENT_HASH_VERSION, DEFAULT_HASH_ALGORITHM);
+	public static String hash(final LibraryElement element) throws LibraryElementHashException {
+		return hash(element, CURRENT_HASH_VERSION, DEFAULT_HASH_ALGORITHM);
 	}
 
 	/**
 	 * Calculate hash with given parameters for the given object
 	 *
-	 * @param eObject   The object to hash
+	 * @param element   The object to hash
 	 * @param version   The hash version
 	 * @param algorithm The hash algorithm
 	 * @return The hash string
 	 * @throws LibraryElementHashException if an error occurs
 	 */
-	public static String hash(final EObject eObject, final String version, final String algorithm)
+	public static String hash(final LibraryElement element, final String version, final String algorithm)
 			throws LibraryElementHashException {
 		if (!CURRENT_HASH_VERSION.equals(version)) {
 			throw new LibraryElementHashException(MessageFormat.format("Wrong library hash version: {0}", version)); //$NON-NLS-1$
@@ -88,8 +87,9 @@ public final class LibraryElementHasher {
 		sb.append(algorithm);
 		sb.append(':');
 
-		final FordiacTypeResource typeRes = new FordiacTypeResource(URI.createFileURI(TOHASH_URI));
-		typeRes.getContents().add(copyForHashing(eObject));
+		final LibraryElementResource typeRes = FordiacTypeResourceFactory.INSTANCE
+				.createResource(element.getTypeEntry().getURI());
+		typeRes.getContents().add(copyForHashing(element));
 
 		try (OutputStream nullOut = OutputStream.nullOutputStream();
 				DigestOutputStream dos = new DigestOutputStream(nullOut, digest)) {

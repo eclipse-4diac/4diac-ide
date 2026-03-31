@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.deployment.devResponse.DevResponsePackage;
 import org.eclipse.fordiac.ide.deployment.devResponse.FB;
+import org.eclipse.fordiac.ide.deployment.devResponse.FBStatus;
 import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 
 /**
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getFbs <em>Fbs</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.deployment.devResponse.impl.ResourceImpl#getStatus <em>Status</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,6 +97,35 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	 * @ordered
 	 */
 	protected EList<FB> fbs;
+
+	/**
+	 * The default value of the '{@link #getStatus() <em>Status</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStatus()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final FBStatus STATUS_EDEFAULT = FBStatus.UNKNOWN;
+
+	/**
+	 * The cached value of the '{@link #getStatus() <em>Status</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStatus()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBStatus status = STATUS_EDEFAULT;
+
+	/**
+	 * This is true if the Status attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean statusESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -170,6 +201,58 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FBStatus getStatus() {
+		return status;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStatus(FBStatus newStatus) {
+		FBStatus oldStatus = status;
+		status = newStatus == null ? STATUS_EDEFAULT : newStatus;
+		boolean oldStatusESet = statusESet;
+		statusESet = true;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.SET, DevResponsePackage.RESOURCE__STATUS, oldStatus, status, !oldStatusESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetStatus() {
+		FBStatus oldStatus = status;
+		boolean oldStatusESet = statusESet;
+		status = STATUS_EDEFAULT;
+		statusESet = false;
+		if (eNotificationRequired()) {
+			eNotify(new ENotificationImpl(this, Notification.UNSET, DevResponsePackage.RESOURCE__STATUS, oldStatus, STATUS_EDEFAULT, oldStatusESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetStatus() {
+		return statusESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -196,6 +279,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				return getType();
 			case DevResponsePackage.RESOURCE__FBS:
 				return getFbs();
+			case DevResponsePackage.RESOURCE__STATUS:
+				return getStatus();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -219,6 +304,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				getFbs().clear();
 				getFbs().addAll((Collection<? extends FB>)newValue);
 				return;
+			case DevResponsePackage.RESOURCE__STATUS:
+				setStatus((FBStatus)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -241,6 +329,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 			case DevResponsePackage.RESOURCE__FBS:
 				getFbs().clear();
 				return;
+			case DevResponsePackage.RESOURCE__STATUS:
+				unsetStatus();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -260,6 +351,8 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case DevResponsePackage.RESOURCE__FBS:
 				return fbs != null && !fbs.isEmpty();
+			case DevResponsePackage.RESOURCE__STATUS:
+				return isSetStatus();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -280,6 +373,12 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		result.append(name);
 		result.append(", type: "); //$NON-NLS-1$
 		result.append(type);
+		result.append(", status: "); //$NON-NLS-1$
+		if (statusESet) {
+			result.append(status);
+		} else {
+			result.append("<unset>"); //$NON-NLS-1$
+		}
 		result.append(')');
 		return result.toString();
 	}

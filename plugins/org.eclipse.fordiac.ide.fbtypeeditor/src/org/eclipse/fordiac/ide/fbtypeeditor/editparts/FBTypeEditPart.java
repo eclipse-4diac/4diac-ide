@@ -23,12 +23,20 @@ import java.util.List;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.fbtypeeditor.figures.FBTypeFigure;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.EventInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.EventOutputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.PlugContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.SocketContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VarInOutInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VarInOutOutputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VariableInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.VariableOutputContainer;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -73,8 +81,6 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		super.activate();
 		getModel().eAdapters().add(versionInfoAdapter);
 		JFaceResources.getFontRegistry().addListener(getFontChangeListener());
-		// position the FB at 0,0
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), new Rectangle(0, 0, -1, -1));
 	}
 
 	@Override

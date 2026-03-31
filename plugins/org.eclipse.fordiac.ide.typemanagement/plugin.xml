@@ -135,6 +135,12 @@
            id="org.eclipse.fordiac.ide.typemanagement.connectionstostruct"
            name="%command.ConnectionsToStruct">
      </command>
+      <command
+      id="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy"
+      name="Insert Adapter Proxy"/>
+        <command
+      id="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.replaceConnectionWithAdapter"
+      name="Replace Connection with Adapter"/>
      <command
            id="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
            name="%command.RepairBrokenConnection">
@@ -187,6 +193,40 @@
                  </test>
            </with></enabledWhen>
      </handler>
+     <handler
+           class="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.IntroduceAdapterProxyOnConnectionHandler"
+           commandId="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy">
+           <enabledWhen>
+           <with
+                 variable="selection">
+                 <test
+                       property="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy">
+                 </test>
+           </with></enabledWhen>
+ 	</handler>
+	<handler
+	      class="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.IntroduceAdapterProxyHandler"
+	      commandId="org.eclipse.fordiac.refactoring.insertAdapterProxy">
+	    <activeWhen>
+	      <with variable="activePartId">
+	        <equals value="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"/>
+	      </with>
+	    </activeWhen>
+	
+	    <enabledWhen>
+	      <with variable="activeMenuSelection">
+	        <count value="1"/>
+	        <iterate>
+	          <or>
+	            <adapt type="org.eclipse.core.resources.IFile">
+	              <test property="org.eclipse.core.resources.extension" value="adp"/>
+	            </adapt>
+	            <instanceof value="org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry"/>
+	          </or>
+	        </iterate>
+	      </with>
+	    </enabledWhen>
+	 </handler>
      <handler
            class="org.eclipse.fordiac.ide.typemanagement.refactoring.handler.RepairBrokenConnectionHandler"
            commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection">
@@ -543,6 +583,13 @@
             properties="ConnectionsToStructSupported"
             type="java.lang.Object">
       </propertyTester>
+       <propertyTester
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.InsertAdapterProxyPropertyTester"
+            id="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxyTester"
+            namespace="org.eclipse.fordiac.ide.typemanagement"
+            properties="insertAdapterProxy"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>  
 
    
@@ -631,6 +678,24 @@
                      checkEnabled="true">
                </visibleWhen>
             </command>
+              <command
+                  commandId="org.eclipse.fordiac.ide.typemanagement.insertAdapterProxy"
+                  label="Insert Adapter Proxy"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
+            </command>
+       <command
+          commandId="org.eclipse.fordiac.ide.typemanagement.refactoring.adapter.replaceConnectionWithAdapter"
+          label="Replace Connection with Adapter"
+          style="push">
+        <!-- Show only when selection passes the tester (prevents a greyed entry) -->
+         <visibleWhen
+                     checkEnabled="true">
+         </visibleWhen>
+      </command>
+            
             <command
                   commandId="org.eclipse.fordiac.ide.typemanagement.repairbrokenconnection"
                   label="%RepairBrokenConnection_label"
@@ -731,5 +796,30 @@
 				</or>
 	     	</adapt>
     	</definition>
-   </extension>   
+   </extension>
+
+<extension point="org.eclipse.ui.menus">
+  <menuContribution
+      locationURI="popup:org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer?after=group.search">
+    <command
+        commandId="org.eclipse.fordiac.refactoring.insertAdapterProxy"
+        label="Insert Adapter Proxy"
+        style="push">
+      <visibleWhen checkEnabled="true">
+        <with variable="selection">
+          <count value="1"/>
+          <iterate>
+            <or>
+              <adapt type="org.eclipse.core.resources.IFile">
+                <test property="org.eclipse.core.resources.extension" value="adp"/>
+              </adapt>
+              <instanceof value="org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry"/>
+            </or>
+          </iterate>
+        </with>
+      </visibleWhen>
+    </command>
+  </menuContribution>
+</extension>
+      
 </plugin>

@@ -76,7 +76,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	private void updateTarget(final Point p) {
-		final ReconnectRequest request = (ReconnectRequest) getTargetRequest();
+		final ReconnectRequest request = getTargetRequest();
 		request.setLocation(p);
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getSource()
@@ -149,7 +149,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	}
 
 	@Override
-	public void setProperties(final Map properties) {
+	public void setProperties(final Map<?, ?> properties) {
 		if (null != conCreationTool) {
 			conCreationTool.setProperties(properties);
 		}

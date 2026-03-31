@@ -858,6 +858,11 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SimpleFBType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//SimpleFBType/simpleECStates"/>
+      <genOperations ecoreOperation="lib.ecore#//SimpleFBType/validateEventUsage"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.SimpleFBTypeAnnotations.validateEventUsage(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//SimpleFBType/validateEventUsage/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//SimpleFBType/validateEventUsage/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
     <genClasses ecoreClass="lib.ecore#//STFunction"/>
@@ -1024,6 +1029,11 @@
           body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateVarInOutSubappNetwork(this, diagnostics, context);">
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateVarInOutSubappNetwork/context"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateDestinationTypeMismatch(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/context"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/findInTypeInterface"
           body="return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;"/>

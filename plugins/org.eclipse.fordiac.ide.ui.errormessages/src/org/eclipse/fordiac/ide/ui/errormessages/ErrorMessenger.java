@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2026 Primetals Technologies Germany GmbH and others
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *   Ernst Blecha - initial API and implementation and/or initial documentation
+ *   Alexander Fedorov (ArSysOp) - remove redundant bundle activator
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.errormessages;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.osgi.framework.FrameworkUtil;
 
 public final class ErrorMessenger {
 
@@ -71,7 +73,7 @@ public final class ErrorMessenger {
 	private static IEventBroker initEventBroker() {
 		// This initialization can fail if this is run as a simple JUnit-Test instead of
 		// a JUnit-Plug-in-Test
-		return EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext())
+		return EclipseContextFactory.getServiceContext(FrameworkUtil.getBundle(ErrorMessenger.class).getBundleContext())
 				.get(IEventBroker.class);
 	}
 

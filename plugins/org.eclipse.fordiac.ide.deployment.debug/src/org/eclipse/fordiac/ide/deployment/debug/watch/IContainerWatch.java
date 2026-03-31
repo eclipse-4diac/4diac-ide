@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.debug.watch;
 
-import java.util.List;
+import java.util.SequencedCollection;
 
 public interface IContainerWatch extends IWatch {
 
@@ -21,5 +21,5 @@ public interface IContainerWatch extends IWatch {
 	 *
 	 * @return The sub-watches
 	 */
-	List<IWatch> getSubWatches();
+	SequencedCollection<IWatch> getSubWatches();
 }

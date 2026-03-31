@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,24 +16,25 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 
 public class InputWithAnchor extends WithAnchor {
 
-	public InputWithAnchor(final IFigure figure, final int pos, final EditPart editPart) {
-		super(figure, pos, editPart);
+	public InputWithAnchor(final IFigure figure, final int pos) {
+		super(figure, pos);
 	}
 
 	@Override
 	public Point getLocation(final Point reference) {
-		final Rectangle r = Rectangle.SINGLETON;
+		final PrecisionRectangle r = LOC_HELPER;
 		r.setBounds(getBox());
 		r.translate(0, -1);
 		r.resize(1, 1);
 		getOwner().translateToAbsolute(r);
-		final int leftX = (int) (r.x - (float) ((WITH_DISTANCE * getZoomFactor()) * getPos()));
-		final int centerY = r.y + r.height / 2;
-		return new Point(leftX, centerY);
+
+		final double leftX = r.preciseX() - getAbsoluteWithPos();
+		final double centerY = r.preciseY() + r.preciseHeight() / 2.0;
+		return new PrecisionPoint(leftX, centerY);
 	}
 }

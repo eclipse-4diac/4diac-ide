@@ -13,11 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typeeditor;
 
+import java.util.Objects;
+
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextViewerExtension6;
@@ -32,6 +36,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.xtext.AbstractRule;
+import org.eclipse.xtext.IGrammarAccess;
+import org.eclipse.xtext.LanguageInfo;
+import org.eclipse.xtext.TypeRef;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 
 import com.google.inject.Inject;
@@ -40,6 +48,13 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 
 	@Inject
 	private AbstractUIPlugin languageUIPlugin;
+
+	@Inject
+	private LanguageInfo languageInfo;
+
+	@Inject
+	private IGrammarAccess grammarAccess;
+
 	private boolean restoringSelection;
 	private boolean performanceMode;
 	private boolean performanceModeShowDialog;
@@ -158,16 +173,21 @@ public class XtextTypeEditorPage extends XtextEditor implements ITypeEditorPage 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
 		try {
-			return marker.getType().startsWith(
-					languageUIPlugin.getBundle().getSymbolicName() + "." + getLanguageShortName().toLowerCase()); //$NON-NLS-1$
-		} catch (final CoreException e) {
-			return false;// marker does not exist
+			return marker.isSubtypeOf(getLanguageMarkerType())
+					|| isLanguageTargetType(FordiacErrorMarker.getTargetType(marker));
+		} catch (final Exception e) {
+			return false; // marker does not exist or target type is invalid
 		}
 	}
 
-	protected String getLanguageShortName() {
-		final String languageName = getLanguageName();
-		return languageName.substring(languageName.lastIndexOf('.') + 1);
+	protected String getLanguageMarkerType() {
+		return languageUIPlugin.getBundle().getSymbolicName() + "." + languageInfo.getShortName().toLowerCase(); //$NON-NLS-1$
+	}
+
+	protected boolean isLanguageTargetType(final EClass targetType) {
+		// check whether the grammar has a rule for targetType
+		return targetType != null && grammarAccess.getGrammar().getRules().stream().map(AbstractRule::getType)
+				.filter(Objects::nonNull).map(TypeRef::getClassifier).anyMatch(targetType::equals);
 	}
 
 	@Override

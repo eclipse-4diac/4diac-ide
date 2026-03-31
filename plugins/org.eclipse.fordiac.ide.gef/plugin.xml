@@ -309,6 +309,31 @@
            id="org.eclipse.fordiac.ide.ui.ConnectionSourceMarkerColor"
            label="%FordiacPreferencePage_LABEL_ConnectionSourceMarkerColor"
            value="99, 179, 31">
-     </colorDefinition>      
+     </colorDefinition>
+     <colorDefinition
+           categoryId="org.eclipse.fordiac.ide.themeCategory"
+           id="org.eclipse.fordiac.ide.ui.GridMajorLineColor"
+           label="Grid Major Line color"
+           value="238, 238, 238"
+           isEditable="false">
+           <!-- the label does not need to be translatable --> 
+     </colorDefinition>
+     <colorDefinition
+           categoryId="org.eclipse.fordiac.ide.themeCategory"
+           id="org.eclipse.fordiac.ide.ui.GridMinorLineColor"
+           label="Grid Minor Line color"
+           value="215, 215, 215"
+           isEditable="false">
+           <!-- the label does not need to be translatable --> 
+     </colorDefinition>
+  </extension>
+  <extension
+        point="org.eclipse.e4.ui.css.swt.theme">
+    <stylesheet
+          uri="css/dark_fordiac_gef_colors.css">
+      <themeid
+            refid="org.eclipse.e4.ui.css.theme.e4_dark">
+      </themeid>
+    </stylesheet>
   </extension>
 </plugin>

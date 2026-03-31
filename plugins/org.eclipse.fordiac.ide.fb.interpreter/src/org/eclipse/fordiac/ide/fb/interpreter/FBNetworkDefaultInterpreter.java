@@ -42,16 +42,11 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 			return switchNetwork(eventOccurrence.getEvent(), EcoreUtil.copy(fBNetworkRuntime));
 		}
 		if (eventOccurrence.getParentFB() instanceof final UntypedSubApp uSubApp) {
-			return new UntypedSubApplicationDefaultInterpreter(eventOccurrence).run(fBNetworkRuntime, uSubApp);
+			return new UntypedSubApplicationDefaultInterpreter(eventOccurrence, uSubApp).run(fBNetworkRuntime);
 		}
 
-		// run FB Type to get the output events for the instance in the network
-		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
-		if (runtime == null) {
-			final FBType copiedType = EcoreUtil.copy(eventOccurrence.getParentFB().getType());
-			runtime = RuntimeFactory.createFrom(copiedType);
-			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
-		}
+		final FBRuntimeAbstract runtime = RuntimeFactory.getOrCreateRuntime(fBNetworkRuntime,
+				eventOccurrence.getParentFB());
 
 		// sampling input & writing output is special for composite types
 		if (runtime instanceof final CompositeFBTypeRuntime compTypeRT) {
@@ -102,7 +97,10 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 			}
 			final VarDeclaration typeVarDec = getEquivalentDataPinFromType(runtime, varDec);
 			if (!VariableUtils.isEmptyValue(value)) {
-				typeVarDec.setValue(EcoreUtil.copy(value));
+				if (typeVarDec.getValue() == null) {
+					typeVarDec.setValue(LibraryElementFactory.eINSTANCE.createValue());
+				}
+				typeVarDec.getValue().setValue(value.getValue());
 			}
 		});
 	}
@@ -150,8 +148,13 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 
 		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo, runtime);
 
-		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(
-				outputConnection -> map.put(outputConnection, EcoreUtil.copy(getOutputValue(variable, runtime)))));
+		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(outputConnection -> {
+			var value = map.get(outputConnection);
+			if (value == null) {
+				value = map.put(outputConnection, LibraryElementFactory.eINSTANCE.createValue());
+			}
+			value.setValue(getOutputValue(variable, runtime).getValue());
+		}));
 	}
 
 	private static Value getOutputValue(final VarDeclaration variable, final FBNetworkRuntime runtime) {
@@ -215,7 +218,7 @@ public class FBNetworkDefaultInterpreter extends FBWithNetworkDefaultInterpreter
 		if (!(dest instanceof Event)) {
 			throw new IllegalArgumentException("cannot trigger FB with pin " + dest.getName()); //$NON-NLS-1$
 		}
-		final EventOccurrence destEO = EventOccFactory.createFrom((Event) dest, null);
+		final EventOccurrence destEO = EventOccFactory.createFrom((Event) dest);
 
 		// if the destination EO does not have a parent, it might be the outgoing
 		// connection for the network inside a composite

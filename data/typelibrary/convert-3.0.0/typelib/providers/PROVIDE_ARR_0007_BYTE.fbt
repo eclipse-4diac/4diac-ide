@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PROVIDE_ARR_0007_BYTE" Comment="FB to provide a BYTE array of size 7 (generic FB)">
+	<Identification Standard="61499-2" Description="Copyright (c) 2026 Andreas Demmler Fahrzeugbau&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0 &#10;&#10;This generic Function Block defines an array of 7 BYTE elements.&#10;Functionality:&#10;- On the INIT event, the FB reads the array &apos;D1&apos;, calculates its size, and triggers INITO.&#10;- The output &apos;u16DaSize&apos; provides the number of elements in the array.&#10;- The &apos;D1&apos; InOut variable serves as the array container and can be pre-filled with initial values.&#10;&#10;Example for D1 initialization: [16#01, 16#00, ...]">
+	</Identification>
+	<VersionInfo Organization="Andreas Demmler Fahrzeugbau" Version="1.1" Author="Moritz Ortmeier" Date="2026-03-21" Remarks="changed naming and removed length output">
+	</VersionInfo>
+	<VersionInfo Organization="Andreas Demmler Fahrzeugbau" Version="1.0" Author="Franz Höpfinger" Date="2026-01-22">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::convert::providers">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
+				<With Var="D1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+				<With Var="D1"/>
+			</Event>
+		</EventOutputs>
+		<InOutVars>
+			<VarDeclaration Name="D1" Type="BYTE" Comment="Array in/out" ArraySize="0..6"/>
+		</InOutVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_INIT_ARR'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

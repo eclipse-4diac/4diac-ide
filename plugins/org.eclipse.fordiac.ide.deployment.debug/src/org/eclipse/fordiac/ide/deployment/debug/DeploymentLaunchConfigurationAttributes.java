@@ -59,6 +59,7 @@ public final class DeploymentLaunchConfigurationAttributes {
 	public static final String WATCH_TARGET_NAME = "org.eclipse.fordiac.ide.deployment.debug.watch.targetName"; //$NON-NLS-1$
 	public static final String WATCH_TARGET_TYPE = "org.eclipse.fordiac.ide.deployment.debug.watch.targetType"; //$NON-NLS-1$
 	public static final String WATCH_FORCE_VALUE = "org.eclipse.fordiac.ide.deployment.debug.watch.forceValue"; //$NON-NLS-1$
+	public static final String WATCH_SUBELEMENTS = "org.eclipse.fordiac.ide.deployment.debug.watch.subElements"; //$NON-NLS-1$
 
 	public static IResource getSystemResource(final ILaunchConfiguration configuration) throws CoreException {
 		final String systemAttribute = configuration.getAttribute(SYSTEM, ""); //$NON-NLS-1$
@@ -124,13 +125,16 @@ public final class DeploymentLaunchConfigurationAttributes {
 		final List<String> targetNames = configuration.getAttribute(WATCH_TARGET_NAME, List.of());
 		final List<String> targetTypes = configuration.getAttribute(WATCH_TARGET_TYPE, List.of());
 		final List<String> forceValues = configuration.getAttribute(WATCH_FORCE_VALUE, List.of());
-		if (targetNames.size() != targetTypes.size() || targetNames.size() != forceValues.size()) {
+		final List<String> watchSubElements = configuration.getAttribute(WATCH_SUBELEMENTS,
+				Collections.nCopies(targetNames.size(), null));
+		if (targetNames.size() != targetTypes.size() || targetNames.size() != forceValues.size()
+				|| targetNames.size() != watchSubElements.size()) {
 			throw new CoreException(
 					Status.error("Invalid watches in launch configuration: Lists must have the same size")); //$NON-NLS-1$
 		}
 		return IntStream.range(0, targetNames.size())
 				.mapToObj(index -> new DeploymentLaunchWatchpoint(targetNames.get(index), targetTypes.get(index),
-						forceValues.get(index)))
+						forceValues.get(index), Boolean.parseBoolean(watchSubElements.get(index))))
 				.toList();
 	}
 
@@ -140,6 +144,7 @@ public final class DeploymentLaunchConfigurationAttributes {
 			configuration.removeAttribute(WATCH_TARGET_NAME);
 			configuration.removeAttribute(WATCH_TARGET_TYPE);
 			configuration.removeAttribute(WATCH_FORCE_VALUE);
+			configuration.removeAttribute(WATCH_SUBELEMENTS);
 			return;
 		}
 		configuration.setAttribute(WATCH_TARGET_NAME,
@@ -148,6 +153,8 @@ public final class DeploymentLaunchConfigurationAttributes {
 				.map(EcoreUtil::getURI).map(URI::toString).toList());
 		configuration.setAttribute(WATCH_FORCE_VALUE,
 				watches.stream().map(DeploymentLaunchWatchpoint::forceValue).toList());
+		configuration.setAttribute(WATCH_SUBELEMENTS,
+				watches.stream().map(DeploymentLaunchWatchpoint::watchSubElements).map(Object::toString).toList());
 	}
 
 	public static List<DeploymentLaunchValue> getValues(final ILaunchConfiguration configuration) throws CoreException {
@@ -193,26 +200,29 @@ public final class DeploymentLaunchConfigurationAttributes {
 		}
 	}
 
-	public record DeploymentLaunchWatchpoint(String targetName, EClass targetType, String forceValue) {
+	public record DeploymentLaunchWatchpoint(String targetName, EClass targetType, String forceValue,
+			boolean watchSubElements) {
 		public DeploymentLaunchWatchpoint {
 			Objects.requireNonNull(targetName);
 			Objects.requireNonNull(targetType);
 			Objects.requireNonNull(forceValue);
 		}
 
-		public DeploymentLaunchWatchpoint(final String targetName, final String targetTypeUri,
-				final String forceValue) {
-			this(targetName, URI.createURI(targetTypeUri), forceValue);
+		public DeploymentLaunchWatchpoint(final String targetName, final String targetTypeUri, final String forceValue,
+				final boolean watchSubElements) {
+			this(targetName, URI.createURI(targetTypeUri), forceValue, watchSubElements);
 		}
 
-		public DeploymentLaunchWatchpoint(final String targetName, final URI targetTypeUri, final String forceValue) {
-			this(targetName, getTargetType(targetTypeUri), forceValue);
+		public DeploymentLaunchWatchpoint(final String targetName, final URI targetTypeUri, final String forceValue,
+				final boolean watchSubElements) {
+			this(targetName, getTargetType(targetTypeUri), forceValue, watchSubElements);
 		}
 
 		public DeploymentLaunchWatchpoint(final DeploymentWatchpoint watchpoint) {
 			this(watchpoint.getLocation(),
 					watchpoint.getTargetType().orElse(LibraryElementPackage.Literals.INAMED_ELEMENT),
-					watchpoint.isForceSupported() && watchpoint.isForceEnabled() ? watchpoint.getForceValue() : ""); //$NON-NLS-1$
+					watchpoint.isForceSupported() && watchpoint.isForceEnabled() ? watchpoint.getForceValue() : "", //$NON-NLS-1$
+					watchpoint.isWatchSubElements());
 		}
 
 		public Optional<INamedElement> getTarget(final Device device) {

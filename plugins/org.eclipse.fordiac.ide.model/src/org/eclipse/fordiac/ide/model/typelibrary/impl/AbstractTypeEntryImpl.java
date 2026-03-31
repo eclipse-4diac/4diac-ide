@@ -49,7 +49,7 @@ import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorLibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
+import org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -343,8 +343,10 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 
 	protected void encloseInResource(final LibraryElement newType) {
 		if (newType.eResource() == null) {
-			new FordiacTypeResource(Objects.requireNonNullElseGet(getURI(),
-					() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))).getContents().add(newType); //$NON-NLS-1$
+			FordiacTypeResourceFactory.INSTANCE
+					.createResource(Objects.requireNonNullElseGet(getURI(),
+							() -> URI.createFileURI(newType.getName() + "." + getFileExtension()))) //$NON-NLS-1$
+					.getContents().add(newType);
 		}
 	}
 
@@ -362,7 +364,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 			retval.setTypeEntry(this);
 			return retval;
 		} catch (final Exception e) {
-			FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
+			handleLoadException(e);
 			return null;
 		} finally {
 			loading = false;
@@ -640,7 +642,7 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 						return foundTypeName;
 					}
 				} catch (final Exception e) {
-					FordiacLogHelper.logWarning(e.getMessage(), e);
+					handleLoadException(e);
 				}
 			}
 			return TypeEntry.getTypeNameFromFile(cachedFile);
@@ -656,10 +658,18 @@ public abstract class AbstractTypeEntryImpl extends ConcurrentNotifierImpl imple
 					return CommonElementImporter.fullyUnEscapeValue(scanner.match().group(1));
 				}
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(e.getMessage(), e);
+				handleLoadException(e);
 			}
 		}
 		return ""; //$NON-NLS-1$
+	}
+
+	protected void handleLoadException(final Exception e) {
+		// suppress logging of core exceptions (e.g., resource not found)
+		if (e instanceof CoreException || e.getCause() instanceof CoreException) {
+			return;
+		}
+		FordiacLogHelper.logWarning("Error loading type " + getFile().getName() + ": " + e.getMessage(), e); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected static NotificationChain chainNotification(final NotificationChain notifications,

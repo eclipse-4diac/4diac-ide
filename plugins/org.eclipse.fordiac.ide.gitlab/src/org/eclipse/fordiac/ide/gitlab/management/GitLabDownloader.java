@@ -41,6 +41,8 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.fordiac.ide.gitlab.Messages;
 import org.eclipse.fordiac.ide.gitlab.Package;
 import org.eclipse.fordiac.ide.gitlab.Project;
+import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpoint;
+import org.eclipse.fordiac.ide.gitlab.preferences.GitLabEndpointsStore;
 import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.treeviewer.LeafNode;
 import org.eclipse.fordiac.ide.library.download.DownloadResult;
@@ -90,12 +92,26 @@ public class GitLabDownloader implements IArchiveDownloader {
 	private String token;
 
 	private boolean active;
+	private List<GitLabEndpoint> endpoints;
 
 	/**
 	 * constructor to be used for Archive Downloader Extension
 	 */
 	public GitLabDownloader() {
 		this(PreferenceConstants.getToken(), PreferenceConstants.getURL());
+		this.endpoints = GitLabEndpointsStore.loadEndpoints();
+	}
+
+	@Override
+	public boolean hasMultipleEndpoints() {
+		return !endpoints.isEmpty();
+	}
+
+	@Override
+	public List<IArchiveDownloader> convertEndpointsToDownloader() {
+		final List<IArchiveDownloader> downloader = new ArrayList<>();
+		endpoints.forEach(e -> downloader.add(new GitLabDownloader(e.token(), e.url())));
+		return downloader;
 	}
 
 	public GitLabDownloader(final String token, final String baseUrl) {

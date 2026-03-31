@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.DebugViewWithEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EmptyDebugViewRootEditPart;
@@ -23,13 +24,14 @@ import org.eclipse.fordiac.ide.debug.ui.view.editparts.InnerValueEntity;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InputEventValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.AbstractContainerElement;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceContainerEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 
 public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
@@ -49,7 +51,15 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 		case final FBType fbType ->
 			// we can not use the version of parent as this expects a FBTypeRootEditPart as
 			// context which we don't have here
-			new FBTypeEditPart();
+			new FBTypeEditPart() {
+				@Override
+				public void activate() {
+					super.activate();
+					// in the debug view we have to manually position the FBType figure
+					((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(),
+							new Rectangle(0, 0, -1, -1));
+				}
+			};
 		case final InnerValueEntity innerValue -> new InnerValueEditPart();
 		case final InterfaceValueEntity interfaceValue -> new InterfaceValueEditPart();
 		case final EventValueEntity ev ->

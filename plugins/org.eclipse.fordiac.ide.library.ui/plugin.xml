@@ -47,24 +47,13 @@
             id="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
             name="Library Importer">
       </category>
-      <wizard
-            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            class="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard"
-            name="Archived Package Import">
-         <description>
-            Import a zipped package into the workspace.
-         </description>
-      </wizard>
-      <wizard
-            category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
-            class="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
-            id="org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard"
-            name="Existing Package Import">
-         <description>
-            Import an existing file into the workspace.
-         </description>
-      </wizard>
+  <wizard
+      category="org.eclipse.fordiac.ide.library.ui.wizards.importCategory"
+      class="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      id="org.eclipse.fordiac.ide.library.ui.wizards.UnifiedLibraryImportWizard"
+      name="Library Import">
+    <description>Browse and import libraries from GitLab, archives, or existing workspace libraries.</description>
+  </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
@@ -99,14 +88,6 @@
     		</and>
    		</enabledWhen>
   	</activity>
-  	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ArchivedLibraryImportWizard">
-	</activityPatternBinding>
-	<activityPatternBinding 
-  		activityId="org.eclipse.fordiac.ide.ui.wizardDisabling" 
-  		pattern=".*/org.eclipse.fordiac.ide.library.ui.wizards.ExtractedLibraryImportWizard">
-	</activityPatternBinding>
    </extension>
    <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant

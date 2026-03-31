@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.ISearchFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -80,14 +81,28 @@ public class CreateSubAppCrossingConnectionsCommand extends Command implements S
 		this.match = Objects.requireNonNull(match);
 	}
 
-	public static Command createProcessBorderCrossingConnection(final IInterfaceElement source,
-			final IInterfaceElement destination) {
+	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
+			final IInterfaceElement source, final IInterfaceElement destination) {
+		return createProcessBorderCrossingConnection(source, destination, true);
+	}
+
+	public static CreateSubAppCrossingConnectionsCommand createProcessBorderCrossingConnection(
+			final IInterfaceElement source, final IInterfaceElement destination, final boolean checkSwap) {
 		Objects.requireNonNull(source);
 		Objects.requireNonNull(destination);
+
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
+
+		if (source.isIsInput() && source.getBlockFBNetworkElement() instanceof final UntypedSubApp usa) {
+			sourceNetworks.addFirst(usa.getSubAppNetwork());
+		}
+		if (!destination.isIsInput() && destination.getBlockFBNetworkElement() instanceof final UntypedSubApp usa) {
+			destinationNetworks.addFirst(usa.getSubAppNetwork());
+		}
+
 		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
-		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
+		if (checkSwap && isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
 			return new CreateSubAppCrossingConnectionsCommand(destination, source, destinationNetworks, sourceNetworks,
 					match);
 		}

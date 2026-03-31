@@ -16,18 +16,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.TextChange;
-import org.eclipse.xtext.ui.editor.XtextEditor;
 
 public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
-
-	@Override
-	public void initialize(final XtextEditor editor, final ITextSelection selection) {
-		super.initialize(editor, selection);
-		setCallableType("METHOD"); //$NON-NLS-1$
-	}
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
@@ -36,5 +28,10 @@ public class ExtractMethodRefactoring extends ExtractCallableRefactoring {
 			textChange.setTextType("stalg"); //$NON-NLS-1$
 		}
 		return change;
+	}
+
+	@Override
+	public String getCallableType() {
+		return "METHOD"; //$NON-NLS-1$
 	}
 }

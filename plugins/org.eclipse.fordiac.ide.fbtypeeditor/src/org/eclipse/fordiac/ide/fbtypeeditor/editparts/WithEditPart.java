@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2024 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- * 				 			Johannes Kepler University Linz
+ * Copyright (c) 2011 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                    Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,11 +16,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
-import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fbtypeeditor.preferences.FBInterfaceEditorColors;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteWithCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
@@ -34,9 +40,9 @@ import org.eclipse.gef.requests.GroupRequest;
 
 public class WithEditPart extends AbstractConnectionEditPart {
 
-	private static final int WITH_BOX_SIZE = 4;
-	private static final float WITH_SCALE = 1f;
-	private static final int SCALED_WITH_DISTANCE = (int) WithAnchor.WITH_DISTANCE;
+	private static final int WITH_BOX_HEIGHT = 8;
+	private static final int WITH_BOX_WIDTH = 7;
+	private static final int WITH_BOX_ARC_SIZE = 4; // arc size is the diameter
 
 	public With getCastedModel() {
 		return (With) getModel();
@@ -73,57 +79,50 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	protected IFigure createFigure() {
 		final PolylineConnection connection = (PolylineConnection) super.createFigure();
 		updateConnection(connection);
+		connection.setForegroundColor(FBInterfaceEditorColors.getWithLineColor());
 		return connection;
 	}
 
-	private void updateConnection(final PolylineConnection connection) {
+	private static void updateConnection(final PolylineConnection connection) {
+		final RoundedRectangleDecoration srcRectDec = new RoundedRectangleDecoration(WITH_BOX_WIDTH, WITH_BOX_HEIGHT,
+				WITH_BOX_ARC_SIZE);
+		srcRectDec.setBackgroundColor(FBInterfaceEditorColors.getWithBoxColor());
+		connection.setTargetDecoration(srcRectDec);
 
-		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(), isInput());
-
-		final PolygonDecoration rectDec = new PolygonDecoration();
-		rectDec.setTemplate(createPointList(withPos, false));
-		rectDec.setScale(WITH_SCALE, WITH_SCALE);
-		rectDec.setFill(false);
-		connection.setTargetDecoration(rectDec);
-
-		final PolygonDecoration rectDec2 = new PolygonDecoration();
-		rectDec2.setTemplate(createPointList(withPos, true));
-		rectDec2.setScale(WITH_SCALE, WITH_SCALE);
-		rectDec2.setFill(false);
-		connection.setSourceDecoration(rectDec2);
+		final RoundedRectangleDecoration targetRectDec = new RoundedRectangleDecoration(WITH_BOX_WIDTH, WITH_BOX_HEIGHT,
+				WITH_BOX_ARC_SIZE);
+		targetRectDec.setBackgroundColor(FBInterfaceEditorColors.getWithBoxColor());
+		connection.setSourceDecoration(targetRectDec);
 	}
 
-	private PointList createPointList(final int withPos, final boolean top) {
-		final PointList rect = new PointList(9);
-		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
-		rect.addPoint(-WITH_BOX_SIZE, WITH_BOX_SIZE);
-		rect.addPoint(WITH_BOX_SIZE, WITH_BOX_SIZE);
-		rect.addPoint(WITH_BOX_SIZE, -WITH_BOX_SIZE);
-		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
-		rect.addPoint(0, -WITH_BOX_SIZE);
-		if (isInput()) {
-			if (top) {
-				addRightAlignedLine(withPos, rect);
-			} else {
-				addLeftAlignedLine(withPos, rect);
-			}
-		} else if (top) {
-			addLeftAlignedLine(withPos, rect);
-		} else {
-			addRightAlignedLine(withPos, rect);
+	private static class RoundedRectangleDecoration extends Figure implements RotatableDecoration {
+
+		private final int arcSize;
+
+		public RoundedRectangleDecoration(final int width, final int height, final int arcSize) {
+			this.arcSize = arcSize;
+			setPreferredSize(width, height);
+			setOpaque(true);
+			setBackgroundColor(ColorConstants.black);
 		}
-		rect.addPoint(0, -WITH_BOX_SIZE);
-		return rect;
-	}
 
-	private static void addLeftAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, -SCALED_WITH_DISTANCE * withPos);
-		rect.addPoint(0, (int) (SCALED_WITH_DISTANCE * 0.8));
-	}
+		@Override
+		protected void paintFigure(final Graphics g) {
+			g.fillRoundRectangle(getBounds(), arcSize, arcSize);
+		}
 
-	private static void addRightAlignedLine(final int withPos, final PointList rect) {
-		rect.addPoint(0, (int) (-SCALED_WITH_DISTANCE * 0.8));
-		rect.addPoint(0, SCALED_WITH_DISTANCE * withPos);
+		@Override
+		public void setLocation(final Point p) {
+			final Dimension prefSize = getPreferredSize();
+			setBounds(new Rectangle(p.x - prefSize.width / 2, p.y - prefSize.height / 2, prefSize.width,
+					prefSize.height));
+		}
+
+		@Override
+		public void setReferencePoint(final Point ref) {
+			// Not needed for vertical connections, but required by interface
+		}
+
 	}
 
 	@Override

@@ -124,6 +124,45 @@ public final class RuntimeFactory {
 		return networkRT;
 	}
 
+	public static FBRuntimeAbstract getOrCreateRuntime(final FBNetworkRuntime fBNetworkRuntime,
+			final FBNetworkElement element) {
+		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(element);
+		if (runtime != null) {
+			return runtime;
+		}
+
+		final FBType copiedType = EcoreUtil.copy(element.getType());
+		runtime = RuntimeFactory.createFrom(copiedType);
+		fBNetworkRuntime.getTypeRuntimes().put(element, runtime);
+
+		return runtime;
+	}
+
+	public static FBNetworkRuntime getOrCreateNetworkRuntime(final FBNetworkRuntime fBNetworkRuntime,
+			final UntypedSubApp uSubApp) {
+
+		FBNetworkRuntime runtime = (FBNetworkRuntime) fBNetworkRuntime.getTypeRuntimes().get(uSubApp);
+		if (runtime != null) {
+			return runtime;
+		}
+
+		runtime = RuntimeFactory.createFrom(uSubApp.getSubAppNetwork());
+		runtime.setOuterNetworkRuntime(fBNetworkRuntime);
+		fBNetworkRuntime.getTypeRuntimes().put(uSubApp, runtime);
+		return runtime;
+	}
+
+	public static FBNetworkRuntime getOrCreateOuterNetworkRuntime(final FBNetworkRuntime fBNetworkRuntime,
+			final UntypedSubApp uSubApp) {
+
+		FBNetworkRuntime runtime = fBNetworkRuntime.getOuterNetworkRuntime();
+		// can still be null if we started the trace in the inner network
+		if (runtime == null) {
+			runtime = RuntimeFactory.createFrom(uSubApp.getFbNetwork());
+		}
+		return runtime;
+	}
+
 	private static void createInternalRuntimes(final FBNetworkRuntime containerRuntime) {
 		containerRuntime.getFbnetwork().getBlockFBNetworkElements().forEach(networkElement -> {
 

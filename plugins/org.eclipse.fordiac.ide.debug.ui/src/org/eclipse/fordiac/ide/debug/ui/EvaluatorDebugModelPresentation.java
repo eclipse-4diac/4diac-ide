@@ -12,12 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IStackFrame;
+import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IValue;
+import org.eclipse.debug.ui.IDebugEditorPresentation;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IValueDetailListener;
 import org.eclipse.emf.common.ui.URIEditorInput;
@@ -28,6 +35,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.preferences.FordiacDebugPreferences;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -35,11 +43,13 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class EvaluatorDebugModelPresentation implements IDebugModelPresentation {
+public class EvaluatorDebugModelPresentation implements IDebugModelPresentation, IDebugEditorPresentation {
 
 	@Override
 	public IEditorInput getEditorInput(final Object element) {
@@ -128,6 +138,40 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 		} catch (final DebugException e) {
 			FordiacLogHelper.logWarning("Cannot compute value detail", e); //$NON-NLS-1$
 		}
+	}
+
+	@Override
+	public boolean addAnnotations(final IEditorPart editorPart, final IStackFrame frame) {
+		final Object sourceElement = frame.getLaunch().getSourceLocator().getSourceElement(frame);
+		if (editorPart.getEditorInput() instanceof final FileEditorInput fileEditorInput
+				&& sourceElement instanceof final EObject sourceObject) {
+			try {
+				showWithMarker(editorPart, fileEditorInput.getFile(), frame, sourceObject);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Cannot show debug source element with marker", e); //$NON-NLS-1$
+			}
+		}
+		return false;
+	}
+
+	private void showWithMarker(final IEditorPart editor, final IFile file, final IStackFrame frame, final EObject sourceElement)
+			throws CoreException {
+		final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder(getText(frame))
+				.setType(IMarker.MARKER).setSource(frame.getModelIdentifier()).setTarget(sourceElement)
+				.addAdditionalAttributes(Map.of(IMarker.LINE_NUMBER, Integer.valueOf(frame.getLineNumber()),
+						IMarker.CHAR_START, Integer.valueOf(frame.getCharStart()), IMarker.CHAR_END,
+						Integer.valueOf(frame.getCharEnd()), IMarker.TRANSIENT, Boolean.TRUE));
+		final IMarker marker = builder.createMarker(file);
+		try {
+			IDE.gotoMarker(editor, marker);
+		} finally {
+			marker.delete();
+		}
+	}
+
+	@Override
+	public void removeAnnotations(final IEditorPart editorPart, final IThread thread) {
+		// not needed
 	}
 
 	@Override

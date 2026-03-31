@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 
 
@@ -51,4 +53,12 @@ public interface SimpleFBType extends BaseFBType {
 	 * @generated
 	 */
 	EList<SimpleECState> getSimpleECStates();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateEventUsage(DiagnosticChain diagnostics, Map<Object, Object> context);
 } // SimpleFBType

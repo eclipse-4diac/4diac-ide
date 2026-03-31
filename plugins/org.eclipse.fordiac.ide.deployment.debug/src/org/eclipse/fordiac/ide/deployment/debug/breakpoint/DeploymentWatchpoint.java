@@ -26,13 +26,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.Breakpoint;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.fordiac.ide.deployment.debug.preferences.DeploymentDebugPreferences;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchUtils;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -48,6 +52,7 @@ public class DeploymentWatchpoint extends Breakpoint {
 	public static final String FORCE_VALUE = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceValue"; //$NON-NLS-1$
 	public static final String FORCE_ENABLED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.forceEnabled"; //$NON-NLS-1$
 	public static final String PINNED = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.pinned"; //$NON-NLS-1$
+	public static final String SUBELEMENTS = "org.eclipse.fordiac.ide.deployment.debug.watchpointMarker.subElements"; //$NON-NLS-1$
 
 	public DeploymentWatchpoint() {
 	}
@@ -57,12 +62,15 @@ public class DeploymentWatchpoint extends Breakpoint {
 	}
 
 	protected IMarker createMarker(final IResource resource, final INamedElement element) throws CoreException {
-		final IMarker marker = ErrorMarkerBuilder.createErrorMarkerBuilder("Deployment Watchpoint: " //$NON-NLS-1$
+		final ErrorMarkerBuilder builder = ErrorMarkerBuilder.createErrorMarkerBuilder("Deployment Watchpoint: " //$NON-NLS-1$
 				+ resource.getName() + " [qualifiedName: " + element.getQualifiedName() + "]") //$NON-NLS-1$ //$NON-NLS-2$
 				.setType(getMarkerId()).setSeverity(IMarker.SEVERITY_INFO).setPriority(IMarker.PRIORITY_NORMAL)
 				.setSource(DEBUG_MODEL).setTarget(element).addAdditionalAttributes(Map.of(IBreakpoint.ENABLED,
-						Boolean.TRUE, IBreakpoint.PERSISTED, Boolean.TRUE, IBreakpoint.ID, getModelIdentifier()))
-				.createMarker(resource);
+						Boolean.TRUE, IBreakpoint.PERSISTED, Boolean.TRUE, IBreakpoint.ID, getModelIdentifier()));
+		if (isWatchSubElementsDefault(resource, element)) {
+			builder.addAdditionalAttributes(Map.of(SUBELEMENTS, Boolean.TRUE));
+		}
+		final IMarker marker = builder.createMarker(resource);
 		setMarker(marker);
 		return marker;
 	}
@@ -190,6 +198,50 @@ public class DeploymentWatchpoint extends Breakpoint {
 
 	public boolean isPinnedChanged(final IMarkerDelta delta) {
 		return delta.getKind() == IResourceDelta.CHANGED && (isPinned() != delta.getAttribute(PINNED, false));
+	}
+
+	public boolean isWatchSubElements() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			return m.getAttribute(SUBELEMENTS, false);
+		}
+		return false;
+	}
+
+	public void setWatchSubElements(final boolean subElements) throws CoreException {
+		setAttribute(SUBELEMENTS, subElements);
+	}
+
+	public boolean isWatchSubElementsSupported() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			final EClass targetType = FordiacErrorMarker.getTargetType(m);
+			return targetType != null
+					&& (LibraryElementPackage.Literals.SUB_APP.isSuperTypeOf(targetType)
+							|| LibraryElementPackage.Literals.CFB_INSTANCE.isSuperTypeOf(targetType))
+					|| (LibraryElementPackage.Literals.FB.isSuperTypeOf(targetType)
+							&& getTarget().filter(FB.class::isInstance).map(FB.class::cast).map(FB::getTypeEntry)
+									.map(TypeEntry::getTypeEClass)
+									.filter(LibraryElementPackage.Literals.BASE_FB_TYPE::isSuperTypeOf).isPresent());
+		}
+		return false;
+	}
+
+	public static boolean isWatchSubElementsDefault(final IResource resource, final INamedElement element) {
+		return switch (element) {
+		case final SubApp subApp -> DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
+		case final CFBInstance cfbInstance ->
+			DeploymentDebugPreferences.isWatchInternalNetworksDefault(resource.getProject());
+		case final FB fb when LibraryElementPackage.Literals.BASE_FB_TYPE
+				.isSuperTypeOf(fb.getTypeEntry().getTypeEClass()) ->
+			DeploymentDebugPreferences.isWatchInternalVariablesDefault(resource.getProject());
+		default -> false;
+		};
+	}
+
+	public boolean isWatchSubElementsChanged(final IMarkerDelta delta) {
+		return delta.getKind() == IResourceDelta.CHANGED
+				&& (isWatchSubElements() != delta.getAttribute(SUBELEMENTS, false));
 	}
 
 	@Override

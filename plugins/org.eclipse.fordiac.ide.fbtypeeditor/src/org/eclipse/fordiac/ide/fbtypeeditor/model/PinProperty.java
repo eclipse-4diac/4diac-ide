@@ -1,0 +1,34 @@
+/*******************************************************************************
+ * Copyright (c) 2026 Johannes Kepler University Linz
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+
+package org.eclipse.fordiac.ide.fbtypeeditor.model;
+
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+
+public abstract sealed class PinProperty permits TypePinProperty, CommentPinProperty, WithPinProperty {
+
+	final IInterfaceElement pin;
+
+	protected PinProperty(final IInterfaceElement pin) {
+		this.pin = pin;
+	}
+
+	public IInterfaceElement getPin() {
+		return pin;
+	}
+
+	public boolean isInput() {
+		return pin.isIsInput();
+	}
+
+}

@@ -55,7 +55,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.AccessMode;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.Refactoring;
@@ -89,21 +88,19 @@ public class ExtractCallableRefactoring extends Refactoring {
 	@Inject
 	private IWhitespaceInformationProvider whitespaceInformationProvider;
 
-	private String name = Messages.ExtractCallableRefactoring_Name;
-
 	private XtextEditor editor;
 	private ITextSelection selection;
 
 	private String lineSeparator;
 
 	private XtextResource resourceCopy;
-	private List<EObject> selectedSemanticElements;
-	private ITextRegion selectedSemanticElementsRegion;
-	private Optional<String> selectedSemanticElementsText = Optional.empty();
+
+	private ITextRegion selectedRegion;
+	private String selectedText;
+	private List<STStatement> selectedSemanticElements;
 
 	private Optional<ICallable> callable = Optional.empty();
 	private Optional<STSource> source = Optional.empty();
-	private String callableType = "FUNCTION"; //$NON-NLS-1$
 	private String callableName = "CALLABLE"; //$NON-NLS-1$
 	private AccessMode referencedReturnVariable = AccessMode.NONE;
 	private Map<STVarDeclaration, AccessMode> referencedLocalVariables = Collections.emptyMap();
@@ -120,9 +117,12 @@ public class ExtractCallableRefactoring extends Refactoring {
 				.getLineSeparator();
 
 		resourceCopy = editor.getDocument().priorityReadOnly(this::copyResource);
+
+		final ICompositeNode rootNode = resourceCopy.getParseResult().getRootNode();
+		selectedRegion = STCoreRefactoringUtil.trimRegion(new TextRegion(selection.getOffset(), selection.getLength()),
+				rootNode);
+		selectedText = rootNode.getText().substring(selectedRegion.getOffset(), selectedRegion.getEndOffset());
 		selectedSemanticElements = findSelectedSemanticObjects();
-		selectedSemanticElementsRegion = calculateSelectedSemanticElementsRegion();
-		selectedSemanticElementsText = calculateSelectedSemanticElementsText();
 
 		callable = calculateCallable();
 		source = calculateSource();
@@ -141,37 +141,18 @@ public class ExtractCallableRefactoring extends Refactoring {
 		return (XtextResource) resourceSet.getResource(resource.getURI(), true);
 	}
 
-	protected List<EObject> findSelectedSemanticObjects() {
-		final ITextSelection trimmedSelection = STCoreRefactoringUtil.trimSelection(selection);
-		final EObject semanticObject = STCoreRefactoringUtil.findSelectedSemanticObject(resourceCopy, trimmedSelection);
-		if (semanticObject instanceof STExpression) {
-			return List.of(semanticObject);
-		}
+	protected List<STStatement> findSelectedSemanticObjects() {
+		final EObject semanticObject = STCoreRefactoringUtil.findSelectedSemanticObject(resourceCopy, selectedRegion);
 		if (semanticObject != null) {
-			return STCoreRefactoringUtil.findSelectedChildSemanticObjectsOfType(semanticObject, trimmedSelection,
-					STStatement.class);
+			if (!STCoreRefactoringUtil.exactMatch(semanticObject, selectedRegion)) {
+				return STCoreRefactoringUtil.findSelectedChildSemanticObjectsOfType(semanticObject, selectedRegion,
+						STStatement.class);
+			}
+			if (semanticObject instanceof final STStatement statement) {
+				return List.of(statement);
+			}
 		}
 		return Collections.emptyList();
-	}
-
-	protected ITextRegion calculateSelectedSemanticElementsRegion() {
-		final ICompositeNode rootNode = resourceCopy.getParseResult().getRootNode();
-		final ITextSelection trimmedSelection = STCoreRefactoringUtil.trimSelection(selection);
-		final ITextRegion trimmedSelectedRegion = new TextRegion(trimmedSelection.getOffset(),
-				trimmedSelection.getLength());
-		final ITextRegion alignedSelectedRegion = STCoreRefactoringUtil.alignRegion(trimmedSelectedRegion, rootNode);
-		return selectedSemanticElements.stream().map(NodeModelUtils::findActualNodeFor).map(INode::getTextRegion)
-				.reduce(ITextRegion::merge).map(region -> region.merge(alignedSelectedRegion))
-				.map(region -> STCoreRefactoringUtil.trimRegion(region, rootNode)).orElse(ITextRegion.EMPTY_REGION);
-	}
-
-	protected Optional<String> calculateSelectedSemanticElementsText() {
-		try {
-			return Optional.of(editor.getDocument().get(selectedSemanticElementsRegion.getOffset(),
-					selectedSemanticElementsRegion.getLength()));
-		} catch (final BadLocationException e) {
-			return Optional.empty();
-		}
 	}
 
 	@Override
@@ -179,17 +160,13 @@ public class ExtractCallableRefactoring extends Refactoring {
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus result = new RefactoringStatus();
 		if (selectedSemanticElements.isEmpty()) {
-			result.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ExtractCallableRefactoring_InvalidSelection));
-		} else if (selectedSemanticElementsRegion.getLength() == 0) {
-			result.merge(RefactoringStatus.createFatalErrorStatus(Messages.ExtractCallableRefactoring_RegionNotFound));
-		} else if (selectedSemanticElementsText.isEmpty()) {
-			result.merge(RefactoringStatus.createFatalErrorStatus(Messages.ExtractCallableRefactoring_TextNotFound));
+			result.addFatalError(Messages.ExtractCallableRefactoring_InvalidSelection);
+		} else if (!STCoreRefactoringUtil.aligned(selectedRegion, resourceCopy.getParseResult().getRootNode())) {
+			result.addFatalError(Messages.ExtractCallableRefactoring_UnalignedSelection);
 		} else if (callable.isEmpty()) {
-			result.merge(
-					RefactoringStatus.createFatalErrorStatus(Messages.ExtractCallableRefactoring_CallableNotFound));
+			result.addFatalError(Messages.ExtractCallableRefactoring_CallableNotFound);
 		} else if (source.isEmpty()) {
-			result.merge(RefactoringStatus.createFatalErrorStatus(Messages.ExtractCallableRefactoring_SourceNotFound));
+			result.addFatalError(Messages.ExtractCallableRefactoring_SourceNotFound);
 		}
 		result.merge(checkReturnType());
 		result.merge(checkReturnVariableAccess());
@@ -317,8 +294,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 		if (getSelectedSingleExpression().isEmpty()) {
 			callExpression.append(";"); //$NON-NLS-1$
 		}
-		return new ReplaceEdit(selectedSemanticElementsRegion.getOffset(), selectedSemanticElementsRegion.getLength(),
-				callExpression.toString());
+		return new ReplaceEdit(selectedRegion.getOffset(), selectedRegion.getLength(), callExpression.toString());
 	}
 
 	protected TextEdit createCallableTextEdit() {
@@ -375,21 +351,17 @@ public class ExtractCallableRefactoring extends Refactoring {
 		if (singleExpression.isPresent()) {
 			builder.append(getCallableName());
 			builder.append(" := "); //$NON-NLS-1$
-			builder.append(getRefactoredSelectedSemanticElementsText().orElse("")); //$NON-NLS-1$
+			builder.append(getRefactoredSelectedSemanticElementsText());
 			builder.append(";"); //$NON-NLS-1$
 			builder.append(lineSeparator);
 		} else {
-			builder.append(getRefactoredSelectedSemanticElementsText().orElse("")); //$NON-NLS-1$
+			builder.append(getRefactoredSelectedSemanticElementsText());
 			builder.append(lineSeparator);
 		}
 	}
 
-	protected Optional<String> getRefactoredSelectedSemanticElementsText() {
-		return selectedSemanticElementsText.map(this::performSelectedSemanticElementsReplacements);
-	}
-
-	protected String performSelectedSemanticElementsReplacements(final String text) {
-		final StringBuilder result = new StringBuilder(text);
+	protected String getRefactoredSelectedSemanticElementsText() {
+		final StringBuilder result = new StringBuilder(selectedText);
 		getSelectedSemanticElementsReplacements().stream()
 				.sorted((a, b) -> Integer.compare(b.getOffset(), a.getOffset()))
 				.forEachOrdered(repl -> repl.applyTo(result));
@@ -402,8 +374,8 @@ public class ExtractCallableRefactoring extends Refactoring {
 				.flatMap(elem -> EcoreUtil2.getAllContentsOfType(elem, STFeatureExpression.class).stream())
 				.filter(this::isReturnVariableReference).map(NodeModelUtils::findActualNodeFor)
 				.map(INode::getTextRegion)
-				.map(region -> new ReplaceRegion(region.getOffset() - selectedSemanticElementsRegion.getOffset(),
-						region.getLength(), callableName))
+				.map(region -> new ReplaceRegion(region.getOffset() - selectedRegion.getOffset(), region.getLength(),
+						callableName))
 				.forEachOrdered(result::add);
 		return result;
 	}
@@ -429,7 +401,7 @@ public class ExtractCallableRefactoring extends Refactoring {
 		final Set<String> usedNames = source.stream()
 				.flatMap(s -> EcoreUtil2.getAllContentsOfType(s, ICallable.class).stream()).map(ICallable::getName)
 				.collect(Collectors.toSet());
-		final String name = callable.map(ICallable::getName).orElse(callableType);
+		final String name = callable.map(ICallable::getName).orElse(getCallableType());
 		return IntStream.range(1, Integer.MAX_VALUE).mapToObj(i -> name + "_" + i) //$NON-NLS-1$
 				.filter(Predicate.not(usedNames::contains)).findFirst().orElse(""); //$NON-NLS-1$
 	}
@@ -470,13 +442,9 @@ public class ExtractCallableRefactoring extends Refactoring {
 				.sorted(NamedElementComparator.INSTANCE).toList();
 	}
 
-	public void setName(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return Messages.ExtractCallableRefactoring_Name;
 	}
 
 	public XtextEditor getEditor() {
@@ -491,16 +459,16 @@ public class ExtractCallableRefactoring extends Refactoring {
 		return resourceCopy;
 	}
 
-	protected List<EObject> getSelectedSemanticElements() {
+	protected ITextRegion getSelectedRegion() {
+		return selectedRegion;
+	}
+
+	protected String getSelectedText() {
+		return selectedText;
+	}
+
+	protected List<STStatement> getSelectedSemanticElements() {
 		return selectedSemanticElements;
-	}
-
-	protected ITextRegion getSelectedSemanticElementsRegion() {
-		return selectedSemanticElementsRegion;
-	}
-
-	protected Optional<String> getSelectedSemanticElementsText() {
-		return selectedSemanticElementsText;
 	}
 
 	protected Optional<STExpression> getSelectedSingleExpression() {
@@ -524,12 +492,9 @@ public class ExtractCallableRefactoring extends Refactoring {
 		return source;
 	}
 
+	@SuppressWarnings("static-method") // subclasses may override
 	public String getCallableType() {
-		return callableType;
-	}
-
-	public void setCallableType(final String callableType) {
-		this.callableType = callableType;
+		return "FUNCTION"; //$NON-NLS-1$
 	}
 
 	public String getCallableName() {

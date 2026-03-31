@@ -68,6 +68,9 @@ public final class Messages extends NLS {
 
 	public static String FileLibraryElementProvider_LibraryElementCannotBeLoaded;
 	public static String FileLibraryElementProvider_LibraryElementDoesNotExist;
+	public static String FileLibraryElementProvider_RefreshJobName;
+	public static String FileLibraryElementProvider_MoveJobName;
+	public static String FileLibraryElementProvider_DeleteJobName;
 	public static String LibraryElementActivationListener_FileChangedMessage;
 	public static String LibraryElementActivationListener_FileChangedTitle;
 	public static String LibraryElementActivationListener_IgnoreChangeButton;

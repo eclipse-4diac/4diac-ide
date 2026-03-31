@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,10 +41,10 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.deployment.debug.DeploymentLaunchConfigurationAttributes.DeploymentLaunchWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.breakpoint.DeploymentWatchpoint;
 import org.eclipse.fordiac.ide.deployment.debug.watch.DeploymentDebugWatchData;
+import org.eclipse.fordiac.ide.deployment.debug.watch.ISubContainerWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch.Source;
-import org.eclipse.fordiac.ide.deployment.devResponse.Resource;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.DeviceManagementInteractorFactory;
@@ -55,6 +56,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -98,14 +100,29 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		fireTerminateEvent();
 	}
 
-	protected void updateResources(final List<Resource> response) {
-		if (resources.keySet().retainAll(response.stream().map(Resource::getName).collect(Collectors.toSet()))) {
+	protected void updateResources(final List<org.eclipse.fordiac.ide.deployment.devResponse.Resource> response) {
+		final Set<String> resourceNames = response.stream()
+				.map(org.eclipse.fordiac.ide.deployment.devResponse.Resource::getName).collect(Collectors.toSet());
+		if (resources.keySet().retainAll(resourceNames)) {
 			fireChangeEvent(DebugEvent.CONTENT);
 		}
+		response.forEach(this::updateResource);
+	}
+
+	private void updateResource(final org.eclipse.fordiac.ide.deployment.devResponse.Resource devResource) {
+		final DeploymentDebugResource resource = resources.computeIfAbsent(devResource.getName(), this::createResource);
+		if (resource != null) {
+			resource.setStatus(devResource.getStatus());
+		}
+	}
+
+	private DeploymentDebugResource createResource(final String name) {
+		final Resource resource = device.getResourceNamed(name);
+		if (resource == null) {
+			return null;
+		}
 		// added resources will fire their own CREATE events
-		response.forEach(devResource -> resources.computeIfAbsent(devResource.getName(),
-				name -> Optional.ofNullable(device.getResourceNamed(name))
-						.map(resource -> new DeploymentDebugResource(resource, this, allowTerminate)).orElse(null)));
+		return new DeploymentDebugResource(resource, this);
 	}
 
 	protected void updateWatches(final Response response) {
@@ -257,6 +274,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				if (watchpoint.isPinnedChanged(delta)) {
 					updatePinned(watchpoint);
 				}
+				if (watchpoint.isWatchSubElementsChanged(delta)) {
+					updateWatchSubElements(watchpoint);
+				}
 			}
 		}
 	}
@@ -268,6 +288,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 				final IWatch watch = watches.computeIfAbsent(element.get().getQualifiedName(),
 						name -> IWatch.watchFor(name, element.get(), this));
 				watch.setSource(Source.LAUNCH);
+				if (watch instanceof final ISubContainerWatch subContainerWatch) {
+					subContainerWatch.setWatchSubElements(watchpoint.watchSubElements());
+				}
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
@@ -287,6 +310,9 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 						name -> IWatch.watchFor(name, element.get(), this));
 				watch.setSource(Source.BREAKPOINT);
 				watch.setPinned(watchpoint.isPinned());
+				if (watch instanceof final ISubContainerWatch subContainerWatch) {
+					subContainerWatch.setWatchSubElements(watchpoint.isWatchSubElements());
+				}
 				getPrimaryDebugTarget().updateWatches(true);
 				watch.addWatch();
 				if (watchpoint.isForceEnabled() && watch instanceof final IVarDeclarationWatch variableWatch) {
@@ -335,6 +361,20 @@ public class DeploymentDebugDevice extends DeploymentDebugElement implements IDe
 		if (watch != null) {
 			watch.setPinned(watchpoint.isPinned());
 			getPrimaryDebugTarget().updateWatches(true);
+		}
+	}
+
+	protected void updateWatchSubElements(final DeploymentWatchpoint watchpoint) {
+		final IWatch watch = watches.get(watchpoint.getLocation());
+		if (watch instanceof final ISubContainerWatch subContainerWatch) {
+			try {
+				subContainerWatch.removeWatch();
+				subContainerWatch.setWatchSubElements(watchpoint.isWatchSubElements());
+				subContainerWatch.addWatch();
+				getPrimaryDebugTarget().updateWatches(true);
+			} catch (final DebugException e) {
+				FordiacLogHelper.logWarning("Cannot update watch for watchpoint: " + watchpoint, e); //$NON-NLS-1$
+			}
 		}
 	}
 

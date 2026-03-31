@@ -39,6 +39,82 @@ public class Messages extends NLS {
 	public static String LibraryPage_Path;
 	public static String LibraryPage_Columns;
 
+	public static String LibrarySourceBuilder_gitlab_package_version;
+
+	public static String LibrarySourceBuilder_project;
+
+	public static String LibrarySourceBuilder_pkg;
+
+	public static String LibrarySourceBuilder_v;
+
+	public static String LibrarySourceBuilder_gitlab_project;
+
+	public static String LibrarySourceBuilder_comment;
+
+	public static String LibrarySourceBuilder_dir;
+
+	public static String LibrarySourceBuilder_file;
+
+	public static String LibrarySourceBuilder_file_system;
+
+	public static String LibrarySourceBuilder_gitlab_package;
+
+	public static String LibrarySourceBuilder_lib;
+
+	public static String LibrarySourceBuilder_name;
+
+	public static String LibrarySourceBuilder_path;
+
+	public static String LibrarySourceBuilder_sym_name;
+
+	public static String LibrarySourceBuilder_uri;
+
+	public static String LibrarySourceBuilder_version;
+
+	public static String UnifiedLibraryImportWizardPage_Available_Libraries;
+
+	public static String UnifiedLibraryImportWizardPage_brows;
+
+	public static String UnifiedLibraryImportWizardPage_config;
+
+	public static String UnifiedLibraryImportWizardPage_failed;
+
+	public static String UnifiedLibraryImportWizardPage_feiled_load;
+
+	public static String UnifiedLibraryImportWizardPage_hide_non_valid;
+
+	public static String UnifiedLibraryImportWizardPage_LibraryImport;
+
+	public static String UnifiedLibraryImportWizardPage_loading;
+
+	public static String UnifiedLibraryImportWizardPage_loading_from;
+
+	public static String UnifiedLibraryImportWizardPage_manage;
+
+	public static String UnifiedLibraryImportWizardPage_no_lib;
+
+	public static String UnifiedLibraryImportWizardPage_no_lib_Available;
+
+	public static String UnifiedLibraryImportWizardPage_no_lib_src;
+
+	public static String UnifiedLibraryImportWizardPage_no_src;
+
+	public static String UnifiedLibraryImportWizardPage_no_target;
+
+	public static String UnifiedLibraryImportWizardPage_op_cancled;
+
+	public static String UnifiedLibraryImportWizardPage_refresh;
+
+	public static String UnifiedLibraryImportWizardPage_sel_lib;
+
+	public static String UnifiedLibraryImportWizardPage_select_to_see_details;
+
+	public static String UnifiedLibraryImportWizardPage_show_latest;
+
+	public static String UnifiedLibraryImportWizardPage_source;
+
+	public static String UnifiedLibraryImportWizardPage_work_with;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

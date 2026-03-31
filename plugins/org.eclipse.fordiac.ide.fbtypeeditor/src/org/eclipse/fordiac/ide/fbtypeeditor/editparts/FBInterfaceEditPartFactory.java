@@ -14,6 +14,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.editparts;
 
+import org.eclipse.fordiac.ide.fbtypeeditor.model.AbstractContainerElement;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.CommentPinProperty;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.TypePinProperty;
+import org.eclipse.fordiac.ide.fbtypeeditor.model.WithPinProperty;
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -35,41 +39,19 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof FBType && context == null) {
-			return new FBTypeRootEditPart();
-		}
-		if (modelElement instanceof FBType && context instanceof FBTypeRootEditPart) {
-			return new FBTypeEditPart();
-		}
-		if (modelElement instanceof AbstractContainerElement) {
-			return new InterfaceContainerEditPart();
-		}
-
-		if (modelElement instanceof Event) {
-			return new InterfaceEditPart();
-		}
-		if (modelElement instanceof final VarDeclaration varDecl) {
-			return createInterfaceEditPart(varDecl);
-		}
-		if (modelElement instanceof AdapterDeclaration) {
-			return new AdapterInterfaceEditPart();
-		}
-		if (modelElement instanceof With) {
-			return new WithEditPart();
-		}
-		if (modelElement instanceof CommentTypeField) {
-			return new CommentTypeEditPart();
-		}
-		if (modelElement instanceof CommentTypeField.CommentTypeSeparator) {
-			return new CommentTypeSeparatorEditPart();
-		}
-		if (modelElement instanceof CommentField) {
-			return new CommentEditPart();
-		}
-		if (modelElement instanceof TypeField) {
-			return new TypeEditPart(typeLib);
-		}
-		throw createEditpartCreationException(context, modelElement);
+		return switch (modelElement) {
+		case final FBType type when context == null -> new FBTypeRootEditPart();
+		case final FBType type when context instanceof FBTypeRootEditPart -> new FBTypeEditPart();
+		case final AbstractContainerElement ac -> new InterfaceContainerEditPart();
+		case final Event ev -> new InterfaceEditPart();
+		case final VarDeclaration varDecl -> createInterfaceEditPart(varDecl);
+		case final AdapterDeclaration adp -> new AdapterInterfaceEditPart();
+		case final With with -> new WithEditPart();
+		case final CommentPinProperty df -> new CommentEditPart();
+		case final TypePinProperty typeProp -> new TypeEditPart(typeLib);
+		case final WithPinProperty withProp -> new WithEndPointEditPart();
+		default -> throw createEditpartCreationException(context, modelElement);
+		};
 	}
 
 	// make it protected none static so that subclasses can override it and provide

@@ -243,6 +243,9 @@ public final class ManifestHelper {
 	public static Manifest createProjectManifest(final IProject project, final Collection<Required> dependencies) {
 		final Manifest manifest = createManifest(SCOPE_PROJECT);
 		final IFile manifestFile = project.getFile(MANIFEST_FILENAME);
+		final Product product = manifest.getProduct();
+		product.setName(project.getName());
+		product.setSymbolicName(toSymbolicName(project.getName()));
 		final Resource resource = createResource(URI.createURI(manifestFile.getLocationURI().toString()));
 
 		if (dependencies != null) {
@@ -258,6 +261,10 @@ public final class ManifestHelper {
 			FordiacLogHelper.logWarning("Could not create project manifest", e); //$NON-NLS-1$
 		}
 		return manifest;
+	}
+
+	private static String toSymbolicName(final String name) {
+		return name.trim().replaceAll("[^A-Za-z0-9_]", "_"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -407,7 +414,7 @@ public final class ManifestHelper {
 		try {
 			resource.load(null);
 		} catch (final IOException e) {
-			FordiacLogHelper.logWarning("Could not load manifest", e); //$NON-NLS-1$
+			FordiacLogHelper.logWarning("Could not load manifest for URI " + uri, e); //$NON-NLS-1$
 			return null;
 		}
 		return (Manifest) resource.getContents().get(0);

@@ -13,6 +13,8 @@
 
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import static org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.isAnyType;
+
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.SequencedSet;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
@@ -32,18 +33,15 @@ import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclaratio
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.util.LibraryElementValidator;
+import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public class ConnectionAnnotations {
@@ -146,52 +144,47 @@ public class ConnectionAnnotations {
 		// basic type check
 		if (!LinkConstraints.typeCheck(src, dest)) {
 			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
-						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatch, src.getQualifiedName(),
-								src.getFullTypeName(), dest.getQualifiedName(), dest.getFullTypeName()),
-						FordiacMarkerHelper.getDiagnosticData(connection)));
+				diagnostics.add(createTypeMismatchDiagnostic(Messages.ConnectionAnnotations_TypeMismatch, connection));
 			}
 			return false;
 		}
-		// extended type check for InOuts
+		// extended type check
 		if (src instanceof final VarDeclaration srcVar && srcVar.isInOutVar()
-				&& dest instanceof final VarDeclaration destVar && !typeCheckInOut(srcVar, destVar)) {
-			if (diagnostics != null) {
-				final SequencedSet<VarDeclaration> path = VarInOutHelper.getDefiningVarInOutDeclarationPath(destVar);
-				final VarDeclaration definingVar = path.removeLast();
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
-						MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatchInOut,
-								definingVar.getQualifiedName(), definingVar.getFullTypeName(), dest.getQualifiedName(),
-								dest.getFullTypeName(), path.isEmpty() ? "" : //$NON-NLS-1$
-										path.stream()
-												.map(v -> MessageFormat.format(
-														Messages.ConnectionAnnotations_TypeMismatchInOutIntermediate,
-														v.getQualifiedName(), v.getFullTypeName()))
-												.collect(Collectors.joining(
-														Messages.ConnectionAnnotations_TypeMismatchInOutSeparator,
-														Messages.ConnectionAnnotations_TypeMismatchInOutVia, ""))), //$NON-NLS-1$
-						FordiacMarkerHelper.getDiagnosticData(connection)));
+				&& dest instanceof final VarDeclaration destVar) { // for InOut connections
+			if (!typeCheckInOut(destVar)) {
+				if (diagnostics != null) {
+					diagnostics.add(createInOutTypeMismatchDiagnostic(Messages.ConnectionAnnotations_TypeMismatchInOut,
+							connection));
+				}
+				return false;
 			}
-			return false;
-		}
-		// check generic endpoints
-		if (GenericTypes.isAnyType(src.getType()) && GenericTypes.isAnyType(connection.getDestination().getType())
-				&& !isContainerPin(src.eContainer().eContainer(), dest.eContainer().eContainer())) {
+		} else if (!dest.isIsInput()) { // for internal to interface (or interface to interface) connections
+			if (!typeCheckIn2If(src, dest)) {
+				if (diagnostics != null) {
+					diagnostics.add(
+							createTypeMismatchDiagnostic(Messages.ConnectionAnnotations_TypeMismatchIn2If, connection));
+				}
+				return false;
+			}
+		} else if (src.isIsInput()) { // for interface to internal connections
+			if (!typeCheckIf2In(src, dest)) {
+				if (diagnostics != null) {
+					diagnostics.add(
+							createTypeMismatchDiagnostic(Messages.ConnectionAnnotations_TypeMismatchIf2In, connection));
+				}
+				return false;
+			}
+		} else if (isAnyType(src.getType()) && isAnyType(dest.getType())) { // for other generic to generic connections
 			if (diagnostics != null) {
-				diagnostics.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
-						LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH,
-						MessageFormat.format(Messages.ConnectionAnnotations_GenericEndpoints, src.getQualifiedName(),
-								src.getFullTypeName(), dest.getQualifiedName(), dest.getFullTypeName()),
-						FordiacMarkerHelper.getDiagnosticData(connection)));
+				diagnostics
+						.add(createTypeMismatchDiagnostic(Messages.ConnectionAnnotations_GenericEndpoints, connection));
 			}
 			return false;
 		}
 		return true;
 	}
 
-	private static boolean typeCheckInOut(final VarDeclaration source, final VarDeclaration destination) {
+	private static boolean typeCheckInOut(final VarDeclaration destination) {
 		// check defining source for InOut sources
 		// get defining declaration (determines the _actual_ type)
 		final VarDeclaration definingVar = VarInOutHelper.getDefiningVarInOutDeclaration(destination);
@@ -202,7 +195,7 @@ public class ConnectionAnnotations {
 		final DataType definingType = LinkConstraints.getFullDataType(definingVar);
 		final DataType destinationType = LinkConstraints.getFullDataType(destination);
 		// check if destination is also an InOut variable
-		if (destination instanceof final VarDeclaration destVar && destVar.isInOutVar()) {
+		if (destination.isInOutVar()) {
 			// connections between InOut variables must be mutually assignable
 			// special exception for generic destination variables, which adapt to the
 			// source
@@ -214,23 +207,54 @@ public class ConnectionAnnotations {
 		return destinationType.isAssignableFrom(definingType);
 	}
 
-	private static boolean isContainerPin(final EObject srcParent, final EObject destParent) {
-		if ((srcParent instanceof FBType) || (destParent instanceof FBType)) {
-			// one of the pins is on the type so we are fine
-			return true;
+	private static boolean typeCheckIn2If(final IInterfaceElement source, final IInterfaceElement destination) {
+		final DataType sourceType = LinkConstraints.getFullDataType(source);
+		final DataType destinationType = LinkConstraints.getFullDataType(destination);
+		// internal to interface (or interface to interface) connections must be
+		// narrower on the interface if generic types are used, particularly connections
+		// are not allowed:
+		// - from a non-generic internal to a generic interface output
+		// - from a narrower generic internal to a wider generic interface output
+		if (GenericTypes.isAnyType(destinationType) || EventTypeLibrary.isGenericEventType(destinationType)) {
+			return sourceType.isAssignableFrom(destinationType);
 		}
+		return true; // remainder handled by basic type checks
+	}
 
-		if ((srcParent instanceof final FBNetworkElement srcElem
-				&& destParent instanceof final FBNetworkElement destElem)
-				&& (srcParent instanceof SubApp || srcParent instanceof CFBInstance || destParent instanceof SubApp
-						|| destParent instanceof CFBInstance)) {
-			// if at least one of the parents is an untyped subapp the connection will need
-			// to cross the interface, i.e., the two FBNetworkElement must not be in the
-			// same network
-			return (srcElem.getFbNetwork() != destElem.getFbNetwork());
-		}
+	private static boolean typeCheckIf2In(final IInterfaceElement source, final IInterfaceElement destination) {
+		final DataType sourceType = LinkConstraints.getFullDataType(source);
+		final DataType destinationType = LinkConstraints.getFullDataType(destination);
+		// interface to internal connections must strictly be assignable, even when
+		// generic types are used, particularly connections are not allowed:
+		// - from a generic interface to a non-generic internal input
+		// - from a wider generic interface to a narrower generic internal input
+		return destinationType.isAssignableFrom(sourceType);
+	}
 
-		return false;
+	private static BasicDiagnostic createTypeMismatchDiagnostic(final String message, final Connection connection) {
+		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+				LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH, MessageFormat.format(message, //
+						connection.getSource().getQualifiedName(), connection.getSource().getFullTypeName(),
+						connection.getDestination().getQualifiedName(), connection.getDestination().getFullTypeName()),
+				FordiacMarkerHelper.getDiagnosticData(connection));
+	}
+
+	private static BasicDiagnostic createInOutTypeMismatchDiagnostic(final String message,
+			final Connection connection) {
+		final VarDeclaration destination = (VarDeclaration) connection.getDestination();
+		final SequencedSet<VarDeclaration> path = VarInOutHelper.getDefiningVarInOutDeclarationPath(destination);
+		final VarDeclaration definingVar = path.removeLast();
+		final String pathString = path.stream()
+				.map(v -> MessageFormat.format(Messages.ConnectionAnnotations_TypeMismatchInOutIntermediate,
+						v.getQualifiedName(), v.getFullTypeName()))
+				.collect(Collectors.joining(Messages.ConnectionAnnotations_TypeMismatchInOutSeparator,
+						Messages.ConnectionAnnotations_TypeMismatchInOutVia, "")); //$NON-NLS-1$
+		return new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+				LibraryElementValidator.CONNECTION__VALIDATE_TYPE_MISMATCH, MessageFormat.format(message, //
+						definingVar.getQualifiedName(), definingVar.getFullTypeName(), //
+						destination.getQualifiedName(), destination.getFullTypeName(),
+						path.isEmpty() ? "" : pathString), //$NON-NLS-1$
+				FordiacMarkerHelper.getDiagnosticData(connection));
 	}
 
 	public static boolean validateMappedVarInOutsDoNotCrossResourceBoundaries(final Connection connection,
