@@ -57,7 +57,7 @@ public class DirectlyDerivedTypeImpl extends AnyDerivedTypeImpl implements Direc
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String INITIAL_VALUE_EDEFAULT = null;
+	protected static final String INITIAL_VALUE_EDEFAULT = "";
 	/**
 	 * The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
