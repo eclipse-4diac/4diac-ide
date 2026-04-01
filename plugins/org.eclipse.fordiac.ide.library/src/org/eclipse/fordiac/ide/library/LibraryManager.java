@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Alexander Fedorov (ArSysOp) - fix "Uncontrolled data used in path expression"
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -270,13 +271,19 @@ public enum LibraryManager {
 	 */
 	public java.net.URI extractLibrary(final Path path, final IProject project, final boolean autoImport,
 			final boolean resolve) throws IOException {
-		if (path == null || Files.notExists(path)) {
+		if (path == null) {
+			// FIXME: AF: FileNotFoundException would be much more clear
 			return null;
 		}
-		FordiacLogHelper.logInfo("Extracting library at " + path); //$NON-NLS-1$
+		final Path real = path.toRealPath();
+		if (!Files.isRegularFile(real)) {
+			// FIXME: AF: FileNotFoundException would be much more clear
+			return null;
+		}
+		FordiacLogHelper.logInfo("Extracting library at " + real); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
-		try (InputStream inputStream = Files.newInputStream(path);
+		try (InputStream inputStream = Files.newInputStream(real);
 				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			folderName = ""; //$NON-NLS-1$
