@@ -1,0 +1,31 @@
+###############################################################################
+# Copyright (c) 2023, 2026 Contributors to Eclipse Foundation
+#
+# This program and the accompanying materials are made available under the
+# terms of the Eclipse Public License 2.0 which is available at
+# https://www.eclipse.org/legal/epl-2.0/.
+#
+# SPDX-License-Identifier: EPL-2.0
+#
+# Contributors:
+#     see git history
+###############################################################################
+name: CodeQL call
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions:
+  checks: write
+  pull-requests: write
+  security-events: write
+  contents: read
+  issues: read
+  actions: read
+
+jobs:
+  callCodeQLworkflow:
+    uses: eclipse-platform/eclipse.platform.releng.aggregator/.github/workflows/codeQLworkflow.yml@master
