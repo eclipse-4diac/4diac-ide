@@ -51,6 +51,7 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.CopyFilesAndFoldersOperation;
 import org.eclipse.ui.actions.SelectionListenerAction;
 import org.eclipse.ui.internal.navigator.resources.plugin.WorkbenchNavigatorMessages;
 import org.eclipse.ui.part.ResourceTransfer;
@@ -166,17 +167,27 @@ import org.eclipse.ui.part.ResourceTransfer;
 		// try a resource transfer
 		final ResourceTransfer resTransfer = ResourceTransfer.getInstance();
 		final IResource[] resourceData = (IResource[]) clipboard.getContents(resTransfer);
-		if (resourceData == null || resourceData.length == 0) {
+
+		if (resourceData != null && resourceData.length > 0) {
+			if (resourceData[0].getType() == IResource.PROJECT) {
+				pasteProjects(resourceData);
+			} else {
+				final IContainer container = getContainer(resourceData);
+				startCopyRefactoring(resourceData, container, shell);
+			}
 			return;
 		}
 
-		if (resourceData[0].getType() == IResource.PROJECT) {
-			pasteProjects(resourceData);
-			return;
-		}
+		// try a file transfer
+		final FileTransfer fileTransfer = FileTransfer.getInstance();
+		final String[] fileData = (String[]) clipboard.getContents(fileTransfer);
 
-		final IContainer container = getContainer(resourceData);
-		startCopyRefactoring(resourceData, container, shell);
+		if (fileData != null) {
+			// enablement should ensure that we always have access to a container
+			final IContainer container = getContainer(null);
+			final CopyFilesAndFoldersOperation operation = new CopyFilesAndFoldersOperation(shell);
+			operation.copyFiles(fileData, container);
+		}
 	}
 
 	private void pasteProjects(final IResource[] resourceData) {
