@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,11 +44,11 @@ public class CopyTypeParticipant extends CopyParticipant {
 
 	@Override
 	protected boolean initialize(final Object element) {
-		if (element instanceof final IResource res
+		if ((element instanceof IFile || element instanceof IFolder)
 				&& getArguments().getDestination() instanceof final IContainer dest) {
-			resource = res;
+			resource = (IResource) element;
 			destination = dest;
-			return RefactoringUtil.containsTypeEntryFile(res);
+			return RefactoringUtil.containsTypeEntryFile(resource);
 		}
 		return false;
 	}
@@ -85,7 +86,11 @@ public class CopyTypeParticipant extends CopyParticipant {
 			throws CoreException {
 		if (resource instanceof final IFile file) {
 			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
-				change.add(new CopyTypeChange(destination.appendSegment(file.getName())));
+				String name = getArguments().getExecutionLog().getNewName(file);
+				if (name == null) {
+					name = file.getName();
+				}
+				change.add(new CopyTypeChange(destination.appendSegment(name)));
 			}
 		} else if (resource instanceof final IContainer container) {
 			for (final IResource member : container.members()) {

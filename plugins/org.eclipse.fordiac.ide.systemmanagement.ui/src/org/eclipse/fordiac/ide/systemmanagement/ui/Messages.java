@@ -90,16 +90,6 @@ public final class Messages extends NLS {
 
 	public static String SystemExplorer_CopyPackageNameAction;
 
-	public static String SystemExplorerPasteAction_CopyProject;
-
-	public static String SystemExplorerPasteAction_newProjectName;
-
-	public static String SystemExplorerPasteAction_nonEmptyProject;
-
-	public static String SystemExplorerPasteAction_projectExists;
-
-	public static String SystemExplorerPasteAction_copy;
-
 	public static String CopyActionErrorRetryTitle;
 	public static String CopyActionErrorRetryMessage;
 

@@ -44,7 +44,18 @@ import org.eclipse.ltk.core.refactoring.participants.SharableParticipants;
 public final class FordiacCopyProcessor extends CopyProcessor {
 
 	public enum ExistsResolve {
-		OVERWRITE, DONT_COPY, CANCEL_ALL
+		OVERWRITE, DONT_COPY, RENAME, CANCEL_ALL;
+
+		private String newName;
+
+		public ExistsResolve setNewName(final String newName) {
+			this.newName = newName;
+			return this;
+		}
+
+		public String getNewName() {
+			return newName;
+		}
 	}
 
 	private final IResource[] files;
@@ -76,7 +87,10 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 			final IResource file = files[i];
 			final ExistsResolve resolve = handleAlreadyExists(file);
 
-			if (resolve == ExistsResolve.OVERWRITE) {
+			if (resolve == ExistsResolve.RENAME) {
+				log.setNewName(file, resolve.getNewName());
+				doCopy[i] = true;
+			} else if (resolve == ExistsResolve.OVERWRITE) {
 				doCopy[i] = true;
 			} else if (resolve == ExistsResolve.CANCEL_ALL) {
 				canceled = true;
@@ -98,7 +112,7 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 			if (!doCopy[i]) {
 				continue;
 			}
-			compChange.add(new CopyResourceChange(files[i], destination));
+			compChange.add(new CopyResourceChange(files[i], log, destination));
 		}
 		return compChange;
 	}
