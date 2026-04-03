@@ -21,26 +21,20 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.FordiacCopyProcessor;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.UserCopyRefactoringQueries;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CheckConditionsOperation;
 import org.eclipse.ltk.core.refactoring.CreateChangeOperation;
@@ -169,12 +163,8 @@ import org.eclipse.ui.part.ResourceTransfer;
 		final IResource[] resourceData = (IResource[]) clipboard.getContents(resTransfer);
 
 		if (resourceData != null && resourceData.length > 0) {
-			if (resourceData[0].getType() == IResource.PROJECT) {
-				pasteProjects(resourceData);
-			} else {
-				final IContainer container = getContainer(resourceData);
-				startCopyRefactoring(resourceData, container, shell);
-			}
+			final IContainer container = getContainer(resourceData);
+			startCopyRefactoring(resourceData, container, shell);
 			return;
 		}
 
@@ -188,69 +178,6 @@ import org.eclipse.ui.part.ResourceTransfer;
 			final CopyFilesAndFoldersOperation operation = new CopyFilesAndFoldersOperation(shell);
 			operation.copyFiles(fileData, container);
 		}
-	}
-
-	private void pasteProjects(final IResource[] resourceData) {
-		for (final IResource res : resourceData) {
-			if (!(res instanceof final IProject project)) {
-				continue;
-			}
-			if (!project.isOpen()) {
-				continue;
-			}
-
-			final String newName = queryNewProjectName(project);
-			if (newName == null) {
-				return;
-			}
-
-			try {
-				final IProgressMonitor pm = new NullProgressMonitor();
-				final IProjectDescription desc = project.getDescription();
-				desc.setName(newName);
-				desc.setLocation(null);
-				project.copy(desc, true, pm);
-			} catch (final CoreException e) {
-				ErrorDialog.openError(shell, null, null, e.getStatus());
-				return;
-			}
-		}
-	}
-
-	private String queryNewProjectName(final IProject project) {
-		final String base = project.getName();
-		final String initial = suggestProjectCopyName(base);
-
-		final InputDialog dialog = new InputDialog(shell, Messages.SystemExplorerPasteAction_CopyProject,
-				Messages.SystemExplorerPasteAction_newProjectName, initial, name -> {
-					if (name == null || name.isBlank()) {
-						return Messages.SystemExplorerPasteAction_nonEmptyProject;
-					}
-					final var status = ResourcesPlugin.getWorkspace().validateName(name, IResource.PROJECT);
-					if (!status.isOK()) {
-						return status.getMessage();
-					}
-					if (Objects.equals(name, base)
-							|| ResourcesPlugin.getWorkspace().getRoot().getProject(name).exists()) {
-						return Messages.SystemExplorerPasteAction_projectExists;
-					}
-					return null;
-				});
-
-		if (dialog.open() == Window.OK) {
-			return dialog.getValue();
-		}
-		return null;
-	}
-
-	private static String suggestProjectCopyName(final String base) {
-		String candidate = base + Messages.SystemExplorerPasteAction_copy;
-		int i = 2;
-		while (ResourcesPlugin.getWorkspace().getRoot().getProject(candidate).exists()) {
-			candidate = base + Messages.SystemExplorerPasteAction_copy + i;
-			i++;
-		}
-		return candidate;
 	}
 
 	private static void startCopyRefactoring(final IResource[] files, final IContainer destination, final Shell shell) {
