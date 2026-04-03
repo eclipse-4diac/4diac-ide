@@ -42,6 +42,7 @@ public class SubAppTypeEntryImpl extends AbstractInterfaceTypeEntryImpl<SubAppTy
 	protected ErrorSubAppType createErrorLibraryElement() {
 		final ErrorSubAppType type = LibraryElementFactory.eINSTANCE.createErrorSubAppType();
 		type.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		type.setFBNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
 		return type;
 	}
 
