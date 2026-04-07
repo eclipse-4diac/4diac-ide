@@ -37,11 +37,9 @@ public class LibraryMarkerFactory {
 	 */
 	public static ErrorMarkerBuilder createDependencyMarker(final Manifest manifest, final ResolveNode rnode,
 			final DependencyNode dnode) {
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
-						VersionComparator.formatVersionRange(dnode.getRange()),
-						String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
+		return createLibraryMarker(MessageFormat.format(rnode.getError(), rnode.getSymbolicName(),
+				VersionComparator.formatVersionRange(dnode.getRange()), String.join(", ", dnode.getCauses().keySet()))) //$NON-NLS-1$
+				.setTarget(manifest.getDependencies())
 				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, rnode.getSymbolicName()));
 	}
 
@@ -57,10 +55,9 @@ public class LibraryMarkerFactory {
 				.map(entry -> entry.getKey() + ": " + VersionComparator.formatVersionRange(entry.getValue())) //$NON-NLS-1$
 				.collect(Collectors.joining(", ")); //$NON-NLS-1$
 
-		return ErrorMarkerBuilder
-				.createErrorMarkerBuilder(
-						MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
-				.setType(FordiacErrorMarker.LIBRARY_MARKER).setTarget(manifest.getDependencies())
+		return createLibraryMarker(
+				MessageFormat.format(Messages.ErrorMarkerVersionRangeEmpty, dnode.getSymbolicName(), causedBy))
+				.setTarget(manifest.getDependencies())
 				.addAdditionalAttributes(Map.of(MARKER_ATTRIBUTE, dnode.getSymbolicName()));
 	}
 
@@ -71,10 +68,25 @@ public class LibraryMarkerFactory {
 	 * @return {@link ErrorMarkerBuilder} for error
 	 */
 	public static ErrorMarkerBuilder createBrokenLinkMarker(final IFolder libFolder) {
-		return ErrorMarkerBuilder.createErrorMarkerBuilder(Messages.LibraryManager_BrokenLink)
-				.setType(FordiacErrorMarker.LIBRARY_MARKER)
+		return createLibraryMarker(Messages.LibraryManager_BrokenLink)
 				.setLocation(MessageFormat.format("Library: {0} - Version: {1}", libFolder.getName(), //$NON-NLS-1$
 						LibraryManager.parseLibraryVersion(libFolder)));
+	}
+
+	/**
+	 * Creates invalid version error marker
+	 *
+	 * @param symbolicName of the library
+	 * @param version      description of the library
+	 * @return {@link ErrorMarkerBuilder} for error
+	 */
+	public static ErrorMarkerBuilder createInvalidVersionMarker(final String symbolicName, final String version) {
+		return createLibraryMarker(
+				MessageFormat.format(Messages.VersionValidator_DeclarationError, version, symbolicName));
+	}
+
+	private static ErrorMarkerBuilder createLibraryMarker(final String message) {
+		return ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(FordiacErrorMarker.LIBRARY_MARKER);
 	}
 
 	private LibraryMarkerFactory() {

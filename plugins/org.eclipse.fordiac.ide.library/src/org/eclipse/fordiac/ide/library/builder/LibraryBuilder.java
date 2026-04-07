@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.fordiac.ide.library.LibraryManager;
+import org.eclipse.fordiac.ide.library.LibraryValidation;
 import org.eclipse.fordiac.ide.library.Messages;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.ManifestHelper;
@@ -54,6 +55,10 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 
 		if (manifest == null) {
 			return new IProject[0];
+		}
+
+		if (!LibraryValidation.validateVersions(manifest, getProject()).isOK()) {
+			throw new OperationCanceledException("Build aborted"); //$NON-NLS-1$
 		}
 
 		if (kind == FULL_BUILD) {
@@ -142,7 +147,6 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 	private static boolean projectManifestChanged(final IResourceDelta delta) {
 		final var md = delta.findMember(new Path(LibraryManager.MANIFEST));
 		return md != null && (md.getKind() & (IResourceDelta.ADDED | IResourceDelta.CHANGED)) != 0;
-
 	}
 
 	private static boolean isLinkedLibraryFolder(final IContainer container) {
