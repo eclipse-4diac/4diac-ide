@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.copy;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,8 +72,7 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 	}
 
 	private ExistsResolve queryUserOverwriteSelf(final IResource file, final IContainer destination) {
-		final StringBuilder msg = new StringBuilder(Messages.Copy_RenameDialog_Message);
-		msg.append('\'').append(file.getName()).append('\'');
+		final String msg = MessageFormat.format(Messages.Copy_RenameDialog_Message, file.getName());
 
 		final IInputValidator validator = string -> {
 			final IWorkspace workspace = file.getWorkspace();
@@ -89,8 +89,8 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 			return null;
 		};
 
-		final InputDialog dialog = new InputDialog(shell, Messages.Copy_RenameDialog_Title, msg.toString(),
-				computeNewName(file.getName()), validator) {
+		final InputDialog dialog = new InputDialog(shell, Messages.Copy_RenameDialog_Title, msg,
+				computeNewName(file.getName(), destination), validator) {
 			@Override
 			protected Control createContents(final Composite parent) {
 				final Control contents = super.createContents(parent);
@@ -108,7 +108,7 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 		return ExistsResolve.CANCEL_ALL;
 	}
 
-	private static String computeNewName(final String oldName) {
+	private static String computeNewName(final String oldName, final IContainer destination) {
 		final int lastIdx = oldName.lastIndexOf('.');
 		String fileExt = ""; //$NON-NLS-1$
 		String fileNameWithoutExt = oldName;
@@ -120,8 +120,13 @@ public class UserCopyRefactoringQueries implements ICopyRefactoringQueries {
 		final Matcher m = ENDS_WITH_NUMBER.matcher(fileNameWithoutExt);
 		if (m.find()) {
 			try {
-				final BigDecimal newNumber = new BigDecimal(m.group()).add(BigDecimal.ONE);
-				return m.replaceFirst(newNumber.toPlainString()) + fileExt;
+				BigDecimal newNumber = new BigDecimal(m.group());
+				String newName;
+				do {
+					newNumber = newNumber.add(BigDecimal.ONE);
+					newName = m.replaceFirst(newNumber.toPlainString()) + fileExt;
+				} while (destination.findMember(newName) != null);
+				return newName;
 			} catch (final NumberFormatException e) {
 				// return default new name below
 			}
