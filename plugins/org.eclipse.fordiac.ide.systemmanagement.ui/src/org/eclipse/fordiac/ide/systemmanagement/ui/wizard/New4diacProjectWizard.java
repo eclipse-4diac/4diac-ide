@@ -39,6 +39,9 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  */
 public class New4diacProjectWizard extends Wizard implements INewWizard {
 
+	private static final String[] LIBRARY_STANDARD_SELECTION = { "convert", "core", "events", "iec61131-3", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			"net", "system", "utils" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
 	/** The pages. */
 	private New4diacProjectPage page;
 	private UnifiedLibraryImportWizardPage libPage;
@@ -61,7 +64,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new UnifiedLibraryImportWizardPage(null);
+		libPage = new UnifiedLibraryImportWizardPage(null, LIBRARY_STANDARD_SELECTION);
 		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
 		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
 

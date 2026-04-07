@@ -17,9 +17,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
@@ -94,11 +96,16 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private boolean showLatestOnly;
 	private boolean hideEmptyProjects;
 	private boolean internalCheckUpdate;
+	private final Set<String> defaultSelectedLibraries;
 
 	private final LatestOnlyFilter latestOnlyFilter = new LatestOnlyFilter();
 	private final NonValidGitlabPackageFilter gitlabPackageFilter = new NonValidGitlabPackageFilter();
 
 	public UnifiedLibraryImportWizardPage(final IProject targetProject) {
+		this(targetProject, new String[0]);
+	}
+
+	public UnifiedLibraryImportWizardPage(final IProject targetProject, final String[] defaultSelectedLibraries) {
 		super(Messages.UnifiedLibraryImportWizardPage_Available_Libraries);
 		setTitle(Messages.UnifiedLibraryImportWizardPage_LibraryImport);
 		setDescription(Messages.UnifiedLibraryImportWizardPage_brows);
@@ -106,6 +113,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		this.showLatestOnly = true;
 		this.hideEmptyProjects = true;
 		this.sources = new ArrayList<>(LibrarySourceBuilder.getAllSources());
+		this.defaultSelectedLibraries = Set.copyOf(Arrays.asList(
+				defaultSelectedLibraries != null ? defaultSelectedLibraries.clone() : new String[0]));
 	}
 
 	public boolean performImport(final IWizardContainer container) {
@@ -279,7 +288,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		viewer.setInput(new AdaptableList());
 		viewer.addFilter(latestOnlyFilter);
 		viewer.addFilter(gitlabPackageFilter);
-		updateGitlabContext(viewer.getInput());
+		updateGitlabContext();
 		applyViewerFilters();
 
 		final ICheckStateListener checkListener = this::handleTreeCheckBoxes;
@@ -390,9 +399,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 						}
 						try {
 							applyModelToViewer(model);
-							updateGitlabContext(model);
+							updateGitlabContext();
 							latestOnlyFilter.rebuildIndex(viewer, contentProvider, model);
 							applyViewerFilters();
+							applyDefaultSelectionToVisibleLibraries();
 							restoreTreeStateAfterRefresh();
 							detailsText.setText(Messages.UnifiedLibraryImportWizardPage_select_to_see_details);
 							setPageComplete(hasSelectableCheckedLeafs());
@@ -433,11 +443,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 				// elements may not exist anymore after filtering
 			}
 		}
-		if (viewer.getExpandedElements().length == 0) {
-			viewer.expandToLevel(2);
-		} else {
-			viewer.expandToLevel(2);
-		}
+		viewer.expandToLevel(2);
 
 		if (lastSelectedElement != null) {
 			try {
@@ -467,8 +473,35 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		}
 	}
 
-	private void updateGitlabContext(final Object input) {
+	private void updateGitlabContext() {
 		gitlabPackageFilter.setLatestOnlyFilter(latestOnlyFilter);
+	}
+
+	private void applyDefaultSelectionToVisibleLibraries() {
+		if (viewer == null || viewer.getControl().isDisposed() || activeSource == null
+				|| defaultSelectedLibraries.isEmpty()) {
+			return;
+		}
+
+		internalCheckUpdate = true;
+		try {
+			checkDefaultLibraries(viewer.getTree().getItems(), new HashSet<>());
+		} finally {
+			internalCheckUpdate = false;
+		}
+	}
+
+	private void checkDefaultLibraries(final TreeItem[] items, final Set<String> alreadySelected) {
+		for (final TreeItem item : items) {
+			final Object element = item.getData();
+			final Object value = LibraryTreeNode.unwrapNode(element);
+			if (activeSource.isSelectableLeaf(element) && value instanceof final LibraryRecord rec
+					&& defaultSelectedLibraries.contains(rec.symbolicName())
+					&& alreadySelected.add(rec.symbolicName())) {
+				viewer.setChecked(element, true);
+			}
+			checkDefaultLibraries(item.getItems(), alreadySelected);
+		}
 	}
 
 	private void applyViewerFilters() {
