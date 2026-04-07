@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MemberVarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -44,26 +43,22 @@ public class ToolTipFigure extends Figure {
 	 *
 	 * @param element the element
 	 */
-	public ToolTipFigure(final INamedElement element, final GraphicalAnnotationModel annotationModel) {
+	public ToolTipFigure(final IInterfaceElement element, final GraphicalAnnotationModel annotationModel) {
 		final ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
 		String nameLine = getName(element);
-
-		if (element instanceof final ITypedElement typedElement && typedElement.getFullTypeName() != null) {
-			nameLine += " - " + typedElement.getFullTypeName(); //$NON-NLS-1$
+		if (element.getFullTypeName() != null) {
+			nameLine += " - " + element.getFullTypeName(); //$NON-NLS-1$
 		}
 
 		add(new Label(nameLine));
 
 		line = new VerticalLineCompartmentFigure();
 		add(line);
+		addComment(element);
 
-		final String comment = element.getComment();
-		if ((comment != null) && (!comment.isEmpty())) {
-			line.add(new Label(comment));
-		}
 		if (element instanceof final Event event) {
 			addWiths(event);
 		} else if (element instanceof final VarDeclaration varDecl) {
@@ -90,6 +85,18 @@ public class ToolTipFigure extends Figure {
 
 	public final VerticalLineCompartmentFigure getLine() {
 		return line;
+	}
+
+	private void addComment(final IInterfaceElement element) {
+		final String comment = element.getComment();
+		if (comment != null && !comment.isEmpty()) {
+			line.add(new Label(comment));
+		} else {
+			final var typePin = element.findInTypeInterface();
+			if (typePin != null) {
+				line.add(new Label(typePin.getComment()));
+			}
+		}
 	}
 
 	private void addWiths(final Event element) {
