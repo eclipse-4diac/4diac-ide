@@ -47,7 +47,8 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateConfigurableFBModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeModelEdit;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -144,8 +145,8 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 				modelEdits.add(new DataTypeModelEdit(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
 						EcoreUtil.getURI(eObject), PackageNameHelper.getFullTypeNameFromFile(newFile)));
 			}
-			if (eObject instanceof final BlockFBNetworkElement elem) {
-				modelEdits.add(new UpdateFBInstanceModelEdit(elem, dtEntry));
+			if (eObject instanceof final ConfigurableFB elem) {
+				modelEdits.add(new UpdateConfigurableFBModelEdit(elem, dtEntry));
 			}
 		}
 	}
@@ -155,7 +156,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 		for (final EObject eObject : result) {
 			if (eObject instanceof final BlockFBNetworkElement elem) {
-				modelEdits.add(new UpdateFBInstanceModelEdit(elem, typeEntry));
+				modelEdits.add(new UpdateFBTypeModelEdit(elem, typeEntry));
 			}
 		}
 	}

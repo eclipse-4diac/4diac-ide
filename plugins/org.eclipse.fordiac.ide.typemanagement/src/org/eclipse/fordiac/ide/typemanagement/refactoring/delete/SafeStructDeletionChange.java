@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateManipulatorModelEdit;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 
@@ -89,11 +88,7 @@ public class SafeStructDeletionChange extends CompositeChange {
 	private void handleTransitiveRefactoring(final VarDeclaration varDecl, final Set<EObject> rootElements) {
 		final DataTypeEntry dataTypeEntry = (DataTypeEntry) varDecl.getType().getTypeEntry();
 		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
-		if (varDecl.getBlockFBNetworkElement() != null) {
-			if (rootElements.add(varDecl.getBlockFBNetworkElement())) {
-				changes.add(new UpdateFBInstanceModelEdit(varDecl.getBlockFBNetworkElement(), dataTypeEntry));
-			}
-		} else if (rootElements.add(rootContainer)) {
+		if (rootElements.add(rootContainer)) {
 			if (rootContainer instanceof final StructuredType stElement) {
 				createChanges((DataTypeEntry) stElement.getTypeEntry());
 			} else if (rootContainer instanceof final FBType fbType
