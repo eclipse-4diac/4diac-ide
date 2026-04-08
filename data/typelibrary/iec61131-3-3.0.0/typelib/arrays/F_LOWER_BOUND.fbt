@@ -4,7 +4,7 @@
 	</Identification>
 	<VersionInfo Organization="Demmler Andreas Fahrzeugbau" Version="1.0" Author="Franz Höpfinger" Date="2026-01-23" Remarks="Initial Implementation">
 	</VersionInfo>
-	<CompilerInfo packageName="iec61131::selection">
+	<CompilerInfo packageName="iec61131::arrays">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -26,5 +26,15 @@
 			<VarDeclaration Name="OUT" Type="ANY_INT" Comment="lowest index of the Dimension"/>
 		</OutputVars>
 	</InterfaceList>
+	<SimpleFB>
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="REQ">
+			<ST><![CDATA[
+OUT := LOWER_BOUND(ARR, DIM);
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
