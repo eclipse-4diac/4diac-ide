@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2023, 2025 Johannes Kepler University,
+ * Copyright (c) 2023, 2026 Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -20,22 +20,22 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.UpdateInternalFBCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-@Deprecated
-public class UpdateFBInstanceModelEdit extends ModelEdit<BlockFBNetworkElement> {
+public class UpdateFBTypeModelEdit extends ModelEdit<BlockFBNetworkElement> {
 
-	protected final TypeEntry typeEntry;
+	private final TypeEntry typeEntry;
 
-	public UpdateFBInstanceModelEdit(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
+	public UpdateFBTypeModelEdit(final BlockFBNetworkElement instance, final TypeEntry typeEntry) {
 		super(MessageFormat.format(Messages.UpdateFBInstances, FBNetworkHelper.getFullHierarchicalName(instance)),
 				EcoreUtil.getURI(instance), BlockFBNetworkElement.class);
 		this.typeEntry = typeEntry;
@@ -52,22 +52,17 @@ public class UpdateFBInstanceModelEdit extends ModelEdit<BlockFBNetworkElement> 
 
 		final RefactoringStatus status = new RefactoringStatus();
 		if (element.eContainer() == null) {
-			status.addError(element.getQualifiedName() + " eContainer is null"); //$NON-NLS-1$
+			status.addFatalError(element.getQualifiedName() + " eContainer is null"); //$NON-NLS-1$
 		}
 		return status;
 	}
 
 	@Override
 	protected Command createCommand(final BlockFBNetworkElement element) {
-		if (element instanceof final SubApp subApp && !subApp.isTyped() && typeEntry instanceof final DataTypeEntry dtEntry) {
-			return new UpdateUntypedSubAppInterfaceModelEdit(subApp, dtEntry).createCommand(subApp);
+		if (element.eContainer() instanceof BaseFBType && element instanceof final FB fb) {
+			return new UpdateInternalFBCommand(fb, typeEntry);
 		}
 
-		if (element instanceof final ConfigurableFB configurableFB && typeEntry instanceof final DataTypeEntry dtEntry) {
-			return new UpdateConfigurableFBModelEdit(configurableFB, dtEntry).createCommand(configurableFB);
-		}
-
-		return new UpdateFBTypeModelEdit(element, typeEntry).createCommand(element);
+		return new UpdateFBTypeCommand(element, typeEntry);
 	}
-
 }

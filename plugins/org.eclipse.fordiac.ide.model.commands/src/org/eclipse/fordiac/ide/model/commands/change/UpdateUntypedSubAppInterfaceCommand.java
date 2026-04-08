@@ -21,11 +21,18 @@ import org.eclipse.gef.commands.Command;
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
 public class UpdateUntypedSubAppInterfaceCommand extends Command {
 	private final DataTypeEntry dataTypeEntry;
+	private final String oldTypeDeclaration;
 	private final SubApp subApp;
 
 	public UpdateUntypedSubAppInterfaceCommand(final FBNetworkElement fbnElement, final DataTypeEntry type) {
+		this(fbnElement, type, type.getFullTypeName());
+	}
+
+	public UpdateUntypedSubAppInterfaceCommand(final FBNetworkElement fbnElement, final DataTypeEntry type,
+			final String oldTypeDeclaration) {
 		this.subApp = (SubApp) fbnElement;
 		this.dataTypeEntry = type;
+		this.oldTypeDeclaration = oldTypeDeclaration;
 	}
 
 	@Override
@@ -36,7 +43,7 @@ public class UpdateUntypedSubAppInterfaceCommand extends Command {
 	@Override
 	public void execute() {
 		subApp.getInterface().getAllInterfaceElements() //
-				.filter(i -> i.getTypeName().equals(dataTypeEntry.getTypeName()))
+				.filter(i -> oldTypeDeclaration.equals(i.getFullTypeName()))
 				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
 					el.setType(dataTypeEntry.getType());
 					if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
