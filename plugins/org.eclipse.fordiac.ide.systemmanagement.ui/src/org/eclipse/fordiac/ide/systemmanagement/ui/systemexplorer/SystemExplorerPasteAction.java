@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.FordiacCopyProcessor;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.copy.UserCopyRefactoringQueries;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -193,6 +194,9 @@ import org.eclipse.ui.part.ResourceTransfer;
 			final Change change = changeOp.getChange();
 			if (change != null) {
 				change.perform(pm);
+			} else if (changeOp.getConditionCheckingFailedSeverity() >= RefactoringStatus.ERROR) {
+				ErrorDialog.openError(shell, null, null, Status.error(
+						changeOp.getConditionCheckingStatus().getMessageMatchingSeverity(RefactoringStatus.ERROR)));
 			} else {
 				FordiacLogHelper.logWarning("copy refactoring change could not be created"); //$NON-NLS-1$
 			}

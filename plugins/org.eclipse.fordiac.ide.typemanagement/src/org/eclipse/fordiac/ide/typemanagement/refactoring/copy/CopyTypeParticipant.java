@@ -62,10 +62,23 @@ public class CopyTypeParticipant extends CopyParticipant {
 	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
+
+		String newName = getArguments().getExecutionLog().getNewName(resource);
+		if (newName != null) {
+			final int lastIdx = newName.lastIndexOf('.');
+			if (lastIdx != -1) {
+				newName = newName.substring(0, lastIdx); // remove file extension
+			}
+			final Optional<String> identErrorMsg = IdentifierVerifier.verifyIdentifier(newName);
+			if (identErrorMsg.isPresent()) {
+				status.addFatalError(identErrorMsg.get());
+			}
+		}
+
 		final String packageNameContainer = PackageNameHelper.getPackageNameFromContainer(destination);
-		final Optional<String> errorMessage = IdentifierVerifier.verifyPackageName(packageNameContainer);
-		if (errorMessage.isPresent()) {
-			status.addFatalError(errorMessage.get());
+		final Optional<String> packageErrorMsg = IdentifierVerifier.verifyPackageName(packageNameContainer);
+		if (packageErrorMsg.isPresent()) {
+			status.addFatalError(packageErrorMsg.get());
 		}
 		return status;
 	}
@@ -86,16 +99,17 @@ public class CopyTypeParticipant extends CopyParticipant {
 			throws CoreException {
 		if (resource instanceof final IFile file) {
 			if (TypeLibraryManager.INSTANCE.getTypeEntryForFile(file) != null) {
-				String name = getArguments().getExecutionLog().getNewName(file);
-				if (name == null) {
-					name = file.getName();
-				}
-				change.add(new CopyTypeChange(destination.appendSegment(name)));
+				change.add(new CopyTypeChange(destination.appendSegment(getNewName(file))));
 			}
 		} else if (resource instanceof final IContainer container) {
 			for (final IResource member : container.members()) {
-				addElement(change, member, destination.appendSegment(container.getName()));
+				addElement(change, member, destination.appendSegment(getNewName(container)));
 			}
 		}
+	}
+
+	private String getNewName(final IResource res) {
+		final String name = getArguments().getExecutionLog().getNewName(res);
+		return name == null ? res.getName() : name;
 	}
 }
