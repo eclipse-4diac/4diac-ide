@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -31,6 +30,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteECStateCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateConnectionAnchor;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECStateFigure;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateLayoutEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECStateSelectionPolicy;
@@ -180,12 +180,12 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if ((connection.getTarget() != null) && connection.getTarget().equals(connection.getSource())) {
 			return new FixedAnchor(getFigure().getNameLabel(), false);
 		}
-		return new ChopboxAnchor(getFigure().getNameLabel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel());
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final Request request) {
-		return new ChopboxAnchor(getFigure().getNameLabel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), null);
 	}
 
 	@Override
@@ -193,12 +193,12 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 		if ((connection.getSource() != null) && connection.getSource().equals(connection.getTarget())) {
 			return new FixedAnchor(getFigure().getNameLabel(), true);
 		}
-		return new ChopboxAnchor(getFigure().getNameLabel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), (ECTransition) connection.getModel());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
-		return new ChopboxAnchor(getFigure().getNameLabel());
+		return new ECStateConnectionAnchor(getFigure(), getModel(), null);
 	}
 
 	@Override
