@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="F_LEN_ARRAY" Comment="Service Interface Function Block Type">
-	<Identification Standard="61499-2" Classification="array function" Description="Copyright (c) 2026 Martin Melik Merkumians&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/">
+<FBType Name="F_LEN_ARRAY" Comment="Returns the length of the dimension of the given array">
+	<Identification Standard="61499-2" Classification="array function" Description="Copyright (c) 2026 Martin Melik Merkumians, Demmler Andreas Fahrzeugbau&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/">
 	</Identification>
+	<VersionInfo Organization="Demmler Andreas Fahrzeugbau" Version="1.1" Author="Franz Höpfinger" Date="2026-04-11" Remarks="make same as F_nn_BOUND">
+	</VersionInfo>
 	<VersionInfo Version="1.0" Author="Martin Melik Merkumians" Date="2026-03-25">
 	</VersionInfo>
-	<CompilerInfo packageName="utils::arrays">
+	<CompilerInfo packageName="eclipse4diac::utils::arrays">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -16,17 +18,27 @@
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
 				<With Var="OUT"/>
-				<With Var="ARR"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
+			<VarDeclaration Name="ARR" Type="ANY_DERIVED" Comment="input array"/>
 			<VarDeclaration Name="DIM" Type="ANY_INT" Comment="Selects array dimension to get the length from, defaults to first dimension" InitialValue="DINT#1"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="OUT" Type="ANY_INT" Comment="Length of the selected array dimension"/>
 		</OutputVars>
-		<InOutVars>
-			<VarDeclaration Name="ARR" Type="ANY_DERIVED" Comment="Input array"/>
-		</InOutVars>
 	</InterfaceList>
+	<SimpleFB>
+		<ECState Name="REQ">
+			<ECAction Algorithm="REQ" Output="CNF"/>
+		</ECState>
+		<Algorithm Name="REQ">
+			<ST><![CDATA[ALGORITHM REQ
+OUT := ADD(SUB(UPPER_BOUND(ARR, DIM), LOWER_BOUND(ARR, DIM)), 1);
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
