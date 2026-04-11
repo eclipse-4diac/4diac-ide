@@ -59,12 +59,13 @@ public interface DirectlyDerivedType extends AnyDerivedType {
 
 	/**
 	 * Returns the value of the '<em><b>Initial Value</b></em>' attribute.
+	 * The default value is <code>""</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Initial Value</em>' attribute.
 	 * @see #setInitialValue(String)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getDirectlyDerivedType_InitialValue()
-	 * @model
+	 * @model default=""
 	 * @generated
 	 */
 	String getInitialValue();

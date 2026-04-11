@@ -53,7 +53,7 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		if (!subapp.isUnfolded()
 				&& (selection.getFirstElement() instanceof final SubAppForFBNetworkEditPart subAppEP)) {
 			// we are going to get unfolded wrap resize command
-			cmd = new ResizeGroupOrSubappCommand(subAppEP, cmd);
+			cmd = cmd.chain(new ResizeGroupOrSubappCommand(subAppEP));
 		}
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);

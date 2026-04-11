@@ -128,7 +128,8 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 					final ChangeNameCommand changeNameCmd = ChangeNameCommand.forName(getModel(),
 							(String) request.getCellEditor().getValue());
 					if (isInExpandedSubapp()) {
-						return new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent(), changeNameCmd);
+						return changeNameCmd
+								.chain(new ResizeGroupOrSubappCommand((GraphicalEditPart) editPart.getParent()));
 					}
 					return changeNameCmd;
 				}

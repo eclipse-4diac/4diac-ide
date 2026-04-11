@@ -40,7 +40,9 @@ public class SystemEntryImpl extends AbstractCheckedTypeEntryImpl<AutomationSyst
 
 	@Override
 	protected ErrorAutomationSystem createErrorLibraryElement() {
-		return LibraryElementFactory.eINSTANCE.createErrorAutomationSystem();
+		final ErrorAutomationSystem errorSystem = LibraryElementFactory.eINSTANCE.createErrorAutomationSystem();
+		errorSystem.setSystemConfiguration(LibraryElementFactory.eINSTANCE.createSystemConfiguration());
+		return errorSystem;
 	}
 
 	@Override

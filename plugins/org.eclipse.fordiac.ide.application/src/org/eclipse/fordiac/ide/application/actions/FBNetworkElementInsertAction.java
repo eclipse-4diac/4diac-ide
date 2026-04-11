@@ -74,17 +74,17 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 			pt = applySnapToGrid(pt, groupContentEP);
 			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
 			pt.translate(-topLeft.x, -topLeft.y);
-			return new ResizeGroupOrSubappCommand(containerEP,
-					new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(), pt.x, pt.y));
+			return new CreateFBElementInGroupCommand(typeEntry, groupContentEP.getModel().getGroup(), pt.x, pt.y)
+					.chain(new ResizeGroupOrSubappCommand(containerEP));
 		}
 		if (containerEP instanceof final UnfoldedSubappContentEditPart subappContentEP) {
 			pt = applySnapToGrid(pt, subappContentEP);
 			final Point topLeft = containerEP.getFigure().getClientArea().getTopLeft();
 			pt.translate(-topLeft.x, -topLeft.y);
-			return new ResizeGroupOrSubappCommand(containerEP,
-					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, subappContentEP.getModel(),
-							pt.x - containerEP.getFigure().getBounds().x,
-							pt.y - containerEP.getFigure().getBounds().y));
+			return AbstractCreateFBNetworkElementCommand
+					.createCreateCommand(typeEntry, subappContentEP.getModel(),
+							pt.x - containerEP.getFigure().getBounds().x, pt.y - containerEP.getFigure().getBounds().y)
+					.chain(new ResizeGroupOrSubappCommand(containerEP));
 		}
 		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
 		if (graphicalViewer != null && graphicalViewer

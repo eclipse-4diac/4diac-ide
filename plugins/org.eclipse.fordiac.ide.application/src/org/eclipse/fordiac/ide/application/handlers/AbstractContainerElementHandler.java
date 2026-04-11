@@ -79,7 +79,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			}
 			if (!isEditorRootNetwork(event, network)) {
 				// if we are in a container expand it accordingly
-				cmd = new ResizeGroupOrSubappCommand(getContainerEP(viewer, network), cmd);
+				cmd = cmd.chain(new ResizeGroupOrSubappCommand(getContainerEP(viewer, network)));
 			}
 			cmdstack.execute(cmd);
 			selectElement(newElement, viewer);

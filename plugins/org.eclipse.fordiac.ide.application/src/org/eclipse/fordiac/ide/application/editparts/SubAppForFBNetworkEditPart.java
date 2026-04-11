@@ -198,7 +198,7 @@ public class SubAppForFBNetworkEditPart extends AbstractBlockFBNElementEditPart 
 			if (getHost().getModel() instanceof final INamedElement namedEl) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand(getHost(), new ChangeCommentCommand(namedEl, str));
+					return new ChangeCommentCommand(namedEl, str).chain(new ResizeGroupOrSubappCommand(getHost()));
 				}
 			}
 			return null;

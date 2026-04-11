@@ -180,8 +180,8 @@ public class GroupPropertySection extends AbstractDoubleColumnSection {
 				final EditPart groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
 						.getEditPartForModel(getType());
 				if (groupforFBNetowrkEditPart instanceof final GroupEditPart gep && gep.getContentEP() != null) {
-					executeCommand(new ResizeGroupOrSubappCommand(gep.getContentEP(),
-							new ChangeCommentCommand(getType(), commentText.getText())));
+					executeCommand(new ChangeCommentCommand(getType(), commentText.getText())
+							.chain(new ResizeGroupOrSubappCommand(gep.getContentEP())));
 				}
 			} else {
 				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));

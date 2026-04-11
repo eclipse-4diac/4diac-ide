@@ -92,7 +92,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
 		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
 
-		return new ResizeGroupOrSubappCommand(getHost(), addElementsToGroup);
+		return addElementsToGroup.chain(new ResizeGroupOrSubappCommand(getHost()));
 	}
 
 }
