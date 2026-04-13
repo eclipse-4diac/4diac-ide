@@ -65,6 +65,8 @@ public final class Messages extends NLS {
 	public static String Discard;
 	public static String Cancel;
 
+	public static String ContextMenu_Find;
+
 	public static String UnexpectedValue;
 
 	static {
