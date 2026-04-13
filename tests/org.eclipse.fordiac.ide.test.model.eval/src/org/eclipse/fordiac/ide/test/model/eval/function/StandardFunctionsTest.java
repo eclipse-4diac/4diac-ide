@@ -52,6 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteOrder;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1255,213 +1256,119 @@ class StandardFunctionsTest {
 				Functions.invoke(StandardFunctions.class, "DAY_OF_WEEK", toDateValue(LocalDate.of(2023, 10, 7))));
 	}
 
-	@Test
-	void testToBigEndian() throws Throwable {
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianNativeArgumentsProvider")
+	void testEndianNative(final String method) throws Throwable {
 		assertEquals(toIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_BIG_ENDIAN", toIntValue((short) 0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toIntValue((short) 0x1704)));
 	}
 
-	@Test
-	void testToLittleEndianAnyMagnitude() throws Throwable {
+	static Stream<String> endianNativeArgumentsProvider() {
+		if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
+			return Stream.of("TO_BIG_ENDIAN", "FROM_BIG_ENDIAN");
+		}
+		return Stream.of("TO_LITTLE_ENDIAN", "FROM_LITTLE_ENDIAN");
+	}
+
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertAnyMagnitude(final String method) throws Throwable {
 		assertEquals(toSIntValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toSIntValue((byte) 0x17)));
+				Functions.invoke(StandardFunctions.class, method, toSIntValue((byte) 0x17)));
 		assertEquals(toIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toIntValue((short) 0x0417)));
-		assertEquals(toDIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toDIntValue(0x04170000)));
+				Functions.invoke(StandardFunctions.class, method, toIntValue((short) 0x0417)));
+		assertEquals(toDIntValue(0x1704), Functions.invoke(StandardFunctions.class, method, toDIntValue(0x04170000)));
 		assertEquals(toLIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLIntValue(0x0417000000000000L)));
+				Functions.invoke(StandardFunctions.class, method, toLIntValue(0x0417000000000000L)));
 		assertEquals(toUSIntValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toUSIntValue((byte) 0x17)));
+				Functions.invoke(StandardFunctions.class, method, toUSIntValue((byte) 0x17)));
 		assertEquals(toUIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toUIntValue((short) 0x0417)));
-		assertEquals(toUDIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toUDIntValue(0x04170000)));
+				Functions.invoke(StandardFunctions.class, method, toUIntValue((short) 0x0417)));
+		assertEquals(toUDIntValue(0x1704), Functions.invoke(StandardFunctions.class, method, toUDIntValue(0x04170000)));
 		assertEquals(toULIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toULIntValue(0x0417000000000000L)));
+				Functions.invoke(StandardFunctions.class, method, toULIntValue(0x0417000000000000L)));
 		assertEquals(toRealValue(Float.intBitsToFloat(0x00008841)),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toRealValue(17)));
+				Functions.invoke(StandardFunctions.class, method, toRealValue(17)));
 		assertEquals(toLRealValue(Double.longBitsToDouble(0x0000000000003140L)),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLRealValue(17)));
+				Functions.invoke(StandardFunctions.class, method, toLRealValue(17)));
 		assertEquals(toTimeValue(0x0417000000000000L),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toTimeValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toTimeValue(0x1704)));
 		assertEquals(toLTimeValue(0x0417000000000000L),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLTimeValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toLTimeValue(0x1704)));
 	}
 
-	@Test
-	void testToLittleEndianAnyBit() throws Throwable {
-		assertEquals(toBoolValue(false),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toBoolValue(false)));
-		assertEquals(toBoolValue(true),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toBoolValue(true)));
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertAnyBit(final String method) throws Throwable {
+		assertEquals(toBoolValue(false), Functions.invoke(StandardFunctions.class, method, toBoolValue(false)));
+		assertEquals(toBoolValue(true), Functions.invoke(StandardFunctions.class, method, toBoolValue(true)));
 		assertEquals(toByteValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toByteValue((byte) 0x0417)));
+				Functions.invoke(StandardFunctions.class, method, toByteValue((byte) 0x0417)));
 		assertEquals(toWordValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toWordValue((short) 0x0417)));
-		assertEquals(toDWordValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toDWordValue(0x04170000)));
+				Functions.invoke(StandardFunctions.class, method, toWordValue((short) 0x0417)));
+		assertEquals(toDWordValue(0x1704), Functions.invoke(StandardFunctions.class, method, toDWordValue(0x04170000)));
 		assertEquals(toLWordValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLWordValue(0x0417000000000000L)));
+				Functions.invoke(StandardFunctions.class, method, toLWordValue(0x0417000000000000L)));
 	}
 
-	@Test
-	void testToLittleEndianAnyDate() throws Throwable {
-		assertEquals(toDateValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toDateValue(0x1704)));
-		assertEquals(toLDateValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLDateValue(0x1704)));
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertAnyDate(final String method) throws Throwable {
+		assertEquals(toDateValue(0x1704), Functions.invoke(StandardFunctions.class, method, toDateValue(0x1704)));
+		assertEquals(toLDateValue(0x1704), Functions.invoke(StandardFunctions.class, method, toLDateValue(0x1704)));
 		assertEquals(toTimeOfDayValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toTimeOfDayValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toTimeOfDayValue(0x1704)));
 		assertEquals(toLTimeOfDayValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLTimeOfDayValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toLTimeOfDayValue(0x1704)));
 		assertEquals(toDateAndTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toDateAndTimeValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toDateAndTimeValue(0x1704)));
 		assertEquals(toLDateAndTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toLDateAndTimeValue(0x1704)));
+				Functions.invoke(StandardFunctions.class, method, toLDateAndTimeValue(0x1704)));
 	}
 
-	@Test
-	void testToLittleEndianAnyChars() throws Throwable {
-		assertEquals(toCharValue("a"), Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toCharValue("a")));
-		assertEquals(toStringValue("abc"),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toStringValue("abc")));
-		assertEquals(toWCharValue("\u6100"),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toWCharValue('a')));
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertAnyChars(final String method) throws Throwable {
+		assertEquals(toCharValue("a"), Functions.invoke(StandardFunctions.class, method, toCharValue("a")));
+		assertEquals(toStringValue("abc"), Functions.invoke(StandardFunctions.class, method, toStringValue("abc")));
+		assertEquals(toWCharValue("\u6100"), Functions.invoke(StandardFunctions.class, method, toWCharValue('a')));
 		assertEquals(toWStringValue("\u6100\u6200\u6300"),
-				Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", toWStringValue("abc")));
+				Functions.invoke(StandardFunctions.class, method, toWStringValue("abc")));
 	}
 
-	@Test
-	void testToLittleEndianArray() throws Throwable {
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertArray(final String method) throws Throwable {
 		final ArrayValue array = new ArrayVariable("TEST",
 				ArrayVariable.newArrayType(IecTypes.ElementaryTypes.INT, ArrayVariable.newSubrange(0, 1))).getValue();
 		array.get(0).setValue(toIntValue((short) 0x1704));
 		array.get(1).setValue(toIntValue((short) 0x2142));
 		assertIterableEquals(List.of(toIntValue((short) 0x0417), toIntValue((short) 0x4221)),
-				(ArrayValue) Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN", array));
+				(ArrayValue) Functions.invoke(StandardFunctions.class, method, array));
 		assertIterableEquals(List.of(toIntValue((short) 0x1704), toIntValue((short) 0x2142)), array);
 	}
 
-	@Test
-	void testToLittleEndianStruct() throws Throwable {
+	@ParameterizedTest(name = "{index}: {0}")
+	@MethodSource("endianConvertArgumentsProvider")
+	void testEndianConvertStruct(final String method) throws Throwable {
 		final StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
 		structuredType.getMemberVariables().add(createVarDeclaration("a", ElementaryTypes.INT));
 		structuredType.getMemberVariables().add(createVarDeclaration("b", ElementaryTypes.INT));
 		final StructValue struct = new StructVariable("TEST", structuredType).getValue();
 		struct.get("a").setValue(toIntValue((short) 0x1704));
 		struct.get("b").setValue(toIntValue((short) 0x2142));
-		final StructValue reverse = ((StructValue) Functions.invoke(StandardFunctions.class, "TO_LITTLE_ENDIAN",
-				struct));
+		final StructValue reverse = ((StructValue) Functions.invoke(StandardFunctions.class, method, struct));
 		assertEquals(toIntValue((short) 0x0417), reverse.get("a").getValue());
 		assertEquals(toIntValue((short) 0x4221), reverse.get("b").getValue());
 		assertEquals(toIntValue((short) 0x1704), struct.get("a").getValue());
 		assertEquals(toIntValue((short) 0x2142), struct.get("b").getValue());
 	}
 
-	@Test
-	void testFromBigEndian() throws Throwable {
-		assertEquals(toIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_BIG_ENDIAN", toIntValue((short) 0x1704)));
-	}
-
-	@Test
-	void testFromLittleEndianAnuMagnitude() throws Throwable {
-		assertEquals(toSIntValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toSIntValue((byte) 0x17)));
-		assertEquals(toIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toIntValue((short) 0x0417)));
-		assertEquals(toDIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toDIntValue(0x04170000)));
-		assertEquals(toLIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLIntValue(0x0417000000000000L)));
-		assertEquals(toUSIntValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toUSIntValue((byte) 0x17)));
-		assertEquals(toUIntValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toUIntValue((short) 0x0417)));
-		assertEquals(toUDIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toUDIntValue(0x04170000)));
-		assertEquals(toULIntValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toULIntValue(0x0417000000000000L)));
-		assertEquals(toRealValue(17), Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN",
-				toRealValue(Float.intBitsToFloat(0x00008841))));
-		assertEquals(toLRealValue(17), Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN",
-				toLRealValue(Double.longBitsToDouble(0x0000000000003140L))));
-		assertEquals(toTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toTimeValue(0x0417000000000000L)));
-		assertEquals(toLTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLTimeValue(0x0417000000000000L)));
-	}
-
-	@Test
-	void testFromLittleEndianAnyBit() throws Throwable {
-		assertEquals(toBoolValue(false),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toBoolValue(false)));
-		assertEquals(toBoolValue(true),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toBoolValue(true)));
-		assertEquals(toByteValue((byte) 0x17),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toByteValue((byte) 0x0417)));
-		assertEquals(toWordValue((short) 0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toWordValue((short) 0x0417)));
-		assertEquals(toDWordValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toDWordValue(0x04170000)));
-		assertEquals(toLWordValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLWordValue(0x0417000000000000L)));
-	}
-
-	@Test
-	void testFromLittleEndianAnyDate() throws Throwable {
-		assertEquals(toDateValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toDateValue(0x1704)));
-		assertEquals(toLDateValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLDateValue(0x1704)));
-		assertEquals(toTimeOfDayValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toTimeOfDayValue(0x1704)));
-		assertEquals(toLTimeOfDayValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLTimeOfDayValue(0x1704)));
-		assertEquals(toDateAndTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toDateAndTimeValue(0x1704)));
-		assertEquals(toLDateAndTimeValue(0x1704),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toLDateAndTimeValue(0x1704)));
-	}
-
-	@Test
-	void testFromLittleEndianAnyChars() throws Throwable {
-		assertEquals(toCharValue("a"),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toCharValue("a")));
-		assertEquals(toStringValue("abc"),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toStringValue("abc")));
-		assertEquals(toWCharValue('a'),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toWCharValue('\u6100')));
-		assertEquals(toWStringValue("abc"),
-				Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", toWStringValue("\u6100\u6200\u6300")));
-	}
-
-	@Test
-	void testFromLittleEndianArray() throws Throwable {
-		final ArrayValue array = new ArrayVariable("TEST",
-				ArrayVariable.newArrayType(IecTypes.ElementaryTypes.INT, ArrayVariable.newSubrange(0, 1))).getValue();
-		array.get(0).setValue(toIntValue((short) 0x0417));
-		array.get(1).setValue(toIntValue((short) 0x4221));
-		assertIterableEquals(List.of(toIntValue((short) 0x1704), toIntValue((short) 0x2142)),
-				(ArrayValue) Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN", array));
-		assertIterableEquals(List.of(toIntValue((short) 0x0417), toIntValue((short) 0x4221)), array);
-	}
-
-	@Test
-	void testFromLittleEndianStruct() throws Throwable {
-		final StructuredType structuredType = DataFactory.eINSTANCE.createStructuredType();
-		structuredType.getMemberVariables().add(createVarDeclaration("a", ElementaryTypes.INT));
-		structuredType.getMemberVariables().add(createVarDeclaration("b", ElementaryTypes.INT));
-		final StructValue struct = new StructVariable("TEST", structuredType).getValue();
-		struct.get("a").setValue(toIntValue((short) 0x0417));
-		struct.get("b").setValue(toIntValue((short) 0x4221));
-		final StructValue reverse = ((StructValue) Functions.invoke(StandardFunctions.class, "FROM_LITTLE_ENDIAN",
-				struct));
-		assertEquals(toIntValue((short) 0x1704), reverse.get("a").getValue());
-		assertEquals(toIntValue((short) 0x2142), reverse.get("b").getValue());
-		assertEquals(toIntValue((short) 0x0417), struct.get("a").getValue());
-		assertEquals(toIntValue((short) 0x4221), struct.get("b").getValue());
+	static Stream<String> endianConvertArgumentsProvider() {
+		if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+			return Stream.of("TO_BIG_ENDIAN", "FROM_BIG_ENDIAN");
+		}
+		return Stream.of("TO_LITTLE_ENDIAN", "FROM_LITTLE_ENDIAN");
 	}
 
 	@Test
