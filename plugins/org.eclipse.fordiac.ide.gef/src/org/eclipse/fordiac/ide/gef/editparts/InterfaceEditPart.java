@@ -516,6 +516,12 @@ public abstract class InterfaceEditPart extends AbstractConnectableEditPart
 	}
 
 	@Override
+	public void refresh() {
+		super.refresh();
+		getFigure().setToolTip(new ToolTipFigure(getModel(), FordiacAnnotationUtil.getAnnotationModel(this)));
+	}
+
+	@Override
 	public void activate() {
 		super.activate();
 		final var storeProvider = ((AdvancedScrollingGraphicalViewer) getViewer()).getPreferencesCache()
