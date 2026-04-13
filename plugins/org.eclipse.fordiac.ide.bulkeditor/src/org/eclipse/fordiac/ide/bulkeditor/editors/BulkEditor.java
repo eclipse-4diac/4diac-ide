@@ -247,7 +247,8 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 		natTable.updateList(editableSearchResult);
 
 		controls.resetChangedSearchParameter();
-		controls.setSearchInformationText(""); //$NON-NLS-1$
+		final String infoText = result.searchResult().isEmpty() ? Messages.NoUsage : ""; //$NON-NLS-1$
+		controls.setSearchInformationText(infoText);
 		commandStack.flush();
 		firePropertyChange(PROP_DIRTY);
 		return true;
