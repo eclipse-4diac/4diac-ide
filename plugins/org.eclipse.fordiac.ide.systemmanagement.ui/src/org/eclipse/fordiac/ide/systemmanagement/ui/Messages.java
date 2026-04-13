@@ -92,6 +92,7 @@ public final class Messages extends NLS {
 
 	public static String CopyActionErrorRetryTitle;
 	public static String CopyActionErrorRetryMessage;
+	public static String Refactoring_ProblemOccurred;
 
 	static {
 		// initialize resource bundle
