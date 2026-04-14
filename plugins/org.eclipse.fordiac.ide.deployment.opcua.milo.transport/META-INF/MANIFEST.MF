@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Milo Transport Import Patch
+Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua.milo.transport
+Bundle-Version: 3.2.0.qualifier
+Fragment-Host: org.eclipse.milo.transport
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua.milo.transport
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.eclipse.milo.shaded.com.google.common.primitives
