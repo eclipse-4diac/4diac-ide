@@ -233,4 +233,5 @@ public class ECStateEditPart extends AbstractDirectEditableEditPart implements N
 	public boolean isConnectable() {
 		return true;
 	}
+
 }
