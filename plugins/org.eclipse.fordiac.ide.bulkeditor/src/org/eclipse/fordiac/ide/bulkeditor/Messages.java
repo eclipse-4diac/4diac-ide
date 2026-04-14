@@ -64,6 +64,8 @@ public final class Messages extends NLS {
 	public static String Discard;
 	public static String Cancel;
 
+	public static String UnexpectedValue;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
