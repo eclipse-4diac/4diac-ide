@@ -10,11 +10,12 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.editors;
+package org.eclipse.fordiac.ide.bulkeditor.commands;
 
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.bulkeditor.nattable.BulkEditorNatTable;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateAttributeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;

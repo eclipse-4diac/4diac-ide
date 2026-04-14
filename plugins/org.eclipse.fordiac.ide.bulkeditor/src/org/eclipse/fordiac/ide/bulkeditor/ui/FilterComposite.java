@@ -10,7 +10,7 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.editors;
+package org.eclipse.fordiac.ide.bulkeditor.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorSettings.BulkEditorSubSettings;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.layout.GridDataFactory;

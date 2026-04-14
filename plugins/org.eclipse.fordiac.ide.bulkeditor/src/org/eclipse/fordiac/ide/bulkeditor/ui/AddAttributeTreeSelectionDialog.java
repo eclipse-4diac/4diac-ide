@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2025, 2026 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +10,7 @@
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.bulkeditor.editors;
+package org.eclipse.fordiac.ide.bulkeditor.ui;
 
 import java.util.Collection;
 import java.util.Set;
@@ -276,9 +276,9 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 		public Object[] getElements(final Object inputElement) {
 			for (final Object object : (Object[]) inputElement) {
 				if (object instanceof final ConfigurableObject configElement) {
-					configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
-							.forEach(asdfasdfsadf -> {
-								final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
+					configElement.getAttributes().stream()
+							.filter(attriute -> attriute.getAttributeDeclaration() != null).forEach(attribute -> {
+								final AttributeDeclaration attdecl = attribute.getAttributeDeclaration();
 								if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
 									disabledElements.add(object);
 								}
@@ -297,9 +297,9 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 						.toArray(ConfigurableObject[]::new);
 
 				for (final ConfigurableObject configElement : configElements) {
-					configElement.getAttributes().stream().filter(asd -> asd.getAttributeDeclaration() != null)
-							.forEach(asdfasdfsadf -> {
-								final AttributeDeclaration attdecl = asdfasdfsadf.getAttributeDeclaration();
+					configElement.getAttributes().stream()
+							.filter(attribute -> attribute.getAttributeDeclaration() != null).forEach(attribute -> {
+								final AttributeDeclaration attdecl = attribute.getAttributeDeclaration();
 								if (PackageNameHelper.getFullTypeName(attdecl).equals(attributeDeclName)) {
 									disabledElements.add(configElement);
 								}
