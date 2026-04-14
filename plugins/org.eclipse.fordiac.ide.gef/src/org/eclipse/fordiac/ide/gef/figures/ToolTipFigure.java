@@ -121,13 +121,17 @@ public class ToolTipFigure extends Figure {
 	}
 
 	private void addVarDefaultValue(final VarDeclaration variable) {
-		final VarDeclaration typeVar = getTypevariable(variable);
-		if (null != typeVar && null != typeVar.getValue()) {
-			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
-			if (!typeVar.getValue().getValue().isEmpty()) {
-				initvalue += typeVar.getValue().getValue();
+		if (variable.hasValue()) {
+			line.add(new Label(FordiacMessages.Value + ": " + variable.getValueString())); //$NON-NLS-1$
+		} else {
+			final VarDeclaration typeVar = getTypevariable(variable);
+			if (typeVar != null) {
+				String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
+				if (typeVar.hasValue()) {
+					initvalue += typeVar.getValueString();
+				}
+				line.add(new Label(initvalue));
 			}
-			line.add(new Label(initvalue));
 		}
 	}
 

@@ -18,7 +18,6 @@ import org.eclipse.fordiac.ide.gef.annotation.GraphicalAnnotationStyles;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.ui.annotation.GraphicalAnnotationModel;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
 
 /**
  * The Class ToolTipFigure.
@@ -26,11 +25,9 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
  * @author Gerhard Ebenhofer (gerhard.ebenhofer@profactor.at)
  */
 public class ValueToolTipFigure extends ToolTipFigure {
-
 	public ValueToolTipFigure(final IInterfaceElement element, final Value value,
 			final GraphicalAnnotationModel annotationModel) {
 		super(element, null); // pass null here to avoid showing annotations for element
-		getLine().add(new Label(FordiacMessages.Value + ": " + value.getValue())); //$NON-NLS-1$
 		if (annotationModel != null) {
 			annotationModel.getAnnotations(value).stream().forEach(annotation -> getLine()
 					.add(new Label(annotation.getText(), GraphicalAnnotationStyles.getAnnotationImage(annotation))));
