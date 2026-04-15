@@ -14,52 +14,20 @@
 package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
-import java.util.Objects;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEdit;
 
-public class RenameUpdateStructDataTypeMemberVariableModelEdit extends ModelEdit<VarDeclaration> {
-
-	private final String newTypeDeclaration;
-	private String oldTypeDeclaration;
+public class RenameUpdateStructDataTypeMemberVariableModelEdit extends DataTypeEdit {
 
 	public RenameUpdateStructDataTypeMemberVariableModelEdit(final VarDeclaration varDeclaration,
-			final String newTypeDeclaration) {
+			final String newTypeName) {
 		super(MessageFormat.format(Messages.DeleteFBTypeParticipant_Change_UpdateMemberVariable,
 				varDeclaration.getName(), varDeclaration.getTypeName(),
-				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration),
-				VarDeclaration.class);
-		this.newTypeDeclaration = newTypeDeclaration;
-	}
-
-	@Override
-	public void initializeValidationData(final VarDeclaration element, final IProgressMonitor pm) {
-		oldTypeDeclaration = element.getFullTypeName();
-	}
-
-	@Override
-	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
-			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
-		if (!Objects.equals(element.getFullTypeName(), oldTypeDeclaration)) {
-			status.addFatalError(Messages.DataTypeChange_TypeDeclarationChanged);
-		}
-		return status;
-	}
-
-	@Override
-	protected Command createCommand(final VarDeclaration varDeclaration) {
-		return ChangeDataTypeCommand.forTypeDeclaration(varDeclaration, newTypeDeclaration);
+				((INamedElement) varDeclaration.eContainer()).getName()), EcoreUtil.getURI(varDeclaration), newTypeName);
 	}
 
 }

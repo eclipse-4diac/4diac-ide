@@ -10,7 +10,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement.refactoring;
+package org.eclipse.fordiac.ide.typemanagement.refactoring.edit;
 
 import java.util.Objects;
 
@@ -21,15 +21,16 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class DataTypeModelEdit extends ModelEdit<IInterfaceElement> {
+public class TypeDeclarationEdit extends ModelEdit<IInterfaceElement> {
 
 	private final String newTypeDeclaration;
 	private String oldTypeDeclaration;
 
-	public DataTypeModelEdit(final String name, final URI elementURI, final String newTypeDeclaration) {
+	public TypeDeclarationEdit(final String name, final URI elementURI, final String newTypeDeclaration) {
 		super(name, elementURI, IInterfaceElement.class);
 		this.newTypeDeclaration = newTypeDeclaration;
 	}

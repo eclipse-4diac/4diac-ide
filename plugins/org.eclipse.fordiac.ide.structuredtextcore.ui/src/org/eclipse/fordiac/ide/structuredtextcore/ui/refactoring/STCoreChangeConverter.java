@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.AttributeValueEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ConditionExpressionEdit;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.TypeDeclarationEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.ImportEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.InitialValueEdit;
 import org.eclipse.jface.text.BadLocationException;
@@ -165,7 +165,7 @@ public class STCoreChangeConverter extends ChangeConverter {
 							getEditedText(attribute.getValue(), textEdit)));
 			case final ArraySize arraySize when arraySize.eContainer() instanceof final VarDeclaration varDeclaration ->
 				addModelEdit(
-						new DataTypeEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(varDeclaration),
+						new TypeDeclarationEdit(sourceElementName, LibraryElementXtextResource.getExternalURI(varDeclaration),
 								getEditedText(varDeclaration.getFullTypeName(), textEdit)));
 			case final Value value when value.eContainer() instanceof final VarDeclaration varDeclaration ->
 				addModelEdit(new InitialValueEdit(sourceElementName,
