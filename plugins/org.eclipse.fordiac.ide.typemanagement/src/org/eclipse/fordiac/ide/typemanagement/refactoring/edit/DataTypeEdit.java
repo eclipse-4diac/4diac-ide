@@ -19,38 +19,38 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class DataTypeEdit extends ModelEdit<IInterfaceElement> {
+public class DataTypeEdit extends ModelEdit<VarDeclaration> {
 
-	private final String newTypeDeclaration;
-	private String oldTypeDeclaration;
+	private final String newTypeName;
+	private String oldTypeName;
 
-	public DataTypeEdit(final String name, final URI elementURI, final String newTypeDeclaration) {
-		super(name, elementURI, IInterfaceElement.class);
-		this.newTypeDeclaration = newTypeDeclaration;
+	public DataTypeEdit(final String name, final URI elementURI, final String newTypeName) {
+		super(name, elementURI, VarDeclaration.class);
+		this.newTypeName = newTypeName;
 	}
 
 	@Override
-	protected Command createCommand(final IInterfaceElement element) {
-		return ChangeDataTypeCommand.forTypeDeclaration(element, newTypeDeclaration);
+	protected Command createCommand(final VarDeclaration element) {
+		return ChangeDataTypeCommand.forTypeName(element, newTypeName);
 	}
 
 	@Override
-	public void initializeValidationData(final IInterfaceElement element, final IProgressMonitor pm) {
-		oldTypeDeclaration = element.getFullTypeName();
+	public void initializeValidationData(final VarDeclaration element, final IProgressMonitor pm) {
+		oldTypeName = element.getFullTypeName();
 	}
 
 	@Override
-	public RefactoringStatus isValid(final IInterfaceElement element, final IProgressMonitor pm)
+	public RefactoringStatus isValid(final VarDeclaration element, final IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		if (!Objects.equals(element.getFullTypeName(), oldTypeDeclaration)) {
-			status.addFatalError(Messages.DataTypeChange_TypeDeclarationChanged);
+		if (!Objects.equals(element.getFullTypeName(), oldTypeName)) {
+			status.addFatalError(Messages.DataTypeChange_DataTypeChanged);
 		}
 		return status;
 	}

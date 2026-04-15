@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.resources.IContainer;
@@ -31,20 +30,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -52,11 +43,9 @@ import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateConfigurableFBModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateUntypedSubAppInterfaceModelEdit;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEditBuilder;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.UpdateTypeEntryFileChange;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -180,81 +169,20 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 		}
 	}
 
-	private void addModelEditsForType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
+	private static void addModelEditsForType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
 			final IPath newPath) {
 		final LibraryElement type = typeEntry.getType();
 		if (type instanceof StructuredType) {
-			createStructChanges((DataTypeEntry) typeEntry, modelEdits, getFullTypeName(newPath), new HashSet<>());
+			DataTypeEditBuilder.createStructuredDataTypeChanges((DataTypeEntry) typeEntry, modelEdits,
+					DataTypeEditBuilder.getFullTypeName(newPath), new HashSet<>());
 		} else if (type instanceof FBType) {
 			createFBDataChange(typeEntry, modelEdits);
 		}
-	}
-
-	private void createStructChanges(final DataTypeEntry dataTypeEntry, final List<ModelEdit<?>> modelEdits,
-			final String targetTypeDeclaration, final Set<URI> handledElements) {
-		final DataTypeInstanceSearch dataTypeInstanceSearch = new DataTypeInstanceSearch(dataTypeEntry);
-		dataTypeInstanceSearch.performSearch().forEach(obj -> {
-			if (obj instanceof final VarDeclaration varDecl) {
-				createSubChange(varDecl, dataTypeEntry, targetTypeDeclaration, handledElements, modelEdits);
-			} else if (obj instanceof final ConfigurableFB configurableFB
-					&& handledElements.add(EcoreUtil.getURI(configurableFB))) {
-				modelEdits.add(new UpdateConfigurableFBModelEdit(configurableFB, dataTypeEntry));
-			}
-		});
-	}
-
-	private void createSubChange(final VarDeclaration varDecl, final DataTypeEntry dataTypeEntry,
-			final String targetTypeDeclaration, final Set<URI> handledElements, final List<ModelEdit<?>> modelEdits) {
-		if (varDecl.getBlockFBNetworkElement() != null) {
-			if (varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB) {
-				// the pin will be updated in UpdateConfigurableFBModelEdit
-				return;
-			}
-
-			if (varDecl.getBlockFBNetworkElement() instanceof final SubApp subApp && !subApp.isTyped()
-					&& !dataTypeEntry.getFullTypeName().equals(targetTypeDeclaration)
-					&& handledElements.add(EcoreUtil.getURI(subApp))) {
-				modelEdits.add(new UpdateUntypedSubAppInterfaceModelEdit(subApp, dataTypeEntry));
-				return;
-			}
-
-			modelEdits.add(new DataTypeEdit(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
-					EcoreUtil.getURI(varDecl), targetTypeDeclaration));
-			return;
-		}
-
-		final EObject rootContainer = EcoreUtil.getRootContainer(varDecl);
-		if (!handledElements.add(EcoreUtil.getURI(rootContainer))) {
-			return;
-		}
-		if (rootContainer instanceof final StructuredType structuredType) {
-			modelEdits.add(new RenameUpdateStructDataTypeMemberVariableModelEdit(varDecl, targetTypeDeclaration));
-			createStructChanges((DataTypeEntry) structuredType.getTypeEntry(), modelEdits,
-					structuredType.getTypeEntry().getFullTypeName(), handledElements);
-		}
-		if (rootContainer instanceof AttributeDeclaration) {
-			modelEdits.add(new RenameUpdateStructDataTypeMemberVariableModelEdit(varDecl, targetTypeDeclaration));
-		}
-		if (rootContainer instanceof final FBType fbType && dataTypeEntry.getType() instanceof StructuredType) {
-			modelEdits.add(new RenameUpdateFBTypeInterfaceModelEdit(fbType, dataTypeEntry.getTypeName(),
-					targetTypeDeclaration, dataTypeEntry.getPackageName()));
-		}
-
 	}
 
 	private static void createFBDataChange(final TypeEntry typeEntry, final List<ModelEdit<?>> modelEdits) {
 		new BlockTypeInstanceSearch(typeEntry).performSearch().stream().filter(BlockFBNetworkElement.class::isInstance)
 				.map(BlockFBNetworkElement.class::cast).map(fbn -> new UpdateFBTypeModelEdit(fbn, typeEntry))
 				.forEach(modelEdits::add);
-	}
-
-	private static String getFullTypeName(final IPath newPath) {
-		final String packageName = PackageNameHelper
-				.getPackageNameFromURI(URI.createPlatformResourceURI(newPath.toString(), true));
-		final String typeName = TypeEntry.getTypeNameFromFileName(newPath.lastSegment());
-		if (packageName.isEmpty()) {
-			return typeName;
-		}
-		return packageName + PackageNameHelper.PACKAGE_NAME_DELIMITER + typeName;
 	}
 }

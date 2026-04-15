@@ -112,6 +112,7 @@ public final class Messages extends NLS {
 	public static String ReplaceVarsWithStructChange_NotContained;
 
 	public static String DataTypeChange_TypeDeclarationChanged;
+	public static String DataTypeChange_DataTypeChanged;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
