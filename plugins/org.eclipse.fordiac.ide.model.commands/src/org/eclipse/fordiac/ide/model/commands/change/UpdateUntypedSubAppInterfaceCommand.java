@@ -44,12 +44,7 @@ public class UpdateUntypedSubAppInterfaceCommand extends Command {
 	public void execute() {
 		subApp.getInterface().getAllInterfaceElements() //
 				.filter(i -> oldTypeDeclaration.equals(i.getFullTypeName()))
-				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast).forEach(el -> {
-					el.setType(dataTypeEntry.getType());
-					if (el.getValue() != null && !el.getValue().getValue().isBlank()) {
-						// as a fallback we just reset the current value
-						el.getValue().setValue(""); //$NON-NLS-1$
-					}
-				});
+				.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+				.forEach(el -> el.setType(dataTypeEntry.getType()));
 	}
 }
