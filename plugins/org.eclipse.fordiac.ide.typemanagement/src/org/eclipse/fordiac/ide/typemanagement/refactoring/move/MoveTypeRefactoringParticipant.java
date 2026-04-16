@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.move;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -107,7 +106,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
 			if (typeEntry instanceof final DataTypeEntry dtEntry) {
 				DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
-						DataTypeEditBuilder.getFullTypeName(path), new HashSet<>());
+						DataTypeEditBuilder.getFullTypeName(path));
 			} else {
 				addInstanceChanges(modelEdits, typeEntry);
 			}
