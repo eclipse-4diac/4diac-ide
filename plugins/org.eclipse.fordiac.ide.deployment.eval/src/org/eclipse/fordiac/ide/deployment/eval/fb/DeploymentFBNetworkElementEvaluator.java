@@ -77,6 +77,7 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 			sharedState = DeploymentEvaluatorSharedState.fromContext(getType().getTypeLibrary());
 			sharedState.getResource().getFBNetwork().getNetworkElements().add(instance);
 			sharedState.prepare();
+			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			deployInstance();
 			writeVariables();
 			addWatches();
@@ -110,8 +111,9 @@ public abstract class DeploymentFBNetworkElementEvaluator<T extends FBType, I ex
 		prepare();
 		try {
 			writeVariables();
-			sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME, StandardFunctions.NOW_MONOTONIC().toString());
 			if (triggerEvent(instanceEvent)) {
+				sharedState.writeDeviceParameter(FAKE_TIME_DEV_PARAM_NAME,
+						StandardFunctions.NOW_MONOTONIC().toString());
 				pollWatches();
 			}
 			update(getVariables().values());
