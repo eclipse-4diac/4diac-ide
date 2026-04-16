@@ -30,19 +30,14 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBTypeModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.TypeRefactoringHelper;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateTypeEntryChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEditBuilder;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.MoveTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.move.UpdateTypeEntryFileChange;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -138,7 +133,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 			final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 			processTypeFiles(resource, resource.getFullPath(),
-					(typeEntry, path) -> addModelEditsForType(modelEdits, typeEntry, path));
+					(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForType(modelEdits, typeEntry, path));
 			change.add(ModelEditChange.fromModelEdits(Messages.Refactoring_StructUsers, modelEdits));
 			return change;
 		} finally {
@@ -164,22 +159,5 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 				processTypeFiles(member, newPath, processor);
 			}
 		}
-	}
-
-	private static void addModelEditsForType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
-			final IPath newPath) {
-
-		if (typeEntry instanceof final DataTypeEntry dtEntry) {
-			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
-					DataTypeEditBuilder.getFullTypeName(newPath));
-		} else if (typeEntry instanceof FBTypeEntry) {
-			createFBDataChange(typeEntry, modelEdits);
-		}
-	}
-
-	private static void createFBDataChange(final TypeEntry typeEntry, final List<ModelEdit<?>> modelEdits) {
-		new BlockTypeInstanceSearch(typeEntry).performSearch().stream().filter(BlockFBNetworkElement.class::isInstance)
-				.map(BlockFBNetworkElement.class::cast).map(fbn -> new UpdateFBTypeModelEdit(fbn, typeEntry))
-				.forEach(modelEdits::add);
 	}
 }
