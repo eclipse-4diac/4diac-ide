@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.typemanagement.refactoring.rename;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -172,7 +171,7 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
-					DataTypeEditBuilder.getFullTypeName(newPath), new HashSet<>());
+					DataTypeEditBuilder.getFullTypeName(newPath));
 		} else if (typeEntry instanceof FBTypeEntry) {
 			createFBDataChange(typeEntry, modelEdits);
 		}
