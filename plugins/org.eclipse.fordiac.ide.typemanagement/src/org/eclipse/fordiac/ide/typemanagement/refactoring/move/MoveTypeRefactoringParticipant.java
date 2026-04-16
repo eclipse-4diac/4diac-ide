@@ -55,7 +55,6 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 
 	private IResource resource;
 	private IContainer destination;
-	private String newPackageName;
 
 	@Override
 	protected boolean initialize(final Object element) {
@@ -63,8 +62,6 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 				&& getArguments().getDestination() instanceof final IContainer dest) {
 			resource = res;
 			destination = dest;
-			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(dest.getFullPath());
-			newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
 			return RefactoringUtil.containsTypeEntryFile(res);
 		}
 		return false;
@@ -92,11 +89,12 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		final List<Change> changes = new ArrayList<>();
 		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
+			final IFile destinationFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			final String newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
 			modelEdits.add(new MoveTypeModelEdit(newPackageName,
 					MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName),
 					typeEntry.getURI()));
-			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry,
-					ResourcesPlugin.getWorkspace().getRoot().getFile(path)));
+			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, destinationFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange
 		changes.addFirst(ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage, modelEdits));
