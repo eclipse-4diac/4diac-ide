@@ -30,13 +30,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
@@ -171,11 +169,11 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 
 	private static void addModelEditsForType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
 			final IPath newPath) {
-		final LibraryElement type = typeEntry.getType();
-		if (type instanceof StructuredType) {
-			DataTypeEditBuilder.createStructuredDataTypeChanges((DataTypeEntry) typeEntry, modelEdits,
+
+		if (typeEntry instanceof final DataTypeEntry dtEntry) {
+			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
 					DataTypeEditBuilder.getFullTypeName(newPath), new HashSet<>());
-		} else if (type instanceof FBType) {
+		} else if (typeEntry instanceof FBTypeEntry) {
 			createFBDataChange(typeEntry, modelEdits);
 		}
 	}
