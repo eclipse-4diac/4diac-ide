@@ -220,7 +220,9 @@ public class VarConfigurationSection extends AbstractSection {
 			if (info != null) {
 				if (needCopy) {
 					final VDInfo newInfo = new VDInfo(info.displayName(), varConfigParameter, info.typedSubApp());
-					varConfigInfoMap.put(EcoreUtil.copy(varConfigParameter), newInfo);
+					final var newVarConfig = EcoreUtil.copy(varConfigParameter);
+					newVarConfig.setName(toReplaceVarConfig.getName());
+					varConfigInfoMap.put(newVarConfig, newInfo);
 				} else {
 					varConfigInfoMap.put(varConfigParameter, info);
 				}

@@ -41,7 +41,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -69,7 +68,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -88,7 +86,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarConfigInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -700,9 +697,7 @@ public abstract class CommonElementImporter {
 		final Value val = LibraryElementFactory.eINSTANCE.createValue();
 		val.setValue(value);
 
-		final IInterfaceElement ie = (name.contains(".") && block instanceof final TypedSubApp tsa) //$NON-NLS-1$
-				? parsedVarConfig(tsa, name)
-				: getInterfaceElement(block, name, val);
+		final IInterfaceElement ie = getInterfaceElement(block, name, val);
 
 		if (ie instanceof final VarDeclaration varDecl) {
 			varDecl.setValue(val);
@@ -720,134 +715,33 @@ public abstract class CommonElementImporter {
 		});
 	}
 
-	private static VarDeclaration parsedVarConfig(final TypedSubApp typedSubApp, final String name) {
-		final var elements = new ArrayList<>(List.of(name.split("\\."))); //$NON-NLS-1$
-		elements.add(0, typedSubApp.getName());
-
-		final var pathSegmenents = elements.subList(0, elements.size() - 1);
-		final var lastPathSegment = elements.get(elements.size() - 1);
-
-		final var vd = getVarConfigVD(typedSubApp, pathSegmenents, lastPathSegment);
-		if (vd != null) {
-			return copyVarDeclFromType(vd, name, typedSubApp, pathSegmenents);
-		}
-		return vd;
-	}
-
-	private static VarDeclaration copyVarDeclFromType(final VarDeclaration vd, final String path,
-			FBNetworkElement typedSubApp, final List<String> pathSegmenents) {
-		VarDeclaration result = null;
-		var fbn = typedSubApp.getFbNetwork();
-		final var parts = new ArrayList<>(List.of(path.split("\\."))); //$NON-NLS-1$
-
-		for (final var blockName : pathSegmenents) {
-			typedSubApp = fbn.getNetworkElements().stream().filter(elem -> elem.getName().equals(blockName)).findFirst()
-					.orElse(null);
-			if (typedSubApp == null) {
-				return result;
-			}
-
-			if (typedSubApp instanceof final TypedSubApp tsa) {
-				fbn = tsa.getFbNetwork();
-				if (!parts.isEmpty()) {
-					parts.remove(0);
-				}
-
-				final var relativeName = computeRelativeName(path, tsa.getName());
-
-				final VarConfigInstance existing = tsa.getVarConfigParams().stream()
-						.filter(v -> relativeName.equals(v.getName())).findFirst().orElse(null);
-
-				if (existing != null) {
-					result = existing;
-				} else {
-					final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(vd, relativeName);
-					tsa.getVarConfigParams().add(copy);
-					result = copy;
-				}
-
-			}
-		}
-		return result;
-	}
-
-	private static String computeRelativeName(final String fullName, final String rootName) {
-		if (fullName.startsWith(rootName + ".")) { //$NON-NLS-1$
-			return fullName.substring(rootName.length() + 1);
-		}
-		return fullName;
-	}
-
-	private static VarDeclaration getVarConfigVD(final FBNetworkElement context, final List<String> remainingPath,
-			final String lastSegment) {
-		if (remainingPath.isEmpty()) {
-			return null;
-		}
-
-		final String currentName = remainingPath.get(0);
-		final List<String> nextPath = remainingPath.subList(1, remainingPath.size());
-
-		if (context.getName().equals(currentName)) {
-			return getVarConfigVD(context, nextPath, lastSegment);
-		}
-
-		final Iterable<FBNetworkElement> children = getNetworkElements(context);
-		if (children == null) {
-			return null;
-		}
-
-		for (final FBNetworkElement elem : children) {
-			if (elem instanceof final UntypedSubApp usa) {
-				final VarDeclaration result = getVarConfigVD(usa, remainingPath, lastSegment);
-				if (result != null) {
-					return result;
-				}
-				continue;
-			}
-
-			if (!elem.getName().equals(currentName)) {
-				continue;
-			}
-
-			if (!nextPath.isEmpty()) {
-				return getVarConfigVD(elem, nextPath, lastSegment);
-			}
-
-			if (elem instanceof final FB fb) {
-				return findAndMarkVarConfig(fb.getInterface(), lastSegment);
-			}
-			if (elem instanceof final TypedSubApp tsa) {
-				return findAndMarkVarConfig(tsa.getInterface(), lastSegment);
-			}
-		}
-
-		return null;
-	}
-
-	private static VarDeclaration findAndMarkVarConfig(final InterfaceList iface, final String name) {
-		return iface.getAllInterfaceElements() //
-				.filter(i -> i instanceof VarDeclaration && i.getName().equals(name)).map(VarDeclaration.class::cast)
-				.peek(vd -> vd.setVarConfig(true)).findFirst().orElse(null);
-	}
-
-	private static Iterable<FBNetworkElement> getNetworkElements(final EObject element) {
-		if (element instanceof final UntypedSubApp usa) {
-			return usa.getSubAppNetwork().getNetworkElements();
-		}
-		if (element instanceof final TypedSubApp tsa) {
-			return tsa.getType().getFBNetwork().getNetworkElements();
-		}
-		return null;
-	}
-
-	public static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
+	private static IInterfaceElement getInterfaceElement(final BlockFBNetworkElement block, final String name,
 			final Value val) {
-		IInterfaceElement ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
-
-		if (null == ie) {
-			ie = createParameterErrorMarker(block, name, val);
+		final var ie = block.getInterface().getInterfaceElement(List.of(name.split("\\.")), true); //$NON-NLS-1$
+		if (ie != null) {
+			return ie;
 		}
-		return ie;
+
+		if (block instanceof final TypedSubApp tsa) {
+			final var param = parsedVarConfig(tsa, name);
+			if (param != null) {
+				return param;
+			}
+		}
+
+		return createParameterErrorMarker(block, name, val);
+	}
+
+	private static IInterfaceElement parsedVarConfig(final TypedSubApp typedSubApp, final String name) {
+		final var varDeclaration = typedSubApp.findByQualifiedName(name).filter(VarDeclaration.class::isInstance)
+				.map(VarDeclaration.class::cast).findFirst();
+		if (varDeclaration.isEmpty()) {
+			return null;
+		}
+
+		final VarConfigInstance copy = InterfaceListCopier.copyVarConfigInstance(varDeclaration.get(), name);
+		typedSubApp.getVarConfigParams().add(copy);
+		return copy;
 	}
 
 	protected static ErrorMarkerInterface createParameterErrorMarker(final BlockFBNetworkElement block,
