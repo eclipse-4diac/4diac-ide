@@ -42,7 +42,11 @@ public class STCoreResourceRelocationContext extends ResourceRelocationContext {
 						(final Resource it) -> original.setURI(change.getToURI()));
 				return original;
 			case COPY:
-				final Resource copy = getResourceSet().createResource(change.getToURI());
+				Resource copy = getResourceSet().getResource(change.getToURI(), false);
+				if (copy != null) {
+					return copy;
+				}
+				copy = getResourceSet().createResource(change.getToURI());
 				try {
 					copy.load(getResourceSet().getURIConverter().createInputStream(change.getFromURI()), null);
 				} catch (final IOException e) {
