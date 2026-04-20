@@ -77,8 +77,6 @@ public class Messages extends NLS {
 	public static String DownloadNullResult;
 	public static String DownloadUnexpectedError;
 
-	public static String VersionValidator_DeclarationError;
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
