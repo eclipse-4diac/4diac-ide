@@ -57,7 +57,7 @@ public class LibraryBuilder extends IncrementalProjectBuilder {
 			return new IProject[0];
 		}
 
-		if (!LibraryValidation.validateVersions(manifest, getProject()).isOK()) {
+		if (!LibraryValidation.validate(manifest, getProject())) {
 			throw new OperationCanceledException("Build aborted"); //$NON-NLS-1$
 		}
 

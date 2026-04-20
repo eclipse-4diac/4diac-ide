@@ -18,10 +18,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.fordiac.ide.library.model.library.Manifest;
 import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 
 public class LibraryMarkerFactory {
 
@@ -74,15 +77,23 @@ public class LibraryMarkerFactory {
 	}
 
 	/**
-	 * Creates invalid version error marker
+	 * Creates a library marker based from a given diagnostic
 	 *
-	 * @param symbolicName of the library
-	 * @param version      description of the library
+	 * @param diagnostic the diagnostic
 	 * @return {@link ErrorMarkerBuilder} for error
 	 */
-	public static ErrorMarkerBuilder createInvalidVersionMarker(final String symbolicName, final String version) {
-		return createLibraryMarker(
-				MessageFormat.format(Messages.VersionValidator_DeclarationError, version, symbolicName));
+	public static ErrorMarkerBuilder forDiagnostic(final Diagnostic diagnostic) {
+		return createLibraryMarker(diagnostic.getMessage()).setSeverity(getSeverity(diagnostic))
+				.setTarget(FordiacMarkerHelper.getDiagnosticTarget(diagnostic));
+	}
+
+	private static int getSeverity(final Diagnostic diagnostic) {
+		return switch (diagnostic.getSeverity()) {
+		case Diagnostic.ERROR -> IMarker.SEVERITY_ERROR;
+		case Diagnostic.WARNING -> IMarker.SEVERITY_WARNING;
+		case Diagnostic.INFO -> IMarker.SEVERITY_INFO;
+		default -> IMarker.SEVERITY_INFO;
+		};
 	}
 
 	private static ErrorMarkerBuilder createLibraryMarker(final String message) {

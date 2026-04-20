@@ -12,45 +12,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.library.model.library.Manifest;
-import org.eclipse.fordiac.ide.library.model.util.VersionComparator;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.fordiac.ide.library.model.library.util.LibraryValidator;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 
 public class LibraryValidation {
 
-	// TODO move parts that do not depend on workspace to EMF validator
-	public static IStatus validateVersions(final Manifest manifest, final IProject project)
-			throws OperationCanceledException {
-		final List<ErrorMarkerBuilder> errorMarkers = new ArrayList<>();
-		final var dependencies = manifest.getDependencies();
-
-		if (dependencies != null) {
-			errorMarkers.addAll(dependencies.getRequired().stream()
-					.filter(r -> !VersionComparator.isValidRange(r.getVersion()))
-					.map(r -> LibraryMarkerFactory.createInvalidVersionMarker(r.getSymbolicName(), r.getVersion()))
-					.toList());
-		}
-
-		final var product = manifest.getProduct();
-		if (product != null && product.getVersionInfo() != null
-				&& !VersionComparator.isValidRange(product.getVersionInfo().getVersion())) {
-			errorMarkers.add(LibraryMarkerFactory.createInvalidVersionMarker(product.getSymbolicName(),
-					product.getVersionInfo().getVersion()));
-		}
+	public static boolean validate(final EObject element, final IProject project) {
+		final Diagnostic validationResult = Diagnostician.INSTANCE.validate(element);
+		final List<ErrorMarkerBuilder> markerList = validationResult.getChildren().stream()
+				.filter(d -> Objects.equals(d.getSource(), LibraryValidator.DIAGNOSTIC_SOURCE))
+				.map(LibraryMarkerFactory::forDiagnostic).toList();
 
 		FordiacMarkerHelper.updateMarkers(project.getFile(LibraryManager.MANIFEST), FordiacErrorMarker.LIBRARY_MARKER,
-				errorMarkers, true);
+				markerList, true);
 
-		return errorMarkers.isEmpty() ? Status.OK_STATUS : Status.CANCEL_STATUS;
+		return markerList.stream().noneMatch(b -> b.getSeverity() >= IMarker.SEVERITY_ERROR);
 	}
 
 	private LibraryValidation() {
