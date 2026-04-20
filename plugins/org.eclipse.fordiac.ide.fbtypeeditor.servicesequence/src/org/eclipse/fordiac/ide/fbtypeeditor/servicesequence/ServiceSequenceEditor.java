@@ -17,20 +17,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.FreeformViewport;
-import org.eclipse.draw2d.RangeModel;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPartFactory;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.ServiceSequenceSaveAndLoadHelper;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
@@ -38,13 +32,10 @@ import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -55,14 +46,10 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -73,41 +60,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
-
-		createPartListener();
-	}
-
-	protected void createPartListener() {
-		getPartService().addPartListener(new IPartListener() {
-			@Override
-			public void partActivated(final IWorkbenchPart part) {
-				if (part instanceof final FBTypeEditor fbTypeEditor
-						&& fbTypeEditor.getActiveEditor() instanceof ServiceSequenceEditor) {
-					getPartService().removePartListener(this);
-					setServiceSequences();
-				}
-			}
-
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-				// do nothing
-			}
-
-			@Override
-			public void partDeactivated(final IWorkbenchPart part) {
-				// do nothing
-			}
-
-			@Override
-			public void partBroughtToTop(final IWorkbenchPart part) {
-				// do nothing
-			}
-
-			@Override
-			public void partClosed(final IWorkbenchPart part) {
-				// do nothing
-			}
-		});
 	}
 
 	@Override
@@ -204,17 +156,6 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	}
 
 	@Override
-	protected Point getInitialScrollPos(final GraphicalEditPart rootEditPart) {
-		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
-		return new Point(calculateTopLeftScrollPosition(rootviewPort.getHorizontalRangeModel()),
-				calculateTopLeftScrollPosition(rootviewPort.getVerticalRangeModel()));
-	}
-
-	private static int calculateTopLeftScrollPosition(final RangeModel rangeModel) {
-		return rangeModel.getExtent();
-	}
-
-	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		// we don't need an additional transferdroptarget listener
 		return null;
@@ -242,23 +183,5 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			return adapter.cast(getType().getService());
 		}
 		return super.getAdapter(adapter);
-	}
-
-	private static IPartService getPartService() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService();
-	}
-
-	void setServiceSequences() {
-		final List<ServiceSequence> serviceSeqs = ServiceSequenceSaveAndLoadHelper
-				.loadServiceSequencesFromFile(getType());
-
-		final CompoundCommand cmds = new CompoundCommand();
-		for (final ServiceSequence seq : serviceSeqs) {
-			cmds.add(new CreateServiceSequenceCommand(getType().getService(), seq));
-		}
-
-		if (cmds.canExecute()) {
-			cmds.execute();
-		}
 	}
 }
