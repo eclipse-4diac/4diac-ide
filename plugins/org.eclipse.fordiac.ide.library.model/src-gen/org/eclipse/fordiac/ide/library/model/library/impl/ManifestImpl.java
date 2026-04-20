@@ -2,8 +2,10 @@
  */
 package org.eclipse.fordiac.ide.library.model.library.impl;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -256,6 +258,16 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		scope = newScope;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryPackage.MANIFEST__SCOPE, oldScope, scope));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateManifestVersions(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.library.model.impl.ManifestAnnotations.validateManifestVersions(this, diagnostics, context);
 	}
 
 	/**
