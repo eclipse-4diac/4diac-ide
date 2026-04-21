@@ -13,6 +13,7 @@
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
 				<With Var="CU"/>
 				<With Var="R"/>
+				<With Var="PV"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
