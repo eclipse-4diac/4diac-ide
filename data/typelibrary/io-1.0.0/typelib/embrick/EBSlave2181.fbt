@@ -24,6 +24,7 @@
 				<With Var="DigitalOutput_7"/>
 				<With Var="DigitalOutput_8"/>
 				<With Var="QI"/>
+				<With Var="UpdateInterval"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>

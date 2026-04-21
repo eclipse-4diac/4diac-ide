@@ -12,6 +12,10 @@
 		<EventInputs>
 			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
 				<With Var="QI"/>
+				<With Var="FRIENDLY_NAME"/>
+				<With Var="SERVER_ADS_ADDRESS"/>
+				<With Var="ADS_PORT"/>
+				<With Var="SERVER_IPV4_OR_HOSTNAME"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>

@@ -9,6 +9,31 @@
 	<CompilerInfo packageName="eclipse4diac::io::eliteboard">
 	</CompilerInfo>
 	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Initialization">
+				<With Var="Pin0"/>
+				<With Var="Pin1"/>
+				<With Var="Pin2"/>
+				<With Var="Pin3"/>
+				<With Var="Pin4"/>
+				<With Var="Pin5"/>
+				<With Var="Pin6"/>
+				<With Var="Pin7"/>
+				<With Var="Pin8"/>
+				<With Var="Pin9"/>
+				<With Var="Pin10"/>
+				<With Var="Pin11"/>
+				<With Var="Pin12"/>
+				<With Var="Pin13"/>
+				<With Var="Pin14"/>
+				<With Var="Pin15"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+			</Event>
+		</EventOutputs>
+
 		<InputVars>
 			<VarDeclaration Name="Pin0" Type="STRING" Comment="Name of the Pin" />
 			<VarDeclaration Name="Pin1" Type="STRING" Comment="Name of the Pin" />

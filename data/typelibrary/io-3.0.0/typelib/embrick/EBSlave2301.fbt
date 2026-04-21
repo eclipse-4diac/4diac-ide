@@ -18,6 +18,7 @@
 				<With Var="Relay_5"/>
 				<With Var="Relay_6"/>
 				<With Var="QI"/>
+				<With Var="UpdateInterval"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
