@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="DefaultOutputValueAdapter" Comment="FB checking the default values from the adapter">
-	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&#10;" >
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0
+&#10;" >
 	</Identification>
 	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-08" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO2"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO2"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
 			</Event>
 		</EventOutputs>
 		<OutputVars>
