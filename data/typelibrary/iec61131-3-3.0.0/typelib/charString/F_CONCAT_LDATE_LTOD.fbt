@@ -21,11 +21,11 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IN1" Type="DATE" Comment="date input"/>
-			<VarDeclaration Name="IN2" Type="TIME_OF_DAY" Comment="time of day input"/>
+			<VarDeclaration Name="IN1" Type="LDATE" Comment="date input"/>
+			<VarDeclaration Name="IN2" Type="LTIME_OF_DAY" Comment="time of day input"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="OUT" Type="DATE_AND_TIME" Comment="date + time of day"/>
+			<VarDeclaration Name="OUT" Type="LDATE_AND_TIME" Comment="date + time of day"/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
