@@ -96,7 +96,6 @@
       <feature id="org.eclipse.emf.compare.rcp.ui"/>
       <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
       <feature id="org.eclipse.emf.compare.egit" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.milo" installMode="root"/>
    </features>
 
    <configurations>
