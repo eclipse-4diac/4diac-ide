@@ -131,6 +131,18 @@ public enum SystemManager {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(fordiacListener);
 	}
 
+	public static boolean hasFordiacProjectNature(final IProject project) {
+		try {
+			return project != null && project.isAccessible()
+					&& project.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(
+					MessageFormat.format(Messages.FordiacSystemManagement_ErrorLoadingProjectNature, e.getMessage()),
+					e);
+		}
+		return false;
+	}
+
 	public static void validateProjectNature(final IProject project) {
 		try {
 			if (project != null && project.isAccessible()) {

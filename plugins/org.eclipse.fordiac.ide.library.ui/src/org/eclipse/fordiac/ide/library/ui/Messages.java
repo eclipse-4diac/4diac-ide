@@ -83,6 +83,8 @@ public class Messages extends NLS {
 
 	public static String UnifiedLibraryImportWizardPage_hide_non_valid;
 
+	public static String UnifiedLibraryImportWizardPage_ImportIntoProject;
+
 	public static String UnifiedLibraryImportWizardPage_LibraryImport;
 
 	public static String UnifiedLibraryImportWizardPage_loading;
@@ -99,7 +101,7 @@ public class Messages extends NLS {
 
 	public static String UnifiedLibraryImportWizardPage_no_src;
 
-	public static String UnifiedLibraryImportWizardPage_no_target;
+	public static String UnifiedLibraryImportWizardPage_no_project;
 
 	public static String UnifiedLibraryImportWizardPage_op_cancled;
 
