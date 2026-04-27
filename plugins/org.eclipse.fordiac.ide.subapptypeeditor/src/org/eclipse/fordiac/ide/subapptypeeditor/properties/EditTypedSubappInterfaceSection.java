@@ -33,13 +33,13 @@ public class EditTypedSubappInterfaceSection extends EditTypeInterfaceSection {
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
 		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
@@ -52,13 +52,13 @@ public class EditTypedSubappInterfaceSection extends EditTypeInterfaceSection {
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
