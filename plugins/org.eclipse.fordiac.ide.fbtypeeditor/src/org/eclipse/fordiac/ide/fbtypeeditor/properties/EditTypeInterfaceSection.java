@@ -58,12 +58,11 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
 		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLE,
-				VarDeclarationTableColumn.VAR_CONFIG, VarDeclarationTableColumn.RETAIN);
+				VarDeclarationTableColumn.RETAIN);
 		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider, columns);
 		outputDataLayer.setConfigLabelAccumulator(
 				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel, columns));
-
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, false);
