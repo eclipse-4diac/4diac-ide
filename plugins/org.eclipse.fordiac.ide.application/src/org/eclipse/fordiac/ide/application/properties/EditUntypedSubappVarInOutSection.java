@@ -56,8 +56,9 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 
 	@Override
 	public void setupInputTable(final Composite parent) {
-		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS) {
+		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLEIN,
+				VarDeclarationTableColumn.VISIBLEOUT);
+		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns) {
 			@Override
 			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 					final Object newValue) {
@@ -66,12 +67,10 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 				};
 			}
 		});
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS));
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_FOR_INOUTS);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider, columns);
+		inputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel, columns));
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 				getSectionEditableRule(), null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));

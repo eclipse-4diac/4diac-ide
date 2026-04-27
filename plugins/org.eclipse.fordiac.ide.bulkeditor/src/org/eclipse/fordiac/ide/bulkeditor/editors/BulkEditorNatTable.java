@@ -181,14 +181,14 @@ public class BulkEditorNatTable {
 	}
 
 	public void createDefaultVarDeclTable() {
-		final var accessor = new VarDeclarationColumnAccessor(commandExecutor,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		final var columns = VarDeclarationTableColumn.defaultColumnsWithPrepended(VarDeclarationTableColumn.FILE_PATH,
+				VarDeclarationTableColumn.LOCATION);
+		final var accessor = new VarDeclarationColumnAccessor(commandExecutor, columns);
 		varDeclProvider = new ChangeableListDataProvider<>(accessor);
 		this.varDeclarationSorterModel = new SorterModel<>(accessor);
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(varDeclProvider, columns);
 		final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
-				varDeclProvider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+				varDeclProvider, () -> null, columns) {
 			@Override
 			public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
 					final int rowPosition) {
@@ -206,13 +206,13 @@ public class BulkEditorNatTable {
 			}
 		};
 		inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
-		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider),
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-						VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
-				null, null, varDeclarationSorterModel, false);
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
+		natTable = NatTableWidgetFactory
+				.createRowNatTable(parent, inputDataLayer, columnProvider,
+						new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(varDeclProvider), columns,
+								VarDeclarationTableColumn.defaultEditableWithout(VarDeclarationTableColumn.FILE_PATH,
+										VarDeclarationTableColumn.LOCATION)),
+						null, null, varDeclarationSorterModel, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(varDeclProvider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(varDeclProvider));
 		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));

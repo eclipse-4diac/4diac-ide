@@ -170,22 +170,22 @@ public class InstancePropertySection extends AbstractSection {
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
 		inputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		outputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputDataProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
 				new VarDeclEditRule(inputDataProvider));
@@ -351,7 +351,7 @@ public class InstancePropertySection extends AbstractSection {
 
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
-			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
+			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG
 					.get(columnIndex);
 			final VarDeclaration varDecl = dataProvider.getRowObject(rowIndex);
 

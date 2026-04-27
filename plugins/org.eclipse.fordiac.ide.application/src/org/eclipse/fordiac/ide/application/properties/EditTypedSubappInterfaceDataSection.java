@@ -65,7 +65,7 @@ public class EditTypedSubappInterfaceDataSection extends EditUntypedSubappInterf
 	@Override
 	protected IEditableRule getSectionEditableRule() {
 		return new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG,
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG,
 				VarDeclarationTableColumn.DEFAULT_EDITABLE);
 	}
 }
