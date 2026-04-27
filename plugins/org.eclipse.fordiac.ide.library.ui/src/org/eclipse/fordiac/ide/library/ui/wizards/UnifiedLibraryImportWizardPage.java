@@ -75,8 +75,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private final List<ILibrarySource> sources;
 
 	private ComboViewer sourceCombo;
-	private Button refreshButton;
-	private Button manageButton;
 
 	private Composite configHost;
 	private StackLayout configLayout;
@@ -113,8 +111,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		this.showLatestOnly = true;
 		this.hideEmptyProjects = true;
 		this.sources = new ArrayList<>(LibrarySourceBuilder.getAllSources());
-		this.defaultSelectedLibraries = Set.copyOf(Arrays.asList(
-				defaultSelectedLibraries != null ? defaultSelectedLibraries.clone() : new String[0]));
+		this.defaultSelectedLibraries = Set.copyOf(
+				Arrays.asList(defaultSelectedLibraries != null ? defaultSelectedLibraries.clone() : new String[0]));
 	}
 
 	public boolean performImport(final IWizardContainer container) {
@@ -146,9 +144,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return true;
 		} catch (final InvocationTargetException ite) {
 			final Throwable cause = ite.getCause() != null ? ite.getCause() : ite;
-			setErrorMessage(cause.getMessage());
+			setErrorMessage(cause.getMessage() != null ? cause.getMessage() : cause.toString());
 			return false;
 		} catch (final InterruptedException ie) {
+			Thread.currentThread().interrupt();
 			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_op_cancled);
 			return false;
 		}
@@ -212,10 +211,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		});
 		sourceCombo.setInput(sources);
 
-		refreshButton = new Button(top, SWT.PUSH);
+		final Button refreshButton = new Button(top, SWT.PUSH);
 		refreshButton.setText(Messages.UnifiedLibraryImportWizardPage_refresh);
 
-		manageButton = new Button(top, SWT.PUSH);
+		final Button manageButton = new Button(top, SWT.PUSH);
 		manageButton.setText(Messages.UnifiedLibraryImportWizardPage_manage);
 		manageButton.setToolTipText(Messages.UnifiedLibraryImportWizardPage_config);
 		manageButton.addListener(SWT.Selection, e -> {
