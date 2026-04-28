@@ -286,6 +286,11 @@ public class VarDeclarationAnnotations {
 		return true;
 	}
 
+	public static boolean validateHiddenPinConnected(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return true;
+	}
+
 	public static VarDeclaration getInOutVarOpposite(final VarDeclaration inOutVar) {
 		final InterfaceList interfaceList = (InterfaceList) inOutVar.eContainer();
 		if (inOutVar.isInOutVar()) {

@@ -1035,6 +1035,11 @@
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/diagnostics"/>
         <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateDestinationTypeMismatch/context"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/validateHiddenPinConnected"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.validateHiddenPinConnected(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateHiddenPinConnected/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/validateHiddenPinConnected/context"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/findInTypeInterface"
           body="return (InterfaceElementAnnotations.findInTypeInterface(this) instanceof VarDeclaration varDecl) ? varDecl : null;"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVisible" body="org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationAnnotations.setVisible(this, visible);">
