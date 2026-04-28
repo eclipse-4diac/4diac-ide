@@ -12,15 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
 import org.eclipse.gef.EditPart;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 
 public class EditTypedSubappVarInOutSection extends EditUntypedSubappVarInOutSection {
 	@Override
@@ -59,14 +56,4 @@ public class EditTypedSubappVarInOutSection extends EditUntypedSubappVarInOutSec
 	public boolean isShowTableEditButtons() {
 		return false;
 	}
-
-	@Override
-	protected IEditableRule getSectionEditableRule() {
-		return new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
-				VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLEIN,
-						VarDeclarationTableColumn.VISIBLEOUT),
-				VarDeclarationTableColumn.defaultEditableWithout(VarDeclarationTableColumn.VISIBLEIN,
-						VarDeclarationTableColumn.VISIBLEOUT));
-	}
-
 }
