@@ -34,13 +34,13 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationVisibleEditableRule;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -55,10 +55,8 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.config.EditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridData;
@@ -180,7 +178,8 @@ public class InstancePropertySection extends AbstractSection {
 				columns);
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, inputColumnProvider,
-				new VarDeclEditRule(inputDataProvider, columns));
+				new VarDeclarationVisibleEditableRule(EditableRule.ALWAYS_EDITABLE, inputDataProvider, columns,
+						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
@@ -207,7 +206,8 @@ public class InstancePropertySection extends AbstractSection {
 				columns);
 
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, outputColumnProvider,
-				new VarDeclEditRule(outputDataProvider, columns));
+				new VarDeclarationVisibleEditableRule(EditableRule.ALWAYS_EDITABLE, outputDataProvider, columns,
+						VarDeclarationTableColumn.DEFAULT_EDITABLE));
 
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
@@ -346,35 +346,5 @@ public class InstancePropertySection extends AbstractSection {
 	protected boolean shouldRefresh() {
 		// as we have our own adapters we need our own shouldRefresh implementation
 		return (null != getType()) && getType().eAdapters().contains(fbnElementAdapter) && !blockRefresh;
-	}
-
-	private class VarDeclEditRule implements IEditableRule {
-
-		private final IChangeableRowDataProvider<VarDeclaration> dataProvider;
-		private final List<VarDeclarationTableColumn> columns;
-
-		public VarDeclEditRule(final IChangeableRowDataProvider<VarDeclaration> dataProvider,
-				final List<VarDeclarationTableColumn> columns) {
-			this.dataProvider = dataProvider;
-			this.columns = columns;
-		}
-
-		@Override
-		public boolean isEditable(final int columnIndex, final int rowIndex) {
-			final VarDeclarationTableColumn column = this.columns.get(columnIndex);
-			final VarDeclaration varDecl = dataProvider.getRowObject(rowIndex);
-
-			if (getType() instanceof TypedSubApp && varDecl.isInOutVar()
-					&& (column == VarDeclarationTableColumn.VISIBLE || column == VarDeclarationTableColumn.VISIBLEIN
-							|| column == VarDeclarationTableColumn.VISIBLEOUT)) {
-				return false;
-			}
-			return VarDeclarationTableColumn.DEFAULT_EDITABLE.contains(column);
-		}
-
-		@Override
-		public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-			return isEditable(cell.getColumnIndex(), cell.getRowIndex());
-		}
 	}
 }

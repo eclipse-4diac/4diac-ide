@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationVisibleEditableRule;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -99,7 +100,9 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				getSectionEditableRule(), null, this, true);
+				new VarDeclarationVisibleEditableRule(getSectionEditableRule(), inputProvider, columns,
+						VarDeclarationTableColumn.DEFAULT_EDITABLE),
+				null, this, true);
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
 	}
@@ -209,7 +212,6 @@ public abstract class AbstractEditVarInOutSection extends AbstractSection
 	}
 
 	private final IEditableRule sectionEditableRule = new IEditableRule() {
-
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
 			return AbstractEditVarInOutSection.this.isEditable();
