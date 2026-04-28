@@ -181,6 +181,8 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
 
+	public static String VarDeclarationAnnotations_HiddenPinConnected;
+
 	// === AttributeTarget Groups ===
 	public static String AttributeTarget_General_group;
 	public static String AttributeTarget_Types_group;
