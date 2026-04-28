@@ -22,11 +22,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase.FbtMacroPatternElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.typeeditor.ITypeEditorPage;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
+import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
+import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -34,10 +39,43 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 
+@SuppressWarnings("restriction")
 public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEditorPage {
+
+	public static final class FordiacAsciiDocLanguage extends AsciiDocLanguage {
+
+		LibraryElement libEl;
+
+		public FordiacAsciiDocLanguage() {
+			setName("AsciiDoc 4diac IDE Extension"); //$NON-NLS-1$
+		}
+
+		public FordiacAsciiDocLanguage(final LibraryElement libEl) {
+			this();
+			this.libEl = libEl;
+		}
+
+		@Override
+		protected void addPhraseModifierExtensions(final PatternBasedSyntax phraseModifierSyntax) {
+			phraseModifierSyntax.add(new FbtMacroPatternElement(libEl));
+		}
+
+		@Override
+		public MarkupLanguage clone() {
+			final FordiacAsciiDocLanguage clone = (FordiacAsciiDocLanguage) super.clone();
+			clone.libEl = this.libEl;
+			return clone;
+		}
+	}
+
+	// The editor input of the type file given to us.
+	IEditorInput originEditorInput;
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		// needs to be done first so that we can get always the type for which we are
+		// shown
+		originEditorInput = input;
 		super.init(site, getDocumentationEditorInput(input));
 		setPartName("AsciiDoc Description");
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
@@ -60,6 +98,11 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		return null;
 	}
 
+	@Override
+	public LibraryElement getType() {
+		return LibraryElementProvider.INSTANCE.getLibraryElement(originEditorInput);
+	}
+
 	private static IFolder getAssetsFolder(final IFile file) throws CoreException {
 		final IContainer parent = file.getParent();
 
@@ -69,6 +112,16 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 			assetFolder.create(true, true, new NullProgressMonitor());
 		}
 		return assetFolder;
+	}
+
+	@Override
+	public void setMarkupLanguage(final MarkupLanguage markupLanguage, final boolean persistSetting) {
+		if (markupLanguage == null) {
+			super.setMarkupLanguage(markupLanguage, persistSetting);
+			return;
+		}
+		final AsciiDocLanguage ownLang = new FordiacAsciiDocLanguage(getType());
+		super.setMarkupLanguage(ownLang, persistSetting);
 	}
 
 	@Override
