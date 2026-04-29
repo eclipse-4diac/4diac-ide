@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
+import java.util.Set;
+
 import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
@@ -39,15 +41,16 @@ public class VarDeclarationTableBuilder {
 
 	public static BuiltNatTable<VarDeclaration> create(final Composite parent, final CommandExecutor commandExecutor) {
 		final var accessor = new VarDeclarationColumnAccessor(commandExecutor,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+				VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.LOCATION));
 		final ChangeableListDataProvider<VarDeclaration> provider = new ChangeableListDataProvider<>(accessor);
 		final SorterModel<VarDeclaration> sorterModel = new SorterModel<>(accessor);
 
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(provider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+				VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.LOCATION));
 
 		final VarDeclarationConfigLabelAccumulator configLabelProvider = new VarDeclarationConfigLabelAccumulator(
-				provider, () -> null, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION) {
+				provider, () -> null,
+				VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.LOCATION)) {
 			@Override
 			public void accumulateConfigLabels(final LabelStack configLabels, final int columnPosition,
 					final int rowPosition) {
@@ -63,12 +66,12 @@ public class VarDeclarationTableBuilder {
 		inputDataLayer.setConfigLabelAccumulator(configLabelProvider);
 
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION);
+				VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.LOCATION));
 
 		final NatTable natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
 				new NatTableColumnEditableRule<>(new LinkedElementsEditableRule(provider),
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_LOCATION,
-						VarDeclarationTableColumn.EDITABLE_COMMENT_VALUE),
+						VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.LOCATION),
+						Set.of(VarDeclarationTableColumn.COMMENT, VarDeclarationTableColumn.INITIAL_VALUE)),
 				null, null, sorterModel, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(provider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(provider));

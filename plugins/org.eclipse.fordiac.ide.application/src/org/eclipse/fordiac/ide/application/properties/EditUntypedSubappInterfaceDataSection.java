@@ -77,28 +77,24 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
-		outputProvider = new ChangeableListDataProvider<>(
-				new VarDeclarationColumnAccessor(this, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE) {
-					@Override
-					public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
-							final Object newValue) {
-						return switch (column) {
-						case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
-						default -> super.createCommand(rowObject, column, newValue);
-						};
-					}
-				});
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(outputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE));
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE);
-		outputTable = NatTableWidgetFactory
-				.createRowNatTable(outputsGroup, inputDataLayer, columnProvider,
-						new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
-								VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE, outputProvider),
-						null, this, false);
+		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLE);
+		outputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns) {
+			@Override
+			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
+					final Object newValue) {
+				return switch (column) {
+				case NAME -> onNameChange(rowObject, Objects.toString(newValue, NULL_DEFAULT));
+				default -> super.createCommand(rowObject, column, newValue);
+				};
+			}
+		});
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputProvider, columns);
+		outputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(outputProvider, this::getAnnotationModel, columns));
+		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, columnProvider,
+				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(), columns, outputProvider), null, this,
+				false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new TypeDeclarationEditorConfiguration(outputProvider));
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -109,7 +105,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	public void setupInputTable(final Group inputsGroup) {
 		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG) {
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG) {
 			@Override
 			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
 					final Object newValue) {
@@ -120,14 +116,14 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 			}
 		});
 		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
+				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG));
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
+				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, columnProvider,
 				new UntypedSubappInterfaceEditableRule(getSectionEditableRule(),
-						VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG, inputProvider),
+						VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG, inputProvider),
 				null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));

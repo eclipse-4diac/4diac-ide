@@ -158,56 +158,63 @@ public class InstancePropertySection extends AbstractSection {
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tableSectionComposite);
 
-		final Group inputComposite = getWidgetFactory().createGroup(tableSectionComposite,
-				Messages.CommentPropertySection_DataInputs);
-		final Group outputComposite = getWidgetFactory().createGroup(tableSectionComposite,
-				Messages.CommentPropertySection_DataOutputs);
-
-		inputComposite.setText(Messages.CommentPropertySection_DataInputs);
-		outputComposite.setText(Messages.CommentPropertySection_DataOutputs);
-
-		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
-		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
-
-		inputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-		outputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
-		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputDataProvider,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
-
-		inputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(inputDataProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-		outputDataLayer.setConfigLabelAccumulator(new VarDeclarationConfigLabelAccumulator(outputDataProvider,
-				this::getAnnotationModel, VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG));
-
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG);
-
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, columnProvider,
-				new VarDeclEditRule(inputDataProvider));
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, columnProvider,
-				new VarDeclEditRule(outputDataProvider));
-
-		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-
-		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
-		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
-
-		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-
-		inputTable.configure();
-		outputTable.configure();
-
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
+		createInputTable(tableSectionComposite);
+		createOutputTable(tableSectionComposite);
 
 		tableSectionComposite.layout();
+	}
+
+	private void createInputTable(final Composite parent) {
+		final Group inputComposite = getWidgetFactory().createGroup(parent, Messages.CommentPropertySection_DataInputs);
+		inputComposite.setText(Messages.CommentPropertySection_DataInputs);
+		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
+
+		final var columns = VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG;
+		inputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
+
+		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider, columns);
+		inputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(inputDataProvider, this::getAnnotationModel, columns));
+
+		final NatTableColumnProvider<VarDeclarationTableColumn> inputColumnProvider = new NatTableColumnProvider<>(
+				columns);
+
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, inputColumnProvider,
+				new VarDeclEditRule(inputDataProvider, columns));
+
+		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
+		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(inputColumnProvider, this));
+		inputTable.configure();
+
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
+	}
+
+	private void createOutputTable(final Composite parent) {
+		final Group outputComposite = getWidgetFactory().createGroup(parent,
+				Messages.CommentPropertySection_DataOutputs);
+		outputComposite.setText(Messages.CommentPropertySection_DataOutputs);
+		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
+
+		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLE);
+		outputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
+
+		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputDataProvider, columns);
+		outputDataLayer.setConfigLabelAccumulator(
+				new VarDeclarationConfigLabelAccumulator(outputDataProvider, this::getAnnotationModel, columns));
+
+		final NatTableColumnProvider<VarDeclarationTableColumn> outputColumnProvider = new NatTableColumnProvider<>(
+				columns);
+
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, outputColumnProvider,
+				new VarDeclEditRule(outputDataProvider, columns));
+
+		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
+		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(outputColumnProvider, this));
+		outputTable.configure();
+
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {
@@ -343,16 +350,18 @@ public class InstancePropertySection extends AbstractSection {
 
 	private class VarDeclEditRule implements IEditableRule {
 
-		final IChangeableRowDataProvider<VarDeclaration> dataProvider;
+		private final IChangeableRowDataProvider<VarDeclaration> dataProvider;
+		private final List<VarDeclarationTableColumn> columns;
 
-		public VarDeclEditRule(final IChangeableRowDataProvider<VarDeclaration> dataProvider) {
+		public VarDeclEditRule(final IChangeableRowDataProvider<VarDeclaration> dataProvider,
+				final List<VarDeclarationTableColumn> columns) {
 			this.dataProvider = dataProvider;
+			this.columns = columns;
 		}
 
 		@Override
 		public boolean isEditable(final int columnIndex, final int rowIndex) {
-			final VarDeclarationTableColumn column = VarDeclarationTableColumn.DEFAULT_COLUMNS_WITH_VISIBLE_AND_VAR_CONFIG
-					.get(columnIndex);
+			final VarDeclarationTableColumn column = this.columns.get(columnIndex);
 			final VarDeclaration varDecl = dataProvider.getRowObject(rowIndex);
 
 			if (getType() instanceof TypedSubApp && varDecl.isInOutVar()
