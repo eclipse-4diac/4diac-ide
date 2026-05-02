@@ -7,15 +7,15 @@ Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.structuredtextalgorithm.tests;x-internal=true
 Require-Bundle: org.eclipse.xtext.testing,
- org.eclipse.xtext.xbase.lib;bundle-version="2.40.0",
+ org.eclipse.xtext.xbase.lib;bundle-version="2.42.0",
  org.eclipse.xtext.xbase.testing,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.core.resources
 Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.tests
-Import-Package: org.junit.jupiter.api;version="[5.1.0,6.0.0)",
- org.junit.jupiter.api.extension;version="[5.1.0,6.0.0)",
- org.junit.jupiter.api.function;version="[5.1.0,6.0.0)",
- org.junit.jupiter.params;version="[5.1.0,6.0.0)",
- org.junit.jupiter.params.provider;version="[5.1.0,6.0.0)",
+Import-Package: org.junit.jupiter.api;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.api.extension;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.api.function;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params;version="[6.0.0,7.0.0)",
+ org.junit.jupiter.params.provider;version="[6.0.0,7.0.0)",
  org.opentest4j
