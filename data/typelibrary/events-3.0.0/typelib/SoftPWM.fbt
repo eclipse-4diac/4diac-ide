@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SoftPWM" Comment="PWM output">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Thomas Mayr" Date="2026-04-18">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="EInit" Comment="Service Initialization">
+				<With Var="PeriodeTime"/>
+				<With Var="DutyCycle"/>
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="EInit" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier"/>
+			<VarDeclaration Name="PeriodeTime" Type="TIME" Comment="Time of each Periode"/>
+			<VarDeclaration Name="DutyCycle" Type="UINT" Comment="Duty Cycle in Percent"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier"/>
+			<VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value=""/>
+</FBType>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PID" Comment="PID FB">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Thomas Mayr" Date="2026-04-19">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::controlengineering">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialize controller">
+				<With Var="QI"/>
+				<With Var="ACTUAL"/>
+				<With Var="SET_POINT"/>
+				<With Var="KP"/>
+				<With Var="TN"/>
+				<With Var="TV"/>
+				<With Var="Timestep"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Execute control step">
+				<With Var="QI"/>
+				<With Var="ACTUAL"/>
+				<With Var="SET_POINT"/>
+				<With Var="KP"/>
+				<With Var="TN"/>
+				<With Var="TV"/>
+				<With Var="Timestep"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization done">
+				<With Var="QO"/>
+				<With Var="OUT"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Calculation done">
+				<With Var="QO"/>
+				<With Var="OUT"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Enable input"/>
+			<VarDeclaration Name="ACTUAL" Type="REAL" Comment="Process value"/>
+			<VarDeclaration Name="SET_POINT" Type="REAL" Comment="Setpoint"/>
+			<VarDeclaration Name="KP" Type="REAL" Comment="Proportional gain"/>
+			<VarDeclaration Name="TN" Type="REAL" Comment="Integral time [s]"/>
+			<VarDeclaration Name="TV" Type="REAL" Comment="Derivative time [s]"/>
+			<VarDeclaration Name="Timestep" Type="TIME" Comment="Sampling time (cycle time)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Enable output"/>
+			<VarDeclaration Name="OUT" Type="REAL" Comment="Controller output (0..100%)"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="ERR" Type="REAL"/>
+			<VarDeclaration Name="ERR_OLD" Type="REAL"/>
+			<VarDeclaration Name="I_SUM" Type="REAL"/>
+			<VarDeclaration Name="DT_SEC" Type="REAL"/>
+			<VarDeclaration Name="D_TERM" Type="REAL"/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+			<ECState Name="INIT" x="2000" y="480">
+				<ECAction Algorithm="ALG_INIT" Output="INITO"/>
+			</ECState>
+			<ECState Name="REQ" x="2240" y="1440">
+				<ECAction Algorithm="ALG_REQ" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="INIT" Condition="INIT" Comment="" x="1500" y="420"/>
+			<ECTransition Source="REQ" Destination="INIT" Condition="1" Comment="" x="1986.67" y="1073.33"/>
+			<ECTransition Source="INIT" Destination="REQ" Condition="REQ" Comment="" x="2526.67" y="1020"/>
+		</ECC>
+		<Algorithm Name="ALG_INIT">
+			<ST><![CDATA[ALGORITHM ALG_INIT
+QO := QI;
+ERR := 0.0;
+ERR_OLD := 0.0;
+I_SUM := 0.0;
+DT_SEC := 0.0;
+D_TERM := 0.0;
+OUT := 0.0;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="ALG_REQ">
+			<ST><![CDATA[
+
+ALGORITHM ALG_REQ
+QO := QI;
+
+IF NOT QI THEN
+	OUT := 0.0;
+	I_SUM := 0.0;
+	D_TERM := 0.0;
+ELSE
+	DT_SEC := LREAL_TO_REAL(TIME_IN_S_TO_LREAL(Timestep));
+	IF DT_SEC <= 0.0 OR KP <= 0.0 THEN
+		STATUS := 'Inputs out of Range';
+		OUT := 0.0;
+	ELSE
+		STATUS := 'PID Active';
+		ERR := SET_POINT - ACTUAL;
+
+			(* I-Term *)
+		IF TN > 0.0 THEN
+			IF NOT ((OUT >= 100.0 AND ERR > 0.0) OR (OUT <= 0.0 AND ERR < 0.0)) THEN
+				I_SUM := I_SUM + (KP * ERR * DT_SEC / TN);
+			END_IF;
+		ELSE
+			I_SUM := 0.0;
+		END_IF;
+
+			(* D-Term *)
+		IF TV > 0.0 THEN
+			D_TERM := KP * TV * (ERR - ERR_OLD) / DT_SEC;
+		ELSE
+			D_TERM := 0.0;
+		END_IF;
+
+		OUT := KP * ERR + I_SUM + D_TERM;
+
+		IF OUT > 100.0 THEN
+			OUT := 100.0;
+		ELSIF OUT < 0.0 THEN
+			OUT := 0.0;
+		END_IF;
+
+		ERR_OLD := ERR;
+	END_IF;
+END_IF;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

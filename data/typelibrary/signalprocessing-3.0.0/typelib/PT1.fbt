@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PT1" Comment="discrete PT1 low-pass filter">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Thomas Mayr" Date="2026-04-22">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Calculate next output">
+				<With Var="IN"/>
+				<With Var="T1"/>
+				<With Var="Timestep"/>
+			</Event>
+			<Event Name="RESET" Type="Event" Comment="Reset internal filter state">
+				<With Var="IN"/>
+				<With Var="T1"/>
+				<With Var="Timestep"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Output value updated">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="REAL" Comment="Input value"/>
+			<VarDeclaration Name="T1" Type="REAL" Comment="PT1 time constant [s]"/>
+			<VarDeclaration Name="Timestep" Type="TIME" Comment="Sampling time"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="REAL" Comment="Filtered output value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="alpha" Type="REAL"/>
+			<VarDeclaration Name="state" Type="REAL"/>
+			<VarDeclaration Name="initialized" Type="BOOL"/>
+			<VarDeclaration Name="DT_SEC" Type="REAL"/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+			<ECState Name="REQ" x="1853" y="527">
+				<ECAction Algorithm="ALG_REQ" Output="CNF"/>
+			</ECState>
+			<ECState Name="RESET" x="1353" y="1260">
+				<ECAction Algorithm="ALG_RESET" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="REQ" Condition="REQ" Comment="" x="1327" y="453"/>
+			<ECTransition Source="REQ" Destination="START" Condition="1" Comment="" x="1253" y="713"/>
+			<ECTransition Source="START" Destination="RESET" Condition="RESET" Comment="" x="1093" y="900"/>
+			<ECTransition Source="RESET" Destination="START" Condition="1" Comment="" x="820" y="1007"/>
+		</ECC>
+		<Algorithm Name="ALG_REQ">
+			<ST><![CDATA[ALGORITHM ALG_REQ
+DT_SEC := LREAL_TO_REAL(TIME_IN_S_TO_LREAL(Timestep));
+IF DT_SEC <= 0.0 THEN
+	OUT := IN;
+	state := OUT;
+	initialized := TRUE;
+	RETURN;
+END_IF;
+
+IF T1 <= 0.0 THEN
+	OUT := IN;
+	state := OUT;
+	initialized := TRUE;
+	RETURN;
+END_IF;
+
+alpha := DT_SEC / (T1 + DT_SEC);
+
+IF NOT initialized THEN
+	state := IN;
+	initialized := TRUE;
+ELSE
+	state := state + alpha * (IN - state);
+END_IF;
+
+OUT := state;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="ALG_RESET">
+			<ST><![CDATA[
+
+ALGORITHM ALG_RESET
+state := 0.0;
+alpha := 0.0;
+initialized := FALSE;
+OUT := 0.0;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="MovingAverage" Comment="moving average filter">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Thomas Mayr" Date="2026-04-20">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::signalprocessing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Calculate next output">
+				<With Var="IN"/>
+				<With Var="WINDOW"/>
+			</Event>
+			<Event Name="RESET" Type="Event" Comment="Reset internal filter state">
+				<With Var="IN"/>
+				<With Var="WINDOW"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Output value updated">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="REAL" Comment="Input value"/>
+			<VarDeclaration Name="WINDOW" Type="INT" Comment="Window size (number of samples)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="REAL" Comment="Filtered output value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="count" Type="INT"/>
+			<VarDeclaration Name="sum" Type="REAL"/>
+			<VarDeclaration Name="index" Type="INT"/>
+			<VarDeclaration Name="buffer" Type="REAL" ArraySize="0..99"/>
+			<VarDeclaration Name="effectiveWindow" Type="INT"/>
+			<VarDeclaration Name="lastWindow" Type="INT"/>
+			<VarDeclaration Name="i" Type="INT"/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+			<ECState Name="REQ" x="1853.33" y="526.67">
+				<ECAction Algorithm="ALG_REQ" Output="CNF"/>
+			</ECState>
+			<ECState Name="RESET" x="1353.33" y="1260">
+				<ECAction Algorithm="ALG_RESET" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="REQ" Condition="REQ" Comment="" x="1326.67" y="453.33"/>
+			<ECTransition Source="REQ" Destination="START" Condition="1" Comment="" x="1253.33" y="713.33"/>
+			<ECTransition Source="START" Destination="RESET" Condition="RESET" Comment="" x="1093.33" y="900"/>
+			<ECTransition Source="RESET" Destination="START" Condition="1" Comment="" x="820" y="1006.67"/>
+		</ECC>
+		<Algorithm Name="ALG_REQ">
+			<ST><![CDATA[ALGORITHM ALG_REQ
+IF WINDOW <= 0 THEN
+	OUT := IN;
+	RETURN;
+END_IF;
+
+effectiveWindow := WINDOW;
+IF effectiveWindow > 100 THEN
+	effectiveWindow := 100;
+END_IF;
+
+IF effectiveWindow <> lastWindow THEN
+	sum := 0.0;
+	index := 0;
+	count := 0;
+	i := 0;
+	WHILE i < 100 DO
+		buffer[i] := 0.0;
+		i := i + 1;
+	END_WHILE;
+	lastWindow := effectiveWindow;
+END_IF;
+
+IF count < effectiveWindow THEN
+	buffer[index] := IN;
+	sum := sum + IN;
+	count := count + 1;
+ELSE
+	sum := sum - buffer[index];
+	buffer[index] := IN;
+	sum := sum + IN;
+END_IF;
+
+index := (index + 1) MOD effectiveWindow;
+
+OUT := sum / INT_TO_REAL(count);
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="ALG_RESET">
+			<ST><![CDATA[
+
+ALGORITHM ALG_RESET
+sum := 0.0;
+index := 0;
+count := 0;
+lastWindow := 0;
+i := 0;
+WHILE i < 100 DO
+	buffer[i] := 0.0;
+	i := i + 1;
+END_WHILE;
+OUT := 0.0;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
