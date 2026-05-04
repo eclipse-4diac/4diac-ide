@@ -56,5 +56,8 @@ public class AttributeDeclarationConfigLabelAccumulator extends AbstractAnnotate
 			accumulateAttributeConfigLabels(configLabels, getDataProvider().getRowObject(rowPosition),
 					FordiacAnnotationUtil::showOnTargetValue);
 		}
+		if (getDataProvider().getDataValue(columnPosition, rowPosition) == null) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+		}
 	}
 }
