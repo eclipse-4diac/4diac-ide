@@ -26,17 +26,21 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.ServiceInterfaceFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FunctionFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.UntypedSubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -163,8 +167,30 @@ public final class RuntimeFactory {
 		return runtime;
 	}
 
+	/**
+	 * @brief Recursively creates runtimes for all FBNetworkElements in the given
+	 *        container runtime. Transfer data for internal connections is
+	 *        initialized with the initial values of the respective output
+	 *        variables.
+	 *
+	 * @param containerRuntime the runtime for which to create the internal runtimes
+	 */
 	private static void createInternalRuntimes(final FBNetworkRuntime containerRuntime) {
+
 		containerRuntime.getFbnetwork().getBlockFBNetworkElements().forEach(networkElement -> {
+
+			// initialize internal data connections
+			final var map = containerRuntime.getTransferData();
+			networkElement.getInterface().getOutputVars()
+					.forEach(pin -> pin.getOutputConnections().stream().forEach(conn -> {
+						if (map.get(conn) != null) {
+							return;
+						}
+						final String val = InitialValueHelper.getInitialOrDefaultValue(pin);
+						final Value value = LibraryElementFactory.eINSTANCE.createValue();
+						value.setValue(val);
+						map.put(conn, value);
+					}));
 
 			if (containerRuntime.getTypeRuntimes().get(networkElement) != null) {
 				return; // runtime already created
@@ -184,8 +210,8 @@ public final class RuntimeFactory {
 				networkRuntime.setOuterNetworkRuntime(containerRuntime);
 				containerRuntime.getTypeRuntimes().put(originalSubApp, networkRuntime);
 
-				// initialize transfer data from input vars (const values in inputs)
-				initializeTransferData(subAppWithNetowrk.getInterface().getInputVars(), networkRuntime);
+				// initialize transfer data from input vars
+				initializeInputTransferData(subAppWithNetowrk, networkRuntime);
 
 				createInternalRuntimes(networkRuntime);
 				return;
@@ -202,7 +228,7 @@ public final class RuntimeFactory {
 				compositeNetworkRuntime.setOuterNetworkRuntime(containerRuntime);
 
 				// initialize transfer data from input vars
-				initializeTransferData(networkElement.getInterface().getInputVars(), compositeNetworkRuntime);
+				initializeInputTransferData(networkElement, compositeNetworkRuntime);
 
 				createInternalRuntimes(compositeNetworkRuntime);
 			}
@@ -210,15 +236,28 @@ public final class RuntimeFactory {
 		});
 	}
 
-	private static void initializeTransferData(final List<VarDeclaration> inputVars,
+	/**
+	 * @brief Initializes the transfer data of the given network runtime related to
+	 *        the input variables of the network element
+	 *
+	 * @param blockFBNetworkElement the network element to look for the input
+	 *                              variables
+	 * @param networkRuntime        the network runtime for which to initialize the
+	 *                              transfer data
+	 */
+	private static void initializeInputTransferData(final BlockFBNetworkElement blockFBNetworkElement,
 			final FBNetworkRuntime networkRuntime) {
+
+		final List<VarDeclaration> inputVars = blockFBNetworkElement.getInterface().getInputVars();
+		final var map = networkRuntime.getTransferData();
 		inputVars.forEach(inputVar -> {
 			final var connections = inputVar.getOutputConnections();
 			for (final var conn : connections) {
 				final var value = inputVar.getValue();
-				networkRuntime.getTransferData().put(conn, EcoreUtil.copy(value));
+				map.put(conn, EcoreUtil.copy(value));
 			}
 		});
+
 	}
 
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {

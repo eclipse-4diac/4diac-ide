@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OPCUA Deployment
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua;singleton:=true
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua
 Bundle-RequiredExecutionEnvironment: JavaSE-21
@@ -13,10 +13,6 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.ui,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.gef,
- org.eclipse.milo.sdk-core,
- org.eclipse.milo.sdk-client,
- org.eclipse.milo.stack-core,
- org.eclipse.milo.stack-client,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.ui,
@@ -26,3 +22,10 @@ Require-Bundle: org.apache.log4j,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.iec61499
 Export-Package: org.eclipse.fordiac.ide.deployment.opcua
+Import-Package: org.eclipse.milo.opcua.sdk.client;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.types;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.types.builtin;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.types.builtin.unsigned;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.types.enumerated;version="[1.1.0,2.0.0)",
+ org.eclipse.milo.opcua.stack.core.types.structured;version="[1.1.0,2.0.0)"

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Milo SDK Client Import Patch
+Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.opcua.milo.sdk_client
+Bundle-Version: 3.2.0.qualifier
+Fragment-Host: org.eclipse.milo.sdk-client
+Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.opcua.milo.sdk.client
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Import-Package: org.eclipse.milo.shaded.com.google.common.cache

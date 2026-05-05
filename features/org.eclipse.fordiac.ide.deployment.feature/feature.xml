@@ -33,10 +33,6 @@
       %license
    </license>
 
-   <includes
-         id="org.eclipse.fordiac.ide.milo"
-         version="0.0.0"/>
-
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
       <import feature="org.eclipse.fordiac.ide.typeeditor.feature"/>
@@ -64,10 +60,6 @@
 
    <plugin
          id="org.eclipse.fordiac.ide.deployment.bootfile"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.fordiac.ide.deployment.opcua"
          version="0.0.0"/>
 
    <plugin

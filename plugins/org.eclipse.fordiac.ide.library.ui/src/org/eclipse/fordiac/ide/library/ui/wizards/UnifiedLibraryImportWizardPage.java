@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -39,6 +40,7 @@ import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.FilteredCheckedTree
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LatestOnlyFilter;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.LibraryTreeNode;
 import org.eclipse.fordiac.ide.library.ui.wizards.treeviewer.NonValidGitlabPackageFilter;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -75,8 +77,6 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private final List<ILibrarySource> sources;
 
 	private ComboViewer sourceCombo;
-	private Button refreshButton;
-	private Button manageButton;
 
 	private Composite configHost;
 	private StackLayout configLayout;
@@ -113,8 +113,8 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		this.showLatestOnly = true;
 		this.hideEmptyProjects = true;
 		this.sources = new ArrayList<>(LibrarySourceBuilder.getAllSources());
-		this.defaultSelectedLibraries = Set.copyOf(Arrays.asList(
-				defaultSelectedLibraries != null ? defaultSelectedLibraries.clone() : new String[0]));
+		this.defaultSelectedLibraries = Set.copyOf(
+				Arrays.asList(defaultSelectedLibraries != null ? defaultSelectedLibraries.clone() : new String[0]));
 	}
 
 	public boolean performImport(final IWizardContainer container) {
@@ -123,7 +123,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return false;
 		}
 		if (targetProject == null) {
-			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_no_target);
+			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_no_project);
 			return false;
 		}
 
@@ -146,9 +146,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			return true;
 		} catch (final InvocationTargetException ite) {
 			final Throwable cause = ite.getCause() != null ? ite.getCause() : ite;
-			setErrorMessage(cause.getMessage());
+			setErrorMessage(cause.getMessage() != null ? cause.getMessage() : cause.toString());
 			return false;
 		} catch (final InterruptedException ie) {
+			Thread.currentThread().interrupt();
 			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_op_cancled);
 			return false;
 		}
@@ -162,6 +163,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		root.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createTopRow(root);
+		createProjectSelectionRow(root);
 		createConfigArea(root);
 		createMainArea(root);
 
@@ -212,10 +214,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		});
 		sourceCombo.setInput(sources);
 
-		refreshButton = new Button(top, SWT.PUSH);
+		final Button refreshButton = new Button(top, SWT.PUSH);
 		refreshButton.setText(Messages.UnifiedLibraryImportWizardPage_refresh);
 
-		manageButton = new Button(top, SWT.PUSH);
+		final Button manageButton = new Button(top, SWT.PUSH);
 		manageButton.setText(Messages.UnifiedLibraryImportWizardPage_manage);
 		manageButton.setToolTipText(Messages.UnifiedLibraryImportWizardPage_config);
 		manageButton.addListener(SWT.Selection, e -> {
@@ -230,6 +232,49 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		});
 
 		refreshButton.addListener(SWT.Selection, ev -> scheduleRefresh());
+	}
+
+	private void createProjectSelectionRow(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		container.setLayout(new GridLayout(2, false));
+
+		final Label label = new Label(container, SWT.NONE);
+		label.setText(Messages.UnifiedLibraryImportWizardPage_ImportIntoProject);
+
+		final ComboViewer projectCombo = new ComboViewer(container, SWT.READ_ONLY);
+		projectCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		projectCombo.setContentProvider(ArrayContentProvider.getInstance());
+		projectCombo.setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return element instanceof final IProject project ? project.getName() : super.getText(element);
+			}
+		});
+
+		final var accessibleProjects = getAccessibleFordiacProjects();
+
+		projectCombo.setInput(accessibleProjects);
+
+		if (targetProject == null) {
+			if (accessibleProjects.isEmpty()) {
+				setErrorMessage(Messages.UnifiedLibraryImportWizardPage_no_project);
+				setPageComplete(false);
+				return;
+			}
+			targetProject = accessibleProjects.getFirst();
+		}
+
+		projectCombo.setSelection(new StructuredSelection(targetProject));
+
+		projectCombo.addSelectionChangedListener(
+				e -> targetProject = (IProject) ((IStructuredSelection) e.getSelection()).getFirstElement());
+
+	}
+
+	private static List<IProject> getAccessibleFordiacProjects() {
+		return Arrays.stream(ResourcesPlugin.getWorkspace().getRoot().getProjects())
+				.filter(SystemManager::hasFordiacProjectNature).toList();
 	}
 
 	private void createConfigArea(final Composite parent) {
@@ -366,7 +411,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	private void scheduleRefresh() {
-		if (activeSource == null || viewer == null || viewer.getControl().isDisposed()) {
+		if (activeSource == null || viewer == null || viewer.getControl().isDisposed() || targetProject == null) {
 			return;
 		}
 

@@ -2,6 +2,8 @@
  */
 package org.eclipse.fordiac.ide.library.model.library;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -115,5 +117,13 @@ public interface Manifest extends EObject {
 	 * @generated
 	 */
 	void setScope(String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateManifestVersions(DiagnosticChain diagnostics, Map<Object, Object> context);
 
 } // Manifest

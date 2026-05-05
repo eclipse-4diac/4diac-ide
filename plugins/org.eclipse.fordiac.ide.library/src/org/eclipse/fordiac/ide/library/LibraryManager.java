@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2024, 2025 Primetals Technologies Austria GmbH
+ * Copyright (c) 2024, 2026 Primetals Technologies Austria GmbH and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Patrick Aigner - initial API and implementation and/or initial documentation
+ *   Alexander Fedorov (ArSysOp) - fix "Uncontrolled data used in path expression"
  *******************************************************************************/
 package org.eclipse.fordiac.ide.library;
 
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -270,13 +272,19 @@ public enum LibraryManager {
 	 */
 	public java.net.URI extractLibrary(final Path path, final IProject project, final boolean autoImport,
 			final boolean resolve) throws IOException {
-		if (path == null || Files.notExists(path)) {
+		if (path == null) {
+			// FIXME: AF: FileNotFoundException would be much more clear
 			return null;
 		}
-		FordiacLogHelper.logInfo("Extracting library at " + path); //$NON-NLS-1$
+		final Path real = path.toRealPath();
+		if (!Files.isRegularFile(real)) {
+			// FIXME: AF: FileNotFoundException would be much more clear
+			return null;
+		}
+		FordiacLogHelper.logInfo("Extracting library at " + real); //$NON-NLS-1$
 		final byte[] buffer = new byte[1024];
 		String folderName;
-		try (InputStream inputStream = Files.newInputStream(path);
+		try (InputStream inputStream = Files.newInputStream(real);
 				ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
 			ZipEntry entry = zipInputStream.getNextEntry();
 			folderName = ""; //$NON-NLS-1$
@@ -541,7 +549,8 @@ public enum LibraryManager {
 					errors.append(" | "); //$NON-NLS-1$
 					errors.append(downloader.getName());
 					errors.append(": "); //$NON-NLS-1$
-					errors.append(symbolicName + " ");
+					errors.append(symbolicName);
+					errors.append(" "); //$NON-NLS-1$
 					errors.append(dlResult.message());
 				}
 			} catch (final IOException e) {
@@ -681,6 +690,39 @@ public enum LibraryManager {
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
 			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
 		}
+	}
+
+	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
+		return Stream.concat(getAvailableVersions(getExtractedLibraries(), symbolicName),
+				getAvailableVersions(getStandardLibraries(), symbolicName));
+	}
+
+	public static List<LibraryRecord> getLinkedLibraries(final IFolder root) {
+		final List<LibraryRecord> libs = new ArrayList<>();
+		try {
+			root.accept(resource -> {
+				if (resource.equals(root)) {
+					return true;
+				}
+				if (resource instanceof final IFolder libFolder) {
+					if (!libFolder.exists() || !libFolder.isLinked()) {
+						return false;
+					}
+					final Manifest manifest = ManifestHelper.getContainerManifest(libFolder);
+					if (manifest != null && manifest.getProduct() != null) {
+						libs.add(new LibraryRecord(ManifestHelper.getSymbolicName(manifest, ""), //$NON-NLS-1$
+								manifest.getProduct().getName(),
+								ManifestHelper.getVersion(manifest, Version.emptyVersion),
+								manifest.getProduct().getComment(), libFolder.getLocation().toPath(),
+								libFolder.getLocationURI()));
+					}
+				}
+				return false;
+			});
+		} catch (final CoreException e) {
+			e.printStackTrace();
+		}
+		return libs;
 	}
 
 	/**
@@ -1017,4 +1059,10 @@ public enum LibraryManager {
 		final Path fordiacInstallPath = installLocationFile.toPath();
 		return fordiacInstallPath.resolve(TypeLibraryTags.TYPE_LIBRARY);
 	}
+
+	private static Stream<Version> getAvailableVersions(final Map<String, List<LibraryRecord>> lib,
+			final String symbolicName) {
+		return lib.getOrDefault(symbolicName, Collections.emptyList()).stream().map(LibraryRecord::version);
+	}
+
 }

@@ -26,9 +26,6 @@
       <VarDeclaration Name="Deadline" Type="TIME" />
       <VarDeclaration Name="WCET" Type="TIME" />
     </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="QO" Type="BOOL" />
-    </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

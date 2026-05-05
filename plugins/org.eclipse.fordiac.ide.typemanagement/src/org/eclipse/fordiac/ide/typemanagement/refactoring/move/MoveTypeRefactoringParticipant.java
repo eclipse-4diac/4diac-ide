@@ -30,24 +30,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableFB;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.search.types.BlockTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.search.types.DataTypeInstanceSearch;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.DataTypeModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.RefactoringUtil;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.UpdateFBInstanceModelEdit;
+import org.eclipse.fordiac.ide.typemanagement.refactoring.TypeRefactoringHelper;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -92,13 +83,12 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		final List<Change> changes = new ArrayList<>();
 		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
-			final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-			final String newPackageName = PackageNameHelper.getPackageNameFromFile(newFile);
-
+			final IFile destinationFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			final String newPackageName = PackageNameHelper.getPackageNameFromFile(destinationFile);
 			modelEdits.add(new MoveTypeModelEdit(newPackageName,
 					MessageFormat.format(Messages.MoveTypeToPackage_RenamePackageTo, newPackageName),
 					typeEntry.getURI()));
-			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, newFile));
+			changes.add(new UpdateTypeEntryFileChange(typeEntry.getFile(), typeEntry, destinationFile));
 		});
 		// add model edits before(!) UpdateTypeEntryFileChange
 		changes.addFirst(ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage, modelEdits));
@@ -108,13 +98,8 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
-		processTypeFiles(resource, destination.getFullPath(), (typeEntry, path) -> {
-			if (typeEntry instanceof final DataTypeEntry dtEntry) {
-				addDataTypeInstanceChanges(modelEdits, dtEntry, path);
-			} else {
-				addInstanceChanges(modelEdits, typeEntry);
-			}
-		});
+		processTypeFiles(resource, destination.getFullPath(),
+				(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForType(modelEdits, typeEntry, path));
 		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
 	}
 
@@ -131,33 +116,4 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 			}
 		}
 	}
-
-	private static void addDataTypeInstanceChanges(final List<ModelEdit<?>> modelEdits, final DataTypeEntry dtEntry,
-			final IPath newPath) {
-		final List<? extends EObject> searchResult = new DataTypeInstanceSearch(dtEntry).performSearch();
-
-		for (final EObject eObject : searchResult) {
-			if (eObject instanceof final VarDeclaration varDecl
-					&& !(varDecl.getBlockFBNetworkElement() instanceof ConfigurableFB)) { // configurable fb pins are
-																							// updated below
-				final IFile newFile = ResourcesPlugin.getWorkspace().getRoot().getFile(newPath);
-				modelEdits.add(new DataTypeModelEdit(Messages.MoveTypeToPackage_UpdateDataTypeInstance,
-						EcoreUtil.getURI(eObject), PackageNameHelper.getFullTypeNameFromFile(newFile)));
-			}
-			if (eObject instanceof final BlockFBNetworkElement elem) {
-				modelEdits.add(new UpdateFBInstanceModelEdit(elem, dtEntry));
-			}
-		}
-	}
-
-	private static void addInstanceChanges(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry) {
-		final List<? extends EObject> result = new BlockTypeInstanceSearch(typeEntry).performSearch();
-
-		for (final EObject eObject : result) {
-			if (eObject instanceof final BlockFBNetworkElement elem) {
-				modelEdits.add(new UpdateFBInstanceModelEdit(elem, typeEntry));
-			}
-		}
-	}
-
 }

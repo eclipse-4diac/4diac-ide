@@ -27,15 +27,12 @@ import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.FreeformViewport;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.shadows.RectangleDropShadowBorder;
+import org.eclipse.draw2d.backgrounds.shadows.RectangleDropShadowBorder;
 import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
@@ -45,6 +42,7 @@ import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.GuideLayer;
+import org.eclipse.gef.editparts.HierarchicalGridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -53,9 +51,7 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.StringConverter;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -63,111 +59,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 
 public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPart {
-
-	/**
-	 * Grid layer that draws the grid in dashed lines and every X line solid to give
-	 * the grid more structure
-	 */
-	private static class MajorMinorGridLayer extends GridLayer {
-		private static final double MIN_ABSOLUTE_INTERLEAVE = 5.0;
-		private static final int MAJOR_INTERLEAVE = 10;
-
-		private static final String MINOR_LINE_COLOR = "org.eclipse.fordiac.ide.ui.GridMinorLineColor"; //$NON-NLS-1$
-		private static final String MAJOR_LINE_COLOR = "org.eclipse.fordiac.ide.ui.GridMajorLineColor"; //$NON-NLS-1$
-
-		private float[] minorLineStyle = createMinorLine(gridY);
-
-		@Override
-		public void setSpacing(final Dimension spacing) {
-			super.setSpacing(spacing);
-			minorLineStyle = createMinorLine(gridY);
-		}
-
-		private static float[] createMinorLine(final int gridInterleave) {
-			final int normalGap = gridInterleave - 1;
-			final float[] newLineStyle = new float[(MAJOR_INTERLEAVE - 1) * 2];
-
-			for (int i = 0; i < (MAJOR_INTERLEAVE - 1) * 2; i += 2) {
-				newLineStyle[i] = 1.0f;
-				newLineStyle[i + 1] = normalGap + gridInterleave;
-			}
-			return newLineStyle;
-		}
-
-		@Override
-		protected void paintGrid(final Graphics g) {
-			final int origLineStyle = g.getLineStyle();
-			g.setLineDash(minorLineStyle);
-
-			final Rectangle clip = g.getClip(Rectangle.SINGLETON);
-
-			if (gridX > 0) {
-				drawVerLines(g, clip);
-			}
-
-			if (gridY > 0) {
-				drawHorLines(g, clip);
-			}
-			g.setLineStyle(origLineStyle);
-		}
-
-		private void drawVerLines(final Graphics g, final Rectangle clip) {
-			final int majorInterleaveX = gridX * MAJOR_INTERLEAVE;
-			final int realInterleaveX = determineInterleave(gridX, majorInterleaveX, g.getAbsoluteScale());
-
-			if (realInterleaveX > 0) {
-				final int startX = clip.x - Math.floorMod(clip.x, gridX);
-				final int startY = clip.y - Math.floorMod(clip.y, majorInterleaveX) + gridY;
-
-				for (int x = startX; x <= clip.right(); x += gridX) {
-					if (x % majorInterleaveX == 0) {
-						g.setLineStyle(SWT.LINE_SOLID);
-						g.setForegroundColor(getMajorLineColor());
-						g.drawLine(x, clip.y, x, clip.bottom());
-					} else {
-						g.setLineStyle(SWT.LINE_CUSTOM);
-						g.setForegroundColor(getMinorLineColor());
-						g.drawLine(x, startY, x, clip.bottom());
-					}
-				}
-			}
-		}
-
-		private void drawHorLines(final Graphics g, final Rectangle clip) {
-			final int mojorInterleaveY = gridY * MAJOR_INTERLEAVE;
-
-			if (mojorInterleaveY * g.getAbsoluteScale() > MIN_ABSOLUTE_INTERLEAVE) {
-				final int startY = clip.y - Math.floorMod(clip.y, mojorInterleaveY);
-
-				g.setLineStyle(SWT.LINE_SOLID);
-				g.setForegroundColor(getMajorLineColor());
-
-				for (int y = startY; y <= clip.bottom(); y += mojorInterleaveY) {
-					g.drawLine(clip.x, y, clip.right(), y);
-				}
-			}
-		}
-
-		private static int determineInterleave(final int interleave, final int majorInterleave,
-				final double absoluteScale) {
-			if (absoluteScale > 0.75) {
-				return interleave;
-			}
-
-			if (majorInterleave * absoluteScale > MIN_ABSOLUTE_INTERLEAVE) {
-				return majorInterleave;
-			}
-			return -1;
-		}
-
-		private static Color getMinorLineColor() {
-			return JFaceResources.getColorRegistry().get(MINOR_LINE_COLOR);
-		}
-
-		private static Color getMajorLineColor() {
-			return JFaceResources.getColorRegistry().get(MAJOR_LINE_COLOR);
-		}
-	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
 
@@ -196,7 +87,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 	@Override
 	protected GridLayer createGridLayer() {
-		return new MajorMinorGridLayer();
+		return new HierarchicalGridLayer();
 	}
 
 	// Duplicated and adjusted this method from base class to allow moving the

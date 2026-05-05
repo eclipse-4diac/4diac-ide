@@ -26,16 +26,15 @@ import org.eclipse.ui.IMemento;
 
 @SuppressWarnings("squid:S1104")
 public class BulkEditorSettings {
-	enum ScopeOption {
+	public enum ScopeOption {
 		PROJECT, WORKSPACE, SUBAPP_HIERARCHY
 	}
 
 	private static final String TAG_BULKEDITOR_SETTINGS = "BULKEDITOR_SETTINGS"; //$NON-NLS-1$
 
 	private static final String MODE_TAG = "_mode"; //$NON-NLS-1$
-	public int modeSelection = 0;
-	private static final String ADVANCED_MODE_TAG = "_advanced_mode"; //$NON-NLS-1$
-	public boolean advancedMode = true;
+	private static final String LEGACY_ADVANCED_MODE_TAG = "_advanced_mode"; //$NON-NLS-1$
+	public BulkEditorMode modeSelection = BulkEditorMode.VARIABLE;
 	private static final String FB_TYPES_TAG = "_fbTypes"; //$NON-NLS-1$
 	public boolean fbSubappTypes = true;
 	private static final String FB_INSTANCES_TAG = "_fbInstances"; //$NON-NLS-1$
@@ -82,8 +81,7 @@ public class BulkEditorSettings {
 	public void saveState(final IMemento memento) {
 		final IMemento childMemento = memento.createChild(TAG_BULKEDITOR_SETTINGS);
 		subSettingsMap.values().forEach(subSetting -> subSetting.saveState(childMemento));
-		childMemento.putInteger(MODE_TAG, modeSelection);
-		childMemento.putBoolean(ADVANCED_MODE_TAG, advancedMode);
+		childMemento.putString(MODE_TAG, modeSelection.name());
 		childMemento.putBoolean(FB_TYPES_TAG, fbSubappTypes);
 		childMemento.putBoolean(FB_INSTANCES_TAG, fbTypedSubappInstance);
 		childMemento.putBoolean(UNTYPED_SUBAPPS_TAG, untypedSubapp);
@@ -102,8 +100,8 @@ public class BulkEditorSettings {
 		final IMemento childMemento = memento.getChild(TAG_BULKEDITOR_SETTINGS);
 
 		settings.subSettingsMap.values().forEach(subSetting -> subSetting.changeFromMemento(childMemento));
-		settings.modeSelection = Optional.ofNullable(childMemento.getInteger(MODE_TAG)).orElse(Integer.valueOf(0))
-				.intValue();
+		settings.modeSelection = BulkEditorMode.fromMemento(childMemento.getString(MODE_TAG),
+				Boolean.TRUE.equals(childMemento.getBoolean(LEGACY_ADVANCED_MODE_TAG)));
 
 		final int scopeValue = Optional.ofNullable(childMemento.getInteger(SCOPE_TAG)).orElse(Integer.valueOf(0))
 				.intValue();
@@ -112,7 +110,6 @@ public class BulkEditorSettings {
 				: ScopeOption.PROJECT;
 
 		// !Boolean.FALSE.equals for null check with true as fallback value
-		settings.advancedMode = !Boolean.FALSE.equals(childMemento.getBoolean(ADVANCED_MODE_TAG));
 		settings.fbSubappTypes = !Boolean.FALSE.equals(childMemento.getBoolean(FB_TYPES_TAG));
 		settings.fbTypedSubappInstance = !Boolean.FALSE.equals(childMemento.getBoolean(FB_INSTANCES_TAG));
 		settings.untypedSubapp = !Boolean.FALSE.equals(childMemento.getBoolean(UNTYPED_SUBAPPS_TAG));

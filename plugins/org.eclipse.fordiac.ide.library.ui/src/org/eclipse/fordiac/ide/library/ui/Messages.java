@@ -83,6 +83,8 @@ public class Messages extends NLS {
 
 	public static String UnifiedLibraryImportWizardPage_hide_non_valid;
 
+	public static String UnifiedLibraryImportWizardPage_ImportIntoProject;
+
 	public static String UnifiedLibraryImportWizardPage_LibraryImport;
 
 	public static String UnifiedLibraryImportWizardPage_loading;
@@ -99,7 +101,7 @@ public class Messages extends NLS {
 
 	public static String UnifiedLibraryImportWizardPage_no_src;
 
-	public static String UnifiedLibraryImportWizardPage_no_target;
+	public static String UnifiedLibraryImportWizardPage_no_project;
 
 	public static String UnifiedLibraryImportWizardPage_op_cancled;
 
@@ -114,6 +116,20 @@ public class Messages extends NLS {
 	public static String UnifiedLibraryImportWizardPage_source;
 
 	public static String UnifiedLibraryImportWizardPage_work_with;
+
+	public static String LibraryChangeAction_Downgrade;
+	public static String LibraryChangeAction_Empty;
+	public static String LibraryChangeAction_Remove;
+	public static String LibraryChangeAction_Update;
+
+	public static String LibraryPlanningPage_ActiveVersion;
+	public static String LibraryPlanningPage_Action;
+	public static String LibraryPlanningPage_LoadRemoteVersions;
+	public static String LibraryPlanningPage_SymbolicName;
+	public static String LibraryPlanningPage_Titel;
+
+	public static String ManageLibraryWizard_Label;
+	public static String ManageLibraryWizard_Description;
 
 	static {
 		// initialize resource bundle

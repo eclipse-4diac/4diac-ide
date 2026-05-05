@@ -43,12 +43,20 @@ public class LibraryValidator extends EObjectValidator {
 	public static final String DIAGNOSTIC_SOURCE = "org.eclipse.fordiac.ide.library.model.library"; //$NON-NLS-1$
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Manifest Versions' of 'Manifest'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int MANIFEST__VALIDATE_MANIFEST_VERSIONS = 1;
+
+	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 0;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 1;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -201,7 +209,27 @@ public class LibraryValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateManifest(Manifest manifest, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(manifest, diagnostics, context);
+		if (!validate_NoCircularContainment(manifest, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(manifest, diagnostics, context);
+		if (result || diagnostics != null) result &= validateManifest_validateManifestVersions(manifest, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the validateManifestVersions constraint of '<em>Manifest</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateManifest_validateManifestVersions(Manifest manifest, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return manifest.validateManifestVersions(diagnostics, context);
 	}
 
 	/**

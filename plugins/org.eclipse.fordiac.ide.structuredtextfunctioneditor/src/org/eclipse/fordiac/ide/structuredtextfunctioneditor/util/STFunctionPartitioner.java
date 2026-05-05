@@ -12,12 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataexport.CommonElementExporter;
@@ -39,7 +37,7 @@ import org.eclipse.xtext.resource.XtextResource;
 import com.google.inject.Inject;
 
 public class STFunctionPartitioner
-		extends STRecoveringPartitioner<org.eclipse.fordiac.ide.model.libraryElement.STFunction> {
+		extends STRecoveringPartitioner<STFunction, org.eclipse.fordiac.ide.model.libraryElement.STFunction> {
 
 	@Inject
 	private STFunctionGrammarAccess grammarAccess;
@@ -63,6 +61,7 @@ public class STFunctionPartitioner
 		final StringBuilder builder = new StringBuilder();
 		generatePackage(fbType, builder);
 		generateImports(fbType, builder);
+		appendBlockComment(fbType, builder);
 		builder.append("FUNCTION "); //$NON-NLS-1$
 		builder.append(fbType.getName());
 		final DataType returnType = fbType.getReturnType();
@@ -111,20 +110,19 @@ public class STFunctionPartitioner
 
 	protected Optional<STCorePartition> partition(final STFunctionSource source) {
 		try {
-			final var node = NodeModelUtils.findActualNodeFor(source);
+			final var node = NodeModelUtils.getNode(source);
 			final var imports = source.getImports().stream().map(STFunctionPartitioner::convertImport)
 					.filter(Objects::nonNull).toList();
-			final var callables = source.getFunctions().stream().map(this::convertSourceElement)
-					.filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
-			handleLostAndFound(node.getRootNode(), source.getFunctions(), callables);
+			final var callables = convertSourceElements(node.getRootNode(), source.getFunctions());
 			return Optional.of(new STFunctionPartition(source.getName(), imports, node.getText(), callables));
 		} catch (final Exception e) {
 			return emergencyPartition(source); // try to salvage what we can
 		}
 	}
 
+	@Override
 	protected org.eclipse.fordiac.ide.model.libraryElement.STFunction convertSourceElement(final STFunction function) {
-		final var node = NodeModelUtils.findActualNodeFor(function);
+		final var node = NodeModelUtils.getNode(function);
 		if (node == null || function.getName() == null) {
 			return null;
 		}
@@ -144,7 +142,7 @@ public class STFunctionPartitioner
 				.filter(STFunctionPartitioner::isValidParameter).map(this::convertInOutParameter)
 				.forEachOrdered(result.getInOutParameters()::add);
 		result.setReturnType(resolveDataType(function.getReturnType(), function, null));
-		result.setText(node.getText());
+		result.setText(getText(node));
 		return result;
 	}
 

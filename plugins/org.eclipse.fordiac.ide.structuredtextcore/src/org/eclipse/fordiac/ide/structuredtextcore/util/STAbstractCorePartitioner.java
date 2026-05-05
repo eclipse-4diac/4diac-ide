@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.Token;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -43,14 +45,19 @@ import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.parser.antlr.Lexer;
 import org.eclipse.xtext.util.Triple;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 public abstract class STAbstractCorePartitioner<E extends INamedElement> implements STCorePartitioner {
 
 	@Inject
 	private IEObjectDocumentationProvider documentationProvider;
+
+	@Inject
+	private Provider<Lexer> lexerProvider;
 
 	protected static Import convertImport(final STImport decl) {
 		if (decl.getImportedNamespace() == null || decl.getImportedNamespace().isEmpty()) {
@@ -213,7 +220,24 @@ public abstract class STAbstractCorePartitioner<E extends INamedElement> impleme
 				.range(1, duplicates.size()).forEach(index -> duplicates.get(index).setName(name + "_" + index))); //$NON-NLS-1$
 	}
 
+	public boolean containsToken(final String input, final int token) {
+		final Lexer lexer = lexerProvider.get();
+		lexer.setCharStream(new ANTLRStringStream(input));
+
+		Token nextToken;
+		while ((nextToken = lexer.nextToken()) != Token.EOF_TOKEN) {
+			if (nextToken.getType() == token) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	protected IEObjectDocumentationProvider getDocumentationProvider() {
 		return documentationProvider;
+	}
+
+	protected Provider<Lexer> getLexerProvider() {
+		return lexerProvider;
 	}
 }

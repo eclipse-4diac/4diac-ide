@@ -112,6 +112,7 @@ public final class Messages extends NLS {
 	public static String ReplaceVarsWithStructChange_NotContained;
 
 	public static String DataTypeChange_TypeDeclarationChanged;
+	public static String DataTypeChange_DataTypeChanged;
 
 	public static String DeleteFBTypeParticipant_Name;
 	public static String DeleteFBTypeParticipant_TypeInUseWarning;
@@ -147,6 +148,10 @@ public final class Messages extends NLS {
 	public static String CopyTypeChange_CannotLoadResource;
 	public static String CopyTypeChange_CannotSaveResource;
 	public static String CopyTypeChange_RenamePackage;
+	public static String Copy_RenameDialog_Message;
+	public static String Copy_RenameDialog_MustBeNewName;
+	public static String Copy_RenameDialog_NameAlreadyExists;
+	public static String Copy_RenameDialog_Title;
 
 	public static String Copy_OverwriteDialog_Title;
 	public static String Copy_OverwriteDialog_Message;

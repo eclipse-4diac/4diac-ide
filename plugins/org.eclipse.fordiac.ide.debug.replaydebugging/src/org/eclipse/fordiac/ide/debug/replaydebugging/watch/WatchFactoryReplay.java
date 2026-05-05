@@ -15,7 +15,9 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.watch;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.deployment.debug.watch.IWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppEventWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.SubAppVarDeclarationWatch;
 import org.eclipse.fordiac.ide.deployment.debug.watch.VarDeclarationWatch;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -47,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -159,6 +163,11 @@ public class WatchFactoryReplay {
 		public void clearError() {
 			super.clearError();
 		}
+
+		@Override
+		public String getQualifiedName() {
+			return getResourceRelativeName();
+		}
 	}
 
 	private static class SubAppVarDeclarationWatchReplay extends SubAppVarDeclarationWatch
@@ -187,6 +196,7 @@ public class WatchFactoryReplay {
 		private final Resource resource;
 		private final String resourceRelativeName;
 		private final List<IWatch> watches;
+		private final Set<INamedElement> eccStates = new HashSet<>();
 
 		public FBNetworkElementValueReplay(final BlockFBNetworkElement element, final DeploymentDebugDevice target) {
 			this(element, element.getResource(),
@@ -219,8 +229,16 @@ public class WatchFactoryReplay {
 
 		private Stream<? extends INamedElement> getAdditionalSubElementsReplay() throws UnsupportedOperationException {
 			return switch (getElement()) {
-			case final FB fb when fb.getType() instanceof final BaseFBType baseFBType ->
-				Stream.concat(baseFBType.getInternalVars().stream(), baseFBType.getInternalFbs().stream());
+			case final FB fb when fb.getType() instanceof final BaseFBType baseFBType -> {
+				final var stateValue = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+				baseFBType.getInternalVars().removeIf(var -> var.getName().equals("!ECC"));
+				stateValue.setName("!ECC");
+				stateValue.setType(ElementaryTypes.STRING);
+				eccStates.add(stateValue);
+				yield Stream.concat(
+						Stream.concat(baseFBType.getInternalVars().stream(), baseFBType.getInternalFbs().stream()),
+						Stream.of(stateValue));
+			}
 			case final Group group -> group.getGroupElements().stream();
 			case final SubApp subapp -> subapp.loadSubAppNetwork().getNetworkElements().stream();
 			case final CFBInstance cfbInstance -> cfbInstance.loadCFBNetwork().getNetworkElements().stream()
@@ -231,7 +249,7 @@ public class WatchFactoryReplay {
 
 		private IWatch createSubWatchReplay(final INamedElement element)
 				throws EvaluatorException, UnsupportedOperationException {
-			if (EcoreUtil.getRootContainer(element) instanceof FBType) {
+			if (EcoreUtil.getRootContainer(element) instanceof FBType || eccStates.contains(element)) {
 				return WatchFactoryReplay.watchFor(element.getName(), element, resource,
 						resourceRelativeName + QUALIFIED_NAME_DELIMITER + element.getName(), getDebugTarget());
 			}

@@ -64,7 +64,6 @@ public class EventManagerProcessor {
 	private long time = 0;
 	private int eventCounter = 0;
 	private final List<Event> lastOutputEvents = new ArrayList<>();
-	private Event lastInjectedEvent = null;
 
 	public EventManagerProcessor(final EventManager eventManager, final FBNetworkRuntime networkRuntime) {
 		this.eventManager = eventManager;
@@ -108,16 +107,12 @@ public class EventManagerProcessor {
 			return Optional.empty();
 		}
 
-		if (lastInjectedEvent != null) {
-			lastOutputEvents.add(lastInjectedEvent);
-			lastInjectedEvent = null;
-		}
-
 		final var transaction = transactions.get(0);
 		transactions.remove(0);
 
 		if (transaction instanceof final FBTransaction fbTransaction) {
 
+			eventCounter++;
 			try (final var contextKeeper = new RuntimeContextHandler(networkRuntime,
 					fbTransaction.getInputEventOccurrence())) {
 				final var transactionProcessor = new FBTransactionProcessor(fbTransaction);
@@ -141,18 +136,17 @@ public class EventManagerProcessor {
 		return Optional.of(transaction.getInputEventOccurrence().getEvent());
 	}
 
-	private void addTransactions(final EList<Transaction> transactions, final boolean atStart) {
+	private void addTransactions(final List<Transaction> transactions, final boolean atStart) {
 		if (atStart) {
 			eventManager.getTransactions().addAll(0, transactions);
 		} else {
 			eventManager.getTransactions().addAll(transactions);
-			eventCounter += transactions.size();
 		}
 	}
 
 	public void injectOutputEvent(final BlockFBNetworkElement fb, final Event event,
 			final Map<String, String> outputValues) {
-
+		DefaultRunFBType.clearCaches();
 		for (final var entry : outputValues.entrySet()) {
 			final var name = entry.getKey();
 			final var value = entry.getValue();
@@ -175,8 +169,31 @@ public class EventManagerProcessor {
 			final FBTransaction transaction = TransactionFactory.createFrom(destinationEventOccurence);
 			generatedT.add(transaction);
 		}
-		lastInjectedEvent = event;
-		addTransactions(generatedT, false);
+		addTransactions(generatedT, true);
+	}
+
+	public void injectInputEvent(final BlockFBNetworkElement fb, final Event event,
+			final Map<String, String> inputValues) {
+		DefaultRunFBType.clearCaches();
+		for (final var entry : inputValues.entrySet()) {
+			final var name = entry.getKey();
+			final var value = entry.getValue();
+			// copy output values to the model.
+			for (final var input : fb.getInterface().getInputVars()) {
+				if (!input.getName().equals(name)) {
+					continue;
+				}
+				final var newValue = LibraryElementFactory.eINSTANCE.createValue();
+				newValue.setValue(value);
+				input.setValue(newValue);
+			}
+		}
+
+		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom(event, null);
+		destinationEventOccurence.setParentFB(event.getBlockFBNetworkElement());
+		final Transaction transaction = TransactionFactory.createFrom(destinationEventOccurence);
+
+		addTransactions(List.of(transaction), true);
 	}
 
 	private class FBTransactionProcessor {
