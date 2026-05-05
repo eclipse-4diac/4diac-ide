@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.nattable;
 
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
@@ -71,7 +70,6 @@ public class VarDeclarationTableBuilder {
 				null, null, sorterModel, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(provider));
 		natTable.addConfiguration(new TypeDeclarationEditorConfiguration(provider));
-		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
 
 		return new BuiltNatTable<>(natTable, provider, sorterModel);
 	}

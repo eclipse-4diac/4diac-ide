@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.bulkeditor.Messages;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorHelper;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
+import org.eclipse.fordiac.ide.gef.nat.FilterDefaultValuesCopyDataCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -94,6 +95,8 @@ public class BulkEditorNatTable {
 
 	private void configureCommonBehavior() {
 		natTable.addConfiguration(new SingleClickSortConfiguration());
+		natTable.registerCommandHandler(
+				new FilterDefaultValuesCopyDataCommandHandler(NatTableWidgetFactory.getSelectionLayer(natTable)));
 		natTable.configure();
 		installMouseWheelForward(this.currentMode == BulkEditorMode.SIMPLE_ATTRIBUTE);
 		addContextMenu();
