@@ -12,22 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
-import java.util.Objects;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.ui.FordiacStringUtils;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class TypeDecorator implements ILightweightLabelDecorator {
@@ -66,36 +59,11 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 	private static String getComment(final IFile file) {
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (entry != null) {
-			// try to load comment from editor
-			final String editorComment = Display.getDefault().syncCall(() -> {
-				final IEditorPart editor = findEditor(file);
-				if (editor != null) {
-					final LibraryElement libraryElement = editor.getAdapter(LibraryElement.class);
-					if (libraryElement != null) {
-						return libraryElement.getComment();
-					}
-				}
-				return null;
-			});
-			// fall back to (cached) comment from type entry
-			return Objects.requireNonNullElse(editorComment, entry.getComment());
+			final LibraryElement editedLibElement = LibraryElementProvider.INSTANCE
+					.getLibraryElement(new FileEditorInput(file));
+			return editedLibElement != null ? editedLibElement.getComment() : entry.getComment();
 		}
 		return null;
 	}
 
-	private static IEditorPart findEditor(final IFile file) {
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench == null) {
-			return null;
-		}
-		final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-		if (activeWorkbenchWindow == null) {
-			return null;
-		}
-		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-		if (activePage == null) {
-			return null;
-		}
-		return activePage.findEditor(new FileEditorInput(file));
-	}
 }
