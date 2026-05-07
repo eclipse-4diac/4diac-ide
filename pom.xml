@@ -306,6 +306,17 @@
 			</properties>
 		</profile>
 		<profile>
+		    <id>macosx-ui-test-fix</id>
+		    <activation>
+		        <os>
+		            <family>mac</family>
+		        </os>
+		    </activation>
+		    <properties>
+		        <tycho.testArgLine>-XstartOnFirstThread</tycho.testArgLine>
+		    </properties>
+		</profile>
+		<profile>
 			<id>eclipse-sign</id>
 			<build>
 				<plugins>
