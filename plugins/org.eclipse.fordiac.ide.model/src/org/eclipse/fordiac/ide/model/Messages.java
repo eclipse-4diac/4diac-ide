@@ -181,6 +181,8 @@ public final class Messages extends NLS {
 
 	public static String VarDeclarationAnnotations_VarInOutSubappNetwork;
 
+	public static String VarDeclarationAnnotations_HiddenPinConnected;
+
 	// === AttributeTarget Groups ===
 	public static String AttributeTarget_General_group;
 	public static String AttributeTarget_Types_group;
@@ -244,8 +246,6 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
 	public static String BaseFBTypeAnnotations_UnsupportedInternalFBType;
-
-	public static String HidePinCommand_PinCannotBeHidden_ConnectedInside;
 
 	public static String SystemImporter_Mapping_WrongString;
 	public static String SystemImporter_Mapping_MissingDevice;

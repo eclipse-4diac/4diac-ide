@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationVisibleEditableRule;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditVarInOutSection;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.ui.widget.nattable.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Composite;
 
@@ -72,7 +74,9 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel, columns));
 		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
 		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				getSectionEditableRule(), null, this, true);
+				new VarDeclarationVisibleEditableRule(getSectionEditableRule(), inputProvider, columns,
+						VarDeclarationTableColumn.ALL_EDITABLE),
+				null, this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -90,4 +94,8 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
+	@Override
+	protected IEditableRule getSectionEditableRule() {
+		return IEditableRule.ALWAYS_EDITABLE;
+	}
 }

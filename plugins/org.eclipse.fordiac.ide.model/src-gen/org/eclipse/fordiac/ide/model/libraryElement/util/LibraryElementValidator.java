@@ -537,12 +537,20 @@ public class LibraryElementValidator extends EObjectValidator {
 	public static final int VAR_DECLARATION__VALIDATE_DESTINATION_TYPE_MISMATCH = 44;
 
 	/**
+	 * The {@link org.eclipse.emf.common.util.Diagnostic#getCode() code} for constraint 'Validate Hidden Pin Connected' of 'Var Declaration'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final int VAR_DECLARATION__VALIDATE_HIDDEN_PIN_CONNECTED = 45;
+
+	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 44;
+	private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 45;
 
 	/**
 	 * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
@@ -1557,6 +1565,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(containerVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(containerVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(containerVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(containerVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateContainerVarDeclaration_validateMemberInputConnections(containerVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateContainerVarDeclaration_validateMemberInitialValues(containerVarDeclaration, diagnostics, context);
 		return result;
@@ -2509,6 +2518,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(localVariable, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(localVariable, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(localVariable, diagnostics, context);
 		return result;
 	}
 
@@ -2568,6 +2578,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(memberVarDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(memberVarDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(memberVarDeclaration, diagnostics, context);
 		return result;
 	}
 
@@ -3248,6 +3259,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(varConfigInstance, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(varConfigInstance, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(varConfigInstance, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(varConfigInstance, diagnostics, context);
 		return result;
 	}
 
@@ -3289,6 +3301,7 @@ public class LibraryElementValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappInterface(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateVarInOutSubappNetwork(varDeclaration, diagnostics, context);
 		if (result || diagnostics != null) result &= validateVarDeclaration_validateDestinationTypeMismatch(varDeclaration, diagnostics, context);
+		if (result || diagnostics != null) result &= validateVarDeclaration_validateHiddenPinConnected(varDeclaration, diagnostics, context);
 		return result;
 	}
 
@@ -3400,6 +3413,16 @@ public class LibraryElementValidator extends EObjectValidator {
 	 */
 	public boolean validateVarDeclaration_validateDestinationTypeMismatch(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return varDeclaration.validateDestinationTypeMismatch(diagnostics, context);
+	}
+
+	/**
+	 * Validates the validateHiddenPinConnected constraint of '<em>Var Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateVarDeclaration_validateHiddenPinConnected(VarDeclaration varDeclaration, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return varDeclaration.validateHiddenPinConnected(diagnostics, context);
 	}
 
 	/**

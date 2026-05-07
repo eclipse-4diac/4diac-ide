@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
 import org.eclipse.fordiac.ide.model.datatype.helper.TypeDeclarationParser;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.helpers.InterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.VarInOutHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -282,6 +283,22 @@ public class VarDeclarationAnnotations {
 				}
 				return false;
 			}
+		}
+		return true;
+	}
+
+	public static boolean validateHiddenPinConnected(final VarDeclaration varDeclaration,
+			final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		if (!varDeclaration.isVisible() && !InterfaceHelper.canHidePin(varDeclaration)) {
+			if (diagnostics != null) {
+				diagnostics
+						.add(new BasicDiagnostic(Diagnostic.ERROR, LibraryElementValidator.DIAGNOSTIC_SOURCE,
+								LibraryElementValidator.VAR_DECLARATION__VALIDATE_HIDDEN_PIN_CONNECTED,
+								MessageFormat.format(Messages.VarDeclarationAnnotations_HiddenPinConnected,
+										varDeclaration.getName()),
+								FordiacMarkerHelper.getDiagnosticData(varDeclaration)));
+			}
+			return false;
 		}
 		return true;
 	}
