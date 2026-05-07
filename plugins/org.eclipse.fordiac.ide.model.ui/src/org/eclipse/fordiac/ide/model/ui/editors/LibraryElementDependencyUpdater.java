@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.util.Collection;
 import java.util.Objects;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Display;
 public class LibraryElementDependencyUpdater extends LibraryElementDependencyTracker {
 
 	private LibraryElement libraryElement;
+	private TypeLibrary typeLibrary;
 	private boolean updating;
 
 	@Override
@@ -67,8 +69,37 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
 				}
 			}
+		} else if (notification.getNotifier() == typeLibrary
+				&& TypeLibrary.TYPE_ENTRY_NAME_REFERENCES_FEATURE.equals(notification.getFeature())) {
+			// react when a dependency is no longer visible through this library
+			updateTypeLibraryDependency(notification);
 		} else {
 			super.notifyChanged(notification);
+		}
+	}
+
+	private void updateTypeLibraryDependency(final Notification notification) {
+		switch (notification.getEventType()) {
+		case Notification.REMOVE, Notification.REMOVE_MANY ->
+			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		default -> {
+			// ignore
+		}
+		}
+	}
+
+	private void updateRemovedTypeEntryNameReference(final Object object) {
+		switch (object) {
+		case final Collection<?> collection -> {
+			for (final Object value : collection) {
+				updateRemovedTypeEntryNameReference(value);
+			}
+		}
+		case final TypeEntry dependency when getDependencies().contains(dependency) ->
+			Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
+		case null, default -> {
+			// ignore
+		}
 		}
 	}
 
@@ -230,11 +261,21 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 		if (libraryElement != null && !libraryElement.eAdapters().contains(this)) {
 			libraryElement.eAdapters().add(this);
 		}
+		if (libraryElement != null) {
+			typeLibrary = libraryElement.getTypeLibrary();
+			if (typeLibrary != null && !typeLibrary.eAdapters().contains(this)) {
+				typeLibrary.eAdapters().add(this);
+			}
+		}
 	}
 
 	private void uninstall() {
 		if (libraryElement != null) {
 			libraryElement.eAdapters().remove(this);
+		}
+		if (typeLibrary != null) {
+			typeLibrary.eAdapters().remove(this);
+			typeLibrary = null;
 		}
 	}
 
