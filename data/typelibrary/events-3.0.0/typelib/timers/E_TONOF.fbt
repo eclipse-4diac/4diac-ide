@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="E_TONOF" Comment="standard timer function block (on/off-delay timing)">
-	<Identification Standard="61499-2" Classification="standard timer function block" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0">
+	<Identification Standard="61499-2" Classification="standard timer function block" Description="Copyright (c) 2024 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_TONOF -- On/Off-delay timer FB  &#10;&#10;When IN goes TRUE, Q becomes TRUE after delay PT_ON.  &#10;When IN goes FALSE, Q becomes FALSE after delay PT_OFF.  &#10;Reset stops both timers and sets Q to FALSE.">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-08" Remarks="E_RF_TRIG instead of E_SWITCH">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Hoepfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.1" Author="Franz Höpfinger" Date="2024-04-23" Remarks="Add a Reset to Timer FBs">
 	</VersionInfo>
-	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Hoepfinger" Date="2024-03-04">
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2024-03-04">
 	</VersionInfo>
 	<CompilerInfo packageName="iec61499::events::timers">
 	</CompilerInfo>
@@ -35,31 +37,31 @@
 		</OutputVars>
 	</InterfaceList>
 	<FBNetwork>
-		<FB Name="E_SWITCH" Type="iec61499::events::E_SWITCH" Comment="" x="-846.6666666666667" y="-986.6666666666667">
+		<FB Name="E_RF_TRIG" Type="iec61499::events::E_RF_TRIG" x="-846.67" y="-986.67">
 		</FB>
-		<FB Name="E_DELAY_ON" Type="iec61499::events::E_DELAY" Comment="" x="353.33333333333337" y="-233.33333333333334">
+		<FB Name="E_DELAY_ON" Type="iec61499::events::E_DELAY" x="353.33" y="-233.33">
 		</FB>
-		<FB Name="E_RS" Type="iec61499::events::E_RS" Comment="" x="1506.6666666666667" y="-986.6666666666667">
+		<FB Name="E_RS" Type="iec61499::events::E_RS" x="1506.67" y="-986.67">
 		</FB>
-		<FB Name="E_DELAY_OFF" Type="iec61499::events::E_DELAY" Comment="" x="353.33333333333337" y="-986.6666666666667">
+		<FB Name="E_DELAY_OFF" Type="iec61499::events::E_DELAY" x="353.33" y="-986.67">
 		</FB>
 		<EventConnections>
-			<Connection Source="REQ" Destination="E_SWITCH.EI" Comment="" dx1="213.33333333333334"/>
-			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_ON.START" Comment="" dx1="273.33333333333337"/>
-			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_ON.STOP" Comment="" dx1="240.0"/>
-			<Connection Source="E_DELAY_ON.EO" Destination="E_RS.S" Comment="" dx1="253.33333333333334"/>
-			<Connection Source="E_RS.EO" Destination="CNF" Comment="" dx1="966.6666666666667"/>
-			<Connection Source="E_DELAY_OFF.EO" Destination="E_RS.R" Comment=""/>
-			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY_OFF.START" Comment=""/>
-			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY_OFF.STOP" Comment=""/>
-			<Connection Source="R" Destination="E_RS.R" Comment="" dx1="246.66666666666669" dx2="253.33333333333334" dy="-213.33333333333334"/>
-			<Connection Source="R" Destination="E_DELAY_OFF.STOP" Comment="" dx1="246.66666666666669" dx2="233.33333333333334" dy="-213.33333333333334"/>
+			<Connection Source="REQ" Destination="E_RF_TRIG.EI" dx1="213.33"/>
+			<Connection Source="E_RF_TRIG.EF" Destination="E_DELAY_ON.START" dx1="313.33"/>
+			<Connection Source="E_RF_TRIG.ER" Destination="E_DELAY_ON.STOP" dx1="240"/>
+			<Connection Source="E_DELAY_ON.EO" Destination="E_RS.S" dx1="253.33"/>
+			<Connection Source="E_RS.EO" Destination="CNF" dx1="966.67"/>
+			<Connection Source="E_DELAY_OFF.EO" Destination="E_RS.R"/>
+			<Connection Source="E_RF_TRIG.ER" Destination="E_DELAY_OFF.START" dx1="246.67"/>
+			<Connection Source="E_RF_TRIG.EF" Destination="E_DELAY_OFF.STOP" dx1="246.67"/>
+			<Connection Source="R" Destination="E_RS.R" dx1="246.67" dx2="253.33" dy="-213.33"/>
+			<Connection Source="R" Destination="E_DELAY_OFF.STOP" dx1="246.67" dx2="146.67" dy="-213.33"/>
 		</EventConnections>
 		<DataConnections>
-			<Connection Source="IN" Destination="E_SWITCH.G" Comment="" dx1="266.6666666666667"/>
-			<Connection Source="PT_ON" Destination="E_DELAY_ON.DT" Comment="" dx1="200.0"/>
-			<Connection Source="E_RS.Q" Destination="Q" Comment="" dx1="1000.0"/>
-			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" Comment="" dx1="233.33333333333334" dx2="300.0" dy="233.33333333333334"/>
+			<Connection Source="IN" Destination="E_RF_TRIG.QI" dx1="266.67"/>
+			<Connection Source="PT_ON" Destination="E_DELAY_ON.DT" dx1="200"/>
+			<Connection Source="E_RS.Q" Destination="Q" dx1="1000"/>
+			<Connection Source="PT_OFF" Destination="E_DELAY_OFF.DT" dx1="233.33" dx2="300" dy="233.33"/>
 		</DataConnections>
 	</FBNetwork>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
