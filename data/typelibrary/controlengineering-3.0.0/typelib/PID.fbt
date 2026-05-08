@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PID" Comment="PID FB">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="Thomas Mayr" Date="2026-04-19">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::controlengineering">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialize controller">
+				<With Var="QI"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Execute control step">
+				<With Var="QI"/>
+				<With Var="ACTUAL"/>
+				<With Var="SET_POINT"/>
+				<With Var="KP"/>
+				<With Var="TN"/>
+				<With Var="TV"/>
+				<With Var="Timestep"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization done">
+				<With Var="QO"/>
+				<With Var="OUT"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Calculation done">
+				<With Var="QO"/>
+				<With Var="OUT"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Enable input"/>
+			<VarDeclaration Name="ACTUAL" Type="REAL" Comment="Process value"/>
+			<VarDeclaration Name="SET_POINT" Type="REAL" Comment="Setpoint"/>
+			<VarDeclaration Name="KP" Type="REAL" Comment="Proportional gain"/>
+			<VarDeclaration Name="TN" Type="REAL" Comment="Integral time [s]"/>
+			<VarDeclaration Name="TV" Type="REAL" Comment="Derivative time [s]"/>
+			<VarDeclaration Name="Timestep" Type="TIME" Comment="Sampling time (cycle time)"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Enable output"/>
+			<VarDeclaration Name="OUT" Type="REAL" Comment="Controller output (0..100%)"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<InternalVars>
+			<VarDeclaration Name="ERR" Type="REAL"/>
+			<VarDeclaration Name="I_SUM" Type="REAL"/>
+			<VarDeclaration Name="DT_SEC" Type="REAL"/>
+			<VarDeclaration Name="D_TERM" Type="REAL"/>
+			<VarDeclaration Name="P_TERM" Type="REAL"/>
+			<VarDeclaration Name="OUT_UNSAT" Type="REAL"/>
+			<VarDeclaration Name="ACTUAL_OLD" Type="REAL"/>
+		</InternalVars>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="-1440" y="-800">
+			</ECState>
+			<ECState Name="INIT" x="300" y="-800">
+				<ECAction Algorithm="ALG_INIT" Output="INITO"/>
+			</ECState>
+			<ECState Name="IDLE" x="300" y="80">
+			</ECState>
+			<ECState Name="REQ" x="300" y="1040">
+				<ECAction Algorithm="ALG_REQ" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="INIT" Condition="INIT" x="-366.67" y="-906.67"/>
+			<ECTransition Source="INIT" Destination="IDLE" Condition="1" x="620" y="-326.67"/>
+			<ECTransition Source="IDLE" Destination="REQ" Condition="REQ" x="620" y="680"/>
+			<ECTransition Source="REQ" Destination="IDLE" Condition="1" x="300" y="700"/>
+			<ECTransition Source="IDLE" Destination="INIT" Condition="INIT" x="300" y="-293.33"/>
+		</ECC>
+		<Algorithm Name="ALG_INIT">
+			<ST><![CDATA[
+QO := QI;
+ERR := 0.0;
+I_SUM := 0.0;
+DT_SEC := 0.0;
+D_TERM := 0.0;
+P_TERM := 0.0;
+OUT_UNSAT := 0.0;
+OUT := 0.0;
+ACTUAL_OLD := ACTUAL;
+STATUS := 'Initialized';
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="ALG_REQ">
+			<ST><![CDATA[
+QO := QI;
+
+IF NOT QI THEN
+	QO := FALSE;
+	STATUS := 'Disabled';
+	OUT := 0.0;
+	I_SUM := 0.0;
+	D_TERM := 0.0;
+	ACTUAL_OLD := ACTUAL;
+ELSE
+	DT_SEC := LREAL_TO_REAL(TIME_IN_S_TO_LREAL(Timestep));
+
+	IF DT_SEC <= 0.0 OR KP <= 0.0 OR TN < 0.0 OR TV < 0.0 THEN
+		QO := FALSE;
+		STATUS := 'Invalid input';
+		OUT := 0.0;
+		I_SUM := 0.0;
+		D_TERM := 0.0;
+		ACTUAL_OLD := ACTUAL;
+
+	ELSE
+		STATUS := 'PID Active';
+		ERR := SET_POINT - ACTUAL;
+
+			(* P-Term *)
+		P_TERM := KP * ERR;
+
+			(* D-Term *)
+		IF TV > 0.0 THEN
+			D_TERM := -KP * TV * (ACTUAL - ACTUAL_OLD) / DT_SEC;
+		ELSE
+			D_TERM := 0.0;
+		END_IF;
+
+			(* I-Term with Anti-Windup *)
+		IF TN > 0.0 THEN
+			OUT_UNSAT := P_TERM + I_SUM + D_TERM;
+			IF NOT ((OUT_UNSAT >= 100.0 AND ERR > 0.0) OR (OUT_UNSAT <= 0.0 AND ERR < 0.0)) THEN
+				I_SUM := I_SUM + (KP * ERR * DT_SEC / TN);
+			END_IF;
+		ELSE
+			I_SUM := 0.0;
+		END_IF;
+
+		OUT := P_TERM + I_SUM + D_TERM;
+
+			(* Clamping *)
+		IF OUT > 100.0 THEN
+			OUT := 100.0;
+		ELSIF OUT < 0.0 THEN
+			OUT := 0.0;
+		END_IF;
+
+		ACTUAL_OLD := ACTUAL;
+	END_IF;
+END_IF;
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
