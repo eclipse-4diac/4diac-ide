@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TLIM" Comment="standard timer function block (time-limiting, timeout)">
+	<Identification Standard="61499-2" Classification="standard timer function block" Description="Copyright (c) 2026 HR Agrartechnik GmbH  &#10; &#10;This program and the accompanying materials are made  &#10;available under the terms of the Eclipse Public License 2.0  &#10;which is available at https://www.eclipse.org/legal/epl-2.0/  &#10; &#10;SPDX-License-Identifier: EPL-2.0  &#10;   &#10;   &#10;E_TLIM -- Time-limiting timer FB  &#10;&#10;When IN goes TRUE, Q becomes TRUE and a timer starts.  &#10;If IN stays TRUE longer than PT, Q goes FALSE (timeout).  &#10;If IN goes FALSE before PT expires, Q goes FALSE immediately.">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2026-05-08" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<CompilerInfo packageName="iec61499::events::timers">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="PT"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment="Input"/>
+			<VarDeclaration Name="PT" Type="TIME" Comment="Process time"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="E_RF_TRIG" Type="iec61499::events::E_RF_TRIG" x="-1000" y="-1000">
+		</FB>
+		<FB Name="E_DELAY" Type="iec61499::events::E_DELAY" x="200" y="-600">
+		</FB>
+		<FB Name="E_SR" Type="iec61499::events::E_SR" x="1400" y="-1000">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="E_RF_TRIG.EI" dx1="200"/>
+			<Connection Source="E_RF_TRIG.ER" Destination="E_DELAY.START" dx1="306.67"/>
+			<Connection Source="E_RF_TRIG.EF" Destination="E_DELAY.STOP" dx1="146.67"/>
+			<Connection Source="E_DELAY.EO" Destination="E_SR.R" dx1="266.67"/>
+			<Connection Source="E_RF_TRIG.EF" Destination="E_SR.R" dx1="846.67"/>
+			<Connection Source="E_SR.EO" Destination="CNF" dx1="1033.33"/>
+			<Connection Source="E_RF_TRIG.ER" Destination="E_SR.S" dx1="846.67"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IN" Destination="E_RF_TRIG.QI" dx1="166.67"/>
+			<Connection Source="PT" Destination="E_DELAY.DT" dx1="80"/>
+			<Connection Source="E_SR.Q" Destination="Q" dx1="1066.67"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
