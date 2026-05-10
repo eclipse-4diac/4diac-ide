@@ -17,14 +17,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
-import org.eclipse.draw2d.Bendpoint;
 import org.eclipse.draw2d.ConnectionLocator;
 import org.eclipse.draw2d.Ellipse;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PolygonDecoration;
@@ -34,6 +32,9 @@ import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.draw2d.geometry.PrecisionPoint;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Vector;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.FBTypeEditorPreferenceConstants;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
@@ -43,6 +44,11 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 
 public class ECTransitionFigure extends SplineConnection {
+
+	private static final double CTRL_POINT_FACTOR = 0.3;
+	private static final double MIN_LENGTH = 1.0;
+	private static final double EPSILON = 0.001;
+	private static final double MAX_HANDLE_DISTANCE = 150.0;
 
 	private static class TransitionOrderDecorator extends Ellipse implements RotatableDecoration {
 
@@ -110,7 +116,6 @@ public class ECTransitionFigure extends SplineConnection {
 				setSize(dim, dim);
 			}
 		}
-
 	}
 
 	private SetableAlphaLabel conditionBackground;
@@ -141,9 +146,40 @@ public class ECTransitionFigure extends SplineConnection {
 	}
 
 	public void updateBendPoints(final ECTransition ecTransition) {
-		final List<Bendpoint> bendPoints = new ArrayList<>();
-		bendPoints.add(new AbsoluteBendpoint(ecTransition.getPosition().toScreenPoint()));
-		getConnectionRouter().setConstraint(this, bendPoints);
+		if (ecTransition == null || ecTransition.getPosition() == null || getSourceAnchor() == null
+				|| getTargetAnchor() == null || getSourceAnchor().getOwner() == null
+				|| getTargetAnchor().getOwner() == null) {
+			return;
+		}
+
+		final PrecisionPoint p4 = new PrecisionPoint(ecTransition.getPosition().toScreenPoint());
+		translateToAbsolute(p4);
+
+		final PrecisionPoint p1 = new PrecisionPoint(getSourceAnchor().getLocation(p4));
+		final PrecisionPoint p7 = new PrecisionPoint(getTargetAnchor().getLocation(p4));
+
+		translateToRelative(p1);
+		translateToRelative(p4);
+		translateToRelative(p7);
+
+		final Vector seg1 = new Vector(p1, p4);
+		final Vector seg2 = new Vector(p4, p7);
+		final double len1 = Math.max(seg1.getLength(), MIN_LENGTH);
+		final double len2 = Math.max(seg2.getLength(), MIN_LENGTH);
+
+		final double ctrlDist1 = Math.min(CTRL_POINT_FACTOR * len1, MAX_HANDLE_DISTANCE);
+		final double ctrlDist2 = Math.min(CTRL_POINT_FACTOR * len2, MAX_HANDLE_DISTANCE);
+
+		final PrecisionPoint p2 = calcOrthogonalControlPoint(p1, getSourceAnchor().getOwner(), ctrlDist1);
+		final PrecisionPoint p6 = calcOrthogonalControlPoint(p7, getTargetAnchor().getOwner(), ctrlDist2);
+
+		final Vector tangent = calcAverageTangent(seg1, seg2);
+
+		final PrecisionPoint p3 = translate(p4, tangent, -ctrlDist1);
+		final PrecisionPoint p5 = translate(p4, tangent, ctrlDist2);
+
+		getConnectionRouter().setConstraint(this,
+				Arrays.asList(toBendpoint(p2), toBendpoint(p3), toBendpoint(p4), toBendpoint(p5), toBendpoint(p6)));
 	}
 
 	public void setTransitionOrder(final String value) {
@@ -185,5 +221,47 @@ public class ECTransitionFigure extends SplineConnection {
 
 	public Label getLabel() {
 		return condition;
+	}
+
+	private PrecisionPoint calcOrthogonalControlPoint(final PrecisionPoint anchor, final IFigure owner,
+			final double distance) {
+		final Rectangle bounds;
+		if (owner instanceof final ECStateFigure stateFigure) {
+			bounds = stateFigure.getNameLabel().getBounds().getCopy();
+			stateFigure.getNameLabel().translateToAbsolute(bounds);
+		} else {
+			bounds = owner.getBounds().getCopy();
+			owner.translateToAbsolute(bounds);
+		}
+		translateToRelative(bounds);
+
+		final Vector normal = EdgeDirection.of(anchor, bounds).toNormal();
+		return translate(anchor, normal, distance);
+	}
+
+	private static Vector getNormalized(final Vector v) {
+		final double len = v.getLength();
+		if (len < EPSILON) {
+			return new Vector(0, 0);
+		}
+		return v.getDivided(len);
+	}
+
+	private static Vector calcAverageTangent(final Vector seg1, final Vector seg2) {
+		final Vector tangent = getNormalized(seg1).getAdded(getNormalized(seg2));
+
+		final double len = tangent.getLength();
+		if (len < EPSILON) {
+			return getNormalized(seg2);
+		}
+		return tangent.getDivided(len);
+	}
+
+	private static PrecisionPoint translate(final PrecisionPoint base, final Vector direction, final double distance) {
+		return new PrecisionPoint(base.preciseX() + direction.x * distance, base.preciseY() + direction.y * distance);
+	}
+
+	private static AbsoluteBendpoint toBendpoint(final PrecisionPoint p) {
+		return new AbsoluteBendpoint(new Point((int) Math.round(p.preciseX()), (int) Math.round(p.preciseY())));
 	}
 }
