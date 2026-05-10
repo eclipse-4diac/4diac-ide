@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Vikash Kumar Sinha - initial implementation
- *******************************************************************************/
+*******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
 import java.util.ArrayList;
@@ -56,13 +56,13 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 
 		final Point ref = (reference != null) ? reference : nameBounds.getCenter();
 
-		final EdgeDirection edge = EdgeDirection.of(ref, nameBounds.getCenter(), state);
+		final EdgeDirection edge = EdgeDirection.of(ref, nameBounds, state);
 
-		return applySpacing(nameBounds, edge, nameBounds.getCenter());
+		return applySpacing(nameBounds, edge, nameBounds);
 	}
 
-	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge, final Point center) {
-		final List<ECTransition> ordered = getTransitionsOnEdge(edge, center);
+	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge, final Rectangle nameBounds) {
+		final List<ECTransition> ordered = getTransitionsOnEdge(edge, nameBounds);
 		final int index = indexOf(ordered, transition);
 		final int count = Math.max(1, ordered.size());
 
@@ -86,7 +86,7 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		};
 	}
 
-	private List<ECTransition> getTransitionsOnEdge(final EdgeDirection edge, final Point center) {
+	private List<ECTransition> getTransitionsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
 		final List<ECTransition> result = new ArrayList<>();
 		if (state == null) {
 			return result;
@@ -102,7 +102,7 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 			}
 			final Point bendPoint = t.getPosition().toScreenPoint();
 
-			if (EdgeDirection.of(bendPoint, center, state) == edge) {
+			if (EdgeDirection.of(bendPoint, nameBounds, state) == edge) {
 				result.add(t);
 			}
 		}

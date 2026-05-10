@@ -9,37 +9,40 @@
  *
  * Contributors:
  *   Vikash Kumar Sinha - initial implementation
- *******************************************************************************/
+*******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Vector;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 
 public enum EdgeDirection {
 	TOP, BOTTOM, LEFT, RIGHT;
 
-	public static EdgeDirection of(final Point reference, final Point center) {
-		return of(reference, center, null);
-	}
-
-	public static EdgeDirection of(final Point reference, final Point center, final ECState state) {
+	public static EdgeDirection of(final Point reference, final Rectangle bounds, final ECState state) {
+		final Point center = bounds.getCenter();
 		final int dx = reference.x - center.x;
 		final int dy = reference.y - center.y;
-
 		final boolean hasActions = state != null && !state.getECAction().isEmpty();
 
-		if (Math.abs(dy) >= Math.abs(dx)) {
-			return (dy >= 0) ? BOTTOM : TOP;
+		final long scaledDx = Math.abs((long) dx * bounds.height);
+		final long scaledDy = Math.abs((long) dy * bounds.width);
+
+		if (scaledDy > scaledDx) {
+			return (dy > 0) ? BOTTOM : TOP;
 		}
 		if (dx < 0) {
 			return LEFT;
 		}
-
 		if (hasActions) {
-			return (dy >= 0) ? BOTTOM : TOP;
+			return (dy > 0) ? BOTTOM : TOP;
 		}
 		return RIGHT;
+	}
+
+	public static EdgeDirection of(final Point reference, final Rectangle bounds) {
+		return of(reference, bounds, null);
 	}
 
 	public Vector toNormal() {
