@@ -41,9 +41,17 @@ public class DataTypeEditBuilder {
 		});
 	}
 
+	public static String getFullTypeName(final TypeEntry typeEntry, final IPath newPath) {
+		return getFullTypeName(typeEntry.getPackageName(), newPath);
+	}
+
 	public static String getFullTypeName(final IPath newPath) {
 		final String packageName = PackageNameHelper
 				.getPackageNameFromURI(URI.createPlatformResourceURI(newPath.toString(), true));
+		return getFullTypeName(packageName, newPath);
+	}
+
+	private static String getFullTypeName(final String packageName, final IPath newPath) {
 		final String typeName = TypeEntry.getTypeNameFromFileName(newPath.lastSegment());
 		if (packageName.isEmpty()) {
 			return typeName;

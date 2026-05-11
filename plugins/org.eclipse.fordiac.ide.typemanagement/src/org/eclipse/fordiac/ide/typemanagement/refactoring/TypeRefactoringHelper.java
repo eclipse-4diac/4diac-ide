@@ -24,11 +24,21 @@ import org.eclipse.fordiac.ide.typemanagement.refactoring.edit.DataTypeEditBuild
 
 public final class TypeRefactoringHelper {
 
-	public static void addModelEditsForType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
+	public static void addModelEditsForMovedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
 			final IPath newPath) {
 		if (typeEntry instanceof final DataTypeEntry dtEntry) {
 			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
 					DataTypeEditBuilder.getFullTypeName(newPath));
+		} else {
+			addInstanceChanges(modelEdits, typeEntry);
+		}
+	}
+
+	public static void addModelEditsForRenamedType(final List<ModelEdit<?>> modelEdits, final TypeEntry typeEntry,
+			final IPath newPath) {
+		if (typeEntry instanceof final DataTypeEntry dtEntry) {
+			DataTypeEditBuilder.createStructuredDataTypeChanges(dtEntry, modelEdits,
+					DataTypeEditBuilder.getFullTypeName(typeEntry, newPath));
 		} else {
 			addInstanceChanges(modelEdits, typeEntry);
 		}
