@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
@@ -118,7 +119,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 					throw new OperationCanceledException();
 				}
 
-				if ((resource instanceof final IFile file) && includeInExport(FULL_BUILD, file)) {
+				if ((resource instanceof final IFile file) && includeInFullBuild(file)) {
 					exportElement(progress, file, context);
 				} else if (resource instanceof IFolder || resource instanceof IProject) {
 					return true;
@@ -174,27 +175,28 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	private void incrementalBuild(final IResourceDelta rootDelta, final SubMonitor monitor, final BuildContext context)
 			throws CoreException {
-		for (final IResourceDelta delta : rootDelta
-				.getAffectedChildren(IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED)) {
+		rootDelta.accept((IResourceDeltaVisitor) delta -> {
 			if (isExportCanceled(monitor)) {
 				throw new OperationCanceledException();
 			}
 
-			if ((delta.getResource() instanceof final IFile file) && includeInExport(INCREMENTAL_BUILD, file)) {
+			if ((delta.getResource() instanceof final IFile file) && includeInIncrementalBuild(file)) {
 				exportElement(monitor, file, context);
-			} else if (delta.getResource() instanceof IFolder) {
-				incrementalBuild(delta, monitor, context);
 			}
-		}
+			return true;
+		}, IResourceDelta.CONTENT | IResourceDelta.CHANGED | IResourceDelta.ADDED);
 	}
 
-	private boolean includeInExport(final int kind, final IFile file) throws CoreException {
-		final boolean includeInBuild = isExportableFileType(file) && !hasRelevantErrorMarker(file)
-				&& !hasGenericClassnameAttribute(file);
-		if (kind != INCREMENTAL_BUILD) {
-			return includeInBuild;
-		}
-		return includeInBuild && onBuildpath(file);
+	private static boolean includeInFullBuild(final IFile file) throws CoreException {
+		return isExportable(file);
+	}
+
+	private boolean includeInIncrementalBuild(final IFile file) throws CoreException {
+		return isExportable(file) && isOnExportBuildpath(file);
+	}
+
+	private static boolean isExportable(final IFile file) throws CoreException {
+		return isExportableFileType(file) && !hasRelevantErrorMarker(file) && !hasGenericClassnameAttribute(file);
 	}
 
 	private static boolean hasGenericClassnameAttribute(final IFile file) {
@@ -210,7 +212,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		return getBuildpath().getSourceFolders().stream().filter(ExportBuilder::getExportAttributeValue).toList();
 	}
 
-	private boolean onBuildpath(final IFile file) {
+	private boolean isOnExportBuildpath(final IFile file) {
 		final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(getBuildpath(), file);
 		return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
 	}
@@ -233,9 +235,8 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	}
 
 	private static boolean getExportAttributeValue(final SourceFolder folder) {
-		final String attributeValue = BuildpathAttributes.getAttributeValue(folder.getAttributes(),
-				BuildpathAttributes.EXPORT);
-		return !attributeValue.isEmpty() && Boolean.parseBoolean(attributeValue);
+		return Boolean.parseBoolean(
+				BuildpathAttributes.getAttributeValue(folder.getAttributes(), BuildpathAttributes.EXPORT));
 	}
 
 	private void exportCmakeLists(final IProgressMonitor monitor, final BuildContext context) {
