@@ -48,6 +48,10 @@ class DependencyNode {
 		return changed;
 	}
 
+	public void markUnchanged() {
+		changed = false;
+	}
+
 	public Map<String, VersionRange> getCauses() {
 		return causes;
 	}

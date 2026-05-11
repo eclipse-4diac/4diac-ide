@@ -641,9 +641,6 @@ public enum LibraryManager {
 		// remove still linked libraries
 		cleanupLinks(libManagerData.linked(), progress.split(2));
 
-		// check if imported library links are broken
-		checkLinkedLibraries(project, progress.split(1));
-
 		if (PreferenceProvider.getBoolean(LibraryPreferenceConstants.LIBRARY_PREFERENCES_ID,
 				LibraryPreferenceConstants.FORCE_LOAD_DEPENDENCIES, false, project)) {
 			// force load explicitly defined dependencies
@@ -690,6 +687,9 @@ public enum LibraryManager {
 		if (maxSeverity >= IMarker.SEVERITY_ERROR) {
 			throw new OperationCanceledException("Unresolvable dependencies"); //$NON-NLS-1$
 		}
+
+		// check if imported library links are broken
+		checkLinkedLibraries(project, progress.split(1));
 	}
 
 	public Stream<Version> getAllAvailableVersions(final String symbolicName) {
@@ -745,7 +745,7 @@ public enum LibraryManager {
 						return true;
 					}
 					if (resource instanceof final IFolder libFolder && libFolder.exists() && libFolder.isLinked()) {
-						if (libFolder.getModificationStamp() == IResource.NULL_STAMP) {
+						if (isBrokenTargetFolder(libFolder)) {
 							FordiacMarkerHelper.updateMarkers(resource, FordiacErrorMarker.LIBRARY_MARKER,
 									List.of(LibraryMarkerFactory.createBrokenLinkMarker(libFolder)), true);
 							throw new OperationCanceledException();
@@ -773,6 +773,7 @@ public enum LibraryManager {
 			if (!dnode.isChanged()) {
 				continue;
 			}
+			dnode.markUnchanged();
 
 			if (!dnode.isValid()) {
 				final var rnode = data.resolveNodes().get(symbolicName);
@@ -787,6 +788,11 @@ public enum LibraryManager {
 						}
 					});
 				}
+				continue;
+			}
+
+			final var unresolvedNode = data.resolveNodes().get(symbolicName);
+			if (unresolvedNode != null && unresolvedNode.getError() != null) {
 				continue;
 			}
 
@@ -813,10 +819,6 @@ public enum LibraryManager {
 					queue.add(symb);
 				}
 			});
-
-			if (rnode.getError() != null) {
-				break;
-			}
 		}
 	}
 
@@ -824,7 +826,8 @@ public enum LibraryManager {
 			final Manifest projectManifest, final List<ErrorMarkerBuilder> markerList, final SubMonitor progress) {
 		for (final var dnode : data.dependencyNodes().values()) {
 			if (dnode.isValid()) {
-				final var rnode = data.resolveNodes().get(dnode.getSymbolicName());
+				final var rnode = data.resolveNodes().computeIfAbsent(dnode.getSymbolicName(),
+						symbolicName -> new ResolveNode(symbolicName, Messages.ErrorMarkerLibNotAvailable));
 
 				if (rnode.isValid()) {
 					if (rnode.requireImport(data.linked(), data.preferred())) {
@@ -834,6 +837,8 @@ public enum LibraryManager {
 						data.linked().remove(rnode.getSymbolicName());
 					}
 				} else {
+					// Remove only from cleanup candidates; invalid nodes must not be imported or deleted here.
+					data.linked().remove(rnode.getSymbolicName());
 					markerList.add(LibraryMarkerFactory.createDependencyMarker(projectManifest, rnode, dnode));
 				}
 			} else if (dnode.isRangeEmpty()) {
@@ -886,6 +891,10 @@ public enum LibraryManager {
 					if (!version.equals(Version.emptyVersion)) {
 						data.preferred().put(libFolder.getName(), version);
 					}
+					if (isBrokenTargetFolder(libFolder)) {
+						data.resolveNodes().put(libFolder.getName(),
+								new ResolveNode(libFolder.getName(), Messages.ErrorMarkerLibNotAvailable));
+					}
 				}
 			}
 			return false;
@@ -896,6 +905,10 @@ public enum LibraryManager {
 		} catch (final CoreException e) {
 			// empty
 		}
+	}
+
+	protected static boolean isBrokenTargetFolder(IFolder libFolder) {
+		return libFolder.getModificationStamp() == IResource.NULL_STAMP;
 	}
 
 	/**
