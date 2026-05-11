@@ -461,7 +461,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 	'''«FOR fb : internalFbs BEFORE ",\n" SEPARATOR ",\n"»«fb.generateInternalFBInitializer»«ENDFOR»'''
 
 	def generateInternalFBInitializer(FB fb) {
-		if (fb.type.genericType)
+		if (fb.genericType)
 			'''«fb.generateName»(«fb.name.FORTEStringId», "«fb.generateInternalFBConfigString»", *this)'''
 		else
 			'''«fb.generateName»(«fb.name.FORTEStringId», *this)'''
