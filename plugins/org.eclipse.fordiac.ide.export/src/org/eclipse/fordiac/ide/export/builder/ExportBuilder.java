@@ -58,7 +58,9 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 	public static final String BUILDER_ID = "org.eclipse.fordiac.ide.export.builder"; //$NON-NLS-1$
 	private static final String FORTE_NG_FILTER_ID = "org.eclipse.fordiac.ide.export.exportFilter.forteNg"; //$NON-NLS-1$
 
-	private static final Set<String> fileTypes = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
+	static final String GENERIC_CLASS_NAME_ATTRIBUTE = "eclipse4diac::core::GenericClassName"; //$NON-NLS-1$
+
+	private static final Set<String> FILE_TYPES = Set.of(TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING,
 			TypeLibraryTags.DATA_TYPE_FILE_ENDING, TypeLibraryTags.FB_TYPE_FILE_ENDING,
 			TypeLibraryTags.GLOBAL_CONST_FILE_ENDING, TypeLibraryTags.FC_TYPE_FILE_ENDING);
 
@@ -116,7 +118,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 					throw new OperationCanceledException();
 				}
 
-				if ((resource instanceof final IFile file) && isExportableFileType(file)) {
+				if ((resource instanceof final IFile file) && includeInExport(FULL_BUILD, file)) {
 					exportElement(progress, file, context);
 				} else if (resource instanceof IFolder || resource instanceof IProject) {
 					return true;
@@ -129,12 +131,10 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 
 	private void exportElement(final SubMonitor monitor, final IFile file, final BuildContext context) {
 		try {
-			if (!hasRelevantErrorMarker(file)) {
-				monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, file.getName()));
-				context.filter.export(file,
-						getProject().getLocation().append(new Path(context.outputDirectory)).toString(), true);
-				monitor.split(1);
-			}
+			monitor.subTask(MessageFormat.format(Messages.FordiacExporter_ExportingType, file.getName()));
+			context.filter.export(file, getProject().getLocation().append(new Path(context.outputDirectory)).toString(),
+					true);
+			monitor.split(1);
 		} catch (final Exception e) {
 			context.status.add(new Status(IStatus.ERROR, getClass(),
 					MessageFormat.format(Messages.ExportBuilder_CouldntExportFile, file.getName()), e));
@@ -180,7 +180,7 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 				throw new OperationCanceledException();
 			}
 
-			if ((delta.getResource() instanceof final IFile file) && isExportable(file)) {
+			if ((delta.getResource() instanceof final IFile file) && includeInExport(INCREMENTAL_BUILD, file)) {
 				exportElement(monitor, file, context);
 			} else if (delta.getResource() instanceof IFolder) {
 				incrementalBuild(delta, monitor, context);
@@ -188,20 +188,35 @@ public class ExportBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
+	private boolean includeInExport(final int kind, final IFile file) throws CoreException {
+		final boolean includeInBuild = isExportableFileType(file) && !hasRelevantErrorMarker(file)
+				&& !hasGenericClassnameAttribute(file);
+		if (kind != INCREMENTAL_BUILD) {
+			return includeInBuild;
+		}
+		return includeInBuild && onBuildpath(file);
+	}
+
+	private static boolean hasGenericClassnameAttribute(final IFile file) {
+		final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntry == null) {
+			return false;
+		}
+		final var type = typeEntry.getType();
+		return type != null && type.getAttribute(GENERIC_CLASS_NAME_ATTRIBUTE) != null;
+	}
+
 	private List<SourceFolder> getExportableFoldersFromBuildpath() {
 		return getBuildpath().getSourceFolders().stream().filter(ExportBuilder::getExportAttributeValue).toList();
 	}
 
-	private boolean isExportable(final IFile file) {
-		if (isExportableFileType(file)) {
-			final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(getBuildpath(), file);
-			return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
-		}
-		return false;
+	private boolean onBuildpath(final IFile file) {
+		final Optional<SourceFolder> sourceFolder = BuildpathUtil.findSourceFolder(getBuildpath(), file);
+		return sourceFolder.isPresent() && getExportAttributeValue(sourceFolder.get());
 	}
 
 	private static boolean isExportableFileType(final IFile file) {
-		return fileTypes.stream().anyMatch(type -> type.equalsIgnoreCase(file.getFileExtension()));
+		return FILE_TYPES.stream().anyMatch(type -> type.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	private IEclipsePreferences getProjectPreferenceNode() {
