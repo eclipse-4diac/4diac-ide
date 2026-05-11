@@ -33,9 +33,11 @@ import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.PasteFromClipboardDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.resize.command.AutoResizeColumnsCommand;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -95,8 +97,9 @@ public class BulkEditorNatTable {
 
 	private void configureCommonBehavior() {
 		natTable.addConfiguration(new SingleClickSortConfiguration());
-		natTable.registerCommandHandler(
-				new FilterDefaultValuesCopyDataCommandHandler(NatTableWidgetFactory.getSelectionLayer(natTable)));
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		natTable.registerCommandHandler(new FilterDefaultValuesCopyDataCommandHandler(selectionLayer));
+		natTable.registerCommandHandler(new PasteFromClipboardDataCommandHandler(selectionLayer));
 		natTable.configure();
 		installMouseWheelForward(this.currentMode == BulkEditorMode.SIMPLE_ATTRIBUTE);
 		addContextMenu();
