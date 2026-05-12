@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.fordiac.ide.structuredtext.feature"
       label="Structured Text Feature"
-      version="3.1.0.qualifier"
+      version="3.1.1.qualifier"
       provider-name="Eclipse 4diac">
 
    <description>
