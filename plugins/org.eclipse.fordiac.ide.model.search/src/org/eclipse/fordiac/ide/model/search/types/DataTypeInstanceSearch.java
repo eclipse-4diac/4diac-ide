@@ -51,8 +51,22 @@ public class DataTypeInstanceSearch extends IEC61499ElementSearch {
 		super(new LiveSearchContext(dtEntry.getTypeLibrary()), createSearchFilter(dtEntry), provider);
 	}
 
+	/*
+	 * Search the datatype, excluding the derived instances. Like the pin that holds
+	 * dtEntry in an FBType and NOT the pin that holds the dtEntry of the Instance
+	 * of FBType. Instead we will search of pins in untyped subapps
+	 */
 	public static DataTypeInstanceSearch createNonDerivedDataTypeSearch(final DataTypeEntry dtEntry) {
 		return new DataTypeInstanceSearch(dtEntry, new DataTypeInstanceSearchChildrenProviderNonDerived());
+	}
+
+	/*
+	 * Search the datatype, including the derived instances. Like the pin that holds
+	 * dtEntry in an FBType and the pin that holds the dtEntry of the Instance of
+	 * FBType
+	 */
+	public static DataTypeInstanceSearch createSearchIncludingDerivedDataTypes(final DataTypeEntry dtEntry) {
+		return new DataTypeInstanceSearch(dtEntry, new DataTypeInstanceSearchChildrenProvider());
 	}
 
 	/*
