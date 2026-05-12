@@ -49,45 +49,35 @@
 			<separator name="layouting stuff" visible="true"/>
 			<command commandId="org.eclipse.fordiac.ide.elk.layout" label="Auto Layouting" style="push">
 				<visibleWhen checkEnabled="false">
-					<with variable="selection">
-						<and>
-							<or>
-								<count value="0"/>
-								<and>
-									<count value="1"/>
-									<iterate>
-										<or>
-											<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
-											<instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
-										</or>
-									</iterate>
-								</and>
-							</or>
-							<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
-						</and>
-					</with>
+				    <with variable="selection">
+				        <and>
+				            <count value="1"/>
+				            <iterate>
+				                <or>
+				                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+				                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+				                </or>
+				            </iterate>
+				            <test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+				        </and>
+				    </with>
 				</visibleWhen>
 			</command>
 
 			<command commandId="org.eclipse.fordiac.ide.elk.connectionLayout" label="Connection Layouting" style="push">
 				<visibleWhen checkEnabled="false">
-					<with variable="selection">
-						<and>
-							<or>
-								<count value="0"/>
-								<and>
-									<count value="1"/>
-									<iterate>
-										<or>
-											<instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
-											<instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
-										</or>
-									</iterate>
-								</and>
-							</or>
-							<test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
-						</and>
-					</with>
+				    <with variable="selection">
+				        <and>
+				            <count value="1"/>
+				            <iterate>
+				                <or>
+				                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
+				                    <instanceof value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart"/>
+				                </or>
+				            </iterate>
+				            <test property="org.eclipse.fordiac.ide.application.utilities.isViewer"/>
+				        </and>
+				    </with>
 				</visibleWhen>
 			</command>
 		</menuContribution>
