@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Display;
 public class LibraryElementDependencyUpdater extends LibraryElementDependencyTracker {
 
 	private LibraryElement libraryElement;
-	private TypeLibrary typeLibrary;
 	private boolean updating;
 
 	@Override
@@ -69,7 +68,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 							.asyncExec(() -> updateDependency(dependency, notification.getOldStringValue()));
 				}
 			}
-		} else if (notification.getNotifier() == typeLibrary
+		} else if (notification.getNotifier() instanceof TypeLibrary
 				&& TypeLibrary.TYPE_ENTRY_NAME_REFERENCES_FEATURE.equals(notification.getFeature())) {
 			// react when a dependency is no longer visible through this library
 			updateTypeLibraryDependency(notification);
@@ -80,8 +79,10 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 
 	private void updateTypeLibraryDependency(final Notification notification) {
 		switch (notification.getEventType()) {
-		case Notification.REMOVE, Notification.REMOVE_MANY ->
+		case Notification.REMOVE ->
 			updateRemovedTypeEntryNameReference(notification.getOldValue());
+		case Notification.REMOVE_MANY ->
+			((Collection<?>) notification.getOldValue()).forEach(this::updateRemovedTypeEntryNameReference);
 		default -> {
 			// ignore
 		}
@@ -89,17 +90,8 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	}
 
 	private void updateRemovedTypeEntryNameReference(final Object object) {
-		switch (object) {
-		case final Collection<?> collection -> {
-			for (final Object value : collection) {
-				updateRemovedTypeEntryNameReference(value);
-			}
-		}
-		case final TypeEntry dependency when getDependencies().contains(dependency) ->
+		if (object instanceof final TypeEntry dependency && getDependencies().contains(dependency)) {
 			Display.getDefault().asyncExec(() -> updateDependency(dependency, dependency.getFullTypeName()));
-		case null, default -> {
-			// ignore
-		}
 		}
 	}
 
@@ -261,22 +253,14 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 		if (libraryElement != null && !libraryElement.eAdapters().contains(this)) {
 			libraryElement.eAdapters().add(this);
 		}
-		if (libraryElement != null) {
-			typeLibrary = libraryElement.getTypeLibrary();
-			if (typeLibrary != null && !typeLibrary.eAdapters().contains(this)) {
-				typeLibrary.eAdapters().add(this);
-			}
-		}
 	}
 
 	private void uninstall() {
 		if (libraryElement != null) {
 			libraryElement.eAdapters().remove(this);
 		}
-		if (typeLibrary != null) {
-			typeLibrary.eAdapters().remove(this);
-			typeLibrary = null;
-		}
+		getDependencies().stream().map(TypeEntry::getTypeLibrary).filter(Objects::nonNull).distinct()
+				.forEach(typeLibrary -> typeLibrary.eAdapters().remove(this));
 	}
 
 	@Override
@@ -285,6 +269,7 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 			if (!typeEntry.eAdapters().contains(this)) {
 				typeEntry.eAdapters().add(this);
 			}
+			addTypeLibraryAdapter(typeEntry);
 			return true;
 		}
 		return false;
@@ -293,9 +278,24 @@ public class LibraryElementDependencyUpdater extends LibraryElementDependencyTra
 	@Override
 	protected boolean removeDependency(final TypeEntry typeEntry) {
 		if (super.removeDependency(typeEntry)) {
+			removeTypeLibraryAdapter(typeEntry);
 			typeEntry.eAdapters().remove(this);
 			return true;
 		}
 		return false;
+	}
+
+	private void addTypeLibraryAdapter(final TypeEntry typeEntry) {
+		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+		if (typeLibrary != null && !typeLibrary.eAdapters().contains(this)) {
+			typeLibrary.eAdapters().add(this);
+		}
+	}
+
+	private void removeTypeLibraryAdapter(final TypeEntry typeEntry) {
+		final TypeLibrary typeLibrary = typeEntry.getTypeLibrary();
+		if (typeLibrary != null && getDependencies().stream().noneMatch(entry -> entry.getTypeLibrary() == typeLibrary)) {
+			typeLibrary.eAdapters().remove(this);
+		}
 	}
 }
