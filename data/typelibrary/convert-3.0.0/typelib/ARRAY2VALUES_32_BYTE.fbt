@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="ARRAY2VALUES_32_BYTE" Comment="Service Interface Function Block Type">
+	<Identification Description="Copyright (c) 2014 Profactor GmbH, HR Agrartechnik GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="1.0" Author="Franz Höpfinger" Date="2026-03-30" Remarks="copy ARRAY2VALUES_2_LREAL and made this block">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::convert">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="OUT_1"/>
+				<With Var="OUT_2"/>
+				<With Var="OUT_3"/>
+				<With Var="OUT_4"/>
+				<With Var="OUT_5"/>
+				<With Var="OUT_6"/>
+				<With Var="OUT_7"/>
+				<With Var="OUT_8"/>
+				<With Var="OUT_9"/>
+				<With Var="OUT_10"/>
+				<With Var="OUT_11"/>
+				<With Var="OUT_12"/>
+				<With Var="OUT_13"/>
+				<With Var="OUT_14"/>
+				<With Var="OUT_15"/>
+				<With Var="OUT_16"/>
+				<With Var="OUT_17"/>
+				<With Var="OUT_18"/>
+				<With Var="OUT_19"/>
+				<With Var="OUT_20"/>
+				<With Var="OUT_21"/>
+				<With Var="OUT_22"/>
+				<With Var="OUT_23"/>
+				<With Var="OUT_24"/>
+				<With Var="OUT_25"/>
+				<With Var="OUT_26"/>
+				<With Var="OUT_27"/>
+				<With Var="OUT_28"/>
+				<With Var="OUT_29"/>
+				<With Var="OUT_30"/>
+				<With Var="OUT_31"/>
+				<With Var="OUT_32"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BYTE" Comment="Array input" ArraySize="32"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT_1" Type="BYTE" Comment="output number 1"/>
+			<VarDeclaration Name="OUT_2" Type="BYTE" Comment="output number 2"/>
+			<VarDeclaration Name="OUT_3" Type="BYTE" Comment="output number 3"/>
+			<VarDeclaration Name="OUT_4" Type="BYTE" Comment="output number 4"/>
+			<VarDeclaration Name="OUT_5" Type="BYTE" Comment="output number 5"/>
+			<VarDeclaration Name="OUT_6" Type="BYTE" Comment="output number 6"/>
+			<VarDeclaration Name="OUT_7" Type="BYTE" Comment="output number 7"/>
+			<VarDeclaration Name="OUT_8" Type="BYTE" Comment="output number 8"/>
+			<VarDeclaration Name="OUT_9" Type="BYTE" Comment="output number 9"/>
+			<VarDeclaration Name="OUT_10" Type="BYTE" Comment="output number 10"/>
+			<VarDeclaration Name="OUT_11" Type="BYTE" Comment="output number 11"/>
+			<VarDeclaration Name="OUT_12" Type="BYTE" Comment="output number 12"/>
+			<VarDeclaration Name="OUT_13" Type="BYTE" Comment="output number 13"/>
+			<VarDeclaration Name="OUT_14" Type="BYTE" Comment="output number 14"/>
+			<VarDeclaration Name="OUT_15" Type="BYTE" Comment="output number 15"/>
+			<VarDeclaration Name="OUT_16" Type="BYTE" Comment="output number 16"/>
+			<VarDeclaration Name="OUT_17" Type="BYTE" Comment="output number 17"/>
+			<VarDeclaration Name="OUT_18" Type="BYTE" Comment="output number 18"/>
+			<VarDeclaration Name="OUT_19" Type="BYTE" Comment="output number 19"/>
+			<VarDeclaration Name="OUT_20" Type="BYTE" Comment="output number 20"/>
+			<VarDeclaration Name="OUT_21" Type="BYTE" Comment="output number 21"/>
+			<VarDeclaration Name="OUT_22" Type="BYTE" Comment="output number 22"/>
+			<VarDeclaration Name="OUT_23" Type="BYTE" Comment="output number 23"/>
+			<VarDeclaration Name="OUT_24" Type="BYTE" Comment="output number 24"/>
+			<VarDeclaration Name="OUT_25" Type="BYTE" Comment="output number 25"/>
+			<VarDeclaration Name="OUT_26" Type="BYTE" Comment="output number 26"/>
+			<VarDeclaration Name="OUT_27" Type="BYTE" Comment="output number 27"/>
+			<VarDeclaration Name="OUT_28" Type="BYTE" Comment="output number 28"/>
+			<VarDeclaration Name="OUT_29" Type="BYTE" Comment="output number 29"/>
+			<VarDeclaration Name="OUT_30" Type="BYTE" Comment="output number 30"/>
+			<VarDeclaration Name="OUT_31" Type="BYTE" Comment="output number 31"/>
+			<VarDeclaration Name="OUT_32" Type="BYTE" Comment="output number 32"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_ARRAY2VALUES'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
