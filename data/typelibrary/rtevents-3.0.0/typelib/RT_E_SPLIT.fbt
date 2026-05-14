@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<FBType Name="RT_E_SPLIT" Comment="Split an event to two event chain branches">
-  <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+<FBType Name="RT_E_SPLIT" Comment="Event broadcast">
+	<Identification Description="Copyright (c) 2008 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Fires both EO1 and EO2 simultaneously when EI is received. Each output branch runs in its own dedicated RT thread with separate Deadline/WCET parameters. Use only when real-time scheduling of the output event chains is required.">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-14" Remarks="Extended Documentation">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
+	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2008-07-10">
+	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::rtevents">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Name="INIT">
-        <With Var="QI" />
-        <With Var="Tmin" />
-        <With Var="Deadline_EO1" />
-        <With Var="WCET_EO1" />
-        <With Var="Deadline_EO2" />
-        <With Var="WCET_EO2" />
-      </Event>
-      <Event Name="EI" Comment="Input event">
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Name="INITO">
-        <With Var="QO" />
-      </Event>
-      <Event Name="EO1" Comment="First output event">
-      </Event>
-      <Event Name="EO2" Comment="Second output event,etc.">
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="QI" Type="BOOL" />
-      <VarDeclaration Name="Tmin" Type="TIME" />
-      <VarDeclaration Name="Deadline_EO1" Type="TIME" />
-      <VarDeclaration Name="WCET_EO1" Type="TIME" />
-      <VarDeclaration Name="Deadline_EO2" Type="TIME" />
-      <VarDeclaration Name="WCET_EO2" Type="TIME" />
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="QO" Type="BOOL" />
-    </OutputVars>
-  </InterfaceList>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialize RT block: QI=TRUE activates with the given timing parameters, QI=FALSE deactivates">
+				<With Var="QI"/>
+				<With Var="Tmin"/>
+				<With Var="Deadline_EO1"/>
+				<With Var="WCET_EO1"/>
+				<With Var="Deadline_EO2"/>
+				<With Var="WCET_EO2"/>
+			</Event>
+			<Event Name="EI" Type="Event" Comment="Input event: simultaneously triggers EO1 and EO2 in their respective dedicated RT threads">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization confirmation; QO mirrors QI">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="EO1" Type="Event" Comment="First output branch: fired in its own dedicated RT thread with Deadline_EO1/WCET_EO1">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="Second output branch: fired in its own dedicated RT thread with Deadline_EO2/WCET_EO2">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Enable input: TRUE activates the RT block"/>
+			<VarDeclaration Name="Tmin" Type="TIME" Comment="Minimum inter-arrival time between EI events; shared basis for both EO thread priority calculations"/>
+			<VarDeclaration Name="Deadline_EO1" Type="TIME" Comment="Relative deadline for the EO1 event chain (must be greater than WCET_EO1)"/>
+			<VarDeclaration Name="WCET_EO1" Type="TIME" Comment="Worst-case execution time of the entire event chain triggered by EO1; used for EO1 thread priority calculation"/>
+			<VarDeclaration Name="Deadline_EO2" Type="TIME" Comment="Relative deadline for the EO2 event chain (must be greater than WCET_EO2)"/>
+			<VarDeclaration Name="WCET_EO2" Type="TIME" Comment="Worst-case execution time of the entire event chain triggered by EO2; used for EO2 thread priority calculation"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Enable output: mirrors QI after INIT"/>
+		</OutputVars>
+	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

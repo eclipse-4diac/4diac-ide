@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<FBType Name="RT_E_DELAY" Comment="Delayed propagation of an event-Cancellable">
-  <Identification Description="Copyright (c) 2008, 2014 ACIN, Profactor GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+<FBType Name="RT_E_DELAY" Comment="Delayed one-shot event">
+	<Identification Description="Copyright (c) 2008, 2014 ACIN, Profactor GmbH&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Fires EO once, DT after START. The pending delay can be cancelled by STOP. EO runs in a dedicated RT thread whose priority is derived from Tmin, Deadline, and WCET. Use only when real-time scheduling of the output event chain is required.">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-14" Remarks="Extended Documentation">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2011-06-04" Organization="Profactor GmbH" Version="1.1"/>
-  <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
+	<VersionInfo Organization="Profactor GmbH" Version="1.1" Author="Alois Zoitl" Date="2011-06-04">
+	</VersionInfo>
+	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2008-07-10">
+	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::rtevents">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Name="INIT">
-        <With Var="QI" />
-        <With Var="Tmin" />
-        <With Var="Deadline" />
-        <With Var="WCET" />
-      </Event>
-      <Event Name="START" Comment="Begin Delay">
-        <With Var="DT" />
-      </Event>
-      <Event Name="STOP" Comment="Cancel Delay">
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Name="INITO">
-        <With Var="QO" />
-      </Event>
-      <Event Name="EO" Comment="Delayed Event">
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="QI" Type="BOOL" />
-      <VarDeclaration Name="DT" Type="TIME" Comment="Delay Time" />
-      <VarDeclaration Name="Tmin" Type="TIME" />
-      <VarDeclaration Name="Deadline" Type="TIME" />
-      <VarDeclaration Name="WCET" Type="TIME" />
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="QO" Type="BOOL" />
-    </OutputVars>
-  </InterfaceList>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialize RT block: QI=TRUE activates with the given timing parameters, QI=FALSE deactivates">
+				<With Var="QI"/>
+				<With Var="Tmin"/>
+				<With Var="Deadline"/>
+				<With Var="WCET"/>
+			</Event>
+			<Event Name="START" Type="Event" Comment="Start the one-shot delay timer with the current DT; ignored if a delay is already active">
+				<With Var="DT"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Cancel the pending delay; no EO will be fired">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization confirmation; QO mirrors QI">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="EO" Type="Event" Comment="Delayed output event: fired once in a dedicated RT thread, DT after START was received">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Enable input: TRUE activates the RT block"/>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Delay time: duration between START and EO"/>
+			<VarDeclaration Name="Tmin" Type="TIME" Comment="Minimum inter-arrival time between START events; contributes to EO thread priority calculation together with Deadline and WCET"/>
+			<VarDeclaration Name="Deadline" Type="TIME" Comment="Relative deadline by which all processing triggered by EO must complete; must be greater than WCET"/>
+			<VarDeclaration Name="WCET" Type="TIME" Comment="Worst-case execution time of the entire event chain triggered by EO (not just this block); used for EO thread priority calculation"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Enable output: mirrors QI after INIT"/>
+		</OutputVars>
+	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>

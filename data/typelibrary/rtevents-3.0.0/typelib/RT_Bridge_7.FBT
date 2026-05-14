@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="RT_Bridge_7" Comment="Data connection decoupling bridge for data connection between real-time event chains">
-	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0">
+<FBType Name="RT_Bridge_7" Comment="RT data bridge (7 port pairs)">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Thread-safe data bridge for sharing data between two RT event chains running in different RT threads. The writer thread calls WR to push SD_x into the internal buffer under mutex protection; the reader thread calls RD to retrieve the buffered data via RDO/RD_x. The suffix _7 defines the number of data port pairs (SD_x / RD_x); use RT_Bridge_N for N pairs.">
 	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-14" Remarks="Extended Documentation">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
 	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Alois Zoitl" Date="2023-11-02">
@@ -10,9 +12,9 @@
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="RD" Type="Event" Comment="Read data from data bridge">
+			<Event Name="RD" Type="Event" Comment="Read trigger (reader thread): copies the internally buffered data to RD_x outputs and fires RDO; access is mutex-protected">
 			</Event>
-			<Event Name="WR" Type="Event" Comment="Write data to data bridge">
+			<Event Name="WR" Type="Event" Comment="Write trigger (writer thread): copies SD_x inputs into the internal buffer under mutex protection; no output event is fired">
 				<With Var="SD_1"/>
 				<With Var="SD_2"/>
 				<With Var="SD_3"/>
@@ -23,7 +25,7 @@
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="RDO" Type="Event" Comment="Read data notifcation">
+			<Event Name="RDO" Type="Event" Comment="Read notification: fired after RD completes; RD_x carries the data that was last written via WR">
 				<With Var="RD_1"/>
 				<With Var="RD_2"/>
 				<With Var="RD_3"/>
@@ -31,30 +33,28 @@
 				<With Var="RD_5"/>
 				<With Var="RD_6"/>
 				<With Var="RD_7"/>
-				<With Var="RD_8"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="SD_1" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_2" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_3" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_4" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_5" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_6" Type="ANY" Comment="Data to be put into the data bridge"/>
-			<VarDeclaration Name="SD_7" Type="ANY" Comment="Data to be put into the data bridge"/>
+			<VarDeclaration Name="SD_1" Type="ANY" Comment="Send data port 1: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_2" Type="ANY" Comment="Send data port 2: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_3" Type="ANY" Comment="Send data port 3: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_4" Type="ANY" Comment="Send data port 4: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_5" Type="ANY" Comment="Send data port 5: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_6" Type="ANY" Comment="Send data port 6: data written into the bridge buffer when WR is received"/>
+			<VarDeclaration Name="SD_7" Type="ANY" Comment="Send data port 7: data written into the bridge buffer when WR is received"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="RD_1" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_2" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_3" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_4" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_5" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_6" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_7" Type="ANY" Comment="Data from data bridge"/>
-			<VarDeclaration Name="RD_8" Type="ANY" Comment="Data from data bridge"/>
+			<VarDeclaration Name="RD_1" Type="ANY" Comment="Receive data port 1: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_2" Type="ANY" Comment="Receive data port 2: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_3" Type="ANY" Comment="Receive data port 3: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_4" Type="ANY" Comment="Receive data port 4: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_5" Type="ANY" Comment="Receive data port 5: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_6" Type="ANY" Comment="Receive data port 6: holds the value last written via WR; updated when RD is received"/>
+			<VarDeclaration Name="RD_7" Type="ANY" Comment="Receive data port 7: holds the value last written via WR; updated when RD is received"/>
 		</OutputVars>
 	</InterfaceList>
-	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Data connection decoupling bridge for data connection between real-time event chains">
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION">
 	</Service>
 	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_RT_Bridge'"/>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

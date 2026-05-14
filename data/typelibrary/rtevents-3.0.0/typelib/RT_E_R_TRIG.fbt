@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<FBType Name="RT_E_R_TRIG" Comment="Boolean rising edge detection">
-  <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
+<FBType Name="RT_E_R_TRIG" Comment="Rising edge detector">
+	<Identification Description="Copyright (c) 2008 ACIN&#10; &#10;This program and the accompanying materials are made&#10;available under the terms of the Eclipse Public License 2.0&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#10;&#10;SPDX-License-Identifier: EPL-2.0&#10;&#10;Fires EO in a dedicated RT thread when QI transitions from FALSE to TRUE at the time of EI. EO thread priority is derived from Tmin, Deadline, and WCET. Use only when real-time scheduling of the output event chain is required.">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik GmbH" Version="3.1" Author="Franz Höpfinger" Date="2026-05-14" Remarks="Extended Documentation">
+	</VersionInfo>
 	<VersionInfo Version="3.0" Author="Patrick Aigner" Date="2025-04-14" Remarks="changed package">
 	</VersionInfo>
-  <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
+	<VersionInfo Organization="ACIN" Version="1.0" Author="Alois Zoitl" Date="2008-07-10">
+	</VersionInfo>
 	<CompilerInfo packageName="eclipse4diac::rtevents">
 	</CompilerInfo>
-  <InterfaceList>
-    <EventInputs>
-      <Event Name="INIT">
-        <With Var="QI" />
-        <With Var="Tmin" />
-        <With Var="Deadline" />
-        <With Var="WCET" />
-      </Event>
-      <Event Name="EI" Comment="Event input">
-        <With Var="QI" />
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Name="INITO">
-        <With Var="QO" />
-      </Event>
-      <Event Name="EO" Comment="Event output">
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="QI" Type="BOOL" />
-      <VarDeclaration Name="Tmin" Type="TIME" />
-      <VarDeclaration Name="Deadline" Type="TIME" />
-      <VarDeclaration Name="WCET" Type="TIME" />
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="QO" Type="BOOL" />
-    </OutputVars>
-  </InterfaceList>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialize RT block: QI=TRUE activates with the given timing parameters, QI=FALSE deactivates">
+				<With Var="QI"/>
+				<With Var="Tmin"/>
+				<With Var="Deadline"/>
+				<With Var="WCET"/>
+			</Event>
+			<Event Name="EI" Type="Event" Comment="Sampling trigger: EO fires in the RT thread if QI has transitioned FALSE-to-TRUE since the last EI">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization confirmation; QO mirrors QI">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="EO" Type="Event" Comment="Rising edge output event: fired in a dedicated RT thread when a FALSE-to-TRUE transition on QI is detected between two consecutive EI events">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Monitored input: EO fires when this transitions from FALSE to TRUE between two consecutive EI events"/>
+			<VarDeclaration Name="Tmin" Type="TIME" Comment="Minimum inter-arrival time between EI events; contributes to EO thread priority calculation together with Deadline and WCET"/>
+			<VarDeclaration Name="Deadline" Type="TIME" Comment="Relative deadline by which all processing triggered by EO must complete; must be greater than WCET"/>
+			<VarDeclaration Name="WCET" Type="TIME" Comment="Worst-case execution time of the entire event chain triggered by EO (not just this block); used for EO thread priority calculation"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Enable output: mirrors QI after INIT"/>
+		</OutputVars>
+	</InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
