@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.phrase;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ITypedElement;
@@ -21,10 +22,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.mylyn.wikitext.parser.Attributes;
 import org.eclipse.mylyn.wikitext.parser.DocumentBuilder.BlockType;
 import org.eclipse.mylyn.wikitext.parser.DocumentBuilder.SpanType;
+import org.eclipse.mylyn.wikitext.parser.LinkAttributes;
 import org.eclipse.mylyn.wikitext.parser.markup.PatternBasedElementProcessor;
 
 @SuppressWarnings("restriction")
 public class FbtMacroProcessor extends PatternBasedElementProcessor {
+
+	public static final String FBT_TYPE_ENTRY_URI = "fbt-entry://"; //$NON-NLS-1$
 
 	private static final String THIS = "THIS"; //$NON-NLS-1$
 	private static final String INTERFACE = "interface"; //$NON-NLS-1$
@@ -63,28 +67,32 @@ public class FbtMacroProcessor extends PatternBasedElementProcessor {
 		case COMMENT -> emitTargetComment(targetElement);
 		default -> emitWrongParamError();
 		}
-
 	}
 
 	private void emitInterface(final EObject targetElement) {
-		emitError("interface not yet implemented"); //$NON-NLS-1$
+		if (!(targetElement instanceof final FBType fbType)) {
+			emitError("Target element does not have an interface!"); //$NON-NLS-1$
+			return;
+		}
+		emitTextElement("Interface of " + fbType.getName(), targetElement); //$NON-NLS-1$
+
 	}
 
 	private void emitTargetName(final EObject targetElement) {
 		if (!(targetElement instanceof final INamedElement namedEl)) {
-			emitError("Target element has no name"); //$NON-NLS-1$
+			emitError("Target element has no name!"); //$NON-NLS-1$
 			return;
 		}
-		emitTextElement(namedEl.getName());
+		emitTextElement(namedEl.getName(), targetElement);
 	}
 
 	private void emitTargetType(final EObject targetElement) {
 		if (targetElement instanceof final ITypedElement typedEl) {
-			emitTextElement(typedEl.getFullTypeName());
+			emitTextElement(typedEl.getFullTypeName(), targetElement);
 			return;
 		}
 		if (targetElement instanceof final LibraryElement libEl) {
-			emitTextElement(libEl.getTypeEntry().getFullTypeName());
+			emitTextElement(libEl.getTypeEntry().getFullTypeName(), targetElement);
 			return;
 		}
 		emitError("Target element has no type"); //$NON-NLS-1$
@@ -95,7 +103,7 @@ public class FbtMacroProcessor extends PatternBasedElementProcessor {
 			emitError("Target element has no comment"); //$NON-NLS-1$
 			return;
 		}
-		emitTextElement(libEl.getTypeEntry().getPackageName());
+		emitTextElement(libEl.getTypeEntry().getPackageName(), targetElement);
 	}
 
 	private void emitTargetComment(final EObject targetElement) {
@@ -103,7 +111,7 @@ public class FbtMacroProcessor extends PatternBasedElementProcessor {
 			emitError("Target element has no comment"); //$NON-NLS-1$
 			return;
 		}
-		emitTextElement(namedEl.getComment());
+		emitTextElement(namedEl.getComment(), targetElement);
 	}
 
 	private EObject getTargetElement() {
@@ -152,10 +160,20 @@ public class FbtMacroProcessor extends PatternBasedElementProcessor {
 		builder.endBlock();
 	}
 
-	private void emitTextElement(final String text) {
+	private void emitTextElement(final String text, final EObject target) {
+		final LinkAttributes linkAttributes = new LinkAttributes();
+		linkAttributes.setHref(createTargetHref(target));
+		builder.beginSpan(SpanType.LINK, linkAttributes);
+
 		builder.beginSpan(SpanType.CODE, new Attributes());
 		builder.characters(text);
 		builder.endSpan();
+
+		builder.endSpan();
+	}
+
+	private static String createTargetHref(final EObject target) {
+		return FBT_TYPE_ENTRY_URI + EcoreUtil.getURI(target).toString();
 	}
 
 }

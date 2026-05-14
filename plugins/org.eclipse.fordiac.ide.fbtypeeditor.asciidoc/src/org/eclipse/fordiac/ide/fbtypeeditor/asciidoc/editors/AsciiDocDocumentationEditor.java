@@ -32,6 +32,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor;
 import org.eclipse.mylyn.wikitext.asciidoc.AsciiDocLanguage;
 import org.eclipse.mylyn.wikitext.parser.markup.MarkupLanguage;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -79,6 +82,31 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		super.init(site, getDocumentationEditorInput(input));
 		setPartName("AsciiDoc Description");
 		setTitleImage(FordiacImage.ICON_DOCUMENTATION_EDITOR.getImage());
+	}
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+
+		final Browser browser = findBrowser(parent);
+		if (browser != null) {
+			browser.addLocationListener(new ModelLocationListener());
+		}
+	}
+
+	private Browser findBrowser(final Control control) {
+		if (control instanceof final Browser browser) {
+			return browser;
+		}
+		if (control instanceof final Composite comp) {
+			for (final Control child : comp.getChildren()) {
+				final Browser b = findBrowser(child);
+				if (b != null) {
+					return b;
+				}
+			}
+		}
+		return null;
 	}
 
 	private IEditorInput getDocumentationEditorInput(final IEditorInput input) {
