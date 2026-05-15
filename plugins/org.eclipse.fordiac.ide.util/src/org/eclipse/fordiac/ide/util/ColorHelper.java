@@ -48,8 +48,8 @@ public final class ColorHelper {
 		h += GOLDEN_RATIO_CONJUGATE;
 		h %= 1;
 
-		s += ((rand.nextDouble() * 0.5) - 0.25);
-		v += ((rand.nextDouble() * 0.2) - 0.1);
+		s = s + (float) ((rand.nextDouble() * 0.5) - 0.25);
+		v = v + (float) ((rand.nextDouble() * 0.2) - 0.1);
 
 		return new RGB((float) (h * 360.0), s, v);
 	}
