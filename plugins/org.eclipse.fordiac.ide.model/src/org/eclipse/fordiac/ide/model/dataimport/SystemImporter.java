@@ -148,10 +148,8 @@ public class SystemImporter extends CommonElementImporter {
 		readNameCommentAttributes(segment);
 
 		getXandY(segment);
-		final String dx1 = getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
-		if (null != dx1) {
-			segment.setWidth(Double.parseDouble(dx1));
-		}
+
+		segment.setWidth(parseCoordinateValue(LibraryElementTags.DX1_ATTRIBUTE));
 
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
