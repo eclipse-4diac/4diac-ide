@@ -140,7 +140,7 @@ public final class FBShapeHelper {
 	 * @return The height in Y coordinates
 	 */
 	public static double getSubappHeightAdjust(final FBNetworkElement element) {
-		int commentLines = 1;
+		long commentLines = 1;
 		if (element.getComment() != null && !element.getComment().isBlank()) {
 			commentLines += element.getComment().chars().filter(c -> c == '\n').count();
 		}
