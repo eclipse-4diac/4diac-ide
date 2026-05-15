@@ -38,9 +38,9 @@ jobs:
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v4
+      uses: github/codeql-action/init@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
       with:
-        languages:  java
+        languages: java-kotlin
         build-mode: manual
 
     - name: Set up Java
@@ -62,9 +62,9 @@ jobs:
         mvn -V -B -fae -ntp clean verify
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4
+      uses: github/codeql-action/analyze@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
       with:
-        category: "/language:java"
+        category: "/language:java-kotlin"
 
     - name: Upload Test Results for Java-${{ matrix.java }}
       if: always()
