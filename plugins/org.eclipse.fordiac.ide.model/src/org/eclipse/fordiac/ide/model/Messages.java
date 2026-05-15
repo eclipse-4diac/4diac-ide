@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
- * 								   Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,6 +33,8 @@ public final class Messages extends NLS {
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
 	public static String CommonElementImporter_ReservedAttributesValidation;
+	public static String CommonElementImporter_WARNING_CannotParseCoordinateValue;
+
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
 	public static String CompilableElementImporter_ERROR_VendorNotSet;

@@ -128,25 +128,15 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		if (name != null) {
 			switch (name) {
-			case LibraryElementTags.WIDTH_ATTRIBUTE:
-				final String widthValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-				if (widthValue != null) {
-					subApp.setWidth(Double.parseDouble(widthValue));
-				}
-				break;
-			case LibraryElementTags.HEIGHT_ATTRIBUTE:
-				final String heightValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-				if (heightValue != null) {
-					subApp.setHeight(Double.parseDouble(heightValue));
-				}
-				break;
-			case LibraryElementTags.LOCKED_ATTRIBUTE:
+			case LibraryElementTags.WIDTH_ATTRIBUTE ->
+				subApp.setWidth(parseCoordinateValue(LibraryElementTags.VALUE_ATTRIBUTE));
+			case LibraryElementTags.HEIGHT_ATTRIBUTE ->
+				subApp.setHeight(parseCoordinateValue(LibraryElementTags.VALUE_ATTRIBUTE));
+			case LibraryElementTags.LOCKED_ATTRIBUTE -> {
 				final String isLocked = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 				subApp.setLocked(Boolean.parseBoolean(isLocked));
-				break;
-			default:
-				parseGenericAttributeNode(subApp);
-				break;
+			}
+			default -> parseGenericAttributeNode(subApp);
 			}
 		} else {
 			parseGenericAttributeNode(subApp);

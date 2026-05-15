@@ -381,20 +381,10 @@ public abstract class CommonElementImporter {
 	 * @throws TypeImportException the FBT import exception
 	 */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
-		try {
-			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
-			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
-			if (x != null && !x.isBlank()) {
-				pos.setX(Double.parseDouble(x));
-			}
-			final String y = getAttributeValue(LibraryElementTags.Y_ATTRIBUTE);
-			if (null != y && !y.isBlank()) {
-				pos.setY(Double.parseDouble(y));
-			}
-			positionableElement.setPosition(pos);
-		} catch (final NumberFormatException nfe) {
-			throw new TypeImportException(Messages.FBTImporter_POSITION_EXCEPTION, nfe);
-		}
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(parseCoordinateValue(LibraryElementTags.X_ATTRIBUTE));
+		pos.setY(parseCoordinateValue(LibraryElementTags.Y_ATTRIBUTE));
+		positionableElement.setPosition(pos);
 	}
 
 	protected void readNameCommentAttributes(final INamedElement namedElement) throws TypeImportException {
@@ -942,5 +932,21 @@ public abstract class CommonElementImporter {
 		}
 		return addDependency(ImportHelper.resolveImport(name, getElement(), getDataTypeLibrary()::getTypeIfExists,
 				getDataTypeLibrary()::getType));
+	}
+
+	double parseCoordinateValue(final String attributeName) {
+		final String val = getAttributeValue(attributeName);
+		if (val == null || val.isBlank()) {
+			return 0.0;
+		}
+
+		try {
+			return Double.parseDouble(val);
+		} catch (final NumberFormatException nfe) {
+			warnings.add(new TypeImportDiagnostic(
+					MessageFormat.format(Messages.CommonElementImporter_WARNING_CannotParseCoordinateValue, val),
+					attributeName, getLineNumber()));
+			return 0.0;
+		}
 	}
 }
