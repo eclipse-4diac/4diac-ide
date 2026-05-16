@@ -35,8 +35,8 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEdit;
 import org.eclipse.fordiac.ide.typemanagement.refactoring.ModelEditChange;
-import org.eclipse.fordiac.ide.typemanagement.refactoring.ReconnectPinModelEdit;
 import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.ParticipantManager;
@@ -75,14 +75,21 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
+		final List<ModelEdit<?>> instanceModelEdits = new ArrayList<>();
 
-		modelEdits.add(new RenameElementModelEdit(MessageFormat
+		createChildChanges(instanceModelEdits);
+		final RenameElementModelEdit typeModelEdit = new RenameElementModelEdit(MessageFormat
 				.format(Messages.RenameElementRefactoringProcessor_RenamePinInType, elementURI.lastSegment()),
-				elementURI, newName));
-		createChildChanges(modelEdits);
+				elementURI, newName);
 
-		return ModelEditChange.fromModelEdits(getProcessorName(), modelEdits);
+		if (instanceModelEdits.isEmpty()) {
+			return ModelEditChange.fromModelEdits(getProcessorName(), List.of(typeModelEdit));
+		}
+
+		final CompositeChange result = new CompositeChange(getProcessorName());
+		result.add(ModelEditChange.fromModelEdits(getProcessorName(), instanceModelEdits));
+		result.add(ModelEditChange.fromModelEdits(getProcessorName(), List.of(typeModelEdit)));
+		return result;
 	}
 
 	private void createChildChanges(final List<ModelEdit<?>> modelEdits) {
@@ -92,7 +99,7 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 		}
 
 		final List<? extends EObject> result = (typeEntry instanceof final DataTypeEntry dtEntry)
-				? new DataTypeInstanceSearch(dtEntry).performSearch()
+				? DataTypeInstanceSearch.createSearchIncludingDerivedDataTypes(dtEntry).performSearch()
 				: new BlockTypeInstanceSearch(typeEntry).performSearch();
 		final var eChild = getChildByURI(typeEntry.getType(), elementURI);
 
@@ -104,8 +111,14 @@ public class RenameElementRefactoringProcessor extends RenameProcessor {
 
 	private void createRenameInterfaceChanges(final List<ModelEdit<?>> modelEdits, final BlockFBNetworkElement element,
 			final IInterfaceElement interfaceElement) {
-		modelEdits.add(new ReconnectPinModelEdit(EcoreUtil.getURI(element), BlockFBNetworkElement.class, newName,
-				interfaceElement.getName()));
+		final IInterfaceElement instancePin = element.getInterface()
+				.getInterfaceElement(List.of(interfaceElement.getName()));
+		if (instancePin != null) {
+			modelEdits.add(new RenameElementModelEdit(MessageFormat
+					.format(Messages.RenameElementRefactoringProcessor_RenamePinInInstance,
+							interfaceElement.getName()),
+					EcoreUtil.getURI(instancePin), newName));
+		}
 	}
 
 	public static EObject getChildByURI(final EObject parent, final URI uri) {

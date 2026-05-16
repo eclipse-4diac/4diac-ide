@@ -132,8 +132,8 @@ public class RenameTypeRefactoringParticipant extends RenameParticipant {
 			}
 
 			final List<ModelEdit<?>> modelEdits = new ArrayList<>();
-			processTypeFiles(resource, resource.getFullPath(),
-					(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForType(modelEdits, typeEntry, path));
+			processTypeFiles(resource, resource.getFullPath(), (typeEntry, path) -> TypeRefactoringHelper
+					.addModelEditsForRenamedType(modelEdits, typeEntry, path));
 			change.add(ModelEditChange.fromModelEdits(Messages.Refactoring_StructUsers, modelEdits));
 			return change;
 		} finally {

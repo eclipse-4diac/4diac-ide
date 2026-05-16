@@ -178,6 +178,7 @@ public final class Messages extends NLS {
 	public static String RenameElementRefactoringProcessor_Name;
 
 	public static String RenameElementRefactoringProcessor_RenamePinInType;
+	public static String RenameElementRefactoringProcessor_RenamePinInInstance;
 	public static String RenameElementRefactoringWizardPage_Name;
 	public static String RenameType_Name;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;

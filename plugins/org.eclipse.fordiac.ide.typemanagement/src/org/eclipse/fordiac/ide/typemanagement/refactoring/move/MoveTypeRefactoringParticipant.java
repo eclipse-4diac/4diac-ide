@@ -99,7 +99,7 @@ public class MoveTypeRefactoringParticipant extends MoveParticipant {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final List<ModelEdit<?>> modelEdits = new ArrayList<>();
 		processTypeFiles(resource, destination.getFullPath(),
-				(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForType(modelEdits, typeEntry, path));
+				(typeEntry, path) -> TypeRefactoringHelper.addModelEditsForMovedType(modelEdits, typeEntry, path));
 		return ModelEditChange.fromModelEdits(Messages.MoveTypeToPackage_UpdateInstances, modelEdits);
 	}
 
