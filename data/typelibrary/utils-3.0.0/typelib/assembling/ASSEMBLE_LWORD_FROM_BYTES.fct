@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_LWORD_FROM_BYTES" Comment="this Function combines the 8 BYTES to a LWORD">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2026-05-16" Remarks="initial Implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::assembling">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
+				<With Var="BYTE_02"/>
+				<With Var="BYTE_03"/>
+				<With Var="BYTE_04"/>
+				<With Var="BYTE_05"/>
+				<With Var="BYTE_06"/>
+				<With Var="BYTE_07"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_02" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_03" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_04" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_05" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_06" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_07" Type="BYTE" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="LWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 8 BYTES to a LWORD *)
+FUNCTION ASSEMBLE_LWORD_FROM_BYTES : LWORD
+
+VAR_INPUT
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
+	BYTE_02 : BYTE;
+	BYTE_03 : BYTE;
+	BYTE_04 : BYTE;
+	BYTE_05 : BYTE;
+	BYTE_06 : BYTE;
+	BYTE_07 : BYTE;
+END_VAR
+
+ASSEMBLE_LWORD_FROM_BYTES.%B0 := BYTE_00;
+ASSEMBLE_LWORD_FROM_BYTES.%B1 := BYTE_01;
+ASSEMBLE_LWORD_FROM_BYTES.%B2 := BYTE_02;
+ASSEMBLE_LWORD_FROM_BYTES.%B3 := BYTE_03;
+ASSEMBLE_LWORD_FROM_BYTES.%B4 := BYTE_04;
+ASSEMBLE_LWORD_FROM_BYTES.%B5 := BYTE_05;
+ASSEMBLE_LWORD_FROM_BYTES.%B6 := BYTE_06;
+ASSEMBLE_LWORD_FROM_BYTES.%B7 := BYTE_07;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="SPLIT_LWORD_INTO_BYTES" Comment="this Function extracts the 8 BYTES from a lword">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2026-05-16" Remarks="initial Implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::splitting">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="BYTE_00"/>
+				<With Var="BYTE_01"/>
+				<With Var="BYTE_02"/>
+				<With Var="BYTE_03"/>
+				<With Var="BYTE_04"/>
+				<With Var="BYTE_05"/>
+				<With Var="BYTE_06"/>
+				<With Var="BYTE_07"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="LWORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BYTE_00" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_01" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_02" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_03" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_04" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_05" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_06" Type="BYTE" Comment=""/>
+			<VarDeclaration Name="BYTE_07" Type="BYTE" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function extracts the 8 BYTES from a lword *)
+FUNCTION SPLIT_LWORD_INTO_BYTES
+
+VAR_INPUT
+	IN : LWORD;
+END_VAR
+
+VAR_OUTPUT
+	BYTE_00 : BYTE;
+	BYTE_01 : BYTE;
+	BYTE_02 : BYTE;
+	BYTE_03 : BYTE;
+	BYTE_04 : BYTE;
+	BYTE_05 : BYTE;
+	BYTE_06 : BYTE;
+	BYTE_07 : BYTE;
+END_VAR
+
+BYTE_00 := IN.%B0;
+BYTE_01 := IN.%B1;
+BYTE_02 := IN.%B2;
+BYTE_03 := IN.%B3;
+BYTE_04 := IN.%B4;
+BYTE_05 := IN.%B5;
+BYTE_06 := IN.%B6;
+BYTE_07 := IN.%B7;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

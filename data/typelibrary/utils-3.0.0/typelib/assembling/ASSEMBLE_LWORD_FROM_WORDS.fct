@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="ASSEMBLE_LWORD_FROM_WORDS" Comment="this Function combines the 4 WORDS to a LWORD">
+	<Identification Standard="61499-1" Description="Copyright (c) 2026 HR Agrartechnik GmbH    &#10;    &#10;This program and the accompanying materials are made     &#10;available under the terms of the Eclipse Public License 2.0     &#10;which is available at https://www.eclipse.org/legal/epl-2.0/     &#10;     &#10;SPDX-License-Identifier: EPL-2.0">
+	</Identification>
+	<VersionInfo Organization="HR Agrartechnik" Version="1.0" Author="Franz Höpfinger" Date="2026-05-16" Remarks="initial Implementation">
+	</VersionInfo>
+	<CompilerInfo packageName="eclipse4diac::utils::assembling">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="WORD_00"/>
+				<With Var="WORD_01"/>
+				<With Var="WORD_02"/>
+				<With Var="WORD_03"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="WORD_00" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_01" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_02" Type="WORD" Comment=""/>
+			<VarDeclaration Name="WORD_03" Type="WORD" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="" Type="LWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[(* this Function combines the 4 WORDS to a LWORD *)
+FUNCTION ASSEMBLE_LWORD_FROM_WORDS : LWORD
+
+VAR_INPUT
+	WORD_00 : WORD;
+	WORD_01 : WORD;
+	WORD_02 : WORD;
+	WORD_03 : WORD;
+END_VAR
+
+ASSEMBLE_LWORD_FROM_WORDS.%W0 := WORD_00;
+ASSEMBLE_LWORD_FROM_WORDS.%W1 := WORD_01;
+ASSEMBLE_LWORD_FROM_WORDS.%W2 := WORD_02;
+ASSEMBLE_LWORD_FROM_WORDS.%W3 := WORD_03;
+
+END_FUNCTION
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>
