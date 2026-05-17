@@ -8,4 +8,12 @@
             	sortIndex="1000">
       	</editorPage>
    	</extension>
+   	
+  <extension point="org.eclipse.mylyn.wikitext.ui.contentAssist">
+    <templates markupLanguage="AsciiDoc">
+
+       <template name="fbt" description="%template.fbt.macro" content="fbt:${text}[${param}] $"/>
+
+     </templates>
+  </extension>
 </plugin>
