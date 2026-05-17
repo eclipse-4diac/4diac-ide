@@ -50,11 +50,10 @@ public class AsciiDocDocumentationEditor extends MarkupEditor implements ITypeEd
 		LibraryElement libEl;
 
 		public FordiacAsciiDocLanguage() {
-			setName("AsciiDoc 4diac IDE Extension"); //$NON-NLS-1$
+			// needed for the clone implementation
 		}
 
 		public FordiacAsciiDocLanguage(final LibraryElement libEl) {
-			this();
 			this.libEl = libEl;
 		}
 
