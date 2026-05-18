@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -181,10 +179,6 @@ public final class FordiacCopyProcessor extends CopyProcessor {
 
 		if (areEqualInWorkspaceOrOnDisk(file, current)) {
 			return queries.queryOverwriteSelf(file, destination);
-		}
-
-		if (current instanceof IFolder || !(current instanceof IFile)) {
-			return ExistsResolve.OVERWRITE;
 		}
 		return queries.queryOverwrite(file, destination);
 	}
