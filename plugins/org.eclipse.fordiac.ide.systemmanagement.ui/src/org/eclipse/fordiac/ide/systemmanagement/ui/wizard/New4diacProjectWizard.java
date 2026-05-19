@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.SystemCreator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -64,12 +66,20 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		page.setTitle(Messages.New4diacProjectWizard_WizardTitle);
 		page.setDescription(Messages.New4diacProjectWizard_WizardDesc);
 
-		libPage = new UnifiedLibraryImportWizardPage(null, LIBRARY_STANDARD_SELECTION);
+		libPage = new UnifiedLibraryImportWizardPage(null, LIBRARY_STANDARD_SELECTION, true);
 		libPage.setTitle(Messages.New4diacProjectWizard_LibPageName);
 		libPage.setDescription(Messages.New4diacProjectWizard_LibPageDesc);
 
 		addPage(page);
 		addPage(libPage);
+	}
+
+	@Override
+	public IWizardPage getNextPage(final IWizardPage currentPage) {
+		if (currentPage == page) {
+			libPage.setTargetProject(ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProjectName()));
+		}
+		return super.getNextPage(currentPage);
 	}
 
 	/*
