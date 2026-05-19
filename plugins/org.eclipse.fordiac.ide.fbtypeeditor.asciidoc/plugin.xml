@@ -12,6 +12,15 @@
         </adapt>
       </enablement>
     </editorPage>
+    <editorPage
+        class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocPreviewTypeEditorPage"
+        sortIndex="1000">
+      <enablement>
+        <adapt type="org.eclipse.core.resources.IFile">
+          <test property="org.eclipse.core.resources.readOnly" value="true"/>
+        </adapt>
+      </enablement>
+    </editorPage>
   </extension>
   <extension point="org.eclipse.mylyn.wikitext.ui.contentAssist">
     <templates markupLanguage="AsciiDoc">

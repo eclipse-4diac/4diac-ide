@@ -25,5 +25,6 @@ Import-Package: org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.ui.imageprovider,
  org.eclipse.mylyn.wikitext.asciidoc,
  org.eclipse.mylyn.wikitext.parser,
+ org.eclipse.mylyn.wikitext.parser.builder,
  org.eclipse.mylyn.wikitext.parser.markup
 
