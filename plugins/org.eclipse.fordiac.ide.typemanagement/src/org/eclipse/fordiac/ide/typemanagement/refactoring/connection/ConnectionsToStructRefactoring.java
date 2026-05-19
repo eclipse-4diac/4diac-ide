@@ -200,8 +200,8 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			status.merge(
 					RefactoringStatus.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_SameFBSameName));
 		}
-		if (conflictResolution
-				&& (lib.getFBTypeEntry("STRUCT_DEMUX") == null || lib.getFBTypeEntry("STRUCT_MUX") == null)) { //$NON-NLS-1$ //$NON-NLS-2$
+		if (conflictResolution && (lib.getFbTypes().noneMatch(type -> "STRUCT_DEMUX".equals(type.getTypeName())) //$NON-NLS-1$
+				|| lib.getFbTypes().noneMatch(type -> "STRUCT_MUX".equals(type.getTypeName())))) { //$NON-NLS-1$
 			status.merge(RefactoringStatus
 					.createFatalErrorStatus(Messages.ConnectionsToStructRefactoring_MissingStructManipulator));
 		}
