@@ -104,12 +104,15 @@ public class TimelineConnectionEditPart extends AbstractConnectionEditPart imple
 		final Display display = getViewer().getControl().getDisplay();
 		if (display.getThread() == Thread.currentThread()) {
 			refreshChildren();
+			refreshVisuals();
 			return;
 		}
 
 		display.asyncExec(() -> {
 			if (isActive()) {
 				refreshChildren();
+				refreshVisuals();
+
 			}
 		});
 	}
