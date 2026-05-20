@@ -38,8 +38,7 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getReplayNavigatorName() {
-		final var model = getModel();
-		return model.getName();
+		return getModel().getName();
 	}
 
 	@Override
@@ -49,8 +48,7 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		final var model = getModel();
-		return List.of(model.getRootTimelineModel());
+		return List.of(getModel().getRootTimelineModel());
 	}
 
 	@Override
