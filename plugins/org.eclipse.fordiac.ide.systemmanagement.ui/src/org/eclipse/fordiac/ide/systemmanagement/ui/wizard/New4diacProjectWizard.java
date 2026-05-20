@@ -106,7 +106,9 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 			return false;
 		}
 
-		libPage.performImport(getContainer());
+		if (libPage.getControl() != null) {
+			libPage.performImport(getContainer());
+		}
 
 		// everything worked fine
 		return true;

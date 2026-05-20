@@ -164,6 +164,11 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	@Override
+	public boolean isPageComplete() {
+		return (allowUnavailableTargetProject && getControl() == null) || super.isPageComplete();
+	}
+
+	@Override
 	public void createControl(final Composite parent) {
 		showLatestOnly = true;
 		final Composite root = new Composite(parent, SWT.NONE);
@@ -263,6 +268,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		final var accessibleProjects = getSelectableFordiacProjects();
 
 		projectCombo.setInput(accessibleProjects);
+		projectCombo.getCombo().setEnabled(!allowUnavailableTargetProject);
 
 		if (targetProject == null) {
 			if (accessibleProjects.isEmpty()) {
