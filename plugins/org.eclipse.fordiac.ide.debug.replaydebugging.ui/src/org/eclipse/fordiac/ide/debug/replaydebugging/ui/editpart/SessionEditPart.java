@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;

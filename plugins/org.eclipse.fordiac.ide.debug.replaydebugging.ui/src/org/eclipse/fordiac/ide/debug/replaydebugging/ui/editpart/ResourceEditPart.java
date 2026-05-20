@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.util.List;
@@ -39,7 +38,7 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 	}
 
 	private String getReplayNavigatorName() {
-		final var model = (Resource) getModel();
+		final var model = getModel();
 		return model.getName();
 	}
 
@@ -50,7 +49,7 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected List<?> getModelChildren() {
-		final var model = (Resource) getModel();
+		final var model = getModel();
 		return List.of(model.getRootTimelineModel());
 	}
 
@@ -59,19 +58,24 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy());
 	}
 
+	@Override
+	public Resource getModel() {
+		return (Resource) super.getModel();
+	}
+
 	public void moveForward() {
-		((Resource) getModel()).moveForward();
+		getModel().moveForward();
 	}
 
 	public void moveBackwards() {
-		((Resource) getModel()).moveBackwards();
+		getModel().moveBackwards();
 	}
 
 	public void moveUp() {
-		((Resource) getModel()).moveUp();
+		getModel().moveUp();
 	}
 
 	public void moveDown() {
-		((Resource) getModel()).moveDown();
+		getModel().moveDown();
 	}
 }

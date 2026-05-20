@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;
@@ -71,17 +70,22 @@ public class TimelineConnectionEditPart extends AbstractConnectionEditPart imple
 	}
 
 	@Override
+	public TimelineConnection getModel() {
+		return (TimelineConnection) super.getModel();
+	}
+
+	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
-			((TimelineConnection) getModel()).addPropertyChangeListener(this);
+			getModel().addPropertyChangeListener(this);
 		}
 	}
 
 	@Override
 	public void deactivate() {
 		if (isActive()) {
-			((TimelineConnection) getModel()).removePropertyChangeListener(this);
+			getModel().removePropertyChangeListener(this);
 			super.deactivate();
 		}
 	}
@@ -90,8 +94,7 @@ public class TimelineConnectionEditPart extends AbstractConnectionEditPart imple
 	protected void refreshVisuals() {
 		final Connection connection = getConnectionFigure();
 		// Assuming your model has a getColor() method
-		final Color newColor = ((TimelineConnection) getModel()).isInCurrentPosition() ? ColorConstants.black
-				: ColorConstants.gray;
+		final Color newColor = getModel().isInCurrentPosition() ? ColorConstants.black : ColorConstants.gray;
 		connection.setForegroundColor(newColor);
 	}
 

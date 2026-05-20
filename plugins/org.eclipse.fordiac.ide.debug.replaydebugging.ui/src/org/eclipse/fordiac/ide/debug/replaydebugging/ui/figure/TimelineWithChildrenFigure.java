@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import org.eclipse.draw2d.Figure;
@@ -28,7 +27,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 public class TimelineWithChildrenFigure extends Figure {
 
 	private final Figure timelineFigure;
-	private final TimelineFigure lineFigure;
+	private final LineFigure lineFigure;
 	private final Figure childrenFigure;
 	private final int startPosition;
 	private static final int SPACING_BETWEEN_TIMELINES = CommonConstants.MARKER_SIZE / 2;
@@ -47,7 +46,7 @@ public class TimelineWithChildrenFigure extends Figure {
 
 		timelineFigure.setLayoutManager(new XYLayout());
 
-		lineFigure = new TimelineFigure(maxNumberOfEvents);
+		lineFigure = new LineFigure(maxNumberOfEvents);
 
 		final int figureWidth = maxNumberOfEvents * CommonConstants.TOTAL_MARKER_SPACE;
 		final int figureHeight = CommonConstants.MARKER_SIZE;
@@ -68,7 +67,7 @@ public class TimelineWithChildrenFigure extends Figure {
 		return timelineFigure;
 	}
 
-	public TimelineFigure getLineFigure() {
+	public LineFigure getLineFigure() {
 		return lineFigure;
 	}
 

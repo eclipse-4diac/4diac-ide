@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;
@@ -28,7 +27,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineAnchor;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineWithChildrenFigure;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineModel;
 import org.eclipse.gef.ConnectionEditPart;
@@ -59,7 +57,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	protected IFigure createFigure() {
-		final var model = (TimelineModel) getModel();
+		final var model = getModel();
 		return new TimelineWithChildrenFigure(model.getGlobalStartPosition(), model.getEventMarkers().size());
 	}
 
@@ -79,7 +77,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	protected List<?> getModelChildren() {
-		final var model = (TimelineModel) getModel();
+		final var model = getModel();
 
 		return Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream())
 				.collect(Collectors.toList());
@@ -87,20 +85,30 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	public IFigure getContentPane() {
-		return ((TimelineWithChildrenFigure) getFigure()).getSpawnedTimelinesPane();
+		return getFigure().getSpawnedTimelinesPane();
+	}
+
+	@Override
+	public TimelineWithChildrenFigure getFigure() {
+		return (TimelineWithChildrenFigure) super.getFigure();
+	}
+
+	@Override
+	public TimelineModel getModel() {
+		return (TimelineModel) super.getModel();
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		final var fig = (TimelineWithChildrenFigure) getFigure();
+		final var fig = getFigure();
 
 		if (childEditPart instanceof final EventMarkerEditPart marker) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
 
 			fig.getTimelineFigure().add(markerFigure);
 
-			final int x = (((EventMarker) marker.getModel()).getIndex()
-					+ ((TimelineModel) getModel()).getGlobalStartPosition()) * CommonConstants.TOTAL_MARKER_SPACE;
+			final int x = (marker.getModel().getIndex() + getModel().getGlobalStartPosition())
+					* CommonConstants.TOTAL_MARKER_SPACE;
 
 			fig.getTimelineFigure().setConstraint(markerFigure,
 					new Rectangle(x, 0, CommonConstants.MARKER_SIZE, CommonConstants.MARKER_SIZE));
@@ -112,7 +120,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		final var fig = (TimelineWithChildrenFigure) getFigure();
+		final var fig = getFigure();
 
 		if (childEditPart instanceof EventMarkerEditPart) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
@@ -127,7 +135,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		super.refreshChildren();
 
 		// remove and add all timelines to sort them when a new one is added
-		final var fig = (TimelineWithChildrenFigure) getFigure();
+		final var fig = getFigure();
 		final IFigure pane = fig.getSpawnedTimelinesPane();
 
 		final List<IFigure> children = new ArrayList<>(pane.getChildren());
@@ -144,20 +152,20 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		final var fig = (TimelineWithChildrenFigure) getFigure();
-		fig.getLineFigure().setFirstInvalid(((TimelineModel) getModel()).getFirstInvalid());
+		final var fig = getFigure();
+		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		((TimelineModel) getModel()).addPropertyChangeListener(this);
+		getModel().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void deactivate() {
-		((TimelineModel) getModel()).removePropertyChangeListener(this);
-		((TimelineModel) getModel()).dispose();
+		getModel().removePropertyChangeListener(this);
+		getModel().dispose();
 		super.deactivate();
 	}
 
@@ -173,8 +181,8 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 		display.asyncExec(() -> {
 			if (isActive()) {
 				if (newTimelines || newEvents) {
-					final var fig = ((TimelineWithChildrenFigure) getFigure());
-					fig.updateMaxNumberOfEvents(((TimelineModel) getModel()).getEventMarkers().size());
+					final var fig = (getFigure());
+					fig.updateMaxNumberOfEvents(getModel().getEventMarkers().size());
 					refreshChildren();
 					refreshSourceConnections();
 
@@ -190,25 +198,24 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	public List<?> getModelSourceConnections() {
-		return ((TimelineModel) getModel()).getSources();
+		return getModel().getSources();
 	}
 
 	@Override
 	public List<?> getModelTargetConnections() {
-		return ((TimelineModel) getModel()).getTargets();
+		return getModel().getTargets();
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		final TimelineConnection conn = (TimelineConnection) connection.getModel();
-		return new TimelineAnchor(((TimelineWithChildrenFigure) getFigure()).getLineFigure(), conn.spawnedIndex(),
-				((TimelineModel) getModel()).getEventMarkers().size(), true);
+		return new TimelineAnchor(getFigure().getLineFigure(), conn.spawnedIndex(), getModel().getEventMarkers().size(),
+				true);
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		return new TimelineAnchor(((TimelineWithChildrenFigure) getFigure()).getLineFigure(), 0,
-				((TimelineModel) getModel()).getEventMarkers().size(), false);
+		return new TimelineAnchor(getFigure().getLineFigure(), 0, getModel().getEventMarkers().size(), false);
 	}
 
 	@Override

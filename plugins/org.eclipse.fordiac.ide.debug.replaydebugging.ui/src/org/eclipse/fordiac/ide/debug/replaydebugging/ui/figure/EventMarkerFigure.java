@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import java.util.HashSet;
@@ -38,7 +37,6 @@ public class EventMarkerFigure extends Figure {
 	private static final Color INVALID_COLOR = ColorConstants.gray;
 
 	private final int eventIndex;
-	private boolean isValid = false;
 	private boolean isCurrentEvent = false;
 
 	public EventMarkerFigure(final int eventIndex) {
@@ -70,7 +68,11 @@ public class EventMarkerFigure extends Figure {
 	}
 
 	public void setIsValid(final boolean isValid) {
-		this.isValid = isValid;
+		if (!isValid) {
+			setBackgroundColor(INVALID_COLOR);
+		} else {
+			setBackgroundColor(isCurrentEvent ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
+		}
 	}
 
 	public void setIsCurrentEvent(final boolean isCurrentEvent) {
@@ -79,18 +81,13 @@ public class EventMarkerFigure extends Figure {
 
 	@Override
 	protected void paintFigure(final Graphics g) {
-		if (!isValid) {
-			setBackgroundColor(INVALID_COLOR);
-		} else {
-			setBackgroundColor(isCurrentEvent ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
-		}
 		g.fillOval(getBounds());
 	}
 
 	// Listener
 
 	public interface SelectedEventListener {
-		void eventSelected(int eventIndex);
+		void eventSelected();
 	}
 
 	private final Set<SelectedEventListener> listeners = new HashSet<>();
@@ -110,7 +107,7 @@ public class EventMarkerFigure extends Figure {
 
 	private void notifyListeners() {
 		for (final var listener : listeners) {
-			listener.eventSelected(eventIndex);
+			listener.eventSelected();
 		}
 	}
 }

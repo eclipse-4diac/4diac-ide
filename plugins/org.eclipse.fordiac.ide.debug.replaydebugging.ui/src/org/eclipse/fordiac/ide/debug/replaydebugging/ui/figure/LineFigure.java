@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -21,25 +20,20 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 /**
- * @brief Figure representing a single timeline of events in the replay
- *        debugging.
+ * @brief Figure representing a single line of a timeline of events in the
+ *        replay debugging.
  *
- *        It is responsible for drawing the line and the event markers, as well
- *        as handling the selection of events and notifying the listeners about
- *        it.
- *
- *        The line is drawn in black for the valid events, and gray for the
- *        invalid ones. The current event is highlighted in yellow, while the
- *        past events are highlighted in blue.
+ *        It is responsible for drawing the line. The line is drawn in black for
+ *        the valid events, and gray for the invalid ones.
  */
-public class TimelineFigure extends Figure {
+public class LineFigure extends Figure {
 
 	private static final int LINE_WITDH = 4;
 
 	int maxNumberOfEvents;
 	private int firstInvalid = 0;
 
-	public TimelineFigure(final int maxNumberOfEvents) {
+	public LineFigure(final int maxNumberOfEvents) {
 		this.maxNumberOfEvents = maxNumberOfEvents;
 		setOpaque(true);
 	}

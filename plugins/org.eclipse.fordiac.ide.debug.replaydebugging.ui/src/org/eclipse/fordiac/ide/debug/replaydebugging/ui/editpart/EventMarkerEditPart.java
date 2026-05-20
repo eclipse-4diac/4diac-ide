@@ -11,22 +11,18 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
@@ -49,7 +45,7 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 
 	@Override
 	protected IFigure createFigure() {
-		final var eventMarker = (EventMarker) getModel();
+		final var eventMarker = getModel();
 		return new EventMarkerFigure(eventMarker.getIndex());
 	}
 
@@ -60,8 +56,8 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 			public void showSelection() {
 				// Redirect selection to the parent
 				final EditPart parent = getHost().getParent();
-				if (parent != null && parent.getViewer() != null) {
-					parent.getViewer().select(parent);
+				if (parent != null) {
+					getHost().getViewer().select(parent);
 				}
 			}
 		});
@@ -70,9 +66,9 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		final var figure = getEventMarkerFigure();
-		figure.setIsValid(getEventMarkerModel().getValid());
-		figure.setIsCurrentEvent(getEventMarkerModel().getIsCurrentEvent());
+		final var figure = getFigure();
+		figure.setIsCurrentEvent(getModel().getIsCurrentEvent());
+		figure.setIsValid(getModel().getValid());
 		figure.repaint();
 	}
 
@@ -91,80 +87,35 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 		((GraphicalEditPart) getViewer().getContents()).getFigure().invalidateTree();
 	}
 
-	private EventMarker getEventMarkerModel() {
-		return (EventMarker) getModel();
+	@Override
+	public EventMarker getModel() {
+		return (EventMarker) super.getModel();
 	}
 
-	private EventMarkerFigure getEventMarkerFigure() {
-		return ((EventMarkerFigure) getFigure());
-	}
-
-	private void centerOnFigure() {
-		if (!figure.isShowing()) {
-			return;
-		}
-
-		final ScalableRootEditPart root = (ScalableRootEditPart) getViewer().getRootEditPart();
-
-		final Viewport viewport = (Viewport) root.getFigure();
-		final IFigure contents = viewport.getContents();
-
-		// Convert figure bounds → viewport content coordinates
-		final Rectangle bounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(bounds);
-		contents.translateToRelative(bounds);
-
-		final Rectangle viewArea = viewport.getClientArea();
-
-		final int centerX = bounds.x + bounds.width / 2;
-		final int centerY = bounds.y + bounds.height / 2;
-
-		final int viewLeft = viewArea.x;
-		final int viewTop = viewArea.y;
-		final int viewRight = viewLeft + viewArea.width;
-		final int viewBottom = viewTop + viewArea.height;
-
-		// Only center if center point is outside
-		final int margin = 20;
-
-		if (centerX >= viewLeft + margin && centerX <= viewRight - margin && centerY >= viewTop + margin
-				&& centerY <= viewBottom - margin) {
-			return;
-		}
-
-		int targetX = centerX - viewArea.width / 2;
-		int targetY = centerY - viewArea.height / 2;
-
-		final int maxX = contents.getBounds().width - viewArea.width;
-		final int maxY = contents.getBounds().height - viewArea.height;
-
-		targetX = Math.clamp(targetX, 0, Math.max(0, maxX));
-		targetY = Math.clamp(targetY, 0, Math.max(0, maxY));
-
-		viewport.setHorizontalLocation(targetX);
-		viewport.setVerticalLocation(targetY);
+	@Override
+	public EventMarkerFigure getFigure() {
+		return ((EventMarkerFigure) super.getFigure());
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		((EventMarker) getModel()).addPropertyChangeListener(this);
-		getEventMarkerFigure().addEventSelectionListener(this);
+		getModel().addPropertyChangeListener(this);
+		getFigure().addEventSelectionListener(this);
 	}
 
 	@Override
 	public void deactivate() {
-		getEventMarkerFigure().removeEventSelectionListener(this);
-		((EventMarker) getModel()).removePropertyChangeListener(this);
+		getFigure().removeEventSelectionListener(this);
+		getModel().removePropertyChangeListener(this);
 		super.deactivate();
 	}
 
 	// calls from the figure
 
 	@Override
-	public void eventSelected(final int eventIndex) {
-		centerOnFigure();
-		getEventMarkerModel().eventSelected();
+	public void eventSelected() {
+		getModel().eventSelected();
 	}
 
 	// call from model
