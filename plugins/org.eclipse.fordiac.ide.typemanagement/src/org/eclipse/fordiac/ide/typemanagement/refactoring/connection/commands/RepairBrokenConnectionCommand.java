@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -91,12 +92,14 @@ public class RepairBrokenConnectionCommand extends Command {
 		if (isSourceReconnect) {
 			optmux = port.getOutputConnections().stream().map(Connection::getDestinationElement)
 					.filter(elem -> elem.getType().getTypeEntry().equals(
-							port.getBlockFBNetworkElement().getTypeLibrary().getFBTypeEntry(STRUCT_DEMUX_TYPE_NAME)))
+							getStructManipulatorTypeEntry(port.getBlockFBNetworkElement().getTypeLibrary(),
+									STRUCT_DEMUX_TYPE_NAME)))
 					.findAny();
 		} else {
 			optmux = port.getInputConnections().stream().map(Connection::getSourceElement)
 					.filter(elem -> elem.getType().getTypeEntry().equals(
-							port.getBlockFBNetworkElement().getTypeLibrary().getFBTypeEntry(STRUCT_MUX_TYPE_NAME)))
+							getStructManipulatorTypeEntry(port.getBlockFBNetworkElement().getTypeLibrary(),
+									STRUCT_MUX_TYPE_NAME)))
 					.findAny();
 		}
 
@@ -112,10 +115,14 @@ public class RepairBrokenConnectionCommand extends Command {
 		final IInterfaceElement port = getPort();
 		if (port != null) {
 			final TypeLibrary lib = port.getBlockFBNetworkElement().getTypeLibrary();
-			return lib.getFBTypeEntry(STRUCT_DEMUX_TYPE_NAME) != null
-					&& lib.getFBTypeEntry(STRUCT_MUX_TYPE_NAME) != null;
+			return getStructManipulatorTypeEntry(lib, STRUCT_DEMUX_TYPE_NAME) != null
+					&& getStructManipulatorTypeEntry(lib, STRUCT_MUX_TYPE_NAME) != null;
 		}
 		return false;
+	}
+
+	private static FBTypeEntry getStructManipulatorTypeEntry(final TypeLibrary lib, final String typeName) {
+		return lib.getFbTypes().filter(entry -> typeName.equals(entry.getTypeName())).findFirst().orElse(null);
 	}
 
 	@Override
