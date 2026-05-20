@@ -74,9 +74,11 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public class UnifiedLibraryImportWizardPage extends WizardPage {
 
 	private IProject targetProject;
+	private final boolean allowUnavailableTargetProject;
 	private final List<ILibrarySource> sources;
 
 	private ComboViewer sourceCombo;
+	private ComboViewer projectCombo;
 
 	private Composite configHost;
 	private StackLayout configLayout;
@@ -106,10 +108,16 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	public UnifiedLibraryImportWizardPage(final IProject targetProject, final String[] defaultSelectedLibraries) {
+		this(targetProject, defaultSelectedLibraries, false);
+	}
+
+	public UnifiedLibraryImportWizardPage(final IProject targetProject, final String[] defaultSelectedLibraries,
+			final boolean allowUnavailableTargetProject) {
 		super(Messages.UnifiedLibraryImportWizardPage_Available_Libraries);
 		setTitle(Messages.UnifiedLibraryImportWizardPage_LibraryImport);
 		setDescription(Messages.UnifiedLibraryImportWizardPage_brows);
 		this.targetProject = targetProject;
+		this.allowUnavailableTargetProject = allowUnavailableTargetProject;
 		this.showLatestOnly = true;
 		this.hideEmptyProjects = true;
 		this.sources = new ArrayList<>(LibrarySourceBuilder.getAllSources());
@@ -153,6 +161,11 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			setErrorMessage(Messages.UnifiedLibraryImportWizardPage_op_cancled);
 			return false;
 		}
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		return (allowUnavailableTargetProject && getControl() == null) || super.isPageComplete();
 	}
 
 	@Override
@@ -242,7 +255,7 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 		final Label label = new Label(container, SWT.NONE);
 		label.setText(Messages.UnifiedLibraryImportWizardPage_ImportIntoProject);
 
-		final ComboViewer projectCombo = new ComboViewer(container, SWT.READ_ONLY);
+		projectCombo = new ComboViewer(container, SWT.READ_ONLY);
 		projectCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		projectCombo.setContentProvider(ArrayContentProvider.getInstance());
 		projectCombo.setLabelProvider(new LabelProvider() {
@@ -252,9 +265,10 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 			}
 		});
 
-		final var accessibleProjects = getAccessibleFordiacProjects();
+		final var accessibleProjects = getSelectableFordiacProjects();
 
 		projectCombo.setInput(accessibleProjects);
+		projectCombo.getCombo().setEnabled(!allowUnavailableTargetProject);
 
 		if (targetProject == null) {
 			if (accessibleProjects.isEmpty()) {
@@ -275,6 +289,14 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	private static List<IProject> getAccessibleFordiacProjects() {
 		return Arrays.stream(ResourcesPlugin.getWorkspace().getRoot().getProjects())
 				.filter(SystemManager::hasFordiacProjectNature).toList();
+	}
+
+	private List<IProject> getSelectableFordiacProjects() {
+		final List<IProject> projects = new ArrayList<>(getAccessibleFordiacProjects());
+		if (allowUnavailableTargetProject && targetProject != null && !projects.contains(targetProject)) {
+			projects.add(targetProject);
+		}
+		return projects;
 	}
 
 	private void createConfigArea(final Composite parent) {
@@ -637,7 +659,33 @@ public class UnifiedLibraryImportWizardPage extends WizardPage {
 	}
 
 	public void setTargetProject(final IProject project) {
+		final IProject previousProject = targetProject;
 		this.targetProject = project;
+		updateProjectSelection();
+		if (allowUnavailableTargetProject && previousProject == null && targetProject != null) {
+			scheduleRefresh();
+		}
+	}
+
+	private void updateProjectSelection() {
+		if (projectCombo == null || projectCombo.getCombo().isDisposed()) {
+			return;
+		}
+
+		final var accessibleProjects = getSelectableFordiacProjects();
+		projectCombo.setInput(accessibleProjects);
+		projectCombo.getCombo().setEnabled(!allowUnavailableTargetProject);
+
+		if (targetProject == null) {
+			if (accessibleProjects.isEmpty()) {
+				setErrorMessage(Messages.UnifiedLibraryImportWizardPage_no_project);
+				setPageComplete(false);
+				return;
+			}
+			targetProject = accessibleProjects.getFirst();
+		}
+
+		projectCombo.setSelection(new StructuredSelection(targetProject));
 	}
 
 	public Map<Required, URI> getChosenLibraries() {

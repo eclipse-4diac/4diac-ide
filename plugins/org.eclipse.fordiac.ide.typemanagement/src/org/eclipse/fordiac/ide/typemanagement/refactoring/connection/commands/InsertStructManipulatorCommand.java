@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.gef.commands.Command;
 
 /**
@@ -54,8 +55,7 @@ public class InsertStructManipulatorCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return port.getType() instanceof StructuredType && port.getBlockFBNetworkElement().getTypeLibrary()
-				.getFBTypeEntry(isMUX ? STRUCT_MUX_TYPE_NAME : STRUCT_DEMUX_TYPE_NAME) != null;
+		return port.getType() instanceof StructuredType && getStructManipulatorTypeEntry() != null;
 	}
 
 	@Override
@@ -65,9 +65,7 @@ public class InsertStructManipulatorCommand extends Command {
 		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 		pos.setX((int) element.getPosition().getX() + (isMUX ? (-1000.0) : 1000.0));
 		pos.setY((int) element.getPosition().getY());
-		muxcreate = new FBCreateCommand(
-				element.getTypeLibrary().getFBTypeEntry(isMUX ? STRUCT_MUX_TYPE_NAME : STRUCT_DEMUX_TYPE_NAME),
-				element.getFbNetwork(), pos);
+		muxcreate = new FBCreateCommand(getStructManipulatorTypeEntry(), element.getFbNetwork(), pos);
 		muxcreate.execute();
 
 		changeStruct = new ChangeStructCommand((StructManipulator) muxcreate.getElement(), structType);
@@ -84,6 +82,12 @@ public class InsertStructManipulatorCommand extends Command {
 
 	public BlockFBNetworkElement getNewElement() {
 		return changeStruct.getNewElement();
+	}
+
+	private FBTypeEntry getStructManipulatorTypeEntry() {
+		final String typeName = isMUX ? STRUCT_MUX_TYPE_NAME : STRUCT_DEMUX_TYPE_NAME;
+		return port.getBlockFBNetworkElement().getTypeLibrary().getFbTypes()
+				.filter(entry -> typeName.equals(entry.getTypeName())).findFirst().orElse(null);
 	}
 
 	@Override
