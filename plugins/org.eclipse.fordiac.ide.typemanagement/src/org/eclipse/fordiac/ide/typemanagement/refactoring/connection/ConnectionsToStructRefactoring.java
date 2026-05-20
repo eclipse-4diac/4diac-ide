@@ -264,28 +264,41 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		final CompositeChange compChange = new CommandCompositeChange(
 				Messages.ConnectionsToStructRefactoring_ChangeName);
-		modelEdits = new ArrayList<>();
 		pm.beginTask(Messages.ConnectionsToStructRefactoring_ProgressText, 1);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(structURI) == null) {
 			compChange.add(new CreateStructChange(structURI, vars));
 		}
 
-		modelEdits.add(new ReplaceVarsWithStructModelEdit(sourceURI, replaceableConMap.keySet(), structURI,
+		final List<ModelEdit<?>> typeEdits = new ArrayList<>();
+		typeEdits.add(new ReplaceVarsWithStructModelEdit(sourceURI, replaceableConMap.keySet(), structURI,
 				sourceVarName, false, 0));
-		modelEdits.add(new ReplaceVarsWithStructModelEdit(destinationURI, replaceableConMap.values(), structURI,
+		typeEdits.add(new ReplaceVarsWithStructModelEdit(destinationURI, replaceableConMap.values(), structURI,
 				destinationVarName, true, 0));
+		addModelEditChange(compChange, typeEdits);
 
 		if (TypeLibraryManager.INSTANCE.getTypeEntryForURI(sourceURI).getType() instanceof final FBType sourceType
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForURI(destinationURI)
 						.getType() instanceof final FBType destinationType) {
 
+			modelEdits = new ArrayList<>();
 			update(sourceType, destinationType);
+			addModelEditChange(compChange, modelEdits);
+
+			modelEdits = new ArrayList<>();
 			connect(sourceType, destinationType);
+			addModelEditChange(compChange, modelEdits);
 		}
 		pm.done();
-		compChange.add(ModelEditChange.fromModelEdits(Messages.ConnectionsToStructRefactoring_ChangeName, modelEdits));
 		return compChange;
+	}
+
+	private static void addModelEditChange(final CompositeChange compChange, final List<ModelEdit<?>> edits) {
+		final CompositeChange modelEditChange = ModelEditChange.fromModelEdits(
+				Messages.ConnectionsToStructRefactoring_ChangeName, edits);
+		if (modelEditChange != null) {
+			compChange.add(modelEditChange);
+		}
 	}
 
 	private void update(final FBType sourceType, final FBType destinationType) {
@@ -305,6 +318,7 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 
 	private void connect(final FBType sourceType, final FBType destinationType) {
 		final Map<AutomationSystem, List<URI>> connectMap = new HashMap<>();
+		final Map<AutomationSystem, Map<URI, URI>> sourceMap = new HashMap<>();
 		final Map<FBNetworkElement, FBNetworkElement> correctConnectionMap = new HashMap<>();
 		final List<? extends EObject> sourceSearch = new BlockTypeInstanceSearch(sourceType.getTypeEntry())
 				.performSearch();
@@ -326,12 +340,14 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 					&& cons.size() == replaceableConMap.size()) {
 				correctConnectionMap.put(instance, cons.get(0).getSourceElement());
 				addToMap(connectMap, instance);
+				addToSourceMap(sourceMap, instance, cons.get(0).getSourceElement());
 			}
 		});
 
 		connectMap.entrySet()
 				.forEach(entry -> modelEdits.add(new SystemConnectStructModelEdit(EcoreUtil.getURI(entry.getKey()),
-						entry.getValue(), replaceableConMap, sourceVarName, destinationVarName)));
+						entry.getValue(), sourceMap.get(entry.getKey()), replaceableConMap, sourceVarName,
+						destinationVarName)));
 
 		if (conflictResolution) {
 			conflictResolution(sourceSearch, destinationSearch, correctConnectionMap);
@@ -373,6 +389,15 @@ public class ConnectionsToStructRefactoring extends Refactoring {
 			map.put(element.getFbNetwork().getAutomationSystem(), list);
 			return list;
 		}).add(EcoreUtil.getURI(element));
+	}
+
+	private static void addToSourceMap(final Map<AutomationSystem, Map<URI, URI>> map,
+			final FBNetworkElement destination, final FBNetworkElement source) {
+		Optional.ofNullable(map.get(destination.getFbNetwork().getAutomationSystem())).orElseGet(() -> {
+			final Map<URI, URI> sourceMap = new HashMap<>();
+			map.put(destination.getFbNetwork().getAutomationSystem(), sourceMap);
+			return sourceMap;
+		}).put(EcoreUtil.getURI(destination), EcoreUtil.getURI(source));
 	}
 
 	public TypeLibrary getTypeLibrary() {
