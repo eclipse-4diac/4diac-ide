@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;
@@ -22,6 +21,7 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.widgets.Display;
@@ -38,7 +38,14 @@ public class SessionEditPart extends AbstractGraphicalEditPart implements Proper
 
 	@Override
 	protected IFigure createFigure() {
-		final Figure figure = new Figure();
+
+		final Figure figure = new Figure() {
+			@Override
+			public Dimension getPreferredSize(final int wHint, final int hHint) {
+				// Let the layout manager compute the true preferred size
+				return getLayoutManager().getPreferredSize(this, wHint, hHint);
+			}
+		};
 		figure.setLayoutManager(new ToolbarLayout(false)); // vertical
 		figure.setOpaque(true);
 		return figure;

@@ -11,14 +11,14 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Device;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineModel;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
@@ -51,8 +51,14 @@ public class TimelineEditPartFactory implements EditPartFactory {
 			return part;
 		}
 
-		if (model instanceof Timeline) {
+		if (model instanceof TimelineModel) {
 			final var part = new TimelineEditPart();
+			part.setModel(model);
+			return part;
+		}
+
+		if (model instanceof EventMarker) {
+			final var part = new EventMarkerEditPart();
 			part.setModel(model);
 			return part;
 		}

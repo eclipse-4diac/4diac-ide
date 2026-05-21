@@ -11,16 +11,18 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * @brief A figure representing an event marker in the timeline.
@@ -30,7 +32,12 @@ import org.eclipse.draw2d.MouseListener;
  */
 public class EventMarkerFigure extends Figure {
 
+	private static final Color CURRENT_EVENT_COLOR = ColorConstants.yellow;
+	private static final Color NOT_CURRENT_EVENT_COLOR = ColorConstants.blue;
+	private static final Color INVALID_COLOR = ColorConstants.gray;
+
 	private final int eventIndex;
+	private boolean isCurrentEvent = false;
 
 	public EventMarkerFigure(final int eventIndex) {
 		this.eventIndex = eventIndex;
@@ -60,6 +67,18 @@ public class EventMarkerFigure extends Figure {
 		return eventIndex;
 	}
 
+	public void setIsValid(final boolean isValid) {
+		if (!isValid) {
+			setBackgroundColor(INVALID_COLOR);
+		} else {
+			setBackgroundColor(isCurrentEvent ? CURRENT_EVENT_COLOR : NOT_CURRENT_EVENT_COLOR);
+		}
+	}
+
+	public void setIsCurrentEvent(final boolean isCurrentEvent) {
+		this.isCurrentEvent = isCurrentEvent;
+	}
+
 	@Override
 	protected void paintFigure(final Graphics g) {
 		g.fillOval(getBounds());
@@ -68,7 +87,7 @@ public class EventMarkerFigure extends Figure {
 	// Listener
 
 	public interface SelectedEventListener {
-		void eventSelected(int eventIndex);
+		void eventSelected();
 	}
 
 	private final Set<SelectedEventListener> listeners = new HashSet<>();
@@ -81,9 +100,14 @@ public class EventMarkerFigure extends Figure {
 		listeners.remove(listener);
 	}
 
+	@Override
+	public Dimension getPreferredSize(final int wHint, final int hHint) {
+		return new Dimension(CommonConstants.MARKER_SIZE, CommonConstants.MARKER_SIZE);
+	}
+
 	private void notifyListeners() {
 		for (final var listener : listeners) {
-			listener.eventSelected(eventIndex);
+			listener.eventSelected();
 		}
 	}
 }

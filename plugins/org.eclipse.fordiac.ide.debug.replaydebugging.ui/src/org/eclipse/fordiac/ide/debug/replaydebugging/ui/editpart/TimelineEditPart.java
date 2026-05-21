@@ -11,27 +11,24 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.StateListener;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineAnchor;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineFigure;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineFigure.SelectedEventListener;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineWithChildrenFigure;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineModel;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -39,7 +36,6 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
@@ -57,16 +53,12 @@ import org.eclipse.swt.widgets.Display;
  *        changes, but only if the current event is outside of the current view
  *        area.
  */
-public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeEditPart, Timeline.NewEventListener,
-		Timeline.NewSpawnedTimelineListener, SelectedEventListener, StateListener {
-
-	private ReplayNavigator replayNavigator;
+public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeEditPart, PropertyChangeListener {
 
 	@Override
 	protected IFigure createFigure() {
-		final var timeline = (Timeline) getModel();
-		replayNavigator = ((Session) getViewer().getContents().getModel()).getResource(timeline).getReplayNavigator();
-		return new TimelineWithChildrenFigure(timeline);
+		final var model = getModel();
+		return new TimelineWithChildrenFigure(model.getGlobalStartPosition(), model.getEventMarkers().size());
 	}
 
 	@Override
@@ -85,196 +77,145 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	protected List<?> getModelChildren() {
-		final Timeline model = (Timeline) getModel();
-		final ArrayList<Timeline> timelines = new ArrayList<>(model.getSpawnedTimelines());
+		final var model = getModel();
 
-		Collections.sort(timelines,
-				(timeline1, timeline2) -> Integer.compare(model.getSpawnedTimelineEventNumber(timeline2),
-						model.getSpawnedTimelineEventNumber(timeline1)));
-		return timelines;
+		return Stream.concat(model.getSpawnedTimelineModels().stream(), model.getEventMarkers().stream())
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public IFigure getContentPane() {
-		return ((TimelineWithChildrenFigure) getFigure()).getChildrenFigure();
+		return getFigure().getSpawnedTimelinesPane();
 	}
 
 	@Override
-	protected void refreshVisuals() {
-		super.refreshVisuals();
-		updateCurrentEvent();
+	public TimelineWithChildrenFigure getFigure() {
+		return (TimelineWithChildrenFigure) super.getFigure();
+	}
+
+	@Override
+	public TimelineModel getModel() {
+		return (TimelineModel) super.getModel();
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		final var fig = getFigure();
+
+		if (childEditPart instanceof final EventMarkerEditPart marker) {
+			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
+
+			fig.getTimelineFigure().add(markerFigure);
+
+			final int x = (marker.getModel().getIndex() + getModel().getGlobalStartPosition())
+					* CommonConstants.TOTAL_MARKER_SPACE;
+
+			fig.getTimelineFigure().setConstraint(markerFigure,
+					new Rectangle(x, 0, CommonConstants.MARKER_SIZE, CommonConstants.MARKER_SIZE));
+
+		} else {
+			fig.getSpawnedTimelinesPane().add(((GraphicalEditPart) childEditPart).getFigure());
+		}
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		final var fig = getFigure();
+
+		if (childEditPart instanceof EventMarkerEditPart) {
+			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
+			fig.getSpawnedTimelinesPane().remove(markerFigure);
+		} else {
+			fig.getSpawnedTimelinesPane().remove(((GraphicalEditPart) childEditPart).getFigure());
+		}
 	}
 
 	@Override
 	protected void refreshChildren() {
 		super.refreshChildren();
-		((GraphicalEditPart) getViewer().getContents()).getFigure().invalidateTree();
+
+		// remove and add all timelines to sort them when a new one is added
+		final var fig = getFigure();
+		final IFigure pane = fig.getSpawnedTimelinesPane();
+
+		final List<IFigure> children = new ArrayList<>(pane.getChildren());
+		children.forEach(pane::remove);
+
+		getModelChildren().stream().filter(TimelineModel.class::isInstance)
+				.map(m -> (GraphicalEditPart) getViewer().getEditPartRegistry().get(m)).filter(Objects::nonNull)
+				.forEach(ep -> pane.add(ep.getFigure()));
+
+		pane.revalidate();
+		pane.repaint();
 	}
 
-	private TimelineFigure getTimelineFigure() {
-		return ((TimelineWithChildrenFigure) getFigure()).getTimelineFigure();
-	}
-
-	private void updateCurrentEvent() {
-		final var fig = getTimelineFigure();
-
-		final var currentPosition = replayNavigator.getCurrentEventPosition();
-
-		final Timeline model = (Timeline) getModel();
-
-		var currentTimeline = currentPosition.timeline();
-		var firstInvalid = currentPosition.eventNumber() + 1;
-
-		while (currentTimeline != model) {
-			final var parentTimeline = currentTimeline.getParentTimeline();
-			if (parentTimeline == null) {
-				firstInvalid = 0;
-				break;
-			}
-			firstInvalid = parentTimeline.getSpawnedTimelineEventNumber(currentTimeline) + 1;
-			currentTimeline = currentTimeline.getParentTimeline();
-		}
-
-		fig.updateEventStates(firstInvalid,
-				currentPosition.timeline() == getModel() ? currentPosition.eventNumber() : -1);
-
-		centerOnFigure(fig.getCurrentSelectedEventFigure());
-	}
-
-	private void centerOnFigure(final IFigure figure) {
-		if (figure == null || !figure.isShowing()) {
-			return;
-		}
-
-		final ScalableRootEditPart root = (ScalableRootEditPart) getViewer().getRootEditPart();
-
-		final Viewport viewport = (Viewport) root.getFigure();
-		final IFigure contents = viewport.getContents();
-
-		// Convert figure bounds → viewport content coordinates
-		final Rectangle bounds = figure.getBounds().getCopy();
-		figure.translateToAbsolute(bounds);
-		contents.translateToRelative(bounds);
-
-		final Rectangle viewArea = viewport.getClientArea();
-
-		final int centerX = bounds.x + bounds.width / 2;
-		final int centerY = bounds.y + bounds.height / 2;
-
-		final int viewLeft = viewArea.x;
-		final int viewTop = viewArea.y;
-		final int viewRight = viewLeft + viewArea.width;
-		final int viewBottom = viewTop + viewArea.height;
-
-		// Only center if center point is outside
-		final int margin = 20;
-
-		if (centerX >= viewLeft + margin && centerX <= viewRight - margin && centerY >= viewTop + margin
-				&& centerY <= viewBottom - margin) {
-			return;
-		}
-
-		int targetX = centerX - viewArea.width / 2;
-		int targetY = centerY - viewArea.height / 2;
-
-		final int maxX = contents.getBounds().width - viewArea.width;
-		final int maxY = contents.getBounds().height - viewArea.height;
-
-		targetX = Math.clamp(targetX, 0, Math.max(0, maxX));
-		targetY = Math.clamp(targetY, 0, Math.max(0, maxY));
-
-		viewport.setHorizontalLocation(targetX);
-		viewport.setVerticalLocation(targetY);
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		final var fig = getFigure();
+		fig.getLineFigure().setFirstInvalid(getModel().getFirstInvalid());
 	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		final Timeline timeline = (Timeline) getModel();
-		timeline.addNewEventListener(this);
-		timeline.addNewSpawnedTimelineListener(this);
-
-		replayNavigator.addStateChangeListener(this);
-		getTimelineFigure().addEventSelectionListener(this);
+		getModel().addPropertyChangeListener(this);
 	}
 
 	@Override
 	public void deactivate() {
-		final Timeline model = (Timeline) getModel();
-		model.removeNewEventListener(this);
-		model.removeNewSpawnedTimelineListener(this);
-
-		replayNavigator.removeStateChangeListener(this);
-		getTimelineFigure().removeEventSelectionListener(this);
+		getModel().removePropertyChangeListener(this);
+		getModel().dispose();
 		super.deactivate();
+	}
+
+	private static void revalidateUpToRoot(IFigure figure) {
+		while (figure != null) {
+			figure.revalidate();
+			figure = figure.getParent();
+		}
 	}
 
 	private void safeRefresh(final boolean newTimelines, final boolean newEvents) {
 		final Display display = getViewer().getControl().getDisplay();
 		display.asyncExec(() -> {
 			if (isActive()) {
-
-				if (newEvents) {
-					getTimelineFigure().rebuildMarkers();
-				}
-				if (newTimelines) {
+				if (newTimelines || newEvents) {
+					final var fig = (getFigure());
+					fig.updateMaxNumberOfEvents(getModel().getEventMarkers().size());
 					refreshChildren();
 					refreshSourceConnections();
+
+					revalidateUpToRoot(fig); // invalidate the whole chain
+					fig.revalidate(); // then queue the layout pass
 				}
 				refreshVisuals();
 			}
 		});
 	}
 
-	// calls from the model
-
-	@Override
-	public void timelineSpawned(final Timeline spawnedTimeline) {
-		final Timeline timeline = (Timeline) getModel();
-		((Session) getViewer().getContents().getModel()).getResource(timeline).addTimeline(spawnedTimeline);
-		safeRefresh(true, false);
-	}
-
-	@Override
-	public void eventAdded(final Timeline timeline) {
-		safeRefresh(false, true);
-	}
-
-	@Override
-	public void stateUpdated(final ReplayNavigator replayNavigator, final DatapointsState changedValues) {
-		safeRefresh(false, false);
-	}
-
-	// calls from the figure
-
-	@Override
-	public void eventSelected(final Timeline timeline, final int eventIndex) {
-		replayNavigator.moveToEvent(new ReplayNavigator.EventPosition(timeline, eventIndex));
-	}
-
 	// connections and anchors
 
 	@Override
 	public List<?> getModelSourceConnections() {
-		final Timeline timeline = (Timeline) getModel();
-		return ((Session) getViewer().getContents().getModel()).getResource(timeline).getSources(timeline);
+		return getModel().getSources();
 	}
 
 	@Override
 	public List<?> getModelTargetConnections() {
-		final Timeline timeline = (Timeline) getModel();
-		return ((Session) getViewer().getContents().getModel()).getResource(timeline).getTargets(timeline);
+		return getModel().getTargets();
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
 		final TimelineConnection conn = (TimelineConnection) connection.getModel();
-		return new TimelineAnchor(getTimelineFigure(), conn.spawnedIndex(), (Timeline) getModel(), true);
+		return new TimelineAnchor(getFigure().getLineFigure(), conn.spawnedIndex(), getModel().getEventMarkers().size(),
+				true);
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
-		return new TimelineAnchor(getTimelineFigure(), 0, (Timeline) getModel(), false);
+		return new TimelineAnchor(getFigure().getLineFigure(), 0, getModel().getEventMarkers().size(), false);
 	}
 
 	@Override
@@ -285,6 +226,17 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(final Request request) {
 		return null;
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(TimelineModel.PROPERTY_EVENT_ADDED)) {
+			safeRefresh(false, true);
+		} else if (evt.getPropertyName().equals(TimelineModel.PROPERTY_TIMELINE_ADDED)) {
+			safeRefresh(true, false);
+		} else if (evt.getPropertyName().equals(TimelineModel.PROPERTY_STATE_CHANGED)) {
+			safeRefresh(false, false);
+		}
 	}
 
 }
