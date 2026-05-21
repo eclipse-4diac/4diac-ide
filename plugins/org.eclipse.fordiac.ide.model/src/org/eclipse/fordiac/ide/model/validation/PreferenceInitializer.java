@@ -30,6 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				ValidationPreferences.SEVERITY_IGNORE);
 		preferences.put(ValidationPreferences.VALUE_FOR_GENERIC_INSTANCE_VARIABLE,
 				ValidationPreferences.SEVERITY_WARNING);
+		preferences.put(ValidationPreferences.EVENT_MULTIPLE_OUTPUT_CONNECTIONS, ValidationPreferences.SEVERITY_IGNORE);
 	}
 
 }

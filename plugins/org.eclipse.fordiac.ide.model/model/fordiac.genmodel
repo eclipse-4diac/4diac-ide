@@ -459,6 +459,11 @@
       <genOperations ecoreOperation="lib.ecore#//Event/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Event/validateMultipleOutputConnections"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.EventAnnotations.validateMultipleOutputConnections(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//Event/validateMultipleOutputConnections/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//Event/validateMultipleOutputConnections/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//EventConnection">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//EventConnection/fBNetwork"/>
