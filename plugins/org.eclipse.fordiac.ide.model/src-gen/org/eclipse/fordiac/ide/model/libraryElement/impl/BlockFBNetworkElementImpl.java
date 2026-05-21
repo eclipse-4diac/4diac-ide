@@ -16,8 +16,10 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Map;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
@@ -209,6 +211,16 @@ public abstract class BlockFBNetworkElementImpl extends FBNetworkElementImpl imp
 		}
 		super.setTypeEntry(newTypeEntry);
 		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean validateUnused(final DiagnosticChain diagnostics, final Map<Object, Object> context) {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.validateUnused(this, diagnostics, context);
 	}
 
 	/**
