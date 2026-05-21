@@ -251,6 +251,8 @@ public final class Messages extends NLS {
 
 	public static String BaseFBTypeAnnotations_UnsupportedInternalFBType;
 
+	public static String BlockFBNetworkElementAnnotations_Unused;
+
 	public static String SystemImporter_Mapping_WrongString;
 	public static String SystemImporter_Mapping_MissingDevice;
 	public static String SystemImporter_Mapping_MissingResource;

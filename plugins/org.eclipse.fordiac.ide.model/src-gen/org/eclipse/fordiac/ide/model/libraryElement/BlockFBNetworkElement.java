@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.Map;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
@@ -109,4 +111,12 @@ public interface BlockFBNetworkElement extends FBNetworkElement {
 	 * @generated
 	 */
 	void setTypeEntry(TypeEntry newTypeEntry);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model annotation="http://www.eclipse.org/emf/2002/Ecore invariant='true'"
+	 * @generated
+	 */
+	boolean validateUnused(DiagnosticChain diagnostics, Map<Object, Object> context);
 } // BlockFBNetworkElement

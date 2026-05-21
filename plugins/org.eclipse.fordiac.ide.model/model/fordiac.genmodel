@@ -150,6 +150,11 @@
           body="if(!(newTypeEntry instanceof org.eclipse.fordiac.ide.model.typelibrary.InterfaceTypeEntry)){&#xA;&#x9;throw new IllegalArgumentException(&quot;Non InterfaceTypeEntry given in setTypeEntry of BlockFBNetworkElement&quot;);  //$NON-NLS-1$&#xA;}&#xA;super.setTypeEntry(newTypeEntry);&#xA;">
         <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/setTypeEntry/newTypeEntry"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//BlockFBNetworkElement/validateUnused"
+          body="return org.eclipse.fordiac.ide.model.libraryElement.impl.BlockFBNetworkElementAnnotations.validateUnused(this, diagnostics, context);">
+        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/validateUnused/diagnostics"/>
+        <genParameters ecoreParameter="lib.ecore#//BlockFBNetworkElement/validateUnused/context"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CFBInstance">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
