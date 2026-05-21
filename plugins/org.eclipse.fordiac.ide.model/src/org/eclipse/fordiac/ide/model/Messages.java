@@ -87,6 +87,8 @@ public final class Messages extends NLS {
 	public static String AttributeAnnotations_MissingAttributeDeclaration;
 
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+
+	public static String EventAnnotations_MultipleOutputConnections;
 	public static String FBNetworkAnnotations_CollisionMessage;
 	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
