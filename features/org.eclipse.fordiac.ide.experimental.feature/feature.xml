@@ -35,7 +35,10 @@
 
    <requires>
       <import feature="org.eclipse.fordiac.ide.workbench.feature"/>
-      <import feature="org.eclipse.mylyn.wikitext.feature"/>
+      <import plugin="org.eclipse.mylyn.wikitext.asciidoc"/>
+      <import plugin="org.eclipse.mylyn.wikitext.asciidoc.ui"/>
+      <import plugin="org.eclipse.mylyn.wikitext.ui"/>
+      <import plugin="org.eclipse.mylyn.wikitext.ui.source"/>
    </requires>
 
    <plugin
