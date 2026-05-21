@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <feature id="org.eclipse.fordiac.ide.experimental.feature" >
+        <category name="org.eclipse.fordiac.ide.additional"/>
+    </feature>
+    <feature id="org.eclipse.fordiac.ide.deployment.opcua.feature" >
+        <category name="org.eclipse.fordiac.ide.additional"/>
+    </feature>
+    
+    <category-def name="org.eclipse.fordiac.ide.additional" label="Additional 4diac IDE Features">
+        <description>Additional 4diac IDE features not included into a default 4diac IDE product to be inclueded in the update site</description>
+    </category-def>
+</site>
