@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 public class EventMarker {
 	private final int index;
+	private final TimelineModel parentTimeline;
 	private final Consumer<Integer> eventSelected;
 	private boolean isCurrentEvent = false;
 	private boolean isValid = false;
@@ -27,8 +28,9 @@ public class EventMarker {
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public EventMarker(final int index, final Consumer<Integer> eventSelected) {
+	public EventMarker(final int index, final TimelineModel parentTimeline, final Consumer<Integer> eventSelected) {
 		this.index = index;
+		this.parentTimeline = parentTimeline;
 		this.eventSelected = eventSelected;
 	}
 
@@ -38,6 +40,10 @@ public class EventMarker {
 
 	public boolean getIsCurrentEvent() {
 		return isCurrentEvent;
+	}
+
+	public TimelineModel getParentTimeline() {
+		return parentTimeline;
 	}
 
 	public void setIsCurrentEvent(final boolean isCurrentEvent) {

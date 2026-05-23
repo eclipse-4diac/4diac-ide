@@ -49,8 +49,8 @@ public class LineFigure extends Figure {
 
 	@Override
 	public Dimension getPreferredSize(final int wHint, final int hHint) {
-		final var width = maxNumberOfEvents * CommonConstants.TOTAL_MARKER_SPACE;
-		return new Dimension(width, CommonConstants.MARKER_SIZE);
+		final var width = maxNumberOfEvents * CommonFigureConstants.TOTAL_MARKER_SPACE;
+		return new Dimension(width, CommonFigureConstants.MARKER_SIZE);
 	}
 
 	@Override
@@ -60,13 +60,13 @@ public class LineFigure extends Figure {
 		g.setLineWidth(LINE_WITDH);
 
 		final var endBlack = area.x + Math.min(area.width,
-				CommonConstants.TOTAL_MARKER_SPACE * (firstInvalid) - CommonConstants.EVENT_SPACING);
+				CommonFigureConstants.TOTAL_MARKER_SPACE * (firstInvalid) - CommonFigureConstants.EVENT_SPACING);
 
 		g.setForegroundColor(ColorConstants.black);
 		g.drawLine(area.x, centerY, endBlack, centerY);
 
 		g.setForegroundColor(ColorConstants.gray);
-		g.drawLine(endBlack, centerY, area.x + area.width - CommonConstants.EVENT_SPACING, centerY);
+		g.drawLine(endBlack, centerY, area.x + area.width - CommonFigureConstants.EVENT_SPACING, centerY);
 	}
 
 }

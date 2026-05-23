@@ -17,22 +17,18 @@ import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.IReplayNavigatorRegistrationListener;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigatorManager;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.action.MoveDown;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.action.MoveOneEventBackwards;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.action.MoveOneEventForward;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.action.MoveUp;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPartFactory;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Session;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.KeyHandler;
-import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -46,6 +42,8 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 
 	private GraphicalViewer viewer;
 	private final Session session = new Session();
+
+	private static String menuId = "org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"; //$NON-NLS-1$
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -64,18 +62,29 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 
 		viewer.setEditDomain(new DefaultEditDomain(null));
 
-		final KeyHandler keyHandler = new KeyHandler();
-		keyHandler.put(KeyStroke.getPressed(SWT.ARROW_RIGHT, 0), new MoveOneEventForward(viewer));
-		keyHandler.put(KeyStroke.getPressed(SWT.ARROW_LEFT, 0), new MoveOneEventBackwards(viewer));
-		keyHandler.put(KeyStroke.getPressed(SWT.ARROW_UP, 0), new MoveUp(viewer));
-		keyHandler.put(KeyStroke.getPressed(SWT.ARROW_DOWN, 0), new MoveDown(viewer));
-
-		viewer.setKeyHandler(keyHandler);
+		setMenu();
 
 		ReplayNavigatorManager.getDefault().addListener(this);
 		parent.addDisposeListener(e -> ReplayNavigatorManager.getDefault().removeListener(this));
 		viewer.setContents(session);
 
+	}
+
+	private void setMenu() {
+
+		// Register context menu — links the viewer's selection to Eclipse's menu
+		// framework
+		final MenuManager menuManager = new MenuManager();
+		menuManager.setRemoveAllWhenShown(true);
+
+		final Menu menu = menuManager.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+
+		// This ID must match the locationURI in plugin.xml (without "popup:")
+		getSite().registerContextMenu(menuId, menuManager, viewer);
+
+		// This makes the viewer's selection available to handlers via HandlerUtil
+		getSite().setSelectionProvider(viewer);
 	}
 
 	@Override
@@ -91,5 +100,13 @@ public class ReplayDebuggingView extends ViewPart implements IReplayNavigatorReg
 	@Override
 	public void replayNavigatorUnregistered(final ReplayNavigator navigator) {
 		session.removeReplayNavigator(navigator);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+		if (adapter == GraphicalViewer.class) {
+			return adapter.cast(viewer);
+		}
+		return super.getAdapter(adapter);
 	}
 }

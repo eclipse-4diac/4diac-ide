@@ -16,10 +16,18 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveDownCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveLeftCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveRightCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 
 /**
@@ -54,26 +62,25 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy());
+		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				if (!(request instanceof final NavigationRequest nav)) {
+					return null;
+				}
+				return switch (nav.getDirection()) {
+				case UP -> new MoveUpCommand(getModel().getReplayNavigator());
+				case DOWN -> new MoveDownCommand(getModel().getReplayNavigator());
+				case LEFT -> new MoveLeftCommand(getModel().getReplayNavigator());
+				case RIGHT -> new MoveRightCommand(getModel().getReplayNavigator());
+				default -> null;
+				};
+			}
+		});
 	}
 
 	@Override
 	public Resource getModel() {
 		return (Resource) super.getModel();
-	}
-
-	public void moveForward() {
-		getModel().moveForward();
-	}
-
-	public void moveBackwards() {
-		getModel().moveBackwards();
-	}
-
-	public void moveUp() {
-		getModel().moveUp();
-	}
-
-	public void moveDown() {
-		getModel().moveDown();
 	}
 }
