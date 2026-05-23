@@ -16,10 +16,13 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ConnectionRouter;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures.ECCTransitionRouter;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.policies.ECCXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
@@ -112,6 +115,11 @@ public class ECCEditPart extends AbstractDiagramEditPart {
 		final List<ECState> temp = new ArrayList<>();
 		temp.addAll(getCastedECCModel().getECState());
 		return temp;
+	}
+
+	@Override
+	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
+		return new ECCTransitionRouter();
 	}
 
 }
