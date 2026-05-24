@@ -102,7 +102,7 @@ public class EventMarkerFigure extends Figure {
 
 	@Override
 	public Dimension getPreferredSize(final int wHint, final int hHint) {
-		return new Dimension(CommonConstants.MARKER_SIZE, CommonConstants.MARKER_SIZE);
+		return new Dimension(CommonFigureConstants.MARKER_SIZE, CommonFigureConstants.MARKER_SIZE);
 	}
 
 	private void notifyListeners() {

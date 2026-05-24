@@ -23,10 +23,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.EventChange;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 
-public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpawnedTimelineListener {
+public class TimelineModel implements Timeline.StructureListener {
 
 	private final Timeline timeline;
 	private TimelineConnection connectionToParentTimelineModel;
@@ -39,6 +40,8 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 
 	public static final String PROPERTY_EVENT_ADDED = "eventAdded"; //$NON-NLS-1$
 	public static final String PROPERTY_TIMELINE_ADDED = "timelineAdded"; //$NON-NLS-1$
+	public static final String PROPERTY_EVENT_DELETED = "eventDeleted"; //$NON-NLS-1$
+	public static final String PROPERTY_TIMELINE_DELETED = "timelineDeleted"; //$NON-NLS-1$
 	public static final String PROPERTY_STATE_CHANGED = "stateChanged"; //$NON-NLS-1$
 
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
@@ -48,15 +51,14 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 		this.eventSelected = eventSelected;
 
 		for (var i = 0; i <= timeline.getMaxEventNumber(); i++) {
-			eventMarkers.add(new EventMarker(i, this::eventSelected));
+			eventMarkers.add(new EventMarker(i, this, this::eventSelected));
 		}
 
 		for (final var spawnedTimeline : timeline.getSpawnedTimelines()) {
 			addNewSpawnedTimeline(spawnedTimeline);
 		}
 
-		timeline.addNewEventListener(this);
-		timeline.addNewSpawnedTimelineListener(this);
+		timeline.addStructureListener(this);
 	}
 
 	public List<EventMarker> getEventMarkers() {
@@ -71,7 +73,7 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 		return Timeline.getSpawnedTimelineGlobalEventNumber(timeline);
 	}
 
-	private Timeline getTimeline() {
+	public Timeline getTimeline() {
 		return timeline;
 	}
 
@@ -132,8 +134,7 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 	}
 
 	public void dispose() {
-		timeline.removeNewEventListener(this);
-		timeline.removeNewSpawnedTimelineListener(this);
+		timeline.removeStructureListener(this);
 	}
 
 	private void eventSelected(final Integer index) {
@@ -152,7 +153,7 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 
 	@Override
 	public void eventAdded(final Timeline timeline) {
-		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this::eventSelected));
+		eventMarkers.add(new EventMarker(timeline.getMaxEventNumber(), this, this::eventSelected));
 		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_ADDED, null, null);
 	}
 
@@ -160,6 +161,22 @@ public class TimelineModel implements Timeline.NewEventListener, Timeline.NewSpa
 	public void timelineSpawned(final Timeline spawnedTimeline) {
 		addNewSpawnedTimeline(spawnedTimeline);
 		propertyChangeSupport.firePropertyChange(PROPERTY_TIMELINE_ADDED, null, null);
+	}
+
+	@Override
+	public void eventsRemoved(final Timeline timeline, final int removedStartEventIndex,
+			final List<EventChange> removedChanges) {
+		while (eventMarkers.size() > removedStartEventIndex) {
+			eventMarkers.removeLast();
+		}
+		propertyChangeSupport.firePropertyChange(PROPERTY_EVENT_DELETED, null, null);
+	}
+
+	@Override
+	public void timelineRemoved(final Timeline parentTimeline, final Timeline removedTimeline,
+			final int spawnedAtEventNumber) {
+		spawnedConnections.removeIf(timelineConnection -> timelineConnection.child().timeline == removedTimeline);
+		propertyChangeSupport.firePropertyChange(PROPERTY_TIMELINE_DELETED, null, null);
 	}
 
 	// Listener to this

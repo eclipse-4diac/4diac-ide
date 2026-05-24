@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,7 +25,9 @@ import java.util.stream.Stream;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteTimelineCommand;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.CommonFigureConstants;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineAnchor;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.TimelineWithChildrenFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.TimelineConnection;
@@ -33,9 +36,12 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Handle;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.AbstractEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.swt.widgets.Display;
 
@@ -64,13 +70,29 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy() {
+
+			// don't show the square around the timeline when selected
 			@Override
-			public void showSelection() {
-				// Redirect selection to the parent
-				final EditPart parent = getHost().getParent();
-				if (parent != null && parent.getViewer() != null) {
-					parent.getViewer().select(parent);
+			protected List<? extends Handle> createSelectionHandles() {
+				return Collections.emptyList();
+			}
+
+		});
+
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				if (CommonConstants.DELETE_TIMELINE_REQUEST.equals(request.getType())) {
+					return new DeleteTimelineCommand(getModel().getTimeline());
 				}
+				return null;
+			}
+		});
+
+		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				return null; // bubble all navigation to parent
 			}
 		});
 	}
@@ -108,10 +130,10 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 			fig.getTimelineFigure().add(markerFigure);
 
 			final int x = (marker.getModel().getIndex() + getModel().getGlobalStartPosition())
-					* CommonConstants.TOTAL_MARKER_SPACE;
+					* CommonFigureConstants.TOTAL_MARKER_SPACE;
 
 			fig.getTimelineFigure().setConstraint(markerFigure,
-					new Rectangle(x, 0, CommonConstants.MARKER_SIZE, CommonConstants.MARKER_SIZE));
+					new Rectangle(x, 0, CommonFigureConstants.MARKER_SIZE, CommonFigureConstants.MARKER_SIZE));
 
 		} else {
 			fig.getSpawnedTimelinesPane().add(((GraphicalEditPart) childEditPart).getFigure());
@@ -124,7 +146,7 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 		if (childEditPart instanceof EventMarkerEditPart) {
 			final IFigure markerFigure = ((GraphicalEditPart) childEditPart).getFigure();
-			fig.getSpawnedTimelinesPane().remove(markerFigure);
+			fig.getTimelineFigure().remove(markerFigure);
 		} else {
 			fig.getSpawnedTimelinesPane().remove(((GraphicalEditPart) childEditPart).getFigure());
 		}
@@ -230,12 +252,18 @@ public class TimelineEditPart extends AbstractGraphicalEditPart implements NodeE
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(TimelineModel.PROPERTY_EVENT_ADDED)) {
+		switch (evt.getPropertyName()) {
+		case TimelineModel.PROPERTY_EVENT_ADDED, TimelineModel.PROPERTY_EVENT_DELETED:
 			safeRefresh(false, true);
-		} else if (evt.getPropertyName().equals(TimelineModel.PROPERTY_TIMELINE_ADDED)) {
+			break;
+		case TimelineModel.PROPERTY_TIMELINE_ADDED, TimelineModel.PROPERTY_TIMELINE_DELETED:
 			safeRefresh(true, false);
-		} else if (evt.getPropertyName().equals(TimelineModel.PROPERTY_STATE_CHANGED)) {
+			break;
+		case TimelineModel.PROPERTY_STATE_CHANGED:
 			safeRefresh(false, false);
+			break;
+		default:
+			break;
 		}
 	}
 

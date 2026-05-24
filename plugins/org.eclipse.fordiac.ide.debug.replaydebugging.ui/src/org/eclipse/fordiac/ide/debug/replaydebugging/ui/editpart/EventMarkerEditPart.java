@@ -15,15 +15,24 @@ package org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.DeleteEventsCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.EventMarkerFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.EventMarker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Handle;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.AbstractEditPolicy;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -52,13 +61,25 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy() {
+
+			// don't show the square around the event when selected
 			@Override
-			public void showSelection() {
-				// Redirect selection to the parent
-				final EditPart parent = getHost().getParent();
-				if (parent != null) {
-					getHost().getViewer().select(parent);
-				}
+			protected List<? extends Handle> createSelectionHandles() {
+				return Collections.emptyList();
+			}
+
+		});
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
+			@Override
+			protected Command createDeleteCommand(final GroupRequest request) {
+				return new DeleteEventsCommand(getModel().getParentTimeline().getTimeline(), getModel().getIndex());
+			}
+		});
+
+		installEditPolicy(CommonConstants.NAVIGATION_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				return null; // bubble all navigation to parent
 			}
 		});
 	}

@@ -11,18 +11,13 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
+package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 
-/**
- * @brief Common constants for the replay debugging UI
- */
 public class CommonConstants {
-
 	private CommonConstants() {
-		// we don't want any instances of this
+		// this class should not be instantiated
 	}
 
-	public static final int MARKER_SIZE = 20;
-	public static final int EVENT_SPACING = 5;
-	public static final int TOTAL_MARKER_SPACE = MARKER_SIZE + EVENT_SPACING;
+	public static String NAVIGATION_POLICY = "Navigation"; //$NON-NLS-1$
+	public static String DELETE_TIMELINE_REQUEST = "DeleteTimeline"; //$NON-NLS-1$
 }
