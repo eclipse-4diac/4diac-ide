@@ -15,6 +15,12 @@
             id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"
             name="%view.name">
       </view>
+      <view
+            class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.StatesComparisonView"
+            icon="icons/states_comparison.png"
+            id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.StatesComparisonView"
+            name="%statesComparisonView.name">
+      </view>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -34,6 +40,9 @@
              name="Delete Event"/>
  	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
              name="Delete Timeline"/>
+ 	<command id="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
+             name="Add To Comparison"/>
+
 
   </extension>
 
@@ -92,6 +101,15 @@
         </with>
       </activeWhen>
     </handler>
+
+    <handler commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
+             class="org.eclipse.fordiac.ide.debug.replaydebugging.ui.handlers.AddToComparisonHandler">
+      <activeWhen>
+        <with variable="activePartId">
+          <equals value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.ReplayDebuggingView"/>
+        </with>
+      </activeWhen>
+    </handler>
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -113,6 +131,20 @@
       <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.deleteTimeline"
                label="%command.delete_timeline_label">
         <visibleWhen checkEnabled="false">
+          <with variable="selection">
+            <iterate ifEmpty="false">
+              <or>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.TimelineEditPart"/>
+                <instanceof value="org.eclipse.fordiac.ide.debug.replaydebugging.ui.editpart.EventMarkerEditPart"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+
+      <command commandId="org.eclipse.fordiac.ide.debug.replaydebugging.ui.addToComparison"
+               label="%command.add_to_comparison_label">
+        <visibleWhen checkEnabled="true">
           <with variable="selection">
             <iterate ifEmpty="false">
               <or>
