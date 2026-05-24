@@ -11,16 +11,10 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.debug.replaydebugging.ui;
 
-public class CommonConstants {
-	private CommonConstants() {
-		// this class should not be instantiated
-	}
+package org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison;
 
-	public static String NAVIGATION_POLICY = "Navigation"; //$NON-NLS-1$
-	public static String COMPARISON_POLICY = "Comparison"; //$NON-NLS-1$
+import java.util.List;
 
-	public static String DELETE_TIMELINE_REQUEST = "DeleteTimeline"; //$NON-NLS-1$
-	public static String ADD_TO_COMPARISON_REQUEST = "AddToComparison"; //$NON-NLS-1$
+public record RowEntry(String rowKey, List<ComparisonColumn> columns) {
 }

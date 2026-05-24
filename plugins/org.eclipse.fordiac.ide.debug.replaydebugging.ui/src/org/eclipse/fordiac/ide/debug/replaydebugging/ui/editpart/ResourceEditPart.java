@@ -17,12 +17,14 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.CommonConstants;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.AddToComparisonCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveDownCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveLeftCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveRightCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.command.MoveUpCommand;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure.NameStackedFigure;
 import org.eclipse.fordiac.ide.debug.replaydebugging.ui.model.Resource;
+import org.eclipse.fordiac.ide.debug.replaydebugging.ui.statescomparison.ComparisonService;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -77,6 +79,18 @@ public class ResourceEditPart extends AbstractGraphicalEditPart {
 				};
 			}
 		});
+
+		installEditPolicy(CommonConstants.COMPARISON_POLICY, new AbstractEditPolicy() {
+			@Override
+			public Command getCommand(final Request request) {
+				if (CommonConstants.ADD_TO_COMPARISON_REQUEST.equals(request.getType())) {
+					return new AddToComparisonCommand(ComparisonService.getInstance(), getModel().getReplayNavigator(),
+							getModel().getReplayNavigator().getCurrentEventPosition());
+				}
+				return null;
+			}
+		});
+
 	}
 
 	@Override

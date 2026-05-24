@@ -82,6 +82,7 @@ public class EventMarkerEditPart extends AbstractGraphicalEditPart
 				return null; // bubble all navigation to parent
 			}
 		});
+
 	}
 
 	@Override

@@ -104,7 +104,7 @@ public class ReplayNavigator implements Timeline.StructureListener {
 		if (currentEventPosition.timeline().getMaxEventNumber() != currentEventPosition.eventNumber()) {
 			// we are not at the end
 			timelineToAdd = new Timeline();
-			currentEventPosition.timeline().addSpawnedTimeline(timelineToAdd, currentEventPosition.eventNumber);
+			currentEventPosition.timeline().addSpawnedTimeline(timelineToAdd, currentEventPosition.eventNumber());
 		}
 		timelineToAdd.addEventChange(newValues);
 		moveToEvent(new EventPosition(timelineToAdd, timelineToAdd.getMaxEventNumber()));
@@ -267,6 +267,15 @@ public class ReplayNavigator implements Timeline.StructureListener {
 		return changedValues;
 	}
 
+	public DatapointsState getStateAtEventPosition(final EventPosition position) {
+		// DatapointsState extends HashMap, so we need to create a new instance to avoid
+		// modifying the current state
+		final var currentStateTemp = new DatapointsState();
+		currentStateTemp.putAll(currentState);
+		currentStateTemp.putAll(getChangesFromTo(currentEventPosition, position));
+		return currentStateTemp;
+	}
+
 	/**
 	 * Finds the lowest common ancestor of two timelines, which is the timeline that
 	 * is the closest common parent of both timelines. This is used to find the path
@@ -355,7 +364,7 @@ public class ReplayNavigator implements Timeline.StructureListener {
 	public void timelineRemoved(final Timeline parentTimeline, final Timeline removedTimeline,
 			final int spawnedAtEventNumber) {
 		if (getCurrentEventPosition().timeline() == removedTimeline) {
-			moveToEvent(new ReplayNavigator.EventPosition(parentTimeline, spawnedAtEventNumber));
+			moveToEvent(new EventPosition(parentTimeline, spawnedAtEventNumber));
 		}
 		removedTimeline.removeStructureListener(this);
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
