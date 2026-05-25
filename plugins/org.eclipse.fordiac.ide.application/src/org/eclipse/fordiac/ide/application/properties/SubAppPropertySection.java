@@ -22,12 +22,13 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class SubAppPropertySection extends InstancePropertySection {
+public class SubAppPropertySection extends AbstractInstanceSection {
 
 	private Text heightText;
 	private Text widthText;
@@ -38,15 +39,23 @@ public class SubAppPropertySection extends InstancePropertySection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
+		GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(true).applyTo(parent);
+
+		final Composite leftComposite = createComposite(parent);
+		final Composite rightComposite = createComposite(parent);
+		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, false);
+		parent.setLayoutData(gridLayoutData);
+		createFBInfoGroup(leftComposite);
 		createFBSizeGroup(rightComposite);
 	}
 
-	@Override
-	protected void createSubsectionLayout(final Composite parent) {
-		createSingleRowLayout(parent);
-		createDoubleColumnLayout(upperComposite);
-		createFBInfoGroup(leftComposite);
-		createTableSection(lowerComposite);
+	private void createFBInfoGroup(final Composite parent) {
+		final Composite fbSizeContainer = getWidgetFactory().createComposite(parent);
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(fbSizeContainer);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(fbSizeContainer);
+
+		createNameInput(fbSizeContainer);
+		createCommentInput(fbSizeContainer);
 	}
 
 	private void createLockSizeCheckbox(final Composite parent) {
@@ -65,7 +74,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(fbSizeContainer);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(fbSizeContainer);
 
-		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Height + ":"); //$NON-NLS-1$
+		getWidgetFactory().createLabel(fbSizeContainer, FordiacMessages.Height + ":"); //$NON-NLS-1$
 		heightText = createGroupText(fbSizeContainer, true);
 		heightText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
 		heightText.addModifyListener(e -> {
@@ -86,7 +95,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 
 		heightText.addVerifyListener(e -> e.doit = e.text.chars().allMatch(Character::isDigit));
 
-		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Width + ":"); //$NON-NLS-1$
+		getWidgetFactory().createLabel(fbSizeContainer, FordiacMessages.Width + ":"); //$NON-NLS-1$
 		widthText = createGroupText(fbSizeContainer, true);
 		widthText.setTextLimit(TEXT_INPUT_MAX_LENGTH);
 		widthText.addModifyListener(e -> {
@@ -107,7 +116,7 @@ public class SubAppPropertySection extends InstancePropertySection {
 
 		widthText.addVerifyListener(e -> e.doit = e.text.chars().allMatch(Character::isDigit));
 
-		getWidgetFactory().createCLabel(fbSizeContainer, FordiacMessages.Subapp_Size_DisableAutoResize + ":"); //$NON-NLS-1$
+		getWidgetFactory().createLabel(fbSizeContainer, FordiacMessages.Subapp_Size_DisableAutoResize + ":"); //$NON-NLS-1$
 		createLockSizeCheckbox(fbSizeContainer);
 	}
 
