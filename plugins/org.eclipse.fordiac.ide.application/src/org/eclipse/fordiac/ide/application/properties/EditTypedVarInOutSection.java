@@ -12,39 +12,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
-import org.eclipse.gef.EditPart;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 
-public class EditTypedSubappInterfaceDataSection extends EditUntypedSubappInterfaceDataSection {
-
+public class EditTypedVarInOutSection extends AbstractEditTypeVarInOutSection {
 	@Override
-	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreationCommand newCreateCommand(final IInterfaceElement ie) {
 		return null;
 	}
 
 	@Override
-	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
-			final int index) {
+	protected CreationCommand newInsertCommand(final IInterfaceElement ie, final int index) {
 		return null;
 	}
 
 	@Override
-	protected SubApp getInputType(final Object input) {
-		Object candidate = null;
-		if (input instanceof final EditPart editPart) {
-			candidate = editPart.getModel();
-		}
-		if (candidate instanceof final SubApp subapp && subapp.isTyped()) {
-			return subapp;
-		}
-		return null;
+	protected BlockFBNetworkElement getInputType(final Object input) {
+		return TypedInterfaceEditingFilter.getTypedElementFromSelectedElement(input);
 	}
 
 	@Override
@@ -60,12 +47,5 @@ public class EditTypedSubappInterfaceDataSection extends EditUntypedSubappInterf
 	@Override
 	public boolean isShowTableEditButtons() {
 		return false;
-	}
-
-	@Override
-	protected IEditableRule getSectionEditableRule() {
-		return new NatTableColumnEditableRule<>(IEditableRule.ALWAYS_EDITABLE,
-				VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG,
-				VarDeclarationTableColumn.DEFAULT_EDITABLE);
 	}
 }

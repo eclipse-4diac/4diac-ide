@@ -12,19 +12,31 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
-public class TypedSubappInterfaceEditingFilter implements IFilter {
+public class TypedInterfaceEditingFilter implements IFilter {
 
 	@Override
 	public boolean select(final Object toTest) {
-		if (toTest instanceof final SubAppForFBNetworkEditPart subAppEP) {
-			final SubApp subapp = subAppEP.getModel();
-			return subapp.isTyped() && !subapp.isContainedInTypedInstance();
+		return getTypedElementFromSelectedElement(toTest) != null;
+	}
+
+	static BlockFBNetworkElement getTypedElementFromSelectedElement(final Object element) {
+		if (element instanceof final EditPart ep && ep.getModel() instanceof final BlockFBNetworkElement bfbne) {
+			if (bfbne.isContainedInTypedInstance()) {
+				return null;
+			}
+
+			if (bfbne instanceof final SubApp subapp && !subapp.isTyped()) {
+				return null;
+			}
+
+			return bfbne;
 		}
-		return false;
+		return null;
 	}
 
 }

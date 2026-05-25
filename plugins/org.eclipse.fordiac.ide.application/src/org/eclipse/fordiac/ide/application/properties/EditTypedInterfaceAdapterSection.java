@@ -15,16 +15,17 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.gef.nat.TypedElementTableColumn;
+import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnEditableRule;
-import org.eclipse.gef.EditPart;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 
-public class EditTypedInterfaceAdapterSection extends EditInterfaceAdapterSection {
+public class EditTypedInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
 	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		return null;
@@ -37,15 +38,8 @@ public class EditTypedInterfaceAdapterSection extends EditInterfaceAdapterSectio
 	}
 
 	@Override
-	protected SubApp getInputType(final Object input) {
-		Object candidate = null;
-		if (input instanceof final EditPart editPart) {
-			candidate = editPart.getModel();
-		}
-		if (candidate instanceof final SubApp subapp && subapp.isTyped()) {
-			return subapp;
-		}
-		return null;
+	protected BlockFBNetworkElement getInputType(final Object input) {
+		return TypedInterfaceEditingFilter.getTypedElementFromSelectedElement(input);
 	}
 
 	@Override
@@ -56,6 +50,16 @@ public class EditTypedInterfaceAdapterSection extends EditInterfaceAdapterSectio
 	@Override
 	protected ChangeInterfaceOrderCommand newOrderCommand(final IInterfaceElement selection, final boolean moveUp) {
 		return null;
+	}
+
+	@Override
+	protected BlockFBNetworkElement getType() {
+		return (BlockFBNetworkElement) type;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterface() : null;
 	}
 
 	@Override

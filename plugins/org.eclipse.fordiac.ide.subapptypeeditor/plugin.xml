@@ -213,20 +213,20 @@
                tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappInterfaceEventSection"
+               class="org.eclipse.fordiac.ide.application.properties.EditTypedInterfaceEventSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditTypedEvents"
-               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappInterfaceDataSection"
+               class="org.eclipse.fordiac.ide.application.properties.EditTypedInterfaceDataSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditTypedData"
-               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
          </propertySection>
-         <propertySection class="org.eclipse.fordiac.ide.application.properties.EditTypedSubappVarInOutSection"
+         <propertySection class="org.eclipse.fordiac.ide.application.properties.EditTypedVarInOutSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditTypedVarInOut"
-               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditVarInOut">
          </propertySection>
          <propertySection
@@ -238,7 +238,7 @@
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.EditTypedInterfaceAdapterSection"
                id="org.eclipse.fordiac.ide.application.properties.section.EditTypedAdapters"
-               filter="org.eclipse.fordiac.ide.application.properties.TypedSubappInterfaceEditingFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedInterfaceEditingFilter"
                tab="org.eclipse.fordiac.ide.application.property.tab.EditAdapters">
          </propertySection>
          <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"

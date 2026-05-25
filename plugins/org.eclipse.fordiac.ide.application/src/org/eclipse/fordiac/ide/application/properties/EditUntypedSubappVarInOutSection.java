@@ -12,30 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.TypeDeclarationEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationVisibleEditableRule;
-import org.eclipse.fordiac.ide.gef.properties.AbstractEditVarInOutSection;
 import org.eclipse.fordiac.ide.model.commands.create.CreateVarInOutCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.nattable.CheckBoxConfigurationNebula;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.swt.widgets.Composite;
 
-public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSection {
+public class EditUntypedSubappVarInOutSection extends AbstractEditTypeVarInOutSection {
 
 	@Override
 	protected CreationCommand newCreateCommand(final IInterfaceElement ie) {
@@ -49,53 +31,7 @@ public class EditUntypedSubappVarInOutSection extends AbstractEditVarInOutSectio
 	}
 
 	@Override
-	protected void setTableInput() {
-		inputProvider.setInput(getType().getInterface().getInOutVars());
-		if (isShowTableEditButtons()) {
-			inputButtons.setEnabled(isEditable());
-		}
-	}
-
-	@Override
-	public void setupInputTable(final Composite parent) {
-		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLEIN,
-				VarDeclarationTableColumn.VISIBLEOUT);
-		inputProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns) {
-			@Override
-			public Command createCommand(final VarDeclaration rowObject, final VarDeclarationTableColumn column,
-					final Object newValue) {
-				return switch (column) {
-				default -> super.createCommand(rowObject, column, newValue);
-				};
-			}
-		});
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputProvider, columns);
-		inputDataLayer.setConfigLabelAccumulator(
-				new VarDeclarationConfigLabelAccumulator(inputProvider, this::getAnnotationModel, columns));
-		final NatTableColumnProvider<VarDeclarationTableColumn> columnProvider = new NatTableColumnProvider<>(columns);
-		inputTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, columnProvider,
-				new VarDeclarationVisibleEditableRule(getSectionEditableRule(), inputProvider, columns,
-						VarDeclarationTableColumn.ALL_EDITABLE),
-				null, this, true);
-		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
-		inputTable.addConfiguration(new TypeDeclarationEditorConfiguration(inputProvider));
-		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, this));
-		inputTable.configure();
-	}
-
-	@Override
-	protected SubApp getType() {
-		return (SubApp) type;
-	}
-
-	@Override
 	protected SubApp getInputType(final Object input) {
 		return SubappPropertySectionFilter.getFBNetworkElementFromSelectedElement(input);
-	}
-
-	@Override
-	protected IEditableRule getSectionEditableRule() {
-		return IEditableRule.ALWAYS_EDITABLE;
 	}
 }
