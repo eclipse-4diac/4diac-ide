@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -139,14 +140,22 @@ class MemberAccessViewer {
 	private ICheckStateListener getCheckStateListener() {
 		return event -> {
 			final MemberAccessTreeNode node = (MemberAccessTreeNode) event.getElement();
-			final Command cmd = new ChangePinVisibilityCommand(block, node.getNamePath(), event.getChecked());
-			if (cmd.canExecute()) {
+			final Command cmd = createPinVisibilityCommand(node.getNamePath(), event.getChecked());
+			if (cmd != null && cmd.canExecute()) {
 				cmdExecutor.executeCommand(cmd);
 			} else {
 				// reset checkmark as command was not executed
 				((TreeViewer) event.getSource()).update(node, null);
 			}
 		};
+	}
+
+	private Command createPinVisibilityCommand(final List<String> path, final boolean visible) {
+		final IInterfaceElement ie = block.getInterface().getInterfaceElement(path, visible);
+		if (ie == null) {
+			return null;
+		}
+		return new ChangePinVisibilityCommand(ie, visible);
 	}
 
 }
