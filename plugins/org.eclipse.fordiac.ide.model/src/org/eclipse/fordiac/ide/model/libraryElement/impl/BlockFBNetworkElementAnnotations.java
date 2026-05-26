@@ -52,8 +52,8 @@ public final class BlockFBNetworkElementAnnotations {
 
 	public static boolean validateUnused(final BlockFBNetworkElement fbne, final DiagnosticChain diagnostics,
 			final Map<Object, Object> context) {
-		if (fbne.isMapped() && fbne.getMapping().getTo() == fbne) {
-			return true; // avoid duplicate error on mapped instance
+		if (fbne.getFbNetwork() == null || (fbne.isMapped() && fbne.getMapping().getTo() == fbne)) {
+			return true; // avoid internal FBs or duplicate on mapped instance
 		}
 		if (isUnused(fbne) && (!fbne.isMapped() || isUnused(fbne.getOpposite()))) {
 			if (diagnostics != null) {
