@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Search Tests
 Bundle-SymbolicName: org.eclipse.fordiac.ide.test.model.search
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.model.search
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.model.search
 Bundle-RequiredExecutionEnvironment: JavaSE-21
