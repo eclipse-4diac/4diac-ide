@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.library.model;singleton:=true
 Automatic-Module-Name: org.eclipse.fordiac.ide.library.model
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: org.eclipse.fordiac.ide.library.model.library,

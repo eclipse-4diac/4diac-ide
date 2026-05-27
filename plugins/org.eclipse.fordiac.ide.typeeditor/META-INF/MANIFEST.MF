@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Type Editor
 Bundle-SymbolicName: org.eclipse.fordiac.ide.typeeditor;singleton:=true
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Export-Package: org.eclipse.fordiac.ide.typeeditor
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.typeeditor

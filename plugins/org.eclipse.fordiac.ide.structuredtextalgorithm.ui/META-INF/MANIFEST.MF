@@ -3,7 +3,7 @@ Automatic-Module-Name: org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
-Bundle-Version: 3.1.100.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
