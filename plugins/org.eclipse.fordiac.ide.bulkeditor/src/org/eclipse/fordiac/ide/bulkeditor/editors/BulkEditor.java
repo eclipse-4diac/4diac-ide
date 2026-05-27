@@ -52,10 +52,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AttributeTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementOperationContextUpdater;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementProvider;
 import org.eclipse.fordiac.ide.model.ui.editors.LibraryElementStateListener;
 import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementActivationListener;
+import org.eclipse.fordiac.ide.model.ui.editors.MultiLibraryElementOperationContextUpdater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -181,7 +181,7 @@ public class BulkEditor extends EditorPart implements CommandExecutor, CommandSt
 
 		controls = new BulkEditorControls(settings, this, selectedSubApps);
 		controls.createControls(pageBodyComposite);
-		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection);
+		natTable = new BulkEditorNatTable(pageComposite, this, settings.modeSelection, getSite());
 
 		scrolledComposite.setMinSize(pageComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		pageComposite.layout();

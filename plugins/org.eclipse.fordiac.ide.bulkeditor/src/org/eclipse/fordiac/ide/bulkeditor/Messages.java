@@ -65,6 +65,11 @@ public final class Messages extends NLS {
 	public static String Discard;
 	public static String Cancel;
 
+	public static String AddElementDialog_InvalidType;
+	public static String AddElementDialog_InvalidSelection;
+	public static String AddElementDialog_EmptyName;
+	public static String AddElementDialog_DuplicateName;
+
 	public static String ContextMenu_Find;
 
 	public static String UnexpectedValue;

@@ -126,8 +126,6 @@ public final class Messages extends NLS {
 	public static String DeleteFBTypeParticipant_Change_UpdateInternalFB;
 	public static String DeleteFBTypeParticipant_Change_UpdateManipulator;
 	public static String DeleteFBTypeParticipant_Change_UpdateSubappPins;
-	public static String RenameUpdateFBTypeInterfaceModelEdit_NotPartOfInterface;
-	public static String RenameUpdateFBTypeInterfaceModelEdit_TypelibraryNull;
 	public static String FBTypeComposedAdapterFactory_FBTypecomposedAdapterFactoryShouldNotBeInsantiated;
 	public static String IFordiacPreviewChange_Reconnect0;
 

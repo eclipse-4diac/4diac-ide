@@ -42,7 +42,7 @@ public class TypeEditorPageDescriptor {
 
 	public boolean handlesType(final LibraryElement type) {
 		try {
-			return getEnablement().evaluate(new EvaluationContext(null, type)) == EvaluationResult.TRUE;
+			return getEnablement().evaluate(createEvaluationContext(type)) == EvaluationResult.TRUE;
 		} catch (final CoreException e) {
 			log("Exception occurred evaluating enablement expression", e); //$NON-NLS-1$
 			return false;
@@ -104,5 +104,11 @@ public class TypeEditorPageDescriptor {
 				.error(String.format(LOG_MESSAGE, message,
 						element.getDeclaringExtension().getExtensionPointUniqueIdentifier(),
 						element.getDeclaringExtension().getContributor().getName()), t);
+	}
+
+	private static EvaluationContext createEvaluationContext(final LibraryElement type) {
+		final EvaluationContext evaluationContext = new EvaluationContext(null, type);
+		evaluationContext.setAllowPluginActivation(true);
+		return evaluationContext;
 	}
 }

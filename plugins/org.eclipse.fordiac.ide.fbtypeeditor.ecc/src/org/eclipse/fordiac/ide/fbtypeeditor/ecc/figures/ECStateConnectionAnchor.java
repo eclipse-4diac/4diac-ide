@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   Vikash Kumar Sinha - initial implementation
- *******************************************************************************/
+*******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.figures;
 
 import java.util.ArrayList;
@@ -22,10 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 
 public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
-
-	private enum Edge {
-		TOP, BOTTOM, LEFT, RIGHT
-	}
 
 	private final ECState state;
 	private final ECTransition transition;
@@ -44,25 +40,13 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 	@Override
 	public Point getReferencePoint() {
 		if (transition != null && transition.getPosition() != null) {
-			return transition.getPosition().toScreenPoint();
+			final Point p = transition.getPosition().toScreenPoint();
+			getOwner().translateToAbsolute(p);
+			return p;
 		}
 		final Rectangle bounds = getOwner().getBounds().getCopy();
 		getOwner().translateToAbsolute(bounds);
 		return bounds.getCenter();
-	}
-
-	private Edge edgeForReference(final Point center, final Point ref) {
-		final int dx = ref.x - center.x;
-		final int dy = ref.y - center.y;
-
-		if (Math.abs(dy) > Math.abs(dx)) {
-			return (dy >= 0) ? Edge.BOTTOM : Edge.TOP;
-		}
-		if (dx >= 0 && state != null && !state.getECAction().isEmpty()) {
-			return (dy >= 0) ? Edge.BOTTOM : Edge.TOP;
-		}
-
-		return (dx >= 0) ? Edge.RIGHT : Edge.LEFT;
 	}
 
 	@Override
@@ -71,13 +55,14 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		getOwner().getNameLabel().translateToAbsolute(nameBounds);
 
 		final Point ref = (reference != null) ? reference : nameBounds.getCenter();
-		final Edge edge = edgeForReference(nameBounds.getCenter(), ref);
 
-		return applySpacing(nameBounds, edge);
+		final EdgeDirection edge = EdgeDirection.of(ref, nameBounds, state);
+
+		return applySpacing(nameBounds, edge, nameBounds);
 	}
 
-	private Point applySpacing(final Rectangle bounds, final Edge edge) {
-		final List<ECTransition> ordered = getTransitionsOnEdgeOrdered(edge);
+	private Point applySpacing(final Rectangle bounds, final EdgeDirection edge, final Rectangle nameBounds) {
+		final List<ECTransition> ordered = getTransitionsOnEdge(edge, nameBounds);
 		final int index = indexOf(ordered, transition);
 		final int count = Math.max(1, ordered.size());
 
@@ -101,40 +86,33 @@ public class ECStateConnectionAnchor extends AbstractConnectionAnchor {
 		};
 	}
 
-	private List<ECTransition> getTransitionsOnEdgeOrdered(final Edge edge) {
+	private List<ECTransition> getTransitionsOnEdge(final EdgeDirection edge, final Rectangle nameBounds) {
 		final List<ECTransition> result = new ArrayList<>();
 		if (state == null) {
 			return result;
 		}
 
-		final List<ECTransition> list = (transition != null && transition.getSource() == state)
+		final List<ECTransition> candidates = (transition != null && transition.getSource() == state)
 				? state.getOutTransitions()
 				: state.getInTransitions();
 
-		final Rectangle nameBounds = getOwner().getNameLabel().getBounds().getCopy();
-		getOwner().getNameLabel().translateToAbsolute(nameBounds);
-		final Point center = nameBounds.getCenter();
-
-		for (final ECTransition t : list) {
-
+		for (final ECTransition t : candidates) {
 			if (t.getPosition() == null) {
 				continue;
 			}
-
 			final Point bendPoint = t.getPosition().toScreenPoint();
-			if (edgeForReference(center, bendPoint) == edge) {
+
+			if (EdgeDirection.of(bendPoint, nameBounds, state) == edge) {
 				result.add(t);
 			}
 		}
+
 		result.sort((t1, t2) -> {
 			final Point p1 = t1.getPosition().toScreenPoint();
 			final Point p2 = t2.getPosition().toScreenPoint();
-			if (edge == Edge.TOP || edge == Edge.BOTTOM) {
-				return Integer.compare(p1.x, p2.x);
-			}
-			return Integer.compare(p1.y, p2.y);
+			return (edge == EdgeDirection.TOP || edge == EdgeDirection.BOTTOM) ? Integer.compare(p1.x, p2.x)
+					: Integer.compare(p1.y, p2.y);
 		});
-
 		return result;
 	}
 

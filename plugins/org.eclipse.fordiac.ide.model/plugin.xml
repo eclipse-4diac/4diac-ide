@@ -315,4 +315,14 @@
           name="LIB">
     </attribute>
  </extension>
+ <extension
+       point="org.eclipse.core.runtime.adapters">
+    <factory
+          adaptableType="org.eclipse.fordiac.ide.model.libraryElement.LibraryElement"
+          class="org.eclipse.fordiac.ide.model.LibraryElementAdapterFactory">
+       <adapter
+             type="org.eclipse.core.resources.IFile">
+       </adapter>
+    </factory>
+ </extension>
 </plugin>

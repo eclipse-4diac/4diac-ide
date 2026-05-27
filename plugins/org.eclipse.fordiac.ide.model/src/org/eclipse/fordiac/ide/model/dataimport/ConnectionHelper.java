@@ -452,27 +452,10 @@ public final class ConnectionHelper {
 
 	private static void parseConnectionRouting(final Connection connection, final CommonElementImporter importer) {
 		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
-		final String dx1Element = importer.getAttributeValue(LibraryElementTags.DX1_ATTRIBUTE);
-		if (null != dx1Element) {
-			routingData.setDx1(parseConnectionValue(dx1Element));
-		}
-		final String dx2Element = importer.getAttributeValue(LibraryElementTags.DX2_ATTRIBUTE);
-		if (null != dx2Element) {
-			routingData.setDx2(parseConnectionValue(dx2Element));
-		}
-		final String dyElement = importer.getAttributeValue(LibraryElementTags.DY_ATTRIBUTE);
-		if (null != dyElement) {
-			routingData.setDy(parseConnectionValue(dyElement));
-		}
+		routingData.setDx1(importer.parseCoordinateValue(LibraryElementTags.DX1_ATTRIBUTE));
+		routingData.setDx2(importer.parseCoordinateValue(LibraryElementTags.DX2_ATTRIBUTE));
+		routingData.setDy(importer.parseCoordinateValue(LibraryElementTags.DY_ATTRIBUTE));
 		connection.setRoutingData(routingData);
-	}
-
-	private static double parseConnectionValue(final String value) {
-		try {
-			return Double.parseDouble(value);
-		} catch (final NumberFormatException ex) {
-			return 0;
-		}
 	}
 
 	public enum ConnectionState {

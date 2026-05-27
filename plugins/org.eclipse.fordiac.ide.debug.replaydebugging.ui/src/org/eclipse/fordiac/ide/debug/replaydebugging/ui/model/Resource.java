@@ -11,14 +11,14 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
+import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator.EventPosition;
 import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 
 /**
@@ -27,50 +27,55 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
  *        It offers a name and the replay navigator, and manages the models for
  *        connections between timelines.
  */
-public class Resource {
-	private final ReplayNavigator navigator;
-	private final Set<TimelineConnection> connections = new HashSet<>();
+public class Resource implements ReplayNavigator.StateListener {
+	private final ReplayNavigator replayNavigator;
+	private final TimelineModel rootTimelineModel;
 
-	public Resource(final ReplayNavigator navigator) {
-		this.navigator = navigator;
-		addChildConnections(navigator.getRootTimeline());
+	public Resource(final ReplayNavigator replayNavigator) {
+		this.replayNavigator = replayNavigator;
+		this.rootTimelineModel = new TimelineModel(replayNavigator.getRootTimeline(), this::eventSelected);
+		replayNavigator.addStateChangeListener(this);
+		updateCurrentPosition();
 	}
 
-	public String getName() {
-		return navigator.getIdentifier().resourceName();
+	public void dispose() {
+		replayNavigator.removeStateChangeListener(this);
 	}
 
 	public ReplayNavigator getReplayNavigator() {
-		return navigator;
+		return replayNavigator;
 	}
 
-	private void addParentConnection(final Timeline timeline) {
-		final var parentTimeline = timeline.getParentTimeline();
-		if (parentTimeline == null) {
-			return;
+	public String getName() {
+		return replayNavigator.getIdentifier().resourceName();
+	}
+
+	public TimelineModel getRootTimelineModel() {
+		return rootTimelineModel;
+	}
+
+	private void updateCurrentPosition() {
+		final var currentEventPosition = replayNavigator.getCurrentEventPosition();
+
+		var runnerTimeline = currentEventPosition.timeline();
+		final List<Timeline> presentTimelines = new ArrayList<>();
+		while (runnerTimeline != null) {
+			presentTimelines.add(runnerTimeline);
+			runnerTimeline = runnerTimeline.getParentTimeline();
 		}
-		final int spawnedIndex = parentTimeline.getSpawnedTimelineEventNumber(timeline);
-		connections.add(new TimelineConnection(parentTimeline, timeline, spawnedIndex, navigator));
+
+		rootTimelineModel.updateCurrentPosition(currentEventPosition, presentTimelines.reversed());
 	}
 
-	private void addChildConnections(final Timeline timeline) {
-		for (final var spawnedTimeline : timeline.getSpawnedTimelines()) {
-			final int spawnedIndex = timeline.getSpawnedTimelineEventNumber(spawnedTimeline);
-			connections.add(new TimelineConnection(timeline, spawnedTimeline, spawnedIndex, navigator));
-			addTimeline(spawnedTimeline);
-		}
+	private void eventSelected(final Timeline timeline, final Integer index) {
+		replayNavigator.moveToEvent(new EventPosition(timeline, index.intValue()));
 	}
 
-	public void addTimeline(final Timeline timeline) {
-		addParentConnection(timeline);
-		addChildConnections(timeline);
+	// callback from the replay navigator
+
+	@Override
+	public void stateUpdated(final ReplayNavigator replayNavigator, final DatapointsState changedValues) {
+		updateCurrentPosition();
 	}
 
-	public List<TimelineConnection> getSources(final Timeline timeline) {
-		return connections.stream().filter(connection -> connection.parent().equals(timeline)).toList();
-	}
-
-	public List<TimelineConnection> getTargets(final Timeline timeline) {
-		return connections.stream().filter(connection -> connection.child().equals(timeline)).toList();
-	}
 }

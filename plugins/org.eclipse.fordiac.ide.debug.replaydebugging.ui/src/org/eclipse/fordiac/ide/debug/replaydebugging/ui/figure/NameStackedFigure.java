@@ -11,7 +11,6 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -68,7 +67,7 @@ public class NameStackedFigure extends RoundedRectangle {
 		final Dimension labelSize = nameLabel.getPreferredSize();
 		final Dimension contentSize = contentPane.getPreferredSize();
 
-		final int width = Math.max(labelSize.width, contentSize.width);
+		final int width = Math.max(labelSize.width, contentSize.width) + SPACING;
 		final int height = labelSize.height + contentSize.height + SPACING * 2;
 
 		return new Dimension(width, height);

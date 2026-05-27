@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.gef.nat.AttributeColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.AttributeConfigLabelAccumulator;
 import org.eclipse.fordiac.ide.gef.nat.AttributeEditableRule;
 import org.eclipse.fordiac.ide.gef.nat.AttributeTableColumn;
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewImportCommand;
@@ -104,7 +103,6 @@ public class AttributeTableBuilder {
 		natTableRef.set(natTable);
 
 		natTable.addConfiguration(new InitialValueEditorConfiguration(provider));
-		natTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(columnProvider, commandExecutor));
 
 		final Predicate<TypeEntry> targetFilter = entry -> {
 			if (entry.getType() instanceof final AttributeDeclaration decl) {

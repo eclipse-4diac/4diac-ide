@@ -12,11 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.bulkeditor.ui;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.bulkeditor.Messages;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DirectlyDerivedType;
 import org.eclipse.fordiac.ide.model.helpers.PackageNameHelper;
@@ -91,6 +97,43 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 		this.attributeDeclName = attributeDeclName;
 		this.project = project;
 		this.disabledElements = disabledElements;
+
+		setValidator(selection -> {
+			if (nameText != null) {
+				final var error = isValidName(nameText.getText(), selection);
+				if (error.isPresent()) {
+					return Status.error(error.get());
+				}
+			}
+			if (typeText != null && TypeLibraryManager.INSTANCE.getTypeLibrary(project).getDataTypeLibrary()
+					.getTypeIfExists(typeText.getText()) == null) {
+				return Status.error(MessageFormat.format(Messages.AddElementDialog_InvalidType, typeText.getText()));
+			}
+			if (selection.length <= 0) {
+				return Status.error(Messages.AddElementDialog_InvalidSelection);
+			}
+
+			return Status.OK_STATUS;
+		});
+	}
+
+	// returns Empty Optional if the identifier is valid
+	private static Optional<String> isValidName(final String name, final Object[] checkedElements) {
+		if (name.isBlank()) {
+			return Optional.of(Messages.AddElementDialog_EmptyName);
+		}
+
+		final var duplicate = Arrays.stream(checkedElements).filter(ConfigurableObject.class::isInstance)
+				.map(ConfigurableObject.class::cast).filter(configureableObject -> {
+					final var attribute = configureableObject.getAttribute(name);
+					return attribute != null;
+				}).findFirst();
+
+		if (duplicate.isPresent()) {
+			return Optional.of(MessageFormat.format(Messages.AddElementDialog_DuplicateName, getName(duplicate.get())));
+		}
+
+		return IdentifierVerifier.verifyIdentifier(name);
 	}
 
 	@Override
@@ -100,6 +143,7 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 			if (disabledElements.contains(event.getElement())) {
 				treeViewer.setChecked(event.getElement(), !event.getChecked());
 			}
+			updateOKStatus();
 		});
 		return treeViewer;
 	}
@@ -133,10 +177,12 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 			WidgetFactory.label(0).text(FordiacMessages.Name).create(attributeComposite);
 			nameText = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.CENTER, true, true))
 					.create(attributeComposite);
+			nameText.addModifyListener(e -> updateOKStatus());
 
 			WidgetFactory.label(0).text(FordiacMessages.Type).create(attributeComposite);
 			typeText = WidgetFactory.text(SWT.BORDER).layoutData(new GridData(SWT.FILL, SWT.CENTER, true, true))
 					.create(attributeComposite);
+			typeText.addModifyListener(e -> updateOKStatus());
 
 			final IContentProposalProvider proposalProvider = new TypeSelectionProposalProvider(
 					() -> TypeLibraryManager.INSTANCE.getTypeLibrary(project),
@@ -172,6 +218,16 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 		return value;
 	}
 
+	private static String getName(final Object element) {
+		if (element instanceof final INamedElement namedElement) {
+			return namedElement.getName();
+		}
+		if (element instanceof final Connection conn) {
+			return conn.getSource().getName() + " -> " + conn.getDestination().getName(); //$NON-NLS-1$
+		}
+		return element.toString();
+	}
+
 	private static class DisabledElementsLabelProvider extends LabelProvider implements IColorProvider {
 		public final Set<Object> disabledElements;
 
@@ -181,13 +237,7 @@ public class AddAttributeTreeSelectionDialog extends CheckedTreeSelectionDialog 
 
 		@Override
 		public String getText(final Object element) {
-			if (element instanceof final INamedElement namedElement) {
-				return namedElement.getName();
-			}
-			if (element instanceof final Connection conn) {
-				return conn.getSource().getName() + " -> " + conn.getDestination().getName(); //$NON-NLS-1$
-			}
-			return element.toString();
+			return getName(element);
 		}
 
 		@Override

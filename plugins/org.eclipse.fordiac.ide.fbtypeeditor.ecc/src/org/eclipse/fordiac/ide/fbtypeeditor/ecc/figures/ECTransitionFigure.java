@@ -97,7 +97,6 @@ public class ECTransitionFigure extends SplineConnection {
 					p.y += (int) Math.sin(angle) * radius;
 				}
 			}
-
 			super.setLocation(p);
 		}
 
@@ -110,7 +109,6 @@ public class ECTransitionFigure extends SplineConnection {
 				setSize(dim, dim);
 			}
 		}
-
 	}
 
 	private SetableAlphaLabel conditionBackground;
@@ -129,7 +127,6 @@ public class ECTransitionFigure extends SplineConnection {
 		createConditionLabel(ecTransition.getConditionText());
 
 		setTargetDecoration(createTargetDecorator());
-
 		final ECTransitionToolTipFigure transitionTooltip = new ECTransitionToolTipFigure();
 		transitionTooltip.setVisible(true);
 		setToolTip(transitionTooltip);

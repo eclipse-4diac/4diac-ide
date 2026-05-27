@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022, 2025 Primetals Technologies Austria GmbH,
- *                          Martin Erich Jobst
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH, Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,281 +17,72 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.nat.DefaultImportCopyPasteLayerConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationConfigLabelAccumulator;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationDataLayer;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationTableColumn;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationVisibleEditableRule;
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.nattable.CheckBoxConfigurationNebula;
-import org.eclipse.fordiac.ide.ui.widget.nattable.IChangeableRowDataProvider;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableColumnProvider;
-import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.action.IAction;
+import org.eclipse.fordiac.ide.model.libraryElement.TypedSubApp;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.EditableRule;
-import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class InstancePropertySection extends AbstractSection {
+public class InstancePropertySection extends AbstractInstanceSection {
 
-	private static final int ONE_COLUMN = 1;
-	protected static final int TWO_COLUMNS = 2;
+	private static final int TWO_COLUMNS = 2;
 
-	private Text nameText;
-	private Text commentText;
-
-	private NatTable inputTable;
-	private NatTable outputTable;
-
-	private IChangeableRowDataProvider<VarDeclaration> inputDataProvider;
-	private IChangeableRowDataProvider<VarDeclaration> outputDataProvider;
-
-	IAction[] defaultCopyPasteCut = new IAction[3];
-	private TabbedPropertySheetPage tabbedPropertySheetPage;
-
-	protected Composite leftComposite;
-	protected Composite rightComposite;
-	protected Composite upperComposite;
-	protected Composite lowerComposite;
+	private MemberAccessViewer inputDataMemberAccessViewer;
+	private MemberAccessViewer outputDataMemberAccessViewer;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		createSubsectionLayout(parent);
-	}
 
-	protected void createSubsectionLayout(final Composite parent) {
-		createSingleRowLayout(parent);
-		createFBInfoGroup(upperComposite);
-		createTableSection(lowerComposite);
-	}
+		final Composite mainContainer = getWidgetFactory().createComposite(parent);
+		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).equalWidth(true).applyTo(mainContainer);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(mainContainer);
 
-	protected void createDoubleColumnLayout(final Composite parent) {
-		parent.setLayout(new GridLayout(2, true));
-		leftComposite = createComposite(parent);
-		rightComposite = createComposite(parent);
-		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, false);
-		parent.setLayoutData(gridLayoutData);
-	}
-
-	protected void createSingleRowLayout(final Composite parent) {
-		parent.setLayout(new GridLayout(1, false));
-		upperComposite = createComposite(parent);
-		// the upper composite should not grab vertical space as it has always the same
-		// size and give the rest to the tables below
-		upperComposite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));
-		lowerComposite = createComposite(parent);
-		final GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
-		parent.setLayoutData(gridLayoutData);
+		createFBInfoGroup(mainContainer);
+		createTableSection(mainContainer);
 	}
 
 	@Override
 	protected void performRefresh() {
 		if (getType() != null) {
-			if (!nameText.isDisposed() && !nameText.getParent().isDisposed()) {
-				nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
-				commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			super.performRefresh();
+
+			if (getType() instanceof TypedSubApp) {
+				// Member access for typed subapps currently not implemented
+				inputDataMemberAccessViewer.setInput(null);
+				outputDataMemberAccessViewer.setInput(null);
+			} else {
+				inputDataMemberAccessViewer.setInput(getType());
+				outputDataMemberAccessViewer.setInput(getType());
 			}
-
-			final List<VarDeclaration> allInputs = new ArrayList<>();
-			final InterfaceList fbInterface = getType().getInterface();
-			allInputs.addAll(fbInterface.getInputVars());
-			allInputs.addAll(fbInterface.getInOutVars());
-			inputDataProvider.setInput(allInputs);
-
-			final List<VarDeclaration> allOutputs = new ArrayList<>();
-			allOutputs.addAll(fbInterface.getOutputVars());
-			allOutputs.addAll(fbInterface.getOutMappedInOutVars());
-			outputDataProvider.setInput(allOutputs);
-
-			inputTable.refresh();
-			outputTable.refresh();
 		}
 	}
 
-	@Override
-	protected void performRefreshAnnotations() {
-		inputTable.refresh(false);
-		outputTable.refresh(false);
-	}
-
 	protected void createTableSection(final Composite parent) {
-		final Composite tableSectionComposite = getWidgetFactory().createComposite(parent);
-		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(tableSectionComposite);
+		inputDataMemberAccessViewer = new MemberAccessViewer(true, this);
+		inputDataMemberAccessViewer.createControls(parent, getWidgetFactory());
 
-		createInputTable(tableSectionComposite);
-		createOutputTable(tableSectionComposite);
+		outputDataMemberAccessViewer = new MemberAccessViewer(false, this);
+		outputDataMemberAccessViewer.createControls(parent, getWidgetFactory());
 
-		tableSectionComposite.layout();
-	}
-
-	private void createInputTable(final Composite parent) {
-		final Group inputComposite = getWidgetFactory().createGroup(parent, Messages.CommentPropertySection_DataInputs);
-		inputComposite.setText(Messages.CommentPropertySection_DataInputs);
-		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
-
-		final var columns = VarDeclarationTableColumn.DEFAULT_COLUMNS_VISIBLE_VARCONFIG;
-		inputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
-
-		final DataLayer inputDataLayer = new VarDeclarationDataLayer(inputDataProvider, columns);
-		inputDataLayer.setConfigLabelAccumulator(
-				new VarDeclarationConfigLabelAccumulator(inputDataProvider, this::getAnnotationModel, columns));
-
-		final NatTableColumnProvider<VarDeclarationTableColumn> inputColumnProvider = new NatTableColumnProvider<>(
-				columns);
-
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, inputColumnProvider,
-				new VarDeclarationVisibleEditableRule(EditableRule.ALWAYS_EDITABLE, inputDataProvider, columns,
-						VarDeclarationTableColumn.DEFAULT_EDITABLE));
-
-		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
-		inputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(inputColumnProvider, this));
-		inputTable.configure();
-
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
-	}
-
-	private void createOutputTable(final Composite parent) {
-		final Group outputComposite = getWidgetFactory().createGroup(parent,
-				Messages.CommentPropertySection_DataOutputs);
-		outputComposite.setText(Messages.CommentPropertySection_DataOutputs);
-		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
-
-		final var columns = VarDeclarationTableColumn.defaultColumnsWith(VarDeclarationTableColumn.VISIBLE);
-		outputDataProvider = new ChangeableListDataProvider<>(new VarDeclarationColumnAccessor(this, columns));
-
-		final DataLayer outputDataLayer = new VarDeclarationDataLayer(outputDataProvider, columns);
-		outputDataLayer.setConfigLabelAccumulator(
-				new VarDeclarationConfigLabelAccumulator(outputDataProvider, this::getAnnotationModel, columns));
-
-		final NatTableColumnProvider<VarDeclarationTableColumn> outputColumnProvider = new NatTableColumnProvider<>(
-				columns);
-
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, outputColumnProvider,
-				new VarDeclarationVisibleEditableRule(EditableRule.ALWAYS_EDITABLE, outputDataProvider, columns,
-						VarDeclarationTableColumn.DEFAULT_EDITABLE));
-
-		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
-		outputTable.addConfiguration(new DefaultImportCopyPasteLayerConfiguration(outputColumnProvider, this));
-		outputTable.configure();
-
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
+		parent.layout();
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {
 		final Composite fbInfoGroup = getWidgetFactory().createComposite(parent);
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbInfoGroup);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(fbInfoGroup);
+		createNameInput(fbInfoGroup);
 
-		getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Name + ":"); //$NON-NLS-1$
-		nameText = createGroupText(fbInfoGroup, true);
-		nameText.addModifyListener(e -> {
-			removeContentAdapter();
-			executeCommand(ChangeNameCommand.forName(getType(), nameText.getText()));
-			addContentAdapter();
-		});
-
-		final CLabel commentLabel = getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).grab(false, false).applyTo(commentLabel);
-
-		commentText = createGroupText(fbInfoGroup, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false)
-				.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
-		commentText.addModifyListener(e -> {
-			removeContentAdapter();
-			final Command cmd = createChangeCommentCommand();
-			executeCommand(cmd);
-			addContentAdapter();
-		});
-	}
-
-	protected Command createChangeCommentCommand() {
-		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
-		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
-			final EditPart editPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
-					.getEditPartForModel(getType());
-			if (editPart instanceof final SubAppForFBNetworkEditPart subAppforFBNetworkEditPart
-					&& subAppforFBNetworkEditPart.getContentEP() != null) {
-				cmd = cmd.chain(new ResizeGroupOrSubappCommand(subAppforFBNetworkEditPart.getContentEP()));
-			}
-		}
-		return cmd;
-	}
-
-	@Override
-	public void aboutToBeShown() {
-		// this can be removed once copy/paste for old tables is no longer used
-		final IActionBars bars = getActionBars();
-		if (bars != null) {
-			defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
-			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
-			defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
-			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
-			defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
-			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
-			bars.updateActionBars();
-		}
-
-		super.aboutToBeShown();
-	}
-
-	@Override
-	public void aboutToBeHidden() {
-		// this can be removed once copy/paste for old tables is no longer used
-		final IActionBars bars = getActionBars();
-		if (bars != null) {
-			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
-			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
-			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
-			bars.updateActionBars();
-		}
-
-		super.aboutToBeHidden();
-	}
-
-	protected IActionBars getActionBars() {
-		if (tabbedPropertySheetPage != null && tabbedPropertySheetPage.getSite() != null) {
-			return tabbedPropertySheetPage.getSite().getActionBars();
-		}
-		return null;
+		final Composite fbCommentComp = getWidgetFactory().createComposite(parent);
+		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbCommentComp);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(fbCommentComp);
+		createCommentInput(fbCommentComp);
 	}
 
 	@Override
@@ -300,19 +90,15 @@ public class InstancePropertySection extends AbstractSection {
 		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
-	@Override
-	protected BlockFBNetworkElement getType() {
-		if (type instanceof final BlockFBNetworkElement fbNetworkElement) {
-			return fbNetworkElement;
-		}
-		return null;
-	}
-
 	protected final Adapter interfaceAdapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			notifiyRefresh();
+			if (!notification.isTouch()) {
+				notifiyRefresh();
+				inputDataMemberAccessViewer.updateVisibility();
+				outputDataMemberAccessViewer.updateVisibility();
+			}
 		}
 	};
 

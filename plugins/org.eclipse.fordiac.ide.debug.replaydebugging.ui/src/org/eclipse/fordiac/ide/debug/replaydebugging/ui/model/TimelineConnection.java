@@ -11,15 +11,10 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.DatapointsState;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.ReplayNavigator;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 
 /**
  * @brief Model class for a connection between two timelines
@@ -29,30 +24,27 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
  *        its state accordingly. It also provides a property change support for
  *        notifying listeners about changes in the connection state.
  */
-public class TimelineConnection implements ReplayNavigator.StateListener {
+public class TimelineConnection {
 
-	public static final String PROPERTY_TIMELINECONNECTION_CHANGED = "timlineConnectionChanged"; //$NON-NLS-1$
+	public static final String PROPERTY_TIMELINECONNECTION_CHANGED = "timelineConnectionChanged"; //$NON-NLS-1$
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	private final Timeline parent;
-	private final Timeline child;
+	private final TimelineModel parent;
+	private final TimelineModel child;
 	private final int spawnedIndex;
-	private final ReplayNavigator replayNavigator;
+	private boolean isInCurrentPosition = false;
 
-	public TimelineConnection(final Timeline parent, final Timeline child, final int spawnedIndex,
-			final ReplayNavigator replayNavigator) {
+	public TimelineConnection(final TimelineModel parent, final TimelineModel child, final int spawnedIndex) {
 		this.parent = parent;
 		this.child = child;
 		this.spawnedIndex = spawnedIndex;
-		this.replayNavigator = replayNavigator;
-		replayNavigator.addStateChangeListener(this);
 	}
 
-	public Timeline parent() {
+	public TimelineModel parent() {
 		return parent;
 	}
 
-	public Timeline child() {
+	public TimelineModel child() {
 		return child;
 	}
 
@@ -61,22 +53,15 @@ public class TimelineConnection implements ReplayNavigator.StateListener {
 	}
 
 	public boolean isInCurrentPosition() {
-		var currentTimeline = replayNavigator.getCurrentEventPosition().timeline();
-		while (currentTimeline != null) {
-			if (currentTimeline == child) {
-				return true;
-			}
-			currentTimeline = currentTimeline.getParentTimeline();
-		}
-		return false;
+		return isInCurrentPosition;
 	}
 
-	@Override
-	public void stateUpdated(final ReplayNavigator replayNavigator, final DatapointsState changedValues) {
+	public void setIsInCurrentPosition(final boolean isInCurrentPosition) {
+		this.isInCurrentPosition = isInCurrentPosition;
 		propertyChangeSupport.firePropertyChange(PROPERTY_TIMELINECONNECTION_CHANGED, null, null);
 	}
 
-	// Listener
+	// Listener to this
 
 	public void addPropertyChangeListener(final PropertyChangeListener listener) {
 		propertyChangeSupport.addPropertyChangeListener(listener);

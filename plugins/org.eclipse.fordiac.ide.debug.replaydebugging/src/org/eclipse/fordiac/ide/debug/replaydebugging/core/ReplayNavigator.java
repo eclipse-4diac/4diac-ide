@@ -36,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *        The state is stored as a map of datapoint names to their values,
  *        allowing easy access to the current state of each datapoint.
  */
-public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewSpawnedTimelineListener {
+public class ReplayNavigator implements Timeline.StructureListener {
 
 	// identifier for the replay navigator, which includes the automation system,
 	// device, and resource names
@@ -88,8 +88,7 @@ public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewS
 		this.currentState = initialState;
 		rootTimeline.addEventChange(initialState.entrySet().stream()
 				.map(entry -> new DataPointChange(entry.getKey(), entry.getValue(), entry.getValue())).toList());
-		rootTimeline.addNewEventListener(this);
-		rootTimeline.addNewSpawnedTimelineListener(this);
+		rootTimeline.addStructureListener(this);
 	}
 
 	/**
@@ -105,7 +104,7 @@ public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewS
 		if (currentEventPosition.timeline().getMaxEventNumber() != currentEventPosition.eventNumber()) {
 			// we are not at the end
 			timelineToAdd = new Timeline();
-			currentEventPosition.timeline().addSpawnedTimeline(timelineToAdd, currentEventPosition.eventNumber);
+			currentEventPosition.timeline().addSpawnedTimeline(timelineToAdd, currentEventPosition.eventNumber());
 		}
 		timelineToAdd.addEventChange(newValues);
 		moveToEvent(new EventPosition(timelineToAdd, timelineToAdd.getMaxEventNumber()));
@@ -268,6 +267,15 @@ public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewS
 		return changedValues;
 	}
 
+	public DatapointsState getStateAtEventPosition(final EventPosition position) {
+		// DatapointsState extends HashMap, so we need to create a new instance to avoid
+		// modifying the current state
+		final var currentStateTemp = new DatapointsState();
+		currentStateTemp.putAll(currentState);
+		currentStateTemp.putAll(getChangesFromTo(currentEventPosition, position));
+		return currentStateTemp;
+	}
+
 	/**
 	 * Finds the lowest common ancestor of two timelines, which is the timeline that
 	 * is the closest common parent of both timelines. This is used to find the path
@@ -348,11 +356,54 @@ public class ReplayNavigator implements Timeline.NewEventListener, Timeline.NewS
 
 	@Override
 	public void timelineSpawned(final Timeline timeline) {
+		timeline.addStructureListener(this);
+		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
+	}
+
+	@Override
+	public void timelineRemoved(final Timeline parentTimeline, final Timeline removedTimeline,
+			final int spawnedAtEventNumber) {
+		if (getCurrentEventPosition().timeline() == removedTimeline) {
+			moveToEvent(new EventPosition(parentTimeline, spawnedAtEventNumber));
+		}
+		removedTimeline.removeStructureListener(this);
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
 	}
 
 	@Override
 	public void eventAdded(final Timeline timeline) {
+		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
+	}
+
+	@Override
+	public void eventsRemoved(final Timeline timeline, final int removedStartEventIndex,
+			final List<EventChange> removedChanges) {
+		if (getCurrentEventPosition().timeline() == timeline
+				&& getCurrentEventPosition().eventNumber() >= removedStartEventIndex) {
+
+			// move to the previous existing event manually, either in this timeline or in
+			// the parent if the start index is 0
+
+			// treat the removed events as its own timeline for easier management of changes
+			final Timeline temp = new Timeline();
+			for (final EventChange removedChange : removedChanges) {
+				temp.addEventChange(removedChange.newValues());
+			}
+
+			final var initialEventNumber = getCurrentEventPosition().eventNumber() - removedStartEventIndex;
+
+			final var changedValues = temp.getChangesFromTo(initialEventNumber, 0);
+
+			if (removedStartEventIndex == 0) {
+				changedValues.putAll(temp.getInitialStateAtLeavingTimeline());
+				currentEventPosition = new EventPosition(timeline.getParentTimeline(),
+						timeline.getParentTimeline().getSpawnedTimelineEventNumber(timeline));
+				timeline.getParentTimeline().removeSpawnedTimeline(timeline);
+			} else {
+				currentEventPosition = new EventPosition(timeline, removedStartEventIndex - 1);
+			}
+			updateCache(changedValues);
+		}
 		maxEventNumber = rootTimeline.getTotalMaxEventNumber();
 	}
 

@@ -22,3 +22,4 @@ Require-Bundle:
  org.eclipse.osgi,
  org.eclipse.swt,
  org.eclipse.ui.ide
+Import-Package: org.eclipse.ui.handlers

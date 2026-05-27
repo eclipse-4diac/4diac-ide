@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension
+      point="org.eclipse.fordiac.ide.typeeditor.typeEditorPage">
+    <editorPage
+        class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocDocumentationEditor"
+        sortIndex="1000">
+      <enablement>
+        <adapt type="org.eclipse.core.resources.IFile">
+          <test property="org.eclipse.core.resources.readOnly" value="false"/>
+        </adapt>
+      </enablement>
+    </editorPage>
+    <editorPage
+        class="org.eclipse.fordiac.ide.fbtypeeditor.asciidoc.editors.AsciiDocPreviewTypeEditorPage"
+        sortIndex="1000">
+      <enablement>
+        <adapt type="org.eclipse.core.resources.IFile">
+          <test property="org.eclipse.core.resources.readOnly" value="true"/>
+        </adapt>
+      </enablement>
+    </editorPage>
+  </extension>
+  <extension point="org.eclipse.mylyn.wikitext.ui.contentAssist">
+    <templates markupLanguage="AsciiDoc">
+
+       <template name="fbt" description="%template.fbt.macro" content="fbt:${text}[${param}] $"/>
+
+     </templates>
+  </extension>
+</plugin>

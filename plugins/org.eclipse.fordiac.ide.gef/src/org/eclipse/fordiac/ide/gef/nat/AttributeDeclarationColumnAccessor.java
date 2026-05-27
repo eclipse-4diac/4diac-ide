@@ -56,7 +56,12 @@ public class AttributeDeclarationColumnAccessor
 
 		if (rowObject.getAttributeDeclaration().getType() instanceof final StructuredType st) {
 			final var columnName = column.getDisplayName();
-			final StructValue value = (StructValue) ValueOperations.parseValue(rowObject.getValue(), st, null);
+			final StructValue value;
+			try {
+				value = (StructValue) ValueOperations.parseValue(rowObject.getValue(), st, null);
+			} catch (final IllegalArgumentException ex) {
+				return null;
+			}
 			final var columnVariable = value.get(columnName);
 			return columnVariable != null ? columnVariable.toString(true) : null;
 		}

@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2010, 2025 Profactor GmbH, TU Wien ACIN
- * 								   Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 Profactor GmbH, TU Wien ACIN,
+ *                    Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -33,6 +33,8 @@ public final class Messages extends NLS {
 	public static String CommonElementImporter_ERROR_MissingAuthorInfo;
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
 	public static String CommonElementImporter_ReservedAttributesValidation;
+	public static String CommonElementImporter_WARNING_CannotParseCoordinateValue;
+
 	public static String CompilableElementImporter_ERROR_ProductNotSet;
 	public static String CompilableElementImporter_ERROR_UnsupportedLanguage;
 	public static String CompilableElementImporter_ERROR_VendorNotSet;
@@ -85,6 +87,8 @@ public final class Messages extends NLS {
 	public static String AttributeAnnotations_MissingAttributeDeclaration;
 
 	public static String ErrorMarkerInterfaceAnnotations_MissingVariableForValue;
+
+	public static String EventAnnotations_MultipleOutputConnections;
 	public static String FBNetworkAnnotations_CollisionMessage;
 	public static String FBNetworkAnnotations_InterfaceBarCollisionMessage;
 
@@ -246,6 +250,8 @@ public final class Messages extends NLS {
 	public static String AttributeTarget_ServiceSequences_tooltip;
 
 	public static String BaseFBTypeAnnotations_UnsupportedInternalFBType;
+
+	public static String BlockFBNetworkElementAnnotations_Unused;
 
 	public static String SystemImporter_Mapping_WrongString;
 	public static String SystemImporter_Mapping_MissingDevice;

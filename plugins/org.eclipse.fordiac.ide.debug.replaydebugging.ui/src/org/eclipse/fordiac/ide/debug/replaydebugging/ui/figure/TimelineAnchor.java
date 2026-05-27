@@ -11,14 +11,12 @@
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-
 package org.eclipse.fordiac.ide.debug.replaydebugging.ui.figure;
 
 import org.eclipse.draw2d.AbstractConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 
 /**
  * @brief Anchor for the connections of the timeline events
@@ -32,13 +30,13 @@ import org.eclipse.fordiac.ide.debug.replaydebugging.core.Timeline;
 public class TimelineAnchor extends AbstractConnectionAnchor {
 
 	private final int eventIndex;
-	private final Timeline timeline;
+	private final int numberOfEvents;
 	private final boolean isSource;
 
-	public TimelineAnchor(final IFigure owner, final int eventIndex, final Timeline timeline, final boolean isSource) {
+	public TimelineAnchor(final IFigure owner, final int eventIndex, final int numberOfEvents, final boolean isSource) {
 		super(owner);
 		this.eventIndex = eventIndex;
-		this.timeline = timeline;
+		this.numberOfEvents = numberOfEvents;
 		this.isSource = isSource;
 	}
 
@@ -49,11 +47,10 @@ public class TimelineAnchor extends AbstractConnectionAnchor {
 		getOwner().translateToAbsolute(bounds);
 
 		final int availableWidth = bounds.width;
-		final int markerSpacing = availableWidth / (timeline.getMaxEventNumber() + 1);
+		final int markerSpacing = availableWidth / numberOfEvents;
 
 		final int x = bounds.x + (eventIndex * markerSpacing) + (isSource ? markerSpacing / 2 : 0);
 		final int y = bounds.y + (isSource ? bounds.height : bounds.height / 2);
-
 		return new Point(x, y);
 	}
 }

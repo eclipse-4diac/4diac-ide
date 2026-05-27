@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.commands.OperationHistoryCommandStack;
 import org.eclipse.fordiac.ide.model.edit.ITypeEntryEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -222,7 +223,10 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 	}
 
 	private void doSaveInternal(final IProgressMonitor monitor) {
-		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(getTypeEntry().getFile().getParent()) {
+		// child text editors may use a TextEditor which is having a root scheduling
+		// rule
+		final WorkspaceModifyOperation operation = new WorkspaceModifyOperation(
+				getTypeEntry().getFile().getWorkspace().getRoot()) {
 			@Override
 			protected void execute(final IProgressMonitor monitor)
 					throws CoreException, InvocationTargetException, InterruptedException {
@@ -390,8 +394,9 @@ public abstract class AbstractTypeEditor extends AbstractCloseAbleFormEditor
 			if (selection instanceof final StructuredSelection structSel
 					&& structSel.getFirstElement() instanceof final URI uri) {
 				final EObject selectedElement = getType().eResource().getEObject(uri.fragment());
-				if (selectedElement instanceof FBNetworkElement || selectedElement instanceof Algorithm
-						|| selectedElement instanceof Method || selectedElement instanceof VarDeclaration) {
+				if (selectedElement instanceof FBType || selectedElement instanceof FBNetworkElement
+						|| selectedElement instanceof Algorithm || selectedElement instanceof Method
+						|| selectedElement instanceof VarDeclaration) {
 					handleContentOutlineSelection(part, new StructuredSelection(selectedElement));
 				}
 			} else if (part instanceof ContentOutline) {

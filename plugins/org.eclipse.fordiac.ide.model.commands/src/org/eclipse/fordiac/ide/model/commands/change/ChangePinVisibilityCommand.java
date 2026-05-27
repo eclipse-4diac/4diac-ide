@@ -12,14 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.ScopedCommand;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.BlockFBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -30,10 +28,6 @@ public class ChangePinVisibilityCommand extends Command implements ScopedCommand
 
 	private final IInterfaceElement interfaceElement; // The pin
 	private final boolean visible;
-
-	public ChangePinVisibilityCommand(final BlockFBNetworkElement fb, final List<String> path, final boolean visible) {
-		this(fb.getInterface().getInterfaceElement(path, visible), visible);
-	}
 
 	public ChangePinVisibilityCommand(final IInterfaceElement interfaceElement, final boolean visible) {
 		this.interfaceElement = Objects.requireNonNull(interfaceElement);

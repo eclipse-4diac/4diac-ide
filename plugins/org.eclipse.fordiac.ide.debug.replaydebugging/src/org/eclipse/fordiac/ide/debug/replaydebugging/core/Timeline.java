@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.debug.replaydebugging.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,12 +31,14 @@ import java.util.Set;
  */
 public class Timeline {
 
-	public interface NewEventListener {
+	public interface StructureListener {
 		void eventAdded(Timeline timeline);
-	}
 
-	public interface NewSpawnedTimelineListener {
+		void eventsRemoved(Timeline timeline, int removedStartEventIndex, List<EventChange> removedChanges);
+
 		void timelineSpawned(Timeline spawnedTimeline);
+
+		void timelineRemoved(Timeline parentTimeline, Timeline removedTimeline, int spawnedAtEventNumber);
 	}
 
 	private Timeline parentTimeline = null;
@@ -44,19 +47,64 @@ public class Timeline {
 
 	private final Map<Timeline, Integer> spawnedTimelines = new HashMap<>();
 
-	private final Set<NewEventListener> newEventsListeners = new HashSet<>();
-
-	private final Set<NewSpawnedTimelineListener> newSpawnedTimelineListeners = new HashSet<>();
+	private final Set<StructureListener> structureListeners = new HashSet<>();
 
 	public void addEventChange(final List<DataPointChange> newValues) {
 		eventChanges.add(new EventChange(eventChanges.size(), newValues));
 		notifyNewEvent();
 	}
 
+	public void removeEventsFrom(final int eventNumber) {
+		if (eventNumber < 0 || eventNumber >= eventChanges.size()) {
+			return;
+		}
+
+		// a view to actual values
+		final var toRemove = eventChanges.subList(eventNumber, eventChanges.size());
+
+		// create a deep copy of toRemove
+		final var toRemoveCopy = new ArrayList<>(toRemove);
+		toRemove.clear();
+
+		// remove timelines which spawn from removed events
+		for (final var entry : spawnedTimelines.entrySet()) {
+			final var spawnedTimeline = entry.getKey();
+			final var spawnedAtEventNumber = entry.getValue().intValue();
+			if (spawnedAtEventNumber >= eventNumber) {
+				removeSpawnedTimeline(spawnedTimeline);
+			}
+		}
+
+		notifyRemoveEvents(eventNumber, toRemoveCopy);
+
+	}
+
+	public List<EventChange> getEventsFrom(final int eventNumber) {
+		if (eventNumber < 0 || eventNumber > eventChanges.size()) {
+			return Collections.emptyList();
+		}
+		return new ArrayList<>(eventChanges.subList(eventNumber, eventChanges.size()));
+	}
+
 	public void addSpawnedTimeline(final Timeline spawnedTimeline, final int eventNumber) {
 		spawnedTimelines.put(spawnedTimeline, Integer.valueOf(eventNumber));
 		spawnedTimeline.parentTimeline = this;
 		notifyNewSpawnedTimeline(spawnedTimeline);
+	}
+
+	public void removeSpawnedTimeline(final Timeline spawnedTimeline) {
+		// remove child timelines first
+		for (final var childTimeline : spawnedTimeline.getSpawnedTimelines()) {
+			spawnedTimeline.removeSpawnedTimeline(childTimeline);
+		}
+		final var spawnedAtEventNumber = spawnedTimelines.get(spawnedTimeline);
+
+		// we notify first and then remove the timeline, so listeners can react on a
+		// valid tree of timelines.
+		notifyRemovedSpawnedTimeline(spawnedTimeline, spawnedAtEventNumber.intValue());
+
+		spawnedTimelines.remove(spawnedTimeline);
+		spawnedTimeline.parentTimeline = null;
 	}
 
 	public int getSpawnedTimelineEventNumber(final Timeline timeline) {
@@ -175,30 +223,34 @@ public class Timeline {
 	}
 
 	// Timeline listeners
-	public void addNewEventListener(final NewEventListener timelineListener) {
-		newEventsListeners.add(timelineListener);
+	public void addStructureListener(final StructureListener timelineListener) {
+		structureListeners.add(timelineListener);
 	}
 
-	public void removeNewEventListener(final NewEventListener timelineListener) {
-		newEventsListeners.remove(timelineListener);
-	}
-
-	public void addNewSpawnedTimelineListener(final NewSpawnedTimelineListener timelineListener) {
-		newSpawnedTimelineListeners.add(timelineListener);
-	}
-
-	public void removeNewSpawnedTimelineListener(final NewSpawnedTimelineListener timelineListener) {
-		newSpawnedTimelineListeners.remove(timelineListener);
+	public void removeStructureListener(final StructureListener timelineListener) {
+		structureListeners.remove(timelineListener);
 	}
 
 	private void notifyNewEvent() {
-		for (final var listener : newEventsListeners) {
+		for (final var listener : structureListeners) {
 			listener.eventAdded(this);
 		}
 	}
 
+	private void notifyRemoveEvents(final int removedStartEventIndex, final List<EventChange> removedChanges) {
+		for (final var listener : structureListeners) {
+			listener.eventsRemoved(this, removedStartEventIndex, removedChanges);
+		}
+	}
+
+	private void notifyRemovedSpawnedTimeline(final Timeline removedTimeline, final int spawnedAtEventNumber) {
+		for (final var listener : structureListeners) {
+			listener.timelineRemoved(this, removedTimeline, spawnedAtEventNumber);
+		}
+	}
+
 	private void notifyNewSpawnedTimeline(final Timeline spawnedTimeline) {
-		for (final var listener : newSpawnedTimelineListeners) {
+		for (final var listener : structureListeners) {
 			listener.timelineSpawned(spawnedTimeline);
 		}
 	}

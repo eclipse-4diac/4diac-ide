@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.bulkeditor.search;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.common.util.URI;
@@ -22,6 +23,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
 import org.eclipse.fordiac.ide.bulkeditor.ui.BulkEditorControls;
 import org.eclipse.fordiac.ide.bulkeditor.ui.FilterComposite;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.HelperTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.InternalAttributeDeclarations;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.search.ISearchContext;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499ElementSearch;
 import org.eclipse.fordiac.ide.model.search.types.IEC61499SearchFilter;
@@ -40,6 +44,7 @@ public class EditorSearchExecutor {
 
 	public static Result search(final SearchParameters params, final IProject project) {
 		final SearchHelper helper = buildHelper(params);
+		final BulkEditorMode mode = BulkEditorMode.resolve(params.modeSelection(), params.advancedMode());
 
 		final List<ISearchContext> contexts;
 		if (params.subappHierarchyScope()) {
@@ -50,7 +55,7 @@ public class EditorSearchExecutor {
 
 		AttributeTypeEntry simpleAttributeTypeEntry = null;
 		final IEC61499SearchFilter modelSearchFilter;
-		if (BulkEditorMode.resolve(params.modeSelection(), params.advancedMode()) == BulkEditorMode.SIMPLE_ATTRIBUTE) {
+		if (mode == BulkEditorMode.SIMPLE_ATTRIBUTE) {
 			simpleAttributeTypeEntry = TypeLibraryManager.INSTANCE.getTypeLibrary(project)
 					.getAttributeTypeEntry(params.searchText().getText());
 			if (simpleAttributeTypeEntry == null) {
@@ -62,15 +67,24 @@ public class EditorSearchExecutor {
 					BulkEditorControls.DEFAULT_LIST.stream().map(params.searchFilter()::getFilter).toList());
 		}
 
-		final List<? extends EObject> result = contexts.stream().flatMap(
+		Stream<? extends EObject> result = contexts.stream().flatMap(
 				context -> new IEC61499ElementSearch(context, modelSearchFilter, helper.createChildrenSearchProvider())
-						.performSearch().stream())
-				.toList();
+						.performSearch().stream());
+
+		if (BulkEditorMode.isAttributeMode(mode)) {
+			result = result.filter(eobj -> {
+				if (eobj instanceof final Attribute att) {
+					return !(InternalAttributeDeclarations.isInternalAttribute(att)
+							|| att.getType() == HelperTypes.CDATA);
+				}
+				return true;
+			});
+		}
 
 		final Set<URI> searchScope = contexts.stream().flatMap(ISearchContext::getTypes)
 				.collect(Collectors.toUnmodifiableSet());
 
-		return new Result(result, searchScope, helper, simpleAttributeTypeEntry);
+		return new Result(result.toList(), searchScope, helper, simpleAttributeTypeEntry);
 	}
 
 	private static SearchHelper buildHelper(final SearchParameters params) {

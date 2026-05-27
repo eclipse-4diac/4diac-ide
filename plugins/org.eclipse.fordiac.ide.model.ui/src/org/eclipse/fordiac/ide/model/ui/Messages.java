@@ -85,8 +85,10 @@ public final class Messages extends NLS {
 	public static String ValidationJob_UpdateJobName;
 	public static String ValidationJob_ValidationJobName;
 
+	public static String ValidationPreferencePage_EventMultipleOutputConnections;
 	public static String ValidationPreferencePage_NoValueForGenericTypeVariable;
 	public static String ValidationPreferencePage_PotentialProgrammingProblems;
+	public static String ValidationPreferencePage_UnusedInstance;
 	public static String ValidationPreferencePage_ValueForGenericInstanceVariable;
 
 	static {

@@ -22,6 +22,8 @@ in the root directory of 4diac IDE source code. After the build completes you ca
     
    `plugins/org.eclipse.fordiac.ide.product/target` 
 
+Note for MacOS users: Running UI tests on MacOS requires the `-XstartOnFirstThread` JVM argument. This is handled automatically when using Maven but you must add it to your VM arguments if you run tests directly from your IDE.
+
 More information on how to build, run and extend 4diac IDE can be found in our [Building 4diac IDE Documentation](https://github.com/eclipse-4diac/4diac-documentation/blob/main/src/development/building4diac.adoc)
 
 ## Links

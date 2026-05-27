@@ -19,22 +19,25 @@ import java.util.stream.IntStream;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.bulkeditor.Messages;
-import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorHelper;
 import org.eclipse.fordiac.ide.bulkeditor.editors.BulkEditorMode;
+import org.eclipse.fordiac.ide.gef.nat.FilterDefaultValuesCopyDataCommandHandler;
 import org.eclipse.fordiac.ide.gef.nat.SorterModel;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.nattable.ChangeableListDataProvider;
+import org.eclipse.fordiac.ide.ui.widget.nattable.ContextMenuConfiguration;
 import org.eclipse.fordiac.ide.ui.widget.nattable.NatTableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.nattable.PasteFromClipboardDataCommandHandler;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.resize.command.AutoResizeColumnsCommand;
+import org.eclipse.nebula.widgets.nattable.selection.RowSelectionProvider;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -42,13 +45,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 
 public class BulkEditorNatTable {
+	private static final String CONTEXT_MENU_ID = "org.eclipse.fordiac.ide.bulkeditor.contextMenu"; //$NON-NLS-1$
+
 	private final CommandExecutor commandExecutor;
 	private final Composite parent;
+	private final IWorkbenchPartSite site;
 
 	private BulkEditorMode currentMode;
 	private NatTable natTable;
@@ -59,9 +63,10 @@ public class BulkEditorNatTable {
 	private List<Attribute> currentAttributeList = Collections.emptyList();
 
 	public BulkEditorNatTable(final Composite parent, final CommandExecutor commandExecutor,
-			final BulkEditorMode initialMode) {
+			final BulkEditorMode initialMode, final IWorkbenchPartSite site) {
 		this.parent = parent;
 		this.commandExecutor = commandExecutor;
+		this.site = site;
 		changeNatTable(initialMode, null);
 	}
 
@@ -94,50 +99,26 @@ public class BulkEditorNatTable {
 
 	private void configureCommonBehavior() {
 		natTable.addConfiguration(new SingleClickSortConfiguration());
-		natTable.configure();
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		natTable.registerCommandHandler(new FilterDefaultValuesCopyDataCommandHandler(selectionLayer));
+		natTable.registerCommandHandler(new PasteFromClipboardDataCommandHandler(selectionLayer));
 		installMouseWheelForward(this.currentMode == BulkEditorMode.SIMPLE_ATTRIBUTE);
 		addContextMenu();
+		natTable.configure();
 		refreshNatTableLayout(0);
 	}
 
 	private void addContextMenu() {
-		final Menu popupMenu = new Menu(natTable.getShell(), SWT.POP_UP);
-		final MenuItem itemDelete = new MenuItem(popupMenu, SWT.PUSH);
-		itemDelete.setText(Messages.ContextMenu_Find);
-		natTable.addListener(SWT.MenuDetect, event -> {
-			final Point natPoint = natTable.toControl(event.x, event.y);
-			final int colPos = natTable.getColumnPositionByX(natPoint.x);
-			final int rowPos = natTable.getRowPositionByY(natPoint.y);
+		final MenuManager manager = new MenuManager();
+		manager.setRemoveAllWhenShown(true);
+		final var selectionProvider = getSelectionProvider(this.provider);
+		site.registerContextMenu(CONTEXT_MENU_ID, manager, selectionProvider);
+		site.setSelectionProvider(selectionProvider);
+		natTable.addConfiguration(new ContextMenuConfiguration(natTable, manager));
+	}
 
-			final var selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-			if (rowPos == 0) {
-				selectionLayer.clear(true);
-				itemDelete.setEnabled(false);
-			} else if (colPos == 0) {
-				selectionLayer.selectRow(0, rowPos - 1, false, false);
-				itemDelete.setEnabled(true);
-			} else if (colPos > 0 && rowPos > 0) {
-				selectionLayer.selectCell(colPos - 1, rowPos - 1, false, false);
-				itemDelete.setEnabled(true);
-			}
-
-			natTable.redraw();
-		});
-		itemDelete.addListener(SWT.Selection, e -> {
-			final var selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-			final var lastPosition = selectionLayer.getLastSelectedCellPosition();
-
-			if (lastPosition != null && lastPosition.getRowPosition() >= 0) {
-				final int rowIdx = selectionLayer.getRowIndexByPosition(lastPosition.getRowPosition());
-				final var rowObject = provider.getRowObject(rowIdx);
-
-				final var root = EcoreUtil.getRootContainer(rowObject);
-				final IEditorPart editor = OpenListenerManager.openEditor(root);
-
-				BulkEditorHelper.gotoElement(rowObject, editor);
-			}
-		});
-		natTable.setMenu(popupMenu);
+	private <T> RowSelectionProvider<T> getSelectionProvider(final ChangeableListDataProvider<T> prov) {
+		return new RowSelectionProvider<>(NatTableWidgetFactory.getSelectionLayer(natTable), prov);
 	}
 
 	private void installMouseWheelForward(final boolean shiftBypass) {
