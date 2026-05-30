@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   enable-background="new 0 0 612 792"
+   xml:space="preserve"
+   sodipodi:docname="4diac_icon.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="14.424782"
+     inkscape:cx="5.9966245"
+     inkscape:cy="20.138953"
+     inkscape:window-width="1920"
+     inkscape:window-height="1048"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" /><metadata
+     id="metadata68"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+     id="defs66"><linearGradient
+       id="linearGradient3857"
+       gradientUnits="userSpaceOnUse"
+       x1="131.3853"
+       y1="358.57709"
+       x2="131.3853"
+       y2="432.2084"
+       gradientTransform="matrix(1,0,0,-1,0,793)"><stop
+         offset="0.30179274"
+         style="stop-color:#473788"
+         id="stop3859" /><stop
+         offset="0.79185295"
+         style="stop-color:#2C2255"
+         id="stop3861" /></linearGradient><linearGradient
+       xlink:href="#linearGradient3857"
+       id="linearGradient3867"
+       gradientUnits="userSpaceOnUse"
+       x1="59.992634"
+       y1="83.283737"
+       x2="103.99626"
+       y2="83.283737"
+       gradientTransform="matrix(15.40426,0,0,15.40426,-942.1852,-718.65592)" /><filter
+       style="color-interpolation-filters:sRGB"
+       id="filter3695"
+       x="-0.059232654"
+       width="1.1184653"
+       y="-0.063287436"
+       height="1.1265749"><feGaussianBlur
+         stdDeviation="1.1106123"
+         id="feGaussianBlur3697" /></filter></defs><g
+     class="Page"
+     id="g16"
+     transform="matrix(0.01758665,0,0,0.0177482,-123.10658,-322.99949)"
+     style="stroke-width:2.13928">
+  <g
+   class="Group"
+   id="g15"
+   style="stroke-width:2.13928">
+   <g
+   class="com.sun.star.drawing.PolyPolygonShape"
+   id="g11"
+   style="stroke-width:2.13928">
+    <g
+   id="id3"
+   style="stroke-width:2.13928">
+     <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="7738"
+   y="18199"
+   width="1065"
+   height="1803"
+   id="rect10"
+   style="stroke-width:2.13928" />
+     <path
+   fill="#012269"
+   stroke="none"
+   d="m 8545,19358 v -708 l -493,708 z m 0,643 v -386 h -807 v -256 l 807,-1159 h 254 l 3,1801 z"
+   id="path11"
+   style="stroke-width:2.13928" />
+    </g>
+   </g>
+   <g
+   class="com.sun.star.drawing.ClosedBezierShape"
+   id="g12"
+   style="stroke-width:2.13928">
+    <g
+   id="id4"
+   style="stroke-width:2.13928">
+     <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="7000"
+   y="18200"
+   width="1387"
+   height="1031"
+   id="rect11"
+   style="stroke-width:2.13928" />
+     <path
+   fill="#ff950e"
+   stroke="none"
+   d="m 7001,18843 h 385 v -257 h -385 c 0,0 -2,32 0,-129 2,-161 136,-257 257,-257 121,0 752,0 1128,0 -238,343 -716,1029 -716,1029 h -669 z"
+   id="path12"
+   style="stroke-width:2.13928" />
+    </g>
+   </g>
+   <g
+   class="com.sun.star.drawing.CustomShape"
+   id="g13-6"
+   style="stroke-width:2.13928">
+    <g
+   id="id5"
+   style="stroke-width:2.13928">
+     <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="7001"
+   y="19357"
+   width="609"
+   height="258"
+   id="rect12"
+   style="stroke-width:2.13928" />
+     <path
+   fill="#ff950e"
+   stroke="none"
+   d="m 7305,19614 h -304 v -257 h 608 v 257 z"
+   id="path13"
+   style="stroke-width:2.13928" />
+    </g>
+   </g>
+   <g
+   class="com.sun.star.drawing.ClosedBezierShape"
+   id="g14"
+   style="stroke-width:2.13928">
+    <g
+   id="id6"
+   style="stroke-width:2.13928">
+     <rect
+   class="BoundingBox"
+   stroke="none"
+   fill="none"
+   x="7000"
+   y="19744"
+   width="1416"
+   height="258"
+   id="rect13"
+   style="stroke-width:2.13928" />
+     <path
+   fill="#ff950e"
+   stroke="none"
+   d="m 7128,20001 c 0,0 -44,-6 -64,-17 -19,-11 -35,-27 -47,-47 -11,-20 -17,-42 -17,-64 0,-5 1,-129 1,-129 h 1414 v 257 z"
+   id="path14"
+   style="stroke-width:2.13928" />
+    </g>
+   </g>
+  </g>
+ </g></svg>
